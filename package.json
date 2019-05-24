@@ -1,0 +1,91 @@
+{
+  "name": "dips-dna-ui",
+  "version": "0.0.1",
+  "description": "国脉前端数据基因",
+  "repository": {
+    "type": "gitlab",
+    "url": ""
+  },
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "start": "npm run serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "analyz": "set npm_config_report=true && npm run build",
+    "test:unit": "vue-cli-service test:unit",
+    "test:e2e": "vue-cli-service test:e2e"
+  },
+  "dependencies": {
+    "@antv/data-set": "^0.10.1",
+    "@smallwei/avue": "^1.6.2",
+    "avue-plugin-transfer": "0.0.3",
+    "avue-plugin-ueditor": "0.0.4",
+    "axios": "^0.18.0",
+    "babel-polyfill": "^6.26.0",
+    "classlist-polyfill": "^1.2.0",
+    "crypto-js": "^3.1.9-1",
+    "driver.js": "^0.8.1",
+    "echarts": "^4.2.0",
+    "element-ui": "^2.6.1",
+    "es6-promise": "^4.2.5",
+    "file-saver": "^2.0.0",
+    "html2canvas": "^1.0.0-alpha.12",
+    "js-cookie": "^2.2.0",
+    "lodash": "^4.17.11",
+    "mockjs": "^1.0.1-beta3",
+    "moment": "^2.23.0",
+    "nprogress": "^0.2.0",
+    "register-service-worker": "^1.5.2",
+    "script-loader": "^0.7.2",
+    "three": "^0.100.0",
+    "viser-vue": "^2.4.2",
+    "vue": "^2.5.22",
+    "vue-axios": "^2.1.4",
+    "vue-bus": "^1.2.0",
+    "vue-clipboard2": "^0.2.1",
+    "vue-image-crop-upload": "^2.5.0",
+    "vue-json-tree-view": "^2.1.4",
+    "vue-moment": "^4.0.0",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.1.0",
+    "vuex-router-sync": "^5.0.0",
+    "xlsx": "^0.14.1"
+  },
+  "devDependencies": {
+    "@babel/polyfill": "^7.2.5",
+    "@vue/cli-plugin-babel": "^3.3.0",
+    "@vue/cli-plugin-eslint": "^3.3.0",
+    "@vue/cli-plugin-pwa": "^3.3.0",
+    "@vue/cli-service": "^3.3.0",
+    "@vue/eslint-config-prettier": "^4.0.0",
+    "@vue/test-utils": "^1.0.0-beta.28",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^23.0.1",
+    "babel-plugin-import": "^1.11.0",
+    "babel-plugin-transform-remove-console": "^6.9.4",
+    "compression-webpack-plugin": "^2.0.0",
+    "eslint": "^5.12.1",
+    "eslint-plugin-vue": "^5.1.0",
+    "express": "^4.16.4",
+    "http-proxy-middleware": "^0.19.1",
+    "lint-staged": "^8.1.0",
+    "node-sass": "^4.10.0",
+    "performance-report": "^1.1.3",
+    "sass-loader": "^7.0.1",
+    "uglifyjs-webpack-plugin": "^2.1.1",
+    "vue-template-compiler": "^2.5.22",
+    "webpack-bundle-analyzer": "^3.0.2"
+  },
+  "lint-staged": {
+    "*.js": [
+      "vue-cli-service lint",
+      "git add"
+    ],
+    "*.vue": [
+      "vue-cli-service lint",
+      "git add"
+    ]
+  }
+}

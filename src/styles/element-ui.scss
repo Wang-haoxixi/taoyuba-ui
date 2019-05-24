@@ -1,0 +1,23 @@
+.el-dropdown-menu__item {
+  font-size: 12px;
+  line-height: 28px;
+}
+
+.el-menu--horizontal {
+  border-bottom: none !important;
+}
+
+.el-menu {
+  border-right: 0 !important;
+}
+
+.el-menu--display,
+.el-menu--display+.el-submenu__icon-arrow {
+  display: none;
+}
+.el-table--enable-row-hover .el-table__body tr:hover>td {
+  background-color: #ecf5ff;
+}
+.el-submenu__title:focus, .el-submenu__title:hover {
+  background-color: rgba(0, 0, 0, 0) !important;
+}

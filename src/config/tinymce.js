@@ -1,0 +1,5 @@
+import '../static/tinymce4.7.5/tinymce.min.js'
+import '../static/tinymce4.7.5/langs/zh_CN.js'
+import '../static/tinymce4.7.5/skins/lightgray/skin.min.css'
+import '../static/tinymce4.7.5/skins/lightgray/content.min.css'
+import '../static/tinymce4.7.5/plugins/codesample/css/prism.css'

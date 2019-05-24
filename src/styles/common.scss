@@ -1,0 +1,110 @@
+*, :after, :before {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.no-border .el-card {
+  border: none;
+}
+.detail-wrapper {
+  .avue-form-detail__item {
+    padding-top: 0;
+  }
+  .avue-form-detail__header {
+    display: none;
+  }
+  &.show-header {
+    .avue-form-detail__header {
+      display: block;
+    }
+  }
+  .avue-form-detail__box {
+    font-size: 14px;
+    margin-bottom: 22px;
+    &:after {
+      visibility: hidden;
+      display: block;
+      font-size: 0;
+      content: " ";
+      clear: both;
+      height: 0;
+    }
+    .avue-form-detail__label {
+      color: #606266;
+      float: left;
+      display: inline-block;
+      width: 125px;
+      height: 36px;
+      line-height: 36px;
+      text-align: right;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .avue-form-detail__content {
+      color: #777;
+      display: inline-block;
+      width: calc(100% - 160px);
+      float: left;
+      height: 36px;
+      line-height: 36px;
+      border: 1px dotted #d7d7d7;
+      padding: 0 10px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+}
+.table-btn-group .el-button{
+  position: relative;
+}
+.table-btn-group .el-button:after {
+  content: "";
+  width: 1px;
+  height: 13px;
+  background-color: #e8e8e8;
+  position: absolute;
+  top: 9px;
+  right: -7px;
+}
+.table-btn-group .el-button:last-child:after {
+  content: "";
+  width: 0px;
+}
+
+.table-btn-group {
+  .gov-button {
+    .el-button {
+      &::after {
+        content: "";
+        width: 1px;
+        height: 13px;
+        background-color: #e8e8e8;
+        position: absolute;
+        top: 9px;
+        right: -7px;
+      }
+    }
+    &:last-child {
+      .el-button {
+        &::after {
+          content: "";
+          width: 0;
+        }
+      }
+    }
+  }
+}
+
+.text-white {
+  color: #fff;
+}
+.search-conten-inline, .search-button-inline {
+  display: inline-block;
+}
+.search-conten-block, .search-button-block {
+  display: block;
+}
+.search-button-block {
+  text-align: right;
+}

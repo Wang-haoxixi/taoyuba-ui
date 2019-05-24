@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <!-- <link rel="stylesheet" href="<%= BASE_URL %>cdn/element-ui/theme-chalk/index.css" defer> -->
+    <!-- <link rel="stylesheet" href="<%= BASE_URL %>cdn/smallwei/theme-chalk/index.css" defer> -->
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+    <title>加载中...</title>
+    <style>
+      html,
+      body,
+      #app {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .avue-home {
+        background-color: #303133;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .avue-home__main {
+        user-select: none;
+        width: 100%;
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+
+      .avue-home__footer {
+        width: 100%;
+        flex-grow: 0;
+        text-align: center;
+        padding: 1em 0;
+      }
+
+      .avue-home__footer>a {
+        font-size: 12px;
+        color: #ABABAB;
+        text-decoration: none;
+      }
+
+      .avue-home__loading {
+        height: 32px;
+        width: 32px;
+        margin-bottom: 20px;
+      }
+
+      .avue-home__title {
+        color: #FFF;
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+
+      .avue-home__sub-title {
+        color: #ABABAB;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <noscript>
+      <strong>很抱歉，如果没有 JavaScript 支持，将不能正常工作。请启用浏览器的 JavaScript 然后继续。</strong>
+    </noscript>
+    <div id="app">
+      <div class="avue-home">
+        <div class="avue-home__main">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="white">
+            <path opacity=".25" d="M16 0 A16 16 0 0 0 16 32 A16 16 0 0 0 16 0 M16 4 A12 12 0 0 1 16 28 A12 12 0 0 1 16 4"/>
+            <path d="M16 0 A16 16 0 0 1 32 16 L28 16 A12 12 0 0 0 16 4z">
+              <animateTransform attributeName="transform" type="rotate" from="0 16 16" to="360 16 16" dur="0.8s" repeatCount="indefinite" />
+            </path>
+          </svg>
+          <div class="avue-home__title">
+            正在加载资源
+          </div>
+          <div class="avue-home__sub-title">
+            初次加载资源可能需要较多时间 请耐心等待
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- built files will be auto injected -->
+    <script src="<%= BASE_URL %>cdn/vue/vue.runtime.min.js"></script>
+    <script src="<%= BASE_URL %>cdn/vuex/vuex.min.js"></script>
+    <script src="<%= BASE_URL %>cdn/vue-router/vue-router.min.js"></script>
+    <!-- <script src="<%= BASE_URL %>cdn/element-ui/index.js"></script> -->
+    <script src="<%= BASE_URL %>cdn/smallwei/avue/index.js" charset="utf-8"></script>
+    <!-- <script src="<%= BASE_URL %>cdn/animate_script/three/jquery.min.js"></script> -->
+    <!-- <script src="<%= BASE_URL %>cdn/animate_script/three/three.min.js"></script> -->
+    <!-- <script src="//unpkg.com/vue@2.5.17/dist/vue.runtime.min.js"></script> -->
+    <!-- <script src="//unpkg.com/vuex@3.0.1/dist/vuex.min.js"></script> -->
+    <!-- <script src="//unpkg.com/vue-router@3.0.1/dist/vue-router.min.js"></script> -->
+    <!-- <script src="//unpkg.com/element-ui@2.4.9/lib/index.js"></script> -->
+    <!-- <script src="//unpkg.com/@smallwei/avue@1.4.0/lib/index.js"></script> -->
+  </body>
+</html>
