@@ -1,10 +1,11 @@
-import request from '@/router/request'
+import request from '@/router/axios'
 
 const prefixUrl = '/tms'
 // @/api/tms/excel
-export function getTagExcelExport () {
+
+function getDownload (path, fileName) {
   return request({
-    url: `${prefixUrl}/excel/export`,
+    url: `${prefixUrl}${path}`,
     method: 'get',
     headers: {
       'Content-Type': 'application/json',
@@ -15,26 +16,15 @@ export function getTagExcelExport () {
     const blob = new Blob([response.data], { type: 'application/vnd.ms-excel' })
     const link = document.createElement('a')
     link.href = window.URL.createObjectURL(blob)
-    link.download = '标签导出信息.xls'
+    link.download = `${fileName}.xls`
     link.click()
   })
+}
+export function getTagExcelExport () {
+  return getDownload('/excel/export', '标签导出信息')
 }
 
 // 提交
 export function getModelExcel () {
-  request({
-    url: `${prefixUrl}/excel/model_download`,
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    responseType: 'arraybuffer',
-  }).then(response => {
-    // 处理返回的文件流
-    const blob = new Blob([response.data], { type: 'application/vnd.ms-excel' })
-    const link = document.createElement('a')
-    link.href = window.URL.createObjectURL(blob)
-    link.download = '导入模板.xls'
-    link.click()
-  })
+  return getDownload('/excel/model_download', '导入模板')
 }

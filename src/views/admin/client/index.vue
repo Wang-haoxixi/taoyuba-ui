@@ -1,91 +1,93 @@
 <template>
-  <gov-layout-main>
-    <gov-layout-header>
-      <gov-layout-button-group>
-        <gov-button type="add" permission="sys_client_add" @click="handleAdd"></gov-button>
-      </gov-layout-button-group>
-    </gov-layout-header>
-    <gov-layout-body>
-      <avue-crud ref="crud"
-        :page="pagination"
-        :data="records"
-        :table-loading="tableLoading"
-        :option="tableOption"
-        @current-change="currentChange"
-        @size-change="sizeChange">
+  <div class="execution">
+    <basic-container>
+      <avue-crud ref="crud" :page="page" :data="tableData" :table-loading="tableLoading" :option="tableOption" @on-load="getList" @refresh-change="refreshChange" @row-update="handleUpdate" @row-save="handleSave" @row-del="rowDel">
         <template slot-scope="scope" slot="menu">
-          <div class="table-btn-group">
-            <gov-button type="text" permission="sys_client_edit" @click="handleEdit(scope.row, scope.index)">编辑</gov-button>
-            <gov-button type="text" permission="sys_client_del" @click="handleDel(scope.row, scope.index)">删除</gov-button>
-          </div>
+          <el-button type="text" v-if="permissions.sys_client_edit" icon="el-icon-check" size="mini" @click="handleEdit(scope.row, scope.index)">编辑
+          </el-button>
+          <el-button type="text" v-if="permissions.sys_client_del" icon="el-icon-delete" size="mini" @click="handleDel(scope.row, scope.index)">删除
+          </el-button>
         </template>
       </avue-crud>
-    </gov-layout-body>
-    <main-dialog
-      ref="mainDialog"
-      :formData="formData"
-      @closed="mainDialogClosed"
-      @okClosed = "submitClose">
-    </main-dialog>
-  </gov-layout-main>
+    </basic-container>
+  </div>
 </template>
 
 <script>
-import { fetchList, addObj, putObj } from '@/api/umps/client'
-import { deleteClient } from '@/api/admin/client'
-import mainDialog from './mainDialog'
-import { tableOption } from '@/const/crud/client'
-import allMixin from '@/mixins/mixin'
+import { addObj, delObj, fetchList, putObj } from '@/api/admin/client'
+import { tableOption } from '@/const/crud/admin/client'
+import { mapGetters } from 'vuex'
 
 export default {
-  name: 'client',
-  mixins: [allMixin],
-  components: {
-    mainDialog,
-  },
+  name: 'Client',
   data () {
     return {
-      records: [],
+      tableData: [],
+      page: {
+        total: 0, // 总页数
+        currentPage: 1, // 当前页数
+        pageSize: 20, // 每页显示多少条
+      },
       tableLoading: false,
       tableOption: tableOption,
-      formData: {},
     }
   },
-  created () {
-    this.getList()
+  created () { },
+  mounted: function () { },
+  computed: {
+    ...mapGetters(['permissions']),
   },
   methods: {
-    getList () {
+    getList (page, params) {
       this.tableLoading = true
-      fetchList(this.listQuery).then(response => {
-        this.records = response.data.records
-        this.pagination.total = response.data.total
+      fetchList(
+        Object.assign(
+          {
+            current: page.currentPage,
+            size: page.pageSize,
+          },
+          params
+        )
+      ).then(response => {
+        this.tableData = response.data.data.records
+        this.page.total = response.data.data.total
         this.tableLoading = false
       })
     },
-    // 新增
+    /**
+     * @title 打开新增窗口
+     * @detail 调用crud的handleadd方法即可
+     *
+     **/
     handleAdd: function () {
-      this.$refs['mainDialog'].open()
+      this.$refs.crud.rowAdd()
     },
-    // 编辑
-    handleEdit (row) {
-      this.formData = {...row}
-      this.$nextTick(()=>{
-        this.$refs['mainDialog'].open()
-      })
+    handleEdit (row, index) {
+      this.$refs.crud.rowEdit(row, index)
     },
-    // 删除
-    handleDel (row) {
-      this.$confirm('是否确认删除此数据', '提示', {
+    handleDel (row, index) {
+      this.$refs.crud.rowDel(row, index)
+    },
+    rowDel: function (row, index) {
+      var _this = this
+      this.$confirm('是否确认删除ID为' + row.clientId, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
-      }).then(() => {
-        deleteClient(row.clientId).then(()=>{
-          this.$message.success('删除成功！')
-          this.getList()
-        })
       })
+        .then(function () {
+          return delObj(row.clientId)
+        })
+        .then(() => {
+          _this.tableData.splice(index, 1)
+          _this.$message({
+            showClose: true,
+            message: '删除成功',
+            type: 'success',
+          })
+          this.refreshChange()
+        })
+        .catch(function () { })
     },
     /**
      * @title 数据更新
@@ -96,12 +98,13 @@ export default {
      **/
     handleUpdate: function (row, index, done) {
       putObj(row).then(() => {
-        this.records.splice(index, 1, Object.assign({}, row))
+        this.tableData.splice(index, 1, Object.assign({}, row))
         this.$message({
           showClose: true,
           message: '修改成功',
           type: 'success',
         })
+        this.refreshChange()
         done()
       })
     },
@@ -113,21 +116,21 @@ export default {
      **/
     handleSave: function (row, done) {
       addObj(row).then(() => {
-        this.records.push(Object.assign({}, row))
+        this.tableData.push(Object.assign({}, row))
         this.$message({
           showClose: true,
           message: '添加成功',
           type: 'success',
         })
+        this.refreshChange()
         done()
       })
     },
-    mainDialogClosed () {
-      this.formData = {}
-    },
-    // 提交关闭弹窗
-    submitClose (){
-      this.getList()
+    /**
+     * 刷新回调
+     */
+    refreshChange () {
+      this.getList(this.page)
     },
   },
 }

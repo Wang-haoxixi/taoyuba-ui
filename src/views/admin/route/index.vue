@@ -1,160 +1,121 @@
 <template>
-  <div>
-    <gov-layout-main>
-      <avue-crud ref="crud" :page="page" :data="records" :table-loading="tableLoading" :option="tableOption" @current-change="currentChange" @size-change="sizeChange" @row-update="handleUpdate" @row-save="handleSave" @row-del="rowDel">
-        <template slot="menuLeft">
-          <el-button type="primary" @click="handleAdd" size="small" v-if="permissions.sys_route_add">新 增</el-button>
-          <el-button type="success" @click="handleApply" size="small" v-if="permissions.sys_route_add">同 步</el-button>
-          <br /><br />
-        </template>
-        <template slot-scope="scope" slot="menu">
-          <el-button type="primary" v-if="permissions.sys_route_edit" icon="el-icon-check" size="small" plain @click="handleEdit(scope.row, scope.index);">编辑</el-button>
-          <el-button type="danger" v-if="permissions.sys_route_del" icon="el-icon-delete" size="small" plain @click="handleDel(scope.row, scope.index);">删除</el-button>
-        </template>
-      </avue-crud>
-    </gov-layout-main>
+  <div class="execution">
+    <basic-container>
+      <el-alert title="路由配置是非常专业的事情，不建议非工程师操作" type="warning">
+      </el-alert>
+      <vue-json-editor v-model="json" :show-btns="false"></vue-json-editor>
+      <div align="center">
+        <el-button @click="openAddDialog()">添加路由</el-button>
+        <el-button @click="edit()">更新路由</el-button>
+      </div>
+    </basic-container>
+    <el-dialog title="新增路由" :visible.sync="dialogFormVisible">
+      <el-form class="router-form" :model="form" label-width="100px">
+        <el-form-item label="路由名称">
+          <el-input v-model="form.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="路由英文">
+          <el-input v-model="form.english" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="路由值">
+          <el-input v-model="form.path" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="add()">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
-
 <script>
-import { fetchList, addObj, putObj, delObj, applyObj } from '@/api/umps/route'
-import { tableOption } from '@/const/crud/route'
-import { mapGetters } from 'vuex'
+import vueJsonEditor from 'vue-json-editor'
+import { fetchList, putObj } from '@/api/admin/route'
+const tempPath = (form) => `
+{
+  "routeId": "${form.english}",
+  "routeName": "${form.name}",
+  "predicates": [{"args": {"_genkey_0": "${form.path}"}, "name": "Path"}],
+  "filters": [],
+  "uri": "lb://${form.english}",
+  "order": 0,
+  "createTime": "2019-02-23 10:40:11",
+  "updateTime": null,
+  "delFlag": 0
+}`
 export default {
-  name: 'route',
   data () {
     return {
-      records: [],
-      page: {
-        total: 0, // 总页数
-        current: 1, // 当前页数
-        size: 20, // 每页显示多少条
+      json: null,
+      dialogFormVisible: false,
+      form: {
+        name: '代码生成',
+        english: 'gds-codegen',
+        path: '/gen/**',
       },
-      tableLoading: false,
-      tableOption: tableOption,
     }
   },
+
+  // 注入vueJsonEditor组件
+  components: {
+    vueJsonEditor,
+  },
+
   created () {
     this.getList()
   },
-  mounted: function () { },
-  computed: {
-    ...mapGetters(['permissions']),
-  },
+
   methods: {
     getList () {
-      this.tableLoading = true
-      fetchList({
-        page: this.page.current,
-        limit: this.page.size,
-      }).then(response => {
-        this.records = response.data.records
-        this.page.total = response.data.total
-        this.tableLoading = false
+      fetchList().then(response => {
+        let result = response.data.data
+        for (var i = 0; i < result.length; i++) {
+          let route = result[i]
+          if (route.predicates) {
+            let predicates = route.predicates
+            route.predicates = JSON.parse(predicates)
+          }
+          if (route.filters) {
+            let filters = route.filters
+            route.filters = JSON.parse(filters)
+          }
+        }
+        this.json = result
       })
     },
-    currentChange (val) {
-      this.page.current = val
-      this.getList()
-    },
-    sizeChange (val) {
-      this.page.size = val
-      this.getList()
-    },
-    /**
-     * @title 打开新增窗口
-     * @detail 调用crud的handleadd方法即可
-     *
-     **/
-    handleAdd: function () {
-      this.$refs.crud.rowAdd()
-    },
-    handleApply: function () {
-      var _this = this
-      this.$confirm('是否确认同步至网关路由', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
-        .then(function () {
-          return applyObj()
-        })
-        .then(() => {
-          _this.$message({
-            showClose: true,
-            message: '同步成功',
-            type: 'success',
-          })
-        })
-        .catch(function (err) {
-          console.log(err)
-        })
-    },
-    handleEdit (row, index) {
-      this.$refs.crud.rowEdit(row, index)
-    },
-    handleDel (row, index) {
-      this.$refs.crud.rowDel(row, index)
-    },
-    rowDel: function (row, index) {
-      var _this = this
-      this.$confirm('是否确认删除ID为' + row.id, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
-        .then(function () {
-          return delObj(row.id)
-        })
-        .then(() => {
-          _this.records.splice(index, 1)
-          _this.$message({
-            showClose: true,
-            message: '删除成功',
-            type: 'success',
-          })
-        })
-        .catch(function (err) {
-          console.log(err)
-        })
-    },
-    /**
-     * @title 数据更新
-     * @param row 为当前的数据
-     * @param index 为当前更新数据的行数
-     * @param done 为表单关闭函数
-     *
-     **/
-    handleUpdate: function (row, index, done) {
-      putObj(row).then(() => {
-        this.records.splice(index, 1, Object.assign({}, row))
-        this.$message({
-          showClose: true,
-          message: '修改成功',
+    add () {
+      // console.log(tempPath(this.form))
+      // console.log(this.json, JSON.parse(tempPath(this.form)))
+      const json = [...this.json, JSON.parse(tempPath(this.form))]
+      putObj(json).then(() => {
+        this.$notify({
+          title: '成功',
+          message: '更新成功',
           type: 'success',
+          duration: 2000,
         })
-        done()
       })
+      this.dialogFormVisible = false
     },
-    /**
-     * @title 数据添加
-     * @param row 为当前的数据
-     * @param done 为表单关闭函数
-     *
-     **/
-    handleSave: function (row, done) {
-      addObj(row).then(() => {
-        this.records.push(Object.assign({}, row))
-        this.$message({
-          showClose: true,
-          message: '添加成功',
+    openAddDialog () {
+      this.dialogFormVisible = true
+    },
+
+    edit () {
+      putObj(this.json).then(() => {
+        this.$notify({
+          title: '成功',
+          message: '更新成功',
           type: 'success',
+          duration: 2000,
         })
-        done()
       })
     },
   },
 }
 </script>
-
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.router-form {
+  padding: 0 40px;
+}
+</style>

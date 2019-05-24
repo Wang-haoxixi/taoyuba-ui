@@ -1,392 +1,152 @@
 <template>
-  <gov-layout-main>
-    <gov-layout-header>
-      <gov-search-bar
-      :listQuery="listQuery"
-      :formProps="searchOption"
-      @handleFilter="handleFilter">
-      </gov-search-bar>
-      <gov-layout-button-group>
-        <el-form :inline="true" size="small">
-          <el-form-item>
-            <el-button type="primary" v-if="permissions['sys_dict_add']" @click="handleCreate" icon="el-icon-plus" class="btn-default">新增</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-dropdown @command="handleImport">
-              <el-button class="btn-default">
-                Excel导入<i class="el-icon-arrow-down el-icon--right"></i>
-              </el-button>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="dict_import"> <i class="el-icon-caret-right"></i>Excel导入字典</el-dropdown-item>
-                <el-dropdown-item command="dict_value_import"> <i class="el-icon-caret-right"></i>Excel导入字典值</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </el-form-item>
-          <el-form-item>
-            <el-dropdown @command="handleExport">
-              <el-button  class="btn-default">
-                导出<i class="el-icon-arrow-down el-icon--right"></i>
-              </el-button>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="dict_export"> <i class="el-icon-caret-right"></i>导出字典</el-dropdown-item>
-                <el-dropdown-item command="dict_value_export"> <i class="el-icon-caret-right"></i>导出字典值</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </el-form-item>
-        </el-form>
-      </gov-layout-button-group>
-    </gov-layout-header>
-
-    <gov-layout-body>
-      <avue-crud
-        :data="pagedTable"
-        :option="formOption"
-        :table-loading="tableLoading"
-        @size-change="sizeChange"
-        @current-change="currentChange"
-        :page="pagination"
-        @refresh-change="getList">
+  <div class="execution">
+    <basic-container>
+      <avue-crud ref="crud" :page="page" :data="tableData" :table-loading="tableLoading" :option="tableOption" @on-load="loadPage" @row-update="handleUpdate" @row-save="handleSave" @search-change="searchChange" @refresh-change="refreshChange" @row-del="rowDel">
         <template slot-scope="scope" slot="menu">
-          <div class="table-btn-group">
-            <el-button v-if="permissions['sys_dict_edit']" size="small" type="text" @click="handleUpdate(scope.row);">编辑
-            </el-button>
-            <el-button v-if="permissions['sys_dict_del']" size="mini" type="text" @click="handleDelete(scope.row);">删除
-            </el-button>
-          </div>
+          <el-button type="text" icon="el-icon-plus" size="mini" @click="handleChild(scope.row, scope.index)">子项
+          </el-button>
+          <el-button type="text" v-if="permissions.sys_dict_edit" icon="el-icon-check" size="mini" @click="handleEdit(scope.row, scope.index)">编辑
+          </el-button>
+          <el-button type="text" v-if="permissions.sys_dict_del" icon="el-icon-delete" size="mini" @click="handleDel(scope.row, scope.index)">删除
+          </el-button>
         </template>
       </avue-crud>
-    </gov-layout-body>
-
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%" @close="dialogClose">
-      <el-form :model="form" ref="form" label-width="100px" :rules='rules'>
-        <el-form-item label="字典编码" prop="number">
-          <el-input v-model="form.number" placeholder="字典编码" ></el-input>
-        </el-form-item>
-        <el-form-item label="字典名称" prop="name">
-          <el-input v-model="form.name" placeholder="字典名称"></el-input>
-        </el-form-item>
-      </el-form>
-      <el-button v-if="dialogStatus !== 'create'" @click="handleAddDictChild()" size="small">新增</el-button>
-      <el-table v-if="dialogStatus !== 'create'" :data="tableData" style="width: 100%" size="mini" border>
-        <el-table-column type="expand">
-          <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand" v-for="(item, index) in props.row.dictValueList" :key="index">
-              <el-form-item label="字典键" class="Dictionaries">
-                <span>{{ item.key }}</span>
-              </el-form-item>
-              <el-form-item label="字典值">
-                <span>{{ item.value }}</span>
-              </el-form-item>
-              <el-form-item class="operationStyle" label="">
-                <el-button @click="addChildDict(item, true)" type="text" size="small">编辑</el-button>
-                <el-button @click="deleteChildDict(item)" type="text" size="small">删除</el-button>
-              </el-form-item>
-            </el-form>
-          </template>
-        </el-table-column>
-        <el-table-column prop="key" label="字典键">
-        </el-table-column>
-        <el-table-column prop="value" label="字典值">
-        </el-table-column>
-        <el-table-column prop="sort" label="排序优先值">
-        </el-table-column>
-        <el-table-column fixed="right" label="操作" width="200">
-          <template slot-scope="scope">
-            <el-button @click="addChildDict(scope.row)" type="text" size="small">添加子字典</el-button>
-            <el-button @click="addChildDict(scope.row, true)" type="text" size="small">编辑</el-button>
-            <el-button @click="deleteChildDict(scope.row)" type="text" size="small">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="cancel('form');">取 消</el-button>
-        <el-button v-if="dialogStatus == 'create'" type="primary" @click="create('form');">确 定</el-button>
-        <el-button v-else type="primary" @click="update('form');">修 改</el-button>
-      </div>
-    </el-dialog>
-    <el-dialog title="字典" :visible.sync="dialogFormChildVisible" width="50%" :before-close="handleClose">
-      <el-form :model="childform" ref="childform" label-width="100px" :rules='rules'>
-        <el-form-item label="字典键" prop="key">
-          <el-input v-model="childform.key" placeholder="字典键" maxlength='20'></el-input>
-        </el-form-item>
-        <el-form-item label="字典值" prop="value">
-          <el-input v-model="childform.value" placeholder="字典值" maxlength='20'></el-input>
-        </el-form-item>
-        <el-form-item label="排序优先值" prop="sort">
-          <el-input v-model="childform.sort" placeholder="排序优先值" type="number" maxlength='20'></el-input>
-        </el-form-item>
-        <el-form-item label="">
-          <gov-button type="primary" @click="saveChildDict(childform)" :loading="loading">保存</gov-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
-    <form-dialog :dialogShow="importDialogShow" :title="importTypeName" @close="importDialogShow=false" width="500px" :isNeedConfirm="false">
-      <dict-import :importUrl="importUrl" @close="handleCloseImport"></dict-import>
-    </form-dialog>
-  </gov-layout-main>
+    </basic-container>
+    <iep-dialog :dialog-show="dialogShow" title="字典子项" width="70%" @close="dialogShow=false">
+      <dict-child v-if="dialogShow" :current-id="currentId"></dict-child>
+    </iep-dialog>
+  </div>
 </template>
 
 <script>
-
-import { getDictList, postDict, putDict, deleteDict, getDictById, getDictChildById, postDictChild, getDictChildByMid, putDictChild, deleteChildDictById, getDictExcelExportByType } from '@/api/umps/dict'
-import waves from '@/directive/waves/index.js' // 水波纹指令
-import mixin from '@/mixins/mixin'
-import dialogMixins from '@/mixins/dialog_mixins'
+import { addObj, delObj, fetchList, putObj } from '@/api/admin/dict'
+import { tableOption } from '@/const/crud/admin/dict'
 import { mapGetters } from 'vuex'
-import dictImport from './dict_import'
-import { formOption, dataConfig, searchOption } from './const/index'
-
+import dictChild from './child'
 
 export default {
-  components: { dictImport },
-  mixins: [mixin, dialogMixins],
-  name: 'table_sys_dict',
-  directives: {
-    waves,
-  },
+  name: 'Dict',
+  components: { dictChild },
   data () {
     return {
-      ...dataConfig,
-      formOption,
-      searchOption,
-      pagedTable:[],
-      formInline: {},
-      form: {},
-      childform: {},
       tableData: [],
+      page: {
+        total: 0, // 总页数
+        currentPage: 1, // 当前页数
+        pageSize: 20, // 每页显示多少条
+      },
+      currentId: 1,
+      tableLoading: false,
+      dialogShow: false,
+      tableOption: tableOption,
     }
   },
+  created () { },
+  mounted: function () { },
   computed: {
     ...mapGetters(['permissions']),
   },
-  created () {
-    this.getList()
-  },
   methods: {
-    getList () {
-      getDictList(this.listQuery).then(({data}) => {
-        this.pagination.total = data.total
-        this.pagedTable = data.records
+    loadPage (page, params) {
+      this.tableLoading = true
+      fetchList(
+        Object.assign(
+          {
+            current: page.currentPage,
+            size: page.pageSize,
+          },
+          params
+        )
+      ).then(response => {
+        this.tableData = response.data.data.records
+        this.page.total = response.data.data.total
         this.tableLoading = false
       })
     },
-    handleCloseImport (res) {
-      this.importDialogShow = false
-      this.getList()
-      if (res.data) {
+    handleChild (row) {
+      this.currentId = row.id
+      this.dialogShow = true
+    },
+    /**
+     * @title 打开新增窗口
+     * @detail 调用crud的handleadd方法即可
+     *
+     **/
+    handleAdd: function () {
+      this.$refs.crud.rowAdd()
+    },
+    handleEdit (row, index) {
+      this.$refs.crud.rowEdit(row, index)
+    },
+    handleDel (row, index) {
+      this.$refs.crud.rowDel(row, index)
+    },
+    rowDel: function (row) {
+      var _this = this
+      this.$confirm('是否确认删除字典名为"' + row.name + '"的数据项?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(function () {
+          return delObj(row)
+        })
+        .then(() => {
+          this.loadPage(this.page)
+          _this.$message({
+            showClose: true,
+            message: '删除成功',
+            type: 'success',
+          })
+        })
+        .catch(function () { })
+    },
+    /**
+     * @title 数据更新
+     * @param row 为当前的数据
+     * @param index 为当前更新数据的行数
+     * @param done 为表单关闭函数
+     *
+     **/
+    handleUpdate: function (row, index, done) {
+      putObj(row).then(() => {
+        this.tableData.splice(index, 1, Object.assign({}, row))
         this.$message({
-          message: `成功!${res.msg}`,
+          showClose: true,
+          message: '修改成功',
           type: 'success',
         })
-      } else {
+        this.loadPage(this.page)
+        done()
+      })
+    },
+    /**
+     * @title 数据添加
+     * @param row 为当前的数据
+     * @param done 为表单关闭函数
+     *
+     **/
+    handleSave: function (row, done) {
+      addObj(row).then(() => {
+        this.tableData.push(Object.assign({}, row))
         this.$message({
-          message: `警告!${res.msg}`,
-          type: 'warning',
+          showClose: true,
+          message: '添加成功',
+          type: 'success',
         })
-      }
-    },
-    handleExport (functionName = 'dict_export') {
-      getDictExcelExportByType(functionName)
-    },
-    handleImport (functionName = 'dict_import') {
-      const typeMap = {
-        'dict_import': '导入字典',
-        'dict_value_import': '导入字典值',
-      }
-      this.importUrl = functionName
-      this.importTypeName = typeMap[functionName]
-      this.importDialogShow = true
-    },
-    handleDelete (row) {
-      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        }).then(()=>{
-            deleteDict(row).then(() => {
-            this.dialogFormVisible = false
-            this.getList()
-            this.$notify({
-              title: '成功',
-              message: '删除成功',
-              type: 'success',
-              duration: 2000,
-            })
-          })
-        }).catch(()=>{})
-    },
-    handleUpdate (row) {
-      this.dialogStatus = 'update'
-      getDictById(row.id).then(res => {
-        this.form = res.data
-        this.dialogFormVisible = true
-      })
-      getDictChildById(row.id).then(res => {
-        this.tableData = res.data
+        this.loadPage(this.page)
+        done()
       })
     },
-    handleCreate () {
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
+    searchChange (form) {
+      this.loadPage(this.page, form)
     },
-    handleAddDictChild () {
-      this.dialogFormChildVisible = true
-    },
-    // 点击保存时的验证
-    saveChildDict (row) {
-      this.$refs['childform'].validate((valid) => {
-        this.loading = true
-        // console.log('验证开始')
-        if (valid) {
-      //     console.log(valid)
-          if (!row.id) {
-            row.dictId = this.form.id
-            postDictChild(row).then(() => {
-              getDictChildById(this.form.id).then(res => {
-                this.tableData = res.data
-                this.childform = {}
-                this.dialogFormChildVisible = false
-                this.loading = false
-              })
-            })
-          } else {
-            putDictChild(row).then(() => {
-              getDictChildById(this.form.id).then(res => {
-                this.tableData = res.data
-                this.childform = {}
-                this.dialogFormChildVisible = false
-                this.loading = false
-              })
-            })
-          }
-        } else {
-      // //     console.log(valid)
-      //     console.log("执行else")
-          this.loading = false
-          return false
-        }
-      })
-    },
-    addChildDict (row, isEdit = false) {
-      if (isEdit) {
-        getDictChildByMid(row.id).then(res => {
-          this.childform = res.data
-          this.dialogFormChildVisible = true
-        })
-      } else {
-        this.childform = {}
-        this.childform.parentId = row.id
-        this.dialogFormChildVisible = true
-      }
-    },
-    deleteChildDict (row) {
-      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        }).then(()=>{
-          deleteChildDictById(row).then(() => {
-            getDictChildById(this.form.id).then(res => {
-              this.tableData = res.data
-              this.dialogFormChildVisible = false
-              this.$notify({
-                title: '成功',
-                message: '删除成功',
-                type: 'success',
-                duration: 2000,
-              })
-              this.$store.dispatch('GetDicList')
-            })
-          })
-        })
-
-    },
-    create () {
-      // const set = this.$refs
-      // set[formName].validate(valid => {
-      //   if (valid) {
-          postDict(this.form).then((res) => {
-            console.log(res)
-            this.dialogFormVisible = false
-            this.getList()
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000,
-            })
-            this.$store.dispatch('GetDicList')
-          })
-        // } else {
-          // return false
-        // }
-      // })
-    },
-    cancel (formName) {
-      this.dialogFormVisible = false
-      const set = this.$refs
-      set[formName].resetFields()
-      console.log(formName)
-      this.form = {}
-    },
-    // 点击外部关闭
-    dialogClose (){
-      this.dialogFormVisible = false
-      this.$refs["form"].resetFields()
-      this.form = {}
-    },
-    handleClose (){
-      this.loading = false
-      this.dialogFormChildVisible = false
-      this.$refs["childform"].resetFields()
-      this.childform = {}
-    },
-    update (formName) {
-      const set = this.$refs
-      set[formName].validate(valid => {
-        if (valid) {
-          this.dialogFormVisible = false
-          this.form.password = undefined
-          putDict(this.form).then(() => {
-            this.dialogFormVisible = false
-            this.getList()
-            this.$notify({
-              title: '成功',
-              message: '修改成功',
-              type: 'success',
-              duration: 2000,
-            })
-            this.$store.dispatch('GetDicList')
-          })
-        } else {
-          return false
-        }
-      })
+    /**
+     * 刷新回调
+     */
+    refreshChange () {
+      this.loadPage(this.page)
     },
   },
 }
 </script>
-<style lang="scss" scoped>
-.app-container /deep/ .el-table__expanded-cell {
-  padding: 10px 0;
-  padding-left: 58px;
-}
-.demo-table-expand {
-  font-size: 0;
-}
-.demo-table-expand label {
-  width: 90px;
-  color: #99a9bf;
-}
-.demo-table-expand .el-form-item {
-  margin-right: 0;
-  margin-bottom: 0;
-  width: 33%;
-}
-.operationStyle{
-  text-align: center;
-}
-.Dictionaries{
-  padding-left: 20px;
-}
-</style>

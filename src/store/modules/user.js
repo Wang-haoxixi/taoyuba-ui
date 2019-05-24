@@ -1,313 +1,210 @@
-import {
-  setToken,
-  removeToken,
-} from '@/util/auth'
-import {
-  setStore,
-  getStore,
-} from '@/util/store'
-import {
-  loginByUsername,
-  getUserInfo,
-  logout,
-} from '@/api/admin/login'
-import {
-  getDeptId,
-  } from '@/api/element/element'
-import {GetMenu} from '@/api/admin/menu'
-import {getDicList} from '@/api/admin/login'
+import { getStore, setStore } from '@/util/store'
+import { getUserInfo, loginByMobile, loginBySocial, loginByUsername, logout, refreshToken } from '@/api/login'
 import { encryption } from '@/util/util'
-import cloneDeep from 'lodash/cloneDeep'
-import isArray from 'lodash/isArray'
-import {setDicList} from '@/util/dic'
+
 const user = {
   state: {
-    userInfo: getStore({
-      name: 'userInfo',
-    }) || {},
-    permissions: getStore({
-      name: 'permissions',
-    }) || {},
-    roles: getStore({
-      name: 'roles',
-    }) || undefined,
-    menuAll: getStore({
-      name: 'menuAll',
-    }) || [],
-    menu: getStore({
-      name: 'menu',
-    }) || [],
-    dicList: getStore({
-      name: 'dicList',
-    }) || [],
-    departmentList: getStore({
-      name: 'departmentList',
-    }) || [],
-    activeMainMenu: getStore({
-      name: 'activeMainMenu',
-    }) || '',
-    activeMenu: getStore({
-      name: 'activeMenu',
-    }) || '',
-    isInitMenu: getStore({
-      name: 'isInitMenu',
-    }) || false,
-    access_token: getStore({
-      name: 'access_token',
-    }) || '',
-    refresh_token: getStore({
-      name: 'refresh_token',
-    }) || '',
-    dictionary: getStore({
-      name: 'dictionary',
-    }) || '',
+    userInfo: {},
+    permissions: {},
+    roles: [],
+    orgs: [],
+    keep_login_token: getStore({ name: 'keep_login_token' }) || {
+      is_keep_login: false,
+      access_token: '',
+      refresh_token: '',
+      expires_in: '',
+    },
+    expires_in: getStore({ name: 'expires_in' }) || '',
+    access_token: getStore({ name: 'access_token' }) || '',
+    refresh_token: getStore({ name: 'refresh_token'  }) || '',
   },
   actions: {
+    // 根据之前保持登陆记录
+    LoginByLocalStorage ({commit, state}) {
+      const { keep_login_token } = state
+      if (keep_login_token.is_keep_login) {
+        commit('SET_ACCESS_TOKEN', keep_login_token.access_token)
+        commit('SET_REFRESH_TOKEN', keep_login_token.refresh_token)
+        commit('SET_EXPIRES_IN', keep_login_token.expires_in)
+        commit('SET_MENU', [])
+        commit('SET_MAINMENU', {})
+        commit('SET_OTHERMENUS', [])
+        commit('SET_MENUSMAP', {})
+        commit('SET_MENUPATHLIST', [])
+        commit('CLEAR_LOCK')
+        return true
+      } else {
+        return false
+      }
+    },
     // 根据用户名登录
-    LoginByUsername ({
-      commit,
-    }, userInfo) {
-      return new Promise((resolve, reject) => {
-        const user = encryption({
-          data: userInfo,
-          key: 'dipscloudisbest1',
-          param: ['password'],
-        })
-        loginByUsername(user.username, user.password, user.code, user.randomStr).then((response) => {
-          let res = response.data
-          setToken(res.access_token)
-          commit('SET_ACCESS_TOKEN', res.access_token)
-          commit('SET_REFRESH_TOKEN', res.refresh_token)
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
+    LoginByUsername ({ commit }, userInfo) {
+      const user = encryption({
+        data: userInfo,
+        key: 'gdscloudprisbest',
+        param: ['password'],
       })
-    },
-    GetTableData () {
-      return new Promise(() => {
-        // 未定义
-        // getTableData(page).then(res => {
-        //   const data = res.data
-        //   resolve(data)
-        // })
-      })
-    },
-    GetUserInfo ({
-      commit,
-      state,
-    }) {
-      return new Promise((resolve, reject) => {
-        getUserInfo(state.token).then((response) => {
-          let res = response.data
-          if (res.code === 0) {
-            const data = res.data
-            commit('SET_ROLES', data.roles)
-            commit('SET_USER_INFO', data.sysUserVO ? data.sysUserVO : data.sysUser)
-            commit('SET_PERMISSIONS', data.permissions)
-            resolve(res)
+      return new Promise(async (resolve, reject) => {
+        try {
+          const {data} = await loginByUsername(user.username, user.password, user.code, user.randomStr)
+          if (user.isKeepLogin) {
+            commit('SET_KEEP_LOGIN_TOKEN', {
+              is_keep_login: true,
+              access_token: data.access_token,
+              refresh_token: data.refresh_token,
+              expires_in: data.expires_in,
+            })
           }
-        }).catch(error => {
+          commit('SET_ACCESS_TOKEN', data.access_token)
+          commit('SET_REFRESH_TOKEN', data.refresh_token)
+          commit('SET_EXPIRES_IN', data.expires_in)
+          commit('SET_MENU', [])
+          commit('SET_MAINMENU', {})
+          commit('SET_OTHERMENUS', [])
+          commit('SET_MENUSMAP', {})
+          commit('SET_MENUPATHLIST', [])
+          commit('CLEAR_LOCK')
+          resolve(data)
+        } catch (error) {
           reject(error)
-        })
+        }
+      })
+    },
+    // 根据手机号登录
+    LoginByPhone ({ commit }, userInfo) {
+      return new Promise((resolve, reject) => {
+        loginByMobile(userInfo.mobile, userInfo.code)
+          .then(response => {
+            const data = response.data
+            commit('SET_ACCESS_TOKEN', data.access_token)
+            commit('SET_REFRESH_TOKEN', data.refresh_token)
+            commit('SET_EXPIRES_IN', data.expires_in)
+            commit('CLEAR_LOCK')
+            resolve()
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
+    // 根据OpenId登录
+    LoginBySocial ({ commit }, param) {
+      return new Promise((resolve, reject) => {
+        loginBySocial(param.state, param.code)
+          .then(response => {
+            const data = response.data
+            commit('SET_ACCESS_TOKEN', data.access_token)
+            commit('SET_REFRESH_TOKEN', data.refresh_token)
+            commit('SET_EXPIRES_IN', data.expires_in)
+            commit('CLEAR_LOCK')
+            resolve()
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
+    GetUserInfo ({ commit }) {
+      return new Promise((resolve, reject) => {
+        getUserInfo()
+          .then(({ data }) => {
+            const realData = data.data || {}
+            commit('SET_USERIFNO', realData.sysUser)
+            commit('SET_ROLES', realData.roles || [])
+            commit('SET_PERMISSIONS', realData.permissions || [])
+            commit('SET_ORGS', realData.orgs || [])
+            resolve(realData)
+          })
+          .catch(() => {
+            reject()
+          })
+      })
+    },
+    // 刷新token
+    RefreshToken ({ commit, state }) {
+      return new Promise((resolve, reject) => {
+        refreshToken(state.refresh_token)
+          .then(response => {
+            const data = response.data
+            commit('SET_ACCESS_TOKEN', data.access_token)
+            commit('SET_REFRESH_TOKEN', data.refresh_token)
+            commit('SET_EXPIRES_IN', data.expires_in)
+            commit('CLEAR_LOCK')
+            resolve()
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
     // 登出
-    LogOut ({
-      commit,
-    }) {
-     return new Promise((resolve, reject)  => {
-        logout().then(() => {
-          commit('SET_ACTIVE_MAIN_MENU', '')
-          // 清除菜单
-          commit('SET_MENU', [])
-          commit('SET_MENU_ALL', [])
-          // 清除权限
-          commit('SET_PERMISSIONS', [])
-          // 部门
-          commit('SET_DEPARTMENT_LIST', [])
-          // 清除用户信息
-          commit('SET_USER_INFO', {})
-          commit('SET_ACCESS_TOKEN', '')
-          commit('SET_REFRESH_TOKEN', '')
-          commit('SET_ROLES', undefined)
-          commit('DEL_ALL_TAG')
-          commit('SET_DIC_LIST', {})
-          removeToken()
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
+    LogOut ({ commit }) {
+      return new Promise((resolve, reject) => {
+        logout()
+          .then(() => {
+            commit('SET_MENU', [])
+            commit('SET_MAINMENU', {})
+            commit('SET_OTHERMENUS', [])
+            commit('SET_MENUSMAP', {})
+            commit('SET_MENUPATHLIST', [])
+            commit('SET_PERMISSIONS', [])
+            commit('SET_ORGS', [])
+            commit('SET_USER_INFO', {})
+            commit('SET_ACCESS_TOKEN', '')
+            commit('SET_KEEP_LOGIN_TOKEN', {})
+            commit('SET_REFRESH_TOKEN', '')
+            commit('SET_EXPIRES_IN', '')
+            commit('SET_ROLES', [])
+            commit('DEL_ALL_TAG')
+            commit('CLEAR_LOCK')
+            resolve()
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
     // 注销session
-    FedLogOut ({
-      commit,
-    }) {
+    FedLogOut ({ commit }) {
       return new Promise(resolve => {
-        commit('SET_ACTIVE_MAIN_MENU', '')
-        // 清除菜单
-        commit('SET_MENU', [])
-        commit('SET_MENU_ALL', [])
-        // 清除权限
         commit('SET_PERMISSIONS', [])
-        // 部门
-        commit('SET_DEPARTMENT_LIST', [])
-        // 清除用户信息
+        commit('SET_ORGS', [])
         commit('SET_USER_INFO', {})
         commit('SET_ACCESS_TOKEN', '')
         commit('SET_REFRESH_TOKEN', '')
         commit('SET_ROLES', [])
         commit('DEL_ALL_TAG')
-        commit('SET_DIC_LIST', {})
-        commit('SET_DIC_LIST', {})
-        removeToken()
+        commit('CLEAR_LOCK')
+        commit('SET_MENU', [])
+        commit('SET_MAINMENU', {})
+        commit('SET_OTHERMENUS', [])
+        commit('SET_MENUSMAP', {})
+        commit('SET_MENUPATHLIST', [])
         resolve()
-      })
-    },
-    // 获取系统菜单
-    GetMenu ({
-      commit,
-    }) {
-      return new Promise(resolve => {
-        GetMenu().then((response) => {
-          let res = response.data
-          // , '/admin/user''/info_system/system_search'
-          // const arr = ['/info_system/system_search', '/element/information', '/admin/user', '/myiframe/urlPath?src=http://127.0.0.1:5001&name=服务监控', '/tag/bqgl']
-          // arr[3] = res
-          // res.forEach((item) => {
-          //   // console.log(item.children[0], item.children[0].path)
-          //   if (item.children && item.children.length > 0) {
-          //     if (~item.children[0].path.indexOf('http')) {
-          //       item.redirect = `/myiframe/urlPath?src=${item.children[0].path}&name=${item.children[0].label}`
-          //     } else {
-          //       item.redirect = `${item.path}/${item.children[0].path}`
-          //     }
-          //   } else {
-          //     item.redirect = `${item.path}`
-          //   }
-          // })
-          // console.log(JSON.stringify(res))
-          const mergeData = cloneDeep(res)
-          // mergeData.forEach(ele => {
-          //   ele.children.forEach(child => {
-          //     if (!validatenull(child.component)) child.path = `${ele.path}/${child.path}`
-          //   })
-          // })
-          // console.log('mergeData', mergeData)
-          commit('SET_MENU_ALL', mergeData)
-          // commit('SET_MENU', mergeData[0].children)
-          // commit('SET_ACTIVE_MAIN_MENU', mergeData[0].name)
-          resolve({mergeData, res})
-        })
-      })
-    },
-    // 获取字典
-    GetDicList ({commit}) {
-      return new Promise(resolve => {
-        getDicList().then((response) => {
-          let res = response.data
-          var obj = {}
-          if (!isArray(res)) {
-            return
-          }
-          res.forEach((item) => {
-            obj[item.number] = item.dictValueVoList
-          })
-          // console.log('SET_DIC_LIST', setDicList(obj))
-          commit('SET_DIC_LIST', setDicList(obj))
-          // commit('SET_DIC_LIST', res)
-          resolve()
-        })
-      })
-    },
-    GetDepartmentList ({commit}) {
-      return new Promise(() => {
-        getDeptId().then(({data}) => {
-          let res = data
-          let arr = []
-          if (!isArray(res)) {
-            return
-          }
-          res.forEach((item) => {
-            arr.push({value: item.id, label: item.name, type: item.type})
-          })
-          commit('SET_DEPARTMENT_LIST', arr)
-        })
       })
     },
   },
   mutations: {
-    // 字典
-    SET_DICTIONARY: (state, dictionary) => {
-      state.dictionary = dictionary
+    SET_KEEP_LOGIN_TOKEN: (state, keep_login_token) => {
+      state.keep_login_token = keep_login_token
       setStore({
-        name: 'dictionary',
-        content: state.dictionary,
-        type: 'session',
+        name: 'keep_login_token',
+        content: state.keep_login_token,
       })
     },
-    SET_ACTIVE_MAIN_MENU: (state, menuName) => {
-      state.activeMainMenu = menuName
-      setStore({
-        name: 'activeMainMenu',
-        content: state.activeMainMenu,
-        type: 'session',
-      })
-    },
-    SET_ACTIVE_MENU: (state, menuName) => {
-      state.activeMenu = menuName
-      setStore({
-        name: 'activeMenu',
-        content: state.activeMenu,
-        type: 'session',
-      })
-    },
-    SET_DIC_LIST: (state, dicList) => {
-      state.dicList = dicList
-      setStore({
-        name: 'dicList',
-        content: state.dicList,
-        type: 'session',
-      })
-    },
-    SET_DEPARTMENT_LIST: (state, departmentList) => {
-      state.departmentList = departmentList
-      setStore({
-        name: 'departmentList',
-        content: state.departmentList,
-        type: 'session',
-      })
-    },
-    SET_ACCESS_TOKEN: (state, accessToken) => {
-      state.access_token = accessToken
+    SET_ACCESS_TOKEN: (state, access_token) => {
+      state.access_token = access_token
       setStore({
         name: 'access_token',
         content: state.access_token,
         type: 'session',
       })
     },
-    SET_MENU: (state, menu) => {
-      state.menu = menu
+    SET_EXPIRES_IN: (state, expires_in) => {
+      state.expires_in = expires_in
       setStore({
-        name: 'menu',
-        content: state.menu,
-        type: 'session',
-      })
-    },
-    SET_MENU_ALL: (state, menu) => {
-      state.menuAll = menu
-      setStore({
-        name: 'menuAll',
-        content: state.menuAll,
-        type: 'session',
-      })
-    },
-    SET_USER_INFO: (state, userInfo) => {
-      state.userInfo = userInfo
-      setStore({
-        name: 'userInfo',
-        content: state.userInfo,
+        name: 'expires_in',
+        content: state.expires_in,
         type: 'session',
       })
     },
@@ -319,13 +216,14 @@ const user = {
         type: 'session',
       })
     },
+    SET_USERIFNO: (state, userInfo) => {
+      state.userInfo = userInfo
+    },
     SET_ROLES: (state, roles) => {
       state.roles = roles
-      setStore({
-        name: 'roles',
-        content: state.roles,
-        type: 'session',
-      })
+    },
+    SET_USER_INFO: (state, userInfo) => {
+      state.userInfo = userInfo
     },
     SET_PERMISSIONS: (state, permissions) => {
       const list = {}
@@ -333,11 +231,9 @@ const user = {
         list[permissions[i]] = true
       }
       state.permissions = list
-      setStore({
-        name: 'permissions',
-        content: state.permissions,
-        type: 'session',
-      })
+    },
+    SET_ORGS: (state, orgs) => {
+      state.orgs = orgs
     },
   },
 }

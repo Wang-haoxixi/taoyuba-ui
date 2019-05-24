@@ -1,0 +1,57 @@
+stages:
+  - build
+  - deploy
+  - master
+
+cache:
+  key: ${CI_COMMIT_REF_NAME}
+  paths:
+    - node_modules/
+
+build_admin_job:
+  image: node:lts
+  stage: build
+  tags:
+    - gitlab-org
+  only:
+    - deploy
+    - master
+  script:
+    - yarn
+    # - yarn test:unit
+    - yarn lint
+    - yarn build
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - dist
+deploy_job:
+  image: alpine
+  stage: deploy
+  only:
+    - deploy
+  tags:
+    - gitlab-org
+  script:
+    - echo "http://mirrors.aliyun.com/alpine/v3.8/main/" > /etc/apk/repositories
+    - apk add --no-cache rsync openssh
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - echo -e "Host $DEPLOY_SERVER\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+    - rsync -rav -e 'ssh -p 10061' --delete dist/ "$DEPLOY_SERVER:$SERVER_DEV_PATH"
+master_job:
+  image: alpine
+  stage: master
+  only:
+    - master
+  tags:
+    - gitlab-org
+  script:
+    - echo "http://mirrors.aliyun.com/alpine/v3.7/main/" > /etc/apk/repositories
+    - apk add --no-cache rsync openssh
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - echo -e "Host $DEPLOY_SERVER\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+    - rsync -rav -e 'ssh -p $DEPLOY_PORT' --delete dist/ "$DEPLOY_SERVER:$SERVER_DEV_PATH"

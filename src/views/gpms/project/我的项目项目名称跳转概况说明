@@ -1,0 +1,5 @@
+点击table中的项目名称
+    -> vuex和缓存中保存当前点击 row
+     -> 跳转路由 地址  /gpms/project/prooverview/overview
+     -> 进入 概况页面时  created 中 发送 dispath 异步读取 vuex 中的 row 进行后台访问
+   概况页面返回时  直接返回到 我的项目页面  /Gpms/project

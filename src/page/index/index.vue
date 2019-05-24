@@ -1,145 +1,204 @@
 <template>
-  <el-container class="avue-contail">
-    <el-header height="auto" class="avue-tabs">
-      <!-- 顶部导航栏 -->
-      <top />
-    </el-header>
-    <el-container class="body-container">
-      <el-aside :style="{ width: isCollapse ? asideWidthCollapse : asideWidth }" class="aside-container">
-        <!-- 左侧导航栏 -->
-        <sidebar class="avue-sidebar"></sidebar>
-      </el-aside>
-      <div class="main-container">
-        <el-main class="avue-main">
-          <!-- 顶部标签卡 -->
-          <tags class="tag-wrapper"/>
+  <div class="avue-contail">
+    <el-container style="height: 100vh;">
+      <el-header style="height: 60px;padding: 0;z-index: 500;">
+        <!-- 顶部导航栏 -->
+        <top />
+      </el-header>
+      <el-container>
+        <el-aside :width="asideWidth">
+          <!-- 左侧导航栏 -->
+          <sidebar />
+        </el-aside>
+        <el-main>
           <!-- 主体视图层 -->
-          <router-view class="avue-view"/>
+          <el-scrollbar style="height:100%">
+            <keep-alive>
+              <router-view class="avue-view" v-if="$route.meta.keepAlive" />
+            </keep-alive>
+            <router-view class="avue-view" v-if="!$route.meta.keepAlive" />
+          </el-scrollbar>
         </el-main>
-      </div>
+      </el-container>
     </el-container>
-  </el-container>
+    <dialog-group></dialog-group>
+  </div>
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
-import tags from './tags'
-// import myAnimationPanel from './animation'
+import displayMixins from '@/mixins/displayMixins'
+import DialogGroup from './DialogGroup'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import top from './top/'
 import sidebar from './sidebar/'
-import { setTheme } from '@/util/util'
+import admin from '@/util/admin'
+import { validatenull } from '@/util/validate'
+// import { calcDate } from '@/util/date.js'
+import { getStore } from '@/util/store.js'
+// import SockJS from 'sockjs-client'
+// import Stomp from 'stompjs'
+// import store from '@/store'
+
 export default {
-  components: { top, tags, sidebar },
-  name: 'index',
+  mixins: [displayMixins],
+  components: {
+    top,
+    sidebar,
+    DialogGroup,
+  },
+  name: 'Index',
   data () {
     return {
-      // [侧边栏宽度] 正常状态
-      asideWidth: '256px',
-      // [侧边栏宽度] 折叠状态
-      asideWidthCollapse: '65px',
-      // 刷新token锁
+      //刷新token锁
       refreshLock: false,
+      //刷新token的时间
+      refreshTime: '',
     }
   },
-  beforeRouteEnter (to, from, next) { 
-    next(vm => {
-      vm.mainMenu = to.matched[0].name
-    })
-  },
-  beforeRouteUpdate (to, from, next) {
-    next(vm => {
-      vm.mainMenu = to.matched[0].name
-    })
-  },
   created () {
-    this.getCurrentMenu()
+    //实时检测刷新token
+    // this.handleRefreshToken()
+  },
+  destroyed () {
+    // console.log("销毁")
+    // console.log(this.refreshTime)
+    clearInterval(this.refreshTime)
+    // this.disconnect()
   },
   mounted () {
-    setTheme(this.themeName)
-    this.$store.dispatch('GetDepartmentList')
+    // this.init()
+    this.LoadAllDictMap()
+    this.LoadContactsPyGroup()
+    this.LoadFamsConfig()
+    // this.initWebSocket()
   },
   computed: {
-    ...mapGetters(['isCollapse', 'website', 'menuAll', 'themeName']),
-    mainMenu: {
-      get () { return this.activeMainMenu },
-      set (val) { this.$store.commit('SET_ACTIVE_MAIN_MENU', val) },
+    ...mapGetters([
+      'userInfo',
+      'isLock',
+      'website',
+      // 'expires_in',
+    ]),
+    asideWidth () {
+      if (this.$route.matched[0].path === '/app') {
+        return '0px'
+      }
+      if (this.isDesktop()) {
+        return '200px'
+      } else {
+        return '64px'
+      }
     },
   },
-  props: [],
   methods: {
-    ...mapMutations([
-      'SET_MENU',
-    ]),
-    getCurrentMenu () {
-      const name = this.$route.matched[0].name
-      this.menuAll.forEach((menu) => {
-        if (menu.name === name) {
-          this.$store.commit('SET_MENU', menu.children)
-        }
-      })
+    ...mapActions(['LoadAllDictMap', 'LoadContactsPyGroup', 'LoadFamsConfig', 'RefreshToken']),
+    ...mapMutations({ setScreen: 'SET_SCREEN', setExpiresIn: 'SET_EXPIRES_IN' }),
+    handleOk () {
+      this.visible = false
     },
+    // 屏幕检测
+    init () {
+      this.setScreen(admin.getScreen())
+      window.onresize = () => {
+        setTimeout(() => {
+          this.setScreen(admin.getScreen())
+        }, 0)
+      }
+    },
+    // 实时检测刷新token
+    handleRefreshToken () {
+      this.refreshTime = setInterval(() => {
+        const token = getStore({
+          name: 'access_token',
+          debug: true,
+        })
+        if (validatenull(token)) {
+          return
+        }
+        if (this.expires_in <= 1000 && !this.refreshLock) {
+          this.refreshLock = true
+          this.RefreshToken().catch(() => {
+            clearInterval(this.refreshTime)
+          })
+          this.refreshLock = false
+        }
+        this.setExpiresIn(this.expires_in - 10)
+      }, 10000)
+    },
+    // initWebSocket () {
+    //   this.connection()
+    //   let self = this
+    //   //断开重连机制,尝试发送消息,捕获异常发生时重连
+    //   this.timer = setInterval(() => {
+    //     try {
+    //       self.stompClient.send('test')
+    //     } catch (err) {
+    //       console.log('断线了: ' + err)
+    //       self.connection()
+    //     }
+    //   }, 5000)
+    // },
+    // connection () {
+    //   let token = store.getters.access_token
+    //   let TENANT_ID = getStore({ name: 'tenantId' })
+    //   let headers = {
+    //     Authorization: 'Bearer ' + token,
+    //   }
+    //   // 建立连接对象
+    //   this.socket = new SockJS('/api/act/ws') //连接服务端提供的通信接口，连接以后才可以订阅广播消息和个人消息
+    //   // 获取STOMP子协议的客户端对象
+    //   this.stompClient = Stomp.over(this.socket)
+
+    //   // 向服务器发起websocket连接
+    //   this.stompClient.connect(
+    //     headers,
+    //     () => {
+    //       this.stompClient.subscribe(
+    //         '/task/' + this.userInfo.username + '-' + TENANT_ID + '/remind',
+    //         msg => {
+    //           // 订阅服务端提供的某个topic;
+    //           this.$notify({
+    //             title: '协同提醒',
+    //             type: 'warning',
+    //             dangerouslyUseHTMLString: true,
+    //             resources: msg.body + '任务，请及时处理',
+    //             offset: 60,
+    //           })
+    //         }
+    //       )
+    //     },
+    //     () => { }
+    //   )
+    // },
+    // disconnect () {
+    //   if (this.stompClient != null) {
+    //     this.stompClient.disconnect()
+    //     console.log('Disconnected')
+    //   }
+    // },
   },
 }
 </script>
-
 <style lang="scss" scoped>
-.body-container {
-  height: calc(100vh - 65px);
-  background-color: #eee;
+.el-aside {
+  overflow: hidden;
+  background-color: #fafafa;
+  border-right: 1px solid #e5e5e5;
 }
-.avue-sidebar {
-  height: 100%;
-  box-sizing: border-box;
-  position: relative;
-  width: 256px;
-}
-.avue-tabs {
-  padding: 0;
-  z-index: 1;
-}
-.avue-main {
-  height: calc(100vh - 46px);
-  background-color: #eee;
-  position: relative;
+</style>
+<style lang="css" scoped>
+.avue-contail >>> .el-main {
   padding: 0;
   overflow-x: hidden;
+  height: calc(100vh - 60px);
 }
-.aside-container {
+.avue-contail >>> .el-scrollbar__wrap {
   overflow-x: hidden;
 }
-.avue-contail /deep/ .el-aside {
-  box-sizing: border-box;
-  position: relative;
-  overflow-y: scroll;
-  padding: 0;
-}
-.avue-contail /deep/ .el-aside::-webkit-scrollbar {
-  display: none;
-}
-.avue-view {
-  margin-top: 46px;
-}
-// .avue-view {
-//   position: absolute;
-//   top: 60px;
-//   height: 100vh;
-//   width: 100%;
-//   box-sizing: border-box;
-//   z-index: 1000;
-// }
-// .basic-container>.avue-view {
-//   height: 100%;
-//   .el-card__body {
-//     height: 100%;
-//   }
-// }
-.main-container {
+.avue-contail >>> .el-scrollbar {
   width: 100%;
 }
-.tag-wrapper {
-  position: fixed;
-  top: 64px;
-  left: 256px;
-  right: 0;
+.avue-contail >>> .el-scrollbar__view {
+  height: 100%;
 }
 </style>

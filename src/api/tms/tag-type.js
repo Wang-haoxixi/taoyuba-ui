@@ -1,4 +1,4 @@
-import request from '@/router/request'
+import request from '@/router/axios'
 
 const prefixUrl = '/tms'
 // @/api/tms/tag-type
@@ -31,7 +31,7 @@ export function putTagType (tag) {
     data: tag,
   })
 }
- 
+
 export function postTagType (tag) {
   return request({
     url: `${prefixUrl}/tag_type/create`,
@@ -39,7 +39,7 @@ export function postTagType (tag) {
     data: tag,
   })
 }
-// 删除
+
 export function deleteTagTypeById (id) {
   return request({
     url: `${prefixUrl}/tag_type/delete/${id}`,

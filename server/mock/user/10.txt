@@ -1,0 +1,4 @@
+Request URL: http://127.0.0.1:8090/api/admin/role/list
+Request Method: GET
+
+{"code":0,"msg":"success","data":[{"roleId":1,"roleName":"管理员","roleCode":"ROLE_ADMIN","roleDesc":"管理员","dsType":2,"dsScope":"2","createTime":"2017-10-29 15:45:51","updateTime":"2018-12-26 14:09:11","delFlag":"0"}]}

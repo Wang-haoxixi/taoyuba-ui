@@ -1,110 +1,47 @@
-*, :after, :before {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
+// 表单展示
+@import './form-detail.scss';
+* {
+  outline: none;
 }
-.no-border .el-card {
-  border: none;
-}
-.detail-wrapper {
-  .avue-form-detail__item {
-    padding-top: 0;
-  }
-  .avue-form-detail__header {
-    display: none;
-  }
-  &.show-header {
-    .avue-form-detail__header {
-      display: block;
-    }
-  }
-  .avue-form-detail__box {
-    font-size: 14px;
-    margin-bottom: 22px;
-    &:after {
-      visibility: hidden;
-      display: block;
-      font-size: 0;
-      content: " ";
-      clear: both;
-      height: 0;
-    }
-    .avue-form-detail__label {
-      color: #606266;
-      float: left;
-      display: inline-block;
-      width: 125px;
-      height: 36px;
-      line-height: 36px;
-      text-align: right;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-    .avue-form-detail__content {
-      color: #777;
-      display: inline-block;
-      width: calc(100% - 160px);
-      float: left;
-      height: 36px;
-      line-height: 36px;
-      border: 1px dotted #d7d7d7;
-      padding: 0 10px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-  }
-}
-.table-btn-group .el-button{
-  position: relative;
-}
-.table-btn-group .el-button:after {
-  content: "";
-  width: 1px;
-  height: 13px;
-  background-color: #e8e8e8;
-  position: absolute;
-  top: 9px;
-  right: -7px;
-}
-.table-btn-group .el-button:last-child:after {
-  content: "";
-  width: 0px;
+button,
+input,
+select,
+pre,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
 }
 
-.table-btn-group {
-  .gov-button {
-    .el-button {
-      &::after {
-        content: "";
-        width: 1px;
-        height: 13px;
-        background-color: #e8e8e8;
-        position: absolute;
-        top: 9px;
-        right: -7px;
-      }
-    }
-    &:last-child {
-      .el-button {
-        &::after {
-          content: "";
-          width: 0;
-        }
-      }
-    }
+#nprogress .bar {
+  background: red;
+}
+.el-checkbox__inner {
+  width: 17px;
+  height: 17px;
+  &:hover {
+    border-color: #999;
+  }
+  &::after {
+    height: 10px;
+    left: 6px;
+    border-color: #999;
   }
 }
-
-.text-white {
-  color: #fff;
+.el-checkbox__input.is-indeterminate .el-checkbox__inner::before {
+  top: 7px;
+  background-color: #999;
 }
-.search-conten-inline, .search-button-inline {
-  display: inline-block;
+.el-checkbox__input.is-checked .el-checkbox__inner,
+.el-checkbox__input.is-indeterminate .el-checkbox__inner,
+.el-checkbox__input.is-focus .el-checkbox__inner {
+  border-color: #999;
+  background-color: #fff;
 }
-.search-conten-block, .search-button-block {
-  display: block;
+.el-loading-mask {
+  z-index: 99;
 }
-.search-button-block {
-  text-align: right;
+.ant-tag {
+  margin-bottom: 5px;
 }

@@ -1,0 +1,4 @@
+Request URL: http://127.0.0.1:8090/api/admin/dict/type/log_type
+Request Method: GET
+
+{"code":0,"msg":"success","data":[{"id":1,"value":"9","label":"异常","type":"log_type","description":"日志异常","sort":1,"createTime":"2018-07-09 06:16:14","updateTime":"2018-11-24 07:25:11","remarks":"日志异常","delFlag":"0"},{"id":5,"value":"0","label":"正常","type":"log_type","description":"日志类型","sort":0,"createTime":"2018-09-30 02:33:53","updateTime":"2018-11-24 07:25:20","remarks":"日志正常","delFlag":"0"}]}

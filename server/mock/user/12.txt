@@ -1,0 +1,4 @@
+Request URL: http://127.0.0.1:8090/api/admin/user/6
+Request Method: DELETE
+
+{"code":0,"msg":"success","data":true}

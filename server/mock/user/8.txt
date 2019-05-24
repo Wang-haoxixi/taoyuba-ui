@@ -1,0 +1,4 @@
+Request URL: http://127.0.0.1:8090/api/admin/dept/tree
+Request Method: GET
+
+{"code":0,"msg":"success","data":[{"id":1,"parentId":0,"children":[{"id":3,"parentId":1,"children":[{"id":4,"parentId":3,"children":[{"id":5,"parentId":4,"children":[],"name":"院校农信"}],"name":"高新农信"}],"name":"潍坊农信"}],"name":"山东农信"},{"id":2,"parentId":0,"children":[{"id":7,"parentId":2,"children":[{"id":8,"parentId":7,"children":[{"id":11,"parentId":8,"children":[],"name":"院校沙县"}],"name":"潍坊沙县"}],"name":"山东沙县"}],"name":"沙县国际"}]}

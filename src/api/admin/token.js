@@ -1,6 +1,6 @@
-import request from '@/router/request'
+import request from '@/router/axios'
 
-export function getList (query) {
+export function fetchList (query) {
   return request({
     url: '/admin/token/page',
     method: 'get',
@@ -8,9 +8,9 @@ export function getList (query) {
   })
 }
 
-export function deleteToken (id) {
+export function delObj (token) {
   return request({
-    url: '/admin/token/delete/' + id,
-    method: 'post',
+    url: '/admin/token/' + token,
+    method: 'delete',
   })
 }

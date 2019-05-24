@@ -1,0 +1,169 @@
+<template>
+  <steps-content>
+    <el-form class="content-wrapper" ref="form" size="small" :model="data" label-width="150px">
+      <a-alert :closable="true" type="error" message="借出方组织审核通过后，将无法撤回！" style="margin-bottom: 24px;" />
+      <iep-form-item label-name="借出组织">
+        <iep-div-detail :value="data.outOrgName"></iep-div-detail>
+      </iep-form-item>
+      <iep-form-item label-name="支付方式">
+        <iep-div-detail :value="dictsMap.borrowMoneyType[data.borrowMoneyType]"></iep-div-detail>
+      </iep-form-item>
+      <iep-form-item label-name="收款公司">
+        <iep-div-detail :value="data.borrowInCompany"></iep-div-detail>
+      </iep-form-item>
+      <iep-form-item v-if="!bankAmountOption.disabled" label-name="收款账户">
+        <iep-div-detail :value="data.borrowInCompanyBank"></iep-div-detail>
+      </iep-form-item>
+      <iep-form-item label-name="还款天数">
+        <iep-div-detail :value="`${data.borrowDays}天`"></iep-div-detail>
+      </iep-form-item>
+      <iep-form-item label-name="还款时间">
+        <iep-div-detail :value="data.repaymentTime"></iep-div-detail>
+      </iep-form-item>
+      <iep-form-item label-name="借款利息">
+        <iep-div-detail :value="`${data.orgInterest}%`"></iep-div-detail>
+      </iep-form-item>
+      <iep-form-item label-name="借款金额">
+        <iep-div-detail :value="`${data.amount}元`"></iep-div-detail>
+      </iep-form-item>
+      <a-divider />
+      <iep-form-item label-name="支付公司">
+        <iep-select v-model="borrowOutCompanyId" autocomplete="off" prefix-url="fams/company" placeholder="请选择收入公司"></iep-select>
+      </iep-form-item>
+      <iep-form-item v-if="!outBankAmountOption.disabled" label-name="支付账户">
+        <iep-select v-model="borrowOutCompanyBankId" autocomplete="off" :prefix-url="outBankAmountOption.prefixUrl" placeholder="请选择银行账户"></iep-select>
+      </iep-form-item>
+    </el-form>
+    <template v-slot:action>
+      <a-button v-if="!data.isOut" type="primary" :loading="submitLoading" @click="handleSubmit">
+        取消借款
+      </a-button>
+      <a-button v-if="data.isOut" style="margin-left: 8px" type="primary" :loading="submitLoading" @click="handleOutConfirm">
+        转账完成
+      </a-button>
+      <a-button v-if="data.isOut" style="margin-left: 8px" :loading="submitLoading" @click="handleOrgReject">
+        转账失败
+      </a-button>
+      <a-button style="margin-left: 8px" @click="handleBack">
+        返回
+      </a-button>
+    </template>
+  </steps-content>
+
+</template>
+<script>
+import StepsContent from './StepsContent'
+import { cancelOrgBorrow, outOrgReconfirmBorrow, orgRejectBorrow } from '@/api/fams/org_borrow'
+import { dictsMap } from './options'
+export default {
+  props: ['data'],
+  components: { StepsContent },
+  data () {
+    return {
+      dictsMap,
+      submitLoading: false,
+      borrowOutCompanyId: '',
+      borrowOutCompanyBankId: '',
+    }
+  },
+  computed: {
+    bankAmountOption () {
+      if (this.data.borrowInCompanyId && this.data.borrowMoneyType === '1') {
+        return {
+          disabled: false,
+          prefixUrl: `fams/bank_account/${this.data.borrowInCompanyId}`,
+        }
+      } else {
+        return {
+          disabled: true,
+          prefixUrl: `fams/bank_account/${this.data.borrowInCompanyId}`,
+        }
+      }
+    },
+    outBankAmountOption () {
+      if (this.borrowOutCompanyId) {
+        return {
+          disabled: false,
+          prefixUrl: `fams/bank_account/${this.borrowOutCompanyId}`,
+        }
+      } else {
+        return {
+          disabled: true,
+          prefixUrl: `fams/bank_account/${this.borrowOutCompanyId}`,
+        }
+      }
+    },
+  },
+  created () {
+  },
+  methods: {
+    handleBack () {
+      this.$emit('back')
+    },
+    async handleOutConfirm () {
+      try {
+        await this.$confirm('此操作将转账完成, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+        this.submitLoading = true
+        try {
+          const { data } = await outOrgReconfirmBorrow({
+            id: this.data.id,
+            borrowOutCompanyId: this.borrowOutCompanyId,
+            borrowOutCompanyBankId: this.borrowOutCompanyBankId,
+          })
+          if (data.data) {
+            this.$message('操作成功')
+            this.handleBack()
+          } else {
+            this.$message(data.msg)
+          }
+        } catch (error) {
+          this.$message('似乎出现了一些问题')
+        }
+      } catch (error) {
+        this.$message('操作取消')
+      } finally {
+        this.submitLoading = false
+      }
+    },
+    async handleOrgReject () {
+      await this.handleCommon('审核通过', orgRejectBorrow)
+    },
+    async handleSubmit () {
+      await this.handleCommon('取消借款', cancelOrgBorrow)
+    },
+    async handleCommon (text, requestFunction) {
+      try {
+        await this.$confirm(`此操作将${text}, 是否继续?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+        this.submitLoading = true
+        try {
+          const { data } = await requestFunction(this.data.id)
+          if (data.data) {
+            this.$message('操作成功')
+            this.$emit('on-data', data.data)
+          } else {
+            this.$message(data.msg)
+          }
+        } catch (error) {
+          this.$message('似乎出现了一些问题')
+        }
+      } catch (error) {
+        this.$message('操作取消')
+      } finally {
+        this.submitLoading = false
+      }
+    },
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+@import "../borrow.scss";
+</style>

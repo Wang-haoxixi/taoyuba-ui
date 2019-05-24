@@ -1,58 +1,60 @@
 import Layout from '@/page/index/'
+/**
+ * 基础路由
+ * @type { *[] }
+ */
 export default [
+  {
+    path: '/',
+    name: '主页',
+    redirect: '/wel/index',
+  },
   {
     path: '/login',
     name: '登录页',
-    component: () => import('@/page/login/index'),
+    component: () =>
+      import(/* webpackChunkName: "page" */ '@/page/login/index'),
+    meta: {
+      keepAlive: false,
+      isTab: false,
+      isAuth: false,
+    },
+  },
+  {
+    path: '/register',
+    name: '注册页',
+    component: () =>
+      import(/* webpackChunkName: "page" */ '@/page/register/index'),
+    meta: {
+      keepAlive: false,
+      isTab: false,
+      isAuth: false,
+    },
+  },
+  {
+    path: '/lock',
+    name: '锁屏页',
+    component: () => import(/* webpackChunkName: "page" */ '@/page/lock/index'),
     meta: {
       keepAlive: true,
-    },
-  },
-  {
-    path: '/404',
-    component: () => import('@/page/error-page/404'),
-    name: '404',
-  },
-  {
-    path: '/403',
-    component: () => import('@/page/error-page/403'),
-    name: '403',
-  },
-  {
-    path: '/500',
-    component: () => import('@/page/error-page/500'),
-    name: '500',
-  },
-  {
-    path: '/',
-    name: 'main',
-    redirect: '/index',
-    meta: {
-      title: '主页',
-    },
-  },
-  {
-    path: '/index',
-    name: 'index',
-    component: () => import('@/page/main-index/index'),
-    meta: {
-      title: '主页面',
+      isTab: false,
+      isAuth: false,
     },
   },
   {
     path: '/myiframe',
     component: Layout,
     redirect: '/myiframe',
-    children: [{
-      path: ':routerPath',
-      name: 'iframe',
-      component: () => import('@/page/iframe/main'),
-      props: true,
-    }],
+    children: [
+      {
+        path: ':routerPath',
+        name: 'iframe',
+        component: () => import(/* webpackChunkName: "page" */ '@/components/iframe/main'),
+        props: true,
+      },
+    ],
   },
   {
-    path: '*',
-    redirect: '/404',
-    // hidden: true,
+    path: '*', redirect: '/login',
   },
 ]

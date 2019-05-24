@@ -1,102 +1,95 @@
 <template>
-  <gov-layout-main>
-    <gov-layout-header>
-      <gov-search-bar
-        :listQuery="listQuery"
-        :formProps="formProps"
-        @handleFilter="handleFilter"
-      />
-    </gov-layout-header>
-    <gov-layout-button-group>
-      <gov-button type="primary" @click="handleClick(list)" text="批量删除"></gov-button> 
-    </gov-layout-button-group>
-    <gov-layout-body>
-      <avue-crud
-        :page="pagination"
-        :data="tableList"
-        :table-loading="tableLoading"
-        :option="tableOption"
-        @selection-change="selectionChange"
-        @current-change="currentChange"
-        @size-change="sizeChange">
+  <div class="log">
+    <basic-container>
+      <avue-crud ref="crud" :page="page" :data="tableData" :table-loading="tableLoading" :option="tableOption" @on-load="getList" @search-change="searchChange" @refresh-change="refreshChange" @row-del="rowDel">
         <template slot-scope="scope" slot="menu">
-          <gov-button type="text" permissions="sys_client_del" size="mini" @click="handleDelete(scope.row)">删除</gov-button>
+          <el-button type="text" v-if="permissions.sys_log_del" icon="el-icon-delete" size="mini" @click="handleDel(scope.row, scope.index)">删除
+          </el-button>
         </template>
       </avue-crud>
-    </gov-layout-body>
-  </gov-layout-main>
+    </basic-container>
+  </div>
 </template>
+
 <script>
-import { getList, deleteLog, deleteID } from '@/api/admin/log'
-import allMixins from '@/mixins/mixin'
-import {tableOption} from './const/index'
+import { delObj, fetchList } from '@/api/admin/log'
+import { tableOption } from '@/const/crud/admin/log'
+import { mapGetters } from 'vuex'
+
 export default {
-  mixins: [allMixins],
+  name: 'Log',
   data () {
     return {
-      tableOption,
-      // 存储批量删除id
-      deleteId:[],
-      listQuery: {
-        type: '',
+      tableData: [],
+      page: {
+        total: 0, // 总页数
+        currentPage: 1, // 当前页数
+        pageSize: 20, // 每页显示多少条
       },
+      tableLoading: false,
+      tableOption: tableOption,
     }
   },
+  created () { },
+  mounted: function () { },
   computed: {
-    formProps () {
-      return [
-        { label: '类型', prop: 'type', type: 'select', data: this.getDic('IS_NORMAL') },
-      ]
-    },
-  },
-  created () {
-    this.getList()
+    ...mapGetters(['permissions']),
   },
   methods: {
-    getList () {
+    getList (page, params) {
       this.tableLoading = true
-      getList(this.listQuery).then(({data}) => {
-        this.tableList = data.records
-        this.pagination.total = data.total
+      fetchList(
+        Object.assign(
+          {
+            descs: 'create_time',
+            current: page.currentPage,
+            size: page.pageSize,
+          },
+          params
+        )
+      ).then(response => {
+        this.tableData = response.data.data.records
+        this.page.total = response.data.data.total
         this.tableLoading = false
       })
     },
-    handleDelete (row) {
-      this.$confirm('确定要删除吗').then(() => {
-        deleteLog(row.id).then(() => {
-          this.getList()
-        })
+    handleDel (row, index) {
+      this.$refs.crud.rowDel(row, index)
+    },
+    rowDel: function (row) {
+      var _this = this
+      this.$confirm('是否确认删除ID为"' + row.id + '"的日志?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
-    },
-    selectionChange (list){
-      this.deleteId = []
-      for(let i=0;i<list.length;i++){
-        this.deleteId.push(list[i].id) 
-      }
-      // console.log(list)
-    },
-    handleClick (){
-      var ids = this.deleteId.join(',')
-      if( ids.length ==0 ){
-        this.$message.error("请先选择")
-      }else {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        }).then(() => {
-          deleteID(ids).then(()=>{
-            this.$message.success("删除成功")
-            this.getList()
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除',
+        .then(function () {
+          return delObj(row.id)
+        })
+        .then(() => {
+          this.getList(this.page)
+          _this.$message({
+            showClose: true,
+            message: '删除成功',
+            type: 'success',
           })
         })
-      }
+        .catch(function () { })
+    },
+    /**
+     * 搜索回调
+     */
+    searchChange (form) {
+      this.getList(this.page, form)
+    },
+    /**
+     * 刷新回调
+     */
+    refreshChange () {
+      this.getList(this.page)
     },
   },
 }
 </script>
+
+<style lang="scss" scoped></style>

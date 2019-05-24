@@ -1,0 +1,4 @@
+Request URL: http://127.0.0.1:8090/api/admin/menu/1000
+Request Method: GET
+
+{"code":0,"msg":"success","data":{"menuId":1000,"name":"权限管理","permission":null,"parentId":-1,"icon":"icon-quanxianguanli","component":"Layout","sort":0,"type":"0","keepAlive":"0","createTime":"2018-09-28 08:29:53","updateTime":"2018-09-28 08:53:01","delFlag":"0","path":"/upms"}}

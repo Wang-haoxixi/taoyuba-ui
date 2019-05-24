@@ -1,4 +1,4 @@
-import request from '@/router/request'
+import request from '@/router/axios'
 
 const prefixUrl = '/tms'
 // @/api/tms/statistics

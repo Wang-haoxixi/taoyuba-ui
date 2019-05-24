@@ -1,67 +1,85 @@
 <template>
-  <gov-layout-main>
-    <gov-layout-body>
-      <avue-crud
-        :page="pagination"
-        :data="tableData"
-        :table-loading="tableLoading"
-        :option="tableOption"
-        @current-change="currentChange"
-        @size-change="sizeChange">
+  <div class="execution">
+    <basic-container>
+      <avue-crud ref="crud" :page="page" :data="tableData" :table-loading="tableLoading" :option="tableOption" @on-load="getList" @refresh-change="refreshChange" @row-del="rowDel">
         <template slot-scope="scope" slot="menu">
-          <el-button type="text" v-if="permissions.sys_client_del" size="mini" @click="handleDelete(scope.row, scope.index)">删除</el-button>
+          <el-button type="text" v-if="permissions.sys_client_del" icon="el-icon-delete" size="mini" @click="handleDel(scope.row, scope.index)">踢人
+          </el-button>
         </template>
       </avue-crud>
-    </gov-layout-body>
-  </gov-layout-main>
+    </basic-container>
+  </div>
 </template>
 
 <script>
-import { getList, deleteToken } from '@/api/admin/token'
-import { tableOption } from './const/token'
-// import searchBar from '@/components/searchBar'
-import allMixins from '@/mixins/mixin'
+import { delObj, fetchList } from '@/api/admin/token'
+import { tableOption } from '@/const/crud/admin/token'
 import { mapGetters } from 'vuex'
+
 export default {
-  name: 'token',
-  mixins: [allMixins],
+  name: 'Token',
   data () {
     return {
       tableData: [],
-      tableOption,
-      formProps: [
-        { label: '用户名', prop: 'user_name', type: 'input' },
-      ],
-      listQuery: {
-        user_name: undefined,
+      page: {
+        total: 0, // 总页数
+        currentPage: 1, // 当前页数
+        pageSize: 20, // 每页显示多少条
       },
+      tableLoading: false,
+      tableOption: tableOption,
     }
   },
-  created () {
-    this.getList()
-  },
+  created () { },
   mounted: function () { },
-  components: {
-    // searchBar,
-  },
   computed: {
     ...mapGetters(['permissions']),
   },
   methods: {
-    getList () {
+    getList (page, params) {
       this.tableLoading = true
-      getList(this.listQuery).then(response => {
-        this.tableData = response.data.records
-        this.pagination.total = response.data.total
+      fetchList(
+        Object.assign(
+          {
+            current: page.currentPage,
+            size: page.pageSize,
+          },
+          params
+        )
+      ).then(response => {
+        this.tableData = response.data.data.records
+        this.page.total = response.data.data.total
         this.tableLoading = false
       })
     },
-    handleDelete (row) {
-      this.$confirm('确定要删除吗').then(() => {
-        deleteToken(row.id).then(() => {
-          this.getList()
-        })
+    handleDel (row, index) {
+      this.$refs.crud.rowDel(row, index)
+    },
+    rowDel: function (row, index) {
+      var _this = this
+      this.$confirm('是否强制' + row.username + '下线?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
+        .then(function () {
+          return delObj(row.access_token)
+        })
+        .then(() => {
+          _this.tableData.splice(index, 1)
+          _this.$message({
+            showClose: true,
+            message: '删除成功',
+            type: 'success',
+          })
+        })
+        .catch(function () { })
+    },
+    /**
+     * 刷新回调
+     */
+    refreshChange () {
+      this.getList(this.page)
     },
   },
 }

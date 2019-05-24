@@ -1,32 +1,17 @@
 // 配置编译环境和线上环境之间的切换
 
-let baseUrl = '/api'
-// 最后一个icon URL只要替换即可, 无需添加
-const iconfontVersion = [
-  '567566_qo5lxgtishg',
-  '599693_0b5sleso3f1j1yvi',
-  '667895_5kwuxgtttcl',
-  '752650_3gt983x4g8c',
-  '809621_m3013tqvw7',
-]
-const iconfontUrl = '//at.alicdn.com/t/font_$key.css'
-const codeUrl = `${baseUrl}/code`
-const performanceDomain = '//perf.limonplayer.cn/api/v1/report/web'
-const performanceAppId = '2FAE447D49E40C2DC5E893F6538CBF21'
 const env = process.env
-if (env.NODE_ENV === 'development') {
-  baseUrl = '/api' // 开发环境地址
-} else if (env.NODE_ENV === 'production') {
-  baseUrl = '/api' // 生产环境地址
-} else if (env.NODE_ENV === 'test') {
-  baseUrl = '/api' // 测试环境地址
-}
-export {
-  baseUrl,
-  iconfontUrl,
-  iconfontVersion,
-  codeUrl,
-  env,
-  performanceDomain,
-  performanceAppId,
-}
+
+const baseUrl = ''
+
+const iconfontVersion = ['1036949_8nagf710b0r']
+const multicolorIconfontUrl = '//at.alicdn.com/t/font_1184303_5w9onear362.js'
+const iconfontUrl = '//at.alicdn.com/t/font_$key.css'
+
+const codeUrl = '/api/code'
+const imgUrl = '//cloud.govmade.com'
+const actUrl = `${window.location.origin}/act/modeler.html?modelId=`
+
+const base64Url = 'data:image/gif;base64,R0lGODlhGAG0ANUAAPHx8fLy8t7e3t/f3+7u7uHh4eLi4urq6unp6e3t7eTk5Obm5vPz89nZ2e/v7+zs7Nvb2+vr6+jo6N3d3eXl5efn59zc3OPj49ra2tjY2PT09NfX1/X19dbW1vb29vf399TU1NPT0/j4+ODg4PDw8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAAAALAAAAAAYAbQAAAb/QJJwSCwaj8ikcslsOp/QqHRKrVqv2Kx2y+16v+CweEwum8/otHrNbrvf8Lh8Tq/b7/i8fs/v+/+AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna23UAAd/g4eLj5OXm5+jjANxw3gQRCPHy8/T19vf4+frzBwnf7GwCOFhQQIDBgwgTKlzIsKHDhwoHUCAQAGCaAAQMTBgwoqPHjyBDihxJsqTJkAMEjHhQ0WIZgQU7QpxJs6ZNgxwFDPDnkgyA/wUTRnCkcCDCgaNIkypdyrSp06dQi1YQOkLABRLreoIBkIDqgAPpwoodS/ZbV44DIrTU6iWAhJwVGGQtxAAB3LVsuTCooHIAS0QACBRIqWBu3i0BFqgckcAwocCDBRQ+3CXx4saABRN2TPmK5Y6YD0He3BmxYtCcBY2WnLr0lM+MWwNaPdk1FtihDdGWbfsJbt5GAAgfLmd3b8+nYzvxRoLAgwcESAQAXsb48Sq/mwiUcOHjhQoO8K6xfv118txIvB0YsXGAe/cqEQhvQ758lOxKAPBdHNJghfnjacaafeZdxlsACPBH0gQSiHdGfQQ6gd8RXFFlkns8qQFhhExMaP8EbCcJQIGD1QlYG4cSntcaAA5YeBJHBFDnxYYoJuEhEQFEoOCLYGkBIBM01njEjUMAkOBJHw3QYBYsOvBjEkEKWQSRQhi544VLWiGcBCMUMJFc+Zkoo5BUSnfAlSUNgACJTwi3X0ojgDddemJK2aGKSATwAEdIdpQWm9qRQIGCKRWAgHScRWmnEGWuYwCaIg1QgJNUYHTBRigJYEAEzBGh6KJlSicBpCExCOgSASQQE0nuKcDSXJ/aGeo6F5DqkaZYSeHNA1UhqdMCFK0Tq5ShSkdArySpRJGuCLrXp1AqVUACAxhFduKiQ+KZXwKP8pnkBAX8FcWWOj3rUaHykWD/7Zg1FsvoQFXplJJKFIQnxXSKeWuun1YdsC62Nmq7hDsIVKCAAhQg4M+peZKggK3POlvVtQDjKDCQc2KVcRQMEFDrvr5SXDGjFy/H7oddQQyyTCKP7G5lEUi8skkDjjxlyWEAUFe5M4fYcsUvT0ntuPrx3DPNPwMcNKMkRCABpwwPUdGgR/dZs81S40xhqg9vtACiqDrwaNVWJ42tu94MBCe0BRzQ6ZCqBkV2yCdzWGxFCKyapGQPvC01ryrPzXLdEZb5TQQa6QuSTvVmrPMBMguONOEEEulNAoOqDKcE0k33luKSJ2s2qBczN1Xg52r6AAnJhU431hYbKLWRBYHu/6ukkbte0tWwZyfcA7XaHrHwuovEO9a4faM26sULfrzNsIXHpdHNV//R8y4nJ8HDxFtfPPZAJ5e79+SDr3Tr5Kd//eiyoq+++uaf7f775bNP7Pz0Wx8/6cznT/b+7euf/44GwPsJcIAzKyCZ8IdA1ymwXQxsoOQeiKK9HFCC5hJR1IgVMwxWTwBZgp0QxKavApjwhChMoQpXyMIWuvCFKEySckRYJQRgqiMGyKEOd8jDHvrwh0AMohB3WACPTKACG1zUT27owblZJVc0LJJ+5vWeKlrxiljMoha3yMUsMo5SUfSUnihggCI2EWQmpACnKGcn5hDgjXCMoxznSMc62v/xjniMo5M2FkYKDeePgAykIAdJyEIacpB9TKQiF8nIPjypCGycUSPbRAAHQNIbYPLUIS95SMf47ZGT3BoBICABuUxnPg+ggAUoYJhNQtJTwWnlAThXJX+hJ5RFapEFLAACDAjAAhhYgAQgAAEMYOAr69ATBBpgTAxYYALNNGYGLsAA6SRgArvcpUGeOQFs7nIAYAzACBqQq8R0IEO4hGUFCrCBEZDxApsaAQYk0DcNVBMrHjPABS6gAAhMc5/7NFRFUtUBA1RAmAaRQAUqIAGENiCcBrBAOSXQgGWl0wgeQIAFNLCABXzgAxxQSZMIkABLCoEB9mSABy7FAQa4FKX/LUlVBh7AAQ84gJlFNCEBPlABCEB0AgGglgYQQE4NgCOSSjtACBpQgAw0YAQWWIACNmABYhZzTVjJijfY0xqZRoADBwABBGaJAAhs4AEaoIBPsxIAA0DgAQmADgUy0I/nQOei0gGeAi7gTAWMIG8TeABFDdCPdThJOBUJilz+KLUENOAACmhArRbgAQlYQC0MUGs4FdCBBnjWs0797Abigtfw6GwjBFCYBS7gARKQUgPDGUFnP5uBDEDzsw2YqVkemzARkAADG2hAAjigM82y9QJvfU4E4GrXB0QgOukUjgEaQMzcQkAyGIjLKJGY1QrwE2HTncAGDECBgx0sRl79/4AGCECBCRAzXADwwALWyij2eMADHMhvfqn1DaQCLAIVOAAJgqIBDvAVABz47QLWElSXeiACpIQACTzwUjDJlKECwEAGDMCABAyAumSkr3QK0ACFLnShEogRXj1VTbEpgKQIiyviOBUcBugkAsJ1UKowgNwCpLaqBohrtyxAqXWMYAMYwG0DQHCAe674pAboADaJ2c1dZqAAfDzpATpwgAfkWIrWpKtAokOA6U2Lo/QNDAYMwOAHbKDJTx4CA+Qp4wgs97kGeWQ1NzABDRzgy+tQ4+XomlYMXJcoagmqcaUTgQ2UcjgdzgACnPxkBkR5IQPIwAh+BID1etYBQwU0AP8kaxa6dsxpChiAoQWA1kUz4AIZUDGjHiBpSq+YAQXAgFGUoqMBcLoCwaWIW2Jtygd0oJRepdZLBXKAIHPAuBjRNF70VOs4Q7kDDMmAr5OZAAuEYADTYnRwrdoBDIRHphDIZjYnoBNsUte0EzgnpfW0gUlbe1okLq95DzZfAUBRbHHBCwJ2eAHMUNtL+064YjCwLAMseEoRkHQSFQmA5/A3HB2OwJR0XOFMskjAFx9HxwRcpdQ44AEmvbffxHgb4Kw8T/69t8xnTvOa2/zmOM+5znfO8577/OdAD7rQh070ohv96EhPutKXzvSmO/3pUI+61KdO9apb/epYz7rWt84M9a57/etgD7vYqRAEADs='
+
+export { baseUrl, actUrl, iconfontUrl, iconfontVersion, codeUrl, env, imgUrl, base64Url, multicolorIconfontUrl }

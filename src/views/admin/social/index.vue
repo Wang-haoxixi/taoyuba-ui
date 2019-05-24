@@ -1,103 +1,155 @@
 <template>
-  <gov-layout-main>
-    <!-- 头部搜索框 -->
-    <gov-layout-header>
-      <gov-search-bar
-        :listQuery="listQuery"
-        :formProps="formProps"
-        @handleFilter="handleFilter"
-      />
-      <!-- 按钮组 -->
-      <gov-layout-button-group>
-        <gov-button type="add" @click="handleCreate" v-if="permissions.generator_syssocialdetails_add"/>
-        <!-- <gov-button type="add" @click="handleCreate"/> -->
-      </gov-layout-button-group>
-    </gov-layout-header>
-    <gov-layout-body>
-      <avue-crud
-        :table-loading="tableLoading"
-        @size-change="sizeChange"
-        @current-change="currentChange"
-        :page="pagination"
-        :data="tableList"
-        :option="tableOption">
+  <div class="execution">
+    <basic-container>
+      <avue-crud ref="crud" :page="page" :data="tableData" :table-loading="tableLoading" :option="tableOption" @on-load="getList" @refresh-change="refreshChange" @search-change="searchChange" @row-update="handleUpdate" @row-save="handleSave" @row-del="rowDel">
+        <template slot="menuLeft">
+          <el-button type="primary" @click="handleAdd" size="small" v-if="permissions.generator_syssocialdetails_add">新 增
+          </el-button>
+          <br /><br />
+        </template>
         <template slot-scope="scope" slot="menu">
-          <el-button type="text" v-if="permissions.generator_syssocialdetails_edit" @click="handleUpdate(scope.row, scope.index);">编辑</el-button>
-          <el-button type="text" v-if="permissions.generator_syssocialdetails_del" @click="handleDelete(scope.row, scope.index);">删除</el-button>
-          <!-- <el-button type="text" @click="handleUpdate(scope.row, scope.index)">编辑</el-button> -->
-          <!-- <el-button type="text" @click="handleDelete(scope.row, scope.index)">删除</el-button> -->
+          <el-button type="text" v-if="permissions.generator_syssocialdetails_edit" icon="el-icon-check" size="small" @click="handleEdit(scope.row, scope.index)">编辑
+          </el-button>
+          <el-button type="text" v-if="permissions.generator_syssocialdetails_del" icon="el-icon-delete" size="small" @click="handleDel(scope.row, scope.index)">删除
+          </el-button>
         </template>
       </avue-crud>
-    </gov-layout-body>
-    <social-dialog
-      :temp="formData"
-      :status="dialogStatus"
-      @successSubmit="successSubmit"
-      ref="formDialog"></social-dialog>
-  </gov-layout-main>
+    </basic-container>
+  </div>
 </template>
 
 <script>
-import {getSocialList, deleteSocial} from '@/api/admin/social'
-import { tableOption } from './const/index'
-import allMixins from '@/mixins/mixin'
-import socialDialog from './socialDialog'
+import {
+  addObj,
+  delObj,
+  fetchList,
+  putObj,
+} from '@/api/admin/sys-social-details'
+import { tableOption } from '@/const/crud/admin/sys-social-details'
+import { mapGetters } from 'vuex'
+
 export default {
-  name: 'syssocialdetails',
-  mixins: [allMixins],
-  components: {socialDialog},
+  name: 'SysSocialDetails',
   data () {
     return {
-      listQuery: {
-        type: undefined,
+      tableData: [],
+      page: {
+        total: 0, // 总页数
+        currentPage: 1, // 当前页数
+        pageSize: 20, // 每页显示多少条
       },
-      tableOption,
+      tableLoading: false,
+      tableOption: tableOption,
     }
   },
+  created () { },
+  mounted: function () { },
   computed: {
-    formProps () {
-      return [
-        { label: '类型', prop: 'type', type: 'select', data: this.getDic('SOCIAL_TYPE') },
-      ]
-    },
-  },
-  created () {
-    this.getList()
+    ...mapGetters(['permissions']),
   },
   methods: {
-    // 列表
-    getList () {
+    getList (page, params) {
       this.tableLoading = true
-      getSocialList(this.listQuery).then(({data}) => {
-        this.tableList = data.records
-        this.pagination.total = data.total
+      fetchList(
+        Object.assign(
+          {
+            current: page.currentPage,
+            size: page.pageSize,
+          },
+          params
+        )
+      ).then(response => {
+        this.tableData = response.data.data.records
+        this.page.total = response.data.data.total
         this.tableLoading = false
       })
     },
-    // 新增
-    handleCreate () {
-      this.dialogStatus = this.dialog.textName.create
-      this.formData = {}
-      this.open()
+    /**
+     * @title 打开新增窗口
+     * @detail 调用crud的handleadd方法即可
+     *
+     **/
+    handleAdd: function () {
+      this.$refs.crud.rowAdd()
     },
-    // 编辑
-    handleUpdate (row) {
-      this.dialogStatus = this.dialog.textName.update
-      this.formData = Object.assign({}, row)
-      this.open()
+    handleEdit (row, index) {
+      this.$refs.crud.rowEdit(row, index)
     },
-    // 成功之后操作
-    successSubmit () {
-      this.getList()
+    handleDel (row, index) {
+      this.$refs.crud.rowDel(row, index)
     },
-    // 删除
-    handleDelete ({id}) {
-      this.$confirm('确定要删除吗').then(() => {
-        deleteSocial(id).then(() => {
-          this.getList()
-        })
+    rowDel: function (row, index) {
+      var _this = this
+      this.$confirm('是否确认删除ID为' + row.id, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
+        .then(function () {
+          return delObj(row.id)
+        })
+        .then(() => {
+          _this.tableData.splice(index, 1)
+          _this.$message({
+            showClose: true,
+            message: '删除成功',
+            type: 'success',
+          })
+          this.refreshChange()
+        })
+        .catch(function () { })
+    },
+    /**
+     * @title 数据更新
+     * @param row 为当前的数据
+     * @param index 为当前更新数据的行数
+     * @param done 为表单关闭函数
+     *
+     **/
+    handleUpdate: function (row, index, done) {
+      putObj(row).then(() => {
+        this.tableData.splice(index, 1, Object.assign({}, row))
+        this.$message({
+          showClose: true,
+          message: '修改成功',
+          type: 'success',
+        })
+        this.refreshChange()
+        done()
+      })
+    },
+    /**
+     * @title 数据添加
+     * @param row 为当前的数据
+     * @param done 为表单关闭函数
+     *
+     **/
+    handleSave: function (row, done) {
+      addObj(row).then(() => {
+        this.tableData.push(Object.assign({}, row))
+        this.$message({
+          showClose: true,
+          message: '添加成功',
+          type: 'success',
+        })
+        this.refreshChange()
+        done()
+      })
+    },
+    /**
+     * 刷新回调
+     */
+    refreshChange () {
+      this.getList(this.page)
+    },
+    /**
+     * 搜索回调
+     */
+    searchChange (form) {
+      this.getList(this.page, form)
     },
   },
 }
 </script>
+
+<style lang="scss" scoped></style>

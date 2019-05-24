@@ -1,94 +1,91 @@
-import router from './router'
-import store from './store'
+/**
+ * 全站权限配置
+ *
+ */
+import router from './router/router'
+import store from '@/store'
+import orderBy from 'lodash/orderBy'
+// import { Message } from 'element-ui'
+// import { getStore } from '@/util/store'
+import { validatenull } from '@/util/validate'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import {
-  setTitle,
-} from '@/util/util'
-import { Message } from 'element-ui'
+NProgress.configure({ showSpinner: false })
 
-// NProgress Configuration
-NProgress.configure({
-  showSpinner: false,
-})
 
-const whiteList = ['/login']
-const lockPage = '/lock'
+const lockPage = store.getters.website.lockPage // 锁屏页
+router.beforeEach(async (to, from, next) => {
 
-router.beforeEach((to, from, next) => {
-  // start progress bar
+  const {
+    access_token,
+    isLock,
+    roles,
+    menuPathList,
+    menu,
+    mainMenu,
+    otherMenus,
+    tagWel,
+  } = store.getters
   NProgress.start()
-  // console.log('to', to)
-  const value = to.query.src ? to.query.src : to.path
-  const label = to.query.name ? to.query.name : to.name
-  if (whiteList.indexOf(value) === -1) {
-    store.commit('ADD_TAG', {
-      label: label,
-      value: value,
-      query: to.query,
-    })
-  }
-  if (store.getters.access_token) { // determine if there has token
-    if (store.getters.isLock && to.path !== lockPage) {
-      next({
-        path: lockPage,
-      })
-      NProgress.done()
+  const meta = to.meta || {}
+  if (access_token) {
+    if (isLock && to.path != lockPage) {
+      next({ path: lockPage })
     } else if (to.path === '/login') {
-      console.log('to login', to.path)
-      next({
-        path: '/',
-        // path: '/login',
-      })
-      NProgress.done()
+      next('/')
     } else {
-      if (store.getters.roles === undefined) {
-        // 修复新增用户重复请求 info 接口 测试
+      if (roles.length === 0) {
         store.dispatch('GetUserInfo').then(() => {
-          // const roles = res.roles
-          next({
-            ...to,
-            replace: true,
-          })
+          next({ ...to, replace: true })
         }).catch(() => {
           store.dispatch('FedLogOut').then(() => {
-            next({
-              path: '/login',
-            })
-            NProgress.done()
+            next({ path: '/login' })
           })
         })
-      } else if (store.getters.roles.length === 0) {
-        Message({
-          message: '用户权限丢失, 请重新登录',
-          type: 'error',
-        })
       } else {
+        if (to.matched.length) {
+          const parentPath = to.matched[0].path
+          const isMatchedMenu = menuPathList.includes(parentPath)
+          const currentMenu = menu.find(m => m.path === parentPath)
+          if (isMatchedMenu && currentMenu) {
+            let Menus = [mainMenu, ...otherMenus]
+            Menus = orderBy(Menus, ['sort'], ['asc'])
+            const oMenus = Menus.filter(m => m.path !== currentMenu.path)
+            store.commit('SET_MAINMENU', currentMenu)
+            store.commit('SET_OTHERMENUS', oMenus)
+          }
+        }
+        const value = to.query.src || to.fullPath
+        const label = to.query.name || to.name
+        if (meta.isTab !== false && !validatenull(value) && !validatenull(label)) {
+          store.commit('ADD_TAG', {
+            label: label,
+            value: value,
+            params: to.params,
+            query: to.query,
+            group: router.$avueRouter.group || [],
+          })
+        }
         next()
       }
     }
   } else {
-    if (whiteList.indexOf(to.path) !== -1) {
+    const result = await store.dispatch('LoginByLocalStorage')
+    if (meta.isAuth === false) {
       next()
+    } else if (result) {
+      const data = await store.dispatch('GetMenu')
+      router.$avueRouter.formatRoutes(data, true)
+      router.push({ path: tagWel.value })
     } else {
       next('/login')
-      NProgress.done()
     }
   }
 })
 
-// 寻找子菜单的父类
-function findMenuParent (tag) {
-  const tagCurrent = []
-  tagCurrent.push(tag)
-  return tagCurrent
-}
-
 router.afterEach(() => {
+  // const { tag } = store.getters
   NProgress.done()
-  setTimeout(() => {
-    const tag = store.getters.tag
-    setTitle(tag.label)
-    store.commit('SET_TAG_CURRENT', findMenuParent(tag))
-  }, 0)
+  // const title = tag.label
+  // router.$avueRouter.setTitle(title)
 })

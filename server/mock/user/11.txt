@@ -1,0 +1,6 @@
+Request URL: http://127.0.0.1:8090/api/admin/user
+Request Method: POST
+
+{"userId":"","username":"test","password":"","deptId":11,"phone":"","role":[1],"lockFlag":"0","createTime":""}
+
+{"code":0,"msg":"success","data":true}

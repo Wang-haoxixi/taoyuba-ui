@@ -1,18 +1,12 @@
-import {
-  validatenull,
-} from '@/util/validate'
+import { validatenull } from '@/util/validate'
+
 /**
  * 存储localStorage
  */
-export const setStore = (params) => {
-  const {
-    name,
-    content,
-    // datetime,
-    type,
-  } = params
-  const obj = {
-    dataType: typeof (content),
+export const setStore = params => {
+  let { name, content, type } = params
+  let obj = {
+    dataType: typeof content,
     content: content,
     type: type,
     datetime: new Date().getTime(),
@@ -21,33 +15,27 @@ export const setStore = (params) => {
   else window.localStorage.setItem(name, JSON.stringify(obj))
 }
 /**
-     * 获取localStorage
-     */
+ * 获取localStorage
+ */
 
-export const getStore = (params) => {
-  const {
-    name,
-    // type,
-    debug,
-  } = params
+export const getStore = params => {
+  let { name, debug } = params
   let obj = {}
   let content
-  obj = window.localStorage.getItem(name)
-  if (validatenull(obj)) obj = window.sessionStorage.getItem(name)
+  obj = window.sessionStorage.getItem(name)
+  if (validatenull(obj)) obj = window.localStorage.getItem(name)
   if (validatenull(obj)) return
   obj = JSON.parse(obj)
   if (debug) {
     return obj
   }
-  if (obj.dataType === 'string') {
+  if (obj.dataType == 'string') {
     content = obj.content
-  } else if (obj.dataType === 'number') {
+  } else if (obj.dataType == 'number') {
     content = Number(obj.content)
-  } else if (obj.dataType === 'boolean') {
-    /* eslint-disable */
+  } else if (obj.dataType == 'boolean') {
     content = eval(obj.content)
-    /* eslint-enable */
-  } else if (obj.dataType === 'object') {
+  } else if (obj.dataType == 'object') {
     content = obj.content
   }
   return content
@@ -56,9 +44,7 @@ export const getStore = (params) => {
  * 删除localStorage
  */
 export const removeStore = params => {
-  const {
-    name,
-  } = params
+  let { name } = params
   window.localStorage.removeItem(name)
   window.sessionStorage.removeItem(name)
 }
@@ -66,11 +52,9 @@ export const removeStore = params => {
 /**
  * 获取全部localStorage
  */
-export const getAllStore = (params) => {
-  const list = []
-  const {
-    type,
-  } = params
+export const getAllStore = params => {
+  let list = []
+  let { type } = params
   for (let i = 1; i <= window.sessionStorage.length; i++) {
     if (type) {
       list.push({
@@ -81,12 +65,14 @@ export const getAllStore = (params) => {
         }),
       })
     } else {
-      list.push(getStore({
-        name: window.localStorage.key(i),
-        content: getStore({
+      list.push(
+        getStore({
           name: window.localStorage.key(i),
-        }),
-      }))
+          content: getStore({
+            name: window.localStorage.key(i),
+          }),
+        })
+      )
     }
   }
 
@@ -96,10 +82,8 @@ export const getAllStore = (params) => {
 /**
  * 清空全部localStorage
  */
-export const clearStore = (params) => {
-  const {
-    type,
-  } = params
+export const clearStore = params => {
+  let { type } = params
   if (type) {
     window.sessionStorage.clear()
     return

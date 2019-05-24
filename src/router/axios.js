@@ -1,57 +1,94 @@
+import { serialize } from '@/util/util'
+import { getStore } from '../util/store'
 import axios from 'axios'
-import store from '../store'
-import { getToken } from '@/util/auth'
-import { Message } from 'element-ui'
-// import qs form 'qs'
-import errorCode from '@/config/errorCode'
+import qs from 'qs'
+import NProgress from 'nprogress' // progress bar
+import errorCode from '@/const/errorCode'
+// import { Message } from 'element-ui'
+import 'nprogress/nprogress.css'
+import store from '@/store' // progress bar style
+import router from '@/router/router'
 
-// 超时时间
 axios.defaults.timeout = 30000
 axios.defaults.baseURL = '/api'
+
+// 返回其他状态吗
+axios.defaults.validateStatus = function (status) {
+  return status >= 200 && status <= 500 // 默认的
+}
 // 跨域请求，允许保存cookie
 axios.defaults.withCredentials = true
-// let msg
+// NProgress Configuration
+NProgress.configure({
+  showSpinner: false,
+})
+
 // HTTPrequest拦截
-axios.interceptors.request.use(config => {
-  // console.log('HTTPrequest拦截', config)
-  if (store.getters.access_token) {
-    config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
+axios.interceptors.request.use(
+  config => {
+    NProgress.start() // start progress bar
+    const TENANT_ID = getStore({ name: 'tenantId' })
+    const isToken = (config.headers || {}).isToken === false
+    let token = store.getters.access_token
+    if (token && !isToken) {
+      config.headers['Authorization'] = 'Bearer ' + token // token
+    }
+    if (TENANT_ID) {
+      config.headers['TENANT_ID'] = TENANT_ID // 租户ID
+    }
+    // headers中配置serialize为true开启序列化
+    if (config.method === 'post' && config.headers.serialize) {
+      config.data = serialize(config.data)
+      delete config.data.serialize
+    }
+    if (config.method === 'get') {
+      config.paramsSerializer = function (params) {
+        return qs.stringify(params, { arrayFormat: 'brackets' })
+      }
+    }
+    return config
+  },
+  error => {
+    return Promise.reject(error)
   }
-  return config
-}, error => {
-  return Promise.reject(error)
-})
+)
+
 // HTTPresponse拦截
-axios.interceptors.response.use(response => {
-  // const res = response.data
-  // 401:Token 过期了;
-  // console.log('HTTPresponse拦截', response)
-
-  console.log('responseDataSuccess', response)
-
-  if (response.status === 401) {
-    store.dispatch('LogOut').then(() => {
-      location.reload()
+axios.interceptors.response.use(res => {
+  NProgress.done()
+  const status = Number(res.status) || 200
+  const message = res.data.msg || errorCode[status] || errorCode['default']
+  if (status === 401 || res.data.code === 401) {
+    store.dispatch('FedLogOut').then(() => {
+      router.push({ path: '/login' })
     })
+    return
+  } else if (status === 403 || res.data.code === 403) {
+    router.push({ path: '/403' })
+    return
+    // } else if (status === 404 || res.data.code === 404) {
+    //   router.push({ path: '/404' })
+    //   return
+    // } else if (status === 500 || res.data.code === 500) {
+    //   router.push({ path: '/500' })
+    //   return
+  } else if (status !== 200 || res.data.code === 1) {
+    // if (process.env.NODE_ENV === 'development') {
+    //   Message({
+    //     message: message,
+    //     type: 'error',
+    //   })
+    // }
+    return Promise.reject(new Error(message))
   } else {
-    return response
+    return res
   }
-}, error => {
-  // console.log('错误信息', error)
-  console.log('responseDataError', error)
 
-  const errMsg = error.toString()
-  const code = errMsg.substr(errMsg.indexOf('code') + 5)
-  Message({
-    message: errorCode[code] || errorCode['default'],
-    type: 'error',
-  })
-  if (code === '401') {
-    store.dispatch('LogOut').then(() => {
-      location.reload()
-    })
+},
+  error => {
+    NProgress.done()
+    return Promise.reject(new Error(error))
   }
-  return Promise.reject(new Error(error))
-})
+)
 
 export default axios
