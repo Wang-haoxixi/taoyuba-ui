@@ -1,18 +1,18 @@
 <template>
   <div>
     <basic-container>
-      <page-header title="求职简历" :replaceText="replaceText" :data="statistics"></page-header>
+      <page-header title="求职简历"></page-header>
       <operation-container>
         <template slot="left">
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
         <template slot="right">
-          <operation-search @search-page="searchPage" advance-search>
+          <operation-search @search-page="searchPage" advance-search :prop="searchData">
             <advance-search @search-page="searchPage"></advance-search>
           </operation-search>
         </template>
       </operation-container>
-      <iep-table :isLoadTable="isLoadTable" :pagination="pagination" :columnsMap="columnsMap" :pagedTable="pagedTable" @size-change="handleSizeChange" @current-change="handleCurrentChange" @selection-change="handleSelectionChange" is-mutiple-selection>
+      <iep-table :isLoadTable="isLoadTable" :pagination="pagination" :dictsMap="dictsMap" :columnsMap="columnsMap" :pagedTable="pagedTable" @size-change="handleSizeChange" @current-change="handleCurrentChange" @selection-change="handleSelectionChange" is-mutiple-selection>
         <el-table-column prop="operation" label="操作" width="220">
           <template slot-scope="scope">
             <operation-wrapper>
@@ -27,10 +27,10 @@
   </div>
 </template>
 <script>
-import { getJobPage, deleteJobById } from '@/api/post/job'
+import { getResumePage, deleteResumeById} from '@/api/post/resume'
 import AdvanceSearch from './AdvanceSearch'
 import mixins from '@/mixins/mixins'
-import { columnsMap, dictsMap } from '../options'
+import { dictsMap, columnsMap} from '../options'
 export default {
   components: { AdvanceSearch },
   mixins: [mixins],
@@ -38,8 +38,7 @@ export default {
     return {
       dictsMap,
       columnsMap,
-      statistics: [0, 0],
-      replaceText: (data) => `（本周新增${data[0]}条招聘信息，收到${data[1]}份简历）`,
+      searchData: 'realName',
     }
   },
   created () {
@@ -50,20 +49,31 @@ export default {
       this.multipleSelection = val.map(m => m.id)
     },
     handleDelete (row) {
-      this._handleGlobalDeleteById(row.id, deleteJobById)
+      this._handleGlobalDeleteById(row.resumeId, deleteResumeById)
     },
     handleAdd () {
-
+      this.$router.push({
+        path: '/hrms_spa/resume_post/0',
+      })      
     },
-    handleEdit () {
-
+    handleEdit (row) {
+      this.$router.push({
+        path: `/hrms_spa/resume_post/${row.resumeId}`,
+      })    
     },
     handleDetail (row) {
       this.$emit('onDetail', row)
     },
     async loadPage (param = this.searchForm) {
-      const data = await this.loadTable(param, getJobPage)
-      this.statistics = this.$fillStatisticsArray(this.statistics, data.statistics)
+       await this.loadTable(param, getResumePage)
+      //  let dataList = this.loadTable(param, getResumePage)
+      //  dataList.then((res) => {
+      //    for (let i=0; i< res.records.length; i++) {
+      //      res.records[i].job = res.records[i].job.toString()
+      //    }
+      //    this.pagedTable = res.records
+      //    console.log(this.pagedTable)
+      //  })
     },
   },
 }
