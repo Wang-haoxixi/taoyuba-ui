@@ -60,6 +60,18 @@ export default [
         component: () => import('@/views/hrms/Position/Page/Edit.vue'),
         meta: noKeepAlive,
       },
+      {
+        path: 'crew_post/:userId',
+        name: '船员管理表单',
+        component: () => import('@/views/hrms/crew/Page/Edit.vue'),
+        meta: noKeepAlive,
+      },
+      {
+        path: 'crew_view/:userId',
+        name: '船员管理表单',
+        component: () => import('@/views/hrms/crew/Page/Detail.vue'),
+        meta: noKeepAlive,
+      },
     ],
   },
 ]

@@ -1,6 +1,6 @@
 import request from '@/router/axios'
 
-const prefixUrl = 'tybhrms/position'
+const prefixUrl = 'tybhrms/crew'
 
 export function getPositionPage (query) {
   return request({
