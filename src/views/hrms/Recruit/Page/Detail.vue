@@ -1,87 +1,70 @@
 <template>
   <div class="edit-wrapper">
     <basic-container>
-      <page-header title="查看简历" :backOption="backOption">
+      <page-header title="查看招聘" :backOption="backOption">
       </page-header>
       <el-card class="recruit-headers" shadow="hover">
         <div class="con">
           <div class="left">
             <h4 class="name">
-              {{form.realName}}
+              {{form.contactName}}
             </h4>
-            <div class="address"><span>{{form.resumeName}}</span>{{form.province}}{{form.city}}</div>
+            <div class="address"><iep-dict-detail :value="form.positionId" dict-name="tyb_resume_position"></iep-dict-detail>{{form.province}}{{form.city}}</div>
           </div>
           <div class="right">
-            <div class="pay">薪资：{{form.expectSalary}}</div>
+            <div class="pay">薪资：{{form.salary}}</div>
             <div class="info-detail">
               <label>联系电话：{{form.contactPhone}}</label>
-              <label>出生日期：{{form.birthday}}</label>
+              <label>招{{form.recruitNo}}人</label>
             </div>
           </div>
         </div>
       </el-card>
       <el-card class="middle-card" :body-style="middleBodyStyle" shadow="never">
         <div slot="header" class="clearfix">
-          <span>其他信息</span>
+          <span>其他要求</span>
         </div>
         <div class="info">
           <div class="info-item">
-            <label>教育水平：</label>
+            <label>货币种类：</label>
             <div class="content">
-              <iep-dict-detail :value="form.education" dict-name="tyb_resume_education"></iep-dict-detail>
+              <div v-if="form.salaryCurrency == 1">人民币（RMB)</div>
+              <div v-if="form.salaryCurrency == 2">美元（USD）</div>
             </div>
           </div>
           <div class="info-item">
-            <label>外语水平：</label>
+            <label>证书要求：</label>
             <div class="content">
-              <iep-dict-detail :value="form.foreignLanguage" dict-name="tyb_resume_language"></iep-dict-detail>
+              <iep-dict-detail :value="form.certRequire" dict-name="tyb_position_certtype"></iep-dict-detail>
             </div>
           </div>
           <div class="info-item">
-            <label>身高CM：</label>
-              <div class="content">{{form.height}}</div>
-          </div>
-          <div class="info-item">
-            <label>原任职务：</label>
+            <label>年龄要求：</label>
             <div class="content">
-              <iep-dict-detail :value="form.postion" dict-name="tyb_resume_position"></iep-dict-detail>
+              <iep-dict-detail :value="form.ageRequire" dict-name="tyb_position_agerequirement"></iep-dict-detail>
             </div>
           </div>
           <div class="info-item">
-            <label>应聘职位：</label>
+            <label>作业方式：</label>
             <div class="content">
-              <iep-dict-detail :value="form.job" dict-name="tyb_resume_position"></iep-dict-detail>
+              <iep-dict-detail :value="form.workMode" dict-name="tyb_resume_worktype"></iep-dict-detail>
             </div>
           </div>
           <div class="info-item">
-            <label>航海经验：</label>
-            <div class="content">
-              <iep-dict-detail :value="form.seniority" dict-name="tyb_resume_seniority"></iep-dict-detail>
-            </div>
+            <label>船长（m）：</label>
+              <div class="content">{{form.hullLength}}</div>
           </div>
           <div class="info-item">
-            <label>作业要求：</label>
-            <div class="content">
-              <iep-dict-detail :value="form.workRequire" dict-name="tyb_resume_worktype"></iep-dict-detail>
-            </div>
-          </div>
-          <div class="info-item">
-            <label>特殊技能：</label>
-              <div class="content">{{form.skill}}</div>
+            <label>主机总功率：</label>
+              <div class="content">{{form.totalPower}}</div>
           </div>
         </div>
-      </el-card>
-      <el-card class="middle-card" :body-style="middleBodyStyle" shadow="never">
-        <div slot="header" class="clearfix">
-          <span>作业方式</span>
-        </div>
-        <pre>{{form.workDetail}}</pre>
       </el-card>
     </basic-container>
   </div>
 </template>
 <script>
-import { getResumeById } from '@/api/post/resume'
+import { getRecruitById } from '@/api/post/recruit'
 import { getInfo } from '@/api/post/address'
 import { initForm, dictsMap } from '../options'
 export default {
@@ -108,18 +91,17 @@ export default {
   },
   created () {
     this.loadPage()
-    console.log(this.record.province)
   },
   methods: {
     loadPage () {
-      getResumeById(this.record.resumeId).then(({ data }) => {
+      getRecruitById(this.record.recruitId).then(({ data }) => {
         this.form = this.$mergeByFirst(initForm(), data.data)
         this.getProvince()
         this.getCity()
       })
     },
     getProvince () {
-      getInfo(this.record.province).then(({ data }) => {
+      getInfo(this.form.province).then(({ data }) => {
         this.form.province = data.data.name
       }) 
     },

@@ -72,6 +72,12 @@ export default [
         component: () => import('@/views/hrms/crew/Page/Detail.vue'),
         meta: noKeepAlive,
       },
+      {
+        path: 'recruit_post/:recruitId',
+        name: '发布招聘求职表单',
+        component: () => import('@/views/hrms/Recruit/Page/Edit.vue'),
+        meta: noKeepAlive,
+      },
     ],
   },
 ]

@@ -1,32 +1,32 @@
 import request from '@/router/axios'
 
-const prefixUrl = 'tybhrms/resume'
+const prefixUrl = 'tybhrms/tybrecruit'
 
-export function getResumePage (query) {
-  return request({
-    url: `${prefixUrl}/getPage`,
+export function getRecruitPage (query) {
+  return request ({
+    url:`${prefixUrl}/page`,
     method: 'get',
     params: query,
   })
 }
 
-export function deleteResumeById (id) {
+export function deleteRecruitById (id) {
   return request({
-    url: `${prefixUrl}/delete/` +id,
+    url: `${prefixUrl}/` +id,
     method: 'post',
     data: id,
   })
 }
 
-export function addResume (data) {
+export function addRecruit (data) {
   return request({
-    url: `${prefixUrl}/add`,
+    url: `${prefixUrl}/save`,
     method: 'post',
     data: data,
   })
 }
 
-export function getResumeById (id) {
+export function getRecruitById (id) {
   return request({
     url: `${prefixUrl}/` + id,
     method: 'get',
@@ -34,10 +34,10 @@ export function getResumeById (id) {
   })
 }
 
-export function putResume (obj, publish) {
+export function putRecruit (obj, publish) {
   return request({
     url: `${prefixUrl}/update`,
-    method: 'put',
+    method: 'post',
     params: {
       publish,
     },
