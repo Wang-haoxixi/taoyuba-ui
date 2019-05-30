@@ -72,7 +72,7 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="船长（m）：" prop="hullLength">
+            <el-form-item type="number" label="船长（m）：" prop="hullLength">
               <el-input v-model="form.hullLength"></el-input>
             </el-form-item>
           </el-col>

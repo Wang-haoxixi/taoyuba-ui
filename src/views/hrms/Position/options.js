@@ -66,24 +66,40 @@ const columnsMap = [
     }
   }
 
+  const cellPhone = (rules, value, callback) => {
+    if (value !== '') {
+      var reg = /(^1[0-9]{10}$)|(^0\d{2,3}-?\d{7,8}$)/
+      if (!reg.test(value)) {
+        callback(new Error('请输入11位的手机号码'))
+      }
+    }
+    callback()
+  }
+
   const rules = {
     contactName: [
       { required: true, message: '请填联系人', trigger: 'blur' },
+      { min: 2, max: 4, message: '长度在 2 到 4 个字符', trigger: 'blur'},
     ],
     positionName: [
       { required: true, message: '请填岗位名称', trigger: 'blur' },
+      { max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur'},
     ],
     contactPhone: [
       { required: true, message: '请填联系电话', trigger: 'blur' },
+      { validator: cellPhone, trigger: 'blur'},
     ],
     raiseNo: [
       { required: true, message: '请填递增人数', trigger: 'blur' },
+      { max: 4, message: '不得超过5位数', trigger: 'blur'},
     ],
     recruitNo: [
       { required: true, message: '请填招聘人数', trigger: 'blur' },
+      { max: 4, message: '不得超过5位数', trigger: 'blur'},
     ],
     salary: [
       { required: true, message: '请填薪水', trigger: 'blur' },
+      { max: 10, message: '不得超过10位数', trigger: 'blur'},
     ],
     settlement: [
       { required: true, message: '请填结算方式', trigger: 'blur' },
@@ -93,9 +109,11 @@ const columnsMap = [
     ],
     workPlace: [
       { required: true, message: '请填工作地点', trigger: 'blur' },
+      { max: 25, message: '长度在 0 到 25 个字符', trigger: 'blur'},
     ],
     workTime: [
       { required: true, message: '请填工作时间', trigger: 'blur' },
+      { max: 25, message: '长度在 0 到 25 个字符', trigger: 'blur'},
     ],
     startTime: [
       { required: true, message: '请填开始时间', trigger: 'blur' },
@@ -105,6 +123,7 @@ const columnsMap = [
     ],
     workSpecification: [
       { required: true, message: '请填岗位描述', trigger: 'blur' },
+      { max: 100, message: '长度在 0 到 100 个字符', trigger: 'blur'},
     ],
   }
 

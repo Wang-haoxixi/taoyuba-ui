@@ -105,21 +105,50 @@ const toDtoSearchForm = (row) => {
   return newForm
 }
 
+const cellPhone = (rules, value, callback) => {
+  if (value !== '') {
+    var reg = /(^1[0-9]{10}$)|(^0\d{2,3}-?\d{7,8}$)/
+    if (!reg.test(value)) {
+      callback(new Error('请输入11位的手机号码'))
+    }
+  }
+  callback()
+}
+
+const amount1 = (rules, value, callback) => {
+  var reg = /^\d{0,3}\.{0,1}(\d{1,2})?$/
+  var num = /^\d{0,100}\.{0,1}(\d{1,2})?$/
+  var dig = /\./
+  if (!num.test(value)) {
+    callback(new Error('为数字类型且小数点后最多两位'))
+  } else if (!reg.test(value)) {
+    callback(new Error('不超过3位整数'))
+  } else if (!dig.test(value)) {
+    callback(new Error('必须带小数点，如10.01'))
+  } 
+  callback()
+}
+
 const rules = {
   contactName: [
     { required: true, message: '请填联系人', trigger: 'blur' },
+    { min: 2, max: 4, message: '长度在 2 到 4 个字符', trigger: 'blur'},
   ],
   positionId: [
     { required: true, message: '请填招聘岗位', trigger: 'blur' },
+    { max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur'},
   ],
   contactPhone: [
     { required: true, message: '请填联系电话', trigger: 'blur' },
+    { validator: cellPhone, trigger: 'blur'},
   ],
   recruitNo: [
     { required: true, message: '请填招聘人数', trigger: 'blur' },
+    { max: 4, message: '不得超过5位数', trigger: 'blur'},
   ],
   salary: [
     { required: true, message: '请填薪水', trigger: 'blur' },
+    { max: 10, message: '不得超过10位数', trigger: 'blur'},
   ],
   salaryCurrency: [
     { required: true, message: '请填货币种类', trigger: 'blur' },
@@ -135,9 +164,11 @@ const rules = {
   ],
   hullLength: [
     { required: true, message: '请填船长（m）', trigger: 'blur' },
+    { validator: amount1, trigger: 'blur'},
   ],
   totalPower: [
     { required: true, message: '请填主机总功率', trigger: 'blur' },
+    { validator: amount1, trigger: 'blur'},
   ],
   isRcmd: [
     { required: true, message: '请填是否推荐', trigger: 'blur' },
