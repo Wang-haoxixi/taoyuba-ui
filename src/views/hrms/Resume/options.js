@@ -1,4 +1,3 @@
-
 import { mergeByFirst } from '@/util/util'
 
   const dictsMap = {
@@ -7,6 +6,9 @@ import { mergeByFirst } from '@/util/util'
     },
     isPublic: {
       0: '不公开', 1: '公开',
+    },
+    isRcmd: {
+      0: '不推荐', 1: '推荐',
     },
   }
   
@@ -38,7 +40,7 @@ import { mergeByFirst } from '@/util/util'
   
   const formToDto = (row) => {
     const newForm = mergeByFirst(initDtoForm(), row)
-    return newForm
+    return newForm  
   }
 
   const initDtoForm = () => {
@@ -61,6 +63,7 @@ import { mergeByFirst } from '@/util/util'
       skill: '', //特殊技能
       workRequire: '', //作业要求
       workDetail: '', //作业方式
+      isRcmd: '', //是否推荐
     }
   }
 
@@ -105,6 +108,7 @@ import { mergeByFirst } from '@/util/util'
       skill: '', //特殊技能
       workRequire: '', //作业要求
       workDetail: '', //作业方式
+      isRcmd: '', //是否推荐
     }
   }
 
@@ -159,6 +163,9 @@ import { mergeByFirst } from '@/util/util'
     ],
     workDetail: [
         { required: true, message: '请填作业方式', trigger: 'blur' },
+    ],
+    isRcmd: [
+      { required: true, message: '请填是否推荐', trigger: 'blur' },
     ],
   }
 

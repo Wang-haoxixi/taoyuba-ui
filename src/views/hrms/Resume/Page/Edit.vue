@@ -100,6 +100,13 @@
               <el-input v-model="form.skill"></el-input>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="是否推荐：" prop="isRcmd">
+              <el-radio-group v-model="form.isRcmd">
+                <el-radio v-for="(item,i) in dictsMap.isRcmd" :key="i" :label="+i">{{item}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
         </el-row>
 
         <iep-form-item class="form-half" prop="workDetail" label-name="作业方式：">
@@ -117,7 +124,7 @@
 </template>
 <script>
 import { getResumeById, addResume, putResume } from '@/api/post/resume'
-import { getArea, getInfo } from '@/api/post/address'
+import { getArea } from '@/api/post/address'
 import { initForm, formToDto, rules, dictsMap } from '../options'
 export default {
   data () {
@@ -151,9 +158,7 @@ export default {
         this.form.postion = this.form.postion.toString()
         this.form.seniority = this.form.seniority.toString()
         this.form.workRequire = this.form.workRequire.toString()
-        getInfo(this.form.city).then(({ data }) => {
-          this.form.city = data.data.name
-        })
+        this.selectCity()
       })
     }
     this.getProvince()
@@ -181,6 +186,16 @@ export default {
         })
       })
       this.form.city = ''
+    },
+    selectCity () {
+        getArea(this.form.province).then(({ data }) => {
+        this.citys = data.data.map(item=>{
+          return {
+            label: item.name,
+            value: item.areaCode,  
+          }
+        })
+      })
     },
     onGoBack () {
       this.$router.history.go(-1)
