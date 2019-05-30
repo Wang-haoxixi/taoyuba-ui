@@ -123,13 +123,6 @@ export default {
     }
   },
   mounted () {
-    if (this.$route.query.position) {
-      const position = this.$route.query.position.map(m => +m) || []
-      this.form.position = position || []
-      setTimeout(() => {
-        this.$refs['IepCascader'].handleChange(position)
-      }, 2000)
-    }
   },
   methods: {
     onGoBack () {

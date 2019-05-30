@@ -56,7 +56,7 @@ export default [
       },
       {
         path: 'position_post/:positionId',
-        name: '招聘岗位表单',
+        name: '发布禁渔岗位表单',
         component: () => import('@/views/hrms/Position/Page/Edit.vue'),
         meta: noKeepAlive,
       },

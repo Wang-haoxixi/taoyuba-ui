@@ -65,7 +65,7 @@ export default {
       this.$emit('onDetail', row)
     },
     async loadPage (param = this.searchForm) {
-       this.loadTable(param, getPositionPage)
+       await this.loadTable(param, getPositionPage)
     },
   },
 }
