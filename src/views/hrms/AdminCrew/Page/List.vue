@@ -4,7 +4,7 @@
       <page-header title="船员管理"></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>申请</iep-button>
+          <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
         <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -27,7 +27,7 @@
   </div>
 </template>
 <script>
-import { getPositionPage, deleteCrewById} from '@/api/post/crew'
+import { getPositionPage, deleteCrewById} from '@/api/post/admin'
 import AdvanceSearch from './AdvanceSearch'
 import mixins from '@/mixins/mixins'
 import { columnsMap, dictsMap } from '../options'
@@ -53,17 +53,17 @@ export default {
     },
     handleAdd () {
       this.$router.push({
-        path: '/hrms_spa/crew_post/0',
+        path: '/hrms_spa/crew_admin/0',
       })      
     },
     handleEdit (row) {
       this.$router.push({
-        path: `/hrms_spa/crew_post/${row.userId}`,
+        path: `/hrms_spa/crew_admin/${row.userId}`,
       })    
     },
     handleDetail (row) {
       this.$router.push({
-        path: `/hrms_spa/crew_view/${row.userId}`,
+        path: `/hrms_spa/crew_admin/${row.userId}`,
       }) 
     },
     async loadPage (param = this.searchForm) {

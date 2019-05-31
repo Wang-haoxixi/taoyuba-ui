@@ -62,14 +62,26 @@ export default [
       },
       {
         path: 'crew_post/:userId',
-        name: '船员管理表单',
+        name: '船员表单',
         component: () => import('@/views/hrms/crew/Page/Edit.vue'),
         meta: noKeepAlive,
       },
       {
         path: 'crew_view/:userId',
-        name: '船员管理表单',
+        name: '船员表单',
         component: () => import('@/views/hrms/crew/Page/Detail.vue'),
+        meta: noKeepAlive,
+      },
+      {
+        path: 'crew_admin/:userId',
+        name: '管理表单',
+        component: () => import('@/views/hrms/AdminCrew/Page/Edit.vue'),
+        meta: noKeepAlive,
+      },
+      {
+        path: 'crew_admin/:userId',
+        name: '管理表单',
+        component: () => import('@/views/hrms/AdminCrew/Page/Detail.vue'),
         meta: noKeepAlive,
       },
       {
@@ -79,7 +91,7 @@ export default [
         meta: noKeepAlive,
       },
       {
-        path: 'resume_post/:recruitId',
+        path: 'resume_post/:resumeId',
         name: '发布求职简历表单',
         component: () => import('@/views/hrms/Resume/Page/Edit.vue'),
         meta: noKeepAlive,
