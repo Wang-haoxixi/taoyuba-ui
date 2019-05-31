@@ -74,7 +74,7 @@ export default {
     text-align: center;
     cursor: pointer;
     &:hover .sub-title {
-      color: #cb3737;
+      color: #0185d8;
     }
     .img {
       width: 100%;

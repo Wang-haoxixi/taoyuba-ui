@@ -1,74 +1,103 @@
 <template>
-  <div class="contract">
-    <div class="contract-nav">
-      <div>我的合同</div>
+  <div class="about-task">
+    <div class="task-nav">
+      <span class="navTitle">我的合同</span>
+      <nav-tab :nav-list="dataList" @tab="tab"></nav-tab>
     </div>
-    <div class="contract-content">
-      <iep-no-data v-if="!dataList.length" message="暂无合同"></iep-no-data>
-      <el-row class="item" v-for="(item,index) in dataList" :key="index">
-        <el-col :span="12">
-          <div class="iep-ellipsis name" @click="handleDetail(item)">{{item.name}}</div>
-        </el-col>
-        <el-col :span="6">
-          <div class="iep-ellipsis" style="text-align: left;">{{item.businessContractType!=''?item.businessContractType:'无'}}</div>
-        </el-col>
-        <el-col :span="3">
-          <div class="iep-ellipsis" style="text-align: right;">{{item.contractAmount.toLocaleString('en-US')}}</div>
-        </el-col>
-        <el-col :span="3">
-          <div class="iep-ellipsis" style="text-align: right;">{{item.status}}</div>
-        </el-col>
-      </el-row>
-    </div>
+    <nav-content :contentData="contentData" @on-detail="handleDetail"></nav-content>
   </div>
 </template>
 
 <script>
-import { getContractList } from '@/api/wel/index'
+import { mapGetters } from 'vuex'
+import NavTab from './NavTab'
+import NavContent from './contractContent'
+import { getContractList } from '@/api/tmlms/contract/index'
+const detailUrlMap = {
+  approval: '/hrms_spa/approval_detail',
+  instruction: '/mlms_spa/email/detail',
+}
 export default {
+  components: { NavTab, NavContent },
   data () {
     return {
-      dataList: [],
+      showClass: 0,
+      navName: 'instruction',
+      contentData: [],
+      dataList: [
+        {
+          subtitle: '劳务合同',
+          type: 'instruction',
+          id: 0,
+        },
+        {
+          subtitle: '交易合同',
+          type: 'approval',
+          id: 3,
+        },
+      ],
+      content: [],
+      hrms_to_approval: false,
     }
   },
+  computed: {
+    ...mapGetters([
+      'permissions',
+    ]),
+  },
   created () {
-    getContractList().then((res) => {
-      this.dataList = res.data.data
-    })
+    this.tab(this.navName)
+    this.hrms_to_approval = this.permissions['hrms_to_approval']
+    if (this.hrms_to_approval) {
+      this.dataList = [this.dataList[0]]
+    }
   },
   methods: {
     handleDetail (row) {
-      this.$router.push(`/mlms_spa/contract/detail/${row.id}`)
+      const path = detailUrlMap[row.type] || false
+      if (!path) {
+        return
+      }
+      this.$router.push({
+        path: `${detailUrlMap[row.type]}/${row.id}`,
+      })
+    },
+    tab (val) {
+      console.log('val',val)
+      getContractList({size:5}).then(({ data }) => {
+        this.contentData = data.data.records.map(m => {
+          return {
+            ...m,
+            type: val,
+          }
+        })
+      })
     },
   },
 }
 </script>
 
 <style lang="scss" scoped>
-.contract {
+.about-task {
   padding: 15px 30px;
   padding-bottom: 0;
   border-bottom: 1px solid #eee;
-  color: #5f5f5f;
-  .contract-nav {
+  .task-nav {
     display: flex;
     align-items: center;
-    font-size: 16px;
-    color: #000;
-  }
-  .contract-content {
-    padding: 10px 0;
-    font-size: 14px;
-    .item {
-      padding: 5px 0;
-      cursor: pointer;
+    .navTitle {
+      font-size: 16px;
+      padding-right: 20px;
+      color: #000;
     }
   }
-}
-.grid-content {
-  min-height: 24px;
-}
-.el-row:hover .el-col .name {
-  color: #cb3737;
+  .title {
+    font-size: 14px;
+    cursor: pointer;
+    color: #666;
+    &:hover {
+      color: #0185d8;
+    }
+  }
 }
 </style>

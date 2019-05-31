@@ -82,9 +82,9 @@ export default {
   .classify {
     padding: 9px 0;
     .sub-title + .appellation {
-      color: #cb3737;
+      color: #0185d8;
       background: #fef0f0;
-      border-color: #cb3737;
+      border-color: #0185d8;
     }
   }
   .pieceDeletion {
@@ -155,7 +155,7 @@ export default {
 .btn {
   float: right;
   padding: 5px 0;
-  color: #cb3737;
+  color: #0185d8;
   &:hover {
     color: #f56c6c;
   }

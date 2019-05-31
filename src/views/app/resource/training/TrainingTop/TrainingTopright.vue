@@ -55,7 +55,7 @@ export default {
         }
         this.activities[0] = Object.assign({}, this.activities[0], {
           important: '即将开始',
-          color: '#cb3737',
+          color: '#0185d8',
           icon: 'el-icon-time',
           size: 'large',
         })
@@ -104,7 +104,7 @@ export default {
     }
     strong {
       font-weight: 400;
-      color: #cb3737;
+      color: #0185d8;
     }
   }
 }

@@ -38,9 +38,9 @@ export default {
     -webkit-box-orient: vertical;
     transition-duration: 0.3s;
     &:hover {
-      color: #cb3737;
+      color: #0185d8;
       &:before {
-        background-color: #cb3737;
+        background-color: #0185d8;
       }
     }
     &:before {

@@ -61,13 +61,13 @@ export default {
   width: 510px;
 }
 .qualification-search >>> .el-button--danger.is-plain {
-  color: #cb3737;
+  color: #0185d8;
   background: #fef0f0;
-  border-color: #cb3737;
+  border-color: #0185d8;
 }
 .qualification-search >>> .el-button--danger.is-plain:hover,
 .qualification-search >>> .el-button--danger.is-plain:focus {
-  background: #cb3737;
+  background: #0185d8;
   border-color: #ba1b21;
   color: #fff;
 }

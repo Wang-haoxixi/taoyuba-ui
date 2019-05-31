@@ -138,7 +138,7 @@ export default {
       cursor: pointer;
     }
     .selectNavigation {
-      color: #cb3737
+      color: #0185d8
     }
   }
   .right {

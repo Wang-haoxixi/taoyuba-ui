@@ -99,7 +99,7 @@ export default {
     background-color: #f8f8f8;
     color: #666;
     &:hover {
-      background-color: #cb3737;
+      background-color: #0185d8;
       color: #fff;
       animation: iconRotate-data-v-300a8671 1s linear infinite;
       cursor: pointer;

@@ -32,6 +32,6 @@ export default {
   font-size: 16px;
   font-weight: 700;
   line-height: 16px;
-  border-left: 3px solid #cb3737;
+  border-left: 3px solid #0185d8;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="relationshipContent">
-    <iep-no-data v-if="!contentData.length" message="暂无内容"></iep-no-data>
+    <!-- <iep-no-data v-if="!contentData.length" message="暂无内容"></iep-no-data>
     <div class="relationship-item" v-for="(item,index) in contentData" :key="index">
       <div><span class="title">{{item.title}}{{item.data}}</span></div>
       <ul>
@@ -8,6 +8,9 @@
       </ul>
     </div>
     <div class="relationship-item">
+    </div> -->
+    <div>
+      <el-button style="color:#666" v-for="item of nameList" :key="item" type="text">{{item.name}}</el-button>
     </div>
   </div>
 </template>
@@ -19,6 +22,27 @@ export default {
       type: Array,
       default: () => [],
     },
+  },
+  data () {
+    return {
+      nameList: [
+        {name: '张三'},
+        {name: '李四'},
+        {name: '王五'},
+        {name: '张三'},
+        {name: '李四'},
+        {name: '王五'},
+        {name: '张三'},
+        {name: '李四'},
+        {name: '王五'},
+        {name: '张三'},
+        {name: '李四'},
+        {name: '王五'},
+        {name: '张三'},
+        {name: '李四'},
+        {name: '王五'},
+      ],
+    }
   },
   created () {
     // console.log(this.content)
@@ -51,7 +75,7 @@ li {
     text-align: center;
     background-color: #eee;
     &:hover {
-      color: #cb3737;
+      color: #0185d8;
     }
   }
   ul {
@@ -66,7 +90,7 @@ li {
     font-size: 14px;
     cursor: pointer;
     &:hover {
-      color: #cb3737;
+      color: #0185d8;
     }
   }
 }

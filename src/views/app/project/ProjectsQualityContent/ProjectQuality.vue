@@ -70,7 +70,7 @@ export default {
       font-size: 12px;
       line-height: 15px;
       text-align: center;
-      background-color: #cb3737;
+      background-color: #0185d8;
       color: #fff;
     }
     .name {

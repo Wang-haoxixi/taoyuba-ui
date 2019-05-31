@@ -101,7 +101,7 @@ export default {
     cursor: pointer;
     position: relative;
     &:hover {
-      color: #cb3737;
+      color: #0185d8;
     }
     span {
       margin-left: 5px;

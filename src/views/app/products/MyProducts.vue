@@ -176,15 +176,15 @@ export default {
         border-radius: 3px;
         font-size: 14px;
         text-align: center;
-        color: #cb3737;
+        color: #0185d8;
         margin-left: 10px;
-        border: 1px solid #cb3737;
+        border: 1px solid #0185d8;
         -webkit-transition: all 0.5s;
         transition: all 0.5s;
         &:focus,
         &:hover {
           cursor: pointer;
-          background-color: #cb3737;
+          background-color: #0185d8;
           color: #fff;
           outline: none;
         }

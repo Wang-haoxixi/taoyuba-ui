@@ -101,7 +101,7 @@ export default {
 .thoughts >>> .el-button {
   float: right;
   padding: 5px 0;
-  color: #cb3737;
+  color: #0185d8;
 }
 .thoughts >>> .el-button :hover {
   color: #f56c6c;

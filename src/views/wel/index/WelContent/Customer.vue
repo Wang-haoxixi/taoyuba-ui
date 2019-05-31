@@ -79,6 +79,6 @@ export default {
 }
 .el-row:hover .el-col .name {
   cursor: pointer;
-  color: #cb3737;
+  color: #0185d8;
 }
 </style>

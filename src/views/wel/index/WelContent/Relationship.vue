@@ -19,11 +19,11 @@ export default {
       navName: 'order',
       contentData: [],
       navList: [{
-        subtitle: '师徒',
+        subtitle: '雇佣',
         type: 'mentor',
         id: 0,
       }, {
-        subtitle: '协作',
+        subtitle: '伙伴',
         type: 'customer',
         id: 1,
       }, {
@@ -31,7 +31,7 @@ export default {
         type: 'colleague',
         id: 3,
       }, {
-        subtitle: '通讯录',
+        subtitle: '老乡',
         type: 'circle',
         id: 4,
       }],
@@ -74,7 +74,7 @@ export default {
     cursor: pointer;
     color: #666;
     &:hover {
-      color: #cb3737;
+      color: #0185d8;
     }
   }
 }

@@ -129,7 +129,7 @@ export default {
       color: #999;
       cursor: pointer;
       &:hover {
-        color: #cb3737;
+        color: #0185d8;
       }
       i {
         margin-right: 5px;
@@ -164,9 +164,9 @@ export default {
       .el-tag {
         margin-right: 5px;
         &:hover {
-          color: #cb3737;
+          color: #0185d8;
           background: #fef0f0;
-          border-color: #cb3737;
+          border-color: #0185d8;
         }
       }
     }
