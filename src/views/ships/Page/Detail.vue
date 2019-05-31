@@ -179,7 +179,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="渔船股份性质" prop="shipShare">
-              <el-select v-model="form.shipAttr">
+              <el-select v-model="form.shipShare">
                 <el-option
                         v-for="item in $store.getters.dictGroup.tyb_contract_ship_attr"
                         :key="item.value"
