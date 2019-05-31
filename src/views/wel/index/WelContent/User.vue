@@ -381,7 +381,6 @@ export default {
             }
           }
           .task {
-            background: #f9eae7;
             padding: 3px 10px;
             font-size: 14px;
             border-radius: 3px;

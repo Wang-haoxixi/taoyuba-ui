@@ -158,7 +158,7 @@ export default {
     color: #959595;
   }
   .color {
-    color: #cb132d;
+    color: #0185d8;
     font-size: 18px;
   }
 }

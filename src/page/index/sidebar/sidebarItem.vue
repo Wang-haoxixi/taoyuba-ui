@@ -116,14 +116,12 @@ export default {
 }
 .el-menu-item.is-active {
   border-color: #0185d8;
-  background: #f9eae7;
   color: #0185d8;
 }
 
 .el-menu-item {
   &:hover,
   &:focus {
-    background-color: #f9eae7;
     color: #0185d8;
   }
 }

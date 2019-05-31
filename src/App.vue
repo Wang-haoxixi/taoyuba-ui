@@ -49,3 +49,8 @@ export default {
   overflow: hidden;
 }
 </style>
+<style>
+.el-menu-item:hover{
+  border-color: #0185d8!important;
+}
+</style>
