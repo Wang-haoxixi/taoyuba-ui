@@ -90,13 +90,13 @@ const columnsMap = [
       { required: true, message: '请填写性别', trigger: 'blur' },
     ],
     idcard: [
-      { required: true,type :'number', message: '请填写身份证信息', trigger: 'blur' },
+      { required: true, message: '请填写身份证信息', trigger: 'blur' },
     ],
     birthday: [
       { required: true, message: '请填写生日信息', trigger: 'blur' },
     ],
     phone: [
-      { required: true,pattern: /^1[34578]\d{9}$/, message: '请填写联系电话', trigger: 'blur' },
+      { required: true, message: '请填写联系电话', trigger: 'blur' },
     ],
   }
 
