@@ -1,32 +1,32 @@
 import request from '@/router/axios'
 
-const prefixUrl = 'tybhrms/position'
+const prefixUrl = 'tybhrms/tybrecruit'
 
-export function getPositionPage (query) {
-  return request({
-    url: `${prefixUrl}/page`,
+export function getRecruitPage (query) {
+  return request ({
+    url:`${prefixUrl}/page`,
     method: 'get',
     params: query,
   })
 }
 
-export function deletePositionById (id) {
+export function deleteRecruitById (id) {
   return request({
-    url: `${prefixUrl}/delete/` +id,
+    url: `${prefixUrl}/` +id,
     method: 'post',
     data: id,
   })
 }
 
-export function addPosition (data) {
+export function addRecruit (data) {
   return request({
-    url: `${prefixUrl}/add`,
+    url: `${prefixUrl}/save`,
     method: 'post',
     data: data,
   })
 }
 
-export function getPositionById (id) {
+export function getRecruitById (id) {
   return request({
     url: `${prefixUrl}/` + id,
     method: 'get',
@@ -34,10 +34,10 @@ export function getPositionById (id) {
   })
 }
 
-export function putPosition (obj, publish) {
+export function putRecruit (obj, publish) {
   return request({
     url: `${prefixUrl}/update`,
-    method: 'put',
+    method: 'post',
     params: {
       publish,
     },

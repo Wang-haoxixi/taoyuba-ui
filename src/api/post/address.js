@@ -15,3 +15,10 @@ export function getInfo (code) {
     method: 'get',
   })
 }
+
+export function getAreacode (name) {
+  return request({
+    url: `${prefixUrl}/getareacode/` + name,
+    method: 'get',
+  })
+}

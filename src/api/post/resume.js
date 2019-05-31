@@ -12,7 +12,7 @@ export function getResumePage (query) {
 
 export function deleteResumeById (id) {
   return request({
-    url: `${prefixUrl}/remove/` +id,
+    url: `${prefixUrl}/delete/` +id,
     method: 'post',
     data: id,
   })

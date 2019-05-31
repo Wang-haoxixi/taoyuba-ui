@@ -1,4 +1,3 @@
-
 import { mergeByFirst } from '@/util/util'
 
   const dictsMap = {
@@ -7,6 +6,9 @@ import { mergeByFirst } from '@/util/util'
     },
     isPublic: {
       0: '不公开', 1: '公开',
+    },
+    isRcmd: {
+      0: '不推荐', 1: '推荐',
     },
   }
   
@@ -38,7 +40,7 @@ import { mergeByFirst } from '@/util/util'
   
   const formToDto = (row) => {
     const newForm = mergeByFirst(initDtoForm(), row)
-    return newForm
+    return newForm  
   }
 
   const initDtoForm = () => {
@@ -61,6 +63,7 @@ import { mergeByFirst } from '@/util/util'
       skill: '', //特殊技能
       workRequire: '', //作业要求
       workDetail: '', //作业方式
+      isRcmd: '', //是否推荐
     }
   }
 
@@ -105,15 +108,28 @@ import { mergeByFirst } from '@/util/util'
       skill: '', //特殊技能
       workRequire: '', //作业要求
       workDetail: '', //作业方式
+      isRcmd: '', //是否推荐
     }
+  }
+
+  const cellPhone = (rules, value, callback) => {
+    if (value !== '') {
+      var reg = /(^1[0-9]{10}$)|(^0\d{2,3}-?\d{7,8}$)/
+      if (!reg.test(value)) {
+        callback(new Error('请输入11位的手机号码'))
+      }
+    }
+    callback()
   }
 
   const rules = {
     realName: [
         { required: true, message: '请填发布人', trigger: 'blur' },
+        { min: 2, max: 4, message: '长度在 2 到 4 个字符', trigger: 'blur'},
     ],
     resumeName: [
         { required: true, message: '请填简历名字', trigger: 'blur' },
+        { max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur'},
     ],
     birthday: [
         { required: true, message: '请填出身日期', trigger: 'blur' },
@@ -126,18 +142,21 @@ import { mergeByFirst } from '@/util/util'
     ],
     contactPhone: [
         { required: true, message: '请填联系电话', trigger: 'blur' },
+        { validator: cellPhone, trigger: 'blur'},
     ],
     education: [
         { required: true, message: '请填教育程度', trigger: 'blur' },
     ],
     expectSalary: [
         { required: true, message: '请填期望月薪', trigger: 'blur' },
+        { max: 10, message: '不得超过10位数', trigger: 'blur'},
     ],
     foreignLanguage: [
         { required: true, message: '请填外语水平', trigger: 'blur' },
     ],
     height: [
         { required: true, message: '请填身高', trigger: 'blur' },
+        { max: 3, message: '不得超过4位数', trigger: 'blur'},
     ],
     isPublic: [
         { required: true, message: '请填是否公开', trigger: 'blur' },
@@ -153,12 +172,17 @@ import { mergeByFirst } from '@/util/util'
     ],
     skill: [
         { required: true, message: '请填特殊技能', trigger: 'blur' },
+        { max: 25, message: '长度在 0 到 25 个字符', trigger: 'blur'},
     ],
     workRequire: [
         { required: true, message: '请填作业要求', trigger: 'blur' },
     ],
     workDetail: [
         { required: true, message: '请填作业方式', trigger: 'blur' },
+        { max: 100, message: '长度在 0 到 100 个字符', trigger: 'blur'},
+    ],
+    isRcmd: [
+      { required: true, message: '请填是否推荐', trigger: 'blur' },
     ],
   }
 
