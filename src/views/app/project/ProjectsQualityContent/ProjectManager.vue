@@ -121,7 +121,7 @@ export default {
 .btn {
   float: right;
   padding: 5px 0;
-  color: #cb3737;
+  color: #0185d8;
   &:hover {
     color: #f56c6c;
   }

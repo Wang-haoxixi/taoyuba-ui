@@ -19,7 +19,10 @@
               <div class="user-poster">
                 <span class="say">{{timeFix}}，{{form.name}}
                   <iep-identity-mark icon="iep2-iconchengyuan" title="成员"></iep-identity-mark>
-                  <span class="welcome-text">{{welcome}}</span>
+                  <span class="welcome-text">
+                    <!-- {{welcome}} -->
+                    **渔业轮机长
+                  </span>
                 </span>
               </div>
               <div class="user-info">
@@ -73,7 +76,23 @@
           </el-col>
         </el-row>
       </el-card>
+      <span style="margin:20px"><i class="el-icon-warning"></i>您尚未加入任何角色，<el-button style="color:#0185d8" type="text" @click="openDialog">请选择</el-button></span>
     </a-spin>
+    <el-dialog
+      title="选择角色"
+      :visible.sync="dialogShow"
+      width="80%">
+      <span style="margin:20px"><i class="el-icon-warning"></i>您尚未加入任何角色，请选择</span>
+      <div class="roles">
+        <div class="role" v-for="(item,index) of roleList" :key="index">
+          <el-button @click="changeSelect(index)" style="width:80%;margin:auto" :type="item.select ? 'primary' : 'default'">{{item.name}}<i v-if="item.select" class="el-icon-check el-icon--right"></i></el-button>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogShow = false">确 定</el-button>
+        <el-button @click="dialogShow = false">取 消</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -102,6 +121,82 @@ export default {
         padding: 0,
       },
       form: initIndexForm(),
+      dialogShow: false, //弹窗
+      roleList: [
+        {
+          name: '船员',
+          select: false,
+        },{
+          name: '船东',
+          select: false,
+        },{
+          name: '服务机构',
+          select: false,
+        },{
+          name: '船厂',
+          select: false,
+        },{
+          name: '船配',
+          select: false,
+        },{
+          name: '检验师',
+          select: false,
+        },{
+          name: '内勤',
+          select: false,
+        },{
+          name: '电工',
+          select: false,
+        },{
+          name: '船员',
+          select: false,
+        },{
+          name: '船东',
+          select: false,
+        },{
+          name: '服务机构',
+          select: false,
+        },{
+          name: '船厂',
+          select: false,
+        },{
+          name: '船配',
+          select: false,
+        },{
+          name: '检验师',
+          select: false,
+        },{
+          name: '内勤',
+          select: false,
+        },{
+          name: '电工',
+          select: false,
+        },{
+          name: '船员',
+          select: false,
+        },{
+          name: '船东',
+          select: false,
+        },{
+          name: '服务机构',
+          select: false,
+        },{
+          name: '船厂',
+          select: false,
+        },{
+          name: '船配',
+          select: false,
+        },{
+          name: '检验师',
+          select: false,
+        },{
+          name: '内勤',
+          select: false,
+        },{
+          name: '电工',
+          select: false,
+        },
+      ],
     }
   },
   computed: {
@@ -128,6 +223,13 @@ export default {
     handleSome5 () {
       this.$message.success('个人信用评分, 功能开发中')
     },
+    openDialog () {
+      this.dialogShow = true
+      console.log(  this.dialogShow)
+    },
+    changeSelect (index){
+      this.$set(this.roleList[index],'select',!this.roleList[index].select)
+    },
     loadPage () {
       this.pageLoading = true
       getIndex().then(({ data }) => {
@@ -144,7 +246,7 @@ export default {
 .welcome-text {
   margin-left: 10px;
   font-size: 16px;
-  color: #cb3737;
+  color: #0185d8;
 }
 .information {
   width: 100%;
@@ -213,7 +315,7 @@ export default {
             margin-left: 20px;
             max-width: 520px;
             font-size: 16px;
-            color: #cb3737;
+            color: #0185d8;
             vertical-align: middle;
           }
         }
@@ -279,7 +381,6 @@ export default {
             }
           }
           .task {
-            background: #f9eae7;
             padding: 3px 10px;
             font-size: 14px;
             border-radius: 3px;
@@ -299,14 +400,14 @@ export default {
             border-radius: 3px;
             font-size: 14px;
             text-align: center;
-            color: #cb3737;
+            color: #0185d8;
             margin-left: 10px;
-            border: 1px solid #cb3737;
+            border: 1px solid #0185d8;
             -webkit-transition: all 0.5s;
             transition: all 0.5s;
             &:focus,
             &:hover {
-              background-color: #cb3737;
+              background-color: #0185d8;
               color: #fff;
               outline: none;
             }
@@ -400,6 +501,15 @@ export default {
         }
       }
     }
+  }
+}
+.roles {
+  display: flex;
+  flex-wrap: wrap;
+  .role{
+    width: 200px;
+    margin: 10px;
+    text-align: center;
   }
 }
 </style>

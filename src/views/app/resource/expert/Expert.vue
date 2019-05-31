@@ -168,7 +168,7 @@ export default {
           font-size: 12px;
           line-height: 15px;
           text-align: center;
-          background-color: #cb3737;
+          background-color: #0185d8;
           color: #fff;
         }
         .show2 {
@@ -179,8 +179,8 @@ export default {
           line-height: 12px;
           font-size: 12px;
           text-align: center;
-          border: 1px solid #cb3737;
-          color: #cb3737;
+          border: 1px solid #0185d8;
+          color: #0185d8;
         }
       }
     }

@@ -44,7 +44,7 @@ export default {
       font-size: 14px;
       cursor: pointer;
       &:hover {
-        color: #cb3737;
+        color: #0185d8;
       }
     }
     .el-progress {

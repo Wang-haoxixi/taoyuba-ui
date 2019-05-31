@@ -37,7 +37,7 @@ export default {
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     &:hover {
-      color: #cb3737;
+      color: #0185d8;
     }
     .assort {
       color: #999;

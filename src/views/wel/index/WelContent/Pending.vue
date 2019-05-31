@@ -1,7 +1,7 @@
 <template>
   <div class="about-task">
     <div class="task-nav">
-      <span class="navTitle">我的待办</span>
+      <span class="navTitle">我的检验</span>
       <nav-tab :nav-list="dataList" @tab="tab"></nav-tab>
     </div>
     <nav-content :contentData="contentData" @on-detail="handleDetail"></nav-content>
@@ -11,8 +11,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import NavTab from './NavTab'
-import NavContent from './NavContent'
-import { getPending } from '@/api/wel/index'
+import NavContent from './CheckContent'
+// import { getPending } from '@/api/wel/index'
 const detailUrlMap = {
   approval: '/hrms_spa/approval_detail',
   instruction: '/mlms_spa/email/detail',
@@ -26,12 +26,12 @@ export default {
       contentData: [],
       dataList: [
         {
-          subtitle: '领导批示',
+          subtitle: '正在检验',
           type: 'instruction',
           id: 0,
         },
         {
-          subtitle: '待审批',
+          subtitle: '历史检验',
           type: 'approval',
           id: 3,
         },
@@ -63,14 +63,15 @@ export default {
       })
     },
     tab (val) {
-      getPending(val).then(({ data }) => {
-        this.contentData = data.data.map(m => {
-          return {
-            ...m,
-            type: val,
-          }
-        })
-      })
+      console.log('val',val)
+      // getPending(val).then(({ data }) => {
+      //   this.contentData = data.data.map(m => {
+      //     return {
+      //       ...m,
+      //       type: val,
+      //     }
+      //   })
+      // })
     },
   },
 }
@@ -95,7 +96,7 @@ export default {
     cursor: pointer;
     color: #666;
     &:hover {
-      color: #cb3737;
+      color: #0185d8;
     }
   }
 }

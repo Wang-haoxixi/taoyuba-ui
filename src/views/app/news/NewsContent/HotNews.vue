@@ -50,7 +50,7 @@ export default {
     font-size: 14px;
     cursor: pointer;
     &:hover {
-      color: #cb3737;
+      color: #0185d8;
     }
   }
   .grid-content {
@@ -84,7 +84,7 @@ export default {
       background-color: #999;
     }
     &:hover {
-      color: #cb3737;
+      color: #0185d8;
     }
     &:nth-child(1) {
       padding-top: 10px;

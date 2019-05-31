@@ -52,7 +52,7 @@ export default {
       }
     }
     &:hover .name {
-      color: #cb3737;
+      color: #0185d8;
     }
     .name {
       line-height: 40px;

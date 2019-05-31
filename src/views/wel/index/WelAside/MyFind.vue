@@ -22,10 +22,10 @@ export default {
       findList: {
         title: '我要找',
         details: [
-          { icon: 'icon-xiangmu', subtitle: '项目', callback: () => { this.$openPage('/app/project') } },
-          { icon: 'icon-shangjifaxian', subtitle: '商机', callback: () => { this.$openPage('/app/resource/business') } },
+          { icon: 'icon-rencai', subtitle: '船东', callback: () => { this.$openPage('/app/project') } },
+          { icon: 'icon-chengyuan-sx', subtitle: '船员', callback: () => { this.$openPage('/app/resource/business') } },
           { icon: 'icon-peixun', subtitle: '培训', callback: () => { this.$openPage('/app/resource/training') } },
-          { icon: 'icon-shifu', subtitle: '师父', callback: () => { this.$openPage('/app/person') } },
+          { icon: 'icon-survey-library', subtitle: '题库', callback: () => { this.$openPage('/app/person') } },
         ],
       },
     }
@@ -89,7 +89,7 @@ export default {
   cursor: pointer;
   color: #999;
   &:hover {
-    color: #cb132d;
+    color: #0185d8;
   }
 }
 .inline {
@@ -104,5 +104,3 @@ export default {
   cursor: pointer;
 }
 </style>
-
-

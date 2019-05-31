@@ -199,7 +199,6 @@ export default {
       return +this.$route.params.userId
     },
     methodName () {
-      console.log()
       return this.userId ? '编辑' : '发布'
     },
   },
@@ -265,13 +264,8 @@ export default {
         this.village=data.data
       })
     },
-    chosevillage () {
-      console.log(111)
-    },
     onGoBack () {
-      this.$router.push({
-        path: '/hrms/crew',
-      })
+      this.$router.history.go(-1)
     },
     handleSubmit () {
       const submitFunction = this.userId ? putPosition : addPosition
@@ -284,11 +278,16 @@ export default {
                 type: 'success',
               })
               this.onGoBack()
+            }else{
+              this.$message({  
+                message: 'data.msg',
+                type: 'fail',
+              })
+              this.onGoBack()
             }
           })
         }
       })
-
     },
   },
 }

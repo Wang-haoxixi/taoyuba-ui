@@ -189,11 +189,11 @@ export default {
 .star-list >>> .el-button {
   padding: 5px 15px;
   font-size: 12px;
-  color: #cb3737;
+  color: #0185d8;
 }
 .star-list >>> .el-button:hover,
 .star-list >>> .el-button:focus {
-  background: #cb3737;
+  background: #0185d8;
   border-color: #ba1b21;
   color: #fff;
 }

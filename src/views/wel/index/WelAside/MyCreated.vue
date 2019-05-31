@@ -114,7 +114,7 @@ export default {
     background-color: #fafafa;
     cursor: pointer;
     &:hover {
-      color: #cb132d;
+      color: #0185d8;
     }
   }
 }

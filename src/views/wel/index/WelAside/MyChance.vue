@@ -43,7 +43,7 @@ export default {
     padding: 5px 0;
     font-size: 14px;
     &:hover {
-      color: #cb132d;
+      color: #0185d8;
     }
   }
 }

@@ -160,7 +160,7 @@ export default {
       display: block;
       margin: 30px 0 15px;
       font-size: 64px;
-      color: #cb3737;
+      color: #0185d8;
     }
     span {
       font-size: 18px;
@@ -180,7 +180,7 @@ export default {
     }
     .sum {
       font-size: 16px;
-      color: #cb3737;
+      color: #0185d8;
     }
     .sumCap {
       font-size: 12px;

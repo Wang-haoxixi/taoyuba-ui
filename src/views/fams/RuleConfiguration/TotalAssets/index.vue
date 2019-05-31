@@ -65,7 +65,7 @@
           <v-chart :forceFit="true" :height="height" :data="data" :scale="scale">
             <v-tooltip />
             <v-axis />
-            <v-bar position="dept*money" color="#CB3737" />
+            <v-bar position="dept*money" color="#0185d8" />
           </v-chart>
           <ve-histogram :data="chartData" :settings="chartSettings" :extend="chartExtend" :colors="colors"></ve-histogram>
         </el-card>
@@ -156,7 +156,7 @@ ul {
         padding: 10px 15px;
         cursor: pointer;
         &:hover {
-          color: #cb3737;
+          color: #0185d8;
         }
       }
     }
@@ -189,11 +189,11 @@ ul {
       padding: 0 10px;
       cursor: pointer;
       &:hover {
-        color: #cb3737;
+        color: #0185d8;
       }
     }
     span.active {
-      color: #cb3737;
+      color: #0185d8;
     }
   }
   .block {

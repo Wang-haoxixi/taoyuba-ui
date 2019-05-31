@@ -87,7 +87,7 @@ export default {
     vertical-align: middle;
   }
   .red {
-    background-color: #cb3737;
+    background-color: #0185d8;
   }
   .num {
     float: right;
@@ -97,7 +97,7 @@ export default {
     color: #666;
   }
   &:hover {
-    color: #cb3737;
+    color: #0185d8;
   }
 }
 .datas {

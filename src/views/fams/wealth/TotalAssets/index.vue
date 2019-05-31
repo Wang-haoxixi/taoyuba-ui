@@ -166,7 +166,7 @@ ul {
         padding: 10px 15px;
         cursor: pointer;
         &:hover {
-          color: #cb3737;
+          color: #0185d8;
         }
       }
     }
@@ -199,11 +199,11 @@ ul {
       padding: 0 10px;
       cursor: pointer;
       &:hover {
-        color: #cb3737;
+        color: #0185d8;
       }
     }
     span.active {
-      color: #cb3737;
+      color: #0185d8;
     }
   }
   .block {

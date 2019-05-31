@@ -140,7 +140,7 @@ export default {
       margin-bottom: 20px;
       font-size: 24px;
       line-height: 32px;
-      color: #cb3737;
+      color: #0185d8;
     }
     .info-detail {
       font-size: 14px;

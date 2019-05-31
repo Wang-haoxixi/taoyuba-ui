@@ -56,7 +56,7 @@ export default {
       margin: 0 auto;
       &:hover {
         cursor: pointer;
-        background-color: #cb3737;
+        background-color: #0185d8;
         color: #fff;
         animation: iconRotate 1s linear infinite;
       }

@@ -73,9 +73,9 @@ export default {
 }
 
 .item:hover {
-  color: #cb3737;
+  color: #0185d8;
   background: #fef0f0;
-  border-color: #cb3737;
+  border-color: #0185d8;
 }
 .clearfix:before,
 .clearfix:after {

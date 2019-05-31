@@ -60,9 +60,9 @@ export default {
       text-overflow: ellipsis;
       white-space: nowrap;
       &:hover {
-        color: #cb3737;
+        color: #0185d8;
         &:before {
-          background-color: #cb3737;
+          background-color: #0185d8;
         }
       }
     }

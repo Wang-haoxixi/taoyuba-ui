@@ -61,9 +61,8 @@ export default {
     border-left: 3px solid #fafafa;
     &:hover,
     &:focus {
-      border-color: #cb3737;
-      background: #f9eae7;
-      color: #cb3737;
+      border-color: #0185d8;
+      color: #0185d8;
     }
   }
   .sub-menu {
@@ -81,7 +80,6 @@ export default {
       vertical-align: middle;
     }
     &:hover {
-      background-color: #f9eae7;
       color: #fb4147;
     }
     i {
@@ -104,9 +102,8 @@ export default {
 .avue-sidebar >>> .el-menu--collapse .el-submenu.is-active .el-submenu__title,
 .avue-sidebar >>> .el-submenu .el-submenu__title:hover {
   margin-left: 0 !important;
-  border-color: #cb3737;
-  background-color: #f9eae7;
-  color: #cb3737;
+  border-color: #0185d8;
+  color: #0185d8;
 }
 .avue-sidebar >>> .el-submenu .el-submenu__title,
 .avue-sidebar >>> .el-menu-item {

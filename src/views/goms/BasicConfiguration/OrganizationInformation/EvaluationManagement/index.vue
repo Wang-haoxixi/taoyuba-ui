@@ -151,7 +151,7 @@ export default {
     }
     .el-icon-edit {
       margin-right: 5px;
-      color: #cb3737;
+      color: #0185d8;
     }
   }
   .img {

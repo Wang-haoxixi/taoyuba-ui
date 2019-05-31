@@ -59,7 +59,7 @@ export default {
     color: #aaa;
   }
   &:hover {
-    color: #cb3737;
+    color: #0185d8;
   }
 }
 </style>

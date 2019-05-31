@@ -40,8 +40,8 @@ export default {
     font-size: 12px;
     background-color: #fff;
     border-radius: 3px;
-    border: 1px solid #cb3737;
-    color: #cb3737;
+    border: 1px solid #0185d8;
+    color: #0185d8;
     position: absolute;
     right: 0;
     top: 7px;

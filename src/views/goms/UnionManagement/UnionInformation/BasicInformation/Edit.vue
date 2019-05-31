@@ -206,7 +206,7 @@ export default {
         line-height: 14px;
         text-align: center;
         border-radius: 50%;
-        background-color: #cb3737;
+        background-color: #0185d8;
         color: #fff;
         z-index: 2;
       }

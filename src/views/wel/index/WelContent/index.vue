@@ -1,11 +1,11 @@
 <template>
   <div class="wel-content">
     <user @on-finish.once="handleWelcome"></user>
+    <contract></contract>
     <pending></pending>
     <project></project>
-    <customer></customer>
-    <contract></contract>
-    <material></material>
+    <!-- <customer></customer>
+    <material></material> -->
     <!-- <grades></grades> -->
     <relationship></relationship>
     <a-modal title="欢迎您加盟国脉内部智慧平台" v-model="visible">
@@ -25,14 +25,14 @@ import { mapState, mapMutations } from 'vuex'
 import User from './User'
 import Pending from './Pending'
 import Project from './Project'
-import Customer from './Customer'
-import Material from './Material'
+// import Customer from './Customer'
+// import Material from './Material'
 // import Grades from './Grades'
 import Relationship from './Relationship'
 import Contract from './Contract'
 
 export default {
-  components: { User, Pending, Project, Customer, Material, Relationship, Contract },
+  components: { User, Pending, Project, Relationship, Contract },
   data () {
     return {
       visible: false,

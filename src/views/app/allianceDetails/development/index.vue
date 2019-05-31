@@ -120,13 +120,13 @@ export default {
   overflow: inherit;
 }
 .events >>> .el-timeline-item:hover .el-timeline-item__content {
-  color: #cb3737;
+  color: #0185d8;
   transition: all 0.5s;
 }
 .events >>> .el-timeline-item:hover .el-timeline-item__node {
-  border-color: #cb3737;
-  background-color: #cb3737;
-  color: #cb3737;
+  border-color: #0185d8;
+  background-color: #0185d8;
+  color: #0185d8;
   transition: all 0.5s;
 }
 </style>
