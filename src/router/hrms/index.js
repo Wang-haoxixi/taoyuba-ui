@@ -79,7 +79,7 @@ export default [
         meta: noKeepAlive,
       },
       {
-        path: 'resume_post/:recruitId',
+        path: 'resume_post/:resumeId',
         name: '发布求职简历表单',
         component: () => import('@/views/hrms/Resume/Page/Edit.vue'),
         meta: noKeepAlive,
