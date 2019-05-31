@@ -129,6 +129,14 @@ const amount1 = (rules, value, callback) => {
   callback()
 }
 
+const amount2 = (rules, value, callback) => {
+  var reg = /^[1-9]\d*$/
+  if (!reg.test(value)) {
+    callback(new Error('必须是整数'))
+  } 
+  callback()
+}
+
 const rules = {
   contactName: [
     { required: true, message: '请填联系人', trigger: 'blur' },
@@ -164,7 +172,8 @@ const rules = {
   ],
   hullLength: [
     { required: true, message: '请填船长（m）', trigger: 'blur' },
-    { validator: amount1, trigger: 'blur'},
+    { validator: amount2, trigger: 'blur'},
+    { max: 3, message: '不得超过4位数', trigger: 'blur'},
   ],
   totalPower: [
     { required: true, message: '请填主机总功率', trigger: 'blur' },
