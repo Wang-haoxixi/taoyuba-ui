@@ -8,7 +8,6 @@
         </template>
         <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
-            <advance-search @search-page="searchPage"></advance-search>
           </operation-search>
         </template>
       </operation-container>
@@ -28,17 +27,15 @@
 </template>
 <script>
 import { getPositionPage, deleteCrewById} from '@/api/post/admin'
-import AdvanceSearch from './AdvanceSearch'
 import mixins from '@/mixins/mixins'
 import { columnsMap, dictsMap } from '../options'
 export default {
-  components: { AdvanceSearch },
   mixins: [mixins],
   data () {
     return {
       dictsMap,
       columnsMap,
-      searchData: 'contactName',
+      searchData: 'realName',
     }
   },
   created () {
