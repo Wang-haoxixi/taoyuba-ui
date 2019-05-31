@@ -62,7 +62,6 @@ export default {
     &:hover,
     &:focus {
       border-color: #0185d8;
-      background: #f9eae7;
       color: #0185d8;
     }
   }
@@ -81,7 +80,6 @@ export default {
       vertical-align: middle;
     }
     &:hover {
-      background-color: #f9eae7;
       color: #fb4147;
     }
     i {
@@ -105,7 +103,6 @@ export default {
 .avue-sidebar >>> .el-submenu .el-submenu__title:hover {
   margin-left: 0 !important;
   border-color: #0185d8;
-  background-color: #f9eae7;
   color: #0185d8;
 }
 .avue-sidebar >>> .el-submenu .el-submenu__title,
