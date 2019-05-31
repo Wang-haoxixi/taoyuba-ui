@@ -274,11 +274,11 @@ export default {
         village: [],
       },
       regionChosen: {
-        province: 0,
-        city: 0,
-        district: 0,
-        town: 0,
-        village: 0,
+        province: '',
+        city: '',
+        district: '',
+        town: '',
+        village: '',
       },
       init: false,
     }
