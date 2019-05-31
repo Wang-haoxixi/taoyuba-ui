@@ -1,7 +1,7 @@
 <template>
   <div class="about-task">
     <div class="task-nav">
-      <span class="navTitle">我的待办</span>
+      <span class="navTitle">我的推荐</span>
       <nav-tab :nav-list="navList" @tab="tab"></nav-tab>
     </div>
     <nav-content :contentData="contentData"></nav-content>
@@ -10,18 +10,18 @@
 
 <script>
 import NavTab from './NavTab'
-import NavContent from './NavContent'
+import NavContent from './RecommendContent'
 export default {
   components: { NavTab, NavContent },
   data () {
     return {
       contentData: '',
       navList: [{
-        subtitle: '执行项目',
+        subtitle: '服务机构',
         type: 'action',
         id: 0,
       }, {
-        subtitle: '完成项目',
+        subtitle: '培训信息',
         type: 'success',
         id: 1,
       }],
@@ -60,7 +60,7 @@ export default {
     cursor: pointer;
     color: #666;
     &:hover {
-      color: #cb3737;
+      color: #0185d8;
     }
   }
 }

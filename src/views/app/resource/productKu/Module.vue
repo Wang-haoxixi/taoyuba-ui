@@ -113,7 +113,7 @@ export default {
       font-size: 30px;
       text-align: center;
       border-radius: 50%;
-      background-color: #cb3737;
+      background-color: #0185d8;
       color: #fff;
       &:hover {
         animation: iconRotate-data-v-300a8671 1s linear infinite;
@@ -144,9 +144,9 @@ export default {
         .el-tag {
           margin-right: 5px;
           &:hover {
-            color: #cb3737;
+            color: #0185d8;
             background: #fef0f0;
-            border-color: #cb3737;
+            border-color: #0185d8;
           }
         }
       }

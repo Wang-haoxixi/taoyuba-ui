@@ -114,6 +114,7 @@ export default {
     },
   },
   created () {
+    console.log(this.positionId)
     if (this.positionId) {
       getPositionById(this.positionId).then(({ data }) => {
         this.form = this.$mergeByFirst(initForm(), data.data)

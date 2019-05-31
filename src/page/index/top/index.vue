@@ -5,7 +5,7 @@
         <el-tooltip class="item" effect="dark" content="点击返回工作台" placement="bottom">
           <div class="logo" @click="$openPage('/')"></div>
         </el-tooltip>
-        <a-dropdown>
+        <!-- <a-dropdown>
           <a href="#">
             国脉智慧平台
             <a-icon type="down" />
@@ -15,7 +15,7 @@
               {{v.name}}
             </a-menu-item>
           </a-menu>
-        </a-dropdown>
+        </a-dropdown> -->
       </div>
     </div>
     <div class="top-center">
@@ -75,8 +75,8 @@ export default {
       .logo {
         cursor: pointer;
         margin-right: 10px;
-        width: 76px;
-        height: 32px;
+        width: 155px;
+        height: 58px;
         background-image: url("/img/logo.png");
         background-repeat: no-repeat;
         background-size: 100% 100%;

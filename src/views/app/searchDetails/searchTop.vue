@@ -26,7 +26,7 @@ export default {
   h3 {
     font-size: 24px;
     span {
-      color: #cb3737;
+      color: #0185d8;
     }
   }
   .search-con {
@@ -39,7 +39,7 @@ export default {
 .title {
   text-align: center;
   line-height: 1.7;
-  color: #cb3737;
+  color: #0185d8;
   font-size: 24px;
 }
 </style>
@@ -65,13 +65,13 @@ export default {
   width: 100%;
 }
 .search >>> .el-button--danger.is-plain {
-  color: #cb3737;
+  color: #0185d8;
   background: #fef0f0;
-  border-color: #cb3737;
+  border-color: #0185d8;
 }
 .search >>> .el-button--danger.is-plain:hover,
 .search >>> .el-button--danger.is-plain:focus {
-  background: #cb3737;
+  background: #0185d8;
   border-color: #ba1b21;
   color: #fff;
 }

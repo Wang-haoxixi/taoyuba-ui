@@ -102,13 +102,13 @@ export default {
   width: 100%;
 }
 .gov-search >>> .el-button--danger.is-plain {
-  color: #cb3737;
+  color: #0185d8;
   background: #fef0f0;
-  border-color: #cb3737;
+  border-color: #0185d8;
 }
 .gov-search >>> .el-button--danger.is-plain:hover,
 .gov-search >>> .el-button--danger.is-plain:focus {
-  background: #cb3737;
+  background: #0185d8;
   border-color: #ba1b21;
   color: #fff;
 }
@@ -159,14 +159,14 @@ export default {
     .keyMore {
       margin-left:20px;
       font-size: 14px;
-      color: #cb3737;
+      color: #0185d8;
     }
   }
 }
 .grid-content .title {
   text-align: center;
   line-height: 1.7;
-  color: #cb3737;
+  color: #0185d8;
   font-size: 24px;
 }
 .imgDes {

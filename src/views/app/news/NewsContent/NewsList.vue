@@ -274,7 +274,7 @@ export default {
     margin-right: 20px;
     overflow: hidden;
     &:hover .sub-title-con {
-      color: #cb3737;
+      color: #0185d8;
     }
   }
   .list-content {
@@ -307,9 +307,9 @@ export default {
     .el-tag {
       margin-right: 5px;
       &:hover {
-        color: #cb3737;
+        color: #0185d8;
         background: #fef0f0;
-        border-color: #cb3737;
+        border-color: #0185d8;
       }
     }
   }

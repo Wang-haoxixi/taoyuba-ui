@@ -44,6 +44,6 @@ export default {
 .item >>> .is-dot {
   top: 13px;
   right: -3px;
-  background: #cb3737;
+  background: #0185d8;
 }
 </style>

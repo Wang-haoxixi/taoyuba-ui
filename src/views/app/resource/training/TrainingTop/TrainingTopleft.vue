@@ -93,9 +93,9 @@ export default {
     .el-tag {
       margin-right: 5px;
       &:hover {
-        color: #cb3737;
+        color: #0185d8;
         background: #fef0f0;
-        border-color: #cb3737;
+        border-color: #0185d8;
       }
     }
   }
@@ -129,7 +129,7 @@ export default {
   height: 0;
   width: 0;
   border-style: solid;
-  border-color: #cb3737 transparent transparent transparent;
+  border-color: #0185d8 transparent transparent transparent;
   border-width: 40px 0 60px 50px;
   background: none;
   span {

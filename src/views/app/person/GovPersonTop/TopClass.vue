@@ -89,7 +89,7 @@ export default {
       font-size: 16px;
     }
     &:nth-child(1) .num {
-      color: #cb3737;
+      color: #0185d8;
     }
   }
 }

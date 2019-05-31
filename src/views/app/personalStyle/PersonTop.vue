@@ -196,9 +196,9 @@ export default {
       .el-tag {
         margin-right: 5px;
         &:hover {
-          color: #cb3737;
+          color: #0185d8;
           background: #fef0f0;
-          border-color: #cb3737;
+          border-color: #0185d8;
         }
       }
     }
@@ -247,7 +247,7 @@ export default {
       font-size: 12px;
       line-height: 16px;
       text-align: center;
-      background-color: #cb3737;
+      background-color: #0185d8;
       color: #fff;
     }
     .show2 {
@@ -291,21 +291,21 @@ export default {
 }
 .personal-top >>> .el-button--danger {
   color: #fff;
-  background: #cb3737;
-  border-color: #cb3737;
+  background: #0185d8;
+  border-color: #0185d8;
 }
 .personal-top >>> .el-button--danger:hover {
-  color: #cb3737;
+  color: #0185d8;
   background: #fef0f0;
-  border-color: #cb3737;
+  border-color: #0185d8;
 }
 .personal-top >>> .el-button--danger.is-plain {
-  color: #cb3737;
+  color: #0185d8;
   background: #fef0f0;
-  border-color: #cb3737;
+  border-color: #0185d8;
 }
 .personal-top >>> .el-button--danger.is-plain:hover {
   color: #fff;
-  background: #cb3737;
+  background: #0185d8;
 }
 </style>

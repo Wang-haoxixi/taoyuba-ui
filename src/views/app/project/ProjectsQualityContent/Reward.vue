@@ -48,7 +48,7 @@ export default {
       float: right;
       height: 30px;
       line-height: 30px;
-      color: #cb3737;
+      color: #0185d8;
     }
     .bgc {
       padding: 0 5px;
@@ -58,9 +58,9 @@ export default {
       color: #999;
     }
     &:hover {
-      color: #cb3737;
+      color: #0185d8;
       &:before {
-        background-color: #cb3737;
+        background-color: #0185d8;
       }
     }
     &:before {

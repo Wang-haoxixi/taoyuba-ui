@@ -65,7 +65,7 @@ export default {
     padding: 5px 0;
     cursor: pointer;
     &:hover {
-      color: #cb3737;
+      color: #0185d8;
     }
   }
 }

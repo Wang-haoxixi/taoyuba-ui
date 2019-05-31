@@ -47,7 +47,7 @@ export default {
     background-color: #f2f2f2;
     color: #333;
     &:hover {
-      background-color: #cb3737;
+      background-color: #0185d8;
       color: #fff;
     }
   }

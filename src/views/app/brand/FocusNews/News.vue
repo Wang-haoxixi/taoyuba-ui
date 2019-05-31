@@ -53,7 +53,7 @@ export default {
     color: #bb1a20;
   }
   &:hover {
-    color: #cb3737;
+    color: #0185d8;
   }
   img{
     display:block;

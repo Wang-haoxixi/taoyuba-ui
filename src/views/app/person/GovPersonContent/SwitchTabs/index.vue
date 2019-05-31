@@ -90,7 +90,7 @@ export default {
     -webkit-box-orient: vertical;
     position: relative;
     &:hover {
-      color: #cb3737;
+      color: #0185d8;
     }
     &:before {
       content: "";

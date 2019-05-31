@@ -60,17 +60,17 @@ export default {
       height: 30px;
       line-height: 30px;
       font-size: 12px;
-      border: 1px solid #cb3737;
+      border: 1px solid #0185d8;
       border-radius: 4px;
       background-color: #fff;
-      color: #cb3737;
+      color: #0185d8;
       transition: all 0.5s;
     }
     &:hover {
       .operate {
         opacity: 1;
         &:hover {
-          background-color: #cb3737;
+          background-color: #0185d8;
           color: #fff;
         }
       }

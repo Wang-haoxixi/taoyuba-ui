@@ -47,7 +47,7 @@ export default {
     float:right;
   }
   &:hover {
-    color: #cb3737;
+    color: #0185d8;
   }
 }
 </style>

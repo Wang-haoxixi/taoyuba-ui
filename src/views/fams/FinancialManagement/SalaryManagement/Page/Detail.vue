@@ -159,7 +159,7 @@ export default {
 .wages-details >>> .first-table.el-table--border td:nth-child(6) .cell,
 .wages-details >>> .first-table.el-table--border td:nth-child(7) .cell,
 .wages-details >>> .first-table.el-table--border td:nth-child(8) .cell {
-  color: #cb3737;
+  color: #0185d8;
 }
 .wages-details >>> .el-table {
   margin-bottom: 20px;
