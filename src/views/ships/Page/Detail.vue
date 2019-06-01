@@ -308,6 +308,8 @@ export default {
         if (data.code === 0) {
           this.regions[target] = data.data
         }
+      }, (error) => {
+        this.$message.error(error.message)
       })
     },
     getShipDetail () {
@@ -322,9 +324,9 @@ export default {
           this.$nextTick(() => {
             this.init = true
           })
-        } else {
-          this.$message.error(data.msg)
         }
+      }, (error) => {
+        this.$message.error(error.message)
       })
     },
     handleSubmit () {
@@ -335,18 +337,18 @@ export default {
               if (data.code === 0) {
                 this.$message.success('添加成功！')
                 this.onGoBack()
-              } else {
-                this.$message.success(data.msg)
               }
+            }, (error) => {
+              this.$message.error(error.message)
             })
           } else if (this.type === 'update') {
             updateShip(this.form).then(({data}) => {
               if (data.code === 0) {
                 this.$message.success('修改成功！')
                 this.onGoBack()
-              } else {
-                this.$message.success(data.msg)
               }
+            }, (error) => {
+              this.$message.error(error.message)
             })
           }
         } else {
