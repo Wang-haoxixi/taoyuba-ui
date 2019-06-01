@@ -1,7 +1,7 @@
 <template>
   <div>
     <basic-container>
-      <page-header title="船员管理"></page-header>
+      <page-header title="船员实名登记"></page-header>
       <operation-container>
         <template slot="left">
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>申请</iep-button>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <basic-container>
-      <page-header title="禁渔岗位"></page-header>
+      <page-header title="禁渔期工作"></page-header>
       <operation-container>
         <template slot="left">
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>

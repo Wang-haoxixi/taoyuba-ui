@@ -1,7 +1,7 @@
 <template>
   <div class="contract-box">
     <basic-container>
-      <page-header title="管理员合同"></page-header>
+      <page-header title="网签合同"></page-header>
       <iep-button v-if="mlms_contract_add" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
       <avue-tree-table :option="options" style="margin-top: 20px;">
         <el-table-column label="操作">
