@@ -105,6 +105,8 @@ export default {
           this.contractList = data.data.records
           this.total = data.data.total
         }
+      }, (error) => {
+        this.$message.error(error.message)
       })
     },
     currentChange (current) {
@@ -125,9 +127,9 @@ export default {
         if (data.data.code === 0) {
           this.$message.success('删除成功！')
           this.getContractList()
-        } else {
-          this.$message.error(data.data.msg)
         }
+      }, (error) => {
+        this.$message.error(error.message)
       })
     },
     handlePrint (contractId) {
@@ -181,9 +183,9 @@ export default {
           h.document.close()
           h.print()
           h.close()
-        } else {
-          this.$message.error(data.msg)
         }
+      }, (error) => {
+        this.$message.error(error.message)
       })
     },
     getDicts () {

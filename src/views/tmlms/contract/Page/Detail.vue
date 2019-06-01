@@ -413,6 +413,8 @@ export default {
         if (data.code == 0) {
           this.formData = data.data
         }
+      }, (error) => {
+        this.$message.error(error.message)
       })
     },
     formDataVerification () {
@@ -432,18 +434,18 @@ export default {
             if (data.data.code === 0) {
               this.$message.success('添加成功！')
               this.$emit('onGoBack')
-            } else {
-              this.$message.error(data.data.msg)
             }
+          }, (error) => {
+            this.$message.error(error.message)
           })
         } else if (this.type === 'edit') {
           editContract(this.formData).then(data => {
             if (data.data.code === 0) {
               this.$message.success('编辑成功！')
               this.$emit('onGoBack')
-            } else {
-              this.$message.error(data.data.msg)
             }
+          }, (error) => {
+            this.$message.error(error.message)
           })
         }
       }
@@ -473,7 +475,6 @@ export default {
     },
     refreshShipowner (owner) {
       let {address = '', idcard = '', phone = '', realName = '', userId = ''} = owner
-      console.log(owner)
       this.formData.shipowner = realName
       this.formData.shipownerIdcard = idcard
       this.formData.shipownerPhone = phone
