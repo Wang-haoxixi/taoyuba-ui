@@ -10,6 +10,14 @@ export function getWholeInfo (id) {
     method: 'get',
   })
 }
+
+export function getwhole (params) {
+  return request({
+    url: `${regionUrl}/wholeInfo/`,
+    method: 'get',
+    params: params,
+  })
+}
 export function getPosition (id) {
   return request({
     url: `${dictUrl}/type/`+id,
@@ -74,3 +82,16 @@ export function putPosition (obj) {
     data: obj,
   })
 }
+export function getRogionList (pid) {
+  return request({
+    url: `/tybship/tybregion/parent/${pid}`,
+    method: 'get',
+  })
+}
+export function getShipDetail (id) {
+  return request({
+    url: `${prefixUrl}/${id}`,
+    method: 'get',
+  })
+}
+

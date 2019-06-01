@@ -28,7 +28,7 @@
   </iep-dialog>
 </template>
 
-<script>
+<script>    
 import { collectList } from '@/api/mlms/material/summary'
 
 export default {

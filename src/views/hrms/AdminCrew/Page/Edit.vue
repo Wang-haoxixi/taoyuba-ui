@@ -29,6 +29,53 @@
           </el-col>
         </el-row>
         <el-row>
+          <el-col :span="8">
+            <el-form-item label="省：" prop="provinceId">
+              <el-select
+                v-model="form.provinceId"
+                @change="choseProvince(form.provinceId)"
+                placeholder="省级地区">
+                <el-option
+                  v-for="item in province"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.areaCode">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8" >
+            <el-form-item prop="cityId" label="市：">
+              <el-select
+                v-model="form.cityId"
+                @change="choseCity(form.cityId)"
+                placeholder="市级地区">
+                <el-option
+                  v-for="item in city"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.areaCode">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="districtId" label="地区：">
+              <el-select
+                v-model="form.districtId"
+                @change="choseDistrict(form.districtId)"
+                placeholder="区级地区">
+                <el-option
+                  v-for="item in district"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.areaCode">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>  
+        <el-row>
           <el-col :span="12">
             <el-form-item label="家庭地址：" prop="address">
               <el-input v-model="form.address"></el-input>
@@ -47,8 +94,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="家庭联系电话" prop="ontactPhone">
-              <el-input v-model="form.ontactPhone"></el-input>
+            <el-form-item label="家庭联系电话" prop="contactPhone">
+              <el-input v-model="form.contactPhone"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -65,12 +112,12 @@
           </el-col>               
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="四小件上传：" prop="fourSmallCard">
             <iep-avatar v-model="form.fourSmallCard"></iep-avatar>
           </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="职位" prop="positionId">
               <el-select
                 v-model="form.positionId"
@@ -84,80 +131,18 @@
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="6">
-            <el-form-item label="省：" prop="provinceId">
-              <el-select
-                v-model="form.provinceId"
-                @change="choseProvince(form.provinceId)"
-                placeholder="省级地区">
-                <el-option
-                  v-for="item in province"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.areaCode">
-                </el-option>
-              </el-select>
+           <!-- <el-col :span="8">
+            <el-form-item label="所属渔村区域" prop="villageId">
+              <span v-for="(region, key) in regions" :key="key">
+                <el-select v-model="regionChosen[key]">
+                  <el-option v-for="item in region"
+                             :key="item.areaCode"
+                             :value="item.areaCode"
+                             :label="item.name"></el-option>
+                </el-select>
+              </span>
             </el-form-item>
-          </el-col>
-          <el-col :span="6" >
-            <el-form-item prop="cityId" label="市：">
-              <el-select
-                v-model="form.cityId"
-                @change="choseCity(form.cityId)"
-                placeholder="市级地区">
-                <el-option
-                  v-for="item in city"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.areaCode">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item prop="districtId" label="地区：">
-              <el-select
-                v-model="form.districtId"
-                @change="choseDistrict(form.districtId)"
-                placeholder="区级地区">
-                <el-option
-                  v-for="item in district"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.areaCode">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item prop="villageId" label="渔村：">
-              <el-select
-                  v-model="form.villageId"
-                  @change="chosevillage(form.districtId)"
-                  placeholder="渔村">
-                  <el-option
-                    v-for="item in village"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.areaCode">
-                  </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>  
-        <el-row>
-          <el-col :span="12">
-            <iep-form-item class="form-half" prop="createTime" label-name="开始时间">
-              <iep-date-picker v-model="form.createTime" type="date" placeholder="选择日期"></iep-date-picker>
-            </iep-form-item>
-          </el-col>
-          <el-col :span="12">
-            <iep-form-item class="form-half" prop="updateTime" label-name="更新时间" tip="此处为招聘截止日期，请务必明确到具体日期，如2019年5月10日">
-              <iep-date-picker v-model="form.updateTime" type="date" placeholder="选择日期"></iep-date-picker>
-            </iep-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
         <iep-form-item class="form-half" prop="remark" label-name="备注信息" tip="请输入备注信息">
           <iep-input-area v-model="form.remark"></iep-input-area>
@@ -172,7 +157,7 @@
   </div>
 </template>
 <script>
-import { getCrewByUserId, addPosition, putPosition,getArea,getPosition,getWholeInfo } from '@/api/post/admin'
+import { getCrewByUserId, addPosition, putPosition,getArea,getPosition,getWholeInfo ,getRogionList} from '@/api/post/admin'
 import { initForm, formToDto, rules, dictsMap } from '../options'
 export default {
   data () {
@@ -191,6 +176,21 @@ export default {
       village:[],
       parentCode:0,
       position:[],
+      regions: {
+        province: [],
+        city: [],
+        district: [],
+        town: [],
+        village: [],
+      },
+      regionChosen: {
+        province: '',
+        city: '',
+        district: '',
+        town: '',
+        village: '',
+        shipId:'',
+      },
       dicID:'tyb_resume_position',
     }
   },
@@ -203,6 +203,8 @@ export default {
     },
   },
   created () {
+    this.getRogionList(0, 'province')
+   
     if (this.userId) {
       getCrewByUserId(this.userId).then(({ data }) => {
         this.form = this.$mergeByFirst(initForm(), data.data)
@@ -210,11 +212,14 @@ export default {
           let districtId = this.form.districtId
           let cityId = this.form.cityId
           let provinceId =this.form.provinceId
+          this.getShipDetail(villageId)
           this.getAllInfo(villageId,4)
           this.getAllInfo(districtId,3)
           this.getAllInfo(cityId,2) 
           this.getAllInfo(provinceId,1)
       })
+    }else{
+         this.init = true
     }
     getArea(this.parentCode).then(({ data }) => {
         this.province=data.data
@@ -232,7 +237,80 @@ export default {
       }, 2000)
     }
   },
+   watch: {
+    'regionChosen.province': function (val) {
+      if (this.init) {
+        this.regionChosen.city = ''
+        this.regionChosen.district = ''
+        this.regionChosen.town = ''
+        this.regionChosen.village = ''
+      }
+      this.regions.city = []
+      this.regions.district = []
+      this.regions.town = []
+      this.regions.village = []
+      if (val) this.getRogionList(val, 'city')
+    },
+    'regionChosen.city': function (val) {
+      if (this.init) {
+        this.regionChosen.district = ''
+        this.regionChosen.town = ''
+        this.regionChosen.village = ''
+      }
+      this.regions.district = []
+      this.regions.town = []
+      this.regions.village = []
+      if (val) this.getRogionList(val, 'district')
+    },
+    'regionChosen.district': function (val) {
+      if (this.init) {
+        this.regionChosen.town = ''
+        this.regionChosen.village = ''
+      }
+      this.regions.town = []
+      this.regions.village = []
+      if (val) this.getRogionList(val, 'town')
+    },
+    'regionChosen.town': function (val) {
+      if (this.init) {
+        this.regionChosen.village = ''
+      }
+      this.regions.village = []
+      if (val) this.getRogionList(val, 'village')
+    },
+    'regionChosen.village': function (val) {
+      this.form.villageId = val
+    },
+  },
   methods: {
+    getRogionList (pid, target) {
+      getRogionList(pid).then(({data}) => {
+        if (data.code === 0) {
+          this.regions[target] = data.data
+        }
+      }, (error) => {
+        this.$message.error(error.message)
+      })
+    },
+    // getShipDetail (villageId) {
+    //   getwhole({areaCode: villageId}).then(({data}) => {
+    //     console.log(data)
+    //     if (data.code === 0) {
+    //       let child = data.data
+    //       this.regionChosen.province = child.name
+    //       this.regionChosen.city = child.child.name
+    //       this.regionChosen.district = child.child.child.name
+    //       this.regionChosen.town = child.child.child.child.name
+    //       this.regionChosen.village = child.child.child.child.child ? child.child.child.child.child.name : ''
+    //       console.log(' this.regionChosen',  this.regionChosen)
+    //       this.$nextTick(() => {
+    //         this.init = true
+    //       })
+    //     }
+    //   }, (error) => {
+    //     this.$message.error(error.message)
+    //   })
+    // },
     getAllInfo (id,type) {
       getWholeInfo(id).then(({ data }) => {
         if (type == 1){
