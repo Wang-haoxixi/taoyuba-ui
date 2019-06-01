@@ -95,7 +95,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="家庭联系电话" prop="contactPhone">
-              <el-input v-model="form.ontactPhone"></el-input>
+              <el-input v-model="form.contactPhone"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -340,24 +340,24 @@ export default {
     onGoBack () {
       this.$router.history.go(-1)
     },
-    handleSubmit () {
-      const submitFunction = this.userId ? putPosition : addPosition
-      this.$refs['form'].validate((valid) => {
-        if (valid) {
-          submitFunction(formToDto(this.form)).then(({ data }) => {
-            if (data.data) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-              })
-              this.onGoBack()
-            }
-          }, (error) => {
-            this.$message.error(error.message)
-          })
-        }
-      })
-    },
+    // handleSubmit () {
+    //   const submitFunction = this.userId ? putPosition : addPosition
+    //   this.$refs['form'].validate((valid) => {
+    //     if (valid) {
+    //       submitFunction(formToDto(this.form)).then(({ data }) => {
+    //         if (data.data) {
+    //           this.$message({
+    //             message: '操作成功',
+    //             type: 'success',
+    //           })
+    //           this.onGoBack()
+    //         }
+    //       }, (error) => {
+    //         this.$message.error(error.message)
+    //       })
+    //     }
+    //   })
+    // },
   },
 }
 </script>
