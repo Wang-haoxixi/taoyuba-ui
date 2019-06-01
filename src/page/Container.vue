@@ -13,7 +13,7 @@
           <slot name="tab-footer"></slot>
         </div>
         <div class="login-bottom">
-          <div class="bottom-text">Copyright©GOVMADE 版权所有 2018-2020</div>
+          <div class="bottom-text">Copyright©TAOYU58 版权所有 2018-2020</div>
         </div>
       </div>
     </div>

@@ -8,9 +8,27 @@
         </el-submenu>
       </el-menu>
       <el-menu ref="navMenu" v-else :default-active="activeIndex" mode="horizontal" router>
-        <el-menu-item v-for="(item) in navList" :key="item.id" :index="item.id" :class="item.show">
+        <!-- <el-menu-item v-for="(item) in navList" :key="item.id" :index="item.id" :class="item.show">
           <span class="sub-menu" @mouseenter="menuItemEnter(item)">{{item.name}}</span>
           <resource-con ref="resource" class="sub-nav-menu" v-if="item.show=='show'"></resource-con>
+        </el-menu-item> -->
+        <el-menu-item>
+          <span class="sub-menu" @click="open(name='index')">首页</span>
+        </el-menu-item>
+        <el-menu-item>
+          <span class="sub-menu" @click="open(name='ship')">渔船</span>
+        </el-menu-item>
+        <el-menu-item>
+          <span class="sub-menu" @click="open(name='crew')">船员</span>
+        </el-menu-item>
+        <el-menu-item>
+          <span class="sub-menu" @click="open(name='fish')">渔获</span>
+        </el-menu-item>
+        <el-menu-item>
+          <span class="sub-menu" @click="open(name='mall')">商场</span>
+        </el-menu-item>
+        <el-menu-item>
+          <span class="sub-menu" @click="open(name='article')">资讯</span>
         </el-menu-item>
       </el-menu>
       <!-- <div class="search-con">
@@ -27,10 +45,10 @@
 <script>
 // import TopSearch from './TopSearch'
 import displayMixins from '@/mixins/displayMixins'
-import ResourceCon from './ResourceCon'
+// import ResourceCon from './ResourceCon'
 import { navList, navPathList } from '@/router/app/navList.js'
 export default {
-  components: { ResourceCon },
+  // components: { ResourceCon },
   mixins: [displayMixins],
   data () {
     return {
@@ -48,6 +66,27 @@ export default {
         this.$nextTick(() => {
           this.$refs['resource'][0].getCount()
         })
+      }
+    },
+    open (name) {
+      console.log(name)
+      if(name === 'index') {
+        window.open('https://www.taoyu58.com/')
+      }
+      if(name === 'ship') {
+        window.open('https://www.taoyu58.com/ship/index.html')
+      }
+      if(name === 'crew') {
+        window.open('https://www.taoyu58.com/crew/index.html')
+      }
+      if(name === 'fish') {
+        window.open('https://www.taoyu58.com/fish/index.html')
+      }
+      if(name === 'mall') {
+        window.open('https://www.taoyu58.com/mall/index.html')
+      }
+      if(name === 'article') {
+        window.open('https://www.taoyu58.com/article/index.html')
       }
     },
   },

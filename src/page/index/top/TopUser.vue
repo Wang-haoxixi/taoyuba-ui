@@ -10,10 +10,10 @@
         <a-menu-item @click="$openPage('/')">
           工作台
         </a-menu-item>
-        <a-menu-item @click="handleOrg(orgText.type)">
+        <!-- <a-menu-item @click="handleOrg(orgText.type)">
           {{orgText.tipText}}&nbsp;&nbsp;&nbsp;
           <a-icon type="swap" />
-        </a-menu-item>
+        </a-menu-item> -->
         <a-menu-item @click="$openPage('BaseSettings','name')">
           个人信息
         </a-menu-item>

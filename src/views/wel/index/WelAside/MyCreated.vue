@@ -16,69 +16,69 @@ export default {
     return {
       dataList: [
         {
-          title: '纪要',
+          title: '招聘',
           callback: () => {
-            this.$router.push('/mlms_spa/summary/create')
+            this.$router.push('/hrms_spa/recruit_list')
           },
         },
         {
-          title: '报表',
+          title: '简历',
           callback: () => {
-            this.$router.push('/wel/material/report')
+            this.$router.push('/hrms_spa/resume_list')
           },
         },
         {
-          title: '材料',
+          title: '工作',
           callback: () => {
-            this.$router.push('/wel/material/datum')
+            this.$router.push('/empty/empty')
           },
         },
         {
-          title: '任务',
+          title: '合同',
           callback: () => {
-            this.$message.success('功能开发中')
+            this.$router.push('/tmlms_spa/contract_list')
           },
         },
         {
-          title: '审批',
+          title: '台账',
           callback: () => {
-            this.$refs['NewApproval'].dialogShow = true
+            this.$router.push('/empty/empty')
           },
         },
         {
-          title: '建议',
+          title: '代办',
           callback: () => {
-            this.$router.push('/hrms_spa/suggestion_new')
+            this.$router.push('/empty/empty')
           },
         },
         {
-          title: '感想',
+          title: '培训',
           callback: () => {
-            this.$message.success('功能开发中')
+            this.$router.push('/empty/empty')
           },
         },
         {
-          title: '邮件',
+          title: '教材',
           callback: () => {
-            this.$router.push('/wel/mail/new')
+            this.$router.push('/empty/empty')
           },
         },
         {
           title: '考试',
           callback: () => {
-            this.$message.success('功能开发中')
+            this.$router.push('/empty/empty')
           },
         },
         {
-          title: '调研',
+          title: '邮件',
           callback: () => {
-            this.$message.success('功能开发中')
+            this.$router.push('/empty/empty')
           },
         },
         {
-          title: '建模',
+          title: '说说',
           callback: () => {
-            this.$message.success('功能开发中')
+            this.$router.push('/empty/empty')
           },
         },
       ],

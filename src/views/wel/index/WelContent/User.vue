@@ -32,13 +32,17 @@
                 <!-- <span class="drop-down">产品技术委员会<i class="el-icon-arrow-down"></i></span> -->
               </div>
               <div class="user-data">
-                <a class="inline task" @click="handleSome1()">
+                <!-- <a class="inline task" @click="handleSome1()">
                   <i class="icon-qian icon padding"></i>
                   <span>完成每日工作，领国脉贝<i class="el-icon-d-arrow-right"></i></span>
-                </a>
-                <a class="inline change" @click="handleSome2()">
+                </a> -->
+                <!-- <a class="inline change" @click="handleSome2()">
                   领导桌面
-                </a>
+                </a> -->
+                <el-button size="small">产品设计</el-button>
+                <el-button size="small">项目管理</el-button>
+                <el-button size="small">原型设计</el-button>
+                <el-button size="small">平台规划</el-button>
                 <div class="inline data">
                   <div class="data-lab">
                     <div class="count" @click="handleSome3()">{{form.tagNum}}</div>

@@ -96,6 +96,24 @@ export default [
         component: () => import('@/views/hrms/Resume/Page/Edit.vue'),
         meta: noKeepAlive,
       },
+      {
+        path: 'recruit_list',
+        name: '招聘列表页',
+        component: () => import('@/views/hrms/Recruit/Page/List.vue'),
+        meta: noKeepAlive,
+      },
+      {
+        path: 'resume_list',
+        name: '招聘列表页',
+        component: () => import('@/views/hrms/Recruit/Page/List.vue'),
+        meta: noKeepAlive,
+      },
+      {
+        path: 'position_list',
+        name: '禁渔期列表页',
+        component: () => import('@/views/hrms/Position/Page/List.vue'),
+        meta: noKeepAlive,
+      },
     ],
   },
 ]
