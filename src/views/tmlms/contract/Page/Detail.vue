@@ -202,7 +202,12 @@
         </el-form-item>
         <el-form-item label="劳务报酬">
           <el-form-item label="计算方式：">
-            <el-radio v-for="item in payComputeTypeDict" :key="item.value" v-model="formData.payComputeType" :label="parseInt(item.value)">{{item.label}}</el-radio>
+            <el-radio
+                    v-for="(item, index) in payComputeTypeDict"
+                    v-show="computeTypeShow(index)"
+                    :key="index"
+                    v-model="formData.payComputeType"
+                    :label="parseInt(item.value)">{{item.label}}</el-radio>
             <div>
               <span style="margin-right: 20px;">{{getDateUnion}}</span>
               <el-input maxlength="10" class="w-200" style="margin-left: 0;" :value="formData.payMoney" @input="inputFloat('payMoney', $event)"></el-input>
@@ -341,6 +346,17 @@ export default {
     this.getDicts()
   },
   methods: {
+    computeTypeShow (index) {
+      if (this.formData.periodType === 1 && index < 2) {
+        return true
+      } else if (this.formData.periodType === 2 && index === 2) {
+        return true
+      } else if (this.formData.periodType === 3 && index === 3){
+        return true
+      } else {
+        return false
+      }
+    },
     inputNum (target, value, max) {
       if (value) {
         this.formData[target] = parseInt(value) > max ? this.formData[target] : parseInt(value)
@@ -531,7 +547,15 @@ export default {
         this.formData.periodPortEnd = ''
         this.formData.periodDateStart = ''
         this.formData.periodDateEnd = ''
+        this.formData.payMoney = ''
         this.formData.periodTypeName = this.getDictValue(this.periodTypeDict, newVal)
+      }
+      if (newVal === 1) {
+        this.formData.payComputeType = 1
+      } else if (newVal === 2) {
+        this.formData.payComputeType = 3
+      } else if (newVal === 3){
+        this.formData.payComputeType = 4
       }
     },
     'formData.payComputeType': function (newVal, oldVal) {
