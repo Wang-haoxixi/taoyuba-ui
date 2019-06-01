@@ -162,11 +162,7 @@
         <iep-form-item class="form-half" prop="remark" label-name="备注信息" tip="请输入备注信息">
           <iep-input-area v-model="form.remark"></iep-input-area>
         </iep-form-item>
-        <el-form-item label="">
-          <operation-wrapper>
-            <iep-button type="primary" @click="handleSubmit">保存</iep-button>
-          </operation-wrapper>
-        </el-form-item>
+
       </el-form>
     </basic-container>
   </div>

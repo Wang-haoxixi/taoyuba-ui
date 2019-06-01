@@ -278,13 +278,9 @@ export default {
                 type: 'success',
               })
               this.onGoBack()
-            }else{
-              this.$message({  
-                message: 'data.msg',
-                type: 'fail',
-              })
-              this.onGoBack()
             }
+          }, (error) => {
+            this.$message.error(error.message)
           })
         }
       })
