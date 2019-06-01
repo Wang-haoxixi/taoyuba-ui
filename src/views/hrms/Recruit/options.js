@@ -149,13 +149,13 @@ function numberValidate (rule, value, callback) {
   }
 }
 
-const amount = (rules, value, callback) => {
-  var reg = /^[1-9]\d*$/
-  if (!reg.test(value)) {
-    callback(new Error('必须是整数'))
-  } 
-  callback()
-}
+// const amount = (rules, value, callback) => {
+//   var reg = /^[1-9]\d*$/
+//   if (!reg.test(value)) {
+//     callback(new Error('必须是整数'))
+//   } 
+//   callback()
+// }
 
 const rules = {
   contactName: [
@@ -192,8 +192,9 @@ const rules = {
   ],
   hullLength: [
     { required: true, message: '请填船长（m）', trigger: 'blur' },
-    { validator: amount, trigger: 'blur'},
-    { max: 3, message: '不得超过4位数', trigger: 'blur'},
+    // { validator: amount, trigger: 'blur'},
+    // { max: 3, message: '不得超过4位数', trigger: 'blur'},
+    {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
   ],
   totalPower: [
     { required: true, message: '请填主机总功率', trigger: 'blur' },
