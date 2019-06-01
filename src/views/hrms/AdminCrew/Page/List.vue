@@ -60,7 +60,7 @@ export default {
     },
     handleDetail (row) {
       this.$router.push({
-        path: `/hrms_spa/crew_admin/${row.userId}`,
+        path: `/hrms_spa/crew_view/${row.userId}`,
       }) 
     },
     async loadPage (param = this.searchForm) {

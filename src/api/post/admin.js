@@ -69,7 +69,7 @@ export function putPosition (obj) {
     url: `${prefixUrl}/edit`,
     method: 'post',
     params: {
-      type:2,
+      type:1,
     },
     data: obj,
   })

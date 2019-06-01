@@ -79,7 +79,7 @@ export default [
         meta: noKeepAlive,
       },
       {
-        path: 'crew_admin/:userId',
+        path: 'crew_view/:userId',
         name: '管理表单',
         component: () => import('@/views/hrms/AdminCrew/Page/Detail.vue'),
         meta: noKeepAlive,
