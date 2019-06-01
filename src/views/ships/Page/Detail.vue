@@ -234,7 +234,7 @@
           <el-col :span="12">
             <el-form-item label="所属渔村区域" prop="villageId">
               <span v-for="(region, key) in regions" :key="key">
-                <el-select v-model="regionChosen[key]">
+                <el-select v-model="regionChosen[key]" v-show="region.length > 0">
                   <el-option v-for="item in region"
                              :key="item.areaCode"
                              :value="item.areaCode"
@@ -298,6 +298,8 @@ export default {
     this.getRogionList(0, 'province')
     if (this.type !== 'create' && this.shipId) {
       this.getShipDetail()
+    } else {
+      this.init = true
     }
   },
   mounted () {
@@ -372,7 +374,7 @@ export default {
       this.regions.district = []
       this.regions.town = []
       this.regions.village = []
-      this.getRogionList(val, 'city')
+      if (val) this.getRogionList(val, 'city')
     },
     'regionChosen.city': function (val) {
       if (this.init) {
@@ -383,7 +385,7 @@ export default {
       this.regions.district = []
       this.regions.town = []
       this.regions.village = []
-      this.getRogionList(val, 'district')
+      if (val) this.getRogionList(val, 'district')
     },
     'regionChosen.district': function (val) {
       if (this.init) {
@@ -392,14 +394,14 @@ export default {
       }
       this.regions.town = []
       this.regions.village = []
-      this.getRogionList(val, 'town')
+      if (val) this.getRogionList(val, 'town')
     },
     'regionChosen.town': function (val) {
       if (this.init) {
         this.regionChosen.village = ''
       }
       this.regions.village = []
-      this.getRogionList(val, 'village')
+      if (val) this.getRogionList(val, 'village')
     },
     'regionChosen.village': function (val) {
       this.form.villageId = val

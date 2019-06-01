@@ -1,23 +1,26 @@
 <template>
   <div class="contract-box">
-    <iep-button v-if="mlms_contract_add" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
-    <avue-tree-table :option="options" style="margin-top: 20px;">
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">查看
-          </el-button>
-          <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.contractId)">编辑
-          </el-button>
-          <el-button type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.contractId)">删除
-          </el-button>
-          <el-button type="text" icon="el-icon-delete" size="mini" @click="handlePrint(scope.row.contractId)">打印
-          </el-button>
-        </template>
-      </el-table-column>
-    </avue-tree-table>
-    <div style="text-align: center;margin: 20px 0;">
-      <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
-    </div>
+    <basic-container>
+      <page-header title="管理员合同"></page-header>
+      <iep-button v-if="mlms_contract_add" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+      <avue-tree-table :option="options" style="margin-top: 20px;">
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">查看
+            </el-button>
+            <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.contractId)">编辑
+            </el-button>
+            <el-button type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.contractId)">删除
+            </el-button>
+            <el-button type="text" icon="el-icon-delete" size="mini" @click="handlePrint(scope.row.contractId)">打印
+            </el-button>
+          </template>
+        </el-table-column>
+      </avue-tree-table>
+      <div style="text-align: center;margin: 20px 0;">
+        <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
+      </div>
+    </basic-container>
   </div>
 </template>
 

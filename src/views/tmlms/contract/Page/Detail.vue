@@ -1,231 +1,234 @@
 <template>
   <div class="contract">
-    <el-form :disabled="type !== 'add' && type !== 'edit'"
-             :model="formData" size="small"
-             ref="form" label-width="200px"
-             :rules="rules"
-             class="form">
-      <el-form-item label="甲方（雇主方）">
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="船名：" prop="shipName">
-              <el-input maxlength="20" v-model="formData.shipName"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="所有权登记号：" prop="shipLicenses">
-              <el-input maxlength="30" v-model="formData.shipLicenses"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="性质：">
-              <el-radio v-for="item in shipAttrDict" :key="item.value" v-model="formData.shipAttr" :label="parseInt(item.value)">{{item.label}}</el-radio>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="船舶所有人：" prop="shipowner">
-              <el-select v-model="formData.shipowner"
-                         placeholder="请选择"
-                         filterable
-                         remote
-                         maxlength="20"
-                         :loading="loading"
-                         allow-create
-                         clearable
-                         @change="shipownerChange"
-                         :remote-method="getShipOwnerList">
-                <el-option v-for="item in shipowners" :key="item.id" :label="item.realName" :value="item"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="身份证号：">
-              <el-input maxlength="20" :value="formData.shipownerIdcard" @input="ValidateIdCard('shipownerIdcard', $event)"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="联系电话：">
-              <el-input maxlength="20" :value="formData.shipownerPhone" @input="ValidatePhone('shipownerPhone', $event)"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="家庭地址：">
-              <el-input maxlength="100" v-model="formData.shipownerAddr"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="委托代理人：">
-              <el-input maxlength="20" v-model="formData.shipownerAgent"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="代理人身份证号：">
-              <el-input maxlength="20" :value="formData.shipownerAgentIdcard"  @input="ValidateIdCard('shipownerAgentIdcard', $event)"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="代理人联系电话：">
-              <el-input maxlength="20" :value="formData.shipownerAgentPhone" @input="ValidatePhone('shipownerAgentPhone', $event)"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="代理人家庭地址：">
-              <el-input maxlength="100" v-model="formData.shipownerAgentAddr"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-          </el-col>
-        </el-row>
-      </el-form-item>
-      <el-form-item label="乙方（雇员）">
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="姓名：" prop="employeeName">
-              <el-select v-model="formData.employeeName"
-                         placeholder="请选择"
-                         filterable
-                         remote
-                         :loading="loading"
-                         allow-create
-                         clearable
-                         @change="employeeChange"
-                         :remote-method="getEmployeeList">
-                <el-option v-for="item in employees" :key="item.id" :label="item.realName" :value="item"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="身份证号：" prop="employeeIdcard">
-              <el-input :value="formData.employeeIdcard" @input="ValidateIdCard('employeeIdcard', $event)"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="联系电话：">
-              <el-input maxlength="20" :value="formData.employeePhone" @input="ValidatePhone('employeePhone', $event)"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="现有资格证书：">
-              <el-input maxlength="200" v-model="formData.employeeCert"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="经常居住地/家庭地址：" prop="employeeAddr">
-              <el-input maxlength="100" v-model="formData.employeeAddr"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="家庭联系人：">
-              <el-input maxlength="20" v-model="formData.employeeLinkMan"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="乙方家庭联系人电话：">
-              <el-input maxlength="20" :value="formData.employeeLinkPhone" @input="ValidatePhone('employeeLinkPhone', $event)"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="支付方式：">
-              <el-radio v-for="item in employeePayTypeDict" :key="item.value" v-model="formData.employeePayType" :label="parseInt(item.value)">{{item.label}}</el-radio>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="支付账号：">
-              <el-input maxlength="50" v-model="formData.employeePayAccount"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form-item>
-      <el-form-item label="合同期限">
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="类型：">
-              <el-radio v-for="item in periodTypeDict" :key="item.value" v-model="formData.periodType" :label="parseInt(item.value)">{{item.label}}</el-radio>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12"></el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <div v-show="formData.periodType == 1">
-              <el-form-item label="开始时间：">
-                <iep-date-picker v-model="formData.periodDateStart"></iep-date-picker>
+    <basic-container>
+      <page-header :title="getTitle"></page-header>
+      <el-form :disabled="type !== 'add' && type !== 'edit'"
+               :model="formData" size="small"
+               ref="form" label-width="200px"
+               :rules="rules"
+               class="form">
+        <el-form-item label="甲方（雇主方）">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="船名：" prop="shipName">
+                <el-input maxlength="20" v-model="formData.shipName"></el-input>
               </el-form-item>
-              <el-form-item label="结束时间：">
-                <iep-date-picker v-model="formData.periodDateEnd"></iep-date-picker>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="所有权登记号：" prop="shipLicenses">
+                <el-input maxlength="30" v-model="formData.shipLicenses"></el-input>
               </el-form-item>
-            </div>
-            <div v-show="formData.periodType == 2">
-              <el-form-item label="登船港口：">
-                <el-input maxlength="20" v-model="formData.periodPortStart"></el-input>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="性质：">
+                <el-radio v-for="item in shipAttrDict" :key="item.value" v-model="formData.shipAttr" :label="parseInt(item.value)">{{item.label}}</el-radio>
               </el-form-item>
-              <el-form-item label="下船港口：">
-                <el-input maxlength="20" v-model="formData.periodPortEnd"></el-input>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="船舶所有人：" prop="shipowner">
+                <el-select v-model="formData.shipowner"
+                           placeholder="请选择"
+                           filterable
+                           remote
+                           maxlength="20"
+                           :loading="loading"
+                           allow-create
+                           clearable
+                           @change="shipownerChange"
+                           :remote-method="getShipOwnerList">
+                  <el-option v-for="item in shipowners" :key="item.id" :label="item.realName + '(身份证：' + item.idcard + ')'" :value="item"></el-option>
+                </el-select>
               </el-form-item>
-            </div>
-            <div v-show="formData.periodType == 3">
-              <el-form-item label="工作内容及时间：">
-                <el-input maxlength="200" type="textarea" v-model="formData.periodWorkContent"></el-input>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="身份证号：">
+                <el-input maxlength="20" :value="formData.shipownerIdcard" @input="ValidateIdCard('shipownerIdcard', $event)"></el-input>
               </el-form-item>
-              <el-form-item label="任务完成标志：">
-                <el-input maxlength="200" type="textarea" v-model="formData.periodWorkSuccess"></el-input>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="联系电话：">
+                <el-input maxlength="20" :value="formData.shipownerPhone" @input="ValidatePhone('shipownerPhone', $event)"></el-input>
               </el-form-item>
-            </div>
-          </el-col>
-          <el-col :span="12"></el-col>
-        </el-row>
-      </el-form-item>
-      <el-form-item label="工作内容">
-        <el-input maxlength="200" type="textarea" v-model="formData.workContent"></el-input>
-      </el-form-item>
-      <el-form-item label="劳务报酬">
-        <el-form-item label="计算方式：">
-          <el-radio v-for="item in payComputeTypeDict" :key="item.value" v-model="formData.payComputeType" :label="parseInt(item.value)">{{item.label}}</el-radio>
-          <div>
-            <span style="margin-right: 20px;">{{getDateUnion}}</span>
-            <el-input maxlength="10" class="w-200" style="margin-left: 0;" :value="formData.payMoney" @input="inputFloat('payMoney', $event)"></el-input>
-            <span>元（大写：{{moneyTransilate(formData.payMoney)}}）</span>
-          </div>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="家庭地址：">
+                <el-input maxlength="100" v-model="formData.shipownerAddr"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="委托代理人：">
+                <el-input maxlength="20" v-model="formData.shipownerAgent"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="代理人身份证号：">
+                <el-input maxlength="20" :value="formData.shipownerAgentIdcard"  @input="ValidateIdCard('shipownerAgentIdcard', $event)"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="代理人联系电话：">
+                <el-input maxlength="20" :value="formData.shipownerAgentPhone" @input="ValidatePhone('shipownerAgentPhone', $event)"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="代理人家庭地址：">
+                <el-input maxlength="100" v-model="formData.shipownerAgentAddr"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+            </el-col>
+          </el-row>
         </el-form-item>
-        <el-form-item label="支付方式：">
-          <el-radio v-for="item in payTypeDict" :key="item.value" v-model="formData.payType" :label="parseInt(item.value)">{{item.label}}</el-radio>
-          <div v-show="formData.payType === 1">
-            <span>每月</span>
-            <el-input class="w-200" v-show="formData.payType !== 3" :value="formData.payTypeValue" maxlength="2" @input="inputNum('payTypeValue', $event, 31)"></el-input>
-            <span>号支付</span>
-          </div>
-          <div v-show="formData.payType === 2">
-            <span>期限结束、航次完成或工作任务完成后的</span>
-            <el-input class="w-200" v-show="formData.payType !== 3" :value="formData.payTypeValue" maxlength="3" @input="inputNum('payTypeValue', $event, 999)"></el-input>
-            <span>日内支付</span>
-          </div>
+        <el-form-item label="乙方（雇员）">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="姓名：" prop="employeeName">
+                <el-select v-model="formData.employeeName"
+                           placeholder="请选择"
+                           filterable
+                           remote
+                           :loading="loading"
+                           allow-create
+                           clearable
+                           @change="employeeChange"
+                           :remote-method="getEmployeeList">
+                  <el-option v-for="item in employees" :key="item.id" :label="item.realName + '(身份证：' + item.idcard + ')'" :value="item"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="身份证号：" prop="employeeIdcard">
+                <el-input :value="formData.employeeIdcard" @input="ValidateIdCard('employeeIdcard', $event)"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="联系电话：">
+                <el-input maxlength="20" :value="formData.employeePhone" @input="ValidatePhone('employeePhone', $event)"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="现有资格证书：">
+                <el-input maxlength="200" v-model="formData.employeeCert"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="经常居住地/家庭地址：" prop="employeeAddr">
+                <el-input maxlength="100" v-model="formData.employeeAddr"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="家庭联系人：">
+                <el-input maxlength="20" v-model="formData.employeeLinkMan"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="乙方家庭联系人电话：">
+                <el-input maxlength="20" :value="formData.employeeLinkPhone" @input="ValidatePhone('employeeLinkPhone', $event)"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="支付方式：">
+                <el-radio v-for="item in employeePayTypeDict" :key="item.value" v-model="formData.employeePayType" :label="parseInt(item.value)">{{item.label}}</el-radio>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="支付账号：">
+                <el-input maxlength="50" v-model="formData.employeePayAccount"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form-item>
-      </el-form-item>
-    </el-form>
-    <div style="text-align: center;padding: 20px 0;">
-      <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add' || type === 'edit'" type="primary" @click="handleSubmit">保存</iep-button>
-      <iep-button :disabeld="false" @click="handleBack">返回</iep-button>
-    </div>
+        <el-form-item label="合同期限">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="类型：">
+                <el-radio v-for="item in periodTypeDict" :key="item.value" v-model="formData.periodType" :label="parseInt(item.value)">{{item.label}}</el-radio>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12"></el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <div v-show="formData.periodType == 1">
+                <el-form-item label="开始时间：">
+                  <iep-date-picker v-model="formData.periodDateStart"></iep-date-picker>
+                </el-form-item>
+                <el-form-item label="结束时间：">
+                  <iep-date-picker v-model="formData.periodDateEnd"></iep-date-picker>
+                </el-form-item>
+              </div>
+              <div v-show="formData.periodType == 2">
+                <el-form-item label="登船港口：">
+                  <el-input maxlength="20" v-model="formData.periodPortStart"></el-input>
+                </el-form-item>
+                <el-form-item label="下船港口：">
+                  <el-input maxlength="20" v-model="formData.periodPortEnd"></el-input>
+                </el-form-item>
+              </div>
+              <div v-show="formData.periodType == 3">
+                <el-form-item label="工作内容及时间：">
+                  <el-input maxlength="200" type="textarea" v-model="formData.periodWorkContent"></el-input>
+                </el-form-item>
+                <el-form-item label="任务完成标志：">
+                  <el-input maxlength="200" type="textarea" v-model="formData.periodWorkSuccess"></el-input>
+                </el-form-item>
+              </div>
+            </el-col>
+            <el-col :span="12"></el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item label="工作内容">
+          <el-input maxlength="200" type="textarea" v-model="formData.workContent"></el-input>
+        </el-form-item>
+        <el-form-item label="劳务报酬">
+          <el-form-item label="计算方式：">
+            <el-radio v-for="item in payComputeTypeDict" :key="item.value" v-model="formData.payComputeType" :label="parseInt(item.value)">{{item.label}}</el-radio>
+            <div>
+              <span style="margin-right: 20px;">{{getDateUnion}}</span>
+              <el-input maxlength="10" class="w-200" style="margin-left: 0;" :value="formData.payMoney" @input="inputFloat('payMoney', $event)"></el-input>
+              <span>元（大写：{{moneyTransilate(formData.payMoney)}}）</span>
+            </div>
+          </el-form-item>
+          <el-form-item label="支付方式：">
+            <el-radio v-for="item in payTypeDict" :key="item.value" v-model="formData.payType" :label="parseInt(item.value)">{{item.label}}</el-radio>
+            <div v-show="formData.payType === 1">
+              <span>每月</span>
+              <el-input class="w-200" v-show="formData.payType !== 3" :value="formData.payTypeValue" maxlength="2" @input="inputNum('payTypeValue', $event, 31)"></el-input>
+              <span>号支付</span>
+            </div>
+            <div v-show="formData.payType === 2">
+              <span>期限结束、航次完成或工作任务完成后的</span>
+              <el-input class="w-200" v-show="formData.payType !== 3" :value="formData.payTypeValue" maxlength="3" @input="inputNum('payTypeValue', $event, 999)"></el-input>
+              <span>日内支付</span>
+            </div>
+          </el-form-item>
+        </el-form-item>
+      </el-form>
+      <div style="text-align: center;padding: 20px 0;">
+        <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add' || type === 'edit'" type="primary" @click="handleSubmit">保存</iep-button>
+        <iep-button :disabeld="false" @click="handleBack">返回</iep-button>
+      </div>
+    </basic-container>
   </div>
 </template>
 
@@ -550,6 +553,15 @@ export default {
     },
   },
   computed: {
+    getTitle () {
+      if (this.type === 'add') {
+        return '合同新增'
+      } else if (this.type === 'edit') {
+        return '合同编辑'
+      } else {
+        return '合同查看'
+      }
+    },
     getDateUnion () {
       if (this.formData.payComputeType == 1) {
         return '每月人民币'
