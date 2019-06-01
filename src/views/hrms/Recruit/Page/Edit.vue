@@ -29,7 +29,7 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="薪水：" prop="salary">
+            <el-form-item label="月薪：" prop="salary">
               <el-input v-model="form.salary"></el-input>
             </el-form-item>
           </el-col>
@@ -83,13 +83,13 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="是否推荐：" prop="isRcmd">
               <el-radio-group v-model="form.isRcmd">
                 <el-radio v-for="(item,i) in dictsMap.isRcmd" :key="i" :label="+i">{{item}}</el-radio>
               </el-radio-group>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
         <el-form-item label="">
           <operation-wrapper>
@@ -138,6 +138,9 @@ export default {
     if (this.recruitId) {
       getRecruitById(this.recruitId).then(({ data }) => {
         this.form = this.$mergeByFirst(initForm(), data.data)
+        this.form.recruitNo = this.form.recruitNo.toString()
+        this.form.salary = this.form.salary.toString()
+        this.form.hullLength = this.form.hullLength.toString()
         this.selectCity()
       })
     }

@@ -34,7 +34,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="薪水" prop="salary">
+            <el-form-item label="月薪" prop="salary">
               <el-input v-model="form.salary"></el-input>
             </el-form-item>
           </el-col>         
@@ -114,12 +114,14 @@ export default {
     },
   },
   created () {
-    console.log(this.positionId)
     if (this.positionId) {
       getPositionById(this.positionId).then(({ data }) => {
         this.form = this.$mergeByFirst(initForm(), data.data)
         this.form.settlement = this.form.settlement.toString()
         this.form.workCls = this.form.workCls.toString()
+        this.form.raiseNo = this.form.raiseNo.toString()
+        this.form.recruitNo = this.form.recruitNo.toString()
+        this.form.salary = this.form.salary.toString()
       })
     }
   },
@@ -129,8 +131,8 @@ export default {
     onGoBack () {
       this.$router.history.go(-1)
     },
-    handleSubmit (isPublish) {
-      const submitFunction = this.positionId ? putPosition : addPosition
+    handleSubmit (isPublish) {    
+      const submitFunction = this.positionId ? putPosition : addPosition     
       this.$refs['form'].validate((valid) => {
         if (valid) {
           const publish = isPublish === true ? true : false
@@ -145,7 +147,6 @@ export default {
           })
         }
       })
-
     },
   },
 }

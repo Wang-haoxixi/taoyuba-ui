@@ -5,7 +5,7 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="140px" size="small">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="发布人：" prop="realName">
+            <el-form-item label="姓名：" prop="realName">
               <el-input v-model="form.realName"></el-input>
             </el-form-item>
           </el-col>
@@ -17,8 +17,8 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="出身日期：" prop="birthday">
-              <el-date-picker v-model="form.birthday" type="date" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期"></el-date-picker> 
+            <el-form-item label="出生日期：" prop="birthday">
+              <el-date-picker v-model="form.birthday" type="date" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" :picker-options="pickerOptions"></el-date-picker> 
             </el-form-item>       
           </el-col>       
           <el-col :span="12">
@@ -100,13 +100,13 @@
               <el-input v-model="form.skill"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="是否推荐：" prop="isRcmd">
               <el-radio-group v-model="form.isRcmd">
                 <el-radio v-for="(item,i) in dictsMap.isRcmd" :key="i" :label="+i">{{item}}</el-radio>
               </el-radio-group>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
 
         <iep-form-item class="form-half" prop="workDetail" label-name="作业方式：">
@@ -135,6 +135,11 @@ export default {
         backPath: null,
         backFunction: () => { this.onGoBack() },
       },
+      pickerOptions: {
+        disabledDate (time) {
+          return time.getTime() > Date.now()
+        },
+      },   
       rules,
       form: initForm(),
       provinces: [],

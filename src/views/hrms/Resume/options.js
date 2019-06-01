@@ -15,7 +15,7 @@ import { mergeByFirst } from '@/util/util'
   const columnsMap = [
     {
       prop: 'realName',
-      label: '发布人',
+      label: '姓名',
     },
     {
       prop: 'resumeName',
@@ -46,9 +46,9 @@ import { mergeByFirst } from '@/util/util'
   const initDtoForm = () => {
     return {
       resumeId: '',
-      realName: '', //发布人
+      realName: '', //姓名
       resumeName: '', //简历名字
-      birthday: '', //出身日期
+      birthday: '', //出生日期
       province: '', //现住地址 省
       city:'', //现住地址 市
       contactPhone: '', //联系电话
@@ -63,20 +63,20 @@ import { mergeByFirst } from '@/util/util'
       skill: '', //特殊技能
       workRequire: '', //作业要求
       workDetail: '', //作业方式
-      isRcmd: '', //是否推荐
+      // isRcmd: '', //是否推荐
     }
   }
 
   const initSearchForm = () => {
     return {
-      realName: '', //发布人
+      realName: '', //姓名
       resumeName: '', //简历名字  
     }
   }
 
   const initDtoSearchForm = () => {
     return {
-      realName: '', //发布人
+      realName: '', //姓名
       resumeName: '', //简历名字
     }
   }
@@ -91,9 +91,9 @@ import { mergeByFirst } from '@/util/util'
   const initForm = () => {
     return {
       resumeId: '',
-      realName: '', //发布人
+      realName: '', //姓名
       resumeName: '', //简历名字
-      birthday: '', //出身日期
+      birthday: '', //出生日期
       province: '', //现住地址 省
       city:'', //现住地址 市
       contactPhone: '', //联系电话
@@ -108,7 +108,7 @@ import { mergeByFirst } from '@/util/util'
       skill: '', //特殊技能
       workRequire: '', //作业要求
       workDetail: '', //作业方式
-      isRcmd: '', //是否推荐
+      // isRcmd: '', //是否推荐
     }
   }
 
@@ -124,7 +124,7 @@ import { mergeByFirst } from '@/util/util'
 
   const rules = {
     realName: [
-        { required: true, message: '请填发布人', trigger: 'blur' },
+        { required: true, message: '请填姓名', trigger: 'blur' },
         { min: 2, max: 4, message: '长度在 2 到 4 个字符', trigger: 'blur'},
     ],
     resumeName: [
@@ -132,7 +132,7 @@ import { mergeByFirst } from '@/util/util'
         { max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur'},
     ],
     birthday: [
-        { required: true, message: '请填出身日期', trigger: 'blur' },
+        { required: true, message: '请填出生日期', trigger: 'blur' },
     ],
     province: [
         { required: true, message: '请填省', trigger: 'blur' },
@@ -181,9 +181,9 @@ import { mergeByFirst } from '@/util/util'
         { required: true, message: '请填作业方式', trigger: 'blur' },
         { max: 100, message: '长度在 0 到 100 个字符', trigger: 'blur'},
     ],
-    isRcmd: [
-      { required: true, message: '请填是否推荐', trigger: 'blur' },
-    ],
+    // isRcmd: [
+    //   { required: true, message: '请填是否推荐', trigger: 'blur' },
+    // ],
   }
 
 

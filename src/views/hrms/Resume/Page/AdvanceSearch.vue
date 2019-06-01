@@ -1,6 +1,6 @@
 <template>
   <el-form :model="form" label-width="120px" size="mini">
-    <el-form-item label="发布人：">
+    <el-form-item label="姓名：">
       <el-input v-model="form.realName"></el-input>
     </el-form-item>
     <el-form-item label="简历名字：">

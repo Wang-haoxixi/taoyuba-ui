@@ -20,7 +20,7 @@ const columnsMap = [
     },
     {
       prop: 'salary',
-      label: '薪水',
+      label: '月薪',
     },
     {
       prop: 'updateTime',
@@ -36,7 +36,7 @@ const columnsMap = [
       contactPhone: '', //联系电话
       raiseNo: '', //递增人数
       recruitNo: '', //招聘人数
-      salary:'', //薪水
+      salary:'', //月薪
       settlement: '', //结算方式
       workCls: '', //工作类型
       startTime: initNow(), //开始时间
@@ -55,7 +55,7 @@ const columnsMap = [
       contactPhone: '', //联系电话
       raiseNo: '', //递增人数
       recruitNo: '', //招聘人数
-      salary:'', //薪水
+      salary:'', //月薪
       settlement: '', //结算方式
       workCls: '', //工作类型
       startTime: initNow(), //开始时间
@@ -98,7 +98,7 @@ const columnsMap = [
       { max: 4, message: '不得超过5位数', trigger: 'blur'},
     ],
     salary: [
-      { required: true, message: '请填薪水', trigger: 'blur' },
+      { required: true, message: '请填月薪', trigger: 'blur' },
       { max: 10, message: '不得超过10位数', trigger: 'blur'},
     ],
     settlement: [
