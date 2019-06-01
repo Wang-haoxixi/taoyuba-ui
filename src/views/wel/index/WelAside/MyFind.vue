@@ -22,10 +22,10 @@ export default {
       findList: {
         title: '我要找',
         details: [
-          { icon: 'icon-rencai', subtitle: '船东', callback: () => { this.$openPage('/app/project') } },
-          { icon: 'icon-chengyuan-sx', subtitle: '船员', callback: () => { this.$openPage('/app/resource/business') } },
-          { icon: 'icon-peixun', subtitle: '培训', callback: () => { this.$openPage('/app/resource/training') } },
-          { icon: 'icon-survey-library', subtitle: '题库', callback: () => { this.$openPage('/app/person') } },
+          { icon: 'icon-rencai', subtitle: '船东', callback: () => { this.$router.push('/empty/empty') } },
+          { icon: 'icon-chengyuan-sx', subtitle: '船员', callback: () => { this.$router.push('/hrms_spa/position_list') } },
+          { icon: 'icon-peixun', subtitle: '培训', callback: () => { this.$router.push('/empty/empty') } },
+          { icon: 'icon-survey-library', subtitle: '题库', callback: () => { this.$router.push('/empty/empty') } },
         ],
       },
     }

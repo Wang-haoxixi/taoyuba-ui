@@ -12,6 +12,8 @@ import appRouter from './app/'
 import cpmsRouter from './cpms/'
 import famsRouter from './fams/'
 import shipRouter from './ship'
+import emptyRouter from './empty'
+import tmlmsRouter from './tmlms'
 import exceptionRouter from './exception/'
 import AvueRouter from './avue-router'
 import Store from '../store/'
@@ -52,5 +54,7 @@ Router.addRoutes([
   ...ViewsRouter,
   ...PageRouter,
   ...shipRouter,
+  ...emptyRouter,
+  ...tmlmsRouter,
 ])
 export default Router
