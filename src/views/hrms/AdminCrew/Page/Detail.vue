@@ -207,7 +207,7 @@ export default {
           let districtId = this.form.districtId
           let cityId = this.form.cityId
           let provinceId =this.form.provinceId
-          this.getShipDetail(villageId)
+          // this.getShipDetail(villageId)
           this.getAllInfo(villageId,4)
           this.getAllInfo(districtId,3)
           this.getAllInfo(cityId,2) 
@@ -340,24 +340,24 @@ export default {
     onGoBack () {
       this.$router.history.go(-1)
     },
-    // handleSubmit () {
-    //   const submitFunction = this.userId ? putPosition : addPosition
-    //   this.$refs['form'].validate((valid) => {
-    //     if (valid) {
-    //       submitFunction(formToDto(this.form)).then(({ data }) => {
-    //         if (data.data) {
-    //           this.$message({
-    //             message: '操作成功',
-    //             type: 'success',
-    //           })
-    //           this.onGoBack()
-    //         }
-    //       }, (error) => {
-    //         this.$message.error(error.message)
-    //       })
-    //     }
-    //   })
-    // },
+    handleSubmit () {
+      const submitFunction = this.userId ? putPosition : addPosition
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          submitFunction(formToDto(this.form)).then(({ data }) => {
+            if (data.data) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+              })
+              this.onGoBack()
+            }
+          }, (error) => {
+            this.$message.error(error.message)
+          })
+        }
+      })
+    },
   },
 }
 </script>

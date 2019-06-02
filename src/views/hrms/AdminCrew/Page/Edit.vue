@@ -211,8 +211,8 @@ export default {
           let villageId = this.form.villageId
           let districtId = this.form.districtId
           let cityId = this.form.cityId
-          let provinceId =this.form.provinceId
-          this.getShipDetail(villageId)
+          let provinceId =this.form.provinceId 
+          // this.getShipDetail(villageId)
           this.getAllInfo(villageId,4)
           this.getAllInfo(districtId,3)
           this.getAllInfo(cityId,2) 

@@ -67,7 +67,7 @@ export default [
         meta: noKeepAlive,
       },
       {
-        path: 'crew_view/:userId',
+        path: 'crew_views/:userId',
         name: '船员表单',
         component: () => import('@/views/hrms/crew/Page/Detail.vue'),
         meta: noKeepAlive,
