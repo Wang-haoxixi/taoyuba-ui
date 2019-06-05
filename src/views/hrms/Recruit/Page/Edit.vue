@@ -181,7 +181,9 @@ export default {
       })
     },
     onGoBack () {
-      this.$router.history.go(-1)
+      this.$router.push({
+        path: '/hrms_spa/recruit_list',
+      })     
     },
     handleSubmit (isPublish) {
       const submitFunction = this.recruitId ? putRecruit : addRecruit

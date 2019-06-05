@@ -105,7 +105,7 @@ export default [
       {
         path: 'resume_list',
         name: '招聘列表页',
-        component: () => import('@/views/hrms/Recruit/Page/List.vue'),
+        component: () => import('@/views/hrms/Resume/Page/List.vue'),
         meta: noKeepAlive,
       },
       {

@@ -129,7 +129,9 @@ export default {
   },
   methods: {
     onGoBack () {
-      this.$router.history.go(-1)
+      this.$router.push({
+        path: '/hrms_spa/position_list',
+      })
     },
     handleSubmit (isPublish) {    
       const submitFunction = this.positionId ? putPosition : addPosition     
