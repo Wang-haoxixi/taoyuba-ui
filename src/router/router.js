@@ -17,6 +17,8 @@ import tmlmsRouter from './tmlms'
 import exceptionRouter from './exception/'
 import AvueRouter from './avue-router'
 import Store from '../store/'
+import  textBookRouter  from   './textbook'
+
 
 const Router = new VueRouter({
   mode: 'history',
@@ -37,7 +39,7 @@ const Router = new VueRouter({
   routes: [].concat([]),
 })
 AvueRouter.install(Router, Store)
-// console.log('AvueRouter', Store.state.user.menu)
+// console.log('AvueRouter', Store.state.user.menu)     
 Router.$avueRouter.formatRoutes(Store.state.menu.menu, true)
 Router.addRoutes([
   ...hrmsRouter,
@@ -56,5 +58,6 @@ Router.addRoutes([
   ...shipRouter,
   ...emptyRouter,
   ...tmlmsRouter,
+  ...textBookRouter,
 ])
 export default Router
