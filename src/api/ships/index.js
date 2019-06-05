@@ -7,14 +7,14 @@ export function getShipList (params) {
     method: 'get',
     params: params,
   })
-}
+}     
 
-export function getShipDetail (id) {
+export function getShipDetail (id) {      
   return request({
     url: `${prefixUrl}/${id}`,
     method: 'get',
-  })
-}
+  })    
+}        
 
 export function createShip (data) {
   return request({
@@ -38,10 +38,33 @@ export function deleteShip (id) {
     method: 'post',
   })
 }
-
+                                                                                     
 export function getRogionList (pid) {
   return request({
     url: `/tybship/tybregion/parent/${pid}`,
     method: 'get',
   })
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

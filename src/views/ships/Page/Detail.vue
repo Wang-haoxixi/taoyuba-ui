@@ -273,7 +273,7 @@ export default {
         town: [],
         village: [],
       },
-      regionChosen: {
+      regionChosen: {         
         province: '',
         city: '',
         district: '',
@@ -283,18 +283,18 @@ export default {
       init: false,
     }
   },
-  computed: {
+  computed: {                                                                                                                           
     type () {
       return this.$route.params.type
     },
     shipId () {
       return this.$route.params.id
     },
-    getTitle () {
+    getTitle () {                                                                     
       return `渔船信息${this.type === 'create' ? '新增' : this.type === 'update' ? '编辑' : ''}`
     },
   },
-  created () {
+  created () {                  
     this.getRogionList(0, 'province')
     if (this.type !== 'create' && this.shipId) {
       this.getShipDetail()
@@ -302,11 +302,11 @@ export default {
       this.init = true
     }
   },
-  mounted () {
+  mounted () {          
   },
-  methods: {
-    getRogionList (pid, target) {
-      getRogionList(pid).then(({data}) => {
+  methods: {                                                                                       
+    getRogionList (pid, target) {                                                                                                                                                                                                                          
+      getRogionList(pid).then(({data}) => {               
         if (data.code === 0) {
           this.regions[target] = data.data
         }

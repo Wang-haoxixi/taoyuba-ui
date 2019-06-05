@@ -71,8 +71,8 @@ const columnsMap = [
       workMode2: '',
       zipcode: '',
     }
-  }
-
+  }               
+                 
   const initDtoForm = () => {
     return {
       realName:'',//个人姓名
