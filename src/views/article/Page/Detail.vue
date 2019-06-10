@@ -5,7 +5,7 @@
       <el-form :disabled="type === 'view'" ref="form" :model="form" :rules="rules" label-width="150px" size="small">    
         <el-row>          
           <el-col :span="12">            
-            <el-form-item label="教材标题：" prop="title">
+            <el-form-item label="资讯标题：" prop="title">
                 <el-input maxlength="100" v-model="form.title"></el-input>
             </el-form-item>
           </el-col>
@@ -15,8 +15,8 @@
             </el-form-item>
           </el-col>
         </el-row>   
-        <el-row>                                          
-          <el-col :span="12">                                    
+        <el-row>                                                                                                                         
+          <el-col :span="12">                                                                       
             <el-form-item label="原价：" prop="origPrice">                                                                                                            
               <el-input maxlength="6" v-model="form.origPrice"></el-input>
             </el-form-item>
@@ -32,7 +32,7 @@
             <el-form-item label="教材简介：" prop="description">          
                 <el-input   v-model="form.description"></el-input>
             </el-form-item>
-          </el-col>                           
+          </el-col>
           <el-col :span="12">
             <el-form-item label="出版社" prop="press">                                            
               <el-input maxlength="100" v-model="form.press"></el-input>
@@ -60,10 +60,10 @@
       </el-form>
     </basic-container>
   </div>
-</template>       
-<script>        
-import { getTextbookDetail, createTextbook, updateTextbook  } from '@/api/textbook/index'                   
-import { initForm,rules } from '../options'                                 
+</template>             
+<script>                  
+import { getTextbookDetail, createTextbook, updateTextbook  } from '@/api/textbook/index'                          
+import { initForm,rules } from '../options'
 export default {            
   data () {     
     return {

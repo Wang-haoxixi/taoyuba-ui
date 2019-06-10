@@ -5,13 +5,15 @@ import './error' // 日志
 import router from './router/router'
 import App from './App'
 import store from './store'
-
+import  htmlToPdf from './util/htmlToPdf'
+																										
 import './plugins/element'
 import './plugins/ant-design'
 
 import './core/use'
 
 Vue.use(VueRouter)
+Vue.use(htmlToPdf)
 
 Vue.config.productionTip = false
 

@@ -5,7 +5,7 @@
 import List from './Page/List'
 import Detail from './Page/Detail'
 import ContractPrint from './Page/ContractPrint.vue'
-
+                  
 export default {
   name: 'TableListWrapper',
   components: { List, Detail, ContractPrint },

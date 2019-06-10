@@ -1,7 +1,7 @@
 import request from '@/router/axios'
 const prefixUrl = '/tmlms/ship_owner'
 
-export function getShipOwners (realName) {
+export function getShipOwners (realName) {              
   return request({
     url: `${prefixUrl}/page`,
     method: 'get',
@@ -12,3 +12,11 @@ export function getShipOwners (realName) {
     },
   })
 }
+
+
+
+
+
+         
+
+

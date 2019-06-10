@@ -231,8 +231,8 @@
               <el-input maxlength="6" v-model="form.zipcode"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="所属渔村区域" prop="villageId">
+          <el-col :span="12">                                     
+            <el-form-item label="所属渔村区域" prop="villageId">                         
               <span v-for="(region, key) in regions" :key="key">
                 <el-select v-model="regionChosen[key]" v-show="region.length > 0">
                   <el-option v-for="item in region"
@@ -253,20 +253,20 @@
     </basic-container>
   </div>
 </template>
-<script>
+<script>        
 import { getShipDetail, createShip, updateShip, getRogionList } from '@/api/ships/index'
 import { initForm , rules } from '../options'
 export default {
   data () {
-    return {
-      backOption: {
+    return {                  
+      backOption: {         
         isBack: true,
         backPath: null,
         backFunction: () => { this.onGoBack() },
       },
       rules,
       form: initForm(),
-      regions: {
+      regions: {                              
         province: [],
         city: [],
         district: [],
@@ -281,9 +281,9 @@ export default {
         village: '',
       },
       init: false,
-    }
+    }                               
   },
-  computed: {                                                                                                                           
+  computed: {                                                                                                                                                               
     type () {
       return this.$route.params.type
     },
@@ -294,27 +294,27 @@ export default {
       return `渔船信息${this.type === 'create' ? '新增' : this.type === 'update' ? '编辑' : ''}`
     },
   },
-  created () {                  
-    this.getRogionList(0, 'province')
-    if (this.type !== 'create' && this.shipId) {
+  created () {                                    
+    this.getRogionList(0, 'province')                         
+    if (this.type !== 'create' && this.shipId) {                                      
       this.getShipDetail()
-    } else {
+    } else {        
       this.init = true
     }
   },
-  mounted () {          
+  mounted () {                    
   },
-  methods: {                                                                                       
-    getRogionList (pid, target) {                                                                                                                                                                                                                          
-      getRogionList(pid).then(({data}) => {               
+  methods: {                                                                                                                                                                                                                                                                                                      
+    getRogionList (pid, target) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      getRogionList(pid).then(({data}) =>   {                                  
         if (data.code === 0) {
           this.regions[target] = data.data
         }
-      }, (error) => {
+      }, (error) => {       
         this.$message.error(error.message)
-      })
-    },
-    getShipDetail () {
+      })                                                                                                                                              
+    },                                      
+    getShipDetail () {                                      
       getShipDetail(this.shipId).then(({data}) => {
         if (data.code === 0) {
           this.form = data.data
