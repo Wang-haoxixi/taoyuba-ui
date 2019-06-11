@@ -24,8 +24,7 @@
         <el-table-column prop="operation" label="操作" width="220">
           <template slot-scope="scope">
             <operation-wrapper>     
-              <iep-button plain @click="handleEdit(scope.row.textbookId)">编辑</iep-button>
-              <iep-button @click="handleView(scope.row.textbookId)">查看</iep-button>
+              <iep-button plain @click="handleEdit(scope.row)">编辑</iep-button>
               <iep-button type="warning" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
             </operation-wrapper>
           </template>
@@ -58,22 +57,16 @@ export default {
       this.multipleSelection = val.map(m => m.id)
     },
     handleDelete (row) {          
-      this._handleGlobalDeleteById(row.textbookId, delArtilce)
+      this._handleGlobalDeleteById(row.articleId, delArtilce)
     },
     handleAdd () {
       this.$router.push({
-        path: '/textbook_spa/detail/create/0',
-      })
+        path: '/article_spa/article_post/0',
+      })   
     },
-    handleView (id) {                    
-      console.log('id='+id)
+    handleEdit (row) {
       this.$router.push({
-        path: `/textbook_spa/detail/view/${id}`,
-      })
-    },
-    handleEdit (id) {
-      this.$router.push({
-        path: `/textbook_spa/detail/update/${id}`,
+        path: `/article_spa/article_post/${row.articleId}`,
       })
     },
     async loadPage (param = this.searchForm) {    

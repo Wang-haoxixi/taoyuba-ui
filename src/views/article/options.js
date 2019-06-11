@@ -1,134 +1,116 @@
 import {initNow}  from  '@/util/date'
+import { mergeByFirst } from '@/util/util'
 
-const   initForm = ()=> {
-        return {                                              
-            articleId:'', 
-            userId:'',
-            title:'', 
-            type:'',        
-            source:'',
-            image:'',   
-            description:'',
-            isRcmd:'',
-            createTime:'',
-            updateTime:'',
-            articleContent:'',
-        }
+const dictsMap = { 
+  isRcmd: {
+    0: '不推荐', 1: '推荐',
+  },
+}
+
+const  columnsMap = [
+  {
+      label:'资讯标题',
+      prop:'title',
+  },
+  {
+      label:'来源',     
+      prop:'source',
+  },
+  {
+      label:'描述',     
+      prop:'description',             
+  },
+  {
+      label:'创建时间',
+      prop:'createTime',     
+  },        
+]     
+
+
+const formToDto = (row) => {
+  const newForm = mergeByFirst(initDtoForm(), row)
+  return newForm  
+}
+
+const initDtoForm = () => {
+  return {
+    articleId:'', //资讯ID
+    title:'', //资讯标题
+    type:'', //分类
+    source:'', //来源
+    image:'', //图片
+    description:'', //描述
+    isRcmd:'', //是否推荐
+    createTime: initNow(), 
+    updateTime: initNow(), 
+    articleContent:'', //资讯内容
+  }
+}
+
+const initSearchForm = () => {
+  return {
+    title: '', //资讯标题
+    source: '', //来源  
+  }
+}
+
+const initDtoSearchForm = () => {
+  return {
+    title: '', //资讯标题
+    source: '', //来源
+  }
+}
+
+const toDtoSearchForm = (row) => {
+  const newForm = mergeByFirst(initDtoSearchForm(), row)
+  newForm.title = row.title ? row.title : null
+  newForm.source = row.source ? row.source : null
+  return newForm
+}
+
+const initForm = () => {
+  return {
+    articleId:'', //资讯ID
+    title:'', //资讯标题
+    type:'', //分类
+    source:'', //来源
+    image:'', //图片
+    description:'', //描述
+    isRcmd:'', //是否推荐
+    createTime: initNow(), 
+    updateTime: initNow(), 
+    articleContent:'', //资讯内容
+  }
 }
 
 
-const  columnsMap = [
-        {
-            label:'资讯标题',
-            prop:'title',
-        },
-        {
-            label:'来源',     
-            prop:'source',
-        },
-        {
-            label:'描述',     
-            prop:'description',             
-        },
-        {
-            label:'创建时间',
-            prop:'createTime',     
-        },        
-]     
 
-                                                                            
-const initDtoForm = () => {                                                                                                 
-    return {      
-        articleId:'',
-        title:'',
-        userId:'',
-        type:'',
-        source:'',
-        image:'',
-        description:'',
-        isRcmd:'',
-        createTime: initNow(), 
-        updateTime: initNow(), 
-        articleContent:'',
-    }
-  }
+const rules = {
+  title: [
+    { required: true, message: '请填资讯标题', trigger: 'blur' },
+    { min: 0, max: 50, message: '长度在 0 到 50 个字符', trigger: 'blur'},
+  ],
+  source: [
+    { required: true, message: '请填来源', trigger: 'blur' },
+    { min: 0, max: 50, message: '长度在 0 到 50 个字符', trigger: 'blur'},
+  ],
+  type: [
+    { required: true, message: '请填分类', trigger: 'blur' },
+  ],
+  isRcmd: [
+    { required: true, message: '请填是否推荐', trigger: 'blur' },
+  ],
+  description: [
+    { required: true, message: '请填描述', trigger: 'blur' },
+    { min: 0, max: 50, message: '长度在 0 到 50 个字符', trigger: 'blur'},
+  ],
+  articleContent: [
+    { required: true, message: '请填资讯内容', trigger: 'blur' },
+    { min: 0, max: 200, message: '长度在 0 到 200 个字符', trigger: 'blur'},
+  ],
+}
 
-  const initSearchForm = () => {                    
-    return {                                                                              
-        title: '', 
-        source: '', 
-    }
-  }
-
-  const initDtoSearchForm = () => {                                                      
-    return {
-        title: '', 
-        source: '', 
-    }
-  }
-
-  const formToDto = (row) => {
-      return  initDtoForm(row)          
-  }
-
-
-  const toDtoSearchForm = (row) => {        
-      return  initSearchForm(row)       
-  }                             
-
-  function isNumberValidate (value, length = 3, decimal = 0) {
-    let reg = new RegExp('^\\d{0,' + length + '}$')
-    if (decimal === 0) {
-      return reg.test(value)
-    }
-    let reg1 = new RegExp('^\\d{0,' + length + '}\\.\\d{0,' + decimal + '}$')
-    return reg.test(value) || reg1.test(value)
-  }
-
-
-  function numberValidate (rule, value, callback) {         
-    if (value === '') {
-      callback(new Error())
-    }else  if (!isNumberValidate(value, rule.length, rule.decimal)){
-      callback(new Error())
-    }else {
-      callback()
-    }
-  }
-
-
-  const rules = {               
-    title: [
-      {required: true, message: '该选项必填！',trigger:'blur'},
-    ],
-    price: [
-      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
-    ],
-    origPrice: [        
-      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
-    ],
-    keyword: [
-      {required: true, message: '该选项必填！', trigger: 'blur'},
-    ],
-    description: [
-      {required: true, message: '该选项必填！', trigger: 'blur'},
-    ],
-    press: [
-      {required: true, message: '该选项必填！', trigger: 'blur'},
-    ],
-    author: [
-      {required: true, message: '该选项必填！', trigger: 'blur'},
-    ],
-    content: [
-      {required: true, message: '该选项必填！', trigger: 'blur'},
-    ],
-    views: [
-      {required: true, message: '该选项必填！', trigger: 'blur'},
-    ],
-  }
-
-
-  export{columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm}
+  export{columnsMap, dictsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm}
 
 
 

@@ -1,10 +1,10 @@
 <template>
   <el-form :model="form" label-width="120px" size="mini">
-    <el-form-item label="教材标题：">                                              
-      <el-input v-model="form.contactName"></el-input>
+    <el-form-item label="资讯标题：">                                              
+      <el-input v-model="form.title"></el-input>
     </el-form-item>
-    <el-form-item label="关键字：">
-        <el-input v-model="form.positionName"></el-input>
+    <el-form-item label="来源：">
+      <el-input v-model="form.source"></el-input>
     </el-form-item>
     <el-form-item>                        
       <operation-wrapper>               

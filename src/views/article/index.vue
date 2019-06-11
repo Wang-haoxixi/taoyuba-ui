@@ -1,12 +1,13 @@
 <template>
-  <component :record="record" :is="currentComponet"></component>
-</template>             
-<script>                        
+  <component @onEdit="handleEdit" @onGoBack="handleGoBack" :record="record" :is="currentComponet"></component>
+</template>
+<script>
 import List from './Page/List'
+import Detail from './Page/Edit'
 
 export default {
   name: 'TableListWrapper',
-  components: { List },
+  components: { List, Detail },
   data () {
     return {
       currentComponet: 'List',
@@ -14,8 +15,13 @@ export default {
     }
   },
   created () {
+
   },
   methods: {
+    handleEdit (record) {
+      this.record = record
+      this.currentComponet = 'Edit'
+    },
     handleGoBack () {
       this.record = ''
       this.currentComponet = 'List'
