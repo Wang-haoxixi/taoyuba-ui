@@ -29,50 +29,66 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="8">
-            <el-form-item label="省：" prop="provinceId">
+          <el-col :span="12">
+            <el-form-item label="身份证号码：" prop="idcard">
+              <el-input v-model="form.idcard"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <iep-form-item class="form-half" prop="birthday" label-name="出生日期">
+              <iep-date-picker v-model="form.birthday" type="date" placeholder="选择日期"></iep-date-picker>
+            </iep-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="地址：">
               <el-select
                 v-model="form.provinceId"
                 @change="choseProvince(form.provinceId)"
-                placeholder="省级地区">
+                placeholder="省级地区" style="width: 33%!important">
                 <el-option
                   v-for="item in province"
                   :key="item.id"
                   :label="item.name"
-                  :value="item.areaCode">
+                  :value="item.areaCode" prop="provinceId">
                 </el-option>
               </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8" >
-            <el-form-item prop="cityId" label="市：">
               <el-select
                 v-model="form.cityId"
                 @change="choseCity(form.cityId)"
-                placeholder="市级地区">
+                placeholder="市级地区" style="width: 33%!important">
                 <el-option
                   v-for="item in city"
                   :key="item.id"
                   :label="item.name"
-                  :value="item.areaCode">
+                  :value="item.areaCode" prop="cityId">
                 </el-option>
               </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item prop="districtId" label="地区：">
               <el-select
                 v-model="form.districtId"
                 @change="choseDistrict(form.districtId)"
-                placeholder="区级地区">
+                placeholder="区级地区" style="width: 33%!important">
                 <el-option
                   v-for="item in district"
                   :key="item.id"
                   :label="item.name"
-                  :value="item.areaCode">
+                  :value="item.areaCode" prop="districtId">
                 </el-option>
               </el-select>
             </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="国籍" prop="nationality">
+              <el-input v-model="form.nationality"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="名族" prop="nation">
+              <el-select v-model="form.nation" placeholder="请输入名族">
+                <el-option v-for="item in nationals" :key="item.id" :label="item.name" :value="item.name"></el-option>
+              </el-select>
+            </el-form-item> 
           </el-col>
         </el-row>  
         <el-row>
@@ -112,11 +128,11 @@
           </el-col>               
         </el-row>
         <el-row>
-          <el-col :span="8">
+          <!-- <el-col :span="8">
             <el-form-item label="四小件上传：" prop="fourSmallCard">
             <iep-avatar v-model="form.fourSmallCard"></iep-avatar>
           </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col :span="8">
             <el-form-item label="职位" prop="positionId">
               <el-select
@@ -338,7 +354,9 @@ export default {
       })
     },
     onGoBack () {
-      this.$router.history.go(-1)
+      this.$router.push({
+        path: '/hrms_spa/crew_admin_list',
+      })     
     },
     handleSubmit () {
       const submitFunction = this.userId ? putPosition : addPosition

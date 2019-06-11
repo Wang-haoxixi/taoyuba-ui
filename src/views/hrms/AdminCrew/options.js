@@ -2,7 +2,9 @@ import { mergeByFirst } from '@/util/util'
 import { initNow } from '@/util/date'
 
 const dictsMap = {
-
+  isTrain: {
+    0: '否', 1: '是',
+  },
 }
 
 const columnsMap = [
@@ -25,6 +27,46 @@ const columnsMap = [
     {
       prop: 'phone',
       label: '电话号码',
+    },
+  ]
+
+  const certificateColumns = [
+    {
+      prop: 'certType',
+      label: '证书种类',
+      dictName: 'tyb_crew_cert_type',
+      type: 'dict',
+    },
+    {
+      prop: 'certLevel',
+      label: '证书等级',
+      dictName: 'tyb_crew_cert_level',
+      type: 'dict',
+    },
+    {
+      prop: 'certTitle',
+      label: '证书职务',
+      dictName: 'tyb_crew_cert_title',
+      type: 'dict',
+    },
+    {
+      prop: 'certNo',
+      label: '证书编号',
+    },
+    {
+      prop: 'certDateIssue',
+      label: '有效起始日期',
+      type: 'date',
+    },
+    {
+      prop: 'certDateExpire',
+      label: '有效终止日期',
+      type: 'date',
+    },
+    {
+      prop: 'certFile',
+      label: '附件',
+      type: 'file',
     },
   ]
 
@@ -51,6 +93,10 @@ const columnsMap = [
       positionId:'',
       shipId:0,//
       userId:'',
+      nationality: '', //国籍
+      nation: '', //名族
+      applyType: 1, //申请类别
+      isTrain: 0, //是否需要培训
     }
   }
 
@@ -77,6 +123,10 @@ const columnsMap = [
       positionId:'',
       shipId:0,//
       userId:'',
+      nationality: '', //国籍
+      nation: '', //名族
+      applyType: 1, //申请类别
+      isTrain: 0, //是否需要培训
     }
   }
   const rules = {
@@ -125,4 +175,5 @@ const columnsMap = [
     return newForm
   }
 
-export{columnsMap, dictsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm}
+export{columnsMap, dictsMap, rules, initForm, formToDto, initSearchForm, 
+  initDtoSearchForm, toDtoSearchForm, certificateColumns}

@@ -16,7 +16,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="联系地址" prop="address">
+            <el-form-item label="联系地址：" prop="address">
               <el-input maxlength="100" v-model="form.address"></el-input>
             </el-form-item>
           </el-col>
@@ -28,7 +28,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="双控功率(kw)" prop="dualPower">
+            <el-form-item label="双控功率(kw)：" prop="dualPower">
               <el-input maxlength="6" v-model="form.dualPower"></el-input>
             </el-form-item>
           </el-col>
@@ -40,7 +40,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="主捕种类" prop="fishType">
+            <el-form-item label="主捕种类：" prop="fishType">
               <el-input maxlength="100" v-model="form.fishType"></el-input>
             </el-form-item>
           </el-col>
@@ -58,19 +58,19 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="总吨位" prop="grossTonnage">
+            <el-form-item label="总吨位：" prop="grossTonnage">
               <el-input maxlength="3" v-model="form.grossTonnage"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="船长（m）" prop="hullLength">
+            <el-form-item label="船长（m）：" prop="hullLength">
               <el-input maxlength="6" v-model="form.hullLength"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="船体材料" prop="hullMaterial">
+            <el-form-item label="船体材料：" prop="hullMaterial">
               <el-select v-model="form.hullMaterial">
                 <el-option
                         v-for="item in $store.getters.dictGroup.tyb_ship_material"
@@ -83,79 +83,79 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <iep-form-item class="form-half" prop="licensesDateExpire" label-name="证书有效期">
+            <iep-form-item class="form-half" prop="licensesDateExpire" label-name="证书有效期：">
               <iep-date-picker v-model="form.licensesDateExpire" type="date" placeholder="选择日期"></iep-date-picker>
             </iep-form-item>
           </el-col>
           <el-col :span="12">
-            <iep-form-item class="form-half" prop="licensesDateIssue" label-name="签发日期">
+            <iep-form-item class="form-half" prop="licensesDateIssue" label-name="签发日期：">
               <iep-date-picker v-model="form.licensesDateIssue" type="date" placeholder="选择日期"></iep-date-picker>
             </iep-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="捕捞许可证编号" prop="licensesFishingNo">
+            <el-form-item label="捕捞许可证编号：" prop="licensesFishingNo">
               <el-input maxlength="50" v-model="form.licensesFishingNo"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="船舶检验证书编号" prop="licensesInspectionNo">
+            <el-form-item label="船舶检验证书编号：" prop="licensesInspectionNo">
               <el-input maxlength="50" v-model="form.licensesInspectionNo"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="国籍证书编号" prop="licensesNationalNo">
+            <el-form-item label="国籍证书编号：" prop="licensesNationalNo">
               <el-input maxlength="50" v-model="form.licensesNationalNo"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="渔船所有权登记证书" prop="licensesOwnerShip">
+            <el-form-item label="渔船所有权登记证书：" prop="licensesOwnerShip">
               <el-input maxlength="20" v-model="form.licensesOwnerShip"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="主机型号" prop="mainEngineModel">
+            <el-form-item label="主机型号：" prop="mainEngineModel">
               <el-input maxlength="50" v-model="form.mainEngineModel"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="主机功率(kw)" prop="mainEnginePower">
+            <el-form-item label="主机功率(kw)：" prop="mainEnginePower">
               <el-input maxlength="6" v-model="form.mainEnginePower"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="手机号码" prop="mobile">
+            <el-form-item label="手机号码：" prop="mobile">
               <el-input maxlength="13" v-model="form.mobile"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="型宽" prop="mouldedBreadth">
+            <el-form-item label="型宽：" prop="mouldedBreadth">
               <el-input maxlength="6" v-model="form.mouldedBreadth"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="型深" prop="mouldedDepth">
+            <el-form-item label="型深：" prop="mouldedDepth">
               <el-input maxlength="6" v-model="form.mouldedDepth"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="净吨位" prop="netTonnage">
+            <el-form-item label="净吨位：" prop="netTonnage">
               <el-input maxlength="3" v-model="form.netTonnage"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="船籍港" prop="portRegister">
+            <el-form-item label="船籍港：" prop="portRegister">
               <el-select v-model="form.portRegister">
                 <el-option
                         v-for="item in $store.getters.dictGroup.tyb_ship_port"
@@ -166,19 +166,19 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="渔船名" prop="shipName">
+            <el-form-item label="渔船名：" prop="shipName">
               <el-input maxlength="20" v-model="form.shipName"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="渔船编号" prop="shipNo">
+            <el-form-item label="渔船编号：" prop="shipNo">
               <el-input maxlength="50" v-model="form.shipNo"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="渔船股份性质" prop="shipShare">
+            <el-form-item label="渔船股份性质：" prop="shipShare">
               <el-select v-model="form.shipShare">
                 <el-option
                         v-for="item in $store.getters.dictGroup.tyb_contract_ship_attr"
@@ -191,19 +191,19 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="持证人" prop="shipowner">
+            <el-form-item label="持证人：" prop="shipowner">
               <el-input maxlength="20" v-model="form.shipowner"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="持证人身份证号码" prop="shipownerIdcard">
+            <el-form-item label="持证人身份证号码：" prop="shipownerIdcard">
               <el-input maxlength="18" v-model="form.shipownerIdcard"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="作业方式1" prop="workMode">
+            <el-form-item label="作业方式1：" prop="workMode">
               <el-select v-model="form.workMode">
                 <el-option
                         v-for="item in $store.getters.dictGroup.tyb_work_mode"
@@ -214,7 +214,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="作业方式2" prop="workMode">
+            <el-form-item label="作业方式2：" prop="workMode">
               <el-select v-model="form.workMode2">
                 <el-option
                         v-for="item in $store.getters.dictGroup.tyb_work_mode"
@@ -227,12 +227,12 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="邮政编码" prop="zipcode">
+            <el-form-item label="邮政编码：" prop="zipcode">
               <el-input maxlength="6" v-model="form.zipcode"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">                                     
-            <el-form-item label="所属渔村区域" prop="villageId">                         
+          <el-col :span="12">
+            <el-form-item label="所属渔村区域：" prop="villageId">
               <span v-for="(region, key) in regions" :key="key">
                 <el-select v-model="regionChosen[key]" v-show="region.length > 0">
                   <el-option v-for="item in region"

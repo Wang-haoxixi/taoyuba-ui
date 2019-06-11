@@ -197,9 +197,6 @@
             <el-col :span="12"></el-col>
           </el-row>
         </el-form-item>
-        <el-form-item label="工作内容">
-          <el-input maxlength="200" type="textarea" v-model="formData.workContent"></el-input>
-        </el-form-item>
         <el-form-item label="劳务报酬">
           <el-form-item label="计算方式：">
             <el-radio
@@ -227,6 +224,12 @@
               <span>日内支付</span>
             </div>
           </el-form-item>
+        </el-form-item>
+        <el-form-item label="工作内容">
+          <el-input maxlength="200" type="textarea" v-model="formData.workContent"></el-input>
+        </el-form-item>
+        <el-form-item label="特别约定">
+          <el-input maxlength="200" type="content" v-model="formData.content"></el-input>
         </el-form-item>
       </el-form>
       <div style="text-align: center;padding: 20px 0;">     
