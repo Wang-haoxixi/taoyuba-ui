@@ -17,7 +17,6 @@
           <template slot-scope="scope">
             <operation-wrapper>
               <iep-button type="warning" plain @click="handleEdit(scope.row)">编辑</iep-button>
-              <iep-button @click="handleDetail(scope.row)">查看</iep-button>
               <iep-button type="default" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
             </operation-wrapper>
           </template>
@@ -27,7 +26,7 @@
   </div>
 </template>
 <script>
-import { getMyCerts, deleteCertByuserId} from '@/api/post/cert'
+import { getMyCerts, deleteCertById} from '@/api/post/cert'
 import { getUserInfo } from '@/api/login'
 import AdvanceSearch from './AdvanceSearch'
 import mixins from '@/mixins/mixins'
@@ -50,22 +49,19 @@ export default {
       this.multipleSelection = val.map(m => m.id)
     },
     handleDelete (row) {
-      this._handleGlobalDeleteById(row.certId, deleteCertByuserId)
+      this._handleGlobalDeleteById(row.certId, deleteCertById)
     },
     handleAdd () {
       this.$router.push({
-        path: '/cert_spa/cert_admin/0',
+        path: '/cert_spa/cert_user/0',
       })      
     },
     handleEdit (row) {
       this.$router.push({
-        path: `/hrms_spa/position_post/${row.certId}`,
+        path: `/cert_spa/cert_user/${row.certId}`,
       })    
     },
-    handleDetail (row) {
-      this.$emit('onDetail', row)
-    },
-     loadPage (param = this.searchForm) {
+    loadPage (param = this.searchForm) {
        getUserInfo().then(({data}) => {
         let userId = data.data.sysUser.userId
         this.loadTable(param, getMyCerts(userId))

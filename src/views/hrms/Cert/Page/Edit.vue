@@ -56,7 +56,8 @@
   </div>
 </template>
 <script>
-import { getCertPage, post, put} from '@/api/post/cert'
+import { detal, post, put} from '@/api/post/cert'
+import { getUserInfo } from '@/api/login'
 import { initForm, formToDto, rules, dictsMap } from '../options'
 export default {
   data () {
@@ -72,16 +73,16 @@ export default {
     }
   },
   computed: {
-    cretId () {
-      return +this.$route.params.cretId
+    certId () {
+      return +this.$route.params.certId
     },
     methodName () {
-      return this.cretId ? '编辑' : '发布'
+      return this.certId ? '编辑' : '发布'
     },
   },
   created () {
-    if (this.cretId) {
-      getCertPage(this.cretId).then(({ data }) => {
+    if (this.certId) {
+      detal(this.certId).then(({ data }) => {
         this.form = this.$mergeByFirst(initForm(), data.data)
       })
     }
@@ -91,18 +92,21 @@ export default {
   methods: {
     onGoBack () {
       this.$router.push({
-        path: '/hrms_spa/recruit_list',
+        path: '/cert_spa/cert_list',
       })     
     },
     handleSubmit (isPublish) {
-      const submitFunction = this.cretId ? put : post
+      const submitFunction = this.certId ? put : post
       this.$refs['form'].validate((valid) => {
         if (valid) {
           const publish = isPublish === true ? true : false
+          getUserInfo().then(({data}) => {
+            this.form.userId = data.data.sysUser.userId
+          })
           submitFunction(formToDto(this.form), publish).then(({ data }) => {
             if (data.data) {
               this.$message({
-                message: `招聘信息${this.methodName}成功`,
+                message: `证书信息${this.methodName}成功`,
                 type: 'success',
               })
               this.onGoBack()

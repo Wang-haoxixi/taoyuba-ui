@@ -27,6 +27,16 @@ export function del (id) {
   })
 }
 
+export function detal (id) {
+  return request({
+    url: `${prefixUrl}/detail`,
+    method: 'get',
+    params: {
+      certId:id,
+    },
+  })
+}
+
 export function getMyCerts (id) {
   return request({
     url: `${prefixUrl}/myCerts`,
@@ -45,7 +55,7 @@ export function getCertPage (query) {
   })
 }
 
-export function deleteCertByuserId (id) {
+export function deleteCertById (id) {
   return request({
     url: `${prefixUrl}/` +id,
     method: 'post',
