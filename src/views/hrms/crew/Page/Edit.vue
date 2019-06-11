@@ -65,11 +65,11 @@
           </el-col>               
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="四小件上传：" prop="fourSmallCard">
             <iep-avatar v-model="form.fourSmallCard"></iep-avatar>
           </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col :span="12">
             <el-form-item label="职位" prop="positionId">
               <el-select

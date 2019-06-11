@@ -1,13 +1,14 @@
 <template>
   <div>
     <basic-container>
-      <page-header title="船员管理"></page-header>
+      <page-header title="船员证书"></page-header>
       <operation-container>
         <template slot="left">
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
         <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
+            <advance-search @search-page="searchPage"></advance-search>
           </operation-search>
         </template>
       </operation-container>
@@ -16,7 +17,7 @@
           <template slot-scope="scope">
             <operation-wrapper>
               <iep-button type="warning" plain @click="handleEdit(scope.row)">编辑</iep-button>
-              <!-- <iep-button @click="handleDetail(scope.row)">查看</iep-button> -->
+              <iep-button @click="handleDetail(scope.row)">查看</iep-button>
               <iep-button type="default" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
             </operation-wrapper>
           </template>
@@ -26,16 +27,19 @@
   </div>
 </template>
 <script>
-import { getPositionPage, deleteCrewById} from '@/api/post/admin'
+import { getMyCerts, deleteCertByuserId} from '@/api/post/cert'
+import { getUserInfo } from '@/api/login'
+import AdvanceSearch from './AdvanceSearch'
 import mixins from '@/mixins/mixins'
 import { columnsMap, dictsMap } from '../options'
 export default {
+  components: { AdvanceSearch },
   mixins: [mixins],
   data () {
     return {
       dictsMap,
       columnsMap,
-      searchData: 'realName',
+      searchData: 'contactName',
     }
   },
   created () {
@@ -46,25 +50,26 @@ export default {
       this.multipleSelection = val.map(m => m.id)
     },
     handleDelete (row) {
-      this._handleGlobalDeleteById(row.userId, deleteCrewById)
+      this._handleGlobalDeleteById(row.certId, deleteCertByuserId)
     },
     handleAdd () {
       this.$router.push({
-        path: '/hrms_spa/crew_admin/0',
+        path: '/cert_spa/cert_admin/0',
       })      
     },
     handleEdit (row) {
       this.$router.push({
-        path: `/hrms_spa/crew_admin/${row.userId}`,
+        path: `/hrms_spa/position_post/${row.certId}`,
       })    
     },
     handleDetail (row) {
-      this.$router.push({
-        path: `/hrms_spa/crew_view/${row.userId}`,
-      }) 
+      this.$emit('onDetail', row)
     },
-    async loadPage (param = this.searchForm) {
-       this.loadTable(param, getPositionPage)
+     loadPage (param = this.searchForm) {
+       getUserInfo().then(({data}) => {
+        let userId = data.data.sysUser.userId
+        this.loadTable(param, getMyCerts(userId))
+      })
     },
   },
 }

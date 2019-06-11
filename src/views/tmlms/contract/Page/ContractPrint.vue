@@ -294,7 +294,8 @@
           内容与本合同其他部分产生冲突，以 “ 特别约定” 为准。
         </p>
         <h3>五、特别约定</h3>
-        <p>这里是特别约定的条款内容</p>
+        <p v-if="formData.content.length > 0">{{formData.content}}</p>
+        <p v-else> 无 </p>
       </div>
       <div class="sign">
         <h3>签署：</h3>

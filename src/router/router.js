@@ -15,6 +15,7 @@ import shipRouter from './ship'
 import emptyRouter from './empty'
 import tmlmsRouter from './tmlms'
 import exceptionRouter from './exception/'
+import certRouter from './cert/'
 import AvueRouter from './avue-router'
 import Store from '../store/'
 
@@ -56,5 +57,6 @@ Router.addRoutes([
   ...shipRouter,
   ...emptyRouter,
   ...tmlmsRouter,
+  ...certRouter,
 ])
 export default Router

@@ -114,6 +114,12 @@ export default [
         component: () => import('@/views/hrms/Position/Page/List.vue'),
         meta: noKeepAlive,
       },
+      {
+        path: 'crew_admin_list',
+        name: '船员管理列表页',
+        component: () => import('@/views/hrms/AdminCrew/Page/List.vue'),
+        meta: noKeepAlive,
+      },
     ],
   },
 ]
