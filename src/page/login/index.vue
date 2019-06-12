@@ -6,7 +6,7 @@
       <third-login v-if="activeName === 'third'"></third-login>
       <retrieve v-if="activeName === 'retrieve'" @tab-active="handleActive"></retrieve>
     </template>
-    <template v-slot:tab-footer>
+    <!-- <template v-slot:tab-footer>
       <div class="menu-p">
         <span class="menu-line"></span>
         <span class="menu-text">其他方式登录</span>
@@ -15,7 +15,7 @@
       <a href="#" @click.stop="activeName = 'user'">账号密码</a>
       <a href="#" @click.stop="activeName = 'code'">手机号登录</a>
       <a href="#" @click.stop="activeName = 'third'">第三方登录</a>
-    </template>
+    </template> -->
   </container>
 </template>
 <script>
