@@ -41,6 +41,7 @@
     "viser-vue": "^2.4.5",
     "vue": "^2.6.10",
     "vue-froala-wysiwyg": "^2.9.5",
+    "vue-pdf": "^4.0.7",
     "vue-router": "^3.0.1",
     "vuedraggable": "^2.17.0",
     "vuex": "^3.0.1",

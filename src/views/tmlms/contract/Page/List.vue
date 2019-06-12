@@ -14,6 +14,8 @@
             </el-button>
             <el-button type="text" icon="el-icon-delete" size="mini" @click="handlePrint(scope.row.contractId)">打印
             </el-button>
+            <el-button type="text" icon="el-icon-view" size="mini" @click="previewFile(scope.row.contractId)">PDF预览
+            </el-button> 
           </template>
         </el-table-column>
       </avue-tree-table>
@@ -28,7 +30,8 @@
 import { getContractList, deleteContract, getContract, getDict } from '@/api/tmlms/contract'
 import { mapGetters } from 'vuex'
 import contractPrint from './ContractPrint.vue'
-import Vue from 'vue'
+import Vue from 'vue'    
+import { initForm,openpdf } from '../options'        
 export default {
   name: 'contract',
   data () {
@@ -48,6 +51,7 @@ export default {
       periodTypeDict: [],
       payComputeTypeDict: [],
       payTypeDict: [],
+      form:initForm(),
     }
   },
   created () {
@@ -207,6 +211,14 @@ export default {
       getDict('tyb_contract_pay_type').then(({data}) => {
         if (data.code === 0) this.payTypeDict = data.data
       })
+    },
+    previewFile (contractId) {                
+        getContract(contractId).then(({data}) => {      
+            if(data.code === 0){
+                  this.form = data.data         
+                  openpdf(this.form.fileUrl)
+            }
+        })
     },
   },
 }
