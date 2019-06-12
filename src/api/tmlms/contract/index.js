@@ -59,3 +59,12 @@ export function getDict (key) {
     method: 'get',
   })
 }
+
+//新增PDF文件名
+export  function  addContractFile (data) {
+    return  request({
+          url:`${prefixUrl}/addfile`,
+          method:'post',
+          data,
+    })
+}

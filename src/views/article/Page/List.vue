@@ -6,13 +6,13 @@
         <template slot="left">
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
-        <template slot="right">
+        <template slot="right">           
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
             <advance-search @search-page="searchPage"></advance-search>
           </operation-search>
-        </template>
-      </operation-container>
-      <iep-table
+        </template>                           
+      </operation-container>                  
+      <iep-table                                          
               :isLoadTable="isLoadTable"
               :pagination="pagination"
               :columnsMap="columnsMap"
@@ -29,31 +29,31 @@
               <iep-button type="warning" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
             </operation-wrapper>
           </template>
-        </el-table-column>
+        </el-table-column>        
       </iep-table>
     </basic-container>                                                                          
   </div>
-</template>
-<script>
+</template>                                                          
+<script>                                                                                                                                                                                                                                                                                                                                                           
 import { getArticleList, delArtilce } from '@/api/article/index'
 import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
-export default {                  
+export default {                          
   components: {
     advanceSearch,
   },
-  mixins: [mixins],
-  data () {
+  mixins: [mixins],       
+  data () {                              
     return {
       columnsMap,
       searchData: 'title',
     }
   },
-  created () {                         
+  created () {                               
     this.loadPage()
   },
-  methods: {
+  methods: {                                        
     handleSelectionChange (val) {
       this.multipleSelection = val.map(m => m.id)
     },

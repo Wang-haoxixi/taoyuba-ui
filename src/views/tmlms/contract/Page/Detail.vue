@@ -79,7 +79,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
+          <el-row>      
             <el-col :span="12">
               <el-form-item label="代理人家庭地址：">
                 <el-input maxlength="100" v-model="formData.shipownerAgentAddr"></el-input>
@@ -158,7 +158,7 @@
             </el-col>
           </el-row>
         </el-form-item>
-        <el-form-item label="合同期限">
+        <el-form-item label="合同期限">    
           <el-row>
             <el-col :span="12">
               <el-form-item label="类型：">
@@ -200,7 +200,7 @@
         <el-form-item label="工作内容">
           <el-input maxlength="200" type="textarea" v-model="formData.workContent"></el-input>
         </el-form-item>
-        <el-form-item label="劳务报酬">
+        <el-form-item label="劳务报酬">         
           <el-form-item label="计算方式：">
             <el-radio
                     v-for="(item, index) in payComputeTypeDict"
@@ -213,8 +213,8 @@
               <el-input maxlength="10" class="w-200" style="margin-left: 0;" :value="formData.payMoney" @input="inputFloat('payMoney', $event)"></el-input>
               <span>元（大写：{{moneyTransilate(formData.payMoney)}}）</span>
             </div>
-          </el-form-item>
-          <el-form-item label="支付方式：">
+          </el-form-item>                                           
+          <el-form-item label="支付方式：">                                                                            
             <el-radio v-for="item in payTypeDict" :key="item.value" v-model="formData.payType" :label="parseInt(item.value)">{{item.label}}</el-radio>
             <div v-show="formData.payType === 1">
               <span>每月</span>
@@ -229,21 +229,22 @@
           </el-form-item>
         </el-form-item>
       </el-form>
-      <div style="text-align: center;padding: 20px 0;">     
+      <div style="text-align: center;padding: 20px 0;">                   
         <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add' || type === 'edit'" type="primary" @click="handleSubmit">保存</iep-button>
         <iep-button :disabeld="false" @click="handleBack">返回</iep-button>     
-        <iep-button :disabeld="false" @click="getPdf()" v-show="type === 'view'" style="margin-left: 30px;">导出PDF</iep-button>            
+        <iep-button :disabeld="false" @click="getPdfFile" v-show="type === 'view'" style="margin-left: 30px;">导出PDF</iep-button>            
       </div>
     </basic-container>
   </div>
 </template>
 
-<script>
+<script>        
 import IepDatePicker from '@/components/IepForm/DatePicker'
 import { getContract, addContract, editContract, getDict } from '@/api/tmlms/contract'
 import { getShipOwners } from '@/api/mlms/shipowner'
 import { getEmployees } from '@/api/mlms/employee'
 import debounce from 'lodash/debounce'
+import  {getPdf}  from  '../options'               
 export default {
   components: {
     IepDatePicker,
@@ -334,7 +335,7 @@ export default {
       periodTypeDict: [],
       payComputeTypeDict: [],
       payTypeDict: [],
-      htmlTitle: '渔船交易合同',     
+      flag: false,
     }
   },
   props: {
@@ -532,6 +533,11 @@ export default {
       this.formData.employeeLinkPhone = contactPhone
       this.formData.employeeName = realName
       this.formData.employeeId = userId
+    },
+  async getPdfFile () {                                
+         await getPdf(this.record)                                                                               
+         this.$message.success('上传成功!')
+         this.$emit('onGoBack')      
     },
   },
   watch: {
