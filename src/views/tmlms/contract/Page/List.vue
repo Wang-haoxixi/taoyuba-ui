@@ -14,8 +14,6 @@
             </el-button>
             <el-button type="text" icon="el-icon-delete" size="mini" @click="handlePrint(scope.row.contractId)">打印
             </el-button>
-            <el-button type="text" icon="el-icon-view" size="mini" @click="previewFile(scope.row.contractId)">PDF预览
-            </el-button> 
           </template>
         </el-table-column>
       </avue-tree-table>
@@ -31,7 +29,7 @@ import { getContractList, deleteContract, getContract, getDict } from '@/api/tml
 import { mapGetters } from 'vuex'
 import contractPrint from './ContractPrint.vue'
 import Vue from 'vue'    
-import { initForm,openpdf } from '../options'        
+
 export default {
   name: 'contract',
   data () {
@@ -51,7 +49,6 @@ export default {
       periodTypeDict: [],
       payComputeTypeDict: [],
       payTypeDict: [],
-      form:initForm(),
     }
   },
   created () {
@@ -130,7 +127,7 @@ export default {
       this.$emit('onEdit', contractId)
     },
     handleDel (contractId) {
-      deleteContract(contractId).then((data) => {
+      deleteContract(contractId).then((data) => {   
         if (data.data.code === 0) {
           this.$message.success('删除成功！')
           this.getContractList()
@@ -186,7 +183,7 @@ export default {
               .margin70{margin-top: 70px;}s
             </style>
           `)
-          h.document.write(el.outerHTML)
+          h.document.write(el.outerHTML)      
           h.document.close()
           h.print()
           h.close()
@@ -211,17 +208,6 @@ export default {
       getDict('tyb_contract_pay_type').then(({data}) => {
         if (data.code === 0) this.payTypeDict = data.data
       })
-    },
-    previewFile (contractId) {                
-        getContract(contractId).then(({data}) => {      
-            if(data.code === 0){
-                  this.form = data.data 
-                  if(this.form.fileUrl === ''){
-                      this.$message.error('无可预览的文件')
-                  }        
-                  openpdf(this.form.fileUrl)
-            }
-        })
     },
   },
 }
