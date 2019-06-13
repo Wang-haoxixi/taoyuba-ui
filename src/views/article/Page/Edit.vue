@@ -36,15 +36,24 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="四小件上传：" prop="image">
-              <iep-avatar v-model="form.image"></iep-avatar>
+            <el-form-item label="图片：" prop="image">
+              <el-upload
+                class="avatar-uploader" action="/api/admin/file/upload/avatar" :show-file-list="false"
+                :on-success="handleAvatarSuccess" :headers="headers" accept="image/*">
+                <img v-if="form.image" :src="form.image" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
             </el-form-item>
           </el-col>
         </el-row>
 
-        <iep-form-item class="form-half" prop="articleContent" label-name="资讯内容">
+        <!-- <iep-form-item class="form-half" prop="articleContent" label-name="资讯内容">
           <iep-input-area v-model="form.articleContent"></iep-input-area>
-        </iep-form-item>
+        </iep-form-item> -->
+
+        <el-form-item label="资讯内容：" prop="articleContent">
+          <iep-froala-editor v-model="form.articleContent"></iep-froala-editor>
+        </el-form-item>
 
         <el-form-item label="">
           <operation-wrapper>
@@ -58,6 +67,7 @@
 <script>                  
 import { getArticleDetail, createArticle, updateArticle  } from '@/api/article/index'                          
 import { initForm,rules, dictsMap, formToDto } from '../options'
+import store from '@/store'
 export default {            
   data () {     
     return {
@@ -70,6 +80,9 @@ export default {
       form: initForm(),                                  
       init: false,
       dictsMap,
+      headers: {
+        Authorization: 'Bearer ' + store.getters.access_token,
+      },
     }
   },
   computed: {                                                                                       
@@ -112,9 +125,39 @@ export default {
         path: '/article_spa/article_list',
       })   
     },
+    handleAvatarSuccess (res, file) {
+      // this.$emit('input', res.data.url)
+      this.form.image = URL.createObjectURL(file.raw)
+    },
   },
   watch: {
 
-},
+  },
 }
 </script>
+
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 120px;
+    height: 120px;
+    line-height: 120px;
+    text-align: center;
+  }
+  .avatar {
+    width: 120px;
+    height: 120px;
+    display: block;
+  }
+</style>
