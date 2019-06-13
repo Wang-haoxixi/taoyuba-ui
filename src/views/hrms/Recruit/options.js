@@ -53,6 +53,7 @@ const initForm = () => {
     workMode: '', //作业方式
     province: '',//上船地点
     city: '', //上船地点
+    town: '', //上船地点
     hullLength: '', //船长（m）
     totalPower: '', //主机总功率
     // isRcmd: '', //是否推荐
@@ -73,6 +74,7 @@ const initDtoForm = () => {
     workMode: '', //作业方式
     province: '',//上船地点
     city: '', //上船地点
+    town: '', //上船地点
     hullLength: '', //船长（m）
     totalPower: '', //主机总功率
     // isRcmd: '', //是否推荐
