@@ -10,7 +10,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">         
-            <el-form-item label="分类:" prop="type">       
+            <el-form-item label="分类：" prop="type">       
               <iep-dict-select v-model="form.type" dict-name="tyb_article_type"></iep-dict-select>
             </el-form-item>
           </el-col>
@@ -68,8 +68,8 @@
 import { getArticleDetail, createArticle, updateArticle  } from '@/api/article/index'                          
 import { initForm,rules, dictsMap, formToDto } from '../options'
 import store from '@/store'
-export default {            
-  data () {     
+export default {         
+  data () {  
     return {
       backOption: {
         isBack: true,
@@ -85,7 +85,7 @@ export default {
       },
     }
   },
-  computed: {                                                                                       
+  computed: {                                                                                    
     articleId () {
       return +this.$route.params.articleId        
     },
@@ -100,7 +100,7 @@ export default {
       })
     }
   },
-  mounted () {                
+  mounted () {
   },
   methods: {
     handleSubmit (isPublish) {
@@ -125,9 +125,10 @@ export default {
         path: '/article_spa/article_list',
       })   
     },
-    handleAvatarSuccess (res, file) {
+    handleAvatarSuccess (res) {
       // this.$emit('input', res.data.url)
-      this.form.image = URL.createObjectURL(file.raw)
+      console.log(res.data.url)
+      // this.form.image = res.data.url
     },
   },
   watch: {
