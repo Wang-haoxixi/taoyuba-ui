@@ -133,7 +133,9 @@ export default {
       })
     },
     onGoBack () {
-      this.$router.history.go(-1)
+      this.$router.push({
+        path: '/textbook_spa/textbook_list',
+      })
     },
   },
   watch: {

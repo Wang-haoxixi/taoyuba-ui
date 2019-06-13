@@ -18,6 +18,30 @@ export default [
         component: () => import('@/views/article/Page/List.vue'),
         meta: noKeepAlive,
       },
+      {
+        path: 'article_service/:articleId',
+        name: '发布培训服务表单',
+        component: () => import('@/views/train/Service/Page/Edit.vue'),
+        meta: noKeepAlive,
+      },
+      {
+        path: 'service_list',
+        name: '培训服务列表页',
+        component: () => import('@/views/train/Service/Page/List.vue'),
+        meta: noKeepAlive,
+      },
+      {
+        path: 'article_agent/:articleId',
+        name: '发布证件代办表单',
+        component: () => import('@/views/train/Agent/Page/Edit.vue'),
+        meta: noKeepAlive,
+      },
+      {
+        path: 'agent_list',
+        name: '证件代办列表页',
+        component: () => import('@/views/train/Agent/Page/List.vue'),
+        meta: noKeepAlive,
+      },
     ],
   },
 ]

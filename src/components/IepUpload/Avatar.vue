@@ -1,8 +1,8 @@
 <template>
   <el-upload class="avatar-uploader" action="/api/admin/file/upload/avatar" :headers="headers" :show-file-list="false" :on-success="handleAvatarSuccess" accept="image/*">
     <div class="no-avatar-wrapper">
-      <a-avatar class="i-avatar" v-if="isShow" :size="64" shape="square" :src="value"></a-avatar>
-      <a-avatar class="i-avatar" v-if="!isShow" shape="square" :size="64" icon="user"></a-avatar>
+      <a-avatar v-if="isShow" :size="64" shape="square" :src="value"></a-avatar>
+      <a-avatar v-if="!isShow" shape="square" :size="64" icon="user"></a-avatar>
       <div class="intro-text">建议尺寸：300px * 300px 的等比图片</div>
     </div>
   </el-upload>
