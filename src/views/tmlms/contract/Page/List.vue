@@ -215,7 +215,10 @@ export default {
     previewFile (contractId) {                
         getContract(contractId).then(({data}) => {      
             if(data.code === 0){
-                  this.form = data.data         
+                  this.form = data.data 
+                  if(this.form.fileUrl === ''){
+                      this.$message.error('无可预览的文件')
+                  }        
                   openpdf(this.form.fileUrl)
             }
         })
