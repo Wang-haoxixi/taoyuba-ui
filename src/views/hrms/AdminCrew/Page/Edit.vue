@@ -174,6 +174,7 @@
         <el-form-item label="">
           <operation-wrapper>
             <iep-button type="primary" @click="handleSubmit">保存</iep-button>
+            <iep-button type="primary" @click="clickButton">连接</iep-button>
           </operation-wrapper>
         </el-form-item>
       </el-form>
@@ -279,6 +280,19 @@ export default {
     this.getCerts()
   },
   mounted () {
+      //添加socket事件监听
+      this.$nextTick(()=>{
+        this.$socket.emit('connect')
+        this.$socket.emit('startRead')
+        // this.sockets.subscribe('card message', (msg) => {
+          // var base = new Base64()  			  
+          // //2.解密后是json字符串
+          // var result1 = base.decode(msg)
+          // var data = eval('('+result1+')') 
+          // console.log(data)
+        // })
+        // console.log(this.sockets)
+      })
     if (this.$route.query.position) {
       const position = this.$route.query.position.map(m => +m) || []
       this.form.position = position || []
@@ -286,6 +300,69 @@ export default {
         this.$refs['IepCascader'].handleChange(position)
       }, 2000)
     }
+    //格式化拿到的數據
+      // function Base64 () {  
+   		// 	 // private property  
+    	// 	var _keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='  
+			//     // public method for decoding  
+			//     this.decode = function (input) {  
+			//         var output = '' 
+			//         var chr1, chr2, chr3  
+			//         var enc1, enc2, enc3, enc4  
+			//         var i = 0 
+			//         input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "") 
+			//         while (i < input.length) {  
+			//             enc1 = _keyStr.indexOf(input.charAt(i++))  
+			//             enc2 = _keyStr.indexOf(input.charAt(i++))  
+			//             enc3 = _keyStr.indexOf(input.charAt(i++)) 
+			//             enc4 = _keyStr.indexOf(input.charAt(i++))  
+			//             chr1 = (enc1 << 2) | (enc2 >> 4)  
+			//             chr2 = ((enc2 & 15) << 4) | (enc3 >> 2)  
+			//             chr3 = ((enc3 & 3) << 6) | enc4;  
+			//             output = output + String.fromCharCode(chr1)  
+			//             if (enc3 != 64) {  
+			//                 output = output + String.fromCharCode(chr2)  
+			//             }  
+			//             if (enc4 != 64) {  
+			//                 output = output + String.fromCharCode(chr3)  
+			//             }  
+			//         }  
+			//         output = _utf8_decode(output)  
+			//         return output  
+			//     }  
+			//     // private method for UTF-8 decoding  
+			//     _utf8_decode = function (utftext) {  
+			//         var string = ''  
+			//         var i = 0  
+			//         var c = c1 = c2 = 0  
+			//         while ( i < utftext.length ) {  
+			//             c = utftext.charCodeAt(i)  
+			//             if (c < 128) {  
+			//                 string += String.fromCharCode(c)  
+			//                 i++
+			//             } else if((c > 191) && (c < 224)) {  
+			//                 c2 = utftext.charCodeAt(i+1)  
+			//                 string += String.fromCharCode(((c & 31) << 6) | (c2 & 63))  
+			//                 i += 2  
+			//             } else {  
+			//                 c2 = utftext.charCodeAt(i+1)  
+			//                 c3 = utftext.charCodeAt(i+2)  
+			//                 string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63))  
+			//                 i += 3
+			//             }  
+			//         }  
+			//         return string  
+			//     }  
+			// 		}  
+  },
+  sockets:{
+    'connect': (msg)=>{
+      console.log('連接')
+      console.log(msg)
+    },
+    'card message': function (msg){
+      console.log(msg)
+    },
   },
    watch: {
     'regionChosen.province': function (val) {
@@ -341,6 +418,10 @@ export default {
       }, (error) => {
         this.$message.error(error.message)
       })
+    },
+    clickButton (data) {
+        // $socket is socket.io-client instance
+        this.$socket.emit('connect', data)
     },
     // getShipDetail (villageId) {
     //   getwhole({areaCode: villageId}).then(({data}) => {

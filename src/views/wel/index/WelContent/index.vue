@@ -50,7 +50,7 @@ export default {
     handleWelcome () {
       if (!this.isWelcome) {
         this.setWelcomeu(true)
-        this.visible = true
+        this.visible = false
       }
     },
   },

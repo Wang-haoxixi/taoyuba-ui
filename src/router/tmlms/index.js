@@ -13,4 +13,80 @@ export default [
       },
     ],
   },
+  // 船东
+  {
+    path: '/ship_owner',
+    component: Layout,
+    children: [
+      {
+        path: 'detail',
+        name: 'detailShipowner',
+        component: () => import('@/views/tmlms/shipowner/Page/Detail'),
+        meta: noKeepAlive,
+      },
+      {
+        path: '/admin/list',
+        name: 'Shipowner',
+        component: () => import('@/views/tmlms/shipowner/index'),
+        meta: noKeepAlive,
+      },
+    ],
+  },
+  // 培训机构
+  {
+    path: '/Training',
+    component: Layout,
+    children: [
+      {
+        path: 'detail',
+        name: 'detailTraining',
+        component: () => import('@/views/tmlms/Training/Page/Detail'),
+        meta: noKeepAlive,
+      },
+      {
+        path: '/admin/training',
+        name: 'Training',
+        component: () => import('@/views/tmlms/Training/index'),
+        meta: noKeepAlive,
+      },
+    ],
+  },
+  // 渔村
+  {
+    path: '/bvillage',
+    component: Layout,
+    children: [
+      {
+        path: 'detail',
+        name: 'detailBvillage',
+        component: () => import('@/views/tmlms/bvillage/Page/Detail'),
+        meta: noKeepAlive,
+      },
+      {
+        path: '/admin/bvillage',
+        name: 'bvillage',
+        component: () => import('@/views/tmlms/bvillage/index'),
+        meta: noKeepAlive,
+      },
+    ],
+  },
+  // 中介
+  {
+    path: '/agent',
+    component: Layout,
+    children: [
+      {
+        path: 'detail',
+        name: 'detailAgent',
+        component: () => import('@/views/tmlms/agent/Page/Detail'),
+        meta: noKeepAlive,
+      },
+      {
+        path: '/admin/agent',
+        name: 'bvillage',
+        component: () => import('@/views/tmlms/agent/index'),
+        meta: noKeepAlive,
+      },
+    ],
+  },
 ]

@@ -3,6 +3,7 @@ node_modules
 /dist
 /back-end
 remark.txt
+.env
 
 # local env files
 .env.local
