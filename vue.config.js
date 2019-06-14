@@ -25,6 +25,20 @@ module.exports = {
   //     : undefined,
   // },
   chainWebpack: config => {
+    // config.module.rule('compile')
+    //   .test(/\.js$/)
+    //   .include
+    //   .add('/node_modules/')
+    //   .end()
+    //   .use('babel')
+    //   .loader('babel-loader')
+    //   .options({
+    //     presets: [
+    //       ['@babel/preset-env', {
+    //         modules: false
+    //       }]
+    //     ]
+    //   });
     // config.resolve.symlinks(true)
     // config.plugin('preload').tap(options => {
     //   options[0] = {
