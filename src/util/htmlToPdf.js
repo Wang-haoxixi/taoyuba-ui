@@ -2,11 +2,12 @@
 // 导出页面为PDF格式
 import html2Canvas from 'html2canvas'           
 import JsPDF from 'jspdf'
-export default{
+
+
+export default{                                 
   install (Vue) {
     Vue.prototype.getPdf = function () {
-      var title = this.htmlTitle
-      console.log('123')
+      var title = '渔船合同'
       html2Canvas(document.querySelector('#pdfDom'), {
         allowTaint:  true,
       }).then(function (canvas) {
@@ -22,7 +23,7 @@ export default{
         if (leftHeight < pageHeight) {
           PDF.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight)
         } else {
-          while (leftHeight > 0) {
+          while (leftHeight > 0) {                                
             PDF.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
             leftHeight -= pageHeight
             position -= 841.89
@@ -30,7 +31,7 @@ export default{
               PDF.addPage()
             }
           }
-        }
+        }                           
         PDF.save(title + '.pdf')
       }
       )
@@ -38,3 +39,5 @@ export default{
   },
 }
 
+
+// 592.28

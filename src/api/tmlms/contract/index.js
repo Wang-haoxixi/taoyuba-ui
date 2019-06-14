@@ -54,8 +54,17 @@ export function deleteContract (contractId) {
 }
 
 export function getDict (key) {
-    return request({
-        url: `/admin/dict/type/${key}`,
-        method: 'get',
+  return request({
+    url: `/admin/dict/type/${key}`,
+    method: 'get',
+  })
+}
+
+//新增PDF文件名
+export  function  addContractFile (data) {
+    return  request({
+          url:`${prefixUrl}/addfile`,
+          method:'post',
+          data,
     })
 }

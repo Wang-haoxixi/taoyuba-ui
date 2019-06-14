@@ -28,7 +28,8 @@
 import { getContractList, deleteContract, getContract, getDict } from '@/api/tmlms/contract'
 import { mapGetters } from 'vuex'
 import contractPrint from './ContractPrint.vue'
-import Vue from 'vue'
+import Vue from 'vue'    
+
 export default {
   name: 'contract',
   data () {
@@ -126,7 +127,7 @@ export default {
       this.$emit('onEdit', contractId)
     },
     handleDel (contractId) {
-      deleteContract(contractId).then((data) => {
+      deleteContract(contractId).then((data) => {   
         if (data.data.code === 0) {
           this.$message.success('删除成功！')
           this.getContractList()
@@ -182,7 +183,7 @@ export default {
               .margin70{margin-top: 70px;}s
             </style>
           `)
-          h.document.write(el.outerHTML)
+          h.document.write(el.outerHTML)      
           h.document.close()
           h.print()
           h.close()

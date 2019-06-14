@@ -155,7 +155,6 @@ export default {
     },
   },
   created () {
-    console.log(this.resumeId)
     if (this.resumeId) {
       getResumeById(this.resumeId).then(({ data }) => {
         this.form = this.$mergeByFirst(initForm(), data.data)

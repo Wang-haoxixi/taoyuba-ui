@@ -16,10 +16,10 @@ import emptyRouter from './empty'
 import tmlmsRouter from './tmlms'
 import exceptionRouter from './exception/'
 import certRouter from './cert/'
+import textBookRouter from './textbook'
+import articleRouter from './article'
 import AvueRouter from './avue-router'
 import Store from '../store/'
-import  textBookRouter  from   './textbook'
-
 
 const Router = new VueRouter({
   mode: 'history',
@@ -61,5 +61,6 @@ Router.addRoutes([
   ...tmlmsRouter,
   ...textBookRouter,
   ...certRouter,
+  ...articleRouter,
 ])
 export default Router

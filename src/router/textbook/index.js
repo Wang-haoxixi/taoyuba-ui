@@ -12,6 +12,12 @@ export default [
         component: () => import('@/views/textbook/Page/Detail.vue'),
         meta: noKeepAlive,
       },
+      {
+        path: 'textbook_list',
+        name: '证件代办列表页',
+        component: () => import('@/views/textbook/Page/List.vue'),
+        meta: noKeepAlive,
+      },
     ],
   },
 ]

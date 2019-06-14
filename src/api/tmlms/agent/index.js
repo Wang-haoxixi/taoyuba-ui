@@ -17,7 +17,7 @@ export function saveAgent (data) {
 }
 export function deleteAgent (id) {
     return request({
-        url: `${prefixUrl}/delete?userId=${id}`,
+        url: `${prefixUrl}/remove?userId=${id}`,
         method: 'post',
     })
 }

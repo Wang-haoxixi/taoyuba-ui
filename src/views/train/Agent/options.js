@@ -94,9 +94,6 @@ const rules = {
     { required: true, message: '请填来源', trigger: 'blur' },
     { min: 0, max: 50, message: '长度在 0 到 50 个字符', trigger: 'blur'},
   ],
-  type: [
-    { required: true, message: '请填分类', trigger: 'blur' },
-  ],
   isRcmd: [
     { required: true, message: '请填是否推荐', trigger: 'blur' },
   ],

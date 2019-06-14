@@ -61,10 +61,13 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="上船地点：">
-              <el-select v-model="form.province" placeholder="请选择" style="width: 50%!important" @change="getCity">
+              <el-select v-model="form.province" placeholder="请选择" style="width: 33%!important" @change="getCity">
                 <el-option v-for="item in provinces" prop='province' :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
-              <el-select v-model="form.city" placeholder="请选择" style="width: 50%!important">
+              <el-select v-model="form.town" placeholder="请选择" style="width: 33%!important" @change="getTown">
+                <el-option v-for="item in towns" prop='town' :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+              <el-select v-model="form.city" placeholder="请选择" style="width: 33%!important">
                 <el-option v-for="item in citys" prop='city' :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select> 
             </el-form-item>
@@ -116,6 +119,7 @@ export default {
       rules,
       provinces: [],
       citys: [],
+      towns: [],
       salaryCurrencys: [{
         value: '1',
         label: '人民币（RMB)',
@@ -142,6 +146,7 @@ export default {
         this.form.salary = this.form.salary.toString()
         this.form.hullLength = this.form.hullLength.toString()
         this.selectCity()
+        this.selectTown()
       })
     }
     this.getProvince()
@@ -161,7 +166,7 @@ export default {
     },
     getCity () {
       getArea(this.form.province).then(({ data }) => {
-        this.citys = data.data.map(item=>{
+        this.towns = data.data.map(item=>{
           return {
             label: item.name,
             value: item.areaCode,  
@@ -169,9 +174,31 @@ export default {
         })
       })
       this.form.city = ''
+      this.form.town = ''
+    },
+    getTown () {
+      getArea(this.form.town).then(({data}) => {
+        this.citys = data.data.map(item => {
+          return {
+            label: item.name,
+            value: item.areaCode,
+          }
+        })
+      })
+      this.form.city = ''
     },
     selectCity () {
-        getArea(this.form.province).then(({ data }) => {
+      getArea(this.form.province).then(({ data }) => {
+        this.towns = data.data.map(item=>{
+          return {
+            label: item.name,
+            value: item.areaCode,  
+          }
+        })
+      })
+    },
+    selectTown () {
+      getArea(this.form.town).then(({ data }) => {
         this.citys = data.data.map(item=>{
           return {
             label: item.name,

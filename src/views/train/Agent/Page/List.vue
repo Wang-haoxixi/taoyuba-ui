@@ -1,7 +1,7 @@
 <template>      
   <div>       
     <basic-container>
-      <page-header title="资讯管理"></page-header>
+      <page-header title="服务管理"></page-header>
       <operation-container>
         <template slot="left">
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
@@ -61,16 +61,17 @@ export default {
     },
     handleAdd () {
       this.$router.push({
-        path: '/article_spa/article_post/0',
+        path: '/article_spa/article_agent/0',
       })   
     },
     handleEdit (row) {
       this.$router.push({
-        path: `/article_spa/article_post/${row.articleId}`,
+        path: `/article_spa/article_agent/${row.articleId}`,
       })
     },
-    async loadPage (param = this.searchForm) {    
-       this.loadTable(param, getArticleList)
+    async loadPage (param = this.searchForm) { 
+      param.type = 4
+      this.loadTable(param, getArticleList)
     },
   },
 }
