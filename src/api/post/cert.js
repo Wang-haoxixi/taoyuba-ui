@@ -47,11 +47,12 @@ export function getMyCerts (id) {
   })
 }
 
-export function getCertPage (query) {
+export function getCertPage (query,data) {
   return request ({
     url:`${prefixUrl}/getPage`,
     method: 'get',
     params: query,
+    data:data,
   })
 }
 
@@ -62,3 +63,15 @@ export function deleteCertById (id) {
     data: id,
   })
 }
+
+export  function  getMyPage (params) {
+      return  request({
+        url:`${prefixUrl}/getotherPage`,
+        method:'get',
+        params:params,
+    })  
+}
+
+
+
+

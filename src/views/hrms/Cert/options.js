@@ -57,6 +57,15 @@ const columnsMap = [
     }
   }
 
+
+  const  queryForm = ()  =>{
+      return  {
+            userId:'',
+            certType:'',
+            certName:'',
+      }
+  }
+
   const formToDto = (row) => {
     const newForm = mergeByFirst(initDtoForm(), row)
     return newForm
@@ -103,4 +112,4 @@ const columnsMap = [
     ],
   }
 
-export{ columnsMap, dictsMap, initForm, formToDto, rules, initSearchForm, toDtoSearchForm }
+export{ columnsMap, dictsMap, initForm, formToDto, rules, initSearchForm, toDtoSearchForm,queryForm }
