@@ -248,11 +248,11 @@ import { getShipOwners } from '@/api/mlms/shipowner'
 import { getEmployees } from '@/api/mlms/employee'
 import debounce from 'lodash/debounce'
 
-export default {
+export default {                  
   components: {
     IepDatePicker,
   },
-  data () {
+  data () {         
     this.getShipOwnerList = debounce(this.getShipOwnerList, 800)
     this.getEmployeeList = debounce(this.getEmployeeList, 800)
     return {
@@ -556,7 +556,7 @@ export default {
         this.formData.payMoney = ''
         this.formData.periodTypeName = this.getDictValue(this.periodTypeDict, newVal)
       }
-      if (newVal === 1) {
+      if (newVal === 1) {                         
         this.formData.payComputeType = 1
       } else if (newVal === 2) {
         this.formData.payComputeType = 3
@@ -576,7 +576,7 @@ export default {
         this.formData.payTypeName = this.getDictValue(this.payTypeDict, newVal)
       }
     },
-    'formData.shipAttr': function (newVal, oldVal) {
+    'formData.shipAttr': function (newVal, oldVal) {          
       if (oldVal !== '') {
         this.formData.shipAttrName = this.getDictValue(this.shipAttrDict, newVal)
       }

@@ -359,7 +359,7 @@ export default {
       })
     },
     onGoBack () {
-      this.$router.history.go(-1)
+      this.$router.history.go(-1)       
     },
   },
   watch: {

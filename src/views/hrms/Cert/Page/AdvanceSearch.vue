@@ -14,7 +14,7 @@
     </el-form-item>
   </el-form>
 </template>
-<script>
+<script>        
 import { dictsMap, initSearchForm, toDtoSearchForm } from '../options'
 export default {
   data () {
