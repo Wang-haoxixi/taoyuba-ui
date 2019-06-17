@@ -8,9 +8,9 @@ export function getTraining (query) {
         params: query,
     })
 }
-export function saveTraining (data) {
+export function saveTraining (data,type) {
     return request({
-        url: `${prefixUrl}/create?type=1`,
+        url: `${prefixUrl}/create?type=${type}`,
         method: 'post',
         data: data,
     })
@@ -21,9 +21,9 @@ export function deleteTraining (id) {
         method: 'post',
     })
 }
-export function editTraining (data) {
+export function editTraining (data,type) {
     return request({
-        url: `${prefixUrl}/edit?type=1`,
+        url: `${prefixUrl}/edit?type=${type}`,
         method: 'post',
         data: data,
     })

@@ -186,6 +186,12 @@ getRogionList} from '@/api/post/admin'
 import { getMyCerts } from '@/api/post/cert'
 import { initForm, formToDto, rules, dictsMap, certificateColumns } from '../options'
 // import CertFormTable from '@/views/hrms/AdminCrew/Page/CertFormTable'
+import VueSocketio from 'vue-socket.io'
+import Vue from 'vue'
+Vue.use(new VueSocketio({
+    debug: true,
+    connection: 'http://localhost:5000', //地址+端口，由后端提供
+}))
 export default {
   // components: { CertFormTable },
   data () {

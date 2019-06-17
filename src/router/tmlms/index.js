@@ -89,4 +89,36 @@ export default [
       },
     ],
   },
+  // 个人信息综合
+    {
+      path: '/information',
+      component: Layout,
+      children: [
+        {
+          path: 'detail',
+          name: 'detailIformation',
+          component: () => import('@/views/tmlms/index'),
+          meta: noKeepAlive,
+        },
+      ],
+    },
+      // 船员
+      {
+        path: '/boatMan',
+        component: Layout,
+        children: [
+          {
+            path: 'detail',
+            name: 'detailBoatMan',
+            component: () => import('@/views/tmlms/boatMan/Page/Detail'),
+            meta: noKeepAlive,
+          },
+          {
+            path: '/admin/bostMan',
+            name: 'boatMan',
+            component: () => import('@/views/tmlms/boatMan/index'),
+            meta: noKeepAlive,
+          },
+        ],
+      },
 ]

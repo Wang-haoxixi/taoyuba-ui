@@ -8,9 +8,9 @@ export function getAgent (query) {
         params: query,
     })
 }
-export function saveAgent (data) {
+export function saveAgent (data,type) {
     return request({
-        url: `${prefixUrl}/create?type=1`,
+        url: `${prefixUrl}/create?type=${type}`,
         method: 'post',
         data: data,
     })
@@ -27,9 +27,9 @@ export function detailAgent (id) {
         method: 'get',
     })
 }
-export function editAgent (data) {
+export function editAgent (data,type) {
     return request({
-        url: `${prefixUrl}/edit?type=1`,
+        url: `${prefixUrl}/edit?type=${type}`,
         method: 'post',
         data: data,
     })

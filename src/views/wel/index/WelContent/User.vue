@@ -6,7 +6,7 @@
           <el-col :span="4" class="dotted">
             <div class="left">
               <div class="img">
-                <iep-img-avatar :size="90" :src="userInfo.avatar" alt="头像"></iep-img-avatar>
+                <iep-img-avatar :size="90" :src="userInfo.sysUser.avatar" alt="头像"></iep-img-avatar>
               </div>
               <div class="code-name">{{form.staffId}}</div>
               <el-tooltip class="item" effect="dark" content="资料完善度" placement="top">
@@ -17,11 +17,11 @@
           <el-col :span="20">
             <div class="right">
               <div class="user-poster">
-                <span class="say">{{timeFix}}，{{form.name}}
+                <span class="say">{{timeFix}}，{{userInfo.sysUser.realName}}
                   <iep-identity-mark icon="iep2-iconchengyuan" title="成员"></iep-identity-mark>
                   <span class="welcome-text">
                     <!-- {{welcome}} -->
-                    **渔业轮机长
+                    <span v-for="(item,index) in userInfo.roleName" :key="index" style="margin-left:5px">{{(item !== '游客权限' && userInfo.roleName.length !== 1) || (item === '游客权限' && userInfo.roleName.length === 1) ? item : ''}}</span>
                   </span>
                 </span>
               </div>
@@ -80,20 +80,29 @@
           </el-col>
         </el-row>
       </el-card>
-      <span style="margin:20px"><i class="el-icon-warning"></i>您尚未加入任何角色，<el-button style="color:#0185d8" type="text" @click="openDialog">请选择</el-button></span>
+      <span style="margin:20px" v-if="userInfo.roleName.length === 1"><i class="el-icon-warning"></i>您尚未加入任何角色，<el-button style="color:#0185d8" type="text" @click="openDialog">请选择</el-button></span>
+      <span style="margin:20px" v-else>
+      <i class="el-icon-warning"></i>
+      您已加入
+        <span v-for="(item,index) in userInfo.roleName" :key="index" style="margin-left:5px">
+            {{(item !== '游客权限' && userInfo.roleName.length !== 1) || (item === '游客权限' && userInfo.roleName.length === 1) ? item : ''}}
+        </span>
+      <el-button style="color:#0185d8" type="text" @click="openDialog">请选择</el-button></span>
     </a-spin>
     <el-dialog
       title="选择角色"
       :visible.sync="dialogShow"
       width="80%">
-      <span style="margin:20px"><i class="el-icon-warning"></i>您尚未加入任何角色，请选择</span>
+      <span style="margin:20px"><i class="el-icon-warning"></i>请选择要加入的角色</span>
       <div class="roles">
-        <div class="role" v-for="(item,index) of roleList" :key="index">
-          <el-button @click="changeSelect(index)" style="width:80%;margin:auto" :type="item.select ? 'primary' : 'default'">{{item.name}}<i v-if="item.select" class="el-icon-check el-icon--right"></i></el-button>
-        </div>
+        <template v-for="(item,index) of roleList" >
+          <div class="role" v-if="userInfo.roles.indexOf(item.role) === -1" :key="index">
+            <el-button @click="changeSelect(item.name)" style="width:80%;margin:auto" :type="item.name == select ? 'primary' : 'default'">{{item.name}}</el-button>
+          </div>
+        </template>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogShow = false">确 定</el-button>
+        <el-button type="primary" @click="addUser()">确 定</el-button>
         <el-button @click="dialogShow = false">取 消</el-button>
       </span>
     </el-dialog>
@@ -101,8 +110,9 @@
 </template>
 <script>
 import { getIndex } from '@/api/wel/index'
+import { getUserInfo } from '@/api/login'
 import { timeFix, welcome } from '@/util/text'
-import { mapGetters } from 'vuex'
+import { getObj } from '@/api/admin/role'
 const initIndexForm = () => {
   return {
     name: '', //名字
@@ -124,89 +134,40 @@ export default {
       bodyStyle: {
         padding: 0,
       },
+      userInfo: {
+        sysUser:{},
+        roles:[],
+        roleName:[],
+      },
+      select: '',
       form: initIndexForm(),
       dialogShow: false, //弹窗
       roleList: [
         {
           name: '船员',
           select: false,
+          role: 105,
         },{
           name: '船东',
           select: false,
+          sole: 108,
         },{
-          name: '服务机构',
+          name: '培训机构',
           select: false,
+          role: 110,
         },{
-          name: '船厂',
+          name: '中介',
           select: false,
+          role: 109,
         },{
-          name: '船配',
+          name: '渔村',
           select: false,
-        },{
-          name: '检验师',
-          select: false,
-        },{
-          name: '内勤',
-          select: false,
-        },{
-          name: '电工',
-          select: false,
-        },{
-          name: '船员',
-          select: false,
-        },{
-          name: '船东',
-          select: false,
-        },{
-          name: '服务机构',
-          select: false,
-        },{
-          name: '船厂',
-          select: false,
-        },{
-          name: '船配',
-          select: false,
-        },{
-          name: '检验师',
-          select: false,
-        },{
-          name: '内勤',
-          select: false,
-        },{
-          name: '电工',
-          select: false,
-        },{
-          name: '船员',
-          select: false,
-        },{
-          name: '船东',
-          select: false,
-        },{
-          name: '服务机构',
-          select: false,
-        },{
-          name: '船厂',
-          select: false,
-        },{
-          name: '船配',
-          select: false,
-        },{
-          name: '检验师',
-          select: false,
-        },{
-          name: '内勤',
-          select: false,
-        },{
-          name: '电工',
-          select: false,
+          role: 112,
         },
       ],
     }
   },
   computed: {
-    ...mapGetters([
-      'userInfo',
-    ]),
   },
   created () {
     this.loadPage()
@@ -229,12 +190,51 @@ export default {
     },
     openDialog () {
       this.dialogShow = true
-      console.log(  this.dialogShow)
     },
-    changeSelect (index){
-      this.$set(this.roleList[index],'select',!this.roleList[index].select)
+    // 单选角色
+    changeSelect (name){
+      this.select = name
+    },
+    // 选好角色后新增信息
+    addUser () {
+      if(this.select){
+        switch(this.select) {
+            case '船员':
+                this.$router.push({name: 'detailBoatMan',query: {userId: this.userInfo.sysUser.userId}})
+                break
+            case '船东':
+                this.$router.push({name: 'detailShipowner',query: {userId: this.userInfo.sysUser.userId}})
+                break
+            case '中介':
+                this.$router.push({name: 'detailAgent',query: {userId: this.userInfo.sysUser.userId}})
+                break
+            case '培训机构':
+                this.$router.push({name: 'detailTraining',query: {userId: this.userInfo.sysUser.userId}})
+                break
+            case '渔村':
+                this.$router.push({name: 'detailBvillage',query: {userId: this.userInfo.sysUser.userId}})
+                break
+            default:
+                return false
+        } 
+      }else{
+        this.$message.error('请选择角色!')
+      }
+    },
+    // 获取roles
+    getRole (val) {
+      getObj(val).then(res=>{
+         this.userInfo.roleName.push(res.data.data.roleName)
+      })
     },
     loadPage () {
+      getUserInfo().then(res=>{
+        this.userInfo = res.data.data
+        this.$set(this.userInfo,'roleName',[])
+        this.userInfo.roles.forEach(item=>{
+          this.getRole(item)
+        })
+      })
       this.pageLoading = true
       getIndex().then(({ data }) => {
         this.form = this.$mergeByFirst(initIndexForm(), data.data)

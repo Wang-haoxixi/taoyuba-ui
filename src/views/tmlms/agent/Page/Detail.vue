@@ -17,7 +17,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="联系电话:" prop="phone">
+              <el-form-item label="手机号码:" prop="phone">
                 <el-input v-model="agent.phone" placeholder="" v-if="!$route.query.see"></el-input>
                 <div v-else>{{ agent.phone }}</div>
               </el-form-item>
@@ -47,7 +47,7 @@
         </el-form>
         <div style="text-align:center">
           <el-button @click="save" v-if="!$route.query.see">提交</el-button>
-          <el-button @click="$router.push({path: '/admin/agent'})">返回</el-button>
+          <el-button @click="$router.go(-1)">返回</el-button>
         </div>
     </basic-container>
   </div>
@@ -55,6 +55,7 @@
 <script>
 import { saveAgent, detailAgent, editAgent } from '@/api/tmlms/agent'
 import store from '@/store'
+import { validRegisterUserPhone } from '@/api/login'
 export default {
   data () {
       var checkPhone = (rule, value, callback) => {
@@ -63,7 +64,13 @@ export default {
         } else if (!value.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/)) {
           callback(new Error('请输入正确的手机号码!'))
         } else {
-          callback()
+            validRegisterUserPhone(value).then(res=>{
+              if(res.data.data && this.$route.query.edit){
+                  callback()
+              }else{
+                callback(new Error(res.data.msg))
+              }
+            })
         }
       }
     return {
@@ -101,29 +108,34 @@ export default {
     save () {
       this.$refs['form'].validate((valid) => {
           if (valid) {
+            let type = 1
             if(this.$route.query.edit){
               let data = JSON.parse(JSON.stringify(this.agent))
-              editAgent(data).then(res=>{
+              if(this.$route.query.userId){
+                type = 2
+                data.userId = this.$route.query.userId
+              }
+              editAgent(data,type).then(res=>{
                   this.$message({
                     message: res.data.msg,
                     type: 'success',
                   })
-                  this.$router.push({
-                    path: '/admin/agent',
-                  })  
+                  this.$router.go(-1)  
               }).catch(err=>{
                 this.$message.error(err.message)
               })
             }else {
                 let data = JSON.parse(JSON.stringify(this.agent))
-                saveAgent(data).then(res=>{
+                if(this.$route.query.userId){
+                  type = 2
+                  data.userId = this.$route.query.userId
+                }
+                saveAgent(data,type).then(res=>{
                     this.$message({
                       message: res.data.msg,
                       type: 'success',
                     })
-                    this.$router.push({
-                      path: '/admin/agent',
-                    })  
+                    this.$router.go(-1)  
                 }).catch(err=>{
                   this.$message.error(err.message)
                 })

@@ -17,14 +17,14 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="联系电话:" prop="phone">
+              <el-form-item label="手机号码:" prop="phone">
                 <el-input v-model="training.phone" placeholder="" v-if="!$route.query.see"></el-input>
                 <div v-else>{{ training.deptName }}</div>
               </el-form-item>
             </el-col>
             <el-col :span="24">
               <el-form-item label="机构地址:" prop="address" class="amap-page-container is-required">
-                <el-amap-search-box class="search-box" :search-option="searchOption" :on-search-result="onSearchResult" ></el-amap-search-box>
+                <el-amap-search-box class="search-box training" :search-option="searchOption" :on-search-result="onSearchResult"></el-amap-search-box>
                 <el-amap vid="amapDemo" :center="mapCenter" :zoom="15" class="amap-demo" :plugin="plugin">
                     <el-amap-marker :position="marker"></el-amap-marker>
                 </el-amap>
@@ -34,7 +34,7 @@
         </el-form>
         <div style="text-align:center">
           <el-button @click="save" v-if="!$route.query.see">提交</el-button>
-          <el-button @click="$router.push({path: '/admin/training'})">返回</el-button>
+          <el-button @click="$router.go(-1)">返回</el-button>
         </div>
     </basic-container>
   </div>
@@ -42,15 +42,22 @@
 <script>
 import { saveTraining, editTraining, detailTraining } from '@/api/tmlms/Training'
 import { lazyAMapApiLoaderInstance } from 'vue-amap'
+import { validRegisterUserPhone } from '@/api/login'
 export default {
   data () {
       var checkPhone = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('请输入联系电话'))
+          callback(new Error('请输入手机号码'))
         } else if (!value.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/)) {
           callback(new Error('请输入正确的手机号码!'))
         } else {
-          callback()
+            validRegisterUserPhone(value).then(res=>{
+              if(res.data.data && this.$route.query.edit){
+                  callback()
+              }else{
+                callback(new Error(res.data.msg))
+              }
+            })
         }
       }
     return {
@@ -86,6 +93,7 @@ export default {
     save () {
       this.$refs['form'].validate((valid) => {
           if (valid) {
+            let type = 1
             if(this.$route.query.edit){
               let data = JSON.parse(JSON.stringify(this.training))
               data.lat = this.marker[1]
@@ -97,14 +105,16 @@ export default {
               this.$message.error('地址不能为空!')
               return false
             }
-              editTraining(data).then(res=>{
+              if(this.$route.query.userId){
+                type = 2
+                data.userId = this.$route.query.userId
+              }
+              editTraining(data,type).then(res=>{
                   this.$message({
                     message: res.data.msg,
                     type: 'success',
                   })
-                  this.$router.push({
-                    path: '/admin/training',
-                  })  
+                  this.$router.go(-1)
               }).catch(err=>{
                 this.$message.error(err.message)
               })
@@ -119,14 +129,16 @@ export default {
               this.$message.error('地址不能为空!')
               return false
             }
-              saveTraining(data).then(res=>{
+              if(this.$route.query.userId){
+                type = 2
+                data.userId = this.$route.query.userId
+              }
+              saveTraining(data,type).then(res=>{
                   this.$message({
                     message: res.data.msg,
                     type: 'success',
                   })
-                  this.$router.push({
-                    path: '/admin/training',
-                  })  
+                  this.$router.go(-1)
               }).catch(err=>{
                 this.$message.error(err.message)
               })
@@ -146,14 +158,13 @@ export default {
   created () {
         lazyAMapApiLoaderInstance.load().then(() => {
               setTimeout(()=>{ 
-                  this.show = true 
+                  this.show = true
                   if(this.$route.query.edit || this.$route.query.see){
                   detailTraining(this.$route.query.edit || this.$route.query.see).then( res=>{
-                    console.log(res)
                     this.training = res.data.data
                     document.getElementsByClassName(
-                        'search-box-wrapper'
-                      )[0].childNodes[0].value = this.training.address
+                      'search-box-wrapper'
+                    )[0].childNodes[0].value = this.training.address
                     this.mapCenter = [this.training.lng,this.training.lat]
                     this.marker = [this.training.lng,this.training.lat]
                     this.show = true

@@ -14,7 +14,7 @@
           {{orgText.tipText}}&nbsp;&nbsp;&nbsp;
           <a-icon type="swap" />
         </a-menu-item> -->
-        <a-menu-item @click="$openPage('BaseSettings','name')">
+        <a-menu-item @click="goInfo()">
           个人信息
         </a-menu-item>
         <a-menu-item @click="handleAbout">
@@ -31,6 +31,7 @@
   </div>
 </template>
 <script>
+import { getUserInfo } from '@/api/login'
 import { mapGetters, mapActions } from 'vuex'
 import AboutDialog from './AboutDialog'
 import SelectOrgDialog from './SelectOrgDialog'
@@ -84,6 +85,13 @@ export default {
             this.$message.error(err.message)
           })
         },
+      })
+    },
+    // 根据角色跳转
+    // $openPage('BaseSettings','name')
+    goInfo () {
+      getUserInfo().then(res=>{
+        this.$router.push({name: 'detailIformation',query: {userId: res.data.data.sysUser.userId,edit: res.data.data.sysUser.userId}})
       })
     },
   },

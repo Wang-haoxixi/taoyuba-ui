@@ -8,9 +8,9 @@ export function getVillage (query) {
         params: query,
     })
 }
-export function saveVillage (data) {
+export function saveVillage (data,type) {
     return request({
-        url: `${prefixUrl}/create?type=1`,
+        url: `${prefixUrl}/create?type=${type}`,
         method: 'post',
         data: data,
     })
@@ -21,9 +21,9 @@ export function deleteVillage (id) {
         method: 'post',
     })
 }
-export function editVillage (data) {
+export function editVillage (data,type) {
     return request({
-        url: `${prefixUrl}/edit?type=1`,
+        url: `${prefixUrl}/edit?type=${type}`,
         method: 'post',
         data: data,
     })

@@ -17,7 +17,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="联系电话:" prop="phone">
+              <el-form-item label="手机号码:" prop="phone">
                 <el-input v-model="bvillage.phone" placeholder="" v-if="!$route.query.see"></el-input>
                 <div v-else>{{  bvillage.phone  }}</div>
               </el-form-item>
@@ -36,8 +36,8 @@
             </el-col>
             <el-col :span="24">
               <el-form-item label="渔村地址:" prop="address" class="amap-page-container is-required">
-                <el-amap-search-box class="search-box" :search-option="searchOption" :on-search-result="onSearchResult" ></el-amap-search-box>
-                <el-amap vid="amapDemo" :center="mapCenter" :zoom="15" class="amap-demo" :plugin="plugin">
+                <el-amap-search-box class="search-box bvillage" :search-option="searchOption" :on-search-result="onSearchResult" ></el-amap-search-box>
+                <el-amap vid="amapDemoD" :center="mapCenter" :zoom="15" class="amap-demo" :plugin="plugin">
                     <el-amap-marker :position="marker"></el-amap-marker>
                 </el-amap>
               </el-form-item>
@@ -46,7 +46,7 @@
         </el-form>
         <div style="text-align:center">
           <el-button @click="save">提交</el-button>
-          <el-button @click="$router.push({path: '/admin/bvillage'})">返回</el-button>
+          <el-button @click="$router.go(-1)">返回</el-button>
         </div>
     </basic-container>
   </div>
@@ -56,6 +56,7 @@ import { saveVillage,detailVillage,editVillage } from '@/api/tmlms/bvillage'
 import { getAllArea, getAllAreaName } from '@/api/tmlms/shipowner'
 import { lazyAMapApiLoaderInstance } from 'vue-amap'
 import { getArea } from '@/api/post/address.js'
+import { validRegisterUserPhone } from '@/api/login'
 export default {
   data () {
       var checkPhone = (rule, value, callback) => {
@@ -64,7 +65,13 @@ export default {
         } else if (!value.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/)) {
           callback(new Error('请输入正确的手机号码!'))
         } else {
-          callback()
+            validRegisterUserPhone(value).then(res=>{
+              if(res.data.data && this.$route.query.edit){
+                  callback()
+              }else{
+                callback(new Error(res.data.msg))
+              }
+            })
         }
       }
     return {
@@ -127,27 +134,30 @@ export default {
     save () {
       this.$refs['form'].validate((valid) => {
           if (valid) {
+            let type = 1
             if(this.$route.query.edit){
               let data = JSON.parse(JSON.stringify(this.bvillage))
               data.lat = this.marker[1]
               data.lng = this.marker[0]
               data.villageId = data.villageId[data.villageId.length-1]
               data.address = document.getElementsByClassName(
-              'search-box-wrapper'
-            )[0].childNodes[0].value
+                  'bvillage'
+          )[0].childNodes[0].childNodes[0].value
             if(!data.address){
               this.$message.error('地址不能为空!')
               return false
             }
-              editVillage(data).then(res=>{
+              if(this.$route.query.userId){
+                type = 2
+                data.userId = this.$route.query.userId
+              }
+              editVillage(data,type).then(res=>{
                 console.log(res.data.code)
                   this.$message({
                     message: res.data.msg,
                     type: 'success',
                   })
-                  this.$router.push({
-                    path: '/admin/bvillage',
-                  })  
+                  this.$router.go(-1) 
               }).catch(err=>{
                 this.$message.error(err.message)
               })
@@ -156,22 +166,24 @@ export default {
               data.lat = this.marker[1]
               data.lng = this.marker[0]
               data.villageId = data.villageId[data.villageId.length-1]
-              data.address = document.getElementsByClassName(
-              'search-box-wrapper'
-            )[0].childNodes[0].value
+              data.address =  document.getElementsByClassName(
+                  'bvillage'
+          )[0].childNodes[0].childNodes[0].value
             if(!data.address){
               this.$message.error('地址不能为空!')
               return false
             }
-              saveVillage(data).then(res=>{
+              if(this.$route.query.userId){
+                type = 2
+                data.userId = this.$route.query.userId
+              }
+              saveVillage(data,type).then(res=>{
                 console.log(res.data.code)
                   this.$message({
                     message: res.data.msg,
                     type: 'success',
                   })
-                  this.$router.push({
-                    path: '/admin/bvillage',
-                  })  
+                  this.$router.go(-1)  
               }).catch(err=>{
                 this.$message.error(err.message)
               })
@@ -264,8 +276,8 @@ export default {
           data.villageId = this.arr
           this.bvillage = data
           document.getElementsByClassName(
-              'search-box-wrapper'
-            )[0].childNodes[0].value = this.bvillage.address
+                  'bvillage'
+          )[0].childNodes[0].childNodes[0].value = this.bvillage.address
           this.mapCenter = [this.bvillage.lng,this.bvillage.lat]
           this.marker = [this.bvillage.lng,this.bvillage.lat]
           console.log(this.bvillage)

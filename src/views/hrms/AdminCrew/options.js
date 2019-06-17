@@ -1,5 +1,6 @@
 import { mergeByFirst } from '@/util/util'
 import { initNow } from '@/util/date'
+import { validRegisterUserPhone } from '@/api/login'
 
 const dictsMap = {
   isTrain: {
@@ -129,6 +130,21 @@ const columnsMap = [
       isTrain: 0, //是否需要培训
     }
   }
+  var checkPhone = (rule, value, callback) => {
+    if (value === '') {
+      callback(new Error('请输入联系电话'))
+    } else if (!value.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/)) {
+      callback(new Error('请输入正确的手机号码!'))
+    } else {
+        validRegisterUserPhone(value).then(res=>{
+          if(res.data.data){
+              callback()
+          }else{
+            callback(new Error(res.data.msg))
+          }
+        })
+    }
+  }
   const rules = {
     realName: [
       { required: true, message: '请填写个人姓名', trigger: 'blur' },
@@ -147,6 +163,7 @@ const columnsMap = [
     ],
     phone: [
       { required: true, message: '请填写联系电话', trigger: 'blur' },
+      { validator: checkPhone, trigger: 'blur' },
     ],
   }
 

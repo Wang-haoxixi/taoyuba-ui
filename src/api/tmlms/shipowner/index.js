@@ -8,9 +8,9 @@ export function getShipowner (query) {
         params: query,
     })
 }
-export function saveShipowner (data) {
+export function saveShipowner (data,type) {
     return request({
-        url: `${prefixUrl}/create?type=1`,
+        url: `${prefixUrl}/create?type=${type}`,
         method: 'post',
         data: data,
     })
@@ -33,9 +33,9 @@ export function getAllArea (id) {
         method: 'get',
     })
 }
-export function editShipowner (data) {
+export function editShipowner (data,type) {
     return request({
-        url: `${prefixUrl}/edit?type=1`,
+        url: `${prefixUrl}/edit?type=${type}`,
         method: 'post',
         data: data,
     })
