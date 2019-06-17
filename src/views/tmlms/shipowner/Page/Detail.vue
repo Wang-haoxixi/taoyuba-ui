@@ -72,7 +72,7 @@ export default {
           callback(new Error('请输入正确的手机号码!'))
         } else {
             validRegisterUserPhone(value).then(res=>{
-              if(res.data.data && this.$route.query.edit){
+              if(res.data.data){
                   callback()
               }else{
                 callback(new Error(res.data.msg))

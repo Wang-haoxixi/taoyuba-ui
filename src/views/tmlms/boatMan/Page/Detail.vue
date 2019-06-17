@@ -71,8 +71,8 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                    <el-form-item label="名族" prop="nation">
-                    <el-select v-model="form.nation" placeholder="请输入名族">
+                    <el-form-item label="民族" prop="nation">
+                    <el-select v-model="form.nation" placeholder="请输入民族">
                         <el-option v-for="item in nationals" :key="item.id" :label="item.name" :value="item.name"></el-option>
                     </el-select>
                     </el-form-item> 
@@ -168,7 +168,7 @@
                     </el-form-item>
                 </el-col> -->
                 </el-row>
-                <iep-form-item class="form-half" prop="remark" label-name="备注信息" tip="请输入备注信息">
+                <iep-form-item class="form-half" prop="remark" label-name="备注信息" tip="请输入备注信息" v-if="!$route.query.userId">
                 <iep-input-area v-model="form.remark"></iep-input-area>
                 </iep-form-item>
             </el-form>
@@ -198,7 +198,7 @@ export default {
           callback(new Error('请输入正确的手机号码!'))
         } else {
             validRegisterUserPhone(value).then(res=>{
-              if(res.data.data && this.$route.query.edit){
+              if(res.data.data){
                   callback()
               }else{
                 callback(new Error(res.data.msg))
