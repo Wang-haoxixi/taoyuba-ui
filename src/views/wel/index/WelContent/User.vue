@@ -152,10 +152,6 @@ export default {
           select: false,
           sole: 108,
         },{
-          name: '培训机构',
-          select: false,
-          role: 110,
-        },{
           name: '中介',
           select: false,
           role: 109,
