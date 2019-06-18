@@ -38,7 +38,7 @@ import { getArticleList, delArtilce } from '@/api/article/index'
 import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
-export default {                          
+export default {                                    
   components: {
     advanceSearch,
   },
