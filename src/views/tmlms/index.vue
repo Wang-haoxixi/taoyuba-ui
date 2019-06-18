@@ -1,6 +1,6 @@
 <template>
   <div class="contract-box" style="padding:20px" v-if="show">
-        <div v-if="roles.length > 1">
+        <div v-if="roles !== [2]">
           <h1>编辑信息</h1>
           <el-tabs tab-position="left">
               <el-tab-pane label="船员" v-if="roles.indexOf(105) !== -1"><v-boat></v-boat></el-tab-pane>
