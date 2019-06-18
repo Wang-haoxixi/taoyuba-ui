@@ -15,13 +15,13 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row>                            
           <el-col :span="12">
             <el-form-item label="证书职务：" prop="certTitle">
               <iep-dict-select v-model="form.certTitle" dict-name="tyb_crew_cert_title"></iep-dict-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="12">             
             <el-form-item label="证书编号：" prop="certNo">
               <el-input v-model="form.certNo"></el-input>
             </el-form-item>
@@ -40,10 +40,15 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
-            <iep-form-item prop="certFile" label-name="附件" tip="请上传详细的船员证书">
-                <iep-upload v-model="form.certFile">请上传附件</iep-upload>
-            </iep-form-item>
+          <el-col :span="15">                                                            
+          <el-form-item label="上传证书图片：" prop="certFile">
+              <el-upload
+                class="avatar-uploader" action="/api/admin/file/upload/avatar" :show-file-list="false"
+                :on-success="handleAvatarSuccess" :headers="headers" accept="image/*">
+                <img v-if="form.certFile" :src="form.certFile" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+            </el-form-item>    
           </el-col>
         </el-row>
         <el-form-item label="">

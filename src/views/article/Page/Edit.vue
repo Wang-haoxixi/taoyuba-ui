@@ -30,7 +30,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">            
+          <el-col :span="12">                                           
             <el-form-item label="描述：" prop="description">
               <el-input v-model="form.description"></el-input>
             </el-form-item>
@@ -43,7 +43,7 @@
                 <img v-if="form.image" :src="form.image" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
-            </el-form-item>
+            </el-form-item>                
           </el-col>
         </el-row>
 
@@ -55,8 +55,8 @@
           <iep-froala-editor v-model="form.articleContent"></iep-froala-editor>
         </el-form-item>
 
-        <el-form-item label="">
-          <operation-wrapper>
+        <el-form-item label="">         
+          <operation-wrapper> 
             <iep-button type="primary" @click="handleSubmit">保存</iep-button>
           </operation-wrapper>
         </el-form-item>

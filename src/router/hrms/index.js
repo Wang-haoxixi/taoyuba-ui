@@ -120,6 +120,18 @@ export default [
         component: () => import('@/views/hrms/AdminCrew/Page/List.vue'),
         meta: noKeepAlive,
       },
+      {
+        path: 'village_ship_list/:villageId',                  
+        name: '渔村下渔船列表页',                     
+        component: () => import('@/views/hrms/StandingBook/BoatsFiles/Page/ShipList.vue'),
+        meta: noKeepAlive,
+      },
+      {   
+        path: 'ship_crew_list/:shipId',                        
+        name: '渔船下船员列表页',                     
+        component: () => import('@/views/hrms/StandingBook/BoatsFiles/Page/CrewList.vue'),
+        meta: noKeepAlive,
+      },
     ],
   },
 ]

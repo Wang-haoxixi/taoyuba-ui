@@ -56,7 +56,7 @@ export default {
         path: '/hrms_spa/resume_post/0',
       })      
     },
-    handleEdit (row) {
+    handleEdit (row) {                                                 
       this.$router.push({
         path: `/hrms_spa/resume_post/${row.resumeId}`,
       })    
