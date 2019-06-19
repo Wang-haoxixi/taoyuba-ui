@@ -134,4 +134,16 @@ export default [
       },
     ],
   },
+  {
+    path: '/hrms',
+    component: Layout,
+    children: [
+      {
+        path: 'resume',
+        name: 'resume',
+        component: () => import('@/views/hrms/Resume/index.vue'),
+        meta: noKeepAlive,
+      },
+    ],
+  },
 ]

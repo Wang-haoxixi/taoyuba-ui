@@ -10,6 +10,21 @@ export function getResumePage (query) {
   })
 }
 
+export function getResumeMyCerts (query) {
+  return request({
+    url: `${prefixUrl}/getMyCerts`,
+    method: 'get',
+    params: query,
+  })
+}
+
+export function statusAgent (switchs,resumeId) {
+  return request({
+      url: `${prefixUrl}/review?status=${switchs}&resumeId=${resumeId}`,
+      method: 'post',
+  })
+}
+
 export function deleteResumeById (id) {
   return request({
     url: `${prefixUrl}/delete/` +id,

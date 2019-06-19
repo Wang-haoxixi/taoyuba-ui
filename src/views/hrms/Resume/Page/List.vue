@@ -4,7 +4,7 @@
       <page-header title="求职简历"></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+          <iep-button @click="handleAdd()" type="primary" v-if="userData.roles.indexOf(111) === -1 && userData.roles.indexOf(1) === -1" icon="el-icon-plus" plain>新增</iep-button>
         </template>
         <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -13,6 +13,22 @@
         </template>
       </operation-container>
       <iep-table :isLoadTable="isLoadTable" :pagination="pagination" :dictsMap="dictsMap" :columnsMap="columnsMap" :pagedTable="pagedTable" @size-change="handleSizeChange" @current-change="handleCurrentChange" @selection-change="handleSelectionChange" is-mutiple-selection>
+        <el-table-column
+            prop="status"  
+            label="审核操作"
+            v-if="userData.roles.indexOf(111) !== -1 || userData.roles.indexOf(1) !== -1"
+          >
+          <template slot-scope="scope">
+            <div>
+              <el-switch
+                v-model="scope.row.swith"
+                active-color="#13ce66"
+                @change="getStatus(scope.row.swith,scope.row.resumeId)"
+                inactive-color="#ff4949">
+              </el-switch>
+            </div>
+          </template>
+          </el-table-column>
         <el-table-column prop="operation" label="操作" width="220">
           <template slot-scope="scope">
             <operation-wrapper>
@@ -27,8 +43,9 @@
   </div>
 </template>
 <script>
-import { getResumePage, deleteResumeById} from '@/api/post/resume'
+import { getResumePage, deleteResumeById, getResumeMyCerts,statusAgent } from '@/api/post/resume'
 import AdvanceSearch from './AdvanceSearch'
+import { getUserInfo } from '@/api/login'
 import mixins from '@/mixins/mixins'
 import { dictsMap, columnsMap} from '../options'
 export default {
@@ -39,6 +56,8 @@ export default {
       dictsMap,
       columnsMap,
       searchData: 'realName',
+      userData: {roles: []},
+      pagedTable: [],
     }
   },
   created () {
@@ -64,8 +83,41 @@ export default {
     handleDetail (row) {
       this.$emit('onDetail', row)
     },
+    // 审核
+    getStatus (switchs,userId) {
+      let data = ''
+      if(switchs){
+        data = 1
+      }else{
+        data = 2
+      }
+      statusAgent(data,userId).then( res=>{
+          this.$message({
+            type: 'success',
+            message: res.data.msg,
+          })
+          this.loadPage()
+      })
+    },
     async loadPage (param = this.searchForm) {
-       await this.loadTable(param, getResumePage)
+      this.userData = await getUserInfo().then(res => {
+        return res.data.data
+      })
+      if(this.userData.roles.indexOf(111) === -1 && this.userData.roles.indexOf(1) === -1){
+        let data = await this.loadTable(param, getResumeMyCerts)
+        this.pagedTable = data.records
+      } else {
+        let data = await this.loadTable(param, getResumePage)
+        this.pagedTable = data.records
+        this.pagedTable.forEach( item=>{
+          if(item.resumeStatus === 1){
+            item.swith = true
+          }else{
+            item.swith = false
+          }
+        })
+        console.log
+      }
       //  let dataList = this.loadTable(param, getResumePage)
       //  dataList.then((res) => {
       //    for (let i=0; i< res.records.length; i++) {

@@ -149,7 +149,7 @@ export default {
         },{
           name: '船东',
           select: false,
-          sole: 108,
+          role: 108,
         },{
           name: '中介',
           select: false,
