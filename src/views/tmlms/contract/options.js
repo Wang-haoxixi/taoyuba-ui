@@ -4,8 +4,9 @@ import html2Canvas from 'html2canvas'
 import JsPDF from 'jspdf'
 import request from '@/router/axios'
 const  pdfBaseUrl  = 'http://183.131.134.242:9000/minio/files/'
+const  bucketName  = 'files-'
                                 
-export  function getPdf (contractId) {
+export  function getMyPdf (contractId) {
       var title = 'myContract.pdf'
       //var  fileUrl = '' 
       var flag =  false   
@@ -43,7 +44,8 @@ export  function getPdf (contractId) {
        formdata.append('file',myfile)                                                                                       
        await  uploadFile(formdata).then(({data}) => {           
           console.log(data.data.fileName)
-              contract.fileUrl  = data.data.fileName               
+              contract.fileUrl  = bucketName + data.data.fileName
+              console.log(contract.fileUrl)               
        })             
 
        await   addContractFile(contract).then(({data}) => {
@@ -102,4 +104,32 @@ const   initForm = ()=>{
       fileUrl: '',
   }
 }
+
+export  function  downLoadpdf (fileName) {
+  return  request({
+    url:`/admin/file/${fileName}`,      
+    method:'get',
+})
+}
+
+
+export function downloadFile (fileUrl) {
+  request({
+    url: '/admin/file/' +fileUrl,
+    method: 'get',
+    responseType: 'arraybuffer',
+  }).then(response => {
+    // 处理返回的文件流
+    const blob = new Blob([response.data])
+    const link = document.createElement('a')
+    link.href = window.URL.createObjectURL(blob)
+    link.download = '渔船合同.pdf'
+    document.body.appendChild(link)
+    link.style.display = 'none'
+    link.click()
+  })
+}
+
+
+
 export {initForm}

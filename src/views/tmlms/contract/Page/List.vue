@@ -8,6 +8,8 @@
           <template slot-scope="scope">
             <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">查看
             </el-button>
+            <el-button type="text" icon="el-icon-view" size="mini" @click="handleDown(scope.row.contractId)">下载PDF
+            </el-button>
             <el-button v-if="isShow(mlms_contract_edit, scope.row)" type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.contractId)">编辑
             </el-button>
             <el-button v-if="isShow(mlms_contract_del, scope.row)" type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.contractId)">删除
@@ -30,6 +32,7 @@ import { getUserInfo } from '@/api/login'
 import { mapGetters } from 'vuex'
 import contractPrint from './ContractPrint.vue'
 import Vue from 'vue'    
+import {downloadFile} from '../options'
 
 export default {
   name: 'contract',
@@ -220,6 +223,17 @@ export default {
       getDict('tyb_contract_pay_type').then(({data}) => {
         if (data.code === 0) this.payTypeDict = data.data
       })
+    },    
+    async handleDown (contractId) {
+              await getContract (contractId).then(({data}) => {
+                    if(data.code === 0){
+                            if(data.data.fileUrl === ''){
+                                  this.$message.error('该合同还没有上传pdf文件')
+                            }
+                            downloadFile(data.data.fileUrl)
+                    }
+              })
+              //this.$message.success('下载成功')
     },
   },
 }

@@ -235,7 +235,7 @@
       <div style="text-align: center;padding: 20px 0;">                   
         <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add' || type === 'edit'" type="primary" @click="handleSubmit">保存</iep-button>
         <iep-button :disabeld="false" @click="handleBack">返回</iep-button>     
-        <iep-button :disabeld="false" @click="getPdf()" v-show="type === 'view'" style="margin-left: 30px;">导出PDF</iep-button>            
+        <iep-button :disabeld="false" @click="getMyPdf" v-show="type === 'view'" style="margin-left: 30px;">导出PDF</iep-button>            
       </div>
     </basic-container>
   </div>
@@ -247,6 +247,7 @@ import { getContract, addContract, editContract, getDict } from '@/api/tmlms/con
 import { getShipOwners } from '@/api/mlms/shipowner'
 import { getEmployees } from '@/api/mlms/employee'
 import debounce from 'lodash/debounce'
+import {getMyPdf} from '../options'   
 
 export default {                  
   components: {
@@ -536,6 +537,11 @@ export default {
       this.formData.employeeLinkPhone = contactPhone
       this.formData.employeeName = realName
       this.formData.employeeId = userId
+    },
+    getMyPdf () {
+           getMyPdf(this.record)
+          this.$message.success('上传成功')
+           this.$emit('onGoBack')
     },
   },
   watch: {
