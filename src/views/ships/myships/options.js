@@ -32,7 +32,7 @@ const columnsMap = [
     },
   ]
 
-  const initForm = () => {      
+  const initForm = () => {
     return {
       activityType: '',
       address: '',
