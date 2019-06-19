@@ -4,7 +4,7 @@
       <page-header title="求职简历"></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button @click="handleAdd()" type="primary" v-if="userData.roles.indexOf(111) === -1 && userData.roles.indexOf(1) === -1" icon="el-icon-plus" plain>新增</iep-button>
+          <iep-button @click="handleAdd()" type="primary" v-if="!manager" icon="el-icon-plus" plain>新增</iep-button>
         </template>
         <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -16,7 +16,7 @@
         <el-table-column
             prop="status"  
             label="审核操作"
-            v-if="userData.roles.indexOf(111) !== -1 || userData.roles.indexOf(1) !== -1"
+            v-if="manager"
           >
           <template slot-scope="scope">
             <div>
@@ -32,7 +32,7 @@
         <el-table-column prop="operation" label="操作" width="220">
           <template slot-scope="scope">
             <operation-wrapper>
-              <iep-button type="warning" plain @click="handleEdit(scope.row)">编辑</iep-button>
+              <iep-button type="warning" plain @click="handleEdit(scope.row)" v-if="!manager">编辑</iep-button>
               <iep-button @click="handleDetail(scope.row)">查看</iep-button>
               <iep-button type="default" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
             </operation-wrapper>
@@ -58,6 +58,7 @@ export default {
       searchData: 'realName',
       userData: {roles: []},
       pagedTable: [],
+      manager: true,
     }
   },
   created () {
@@ -99,6 +100,7 @@ export default {
           this.loadPage()
       })
     },
+    // 调取接口
     async loadPage (param = this.searchForm) {
       this.userData = await getUserInfo().then(res => {
         return res.data.data
@@ -106,9 +108,13 @@ export default {
       if(this.userData.roles.indexOf(111) === -1 && this.userData.roles.indexOf(1) === -1){
         let data = await this.loadTable(param, getResumeMyCerts)
         this.pagedTable = data.records
+        this.manager = false
+        columnsMap.splice(0,1)
       } else {
         let data = await this.loadTable(param, getResumePage)
         this.pagedTable = data.records
+        this.manager = true
+        // 需要给switch一个字段识别
         this.pagedTable.forEach( item=>{
           if(item.resumeStatus === 1){
             item.swith = true
@@ -116,7 +122,6 @@ export default {
             item.swith = false
           }
         })
-        console.log
       }
       //  let dataList = this.loadTable(param, getResumePage)
       //  dataList.then((res) => {
