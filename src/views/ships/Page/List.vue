@@ -4,7 +4,7 @@
       <page-header title="渔船管理"></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+          <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain v-if="!manager">新增</iep-button>
         </template>
         <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -24,7 +24,7 @@
         <el-table-column prop="operation" label="操作" width="220">
           <template slot-scope="scope">
             <operation-wrapper>
-              <iep-button plain @click="handleEdit(scope.row.shipId)">编辑</iep-button>
+              <iep-button plain @click="handleEdit(scope.row.shipId)" v-if="!manager">编辑</iep-button>
               <iep-button @click="handleView(scope.row.shipId)">查看</iep-button>
               <iep-button type="warning" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
             </operation-wrapper>
@@ -35,10 +35,11 @@
   </div>
 </template>
 <script>
-import { getShipList, deleteShip } from '@/api/ships'
+import { getShipList, deleteShip, getMyShipList } from '@/api/ships'
 import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
+import { getUserInfo } from '@/api/login'
 export default {
   components: {
     advanceSearch,
@@ -48,6 +49,7 @@ export default {
     return {
       columnsMap,
       searchData: 'contactName',
+      manager: false,
     }
   },
   created () {
@@ -76,7 +78,18 @@ export default {
       })
     },
     async loadPage (param = this.searchForm) {
-       this.loadTable(param, getShipList)
+      this.userData = await getUserInfo().then(res => {
+        return res.data.data
+      })
+      if(this.userData.roles.indexOf(111) === -1 && this.userData.roles.indexOf(1) === -1){
+        let data = await this.loadTable(param, getMyShipList)
+        this.pagedTable = data.records
+        this.manager = false
+      } else {
+        let data = await this.loadTable(param, getShipList)
+        this.pagedTable = data.records
+        this.manager = true
+      }
     },
   },
 }

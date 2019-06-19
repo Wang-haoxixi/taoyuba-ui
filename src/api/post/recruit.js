@@ -10,6 +10,14 @@ export function getRecruitPage (query) {
   })
 }
 
+export function getMyRecruitPage (query) {
+  return request ({
+    url:`${prefixUrl}/mypage`,
+    method: 'get',
+    params: query,
+  })
+}
+
 export function deleteRecruitById (id) {
   return request({
     url: `${prefixUrl}/` +id,

@@ -46,6 +46,13 @@ export function getRogionList (pid) {
   })
 }
 
+export function getMyShipList (params) {
+  return request({
+    url: `${prefixUrl}/mypage`,
+    method: 'get',
+    params: params,
+  })
+}    
 
 
 

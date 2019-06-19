@@ -4,7 +4,7 @@
       <page-header title="求职简历"></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button @click="handleAdd()" type="primary" v-if="!manager" icon="el-icon-plus" plain>新增</iep-button>
+          <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
         <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -32,7 +32,7 @@
         <el-table-column prop="operation" label="操作" width="220">
           <template slot-scope="scope">
             <operation-wrapper>
-              <iep-button type="warning" plain @click="handleEdit(scope.row)" v-if="!manager">编辑</iep-button>
+              <iep-button type="warning" plain @click="handleEdit(scope.row)">编辑</iep-button>
               <iep-button @click="handleDetail(scope.row)">查看</iep-button>
               <iep-button type="default" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
             </operation-wrapper>
@@ -109,7 +109,9 @@ export default {
         let data = await this.loadTable(param, getResumeMyCerts)
         this.pagedTable = data.records
         this.manager = false
-        columnsMap.splice(0,1)
+        if(columnsMap[0].label === '姓名'){
+          columnsMap.splice(0,1)
+        }
       } else {
         let data = await this.loadTable(param, getResumePage)
         this.pagedTable = data.records

@@ -27,10 +27,11 @@
   </div>
 </template>
 <script>
-import { getRecruitPage, deleteRecruitById} from '@/api/post/recruit'
+import { getRecruitPage, deleteRecruitById,getMyRecruitPage} from '@/api/post/recruit'
 import AdvanceSearch from './AdvanceSearch'
 import mixins from '@/mixins/mixins'
 import { columnsMap, dictsMap } from '../options'
+import { getUserInfo } from '@/api/login'
 export default {
   components: { AdvanceSearch },
   mixins: [mixins],
@@ -42,7 +43,7 @@ export default {
     }
   },
   created () {
-    this.loadPage(this.query)
+    this.loadPage()
   },
   methods: {
     handleSelectionChange (val) {
@@ -65,7 +66,26 @@ export default {
       this.$emit('onDetail', row)
     },
     async loadPage (param = this.searchForm) {
-       await this.loadTable(param, getRecruitPage)
+      this.userData = await getUserInfo().then(res => {
+        return res.data.data
+      })
+      if(this.userData.roles.indexOf(111) === -1 && this.userData.roles.indexOf(1) === -1){
+        let data = await this.loadTable(param, getMyRecruitPage)
+        this.pagedTable = data.records
+        this.manager = false
+      } else {
+        let data = await this.loadTable(param, getRecruitPage)
+        this.pagedTable = data.records
+        this.manager = true
+        // 需要给switch一个字段识别
+        // this.pagedTable.forEach( item=>{
+        //   if(item.resumeStatus === 1){
+        //     item.swith = true
+        //   }else{
+        //     item.swith = false
+        //   }
+        // })
+      }
     },
   },
 }

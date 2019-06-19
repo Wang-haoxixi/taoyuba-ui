@@ -14,4 +14,16 @@ export default [
       },
     ],
   },
+  {
+    path: '/ship_spa',
+    component: Layout,
+    children: [
+      {
+        path: '/wel/ship',
+        name: 'ships',
+        component: () => import('@/views/ships/index.vue'),
+        meta: noKeepAlive,
+      },
+    ],
+  },
 ]

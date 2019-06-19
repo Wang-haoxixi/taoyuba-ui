@@ -26,6 +26,7 @@
 
 <script>
 import { getContractList, deleteContract, getContract, getDict } from '@/api/tmlms/contract'
+import { getUserInfo } from '@/api/login'
 import { mapGetters } from 'vuex'
 import contractPrint from './ContractPrint.vue'
 import Vue from 'vue'    
@@ -96,21 +97,32 @@ export default {
   methods: {
     isShow (flag, contract) {
       let user = this.$store.getters.userInfo
+      console.log(user)
       return flag && (user.userId === contract.userId || user.userId === contract.shipownerId || user.userId === contract.employeeId)
     },
     getContractList () {
       let params = Object.assign({}, this.params)
-      let userId = this.$store.getters.userInfo.user
-      params.userId = userId
-      params.shipownerId = userId
-      params.employeeId = userId
-      getContractList(params).then(({data}) => {
-        if (data.code === 0) {
-          this.contractList = data.data.records
-          this.total = data.data.total
+      // let userId = this.$store.getters.userInfo.user
+      // console.log(this.$store.getters.userInfo.user)
+      // params.userId = userId
+      // params.shipownerId = userId
+      // params.employeeId = userId
+      getUserInfo().then(res => {
+        if(res.data.data.roles.indexOf(111) !== -1 || res.data.data.roles.indexOf(1) !== -1){
+          params = {}
+        } else {
+          params.userId = res.data.data.sysUser.userId
+          params.shipownerId = res.data.data.sysUser.userId
+          params.employeeId = res.data.data.sysUser.userId
         }
-      }, (error) => {
-        this.$message.error(error.message)
+        getContractList(params).then(({data}) => {
+          if (data.code === 0) {
+            this.contractList = data.data.records
+            this.total = data.data.total
+          }
+        }, (error) => {
+          this.$message.error(error.message)
+        })
       })
     },
     currentChange (current) {
