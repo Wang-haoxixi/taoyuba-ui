@@ -58,10 +58,10 @@ export default {
         getVillageDetail(id).then(({data}) => {          
               if(data.code === 0){
                 let  villageId = data.data.villageId
-                console.log(villageId)
                 this.$router.push({         
                     path: `/hrms_spa/village_ship_list/${villageId}`,
                   })
+
               }
         })
     },

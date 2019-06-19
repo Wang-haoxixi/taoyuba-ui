@@ -74,3 +74,6 @@ export function putPosition (obj) {
     data: obj,
   })
 }
+
+
+
