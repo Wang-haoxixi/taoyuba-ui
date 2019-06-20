@@ -229,7 +229,7 @@
           <el-input maxlength="200" type="textarea" v-model="formData.workContent"></el-input>
         </el-form-item>
         <el-form-item label="特别约定">
-          <el-input maxlength="200" type="content" v-model="formData.content"></el-input>
+          <el-input maxlength="200" type="textarea" v-model="formData.content"></el-input>
         </el-form-item>
       </el-form>
       <div style="text-align: center;padding: 20px 0;">                   
