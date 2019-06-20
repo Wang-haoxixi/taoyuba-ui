@@ -56,4 +56,40 @@ export default [
       },
     ],
   },
+  {
+    path: '/receiveResume',
+    component: Layout,
+    children: [
+      {
+        path: 'detail',
+        name: 'receiveResumeDetail',
+        component: () => import('@/views/mlms/ReceivedJob/Page/Detail.vue'),
+        meta: noKeepAlive,
+      },
+      {
+        path: '/wel/receiveResume',
+        name: 'receiveResume',
+        component: () => import('@/views/mlms/ReceivedJob/index.vue'),
+        meta: noKeepAlive,
+      },
+    ],
+  },
+  {
+    path: '/myJob',
+    component: Layout,
+    children: [
+      {
+        path: 'detail',
+        name: 'myJobDetail',
+        component: () => import('@/views/mlms/myJob/Page/Detail.vue'),
+        meta: noKeepAlive,
+      },
+      {
+        path: '/wel/myjob',
+        name: 'myjob',
+        component: () => import('@/views/mlms/myJob/index.vue'),
+        meta: noKeepAlive,
+      },
+    ],
+  },
 ]
