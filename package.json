@@ -92,9 +92,9 @@
     "not ie <= 10"
   ],
   "repository": {
-    "name": "IEP 2.0.0",
-    "team": "国脉集团研发中心—内网突击队",
+    "name": "TYB 1.0.0",
+    "team": "淘渔吧研发小组",
     "changelogurl": "http://115.233.227.46:8066/root/iep-ui/blob/develop/CHANGELOG.md",
-    "description": "国脉内网2.0项目"
+    "description": "淘渔吧项目"
   }
 }
