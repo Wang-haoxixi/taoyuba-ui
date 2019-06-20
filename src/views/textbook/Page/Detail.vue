@@ -45,12 +45,16 @@
                 <el-input   v-model="form.author"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="教材内容" prop="content">                                                                                          
               <el-input   type="textarea" v-model="form.content"></el-input>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
+        
+        <el-form-item label="教材内容：" prop="content">
+          <iep-froala-editor v-model="form.content"></iep-froala-editor>
+        </el-form-item>
 
         <el-form-item label="" v-if="type !== 'view'">
           <operation-wrapper>
