@@ -25,7 +25,7 @@
           <span class="sub-menu" @click="open(name='fish')">渔获</span>
         </el-menu-item>
         <el-menu-item>
-          <span class="sub-menu" @click="open(name='mall')">商场</span>
+          <span class="sub-menu" @click="open(name='mall')">商城</span>
         </el-menu-item>
         <el-menu-item>
           <span class="sub-menu" @click="open(name='article')">资讯</span>
