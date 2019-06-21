@@ -13,6 +13,7 @@ import { mapGetters } from 'vuex'
 import NavTab from './NavTab'
 import NavContent from './contractContent'
 import { getContractList } from '@/api/tmlms/contract/index'
+import { getUserInfo } from '@/api/login'
 const detailUrlMap = {
   approval: '/hrms_spa/approval_detail',
   instruction: '/mlms_spa/email/detail',
@@ -63,13 +64,22 @@ export default {
       })
     },
     tab (val) {
-      console.log('val',val)
-      getContractList({size:5}).then(({ data }) => {
-        this.contentData = data.data.records.map(m => {
-          return {
-            ...m,
-            type: val,
-          }
+      getUserInfo().then((data) => {
+        let userId = ''
+        let params = {}
+        userId = data.data.data.sysUser.userId             
+        if (userId === 1) {
+          params = {size:5}
+        } else {
+          params = {size:5, userId:userId}
+        }
+        getContractList(params).then(({ data }) => {
+          this.contentData = data.data.records.map(m => {
+            return {
+              ...m,
+              type: val,
+            }
+          })
         })
       })
     },
