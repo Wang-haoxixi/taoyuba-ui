@@ -152,6 +152,17 @@ export function updateSave (params) {
     })
 }
 
+/**
+ * 点击修改按钮
+ */
+export function getExamMsg (params) {
+    return request({
+        url: 'exms/iepitembank/getById',
+        method: 'get',
+        params: params,
+    })
+}
+
 
 
 /**

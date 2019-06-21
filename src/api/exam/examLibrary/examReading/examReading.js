@@ -39,7 +39,7 @@ export function deleteById (id) {
   
 
 /**
- *根据id判断是否可以进行笔试阅卷
+ *点击笔试阅卷先判断是否可以进行笔试阅卷
  */
 export function judgeWrittenById (id) {
     return request({
@@ -73,24 +73,55 @@ export function passChoiceById (params) {
 }
 
 /**
+ * 根据id获取面试信息
+ */
+export function getInterviewById (id) {
+  return request({
+    url: `/exms/grade/face/${id}`,
+    method: 'get',
+  })
+}
+
+/**
  * 提交面试表单
  */
 export function passInterviewById (params) {
     return request({
-      url: 'exms',
+      url: '/exms/grade/face/save',
       method: 'post',
       data: params,
     })
 }
 
 /**
- * 发放证书
+ * 根据id获取阅卷进度列表信息
+ */
+export function getPaperProcessById (id) {
+  return request({
+    url: `/exms/grade/examiner/${id}`,
+    method: 'get',
+  })
+}
+
+/**
+ * 列表里的发放证书
  */
 export function sendCertificateById (params) {
   return request({
-    url: 'exms',
+    url: 'exms/iepcertificate/grantone',
     method: 'post',
-    data: params,
+    params: params,
+  })
+}
+
+/**
+ * 阅卷进度里的发放证书
+ */
+export function sendCertificateAllById (params) {
+  return request({
+    url: '/exms/iepcertificate/grantall',
+    method: 'post',
+    params: params,
   })
 }
 
@@ -99,9 +130,9 @@ export function sendCertificateById (params) {
  */
 export function rollingPaperById (params) {
   return request({
-    url: 'exms',
+    url: '/exms/grade/rolling',
     method: 'post',
-    data: params,
+    params: params,
   })
 }
 
@@ -110,9 +141,9 @@ export function rollingPaperById (params) {
  */
 export function  overPapersById (params) {
   return request({
-    url: 'exms',
+    url: '/exms/grade/done',
     method: 'post',
-    data: params,
+    params: params,
   })
 }
 

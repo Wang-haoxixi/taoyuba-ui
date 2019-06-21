@@ -25,7 +25,7 @@
                   <el-card class="module-item" v-for="(item,index) in moduleList" :key="index" shadow="hover">
                     <div class="content">
                       <div class="img">
-                        <img :src="item.img" alt="">
+                        <iep-img :src="item.img" alt=""></iep-img>
                       </div>
                       <div class="message">
                         <span class="title" style="font-size:15px;font-weight:bold;">{{item.title}}</span>

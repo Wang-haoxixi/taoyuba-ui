@@ -7,7 +7,7 @@
             :value="item.id"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="名称" prop="title">
+      <el-form-item label="名称：" prop="title">
         <el-input :maxlength="80" v-model="form.title"></el-input>
       </el-form-item>
       <el-form-item label="级别：" prop="level">
@@ -29,19 +29,32 @@
       </el-form-item>
     </el-form>
     <template slot="footer">
-      <iep-button type="primary" @click="loadData('form')" v-if="`${methodName==='上传'}`">确定</iep-button>
+      <iep-button type="primary" @click="loadData('form')" v-if="methodName==='上传'">确定</iep-button>
       <iep-button type="primary" @click="submitForm('form')" v-else>提交</iep-button>
       <iep-button @click="loadPage">取消</iep-button>
     </template>
   </iep-dialog>
 </template>
 <script>
+import { validCertificateTitle } from '@/api/exam/review'
 import { getTestOption } from '@/api/exam/createExam/newTest/newTest'
 import { getOrgList } from '@/api/admin/org'
 import { initForm } from './options'
 export default {
   name: 'DialogForm',
   data () {
+    var checkTitle = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('标题不能为空'))
+      }
+      validCertificateTitle({ title: value }).then(res => {
+        if (this.title != value && res.data.data === true) {
+          callback(new Error('标题重复，已存在。'))
+        } else {
+          callback()
+        }
+      })
+    }
     return {
       dialogShow: false,
       formRequestFn: () => { },
@@ -50,8 +63,9 @@ export default {
       limit: 1,
       res: {},
       resdata: {},
+      title: '',
       rules: {
-        title: [{ required: true, message: '请输入名称', trigger: 'blur' }],
+        title: [{ required: true, validator: checkTitle, trigger: 'blur' }],
         field: [{ required: true, message: '请选择科目', trigger: 'blur' }],
         level: [{ required: true, message: '请选择级别', trigger: 'blur' }],
         deptId: [{ required: true, message: '请选择颁发机构', trigger: 'blur' }],

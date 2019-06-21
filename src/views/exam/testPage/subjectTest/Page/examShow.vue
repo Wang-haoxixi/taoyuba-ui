@@ -5,22 +5,14 @@
       <el-form :model="searchForm">
         <el-form-item label="科目：" prop="field">
           <el-radio-group size="small" v-model="searchForm.field" style="width: 90%;">
-            <el-radio-button
-              v-for="item in res.exms_subjects"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-              @change.native="handleSubject (item)">
+            <el-radio-button v-for="item in res.exms_subjects" :key="item.value" :label="item.label"
+              :value="item.value" @change.native="handleSubject (item)">
             </el-radio-button>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="状态：" prop="states" class="statesShow">
           <el-radio-group size="small" v-model="searchForm.states">
-            <el-radio-button
-              v-for="item in states"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+            <el-radio-button v-for="item in states" :key="item.value" :label="item.label" :value="item.value"
               @change.native="handleStates (item)">
             </el-radio-button>
           </el-radio-group>
@@ -32,73 +24,101 @@
             <template v-if="activeTab ==='testRecordTab'" v-slot:testRecordTab>
               <div class="record">
                 <div class="module">
-                  <el-card class="module-item" v-for="(item,index) in testListRes" :key="index" shadow="hover">
+                  <el-card class="module-item" v-for="(item,index) in testListRes" :key="index"
+                    shadow="hover">
                     <div class="content">
                       <div class="img">
                         <img src="../img/1.jpg" alt="">
                       </div>
-                      <div class="message">
+                      <div class="message" style="overflow: hidden; padding-bottom: 10px;">
                         <span class="title" style="font-size:15px;font-weight:bold;">{{item.title}}</span>
-                        <div class="detail" v-if="item.examStatus === 5">
+
+                        <div class="detail" style="margin-bottom: 4px">
+                          <template v-if="item.examStatus === 5">
+                            <span style="float:left;width: 40%;">报名日期</span>
+                            <span class="timeShow">{{registDate(item)}}</span>
+                          </template>
+                          <template v-else>
+                            <span style="float:left;width: 40%;">考试日期</span>
+                            <span class="timeShow">{{examDate(item)}}</span>
+                          </template>
+                        </div>
+
+                        <!-- <div class="detail" v-if="item.examStatus === 5" style="margin-bottom: 4px">
                           <span style="float:left;width: 40%;">报名日期</span>
-                          <span class="timeShow">{{item.signBeginTime.substr(0,10)}} ~ {{item.signEndTime.substr(0,10)}}</span>
+                          <span class="timeShow">{{registDate(item)}}</span>
                         </div>
 
-                        <div class="detail" v-if="item.examStatus === 1 || item.examStatus === 0 || item.examStatus === 4 || item.examStatus === 2 || item.examStatus === 7">
+                        <div class="detail" v-if="item.examStatus === 1 || item.examStatus === 0 || item.examStatus === 4 || item.examStatus === 2 || item.examStatus === 7"
+                          style="margin-bottom: 4px">
                           <span style="float:left;width: 40%;">考试日期</span>
-                          <span class="timeShow">{{item.beginTime.substr(0,10)}} ~ {{item.endTime.substr(0,10)}}</span>
+                          <span class="timeShow">{{examDate(item)}}</span>
+                        </div> -->
+
+                        <!-- <div v-if="item.examStatus !== 1 && item.examStatus !== 2 && item.examStatus !== 3 && item.examStatus !== 4"
+                          class="title" style="float:left;">已有 {{item.totalEnrollment}} 人报名</div>
+                        <div v-if="item.examStatus === 2 || item.examStatus === 3" class="title"
+                          style="float:left;">已有 {{item.totalExam}} 人完成考试</div> -->
+
+                        <div class="detail" style="float:left">
+                          <span v-if="item.examStatus === 2 || item.examStatus === 3 || item.examStatus === 4 || item.examStatus === 7 || item.examStatus === 8">
+                            <em>{{item.totalExam}}</em>人完成
+                          </span>
+                          <span v-else><em>{{item.totalEnrollment}}</em>人报名</span>
                         </div>
 
-                        <div v-if="item.examStatus !== 1 && item.examStatus !== 2 && item.examStatus !== 4" class="title" style="float:left;">已有 {{item.totalEnrollment}} 人报名</div>
-                        <div v-if="item.examStatus === 2" class="title" style="float:left;">已有 {{item.totalExam}} 人完成考试</div>
-                        <div class="title" style="float:right;text-align:right;">
-                          <div v-if="item.examStatus === 0 && item.status !== 1">
+                        <div class="title" style="float:right;margin:0">
+                          <div v-if="item.status !== 1 && item.examStatus === 7  && item.status!==3">
                             <div class="circleG"></div>
                             <div class="states">已报名</div>
                           </div>
-                          
-                          <div v-if="item.status === 1">
+
+                          <div v-if="(item.status === 1 && item.examStatus === 7) || item.examStatus === 0">
                             <div class="circleR"></div>
                             <div class="states">进行中</div>
                           </div>
 
-                          <div v-if="item.examStatus === 5">
+                          <div v-if="item.examStatus === 5 && item.status!==3">
                             <div class="circleY"></div>
                             <div class="states">未报名</div>
                           </div>
 
-                          <div v-if="item.examStatus === 4">
+                          <div v-if="item.status === 3 ">
                             <div class="circleGray"></div>
                             <div class="states">已结束</div>
                           </div>
 
-                          <div v-if="item.examStatus === 2">
+                          <div v-if="item.examStatus === 2 && item.status!==3">
                             <div class="circleB"></div>
                             <div class="states">已完成</div>
+                          </div>
+
+                          <div v-if="item.examStatus === 1 && item.status === 1 && item.status!==3">
+                            <div class="circleR"></div>
+                            <div class="states">已撤销考试资格</div>
                           </div>
 
                         </div>
                       </div>
                       <div class="handleButton">
-                        <iep-button type="primary" @click="handleStart(item)" v-if="item.status === 1 && item.examStatus === 7">开始考试</iep-button>
-                        <iep-button type="primary" @click="handleSign(item)" v-if="item.status === 0 && item.examStatus === 5">开始报名</iep-button>
-                        <iep-button type="primary" disabled v-if="item.examStatus === 0 && item.status === 0 ">等待考试</iep-button>
-                        <iep-button type="primary" disabled v-if="item.status === 2 && item.examStatus === 5">报名结束</iep-button>
-                        <iep-button type="primary" disabled v-if="item.examStatus === 4">考试结束</iep-button>
-                        <iep-button type="primary" disabled v-if="item.examStatus === 2">考试完成</iep-button>
-                        <iep-button type="primary" disabled v-if="(item.examStatus === 0 && item.status === 1) || (item.examStatus === 0 && item.status !== 1)">报名审核中</iep-button>
+                        <iep-button type="primary" @click="handleStart(item)" v-if="item.status === 1 && item.examStatus === 7 && item.status!==3">开始考试</iep-button>
+                        <iep-button type="success" @click="handleSign(item)" v-if="item.status === 0 && item.examStatus === 5 && item.status!==3">开始报名</iep-button>
+                        <iep-button type="primary" disabled v-if="item.status !== 1 && item.examStatus === 7 && item.status!==3">等待考试</iep-button>
+                        <iep-button type="info" disabled v-if="item.status === 2 && item.examStatus === 5 && item.status!==3">报名结束</iep-button>
+                        <iep-button type="info" disabled v-if="item.status === 3 && item.examStatus !== 8 ">考试结束</iep-button>
+                        <iep-button type="info" disabled v-if="item.examStatus === 2 && item.status!==3">考试完成</iep-button>
+                        <iep-button type="success" disabled v-if="item.examStatus === 0 && item.status!==3">报名审核中</iep-button>
+                        <iep-button type="danger" disabled v-if="item.examStatus === 1 && item.status === 1 && item.status!==3">报名审核不通过</iep-button>
+                        <iep-button type="info" disabled v-if="item.examStatus === 3 && item.status!==3">已交卷</iep-button>
+                        <iep-button type="primary" v-if="item.examStatus === 8 " @click="handleExamine(item)">查看成绩</iep-button>
                       </div>
                     </div>
                   </el-card>
                 </div>
                 <div class="pagination">
-                  <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="paginationOption.current"
-                    :page-sizes="[12, 16, 20, 24]"
-                    :page-size="paginationOption.size"
-                    layout="total, sizes, prev, pager, next, jumper"
+                  <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                    :current-page.sync="paginationOption.current" :page-sizes="[12, 16, 20, 24]"
+                    :page-size="paginationOption.size" layout="total, sizes, prev, pager, next, jumper"
                     :total="paginationOption.total">
                   </el-pagination>
                 </div>
@@ -136,7 +156,7 @@ export default {
         { value: null, label: '全部' },
         { value: 0, label: '已报名' },
         { value: 1, label: '进行中' },
-        { value: 2, label: '已完成' },
+        { value: 8, label: '已完成' },
         { value: 3, label: '批卷中' },
         { value: 4, label: '已结束' },
         { value: 5, label: '未报名' },
@@ -177,6 +197,24 @@ export default {
     this.getList()
   },
   methods: {
+    /**
+     * 报名时间
+     */
+    registDate (item) {
+      return `${this.dateFormat(item.signBeginTime)} - ${this.dateFormat(item.signEndTime)}`
+    },
+    /**
+     * 考试时间
+     */
+    examDate (item) {
+      return `${this.dateFormat(item.beginTime)} - ${this.dateFormat(item.endTime)}`
+    },
+    /**
+     * 格式化日期
+     */
+    dateFormat (date) {
+      return date.substr(0, 10).replace(/-/g, '/')
+    },
     handleSizeChange (val) {
       this.paginationOption.size = val
       this.load()
@@ -284,6 +322,13 @@ export default {
       this.$refs['SignDialog'].consume = item.consume
       this.$refs['SignDialog'].examId = item.id
     },
+
+    /**
+     * 查看成绩
+     */
+    handleExamine (item) {
+      this.$emit('onExamine', item)
+    },
     /**
      * 报名成功重新加载
      */
@@ -364,7 +409,7 @@ export default {
   position: absolute;
   width: 10px;
   height: 10px;
-  background: yellow;
+  background: #67c23a;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
@@ -396,11 +441,11 @@ export default {
     }
   }
   .handleButton {
-    padding: 50px 0;
+    line-height: 98px;
     text-align: center;
     display: none;
     width: 100%;
-    height: 100px;
+    height: 98px;
   }
   .title {
     display: block;

@@ -7,7 +7,8 @@
         <iep-button class="empty" @click="handleEmpty" v-show="sumValue != 0">清空</iep-button>
       </template>
       <template slot="right">
-        <operation-search @search-page="searchPage">
+        <operation-search @search-page="searchPage" prop="title">
+          <!-- <advance-search @search-page="searchPage"></advance-search> -->
         </operation-search>
       </template>
     </operation-container>
@@ -93,7 +94,7 @@ export default {
       // console.log('val => ',val)
       var str = new Array()
       str = val.split('-')
-      return str[0] + ' : ' + str[1]
+      return str[0] + ' 分 ' + str[1] + ' 秒'
     },
   },
   created () {
@@ -103,11 +104,11 @@ export default {
     /**
      * 获取列表分页数据
      */
-    loadPage () {
-      const param = {
+    loadPage (param) {
+      const params = {
         examinationId: this.record.row.id,
       }
-      this.loadTable({...param}, getExamPaperList)
+      this.loadTable({...param, ...params}, getExamPaperList)
     },
 
     /**

@@ -36,3 +36,15 @@ export function postSign (params) {
         data: params,
     })
 }
+
+/**
+ * 查看考试
+ * @param {Object} params 参数
+ */
+export function getResultInfo (params) {
+    return request({
+        url: 'exms/examer/resultinfo',
+        method: 'get',
+        params: params,
+    })
+}

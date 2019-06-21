@@ -56,6 +56,7 @@ export default {
      */
     handleDialogCancel (){
       this.dialogShow = false
+      this.form.qualificationsurl = ''
     },
     handleSignConfigCancel (){
       this.dialogConfigShow = false

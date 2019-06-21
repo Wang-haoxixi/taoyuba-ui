@@ -7,7 +7,7 @@
       <span class="title-two">{{resdata.fieldName}}</span>
     </div>
 
-    <div class="examShow">
+    <div class="examShow" v-loading="loading">
       <div class="left">
         <span style="font-size: 20px;"><b>{{resdata.questionTypeName}}</b></span>
         <span class="title">共 {{resdata.kindTotalNum}} 题，合计 {{resdata.kindMark}} 分，已完成 {{kindOffCount}} / {{resdata.kindTotalNum}}</span>
@@ -24,7 +24,7 @@
           <div v-if="resdata.questionTypeName ==='单选题'">
             <li v-for="(item,index) in resdata.titleOptions" :key="index">
               <el-radio v-model="answerRadio" :label="item.key"></el-radio>
-              <span> {{item.key}}、{{item.value}}</span>
+              <span>{{item.value}}</span>
             </li>
           </div>
 
@@ -36,9 +36,15 @@
             </el-checkbox-group>
           </div>
 
-          <div v-if="resdata.questionTypeName ==='判断题'">
+          <!-- <div v-if="resdata.questionTypeName ==='判断题'">
             <li v-for="(item,index) in resdata.titleOptions" :key="index">
               <el-radio v-model="trueOrFalseRadio" :label="item.value"></el-radio>
+            </li>
+          </div> -->
+
+          <div v-if="resdata.questionTypeName ==='判断题'">
+            <li v-for="(item,index) in trueOrFalseList" :key="index">
+              <el-radio v-model="trueOrFalseRadio" :label="item" @change="handleTrueOrFalse ()"></el-radio>
             </li>
           </div>
 
@@ -112,7 +118,7 @@
       <span class="headerTxt">剩余时间：{{min}} 分：{{sec}} 秒</span>
       <!-- <iep-button @click="handleSave">暂停</iep-button> -->
       <iep-button @click="backhome">返回</iep-button>
-      <iep-button style="margin-right: 30px;" @click="saveAndGoBack">保存并退出</iep-button>
+      <iep-button @click="saveAndGoBack">保存并退出</iep-button>
       <iep-button type="primary" @click="handleExamination">交卷</iep-button>
     </footer-tool-bar>
   </div>
@@ -125,16 +131,18 @@ export default {
   mixins: [mixins],
   props: ['record'],
   data () {
-    this.colors = ['#ba1b21', '#999999']
+    this.colors = ['#ba1b21', '#999']
     this.chartSettings = {
       radius: [50, 60],
       offsetY: 100,
     }
     return {
+      loading: true,      //加载圈圈
       answerRadio: '',        //单选(v-model绑定的值)
       checksList: [],         //复选(v-model绑定的值)
       trueOrFalseRadio: '',   //判断(v-model绑定的值)
       freeInput: '',          //简答(v-model绑定的值)
+      trueOrFalseList: ['正确', '错误'],
       inputAreaList: [''],
       questionExplain: '本题来源于国脉内网、水巢、数据基因、技能类、知识类、数据能力类、基本能力类、项目管理类、公司常识类、人力资源类等。',
       mins: '',
@@ -192,7 +200,7 @@ export default {
     },
   },
   mounted () {
-    this.timer()
+    // this.timer()
   },
   created () {
     this.loadPage()
@@ -207,6 +215,14 @@ export default {
 
   },
   methods: {
+
+    /**
+     * 判断题
+     */
+    handleTrueOrFalse () {
+      // console.log('handleTrueOrFalse => ' + item)
+    },
+
     /**
      * 判断题型(公用方法)
      */
@@ -218,7 +234,8 @@ export default {
         params.userAnswer = this.answerRadio
       }
       if (type === '复选题') {
-        params.userAnswer = JSON.stringify(this.checksList)
+        params.userAnswer = this.checksList.length > 0 ? JSON.stringify(this.checksList.sort()) : ''
+        // console.log('111', params.userAnswer)
       }
       if (type === '判断题') {
         params.userAnswer = this.trueOrFalseRadio
@@ -233,47 +250,57 @@ export default {
      */
     getSubjectById (params, times) {
       getTestPageById(params).then(res => {
-        const record = res.data.data
-        if (times === true) {
-          const timeAll = record.remainingTime ? record.remainingTime.split('-') : []
-          this.mins = Number(timeAll[0])
-          this.secs = Number(timeAll[1])
-        }
-        if (this.mins + this.secs === 0) {
-          this.tip()
+        if (res.data.code === 0) {
+          this.loading = false
+          const record = res.data.data
+          if (times === true) {
+            const timeAll = record.remainingTime ? record.remainingTime.split('-') : []
+            this.mins = Number(timeAll[0])
+            this.secs = Number(timeAll[1])
+            this.timer()
+          }
+          if (this.mins + this.secs === 0) {
+            this.tip()
+          } else {
+            this.chartData.rows = record.questionStatus
+            this.resdata = record
+            this.resdata.questionOffNum = record.questionNumList
+            this.resdata.questionTotalNum = record.questionNumList.checkboxMap.length + record.questionNumList.checkedMap.length + record.questionNumList.radioMap.length + record.questionNumList.textMap.length
+            this.resdata.titleOptions = record.titleOptions ? JSON.parse(record.titleOptions) : []
+            this.resdata.radioMap = record.questionNumList.radioMap
+            this.resdata.checkboxMap = record.questionNumList.checkboxMap
+            this.resdata.checkedMap = record.questionNumList.checkedMap
+            this.resdata.textMap = record.questionNumList.textMap
+            if (record.questionTypeName === '单选题') {
+              this.answerRadio = record.userAnswer
+              this.resdata.kindTotalNum = record.questionNumList.radioMap.length
+              this.resdata.kindMark = record.questionNumList.radioMap[0].grade * this.resdata.kindTotalNum
+            }
+
+            if (record.questionTypeName === '复选题') {
+              // console.log('222', this.checksList)
+              this.checksList = record.userAnswer && record.userAnswer.length > 0 ? JSON.parse(record.userAnswer) : []
+              // console.log('333', this.checksList)
+              this.resdata.kindTotalNum = record.questionNumList.checkboxMap.length
+              this.resdata.kindMark = record.questionNumList.checkboxMap[0].grade * this.resdata.kindTotalNum
+            }
+            if (record.questionTypeName === '判断题') {
+              this.trueOrFalseRadio = record.userAnswer
+              this.resdata.kindTotalNum = record.questionNumList.checkedMap.length
+              this.resdata.kindMark = record.questionNumList.checkedMap[0].grade * this.resdata.kindTotalNum
+            }
+            if (record.questionTypeName === '简答题') {
+              this.freeInput = record.userAnswer
+              this.resdata.kindTotalNum = record.questionNumList.textMap.length
+              this.resdata.kindMark = record.questionNumList.textMap[0].grade * this.resdata.kindTotalNum
+            }
+          }
         } else {
-          this.chartData.rows = record.questionStatus
-          this.resdata = record
-          this.resdata.questionOffNum = record.questionNumList
-          this.resdata.questionTotalNum = record.questionNumList.checkboxMap.length + record.questionNumList.checkedMap.length + record.questionNumList.radioMap.length + record.questionNumList.textMap.length
-          this.resdata.titleOptions = record.titleOptions ? JSON.parse(record.titleOptions) : []
-          this.resdata.radioMap = record.questionNumList.radioMap
-          this.resdata.checkboxMap = record.questionNumList.checkboxMap
-          this.resdata.checkedMap = record.questionNumList.checkedMap
-          this.resdata.textMap = record.questionNumList.textMap
-          if (record.questionTypeName === '单选题') {
-            this.answerRadio = record.userAnswer
-            this.resdata.kindTotalNum = record.questionNumList.radioMap.length
-            this.resdata.kindMark = record.questionNumList.radioMap[0].grade * this.resdata.kindTotalNum
-          }
-
-          if (record.questionTypeName === '复选题') {
-            this.checksList = JSON.parse(record.userAnswer)
-            this.resdata.kindTotalNum = record.questionNumList.checkboxMap.length
-            this.resdata.kindMark = record.questionNumList.checkboxMap[0].grade * this.resdata.kindTotalNum
-          }
-          if (record.questionTypeName === '判断题') {
-            this.trueOrFalseRadio = record.userAnswer
-            this.resdata.kindTotalNum = record.questionNumList.checkedMap.length
-            this.resdata.kindMark = record.questionNumList.checkedMap[0].grade * this.resdata.kindTotalNum
-          }
-          if (record.questionTypeName === '简答题') {
-            this.freeInput = record.userAnswer
-            this.resdata.kindTotalNum = record.questionNumList.textMap.length
-            this.resdata.kindMark = record.questionNumList.textMap[0].grade * this.resdata.kindTotalNum
-          }
+          this.$message({
+            type: 'error',
+            message: res.data.msg,
+          })
         }
-
       })
     },
 
@@ -414,7 +441,6 @@ export default {
         questionNum: item.questionNum,
       }
       this.judgeType(params)
-      console.log('33', params)
       this.getSubjectById(params)
     },
 
@@ -429,7 +455,7 @@ export default {
      * 返回
      */
     backhome () {
-      this.$confirm('此操作将不保存试卷，是否继续?', '提示', {
+      this.$confirm('此操作将不保存试卷所选答案，是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
@@ -438,6 +464,7 @@ export default {
           type: 'success',
           message: '已成功返回到主界面!',
         })
+        this.saveAll()
         this.$emit('onGoBack')
       }).catch(() => {
         this.$message({
@@ -482,7 +509,7 @@ export default {
         this.judgeType(params)
         getTestPageById(params).then(res => {
           if (res.data.code === 0) {
-            console.log('success go back')
+            // console.log('success go back')
             this.$message({
               type: 'success',
               message: '交卷成功!',
@@ -523,12 +550,17 @@ export default {
             remainingTime: _this.mins + '-' + _this.secs,
           }
           _this.judgeType(params)
-          _this.getSubjectById(params)
-          _this.$message({
-            type: 'warning',
-            message: '考试时间已到，自动交卷！',
+          // _this.getSubjectById(params)
+          getTestPageById(params).then(res => {
+            if (res.data.code === 0) {
+              _this.$message({
+                type: 'warning',
+                message: '考试时间已到，自动交卷！',
+              })
+              _this.$emit('onGoBack')
+            }
+            console.log('时间到啦')
           })
-          _this.$emit('onGoBack')
         }
         else {
           _this.secs -= 1

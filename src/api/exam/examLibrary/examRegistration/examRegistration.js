@@ -31,7 +31,7 @@ export function cancelExamerById (params) {
     return request({
       url: '/exms/iepentryform/changeStat',
       method: 'post',
-      params: params,
+      data: params,
     })
 }
 

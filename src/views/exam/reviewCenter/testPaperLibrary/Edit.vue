@@ -8,7 +8,7 @@
         </a-steps>
         <keep-alive>
           <component :is="steps[current].content" :data="steps[current].data" @on-data="steps[current].onData"
-            @prev="prev" :ref="steps[current].content" @back-list="back"></component>
+            @prev="prev" :ref="steps[current].content"></component>
         </keep-alive>
       </div>
     </basic-container>
@@ -72,10 +72,6 @@ export default {
         type: 'warning',
       }).then(() => {
         this.$emit('onGoBack')
-        this.$message({
-          type: 'success',
-          message: '返回成功!',
-        })
       }).catch(() => {
         this.$message({
           type: 'info',

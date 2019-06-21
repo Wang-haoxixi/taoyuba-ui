@@ -21,14 +21,16 @@
       </div>
       <hr class="line">
 
-      <iep-tabs v-model="activeTab" :tab-list="tabList">
-        <template v-if="activeTab ==='ExamPaper'" v-slot:ExamPaper>
+      <iep-tabs v-model="activeTab" :tab-list="list">
+        <template v-if="activeTab ==='ExamPaper' && (isCreator || permissionRegist || permissionAll)"
+          v-slot:ExamPaper>
           <exam-paper :record="record"></exam-paper>
         </template>
         <template v-if="activeTab ==='ExamReading'" v-slot:ExamReading>
           <exam-reading :record="record"></exam-reading>
         </template>
-        <template v-if="activeTab ==='ExamRegistration'" v-slot:ExamRegistration>
+        <template v-if="activeTab ==='ExamRegistration' && (isCreator || permissionRegist || permissionAll)"
+          v-slot:ExamRegistration>
           <exam-registration :record="record"></exam-registration>
         </template>
       </iep-tabs>
@@ -37,6 +39,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import ExamPaper from './examPaper/'
 import ExamReading from './examReading/'
 import ExamRegistration from './examRegistration/'
@@ -71,7 +74,38 @@ export default {
           this.$emit('onGoBack')
         },
       },
+      permissionAll: false,
+      permissionView: false,
     }
+  },
+  computed: {
+    ...mapGetters(['userInfo', 'permissions']),
+    permissionRegist () {
+      // 报名/考卷权限
+      const { operateUsersArray } = this.record.row.iepExaminationOperateVO
+      return operateUsersArray.map(Number).includes(this.userInfo.userId)
+    },
+    permissionReading () {
+      // 阅卷权限
+      const { writeUsedWriteUsedArray, faceUserIdsArray } = this.record.row.iepExaminationOperateVO
+      return (writeUsedWriteUsedArray.map(Number).includes(this.userInfo.userId) || faceUserIdsArray.map(Number).includes(this.userInfo.userId)) && this.permissionView
+    },
+    /**
+     * 判断当前用户是不是考试创建者
+     */
+    isCreator () {
+      const { creatorId } = this.record.row
+      return creatorId === this.userInfo.userId
+    },
+    list () {
+      // 根据权限是否显示报名/考卷的tab页
+      const array = [].concat(this.tabList)
+      if (this.isCreator || this.permissionAll) return array
+      if (this.permissionRegist) return array.splice(0, 2)
+      if (this.permissionReading) return array.splice(2)
+      return array
+      // return this.permissionRegist || this.permissionAll ? array : array.splice(2)
+    },
   },
   created () {
     const { row, activeTab } = this.record
@@ -83,8 +117,13 @@ export default {
     this.row.totalScore = this.row.totalScore
     this.row.beginTime = this.row.beginTime
     this.topTitle = '试题： ' + this.row.title
+    this.setPermission()
   },
   methods: {
+    setPermission () {
+      this.permissionAll = this.permissions['exam_library_all']
+      this.permissionView = this.permissions['exam_library_view']
+    },
   },
 }
 </script>

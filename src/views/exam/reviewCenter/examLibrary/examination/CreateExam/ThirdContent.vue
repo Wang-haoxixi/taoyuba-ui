@@ -1,46 +1,60 @@
 <template>
-  <div>
+  <div style="margin-top:40px">
     <div class="steps-content">
       <el-card shadow="never" class="content-wrapper">
+        <div slot="header">
+          <span>试卷信息</span>
+          <iep-button type="primary" @click="handleEdit(testPaper.id)" v-if="readOnly===false"
+            style="float:right; margin-top: -5px;">编辑试卷</iep-button>
+        </div>
         <el-form size="small" :model="data" label-width="100px">
-          <h1>{{testPaper.title}}</h1>
-          <el-form-item label="所属科目:" style="width:50%">
-            <el-input readonly v-model="testPaper.fieldName"></el-input>
-          </el-form-item>
-          <el-row>
-            <el-col :span="4">
-              <el-form-item label="试题数量:">
-                <el-input v-model="testPaper.choiceNum" readonly>
-                  <template slot="append">道</template>
-                </el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="4">
-              <el-form-item label="试题总分:">
-                <el-input v-model="testPaper.score" readonly>
-                  <template slot="append">分</template>
-                </el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="4">
-              <el-form-item label="试题难度:">
-                <el-input v-model="testPaper.difficulty" readonly></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="6">
-              <el-form-item label="创建人：">
-                <span>{{testPaper.createName}}</span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="创建时间：">
-                <span>{{testPaper.creatTime}}</span>
+          <el-row :gutter="40">
+            <el-col :span="12">
+              <el-form-item label="试卷名称">
+                <el-input readonly v-model="testPaper.title"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <iep-button type="primary" style="float:right" @click="handleEdit(testPaper.id)" v-if="readOnly===false">编辑试卷</iep-button>
+              <el-form-item label="所属科目">
+                <el-input readonly v-model="testPaper.fieldName"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="40">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="试题数量">
+                    <el-input v-model="testPaper.choiceNum" readonly>
+                      <template slot="append">道</template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="总分">
+                    <el-input v-model="testPaper.score" readonly>
+                      <template slot="append">分</template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <!-- <el-col :span="4">
+              <el-form-item label="试题难度:">
+                <el-input v-model="testPaper.difficulty" readonly></el-input>
+              </el-form-item>
+            </el-col> -->
+          </el-row>
+          <el-row :gutter="40">
+            <el-col :span="12">
+              <el-form-item label="创建者" style="margin-bottom: 0">
+                <el-input readonly v-model="testPaper.createName"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="创建时间" style="margin-bottom: 0">
+                <el-input readonly v-model="testPaper.creatTime"></el-input>
+              </el-form-item>
             </el-col>
           </el-row>
         </el-form>
@@ -54,12 +68,13 @@
           <el-row :gutter="40">
             <el-col :span="12">
               <el-form-item label="考试名称" prop="title">
-                <el-input v-model="examForm.title" placeholder="请输入考试名称"></el-input>
+                <el-input v-model="examForm.title" placeholder="请输入考试名称" :readonly="readOnly"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="所属科目" prop="field">
-                <el-select placeholder="请选择所属科目" v-model="examForm.field">
+                <el-select placeholder="请选择所属科目" v-model="examForm.field" :disabled="readOnly"
+                  style="width:100%">
                   <el-option v-for="(item, index) in res.exms_subjects" :key="index" :label="item.label"
                     :value="item.id"></el-option>
                 </el-select>
@@ -73,14 +88,16 @@
                   <el-col :span="11" style="padding:0">
                     <el-form-item prop="signBeginTime">
                       <iep-date-picker v-model="examForm.signBeginTime" type="datetime" placeholder="开始时间"
-                        @change="startChange(examForm.signBeginTime)"></iep-date-picker>
+                        style="width:100%" :readonly="readOnly" :picker-options="pickerOptionsSignBegin"
+                        value-format="yyyy-MM-dd HH:mm:ss"></iep-date-picker>
                     </el-form-item>
                   </el-col>
                   <el-col class="line" :span="2">-</el-col>
                   <el-col :span="11" style="padding:0">
                     <el-form-item prop="signEndTime">
                       <iep-date-picker v-model="examForm.signEndTime" type="datetime" placeholder="结束时间"
-                        @change="endChange(examForm.signEndTime)"></iep-date-picker>
+                        style="width:100%" :readonly="readOnly" :picker-options="pickerOptionsSignEnd"
+                        value-format="yyyy-MM-dd HH:mm:ss"></iep-date-picker>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -88,7 +105,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="报名消耗" prop="consume">
-                <el-input v-model="examForm.consume">
+                <el-input v-model.number="examForm.consume" :readonly="readOnly">
                   <template slot="append">贝</template>
                 </el-input>
               </el-form-item>
@@ -99,20 +116,28 @@
               <el-form-item label="考试时间" required>
                 <el-row>
                   <el-col :span="11" style="padding:0">
-                    <iep-date-picker v-model="examForm.beginTime" type="datetime" placeholder="开始时间"
-                      @change="startChange(examForm.beginTime,'exam')"></iep-date-picker>
+                    <el-form-item prop="signBeginTime">
+                      <iep-date-picker v-model="examForm.beginTime" type="datetime" placeholder="开始时间"
+                        style="width:100%" :picker-options="pickerOptionsBegin" :readonly="readOnly"></iep-date-picker>
+                    </el-form-item>
+
                   </el-col>
                   <el-col class="line" :span="2">-</el-col>
                   <el-col :span="11" style="padding:0">
-                    <iep-date-picker v-model="examForm.endTime" type="datetime" placeholder="开始时间"
-                      @change="endChange(examForm.endTime,'exam')"></iep-date-picker>
+                    <el-form-item prop="endTime">
+                      <iep-date-picker v-model="examForm.endTime" type="datetime" placeholder="结束时间"
+                        style="width:100%" :picker-options="pickerOptionsEnd" :readonly="readOnly"></iep-date-picker>
+                    </el-form-item>
                   </el-col>
                 </el-row>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="答卷时长" prop="timeLong">
-                <el-input v-model="examForm.timeLong" onkeyup="this.value=this.value.replace(/[^\w]/g,'');">
+                <el-input v-model="examForm.timeLong" :readonly="readOnly">
+                  <template slot="append">
+                    分
+                  </template>
                 </el-input>
               </el-form-item>
             </el-col>
@@ -120,19 +145,21 @@
           <el-row :gutter="40">
             <el-col :span="12">
               <el-form-item label="及格线" prop="passScore">
-                <el-input v-model="examForm.passScore"></el-input>
+                <iep-input-number controls-position="right" :min="0" :max="testPaper.score-1"
+                  v-model="examForm.passScore" style="width:100%"></iep-input-number>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-row>
                 <el-col :span="12">
                   <el-form-item label="优秀线" prop="excellentLine">
-                    <el-input v-model="examForm.excellentLine"></el-input>
+                    <iep-input-number controls-position="right" :min="0" :max="testPaper.score-1"
+                      v-model="examForm.excellentLine" style="width:100%"></iep-input-number>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="奖励" prop="reward">
-                    <el-input v-model="examForm.reward">
+                    <el-input v-model.number="examForm.reward" :readonly="readOnly">
                       <template slot="append">
                         贝
                       </template>
@@ -143,47 +170,56 @@
             </el-col>
           </el-row>
           <el-form-item label="考试说明" prop="description">
-            <iep-input-area v-model="examForm.description"></iep-input-area>
+            <iep-input-area v-model="examForm.description" :readonly="readOnly"></iep-input-area>
           </el-form-item>
           <hr>
           <el-form-item>
-            <el-col :span="8">
+            <el-col :span="6">
               <el-form-item prop="showResult">
                 <el-switch active-text="考后显示成绩" v-model="examForm.showResult" :active-value="1"
-                  :inactive-value="0"></el-switch>
+                  :inactive-value="0" :disabled="readOnly"></el-switch>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6">
               <el-form-item prop="showAnswer">
                 <el-switch active-text="考后显示答案和解析" v-model="examForm.showAnswer" :active-value="1"
-                  :inactive-value="0"></el-switch>
+                  :inactive-value="0" :disabled="readOnly"></el-switch>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
-              <el-form-item prop="showPlace">
-                <el-switch active-text="添加面试判分" v-model="examForm.showComment" :active-value="1"
-                  :inactive-value="0"></el-switch>
+            <el-col :span="6">
+              <el-form-item prop="addInterview">
+                <el-switch active-text="添加面试判分" v-model="examForm.addInterview" :active-value="1"
+                  :inactive-value="0" :disabled="readOnly"></el-switch>
               </el-form-item>
             </el-col>
+            <el-col :span="6">
+              <el-form-item prop="registrationState">
+                <el-switch active-text="报名自动审核通过" v-model="examForm.registrationState"
+                  :active-value="1" :inactive-value="0" :disabled="readOnly"></el-switch>
+              </el-form-item>
+            </el-col>
+
           </el-form-item>
           <el-form-item label="证书信息" prop="iepCertiFicate">
-            <dialog-certificate v-model="examForm.iepCertiFicate"></dialog-certificate>
+            <dialog-certificate v-model="examForm.iepCertiFicate" :is-show-contact-btn="readOnly"></dialog-certificate>
           </el-form-item>
           <el-form-item label="结束语" prop="oncludingRemarks">
-            <iep-input-area v-model="examForm.oncludingRemarks"></iep-input-area>
+            <iep-input-area v-model="examForm.oncludingRemarks" :readonly="readOnly"></iep-input-area>
           </el-form-item>
           <hr>
           <el-form-item label="权限设置" required>
             <div class="permissionSettings">
               <el-form-item prop="operateUserids" label="报名管理&考卷管理" label-width="150px">
-                <iep-contact-multiple-user v-model="examForm.operateUserids" :filter-user-list="filterUserList"></iep-contact-multiple-user>
+                <iep-contact-multiple-user v-model="examForm.operateUserids" :filter-user-list="filterUserList"
+                  :disabled="readOnly"></iep-contact-multiple-user>
               </el-form-item>
               <el-form-item prop="writeUserids" label="试卷审阅权限" label-width="150px">
-                <iep-contact-multiple-user v-model="examForm.writeUserids" :filter-user-list="filterUserList"></iep-contact-multiple-user>
+                <iep-contact-multiple-user v-model="examForm.writeUserids" :filter-user-list="filterUserList"
+                  :disabled="readOnly"></iep-contact-multiple-user>
               </el-form-item>
-
-              <el-form-item prop="faceUserIds" label="面试判分权限" label-width="150px">
-                <iep-contact-multiple-user v-model="examForm.faceUserIds" :filter-user-list="filterUserList"></iep-contact-multiple-user>
+              <el-form-item prop="faceUserIds" label="面试判分权限" label-width="150px" v-if="examForm.addInterview===1">
+                <iep-contact-multiple-user v-model="examForm.faceUserIds" :filter-user-list="filterUserList"
+                  :disabled="readOnly"></iep-contact-multiple-user>
               </el-form-item>
             </div>
           </el-form-item>
@@ -225,6 +261,10 @@ export default {
       testPaper: initForm(),//试卷信息
       res: [],
       formRequestFn: () => { },
+      pickerOptionsSignBegin: this.signBeginDate(),
+      pickerOptionsSignEnd: this.signEndDate(),
+      pickerOptionsBegin: this.beginDate(),
+      pickerOptionsEnd: this.endDate(),
     }
   },
   computed: {
@@ -247,18 +287,72 @@ export default {
       return [this.userInfo.userId, ...this.examForm.operateUserids.map(m => m.id), ...this.examForm.faceUserIds.map(m => m.id), ...this.examForm.writeUserids.map(m => m.id)]
     },
   },
-  created () {
-    this.loadSelf()
-    this.getTestOption()
-  },
   watch: {
-    'data.iepTestPaperVO': {
-      handler (newName) {
-        this.testPaper = newName
+    'data': {
+      handler () {
+        this.loadSelf()
+        this.getTestOption()
       },
+      immediate: true,
     },
   },
   methods: {
+
+    /**
+     * 报名开始时间
+     */
+    signBeginDate () {
+      const self = this
+      return {
+        disabledDate (time) {
+          if (self.examForm.signEndTime) {
+            return new Date(self.examForm.signEndTime) < time.getTime()
+          }
+        },
+      }
+    },
+
+    /**
+     * 报名结束时间
+     */
+    signEndDate () {
+      const self = this
+      return {
+        disabledDate (time) {
+          if (self.examForm.signBeginTime) {
+            return new Date(self.examForm.signBeginTime) > time.getTime()
+          }
+        },
+      }
+    },
+
+    /**
+     * 考试开始时间
+     */
+    beginDate () {
+      const self = this
+      return {
+        disabledDate (time) {
+          if (self.examForm.endTime) {
+            return new Date(self.examForm.endTime) < time.getTime()
+          }
+        },
+      }
+    },
+
+    /**
+     * 考试结束时间
+     */
+    endDate () {
+      const self = this
+      return {
+        disabledDate (time) {
+          if (self.examForm.beginTime) {
+            return new Date(self.examForm.beginTime) > time.getTime()
+          }
+        },
+      }
+    },
 
     /**
     * 获取科目数据
@@ -286,44 +380,17 @@ export default {
 
     },
 
-    // 处理时间段
-    dealTime (val1, val2) {
-      function parseDate (date) {
-        return new Date(date)
-      }
-      const newDate1 = parseDate(val1)
-      const newDate2 = parseDate(val2)
-      const between = (Number(newDate2) - Number(newDate1)) / 1000
-      if (between < 0) {
-        this.$message.error('开始时间不能大于结束时间！！！')
-        return
-      }
-
-    },
-    startChange (val, type) {
-      if (type === 'exam') {
-        this.examForm.beginTime = val
-      } else {
-        this.examForm.signBeginTime = val
-      }
-      this.dealTime(val, this.examForm.signEndTime)
-    },
-    endChange (val, type) {
-      if (type === 'exam') {
-        this.examForm.endTime = val
-      } else {
-        this.examForm.signEndTime = val
-      }
-      this.dealTime(this.examForm.signBeginTime, val)
-    },
-
     /**
      * 编辑/查看试卷
      */
     handleEdit (id) {
       getTestPaperById({ id: id }).then(({ data }) => {
         data.data[0].resource = 0
-        let _exam = Object.assign(data.data[0], { methodName: this.data.methodName })
+        let _exam = {
+          iepTestPaperVO: data.data[0],
+          methodName: this.data.methodName,
+          id: this.data.id,
+        }
         this.$emit('prev', _exam)
       })
     },
@@ -423,5 +490,11 @@ export default {
       }
     }
   }
+}
+</style>
+
+<style scoped>
+.permissionSettings >>> .el-form-item__label {
+  line-height: 32px;
 }
 </style>

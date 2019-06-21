@@ -26,7 +26,7 @@
             <el-form label-width="50px" :inline="true">
               <div class="dt_div">
                 <el-form-item label="科目:">
-                  <el-select v-model="item.field" size="mini" disabled>
+                  <el-select v-model="item.field" multiple collapse-tags size="mini" disabled>
                     <el-option v-for="(item, index) in res.exms_subjects" :key="index" :label="item.label"
                       :value="item.id"></el-option>
                   </el-select>
@@ -74,37 +74,54 @@
                     <template slot="append">分</template>
                   </el-input>
                 </el-form-item>
-                <el-form-item label="打分方式:" label-width="90px" v-if="item.type==2">
+                <el-form-item label="打分方式:" label-width="90px" v-if="item.type==11">
                   <el-radio-group v-model="item.scoringMethod">
                     <el-radio label="0" disabled>系统判定</el-radio>
                     <el-radio label="1" disabled>人工阅卷</el-radio>
                   </el-radio-group>
                 </el-form-item>
-                <el-form-item style="margin-left:20px" v-if="item.type==2 || item.type==3">
+                <el-form-item style="margin-left:20px" v-if="item.type==11 || item.type==10">
                   <el-checkbox v-model="item.marker" label="指定阅卷老师" disabled></el-checkbox>
                 </el-form-item>
-                <el-form-item style="margin-left:20px" v-if="item.type==3">
+                <el-form-item style="margin-left:20px" v-if="item.type==10">
                   <el-switch active-text="多选模式" v-model="item.multipleSelection" disabled
                     :active-value="1" :inactive-value="0"></el-switch>
                 </el-form-item>
               </div>
 
-              <div class="dt_div">
+              <div class="dt_div" v-if="item.type==10">
                 <el-form-item label="题型:" style="width: 100%;" class="qstnDescribeArea">
                   <iep-input-area :autosize={minRows:2,maxRows:6} readonly v-model="item.qstnDescribe"></iep-input-area>
                 </el-form-item>
               </div>
 
               <div class="dt_div" v-if="item.configurationState=='0'">
-                <el-form-item label="已选试题:" style="width:100%" label-width="75px">
-                  <ol type="1" style="padding-left:20px">
-                    <li v-for="(choice,index) in item.questionArray" :key="index">
-                      <div class="iep-ellinsis">
-                        {{choice.title}}
-                      </div>
-                    </li>
-                  </ol>
-                </el-form-item>
+                <el-form-item label="已选试题:" style="width:100%" label-width="75px"></el-form-item>
+                <el-table :data="item.iepItemBankList" :header-cell-style="getRowClass" class="questionTable"
+                  border style="width: 100%; margin-bottom: 10px;">
+                  <el-table-column type="index" align="center"></el-table-column>
+                  <el-table-column prop="title" label="内容">
+                    <template slot-scope="scope">
+                      {{scope.row.title}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="title" label="题型" width="120px">
+                    <template slot-scope="scope">
+                      {{scope.row.questionTypeName}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="title" label="题类" width="120px">
+                    <template slot-scope="scope">
+                      {{scope.row.kindName}}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="levelName" label="难度" width="120px">
+                    <template slot-scope="scope">
+                      {{scope.row.difficultyName}}
+                    </template>
+                  </el-table-column>
+                </el-table>
+
               </div>
             </el-form>
           </div>
@@ -126,7 +143,7 @@
           </li>
           <li>共{{assessmentPaper.choiceNum || 0}}道</li>
         </ul>
-        <p>难度系数：{{assessmentPaper.difficulty || 0}} <span>中等</span></p>
+        <!-- <span>难度系数：{{assessmentPaper.difficulty || 0}} <span>中等</span></p> -->
       </div>
     </el-card>
     <template v-slot:action>
@@ -140,23 +157,25 @@
 
     </template>
     <el-dialog title="试题配置" :visible.sync="questionConfiguration" :close-on-click-modal="false"
-      width="700px" @close="questionClose">
-      <el-form ref="form" :model="form" label-width="100px" :rules="rules">
+      width="700px" @close="questionConfiguration = false">
+      <el-form ref="form" :model="form" label-width="100px" :rules="rules" v-loading="formLoading">
         <el-form-item label="科目" prop="field">
-          <el-select v-model="form.field" clearable placeholder="请选择科目" @change="fieldChang">
+          <el-select v-model="form.field" clearable multiple placeholder="请选择科目" @visible-change="fieldChange"
+            style="width:100%">
             <el-option v-for="(item, index) in res.exms_subjects" :key="index" :label="item.label"
               :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="题型" prop="type">
-          <el-select v-model="form.type" clearable placeholder="请选择题型" @change="typeChange">
+          <el-select v-model="form.type" clearable placeholder="请选择题型" @change="typeChange" style="width:100%">
             <el-option v-for="(item, index) in res.exms_question_type" :key="index" :label="item.label"
               :value="item.id" :disabled="choiceType.indexOf(item.id)>-1"></el-option>
           </el-select>
         </el-form-item>
 
         <el-form-item label="配置状态" prop="configurationState">
-          <el-select v-model="form.configurationState" placeholder="请选择配置状态" clearable @change="configurationStateChange">
+          <el-select v-model="form.configurationState" placeholder="请选择配置状态" clearable @change="configurationStateChange"
+            style="width:100%">
             <el-option value="0" label="固定选题"></el-option>
             <el-option value="1" label="随机选题"></el-option>
           </el-select>
@@ -164,35 +183,35 @@
 
         <el-form-item label="简单题数" prop="simpleNum">
           <el-col :span="17">
-            <iep-input-number controls-position="right" :min="0" :max="totalNum.simpleTotalNum || 0"
-              v-model="form.simpleNum" style="width:100%" :disabled="form.configurationState==='0'"></iep-input-number>
+            <iep-input-number controls-position="right" :max="totalNum.simple || 0" v-model="form.simpleNum"
+              style="width:100%" :disabled="form.configurationState==='0'"></iep-input-number>
           </el-col>
-          <el-col :span="7" style="text-align:center">题库现有 <span>{{totalNum.simpleTotalNum || 0}}</span>
+          <el-col :span="7" style="text-align:center">题库现有 <span>{{totalNum.simple || 0}}</span>
             道</el-col>
 
         </el-form-item>
 
         <el-form-item label="一般题数" prop="middleNum">
           <el-col :span="17">
-            <iep-input-number controls-position="right" :min="0" :max="totalNum.middleTotalNum || 0"
-              v-model="form.middleNum" style="width:100%" :disabled="form.configurationState==='0'"></iep-input-number>
+            <iep-input-number controls-position="right" :max="totalNum.general || 0" v-model="form.middleNum"
+              style="width:100%" :disabled="form.configurationState==='0'"></iep-input-number>
           </el-col>
-          <el-col :span="7" style="text-align:center">题库现有 <span>{{totalNum.middleTotalNum || 0}}</span>
+          <el-col :span="7" style="text-align:center">题库现有 <span>{{totalNum.general || 0}}</span>
             道</el-col>
         </el-form-item>
 
         <el-form-item label="困难题数" prop="hardNum">
           <el-col :span="17">
-            <iep-input-number controls-position="right" :min="0" :max="totalNum.hardTotalNum || 0"
-              v-model="form.hardNum" style="width:100%" :disabled="form.configurationState==='0'"></iep-input-number>
+            <iep-input-number controls-position="right" :max="totalNum.difficult || 0" v-model="form.hardNum"
+              style="width:100%" :disabled="form.configurationState==='0'"></iep-input-number>
           </el-col>
-          <el-col :span="7" style="text-align:center">题库现有 <span>{{totalNum.hardTotalNum || 0}}</span>
+          <el-col :span="7" style="text-align:center">题库现有 <span>{{totalNum.difficult || 0}}</span>
             道</el-col>
         </el-form-item>
 
         <el-form-item label="每题" prop="single">
           <el-col :span="7">
-            <iep-input-number controls-position="right" :min="0" v-model="form.single" style="width:100%"></iep-input-number>
+            <iep-input-number controls-position="right" :min="1" v-model="form.single" style="width:100%"></iep-input-number>
           </el-col>
           <el-col :span="3">
             <span style="border-right: 1px solid #c0c4cc;">分</span>
@@ -231,9 +250,9 @@
         <el-form-item label="题型说明" prop="qstnDescribe" v-if="form.type==3">
           <iep-input-area placeholder="请输入题型说明" :autosize={minRows:2,maxRows:6} v-model="form.qstnDescribe"></iep-input-area>
         </el-form-item>
-        <el-form-item v-if="form.configurationState==='0'" prop="questionArray">
-          <dialog-question-table v-model="form.questionArray" :questionType="form.type" :fieldType="form.field"
-            ref="table" @show-number="showNumber"></dialog-question-table>
+        <el-form-item v-if="form.configurationState==='0'" prop="iepItemBankList" label-width="20px">
+          <dialog-question-table v-model="form.iepItemBankList" :questionType="form.type"
+            :fieldType="form.field.join(',')" ref="table" @show-number="showNumber"></dialog-question-table>
         </el-form-item>
       </el-form>
       <template slot="footer">
@@ -248,7 +267,7 @@ import StepsContent from '../StepsContent'
 import DialogQuestionTable from '../DialogQuestionTable'
 import { postPaperAmount, postNewPaper } from '@/api/examPaper/examPaperApi'
 import { getTestOption } from '@/api/exam/createExam/newTest/newTest'
-import { toDtoForm } from '../option'
+import { toDtoForm, questionForm } from '../option'
 function sortKey (array, key) {
   return array.sort(function (a, b) {
     var x = a[key]
@@ -257,48 +276,59 @@ function sortKey (array, key) {
   })
 }
 
+
 export default {
   name: 'CreatedNewPaper',
   props: ['data'],
   components: { StepsContent, DialogQuestionTable },
   data () {
+    var checkSimpleNum = (rule, value, callback) => {
+      setTimeout(() => {
+        if (value === 0 && this.totalNum.simple > 0) {
+          callback(new Error('请配置试题的简单题数'))
+        } else {
+          callback()
+        }
+      }, 100)
+    }
+    var checkMiddleNum = (rule, value, callback) => {
+      setTimeout(() => {
+        if (value === 0 && this.totalNum.general > 0) {
+          callback(new Error('请配置试题的一般题数'))
+        } else {
+          callback()
+        }
+      }, 100)
+    }
+    var checkHardNum = (rule, value, callback) => {
+      setTimeout(() => {
+        if (value === 0 && this.totalNum.difficult > 0) {
+          callback(new Error('请配置试题的困难题数'))
+        } else {
+          callback()
+        }
+      }, 100)
+    }
     return {
+      formLoading: false,
       questionConfiguration: false,
-      choiceType: [],//已选择的题型
-      iepTestPaperIndex: '',//试题下标
+      choiceType: [],//已选择的题型      iepTestPaperIndex: '',//试题下标
       submitLoading: false,//提交加载
       submitDisabled: false,//禁用配置完成的按钮
       res: [],//下拉框的值
       rules: {
-        field: [{ required: true, message: '请选择题库', trigger: 'change' }],
+        field: [{ required: true, message: '请选择科目', trigger: 'change' }],
         type: [{ required: true, message: '请选择题型', trigger: 'change' }],
         configurationState: [{ required: true, message: '请选择配置状态', trigger: 'change' }],
-        simpleNum: [{ required: true, message: '请选择简单题数', trigger: 'blur' }],
-        middleNum: [{ required: true, message: '请选择一般题数', trigger: 'blur' }],
-        hardNum: [{ required: true, message: '请选择困难题数', trigger: 'blur' }],
+        simpleNum: [{ validator: checkSimpleNum, trigger: 'blur' }],
+        middleNum: [{ validator: checkMiddleNum, trigger: 'blur' }],
+        hardNum: [{ validator: checkHardNum, trigger: 'blur' }],
         single: [{ required: true, message: '请输入每题分数', trigger: 'blur' }],
         scoringMethod: [{ required: true, message: '请选择打分方式', trigger: 'change' }],
+        iepItemBankList: [{ required: true, message: '请选择试题', trigger: 'blur' }],
       },
-      form: {
-        field: '',//科目
-        type: '',//题型
-        configurationState: '',//配置状态
-        simpleNum: '',//简单题数
-        middleNum: '',//普通题数
-        hardNum: '',//困难题数
-        scoringMethod: '',//打分方式
-        marker: '',//是否指定阅卷人
-        qstnDescribe: '',// 题型说明
-        multipleSelection: 0,//是否开启多选
-        single: '',//单题分数
-        total: '',//试题总数
-        questionArray: [],//固定试题
-      },
-      totalNum: {
-        simpleTotalNum: 0,//简单总数
-        middleTotalNum: 0,//普通总数
-        hardTotalNum: 0,//困难总数
-      },
+      form: questionForm(),
+      totalNum: {},
       iepQstnRuleList: [],//试题集合
     }
   },
@@ -317,7 +347,7 @@ export default {
     },
     //新增/编辑
     isEdit () {
-      return this.data.id ? true : false
+      return this.data.iepTestPaperVO.id ? true : false
     },
     //是否只读
     readOnly () {
@@ -347,9 +377,10 @@ export default {
       paperNum.choiceNum = simpleNum + middleNum + hardNum
       return paperNum
     },
+
   },
   watch: {
-    'data': {
+    'data.iepTestPaperVO': {
       handler () {
         this.getTestOption()
       },
@@ -357,6 +388,15 @@ export default {
     },
   },
   methods: {
+
+    getRowClass ({ rowIndex }) {
+      if (rowIndex == 0) {
+        return 'background:#F2F4F5;color:#333'
+      } else {
+        return ''
+      }
+    },
+
     /**
      * 获取试题数据
      */
@@ -377,10 +417,16 @@ export default {
      */
     loadSelf () {
       if (this.isEdit) {
-        this.iepQstnRuleList = this.data.iepQstnRuleList
-        this.iepQstnRuleList.forEach((item) => {
+        this.data.iepTestPaperVO.iepQstnRuleList.forEach((item) => {
           this.choiceType.push(item.type)
+          var fieldString = item.field.split(',')
+          var fieldInt = fieldString.map((data) => {
+            return +data
+          })
+          item.field = fieldInt
+          this.iepQstnRuleList.push(item)
         })
+        this.choiceType.sort()
         this.submitDisabled = true
       } else {
         this.choiceType = []
@@ -393,17 +439,24 @@ export default {
      * 试题配置操作
      */
     questionButton (index) {
-      this.questionConfiguration = true
+      this.formLoading = true
       this.iepTestPaperIndex = index
       if (index != undefined) {
-        this.form = { ...this.iepQstnRuleList[index] }
-        this.count()
-      } else {
-        this.$nextTick(function () {
-          this.$refs['form'].resetFields()
+        postPaperAmount({ subject: this.iepQstnRuleList[index].field.join(','), question: this.iepQstnRuleList[index].type }).then(({ data }) => {
+          if (data.data) {
+            this.totalNum = data.data
+            this.form = this.$mergeByFirst(questionForm(), this.iepQstnRuleList[index])
+            this.formLoading = false
+          }
         })
+      } else {
+        this.form = questionForm()
+        this.totalNum.simple = 0
+        this.totalNum.general = 0
+        this.totalNum.difficult = 0
+        this.formLoading = false
       }
-
+      this.questionConfiguration = true
     },
 
     /**
@@ -412,39 +465,40 @@ export default {
     submitForm () {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          let form = toDtoForm(this.form)
-          form.total = this.totalCount
+          let _form = toDtoForm(this.form)
+          _form.total = this.totalCount
           if (this.iepTestPaperIndex != undefined) {
-            this.iepQstnRuleList.splice(this.iepTestPaperIndex, 1, form)
-            this.choiceType.splice(this.iepTestPaperIndex, 1, form.type)
+            this.iepQstnRuleList.splice(this.iepTestPaperIndex, 1, _form)
+            this.choiceType.splice(this.iepTestPaperIndex, 1, _form.type)
           } else {
-            this.choiceType.push(form.type)
-            this.iepQstnRuleList.push(form)
+            this.choiceType.push(_form.type)
+            this.iepQstnRuleList.push(_form)
           }
           this.choiceType.sort()
           this.questionConfiguration = false
           this.submitDisabled = true
-          this.totalNum.simpleTotalNum = ''
-          this.totalNum.middleTotalNum = ''
-          this.totalNum.hardTotalNum = ''
-          this.$refs['form'].resetFields()
+
         }
       })
     },
 
     /**
-     * 计算题数
+     * 获取题数
      */
     async count () {
-      let _form = this.form
-      if (_form.type != '' && _form.field != '') {
-        const { data } = await postPaperAmount({ subject: _form.field, question: _form.type })
+      this.form.simpleNum = 0
+      this.form.middleNum = 0
+      this.form.hardNum = 0
+      if (this.form.iepItemBankList.length > 0) {
+        this.$refs['table'].handleDelete()
+      }
+      if (this.form.type != '' && this.form.field != '') {
+        const { data } = await postPaperAmount({ subject: this.form.field.join(','), question: this.form.type })
         if (data.data) {
-          this.totalNum.simpleTotalNum = data.data.simple
-          this.totalNum.middleTotalNum = data.data.general
-          this.totalNum.hardTotalNum = data.data.difficulty
+          this.totalNum = data.data
         }
       }
+
     },
 
     /**
@@ -452,18 +506,18 @@ export default {
      */
     configurationStateChange (val) {
       let _form = this.form
+      _form.simpleNum = 0
+      _form.middleNum = 0
+      _form.hardNum = 0
       if (val === '1') {
-        _form.simpleNum = 0
-        _form.middleNum = 0
-        _form.hardNum = 0
-        _form.questionArray = []
+        _form.iepItemBankList = []
       }
     },
 
     /**
      * 科目选择时加载对应难度的总数
      */
-    fieldChang () {
+    fieldChange () {
       this.count()
     },
 
@@ -472,23 +526,19 @@ export default {
      * 题型选择时部分表单内容清空以及加载对应难度的总数
      */
     typeChange (value) {
-      let form = this.form
+
+      let _form = this.form
       if (value == '0' || value == '1') {
-        form.scoringMethod = ''
-        form.marker = ''
-        form.qstnDescribe = ''
-        form.multipleSelection = 0
+        _form.scoringMethod = ''
+        _form.marker = ''
+        _form.qstnDescribe = ''
+        _form.multipleSelection = 0
       } else if (value == '2') {
-        form.qstnDescribe = ''
-        form.multipleSelection = 0
+        _form.qstnDescribe = ''
+        _form.multipleSelection = 0
       } else {
-        form.scoringMethod = ''
+        _form.scoringMethod = ''
       }
-
-      if (form.questionArray.length > 0) {
-        this.$refs['table'].handleDelete()
-      }
-
       this.count()
     },
 
@@ -496,35 +546,33 @@ export default {
      * 展示所选的题数
      */
     showNumber (val) {
-      if (val.length === 0) {
-        this.form.simpleNum = 0
-        this.form.middleNum = 0
-        this.form.hardNum = 0
-      } else {
-        var sortMap = {}
-        for (var i = 0; i < val.length; i++) {
-          for (var prop in val[i]) {
-            if (prop == 'difficulty') {
-              var key = val[i][prop]
-              if (sortMap.hasOwnProperty(key)) {
-                sortMap[key] = sortMap[key] * 1 + 1
-              } else {
-                sortMap[key] = 1
-              }
-              break
+      this.form.simpleNum = 0
+      this.form.middleNum = 0
+      this.form.hardNum = 0
+      var sortMap = {}
+      for (var i = 0; i < val.length; i++) {
+        for (var prop in val[i]) {
+          if (prop == 'difficulty') {
+            var key = val[i][prop]
+            if (sortMap.hasOwnProperty(key)) {
+              sortMap[key] = sortMap[key] * 1 + 1
+            } else {
+              sortMap[key] = 1
             }
-          }
-        }
-        for (var difficulty in sortMap) {
-          if (difficulty === '9') {
-            this.form.simpleNum = sortMap[difficulty]
-          } else if (difficulty === '8') {
-            this.form.middleNum = sortMap[difficulty]
-          } else {
-            this.form.hardNum = sortMap[difficulty]
+            break
           }
         }
       }
+      for (var difficulty in sortMap) {
+        if (difficulty === '9') {
+          this.form.simpleNum = sortMap[difficulty]
+        } else if (difficulty === '8') {
+          this.form.middleNum = sortMap[difficulty]
+        } else {
+          this.form.hardNum = sortMap[difficulty]
+        }
+      }
+
 
     },
 
@@ -550,8 +598,12 @@ export default {
      * 配置完成
      */
     async handleSubmit () {
-      const iepTestPaper = { ...this.data }
-      iepTestPaper.iepQstnRuleList = this.iepQstnRuleList
+      const iepTestPaper = { ...this.data.iepTestPaperVO }
+      iepTestPaper.iepQstnRuleList = this.iepQstnRuleList.map(function (item) {
+        const field = item.field.join(',')
+        item.field = field
+        return item
+      })
       iepTestPaper.score = this.assessmentPaper.score
       iepTestPaper.choiceNum = this.assessmentPaper.choiceNum
       iepTestPaper.difficulty = this.assessmentPaper.difficulty
@@ -559,10 +611,10 @@ export default {
       try {
         const { data } = await postNewPaper(iepTestPaper)
         if (data.data) {
-          this.choiceType = []
-          this.iepQstnRuleList = []
           this.submitDisabled = false
-          this.$emit('on-data', data.data)
+          const examInfo = { ...this.data }
+          examInfo.iepTestPaperVO = data.data
+          this.$emit('on-data', examInfo)
         } else {
           this.$message(data.msg)
         }
@@ -572,16 +624,6 @@ export default {
       this.submitLoading = false
     },
 
-    /**
-     * 关闭弹窗
-     */
-    questionClose () {
-      this.questionConfiguration = false
-      this.totalNum.simpleTotalNum = ''
-      this.totalNum.middleTotalNum = ''
-      this.totalNum.hardTotalNum = ''
-      this.$refs['form'].resetFields()
-    },
   },
 }
 </script>
@@ -653,5 +695,21 @@ span {
 <style  scoped>
 .qstnDescribeArea >>> .el-form-item__content {
   width: 95%;
+}
+.questionTable >>> .th {
+  background: #ccc;
+}
+.questionTable >>> .ms-tree-space {
+  position: relative;
+  top: 1px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  width: 18px;
+  height: 14px;
+}
+.questionTable >>> .cell {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>

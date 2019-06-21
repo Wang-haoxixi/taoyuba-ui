@@ -1,9 +1,9 @@
 <template>
   <el-form :form="searchForm" label-width="80px" size="mini">
-    <el-form-item label="分类">
-      <el-select v-model="searchForm.field" placeholder="请选择分类" clearable>
-        <el-option value="0" label="国脉内网"></el-option>
-        <el-option value="1" label="数据基因"></el-option>
+    <el-form-item label="试卷科目">
+      <el-select v-model="searchForm.field" placeholder="请选择试卷科目" clearable>
+        <el-option v-for="(item, index) in res.exms_subjects" :key="index" :label="item.label"
+          :value="item.id"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="试卷名称">
@@ -16,16 +16,33 @@
   </el-form>
 </template>
 <script>
+import { getTestOption } from '@/api/exam/createExam/newTest/newTest'
 export default {
   name: 'AdvanceSearch',
   data () {
     return {
       searchForm: {},
+      res: [],
     }
+  },
+  created () {
+    this.getTestOption()
   },
   methods: {
     searchPage () {
       this.$emit('search-page', this.form)
+    },
+    /**
+     * 获取试题数据
+     */
+    async getTestOption () {
+      const params = {
+        numberList: [
+          'exms_subjects',//考试科目
+        ],
+      }
+      const { data } = await getTestOption(params)
+      this.res = data
     },
   },
   watch: {

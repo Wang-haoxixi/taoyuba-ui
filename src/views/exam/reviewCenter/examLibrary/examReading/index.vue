@@ -9,6 +9,7 @@ import Edit from './Page/Edit'
 
 export default {
   name: 'TableListWrapper',
+  props: ['record'],
   components: {
     List,
     Edit,
@@ -16,7 +17,6 @@ export default {
   data () {
     return {
       currentComponet: 'List',
-      record: '',
     }
   },
   methods: {

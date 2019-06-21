@@ -86,7 +86,7 @@
     </iep-dialog> -->
     <iep-dialog :dialog-show="dialogShow" title="查看资质" width="500px" @close="dialogShow = false" center>
       <div style="text-align:center;">
-        <img :src="imgUrl">
+        <iep-img :src="imgUrl"></iep-img>
         <span v-if="imgUrlNo">资质证明图片未上传！</span>
       </div>
       <template slot="footer">
@@ -100,7 +100,7 @@
 
 <script>
 import mixins from '@/mixins/mixins'
-import { getExamRegistrationList,passExamerById,cancelExamerById,deleteById } from '@/api/exam/examLibrary/examRegistration/examRegistration'
+import { getExamRegistrationList,passExamerById,deleteById,cancelExamerById } from '@/api/exam/examLibrary/examRegistration/examRegistration'
 export default {
   mixins: [mixins],
   props: ['record'],
@@ -158,6 +158,8 @@ export default {
     handleCancel (row){
       const param = {
         id: row.id,
+        examinationId: row.examinationId,
+        userId: row.examineeId,
       }
       this._handleComfirm(param, cancelExamerById,'撤销资格')
     },

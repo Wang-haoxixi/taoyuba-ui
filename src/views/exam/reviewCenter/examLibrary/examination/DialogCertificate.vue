@@ -2,9 +2,9 @@
   <div>
     <operation-container>
       <template slot="left">
-        <iep-button type="primary" plain @click="replaceCertificate">替换证书</iep-button>
+        <iep-button type="primary" plain @click="replaceCertificate" v-if="isShowContactBtn===false">替换证书</iep-button>
         <iep-button type="primary" plain style="margin-left: 10px;" @click="uploadCertificate"
-          :disabled="tableData.length>0">上传证书</iep-button>
+          :disabled="tableData.length>0" v-if="isShowContactBtn===false">上传证书</iep-button>
       </template>
     </operation-container>
     <div class="choice-certificate">
@@ -24,7 +24,7 @@
             {{scope.row.deptName}}
           </template>
         </el-table-column>
-        <el-table-column prop="operation" label="操作" width="180">
+        <el-table-column prop="operation" label="操作" width="180" v-if="isShowContactBtn===false">
           <iep-button @click="handleDelete()">删除</iep-button>
         </el-table-column>
       </el-table>
@@ -63,14 +63,14 @@
         </el-table-column>
         <el-table-column prop="deptName" label="颁发机构">
           <template slot-scope="scope">
-  {{scope.row.deptName}}
-</template>
+            {{scope.row.deptName}}
+          </template>
         </el-table-column>
       </iep-table>
       <template slot="footer">
-  <iep-button type="primary" @click="handleSelect()">选择</iep-button>
-  <iep-button @click="dialogShow=false">取消</iep-button>
-</template>
+        <iep-button type="primary" @click="handleSelect()">选择</iep-button>
+        <iep-button @click="dialogShow=false">取消</iep-button>
+      </template>
     </iep-dialog>
     <dialog-form ref="DialogForm" @load-data="loadData"></dialog-form>
   </div>
@@ -81,7 +81,16 @@ import DialogForm from '@/views/exam/reviewCenter/certificateLibrary/DialogForm'
 import mixins from '@/mixins/mixins'
 import { getCertificatePage, postCertificate } from '@/api/exam/review'
 export default {
-  props: ['value'],
+  props: {
+    isShowContactBtn: {
+      type: Boolean,
+      default: true,
+    },
+    value: {
+      type: Array,
+      required: true,
+    },
+  },
   mixins: [mixins],
   components: { AdvanceSearch, DialogForm },
   data () {

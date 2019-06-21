@@ -218,6 +218,7 @@ export const tipContent2 = {
 //考试表单字段
 export function examForm () {
   return {
+    addInterview: 0,  //控制面试判分的按钮
     id: '',//考试Id
     title: '',//考试名称
     field: '',//考试科目
@@ -235,16 +236,30 @@ export function examForm () {
     showAnswer: '',//考完后是否显示答案和解析
     showComment: '',//是否显示面试评语
     oncludingRemarks: '',//考试结束语
+    registrationState:'',//是否添加报名审核
     testPaperId: '',//试卷库id
     iepCertiFicate: [],//证书信息
     examRoleId: '',//权限id
     operateUserids: [],//报名管理&考卷管理列表
     writeUserids: [],//试卷审阅权限列表
     faceUserIds: [],//面试判分权限列表
-
-
   }
 
+}
+
+/**
+ * 
+ * @param {*} rule 
+ * @param {*} value 
+ * @param {*} callback 
+ * 验证答卷时长是否为数字
+ */
+let intValidate = (rule, value, callback) => {
+  if (/^[0-9]*$/.test(value) || value === '') {
+    callback()
+  } else {
+    callback(new Error())
+  }
 }
 
 //考试表单字段验证
@@ -269,18 +284,22 @@ export const examFormRules = {
   ],
   consume: [
     { required: true, message: '必填', trigger: 'blur' },
+    { type: 'number', message: '该字段必须为数字值' },
   ],
   timeLong: [
-    { required: true, message: '必填', trigger: 'blur' },
+    { required: true, trigger: 'blur', message: '必填' },
+    { validator: intValidate, message: '该字段必须为数字值' },
   ],
   passScore: [
     { required: true, message: '必填', trigger: 'blur' },
   ],
   excellentLine: [
     { required: true, message: '必填', trigger: 'blur' },
+    { type: 'number', message: '该字段必须为数字值' },
   ],
   reward: [
     { required: true, message: '必填', trigger: 'blur' },
+    { type: 'number', message: '该字段必须为数字值' },
   ],
   description: [
     { required: true, message: '必填', trigger: 'blur' },

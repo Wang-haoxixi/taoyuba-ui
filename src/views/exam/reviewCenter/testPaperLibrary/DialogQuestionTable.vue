@@ -5,19 +5,35 @@
         <iep-button type="primary" icon="el-icon-plus" plain @click="handleAdd()">选择试题</iep-button>
       </template>
     </operation-container>
-    <iep-no-data v-if="!tableData.length" message="暂无关联试题"></iep-no-data>
-    <div class="choice-question">
-      <el-row class="item" v-for="(item,index) in tableData" :key="index">
-        <el-col :span="18">
-          <div class="title iep-ellinsis">
-            {{item.title}}
-          </div>
-        </el-col>
-        <el-col :span="4">
-          <span class="el-icon-delete" @click="handleDelete(item)"></span>
-        </el-col>
-      </el-row>
-    </div>
+    <el-table :data="tableData" :header-cell-style="getRowClass" class="questionTable" border style="width: 100%;"
+      center>
+      <el-table-column type="index" align="center"></el-table-column>
+      <el-table-column prop="title" label="内容">
+        <template slot-scope="scope">
+          {{scope.row.title}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="title" label="题型" width="80px">
+        <template slot-scope="scope">
+          {{scope.row.questionTypeName}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="title" label="题类" width="80px">
+        <template slot-scope="scope">
+          {{scope.row.kindName}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="levelName" label="难度" width="80px">
+        <template slot-scope="scope">
+          {{scope.row.difficultyName}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="operation" label="操作" width="80px">
+        <template slot-scope="scope">
+          <iep-button @click="handleDelete(scope.row)">删除</iep-button>
+        </template>
+      </el-table-column>
+    </el-table>
     <iep-dialog :dialog-show="dialogShow" title="试题选择" width="50%" @close="dialogShow=false">
       <operation-container>
         <template slot="right">
@@ -62,11 +78,6 @@ const columnsMap = [
     label: '难度',
     prop: 'difficultyName',
   },
-  {
-    label: '提交时间',
-    prop: 'creatTime',
-    width: '250px',
-  },
 ]
 import mixins from '@/mixins/mixins'
 import AdvanceSearch from '../testQuestionsLibrary/Page/AdvanceSearch'
@@ -94,6 +105,14 @@ export default {
     },
   },
   methods: {
+
+    getRowClass ({ rowIndex }) {
+      if (rowIndex == 0) {
+        return 'background:#F2F4F5;color:#333'
+      } else {
+        return ''
+      }
+    },
 
     checkboxInit (row) {
       const isIncludes = this.tableData.map(m => m.id).includes(row.id)
@@ -154,4 +173,24 @@ export default {
   },
 }
 </script>
-
+<style  scoped>
+.qstnDescribeArea >>> .el-form-item__content {
+  width: 95%;
+}
+.questionTable >>> .th {
+  background: #ccc;
+}
+.questionTable >>> .ms-tree-space {
+  position: relative;
+  top: 1px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  width: 18px;
+  height: 14px;
+}
+.questionTable >>> .cell {
+  display: flex;
+  flex-wrap: wrap;
+}
+</style>
