@@ -55,7 +55,6 @@
 <script>
 import { saveAgent, detailAgent, editAgent } from '@/api/tmlms/agent'
 import store from '@/store'
-import { validRegisterUserPhone } from '@/api/login'
 export default {
   data () {
       var checkPhone = (rule, value, callback) => {
@@ -64,13 +63,7 @@ export default {
         } else if (!value.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/)) {
           callback(new Error('请输入正确的手机号码!'))
         } else {
-            validRegisterUserPhone(value).then(res=>{
-              if(res.data.data){
-                  callback()
-              }else{
-                callback(new Error(res.data.msg))
-              }
-            })
+            callback()
         }
       }
     return {

@@ -182,7 +182,6 @@
 <script>
 import { getArea,getPosition} from '@/api/post/admin'
 import { saveCrew, detailCrew, editCrew } from '@/api/tmlms/boatMan'
-import { validRegisterUserPhone } from '@/api/login'
 import VueSocketio from 'vue-socket.io'
 import Vue from 'vue'
 Vue.use(new VueSocketio({
@@ -197,13 +196,7 @@ export default {
         } else if (!value.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/)) {
           callback(new Error('请输入正确的手机号码!'))
         } else {
-            validRegisterUserPhone(value).then(res=>{
-              if(res.data.data){
-                  callback()
-              }else{
-                callback(new Error(res.data.msg))
-              }
-            })
+            callback()
         }
       }
     return {

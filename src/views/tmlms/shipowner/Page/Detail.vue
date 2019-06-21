@@ -46,7 +46,6 @@
 <script>
 import { getArea } from '@/api/post/address.js'
 import { saveShipowner, getShipownerDetail, getAllArea, editShipowner, getAllAreaName } from '@/api/tmlms/shipowner'
-import { validRegisterUserPhone } from '@/api/login'
 import Vue from 'vue'
 import VueSocketio from 'vue-socket.io'
 Vue.use(new VueSocketio({
@@ -71,13 +70,7 @@ export default {
         } else if (!value.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/)) {
           callback(new Error('请输入正确的手机号码!'))
         } else {
-            validRegisterUserPhone(value).then(res=>{
-              if(res.data.data){
-                  callback()
-              }else{
-                callback(new Error(res.data.msg))
-              }
-            })
+            callback()
         }
       }
     return {
