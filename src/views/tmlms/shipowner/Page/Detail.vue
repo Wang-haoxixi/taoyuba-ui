@@ -1,7 +1,8 @@
 <template>
   <div class="contract-box">
     <basic-container>
-        <h1>{{ $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }}船东信息</h1>
+        <h1 v-if="!$route.query.userId">{{ $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }}船东信息</h1>
+        <h1 v-if="$route.query.userId">完善个人信息</h1>
         <el-form :model="shipowner" ref="form" label-width="150px" :rules="rules">
           <el-row>
             <el-col :span="8">
