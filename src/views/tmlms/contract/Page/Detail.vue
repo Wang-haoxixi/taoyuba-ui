@@ -234,8 +234,7 @@
       </el-form>
       <div style="text-align: center;padding: 20px 0;">                   
         <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add' || type === 'edit'" type="primary" @click="handleSubmit">保存</iep-button>
-        <iep-button :disabeld="false" @click="handleBack">返回</iep-button>     
-        <iep-button :disabeld="false" @click="getMyPdf" v-show="type === 'view'" style="margin-left: 30px;">导出PDF</iep-button>            
+        <iep-button :disabeld="false" @click="handleBack">返回</iep-button>            
       </div>
     </basic-container>
   </div>
@@ -428,8 +427,8 @@ export default {
         if (data.code === 0) this.payTypeDict = data.data
       })
     },      
-    getDictValue (data, key) {      
-      for (let i = data.length; i--;) {
+    getDictValue (data, key) {                        
+      for (let i = data.length; i--;) {       
         if (data[i].value === key) return data[i].label
       }
       return null
@@ -456,8 +455,10 @@ export default {
     handleSubmit () {
       if (this.formDataVerification()) {
         if (this.type === 'add') {
-          addContract(this.formData).then(data => {
-            if (data.data.code === 0) {
+          addContract( this.formData).then(async data => {
+            if (data.data.code === 0) {           
+              this.record  = data.data.data 
+             await this.getMyPdf()         
               this.$message.success('添加成功！')
               this.$emit('onGoBack')
             }
@@ -465,8 +466,9 @@ export default {
             this.$message.error(error.message)
           })
         } else if (this.type === 'edit') {
-          editContract(this.formData).then(data => {
+          editContract(this.formData).then(async data => {
             if (data.data.code === 0) {
+              await  this.getMyPdf()   
               this.$message.success('编辑成功！')
               this.$emit('onGoBack')
             }
@@ -540,8 +542,8 @@ export default {
     },
     getMyPdf () {
            getMyPdf(this.record)
-          this.$message.success('上传成功')
-           this.$emit('onGoBack')
+          //this.$message.success('上传成功')
+           //this.$emit('onGoBack')
     },
   },
   watch: {
