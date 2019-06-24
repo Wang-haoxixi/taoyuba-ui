@@ -209,18 +209,54 @@
           <hr>
           <el-form-item label="权限设置" required>
             <div class="permissionSettings">
-              <el-form-item prop="operateUserids" label="报名管理&考卷管理" label-width="150px">
-                <iep-contact-multiple-user v-model="examForm.operateUserids" :filter-user-list="filterUserList"
-                  :disabled="readOnly"></iep-contact-multiple-user>
+              <el-form-item prop="operateUserids" label="报名管理&考卷管理" label-width="150px" ref="operateValidate">
+                <!-- <iep-contact-multiple-user v-model="examForm.operateUserids" :filter-user-list="filterUserList"
+                  :disabled="readOnly"></iep-contact-multiple-user> -->
+                <operation-wrapper class="contact-wrapper">
+                    <el-select v-model="examForm.operateUserids" multiple filterable  placeholder="请输入关键词">
+                      <el-option v-for="item in treeData" :key="item.value" :label="item.label" :value="item.value">
+                      </el-option>
+                    </el-select>
+                  <el-button @click="openOperateContact()">通讯录</el-button>
+                </operation-wrapper>
               </el-form-item>
-              <el-form-item prop="writeUserids" label="试卷审阅权限" label-width="150px">
-                <iep-contact-multiple-user v-model="examForm.writeUserids" :filter-user-list="filterUserList"
-                  :disabled="readOnly"></iep-contact-multiple-user>
+              <el-form-item prop="writeUserids" label="试卷审阅权限" label-width="150px" ref="writeValidate">
+                <!-- <iep-contact-multiple-user v-model="examForm.writeUserids" :filter-user-list="filterUserList"
+                  :disabled="readOnly"></iep-contact-multiple-user> -->
+                <operation-wrapper class="contact-wrapper">
+                    <el-select v-model="examForm.writeUserids" multiple filterable  placeholder="请输入关键词">
+                      <el-option v-for="item in treeData" :key="item.value" :label="item.label" :value="item.value">
+                      </el-option>
+                    </el-select>
+                  <el-button @click="openWriteContact()">通讯录</el-button>
+                </operation-wrapper>
               </el-form-item>
               <el-form-item prop="faceUserIds" label="面试判分权限" label-width="150px" v-if="examForm.addInterview===1">
                 <iep-contact-multiple-user v-model="examForm.faceUserIds" :filter-user-list="filterUserList"
                   :disabled="readOnly"></iep-contact-multiple-user>
               </el-form-item>
+              <iep-drawer :drawer-show="dialogWriteShow" title="通讯录" width="300" @close="closeWrite" :z-index="3000">
+                <el-input placeholder="输入关键字进行过滤" v-model="filterText" clearable></el-input>
+                  <el-tree :data="treeData">
+                    <span  class="custom-tree-node" slot-scope="{ node, data }">
+                      <span>{{ node.label }}</span>
+                      <span>
+                        <el-button :disabled="isWriteDisabled(data)" type="text" size="mini" @click="() => selectWriteGroup(data, node)">选择</el-button>
+                      </span>
+                    </span>         
+                  </el-tree>
+              </iep-drawer>
+              <iep-drawer :drawer-show="dialogOperateShow" title="通讯录" width="300" @close="closeOperate" :z-index="3000">
+                <el-input placeholder="输入关键字进行过滤" v-model="filterText" clearable></el-input>
+                  <el-tree :data="treeData">
+                    <span  class="custom-tree-node" slot-scope="{ node, data }">
+                      <span>{{ node.label }}</span>
+                      <span>
+                        <el-button :disabled="isOperateDisabled(data)" type="text" size="mini" @click="() => selectOperateGroup(data, node)">选择</el-button>
+                      </span>
+                    </span>         
+                  </el-tree>
+              </iep-drawer>
             </div>
           </el-form-item>
 
@@ -248,6 +284,7 @@ import { examForm, examFormRules, toDtoForm, selfToVo } from '../option'
 import { save, release, getTestOption, getExam, updateSave, updateRelease } from '@/api/exam/createExam/newTest/newTest'
 import { initForm } from '../../../testPaperLibrary/option'
 import { getTestPaperById } from '@/api/examPaper/examPaperApi'
+import { getTybListTree } from '@/api/admin/contacts'
 export default {
   mixins: [mixins],
   props: ['data'],
@@ -265,7 +302,15 @@ export default {
       pickerOptionsSignEnd: this.signEndDate(),
       pickerOptionsBegin: this.beginDate(),
       pickerOptionsEnd: this.endDate(),
+      dialogWriteShow: false,
+      dialogOperateShow: false,
+      filterText: '',
+      treeData: [],
+      filterUserList: [],
     }
+  },
+  created () {
+    this.loadNode()
   },
   computed: {
     //新增/编辑
@@ -283,9 +328,6 @@ export default {
     ...mapGetters([
       'userInfo',
     ]),
-    filterUserList () {
-      return [this.userInfo.userId, ...this.examForm.operateUserids.map(m => m.id), ...this.examForm.faceUserIds.map(m => m.id), ...this.examForm.writeUserids.map(m => m.id)]
-    },
   },
   watch: {
     'data': {
@@ -447,6 +489,49 @@ export default {
         }
       })
     },
+    loadNode () {
+      if (this.treeData.length) {
+        return
+      }
+      getTybListTree().then(({ data }) => {
+        this.treeData = data.data[0].children[2].children
+        console.log(this.treeData)
+      })
+    },
+    openWriteContact () {
+      this.dialogWriteShow = true
+    },
+    openOperateContact () {
+      this.dialogOperateShow = true
+    },
+    closeWrite () {
+      this.filterText = ''
+      this.dialogWriteShow = false
+    },
+    closeOperate () {
+      this.filterText = ''
+      this.dialogOperateShow = false
+    },
+    selectWriteGroup (data) {
+      this.examForm.writeUserids.push(data.value)
+      this.$refs['writeValidate'].clearValidate()
+    },
+    selectOperateGroup (data) {
+      this.examForm.operateUserids.push(data.value)
+      this.$refs['operateValidate'].clearValidate()
+    },
+    isOperateDisabled (data) {
+      if(this.examForm.operateUserids.includes(data.value)) {
+        return true
+      }
+      return false
+    },
+    isWriteDisabled (data) {
+      if(this.examForm.writeUserids.includes(data.value)) {
+        return true
+      }
+      return false
+    },
   },
 }
 </script>
@@ -496,5 +581,21 @@ export default {
 <style scoped>
 .permissionSettings >>> .el-form-item__label {
   line-height: 32px;
+}
+.contact-wrapper {
+  display: flex;
+}
+.contact-wrapper
+  >>> .ant-select-selection__choice__content
+  > span:nth-child(2) {
+  display: none;
+}
+.custom-tree-node {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-right: 8px;
 }
 </style>
