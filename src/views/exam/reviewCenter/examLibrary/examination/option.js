@@ -308,11 +308,17 @@ export const examFormRules = {
     { required: true, message: '必填', trigger: 'blur' },
   ],
   operateUserids: [
-    { required: true, message: '请选择报名管理&考卷管理的阅卷老师', trigger: 'change' },
+    { required: true, message: '请选择报名管理&考卷管理的阅卷老师12', trigger: 'change' },
   ],
+  // operateIds: [
+  //   { required: true, message: '请选择报名管理&考卷管理的阅卷老师', trigger: 'change' },
+  // ],
   writeUserids: [
-    { required: true, message: '请选择试卷审阅权限的阅卷老师', trigger: 'change' },
+    { required: true, message: '请选择试卷审阅权限的阅卷老师12', trigger: 'change' },
   ],
+  // writeIds: [
+  //   { required: true, message: '请选择试卷审阅权限的阅卷老师', trigger: 'change' },
+  // ],
   faceUserIds: [
     { required: true, message: '请选择面试判分权限的阅卷老师', trigger: 'change' },
   ],
