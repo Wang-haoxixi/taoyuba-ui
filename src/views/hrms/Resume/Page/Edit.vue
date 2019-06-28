@@ -6,7 +6,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="姓名：" prop="realName">
-              <el-input v-model="form.realName"></el-input>
+              <el-input v-model="form.realName" :disabled="haveInfo.realName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -35,7 +35,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="联系电话：" prop="contactPhone">
-              <el-input v-model="form.contactPhone"></el-input>
+              <el-input v-model="form.contactPhone" :disabled="haveInfo.contactPhone"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -126,9 +126,14 @@
 import { getResumeById, addResume, putResume } from '@/api/post/resume'
 import { getArea } from '@/api/post/address'
 import { initForm, formToDto, rules, dictsMap } from '../options'
+import { getUserInfo } from '@/api/login'
 export default {
   data () {
     return {
+      haveInfo:{
+        contactPhone: false,
+        contactName: false,
+      },
       dictsMap,
       backOption: {
         isBack: true,
@@ -169,6 +174,19 @@ export default {
     this.getProvince()
   },
   mounted () {
+        // 判断禁止Input用自己的名字和手机
+    getUserInfo().then(res=>{
+      if(res.data.data.roles.indexOf(1) === -1 && res.data.data.roles.indexOf(111) === -1){
+          if(res.data.data.sysUser.phone){
+            this.haveInfo.contactPhone = true
+            this.form.contactPhone = res.data.data.sysUser.phone
+          }
+          if(res.data.data.sysUser.realName){
+            this.haveInfo.realName = true
+            this.form.realName = res.data.data.sysUser.realName
+          }
+      }
+    })
   },
   methods: {
     getProvince () {

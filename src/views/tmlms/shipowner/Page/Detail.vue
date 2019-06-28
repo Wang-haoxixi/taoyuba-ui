@@ -7,13 +7,13 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="姓名:" prop="realName">
-                <el-input v-model="shipowner.realName" placeholder="" v-if="!$route.query.see"></el-input>
+                <el-input v-model="shipowner.realName" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.realName"></el-input>
                 <div v-else>{{ shipowner.realName }}</div>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="身份证号:" prop="idcard">
-                <el-input v-model="shipowner.idcard" placeholder="" v-if="!$route.query.see"></el-input>
+                <el-input v-model="shipowner.idcard" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.idcard"></el-input>
                 <div v-else>{{ shipowner.idcard }}</div>
               </el-form-item>
             </el-col>
@@ -25,7 +25,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="手机号码:" prop="phone">
-                <el-input v-model="shipowner.phone" placeholder="" v-if="!$route.query.see"></el-input>
+                <el-input v-model="shipowner.phone" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.phone"></el-input>
                 <div v-else>{{ shipowner.phone }}</div>
               </el-form-item>
             </el-col>
@@ -47,6 +47,7 @@
 <script>
 import { getArea } from '@/api/post/address.js'
 import { saveShipowner, getShipownerDetail, getAllArea, editShipowner, getAllAreaName } from '@/api/tmlms/shipowner'
+import { getUserInfo } from '@/api/login'
 import Vue from 'vue'
 import VueSocketio from 'vue-socket.io'
 Vue.use(new VueSocketio({
@@ -75,6 +76,9 @@ export default {
         }
       }
     return {
+      haveInfo: {
+        phone: false,
+      },
       shipowner:{
       },
       rules: {
@@ -207,6 +211,24 @@ export default {
         })
       })
     }
+    // 判断是否有数据
+    getUserInfo().then(res=>{
+      console.log(res.data.data.roles.indexOf(1))
+      if(res.data.data.roles.indexOf(1) === -1 && res.data.data.roles.indexOf(111) === -1){
+          if(res.data.data.sysUser.phone){
+            this.haveInfo.phone = true
+            this.shipowner.phone = res.data.data.sysUser.phone
+          }
+          if(res.data.data.sysUser.realName){
+            this.haveInfo.realName = true
+            this.shipowner.realName = res.data.data.sysUser.realName
+          }
+          if(res.data.data.sysUser.idCard){
+            this.haveInfo.idcard = true
+            this.shipowner.idcard = res.data.data.sysUser.idCard
+          }
+      }
+    })
     // 获取编辑数据
     async function getAll () {
       // 异步获取ID

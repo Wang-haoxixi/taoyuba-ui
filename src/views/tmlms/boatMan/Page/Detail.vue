@@ -7,7 +7,7 @@
                 <el-row>
                 <el-col :span="12">
                     <el-form-item label="个人姓名：" prop="realName">
-                    <el-input v-model="form.realName"></el-input>
+                    <el-input v-model="form.realName" :disabled="haveInfo.realName"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -20,7 +20,7 @@
                 <el-row>
                 <el-col :span="12">
                     <el-form-item label="身份证号码：" prop="idcard">
-                    <el-input v-model="form.idcard"></el-input>
+                    <el-input v-model="form.idcard" :disabled="haveInfo.idcard"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -87,7 +87,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="联系电话" prop="phone">
-                    <el-input v-model="form.phone"></el-input>
+                    <el-input v-model="form.phone" :disabled="haveInfo.phone"></el-input>
                     </el-form-item>
                 </el-col>
                 </el-row>
@@ -184,6 +184,7 @@
 import { getArea,getPosition} from '@/api/post/admin'
 import { saveCrew, detailCrew, editCrew } from '@/api/tmlms/boatMan'
 import VueSocketio from 'vue-socket.io'
+import { getUserInfo } from '@/api/login'
 import Vue from 'vue'
 Vue.use(new VueSocketio({
     debug: true,
@@ -201,6 +202,7 @@ export default {
         }
       }
     return {
+      haveInfo: {},
       form: {
           gender: 1,
           isTrain: 0,
@@ -360,6 +362,23 @@ export default {
     if(this.$route.query.edit || this.$route.query.see){
       getAll.call(this)
     }
+        // 判断是否有数据
+    getUserInfo().then(res=>{
+      if(res.data.data.roles.indexOf(1) === -1 && res.data.data.roles.indexOf(111) === -1){
+          if(res.data.data.sysUser.phone){
+            this.haveInfo.phone = true
+            this.form.phone = res.data.data.sysUser.phone
+          }
+          if(res.data.data.sysUser.realName){
+            this.haveInfo.realName = true
+            this.form.realName = res.data.data.sysUser.realName
+          }
+          if(res.data.data.sysUser.idCard){
+            this.haveInfo.idcard = true
+            this.form.idcard = res.data.data.sysUser.idCard
+          }
+      }
+    })
         // 获取编辑数据
     async function getAll () {
       // 异步获取ID

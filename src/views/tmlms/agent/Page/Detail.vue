@@ -13,13 +13,13 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="联系人:" prop="contactName">
-                <el-input v-model="agent.contactName" placeholder="" v-if="!$route.query.see"></el-input>
+                <el-input v-model="agent.contactName" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.contactName"></el-input>
                 <div v-else>{{ agent.contactName }}</div>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="手机号码:" prop="phone">
-                <el-input v-model="agent.phone" placeholder="" v-if="!$route.query.see"></el-input>
+                <el-input v-model="agent.phone" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.phone"></el-input>
                 <div v-else>{{ agent.phone }}</div>
               </el-form-item>
             </el-col>
@@ -56,6 +56,7 @@
 <script>
 import { saveAgent, detailAgent, editAgent } from '@/api/tmlms/agent'
 import store from '@/store'
+import { getUserInfo } from '@/api/login'
 export default {
   data () {
       var checkPhone = (rule, value, callback) => {
@@ -68,8 +69,14 @@ export default {
         }
       }
     return {
+      haveInfo: {
+        contactName:false,
+        phone:false,
+      },
       agent:{
         businessLicense:'',
+        phone: '',
+        contactName: '',
       },
       headers: {
         Authorization: 'Bearer ' + store.getters.access_token,
@@ -153,6 +160,19 @@ export default {
         this.agent = res.data.data
       })
     }
+    getUserInfo().then(res=>{
+      console.log(res.data.data)
+      if(res.data.data.roles.indexOf(1) === -1 && res.data.data.roles.indexOf(111) === -1){
+          if(res.data.data.sysUser.phone){
+            this.haveInfo.phone = true
+            this.agent.phone = res.data.data.sysUser.phone
+          }
+          if(res.data.data.sysUser.realName){
+            this.haveInfo.contactName = true
+            this.agent.contactName = res.data.data.sysUser.realName
+          }
+      }
+    })
   },
 }
 </script>

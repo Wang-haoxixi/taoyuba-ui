@@ -3,7 +3,7 @@
     <a-dropdown>
       <div class="user-info-wrapper">
         <a-avatar icon="user" :src="userInfo.avatar" />
-        <span class="user-name">{{ userInfo.username}}</span>
+        <span class="user-name">{{ userInfo.realName || userInfo.username}}</span>
         <a-icon type="down" />
       </div>
       <a-menu slot="overlay">

@@ -96,7 +96,7 @@
       <div class="roles">
         <template v-for="(item,index) of roleList" >
           <div class="role" v-if="userInfo.roles.indexOf(item.role) === -1" :key="index">
-            <el-button @click="changeSelect(item.name)" style="width:80%;margin:auto" :type="item.name == select ? 'primary' : 'default'">{{item.name}}</el-button>
+            <el-button @click="changeSelect(item.role)" style="width:80%;margin:auto" :type="item.role == select ? 'primary' : 'default'">{{item.name}}</el-button>
           </div>
         </template>
       </div>
@@ -155,7 +155,7 @@ export default {
           select: false,
           role: 109,
         },{
-          name: '渔村',
+          name: '村公司',
           select: false,
           role: 112,
         },
@@ -187,26 +187,23 @@ export default {
       this.dialogShow = true
     },
     // 单选角色
-    changeSelect (name){
-      this.select = name
+    changeSelect (role){
+      this.select = role
     },
     // 选好角色后新增信息
     addUser () {
       if(this.select){
         switch(this.select) {
-            case '船员':
+            case 105:
                 this.$router.push({name: 'detailBoatMan',query: {userId: this.userInfo.sysUser.userId}})
                 break
-            case '船东':
+            case 108:
                 this.$router.push({name: 'detailShipowner',query: {userId: this.userInfo.sysUser.userId}})
                 break
-            case '中介':
+            case 109:
                 this.$router.push({name: 'detailAgent',query: {userId: this.userInfo.sysUser.userId}})
                 break
-            case '培训机构':
-                this.$router.push({name: 'detailTraining',query: {userId: this.userInfo.sysUser.userId}})
-                break
-            case '渔村':
+            case 112:
                 this.$router.push({name: 'detailBvillage',query: {userId: this.userInfo.sysUser.userId}})
                 break
             default:
