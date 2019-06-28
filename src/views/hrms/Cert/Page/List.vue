@@ -6,10 +6,10 @@
         <template slot="left">
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
-        <template slot="right">
-          <operation-search @search-page="searchPage" advance-search :prop="searchData">
-            <advance-search @search-page="searchPage"></advance-search>
-          </operation-search>
+        <template slot="right"  >                                                                                                          
+            <operation-search @search-page="searchPage" advance-search :prop="searchData">
+              <advance-search @search-page="searchPage"></advance-search>
+            </operation-search>
         </template>
       </operation-container>          
       <iep-table :isLoadTable="isLoadTable" :pagination="pagination" :columnsMap="columnsMap" :pagedTable="pagedTable" @size-change="handleSizeChange" @current-change="handleCurrentChange" @selection-change="handleSelectionChange" is-mutiple-selection>
@@ -31,9 +31,9 @@ import { deleteCertById,getCertPage} from '@/api/post/cert'
 import { getUserInfo } from '@/api/login'
 import AdvanceSearch from './AdvanceSearch'
 import mixins from '@/mixins/mixins'
-import { columnsMap, dictsMap,queryForm } from '../options'
+import { columnsMap, dictsMap,queryForm,searchForm } from '../options'
 export default {
-  components: { AdvanceSearch },
+  components: { AdvanceSearch },      
   mixins: [mixins],
   data () {
     return {
@@ -41,6 +41,7 @@ export default {
       columnsMap,
       searchData: 'contactName',
       maps:queryForm(),
+      searchForm:searchForm(),
     }
   },
   created () {
@@ -48,12 +49,12 @@ export default {
   },
   methods: {
     handleSelectionChange (val) {
-      this.multipleSelection = val.map(m => m.id)
+      this.multipleSelection = val.map(m => m.id)                         
     },
     handleDelete (row) {
       this._handleGlobalDeleteById(row.certId, deleteCertById)
     },
-    handleAdd () {
+    handleAdd () {                                                              
       this.$router.push({
         path: '/cert_spa/cert_user/0',
       })      
@@ -63,14 +64,23 @@ export default {
         path: `/cert_spa/cert_user/${row.certId}`,
       })    
     },
- async loadPage (param = this.searchForm) {                              
-              console.log(this.maps)      
+ async loadPage (param = this.searchForm) {                                           
         getUserInfo().then(({data}) => {
-              this.maps.userId  =  data.data.sysUser.userId
+              this.maps.userId  =  data.data.sysUser.userId     
               this.loadTable({ userId: this.maps.userId, ...param }, getCertPage)
-              console.log(this.maps)
         })         
     },
   },
 }
 </script>
+
+<style lang="scss" scoped>                                                                             
+.searchspan3 {             
+      span {
+         display: inline-block;  
+          width: 150px;
+          margin: 0 5px;
+      }
+}
+
+</style>

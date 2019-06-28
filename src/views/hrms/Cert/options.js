@@ -73,6 +73,11 @@ const columnsMap = [
 
   const initSearchForm = () => {
     return {
+      idCard: '',
+      crewName: '',
+      certIssueUnit: '',
+      certTitle: '',
+      certLevel: '',
       certType: '', // 证书类型
       certNo: '', // 证书编号
     }
@@ -80,6 +85,11 @@ const columnsMap = [
   
   const initDtoSearchForm = () => {
     return {
+      idCard: '',
+      crewName: '',
+      certIssueUnit: '',
+      certTitle: '',
+      certLevel: '',
       certType: '', // 证书类型
       certNo: '', // 证书编号
     }
@@ -112,4 +122,16 @@ const columnsMap = [
     ],
   }
 
-export{ columnsMap, dictsMap, initForm, formToDto, rules, initSearchForm, toDtoSearchForm,queryForm }
+  const  searchForm = () => {
+        return {
+            realName: '',
+            idcard: '',
+            certIssueUnit: '',
+            certNo: '',
+            certLevel: '',
+            certType: '',
+            certTitle: '',
+        }
+  }
+
+export{ columnsMap, dictsMap, initForm, formToDto, rules, initSearchForm, toDtoSearchForm,queryForm,searchForm }

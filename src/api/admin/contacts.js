@@ -30,6 +30,13 @@ export function getUserListTree () {
   })
 }
 
+export function getTybListTree () {
+  return request({
+    url: `${prefixUrl}/admin/user/list`,
+    method: 'get',
+  })
+}
+
 export function getUserPyList () {
   return request({
     url: `${prefixUrl}/user/name/list`,

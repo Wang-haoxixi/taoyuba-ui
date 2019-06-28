@@ -21,16 +21,16 @@
           {{scope.row.examineeName}}
         </template>
       </el-table-column>
-      <el-table-column prop="examineeNumber" label="工号">
+      <!-- <el-table-column prop="examineeNumber" label="工号">
         <template slot-scope="scope">
           {{scope.row.examineeNumber}}
         </template>
-      </el-table-column>
-      <el-table-column prop="department" label="部门" width="110">
+      </el-table-column> -->
+      <!-- <el-table-column prop="department" label="部门" width="110">
         <template slot-scope="scope">
           {{scope.row.department}}
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column prop="examinationNumber" label="准考证号" min-width="110">
         <template slot-scope="scope">
           {{scope.row.examinationNumber}}

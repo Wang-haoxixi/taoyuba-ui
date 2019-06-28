@@ -209,18 +209,54 @@
           <hr>
           <el-form-item label="权限设置" required>
             <div class="permissionSettings">
-              <el-form-item prop="operateUserids" label="报名管理&考卷管理" label-width="150px">
-                <iep-contact-multiple-user v-model="examForm.operateUserids" :filter-user-list="filterUserList"
-                  :disabled="readOnly"></iep-contact-multiple-user>
+              <el-form-item prop="operateIds" label="报名管理&考卷管理" label-width="150px" ref="operateValidate">
+                <!-- <iep-contact-multiple-user v-model="examForm.operateUserids" :filter-user-list="filterUserList"
+                  :disabled="readOnly"></iep-contact-multiple-user> -->
+                <operation-wrapper class="contact-wrapper">
+                    <el-select v-model="operateIds" multiple filterable  placeholder="请输入关键词" @change="clearOperate()">
+                      <el-option class="dis" v-for="item in treeData" :key="item.value" :label="item.label" :value="item.value">
+                      </el-option>
+                    </el-select>
+                  <el-button @click="openOperateContact()">通讯录</el-button>
+                </operation-wrapper>
               </el-form-item>
-              <el-form-item prop="writeUserids" label="试卷审阅权限" label-width="150px">
-                <iep-contact-multiple-user v-model="examForm.writeUserids" :filter-user-list="filterUserList"
-                  :disabled="readOnly"></iep-contact-multiple-user>
+              <el-form-item prop="writeIds" label="试卷审阅权限" label-width="150px" ref="writeValidate">
+                <!-- <iep-contact-multiple-user v-model="examForm.writeUserids" :filter-user-list="filterUserList"
+                  :disabled="readOnly"></iep-contact-multiple-user> -->
+                <operation-wrapper class="contact-wrapper">
+                    <el-select v-model="writeIds" multiple filterable  placeholder="请输入关键词" @change="clearWrite()">
+                      <el-option class="dis" v-for="item in treeData" :key="item.value" :label="item.label" :value="item.value">
+                      </el-option>
+                    </el-select>
+                  <el-button @click="openWriteContact()">通讯录</el-button>
+                </operation-wrapper>
               </el-form-item>
               <el-form-item prop="faceUserIds" label="面试判分权限" label-width="150px" v-if="examForm.addInterview===1">
                 <iep-contact-multiple-user v-model="examForm.faceUserIds" :filter-user-list="filterUserList"
                   :disabled="readOnly"></iep-contact-multiple-user>
               </el-form-item>
+              <iep-drawer :drawer-show="dialogWriteShow" title="通讯录" width="300" @close="closeWrite" :z-index="3000">
+                <el-input placeholder="输入关键字进行过滤" v-model="filterText" clearable></el-input>
+                  <el-tree :data="treeData">
+                    <span  class="custom-tree-node" slot-scope="{ node, data }">
+                      <span>{{ node.label }}</span>
+                      <span>
+                        <el-button :disabled="isDisabled(data)" type="text" size="mini" @click="() => selectWriteGroup(data, node)">选择</el-button>
+                      </span>
+                    </span>         
+                  </el-tree>
+              </iep-drawer>
+              <iep-drawer :drawer-show="dialogOperateShow" title="通讯录" width="300" @close="closeOperate" :z-index="3000">
+                <el-input placeholder="输入关键字进行过滤" v-model="filterText" clearable></el-input>
+                  <el-tree :data="treeData">
+                    <span  class="custom-tree-node" slot-scope="{ node, data }">
+                      <span>{{ node.label }}</span>
+                      <span>
+                        <el-button :disabled="isDisabled(data)" type="text" size="mini" @click="() => selectOperateGroup(data, node)">选择</el-button>
+                      </span>
+                    </span>         
+                  </el-tree>
+              </iep-drawer>
             </div>
           </el-form-item>
 
@@ -248,6 +284,8 @@ import { examForm, examFormRules, toDtoForm, selfToVo } from '../option'
 import { save, release, getTestOption, getExam, updateSave, updateRelease } from '@/api/exam/createExam/newTest/newTest'
 import { initForm } from '../../../testPaperLibrary/option'
 import { getTestPaperById } from '@/api/examPaper/examPaperApi'
+import { getTybListTree } from '@/api/admin/contacts'
+// import { getObj } from '@/api/admin/user'
 export default {
   mixins: [mixins],
   props: ['data'],
@@ -265,7 +303,17 @@ export default {
       pickerOptionsSignEnd: this.signEndDate(),
       pickerOptionsBegin: this.beginDate(),
       pickerOptionsEnd: this.endDate(),
+      dialogWriteShow: false,
+      dialogOperateShow: false,
+      filterText: '',
+      treeData: [],
+      filterUserList: [],
+      operateIds: [],
+      writeIds: [],
     }
+  },
+  created () {
+    this.loadNode()
   },
   computed: {
     //新增/编辑
@@ -283,9 +331,6 @@ export default {
     ...mapGetters([
       'userInfo',
     ]),
-    filterUserList () {
-      return [this.userInfo.userId, ...this.examForm.operateUserids.map(m => m.id), ...this.examForm.faceUserIds.map(m => m.id), ...this.examForm.writeUserids.map(m => m.id)]
-    },
   },
   watch: {
     'data': {
@@ -295,6 +340,20 @@ export default {
       },
       immediate: true,
     },
+    // 'operateIds': {
+    //   handler () {
+    //     console.log(this.operateIds)
+    //     console.log(this.treeData)
+    //   },
+    //   immediate: true,
+    // },
+    // 'writeIds': {
+    //   handler () {
+    //     console.log(this.writeIds)
+    //     console.log(this.treeData)
+    //   },
+    //   immediate: true,
+    // },
   },
   methods: {
 
@@ -371,6 +430,8 @@ export default {
       if (this.isEdit) {
         await getExam({ id: this.data.id }).then(({ data }) => {
           this.examForm = selfToVo(data.data)
+          this.writeIds = this.examForm.writeUserids.map(m => m.id)
+          this.operateIds = this.examForm.operateUserids.map(m => m.id)
           this.testPaper = data.data.iepTestPaperVO
         })
       } else {
@@ -447,6 +508,98 @@ export default {
         }
       })
     },
+    loadNode () {
+      if (this.treeData.length) {
+        return
+      }
+      getTybListTree().then(({ data }) => {
+        this.treeData = data.data[0].children[2].children
+      })
+    },
+    openWriteContact () {
+      this.dialogWriteShow = true
+    },
+    openOperateContact () {
+      this.dialogOperateShow = true
+    },
+    closeWrite () {
+      this.filterText = ''
+      this.dialogWriteShow = false
+    },
+    closeOperate () {
+      this.filterText = ''
+      this.dialogOperateShow = false
+    },
+    selectWriteGroup (data) {
+      if (!this.writeIds.includes(data.value)) {
+        this.writeIds.push(data.value)
+        this.examForm.writeUserids.push({
+          id: data.value,
+          name: data.label,
+        })
+      }
+      this.$refs['writeValidate'].clearValidate()
+    },
+    selectOperateGroup (data) {
+      if (!this.operateIds.includes(data.value)) {
+        this.operateIds.push(data.value)
+        this.examForm.operateUserids.push({
+          id: data.value,
+          name: data.label,
+        })
+      }
+      this.$refs['operateValidate'].clearValidate()
+    },
+    isDisabled (data) {
+      if(this.writeIds.includes(data.value) || this.operateIds.includes(data.value)) {
+        return true
+      }
+      return false
+    },
+    // isWriteDisabled (data) {
+    //   if(this.examForm.writeUserids.includes(data.value)) {
+    //     return true
+    //   }
+    //   return false
+    // },
+    clearOperate () {
+      // console.log(this.examForm.operateUserids)
+      let operates = []
+      operates = this.examForm.operateUserids.map(m => m.id)
+      // console.log(operates)
+      // getObj(operates).then((data) => {
+      //   console.log(data)
+      // })
+      operates.forEach(v => {
+        if (!this.operateIds.includes(v)) {
+          // this.examForm.operateUserids.forEach(k => {
+          //   if (v === k.id) {
+          //     console.log(k)
+          //     console.log('111')
+          //     this.examForm.operateUserids.splice(k, 1)              
+          //   }
+          // })
+          for (let i=0; i<this.examForm.operateUserids.length; i++) {
+            if (v === this.examForm.operateUserids[i].id) {
+              this.examForm.operateUserids.splice(i, 1) 
+            }
+          }
+        }
+      })
+    },
+    clearWrite () {
+      let writes = []
+      writes = this.examForm.writeUserids.map(m => m.id)
+      writes.forEach(v => {
+        if (!this.writeIds.includes(v)) {
+          for (let i=0; i<this.examForm.writeUserids.length; i++) {
+            if (v === this.examForm.writeUserids[i].id) {
+              this.examForm.writeUserids.splice(i, 1) 
+            }
+          }
+        }
+      })
+    },
   },
 }
 </script>
@@ -496,5 +649,24 @@ export default {
 <style scoped>
 .permissionSettings >>> .el-form-item__label {
   line-height: 32px;
+}
+.contact-wrapper {
+  display: flex;
+}
+.contact-wrapper
+  >>> .ant-select-selection__choice__content
+  > span:nth-child(2) {
+  display: none;
+}
+.custom-tree-node {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-right: 8px;
+}
+.dis {
+  display:none;
 }
 </style>

@@ -64,6 +64,7 @@
 import { detal, post, put} from '@/api/post/cert'
 import { getUserInfo } from '@/api/login'
 import { initForm, formToDto, rules, dictsMap } from '../options'
+import store from '@/store'
 export default {
   data () {
     return {
@@ -75,6 +76,9 @@ export default {
       },
       rules,
       form: initForm(),
+      headers: {
+          Authorization: 'Bearer ' + store.getters.access_token,
+      },
     }
   },
   computed: {

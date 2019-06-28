@@ -6,6 +6,27 @@
     <el-form-item label="证书编号：">
         <el-input v-model="form.certNo"></el-input>
     </el-form-item>
+    <el-form-item label="身份证号码：">
+        <el-input v-model="form.idCard"></el-input>
+    </el-form-item>
+     <el-form-item label="姓名：">
+        <el-input v-model="form.crewName"></el-input>
+    </el-form-item>
+     <el-form-item label="签发机构：">
+        <el-input v-model="form.certIssueUnit"></el-input>
+    </el-form-item>
+    <el-form-item label="证书等级：">
+     <el-select  placeholder="请选择证书等级" v-model="form.certLevel" size="small">           
+              <el-option v-for="item in level"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+              </el-option>
+            </el-select>
+    </el-form-item>
+      <el-form-item label="证书职务：">
+      <iep-dict-select v-model="form.certTitle" dict-name="tyb_crew_cert_title"></iep-dict-select>
+    </el-form-item>
     <el-form-item>
       <operation-wrapper>
         <iep-button type="primary" @click="searchPage">搜索</iep-button>
@@ -48,6 +69,20 @@ export default {
           },
         }],
       },
+        level: [
+        {
+          label: '一级',
+          value: 1,
+        },
+        {
+          label: '二级',
+          value: 2,
+        },
+        {
+          label: '三级',    
+          value: 3,
+        },
+      ],
     }
   },
   methods: {
