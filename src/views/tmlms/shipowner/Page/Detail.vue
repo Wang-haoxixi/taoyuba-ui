@@ -47,14 +47,15 @@
 <script>
 import { getArea } from '@/api/post/address.js'
 import { saveShipowner, getShipownerDetail, getAllArea, editShipowner, getAllAreaName } from '@/api/tmlms/shipowner'
-import { getUserInfo } from '@/api/login'
 import Vue from 'vue'
+import information from '@/mixins/information'
 import VueSocketio from 'vue-socket.io'
 Vue.use(new VueSocketio({
     debug: true,
     connection: 'http://localhost:5000', //地址+端口，由后端提供
 }))
 export default {
+  mixins: [information],
   data () {
     // 验证
       var card = (rule, value, callback) => {
@@ -212,23 +213,7 @@ export default {
       })
     }
     // 判断是否有数据
-    getUserInfo().then(res=>{
-      console.log(res.data.data.roles.indexOf(1))
-      if(res.data.data.roles.indexOf(1) === -1 && res.data.data.roles.indexOf(111) === -1){
-          if(res.data.data.sysUser.phone){
-            this.haveInfo.phone = true
-            this.shipowner.phone = res.data.data.sysUser.phone
-          }
-          if(res.data.data.sysUser.realName){
-            this.haveInfo.realName = true
-            this.shipowner.realName = res.data.data.sysUser.realName
-          }
-          if(res.data.data.sysUser.idCard){
-            this.haveInfo.idcard = true
-            this.shipowner.idcard = res.data.data.sysUser.idCard
-          }
-      }
-    })
+    this.getInformation('shipowner',['phone','realName',true])
     // 获取编辑数据
     async function getAll () {
       // 异步获取ID

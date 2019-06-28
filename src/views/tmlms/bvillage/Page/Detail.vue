@@ -13,7 +13,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="联系人:" prop="contactName">
-                <el-input v-model="bvillage.contactName" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.contactName"></el-input>
+                <el-input v-model="bvillage.contactName" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.realName"></el-input>
                 <div v-else>{{ bvillage.contactName  }}</div>
               </el-form-item>
             </el-col>
@@ -57,8 +57,9 @@ import { saveVillage,detailVillage,editVillage } from '@/api/tmlms/bvillage'
 import { getAllArea, getAllAreaName } from '@/api/tmlms/shipowner'
 import { lazyAMapApiLoaderInstance } from 'vue-amap'
 import { getArea } from '@/api/post/address.js'
-import { getUserInfo } from '@/api/login'
+import information from '@/mixins/information'
 export default {
+  mixins: [information],
   data () {
       var checkPhone = (rule, value, callback) => {
         if (value === '') {
@@ -70,10 +71,6 @@ export default {
         }
       }
     return {
-        haveInfo: {
-          contactName:false,
-          phone:false,
-        },
         show: false,
         bvillage:{
             phone: '',
@@ -261,18 +258,7 @@ export default {
             }
           }, 100)
     })
-    getUserInfo().then(res=>{
-      if(res.data.data.roles.indexOf(1) === -1 && res.data.data.roles.indexOf(111) === -1){
-          if(res.data.data.sysUser.phone){
-            this.haveInfo.phone = true
-            this.bvillage.phone = res.data.data.sysUser.phone
-          }
-          if(res.data.data.sysUser.realName){
-            this.haveInfo.contactName = true
-            this.bvillage.contactName = res.data.data.sysUser.realName
-          }
-      }
-    })
+    this.getInformation('bvillage',['phone','contactName'])
     // 获取编辑数据
     async function getAll () {
       // 异步获取ID

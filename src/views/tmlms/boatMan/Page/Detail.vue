@@ -184,13 +184,15 @@
 import { getArea,getPosition} from '@/api/post/admin'
 import { saveCrew, detailCrew, editCrew } from '@/api/tmlms/boatMan'
 import VueSocketio from 'vue-socket.io'
-import { getUserInfo } from '@/api/login'
+// import { getUserInfo } from '@/api/login'
+import information from '@/mixins/information'
 import Vue from 'vue'
 Vue.use(new VueSocketio({
     debug: true,
     connection: 'http://localhost:5000', //地址+端口，由后端提供
 }))
 export default {
+  mixins: [information],
   data () {
       var checkPhone = (rule, value, callback) => {
         if (value === '') {
@@ -202,7 +204,6 @@ export default {
         }
       }
     return {
-      haveInfo: {},
       form: {
           gender: 1,
           isTrain: 0,
@@ -362,23 +363,7 @@ export default {
     if(this.$route.query.edit || this.$route.query.see){
       getAll.call(this)
     }
-        // 判断是否有数据
-    getUserInfo().then(res=>{
-      if(res.data.data.roles.indexOf(1) === -1 && res.data.data.roles.indexOf(111) === -1){
-          if(res.data.data.sysUser.phone){
-            this.haveInfo.phone = true
-            this.form.phone = res.data.data.sysUser.phone
-          }
-          if(res.data.data.sysUser.realName){
-            this.haveInfo.realName = true
-            this.form.realName = res.data.data.sysUser.realName
-          }
-          if(res.data.data.sysUser.idCard){
-            this.haveInfo.idcard = true
-            this.form.idcard = res.data.data.sysUser.idCard
-          }
-      }
-    })
+    this.getInformation('form',['phone','realName',true])
         // 获取编辑数据
     async function getAll () {
       // 异步获取ID

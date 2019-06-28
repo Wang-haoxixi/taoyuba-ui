@@ -13,7 +13,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="联系人:" prop="contactName">
-                <el-input v-model="agent.contactName" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.contactName"></el-input>
+                <el-input v-model="agent.contactName" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.realName"></el-input>
                 <div v-else>{{ agent.contactName }}</div>
               </el-form-item>
             </el-col>
@@ -55,9 +55,11 @@
 </template>
 <script>
 import { saveAgent, detailAgent, editAgent } from '@/api/tmlms/agent'
+import information from '@/mixins/information'
 import store from '@/store'
-import { getUserInfo } from '@/api/login'
+// import { getUserInfo } from '@/api/login'
 export default {
+  mixins: [information],
   data () {
       var checkPhone = (rule, value, callback) => {
         if (value === '') {
@@ -160,19 +162,7 @@ export default {
         this.agent = res.data.data
       })
     }
-    getUserInfo().then(res=>{
-      console.log(res.data.data)
-      if(res.data.data.roles.indexOf(1) === -1 && res.data.data.roles.indexOf(111) === -1){
-          if(res.data.data.sysUser.phone){
-            this.haveInfo.phone = true
-            this.agent.phone = res.data.data.sysUser.phone
-          }
-          if(res.data.data.sysUser.realName){
-            this.haveInfo.contactName = true
-            this.agent.contactName = res.data.data.sysUser.realName
-          }
-      }
-    })
+    this.getInformation('agent',['phone','contactName'])
   },
 }
 </script>
