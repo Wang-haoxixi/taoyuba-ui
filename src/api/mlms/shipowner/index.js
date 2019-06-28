@@ -12,7 +12,12 @@ export function getShipOwners (realName) {
     },
   })
 }
-
+export function getShip (realName) {              
+  return request({
+    url: `/tybship/tybship/findship/${realName}`,
+    method: 'get',
+  })
+}
 
 
 

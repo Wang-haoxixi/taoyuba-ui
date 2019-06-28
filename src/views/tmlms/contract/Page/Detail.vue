@@ -11,7 +11,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="船名：" prop="shipName">
-                <el-input maxlength="20" v-model="formData.shipName"></el-input>
+                <el-input maxlength="20" v-model="formData.shipName" @blur="getShipName"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -243,7 +243,7 @@
 <script>        
 import IepDatePicker from '@/components/IepForm/DatePicker'
 import { getContract, addContract, editContract, getDict } from '@/api/tmlms/contract'
-import { getShipOwners } from '@/api/mlms/shipowner'
+import { getShipOwners,getShip } from '@/api/mlms/shipowner'
 import { getEmployees } from '@/api/mlms/employee'
 import debounce from 'lodash/debounce'
 import {getMyPdf} from '../options'   
@@ -544,6 +544,17 @@ export default {
            getMyPdf(this.record)
           //this.$message.success('上传成功')
            //this.$emit('onGoBack')
+    },
+    // 根据渔船名称填充基本信息
+    getShipName () {
+      getShip(this.formData.shipName).then(res=>{
+        let { licensesOwnerShip,shipowner,shipownerIdcard,mobile,address } = res.data.data[0]
+        this.formData.shipLicenses = licensesOwnerShip
+        this.formData.shipowner = shipowner
+        this.formData.shipownerIdcard = shipownerIdcard
+        this.formData.shipownerPhone = mobile
+        this.formData.shipownerAddr = address
+      })
     },
   },
   watch: {
