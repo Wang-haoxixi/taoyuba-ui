@@ -1,6 +1,7 @@
-<template>
+<template>      
   <div id="contract-print">
     <div id="contract" class="body-width">
+      <div ref="pdfDom">
       <div class="con-cover">
         <p class="cover-num">合同编号：{{formData.contractNumber}}</p>
         <h1>渔船劳务（雇员）合同</h1>
@@ -15,25 +16,25 @@
           <td><label>船名</label></td>
           <td>{{formData.shipName}}</td>
           <td colspan="2"><label>所有权登记号</label></td>
-          <td>{{formData.shipLicenses}}</td>
+          <td>{{formData.shipLicenses}}</td>                                                  
         </tr>
         <tr>
           <td><label>性质</label></td>
-          <td colspan="4">
+          <td colspan="4">          
             <span v-for="item in shipAttrDict" :key="item.value">
               <input v-if="item.value == formData.shipAttr" checked="true" type="checkbox"/>
               <input v-else type="checkbox"/>
               {{item.label}}
-            </span>
-            <span>(请"√"选)</span>
+            </span>                                               
+            <span>(请"√"选)</span>                                                                                              
           </td>
         </tr>
-        <tr>
+        <tr>            
           <td><label>船舶所有人</label></td>
           <td>{{formData.shipowner}}</td>
           <td colspan="2"><label>身份证号</label></td>
           <td>{{formData.shipownerIdcard}}</td>
-        </tr>
+        </tr>           
         <tr>
           <td><label>联系电话</label></td>
           <td>{{formData.shipownerPhone}}</td>
@@ -80,7 +81,7 @@
               {{item.label}}
             </span>
             <span>（请在选项“ □” 上打“ √” 并下面填写相关内容）</span>
-          </td>
+          </td>                                                                                                                   
         </tr>
         <tr>
           <th rowspan="4">合同期限(请"√"选)</th>
@@ -102,15 +103,15 @@
               <input v-if="2 == formData.periodType" checked="true" type="checkbox"/>
               <input v-else type="checkbox"/>
               航次
-            </span>
-          </td>
-          <td rowspan="2">
-            <div v-if="2 == formData.periodType">
-              <p>{{formData.periodPortStart}}登船起</p>
-              <p>{{formData.periodPortEnd}}下船止</p>
-            </div>
-          </td>
-        </tr>
+            </span>                     
+          </td>                                               
+          <td rowspan="2">                                                
+            <div v-if="2 == formData.periodType">             
+              <p>{{formData.periodPortStart}}登船起</p>                 
+              <p>{{formData.periodPortEnd}}下船止</p>               
+            </div>                                                     
+          </td>                                                         
+        </tr>                                                 
         <tr>
           <td>
             <div v-if="1 == formData.periodType">
@@ -119,7 +120,7 @@
             </div>
           </td>
         </tr>
-        <tr>                                                                                              
+        <tr>
           <td rowspan="2" class="check">
             <span>
               <input v-if="3 == formData.periodType" checked="true" type="checkbox"/>
@@ -174,7 +175,7 @@
               <input v-else type="checkbox"/>
               按登船至下船日期计算
             </span>
-          <td colspan="3">        
+          <td colspan="3">
           <span v-if="3 == formData.payComputeType">每天人民币{{formData.payMoney}}元(大写：{{moneyTransilate(formData.payMoney)}})</span>
           </td>
         </tr>
@@ -216,7 +217,7 @@
             </span>
           </td>
         </tr>
-        <tr>
+        <tr>                                      
           <td class="check">
              <span>
               <input v-if="3 == formData.payType" checked="true" type="checkbox"/>
@@ -309,23 +310,39 @@
           <li>见证人：</li>
           <li>签署日期：</li>
         </ul>
+      </div>·
       </div>
     </div>
   </div>
 </template>
 
-<script>
-export default {
+<script>                  
+import { getContract,getDict} from '@/api/tmlms/contract'                                                                                                          
+import {getMyPdf} from '../conoptions' 
+import  { Loading }  from  'element-ui'
+export default {                                
   name: 'print',
   props: {
-    formData: {},
-    shipAttrDict: {},
-    employeePayTypeDict: {},
-    periodTypeDict: {},
-    payComputeTypeDict: {},
-    payTypeDict: {},
+      record: {},
+      type: {},
   },
-  methods: {
+  data () {                                                                  
+      return {
+            formData: {},
+            shipAttrDict: [],
+            employeePayTypeDict: [],
+            periodTypeDict: [],
+            payComputeTypeDict: [],
+            payTypeDict: [],
+            options:{
+                  fullscreen:true,
+                  text: 'pdf文件生成中',
+                  spinner: 'el-icon-loading',
+                  background: 'rgba(0, 0, 0, 0.8)',
+            },
+      }
+  },
+  methods: {        
     moneyTransilate (number) {
       if (number == '') {
         return ''
@@ -346,6 +363,85 @@ export default {
       }
       return str.replace(/零(仟|佰|拾|角)/g, '零').replace(/(零)+/g, '零').replace(/零(兆|万|亿|元)/g, '$1').replace(/(兆|亿)万/g, '$1').replace(/(京|兆)亿/g, '$1').replace(/(京)兆/g, '$1').replace(/(京|兆|亿|仟|佰|拾)(万?)(.)仟/g, '$1$2零$3仟').replace(/^元零?|零分/g, '').replace(/(元|角)$/g, '$1整')
     },
+    getContract () {        
+          getContract(this.record).then(({data}) => {
+                this.formData  = data.data
+          },(error) => {
+                this.$message.error(error.message)
+            }      
+          )
+    },
+    getDicts () {
+          getDict('tyb_contract_ship_attr').then(({data}) => {
+                if(data.code === 0)
+                this.shipAttrDict = data.data
+            })
+          getDict('tyb_contract_employee_pay_type').then(({data}) => {
+            if (data.code === 0) this.employeePayTypeDict = data.data
+          })
+          getDict('tyb_contract_period_type').then(({data}) => {
+            if (data.code === 0) this.periodTypeDict = data.data
+          })
+          getDict('tyb_contract_pay_compute_type').then(({data}) => {
+            if (data.code === 0) this.payComputeTypeDict = data.data
+          })
+          getDict('tyb_contract_pay_type').then(({data}) => {
+            if (data.code === 0) this.payTypeDict = data.data
+          })
+    },
+   downLoadpdf () {                                                                                                           
+          let loadingInstance   =  Loading.service(this.options)
+          this.$nextTick(() => {
+                    getMyPdf(this.record)
+            })
+          loadingInstance.close()
+    },
+  },
+  created () {    
+      this.getContract()
+      this.getDicts()
+  },
+  mounted () {     
+        let loadingInstance   =  Loading.service(this.options)                                                                                                                                                                                                                                                                                                                                                                                       
+        this.$nextTick( () => {       
+          setTimeout(() => {
+               let  pdfDom  = this.$refs.pdfDom    
+                getMyPdf(this.record,pdfDom)
+                loadingInstance.close()
+               this.$emit('onGoBack')     
+          }, 1000)                                                                                                                   
+            }
+        )
   },
 }
-</script>
+</script>     
+
+  <style>
+              ul,li{list-style: none;}
+              .body-width{width: 210mm;color: #333;margin:0px auto;font-size:14px;}
+              .contract-table{border:solid 1px #606266;border-collapse:collapse;border-spacing:0px;width:100%;height: 297mm;overflow: hidden;}
+              .contract-table td,.contract-table th{color:#606266;border-bottom: solid 1px #606266;border-right: solid 1px #333;height: 30px;line-height: 30px;text-align: center;font-size:14px;}
+              .contract-table td.check{text-align: left;padding:10px 30px;}
+              .contract-table th{font-weight: normal;}
+               .check el-date-picker{}
+              .set-width .el-input{width: 50%;margin: 5px 0px;}
+              .contract-table .el-checkbox-group{display: inline-block;}
+              .con-cover{text-align: center;height: 297mm;overflow: hidden;}
+              .cover-num{text-align: right;padding: 50px 0px;font-weight: bold;font-size:16px;margin-right: 50px;}
+              .con-cover h1{font-size: 30px;font-weight: bold;margin-top: 150px;margin-bottom: 50px}
+              .con-cover h2{font-size:24px;font-weight: bold;}
+              .cover-tip{margin-top:600px;}
+              .cover-tip p{margin-bottom: 30px;font-weight: bold;font-size:16px;}
+              .body-width td.check{padding:0px 30px;}
+              .con-detail{margin-top: 20px;}
+              .con-detail h2{text-align: center;font-size: 20px;font-weight: bold;}
+              .con-detail h3{font-size: 16px;font-weight: bold;margin-top: 15px;}
+              .con-detail p{text-indent: 2em;line-height: 28px;margin-top: 15px;}
+              .sign{margin-top: 30px;}
+              .sign h3{font-size:16px;font-weight: bold;}
+              .sign-name{margin-top: 10px;overflow: hidden;}
+              .sign-name li{float: left;width: 50%;line-height: 30px;}
+              .sign-see{margin-top: 30px;}
+              .sign-see li{line-height: 30px;}
+              .margin70{margin-top: 70px;}
+  </style>
