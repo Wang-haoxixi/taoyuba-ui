@@ -120,10 +120,12 @@ export function downloadFile (fileUrl) {
     responseType: 'arraybuffer',
   }).then(response => {
     // 处理返回的文件流
+    let ArrayName = fileUrl.split('-')
+    let  fileName = ArrayName[1]
     const blob = new Blob([response.data])
     const link = document.createElement('a')
     link.href = window.URL.createObjectURL(blob)
-    link.download = '渔船合同.pdf'
+    link.download = fileName
     document.body.appendChild(link)
     link.style.display = 'none'
     link.click()
