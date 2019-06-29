@@ -467,8 +467,7 @@ export default {
           })
         } else if (this.type === 'edit') {
           editContract(this.formData).then(async data => {
-            if (data.data.code === 0) {
-              await  this.getMyPdf()   
+            if (data.data.code === 0) { 
               this.$message.success('编辑成功！')
               this.$emit('onGoBack')
             }
