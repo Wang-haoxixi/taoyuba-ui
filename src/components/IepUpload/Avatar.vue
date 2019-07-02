@@ -26,8 +26,12 @@ export default {
   },
   computed: {
     isShow () {
-      if (this.value.startsWith('//')) return true
-      else return false
+      if(this.value){
+        if (this.value.startsWith('//')) return true
+        else return false
+      }else {
+        return false
+      }
     },
   },
   methods: {

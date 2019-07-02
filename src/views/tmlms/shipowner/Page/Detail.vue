@@ -35,6 +35,11 @@
                 <div v-else>{{ shipowner.villageId }}</div>
               </el-form-item>
             </el-col>
+            <el-col>
+                <iep-form-item prop="workExperience" label-name="资质证书">
+                  <inline-form-table :table-data="shipowner.shiplist" :columns="certificateColumns" requestName="certificate" type="employee_profile" @add="setData"></inline-form-table>
+                </iep-form-item>
+            </el-col>
           </el-row>
         </el-form>
         <div style="text-align:center">
@@ -45,6 +50,7 @@
   </div>
 </template>
 <script>
+import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable/'
 import { getArea } from '@/api/post/address.js'
 import { saveShipowner, getShipownerDetail, getAllArea, editShipowner, getAllAreaName } from '@/api/tmlms/shipowner'
 import Vue from 'vue'
@@ -80,7 +86,34 @@ export default {
       haveInfo: {
         phone: false,
       },
+      certificateColumns: [
+          {
+            prop: 'shipName',
+            label: '渔船名',
+          },
+          {
+            prop: 'shipNo',
+            label: '渔船编号',
+          },
+          {
+            prop: 'licensesFishingNo',
+            label: '捕捞许可证编号',
+          },
+          {
+            prop: 'licensesOwnerShip',
+            label: '渔船所有权登记证书',
+          },
+          {
+            prop: 'licensesNationalNo',
+            label: '国籍证书编号',
+          },
+          {
+            prop: 'licensesInspectionNo',
+            label: '船舶检验证书编号',
+          },
+      ],
       shipowner:{
+        shiplist:[],
       },
       rules: {
           realName: [
@@ -110,14 +143,19 @@ export default {
       arr:[],
     }
   },
+  components: { InlineFormTable },
   methods: {
     // 提交表单
     save () {
       this.$refs['form'].validate((valid) => {
           if (valid) {
+            let shipowner = JSON.parse(JSON.stringify(this.shipowner))
+            shipowner.shiplist.forEach(item=>{
+              item.certFile = item.annex
+            })
             let type = 1
             if(this.$route.query.edit){
-              let data = JSON.parse(JSON.stringify(this.shipowner))
+              let data = JSON.parse(JSON.stringify(shipowner))
               data.villageId = data.villageId[data.villageId.length-1]
                // 用户调用这个界面的时候 需要传入ID
               if(this.$route.query.userId){
@@ -134,7 +172,7 @@ export default {
                 this.$message.error(err.message)
               })
             }else{
-              let data = JSON.parse(JSON.stringify(this.shipowner))
+              let data = JSON.parse(JSON.stringify(shipowner))
               data.villageId = data.villageId[data.villageId.length-1]
               // 用户调用这个界面的时候 需要传入ID
               if(this.$route.query.userId){
@@ -181,6 +219,10 @@ export default {
           }
         }
       })
+    },
+    // 获取子组件数据
+    setData (val) {
+      this.shipowner.shiplist = val
     },
     // 遍历数组
     getarr (node) {
@@ -229,6 +271,10 @@ export default {
         if(this.$route.query.edit || this.$route.query.see){
           this.getarr(res.data.data,this.arr)
           data.villageId = this.arr
+          data.shiplist.forEach((item,index)=>{
+              item.annex = item.certFile
+              item.id = index
+          })
           this.shipowner = data
         }
       })

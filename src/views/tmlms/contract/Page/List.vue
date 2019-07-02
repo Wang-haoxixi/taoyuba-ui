@@ -170,9 +170,9 @@ export default {
           h.document.write(`
             <style>
               ul,li{list-style: none;}
-              .body-width{width: 210mm;color: #333;margin:0px auto;font-size:14px;}
+              .body-width{width: 210mm;color: #333;margin:0 auto;font-size:14px;padding-top:10px;}
               .contract-table{border:solid 1px #606266;border-collapse:collapse;border-spacing:0px;width:100%;height: 297mm;overflow: hidden;}
-              .contract-table td,.contract-table th{color:#606266;border-bottom: solid 1px #606266;border-right: solid 1px #333;height: 30px;line-height: 30px;text-align: center;font-size:14px;}
+              .contract-table td,.contract-table th{color:#606266;border-bottom: solid 1px #606266;border-right: solid 1px #333;height: 30px;line-height: 30px;text-align: center;font-size:14px;padding:10px 5px;}
               .contract-table td.check{text-align: left;padding:10px 30px;}
               .contract-table th{font-weight: normal;}
               .check el-date-picker{}
@@ -186,7 +186,7 @@ export default {
               .cover-tip p{margin-bottom: 30px;font-weight: bold;font-size:16px;}
               .body-width td.check{padding:0px 30px;}
               .con-detail{margin-top: 20px;}
-              .con-detail h2{text-align: center;font-size: 20px;font-weight: bold;}
+              .con-detail h2{text-align: center;font-size: 20px;font-weight: bold;margin-top:15px;}
               .con-detail h3{font-size: 16px;font-weight: bold;margin-top: 15px;}
               .con-detail p{text-indent: 2em;line-height: 28px;margin-top: 15px;}
               .sign{margin-top: 30px;}
@@ -195,7 +195,7 @@ export default {
               .sign-name li{float: left;width: 50%;line-height: 30px;}
               .sign-see{margin-top: 30px;}
               .sign-see li{line-height: 30px;}
-              .margin70{margin-top: 70px;}s
+              .margin70{margin-top: 70px;}
             </style>
           `)
           h.document.write(el.outerHTML)      

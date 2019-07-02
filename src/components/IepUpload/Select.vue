@@ -13,15 +13,23 @@
     </el-tag>
     <iep-dialog :dialog-show="dialogShow" title="文件" width="440px" @close="dialogShow=false">
       <div class="upload-wrapper">
-        <iep-upload v-model="fileList" drag :limit="1" @on-finish="handleFinish"></iep-upload>
+        <iep-upload v-model="fileList" drag :limit="1" @on-finish="handleFinish" v-if="!type"></iep-upload>
+        <avatar :value="null" @input="handleFinishAvatar" v-if="type"></avatar>
+      </div>
+    </iep-dialog>
+    <iep-dialog :dialog-show="dialogShow1" title="图片" width="440px" @close="dialogShow1=false">
+      <div class="upload-wrapper">
+        <img :src="src" alt="" style="width:100%">
       </div>
     </iep-dialog>
   </div>
 </template>
 <script>
 import { downloadUrl } from '@/api/common'
+import Avatar from './Avatar'
 export default {
   name: 'IepUploadSelect',
+  components: {Avatar},
   props: {
     disabled: {
       type: Boolean,
@@ -35,11 +43,17 @@ export default {
       type: String,
       required: true,
     },
+    type: {
+      type: Boolean,
+      required: true,
+    },
   },
   data () {
     return {
       dialogShow: false,
+      dialogShow1: false,
       fileList: [],
+      src: '',
     }
   },
   computed: {
@@ -58,7 +72,10 @@ export default {
   },
   methods: {
     handleDownload () {
-      if (this.closable) {
+      if (this.type) {
+        this.dialogShow1 = true
+      }
+      if (this.closable && !this.type) {
         downloadUrl(this.value)
       }
     },
@@ -70,9 +87,19 @@ export default {
       this.$emit('input', files[0].url)
       this.dialogShow = false
     },
+    handleFinishAvatar (files) {
+      console.log(files)
+      this.src = files
+      this.$emit('input', files)
+      this.dialogShow = false
+    },
     handleUpload () {
       this.dialogShow = true
     },
+  },
+  created () {
+    this.src = this.fileName
+    console.log(this.fileName)
   },
 }
 </script>

@@ -172,6 +172,9 @@
                 <iep-form-item class="form-half" prop="remark" label-name="备注信息" tip="请输入备注信息" v-if="!$route.query.userId">
                 <iep-input-area v-model="form.remark"></iep-input-area>
                 </iep-form-item>
+                <iep-form-item prop="workExperience" label-name="资质证书">
+                  <inline-form-table :table-data="form.certList" :columns="certificateColumns" requestName="certificate" type="employee_profile" @load-page="handleSave" @add="setData"></inline-form-table>
+                </iep-form-item>
             </el-form>
         <div style="text-align:center">
           <el-button @click="save" v-if="!$route.query.see">提交</el-button>
@@ -181,14 +184,16 @@
   </div>
 </template>
 <script>
+import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable/'
 import { getArea,getPosition} from '@/api/post/admin'
 import { saveCrew, detailCrew, editCrew } from '@/api/tmlms/boatMan'
-import VueSocketio from 'vue-socket.io'
+import { certificateColumns } from '@/views/hrms/ComponentsNew/options'
 // import { getUserInfo } from '@/api/login'
 import information from '@/mixins/information'
+import VueSocketio from 'vue-socket.io'
 import Vue from 'vue'
 Vue.use(new VueSocketio({
-    debug: true,
+    debug: false,
     connection: 'http://localhost:5000', //地址+端口，由后端提供
 }))
 export default {
@@ -204,12 +209,14 @@ export default {
         }
       }
     return {
+      certificateColumns,
       form: {
           gender: 1,
           isTrain: 0,
           districtId: '',
           remark:'',
           positionId: '',
+          certList: [],
       },
       agent:{
         businessLicense:'',
@@ -287,11 +294,16 @@ export default {
   methods: {
     // 提交表单
     save () {
+      console.log(this.form)
       this.$refs['form'].validate((valid) => {
           if (valid) {
+            let form = JSON.parse(JSON.stringify(this.form))
+            form.certList.forEach(item=>{
+              item.certFile = item.annex
+            })
             let type = 1
             if(this.$route.query.edit){
-              let data = JSON.parse(JSON.stringify(this.form))
+              let data = JSON.parse(JSON.stringify(form))
               if(this.$route.query.userId){
                 type = 2
                 data.userId = this.$route.query.userId
@@ -310,7 +322,7 @@ export default {
                 this.$message.error(err.message)
               })
             }else {
-                let data = JSON.parse(JSON.stringify(this.form))
+                let data = JSON.parse(JSON.stringify(form))
                 if(this.$route.query.userId){
                   type = 2
                   data.userId = this.$route.query.userId
@@ -344,15 +356,20 @@ export default {
           this.city = data.data
       })
     },
+    // 获取子组件数据
+    setData (val) {
+      this.form.certList = val
+    },
     // 改变城市
     choseCity (id) {
       getArea(id).then(({ data }) => {
         this.district = data.data
       })
     },
+    // handleSave
+    handleSave () {},
   },
-  computed: {
-  },
+  components: { InlineFormTable },
   created () {
     getArea(0).then(({ data }) => {
         this.province = data.data
@@ -375,6 +392,10 @@ export default {
       let b = await this.choseCity(data.cityId) 
       console.log(a)
       console.log(b)
+      data.certList.forEach((item,index)=>{
+        item.annex = item.certFile
+        item.id = index
+      })
       this.form = data
     }
   },
