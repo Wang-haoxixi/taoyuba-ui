@@ -39,8 +39,8 @@ const columnsMap = [
   },
 ]
 
-const initForm = () => {
-  return {
+const initForm = () => {                                                
+  return {          
     recruitId: '',
     contactName: '', //联系人
     positionId: '', //招聘岗位
@@ -56,7 +56,10 @@ const initForm = () => {
     town: '', //上船地点
     hullLength: '', //船长（m）
     totalPower: '', //主机总功率
-    // isRcmd: '', //是否推荐
+    certLevel:'',
+    certTitle: '',
+    shipName: '',
+    remark: '',
   }
 }
 
@@ -77,7 +80,10 @@ const initDtoForm = () => {
     town: '', //上船地点
     hullLength: '', //船长（m）
     totalPower: '', //主机总功率
-    // isRcmd: '', //是否推荐
+    certLevel:'',
+    certTitle: '',
+    shipName: '',
+    remark: '',
   }
 }
 
@@ -202,6 +208,9 @@ const rules = {
     { required: true, message: '请填主机总功率', trigger: 'blur' },
     // { validator: amount1, trigger: 'blur'},
     {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+  ],
+  shipName: [
+    { required: true, message: '请填船名', trigger: 'blur' },
   ],
   // isRcmd: [
   //   { required: true, message: '请填是否推荐', trigger: 'blur' },
