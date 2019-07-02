@@ -21,7 +21,7 @@
       <div class="login-text">
         <el-checkbox v-model="form.isKeepLogin">保持登陆</el-checkbox>
         <div class="check-text">
-          <el-button type="text" @click.prevent="handleRetrieve">忘记密码?</el-button>
+          <!-- <el-button type="text" @click.prevent="handleRetrieve">忘记密码?</el-button> -->
           <el-button type="text" @click.prevent="handleRegister">立即注册</el-button>
         </div>
       </div>
