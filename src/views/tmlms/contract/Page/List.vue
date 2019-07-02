@@ -5,7 +5,7 @@
       <iep-button v-if="mlms_contract_add" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
       <avue-tree-table :option="options" style="margin-top: 20px;">
         <el-table-column label="操作">
-          <template slot-scope="scope">
+          <template slot-scope="scope">                     
             <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">查看
             </el-button>
             <el-button type="text" icon="el-icon-view" size="mini" @click="handleDown(scope.row.contractId)">下载PDF
@@ -151,7 +151,7 @@ export default {
         this.$message.error(error.message)
       })
     },
-    handlePrint (contractId) {
+    handlePrint (contractId) {            
       getContract(contractId).then(({data}) => {
         if (data.code == 0) {
           let formData = data.data
@@ -207,8 +207,8 @@ export default {
         this.$message.error(error.message)
       })
     },
-    getDicts () {
-      getDict('tyb_contract_ship_attr').then(({data}) => {
+    getDicts () {                     
+      getDict('tyb_contract_ship_attr').then(({data}) => {                            
         if (data.code === 0) this.shipAttrDict = data.data
       })
       getDict('tyb_contract_employee_pay_type').then(({data}) => {

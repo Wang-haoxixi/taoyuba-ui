@@ -240,7 +240,7 @@
   </div>
 </template>
 
-<script>        
+<script>                                                                     
 import IepDatePicker from '@/components/IepForm/DatePicker'
 import { getContract, addContract, editContract, getDict } from '@/api/tmlms/contract'
 import { getShipOwners,getShip } from '@/api/mlms/shipowner'
@@ -455,20 +455,19 @@ export default {
     handleSubmit () {
       if (this.formDataVerification()) {
         if (this.type === 'add') {
-          addContract( this.formData).then(async data => {
+          addContract( this.formData).then(data => {
             if (data.data.code === 0) {           
               this.record  = data.data.data 
-             await this.getMyPdf()         
+             //await this.getMyPdf()         
               this.$message.success('添加成功！')
-              this.$emit('onGoBack')
+              this.$emit('onPdf',this.record)
             }
           }, (error) => {
             this.$message.error(error.message)
           })
         } else if (this.type === 'edit') {
           editContract(this.formData).then(async data => {
-            if (data.data.code === 0) {
-              await  this.getMyPdf()   
+            if (data.data.code === 0) { 
               this.$message.success('编辑成功！')
               this.$emit('onGoBack')
             }
