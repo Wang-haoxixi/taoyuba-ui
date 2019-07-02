@@ -43,8 +43,10 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-           <el-form-item label="证书要求：" prop="certRequire">
-              <iep-dict-select v-model="form.certRequire" dict-name="tyb_position_certtype"></iep-dict-select>
+           <el-form-item label="证书等级：" prop="certLevel">       
+              <el-select v-model="form.certLevel" placeholder="请选择">
+                <el-option v-for="item in level" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -86,13 +88,23 @@
           </el-col>
         </el-row>
         <el-row>
-          <!-- <el-col :span="12">
-            <el-form-item label="是否推荐：" prop="isRcmd">
-              <el-radio-group v-model="form.isRcmd">
-                <el-radio v-for="(item,i) in dictsMap.isRcmd" :key="i" :label="+i">{{item}}</el-radio>
-              </el-radio-group>
+            <el-col :span="12">
+            <el-form-item label="证书职务：" prop="certTitle">        
+              <iep-dict-select v-model="form.certTitle" dict-name="tyb_crew_cert_title"></iep-dict-select>
             </el-form-item>
-          </el-col> -->
+          </el-col>
+          <el-col :span="12">       
+            <el-form-item label="船名：" prop="shipName">
+              <el-input v-model="form.shipName" ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>                       
+          <el-col :span="12">                          
+            <el-form-item label="备注：" prop="remark">                              
+              <el-input   type="textarea" v-model="form.remark" ></el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
         <el-form-item label="">
           <operation-wrapper>
@@ -130,6 +142,20 @@ export default {
         label: '美元（USD）', 
       }],
       form: initForm(),
+      level: [        
+          {
+             value: '1', 
+              label: '一级',
+          },
+          {
+             value: '2',  
+            label: '二级',
+          },
+          {
+             value: '3',  
+            label: '三级',
+          },
+      ],
     }
   },
   computed: {
