@@ -5,6 +5,7 @@
       <div class="con-cover">
         <p class="cover-num">合同编号：{{formData.contractNumber}}</p>
         <h1>渔船劳务（雇员）合同</h1>
+        <h2>模 板</h2>
         <div class="cover-tip">
           <p>浙江省海洋渔业船舶交易服务中心 编制</p>
           <p>2019年 4月版</p>
@@ -12,7 +13,7 @@
       </div>
       <table class="contract-table margin70">
         <tr>
-          <th rowspan="6">甲方(雇主)</th>
+          <th rowspan="6">甲方<p>(雇主)</p></th>
           <td><label>船名</label></td>
           <td>{{formData.shipName}}</td>
           <td colspan="2"><label>所有权登记号</label></td>
@@ -54,7 +55,7 @@
           <td>{{formData.shipownerAgentAddr}}</td>
         </tr>
         <tr>
-          <th rowspan="4">乙方(雇员)</th>
+          <th rowspan="4">乙方<p>(雇员)</p></th>
           <td><label>姓名</label></td>
           <td>{{formData.employeeName}}</td>
           <td colspan="2"><label>身份证号</label></td>
@@ -295,7 +296,7 @@
           内容与本合同其他部分产生冲突，以 “ 特别约定” 为准。
         </p>
         <h3>五、特别约定</h3>
-        <p v-if="formData.content.length > 0">{{formData.content}}</p>
+        <p class="special" v-if="formData.content.length > 0">{{formData.content}}</p>
         <p v-else> 无 </p>
       </div>
       <div class="sign">
@@ -303,12 +304,12 @@
         <ul class="sign-name">
           <li>甲方：</li>
           <li>乙方：</li>
-          <li>签署日期：</li>
-          <li>签署日期：</li>
+          <li>签署日期：<span><i>年</i><i>月</i><i>日</i></span></li>
+          <li>签署日期：<span><i>年</i><i>月</i><i>日</i></span></li>
         </ul>
         <ul class="sign-see">
           <li>见证人：</li>
-          <li>签署日期：</li>
+          <li>签署日期：<span><i>年</i><i>月</i><i>日</i></span></li>
         </ul>
       </div>·
       </div>
@@ -417,31 +418,35 @@ export default {
 </script>     
 
   <style>
-              ul,li{list-style: none;}
-              .body-width{width: 210mm;color: #333;margin:0px auto;font-size:14px;}
-              .contract-table{border:solid 1px #606266;border-collapse:collapse;border-spacing:0px;width:100%;height: 297mm;overflow: hidden;}
-              .contract-table td,.contract-table th{color:#606266;border-bottom: solid 1px #606266;border-right: solid 1px #333;height: 30px;line-height: 30px;text-align: center;font-size:14px;}
-              .contract-table td.check{text-align: left;padding:10px 30px;}
-              .contract-table th{font-weight: normal;}
-               .check el-date-picker{}
-              .set-width .el-input{width: 50%;margin: 5px 0px;}
-              .contract-table .el-checkbox-group{display: inline-block;}
-              .con-cover{text-align: center;height: 297mm;overflow: hidden;}
-              .cover-num{text-align: right;padding: 50px 0px;font-weight: bold;font-size:16px;margin-right: 50px;}
-              .con-cover h1{font-size: 30px;font-weight: bold;margin-top: 150px;margin-bottom: 50px}
-              .con-cover h2{font-size:24px;font-weight: bold;}
-              .cover-tip{margin-top:600px;}
-              .cover-tip p{margin-bottom: 30px;font-weight: bold;font-size:16px;}
-              .body-width td.check{padding:0px 30px;}
-              .con-detail{margin-top: 20px;}
-              .con-detail h2{text-align: center;font-size: 20px;font-weight: bold;}
-              .con-detail h3{font-size: 16px;font-weight: bold;margin-top: 15px;}
-              .con-detail p{text-indent: 2em;line-height: 28px;margin-top: 15px;}
-              .sign{margin-top: 30px;}
-              .sign h3{font-size:16px;font-weight: bold;}
-              .sign-name{margin-top: 10px;overflow: hidden;}
-              .sign-name li{float: left;width: 50%;line-height: 30px;}
-              .sign-see{margin-top: 30px;}
-              .sign-see li{line-height: 30px;}
-              .margin70{margin-top: 70px;}
+   ul,li{list-style: none;}
+    .body-width{width: 210mm;color: #333;}
+    #contract{margin:0px auto;font-size:14px;}
+    .contract-table{border:solid 1px #606266;border-collapse:collapse;border-spacing:0px;width:90%;height: 297mm;overflow: hidden;margin:20mm auto;}
+    .contract-table td,.contract-table th{color:#606266;border-bottom: solid 1px #606266;border-right: solid 1px #333;height: 30px;line-height: 30px;text-align: center;font-size:12px;}
+    .contract-table td.check{text-align: left;padding:10px 30px;}
+    .contract-table th{font-weight: normal;padding:0px 10px;}
+    .check el-date-picker{}
+    .set-width .el-input{width: 50%;margin: 5px 0px;}
+    .contract-table .el-checkbox-group{display: inline-block;}
+    .con-cover{text-align: center;height: 297mm;overflow: hidden;}
+    .cover-num{text-align: right;padding: 80px 0px;font-weight:normal;font-size:18px;margin-right: 50px;}
+    .con-cover h1{font-size: 30px;font-weight: bold;margin-top: 120px;margin-bottom: 50px}
+    .con-cover h2{font-size:30px;font-weight: bold;}
+    .cover-tip{margin-top:600px;}
+    .cover-tip p{margin-bottom: 40px;font-weight:normal;font-size:18px;}
+    .body-width td.check{padding:0px 30px;}
+    .con-detail{width:90%;margin:0 auto;margin-top:220px;}
+    .con-detail h2{text-align: center;font-size: 20px;font-weight: bold;}
+    .con-detail h3{font-size: 16px;font-weight: bold;margin-top: 15px;}
+    .con-detail p{text-indent: 2em;line-height: 35px;font-size:16px;}
+    .con-detail .special{text-decoration: underline;}
+    .sign{width:90%;margin:0 auto;margin-top: 50px;font-size:16px;}
+    .sign span{padding-left: 50px;}
+    .sign h3{font-size:18px;font-weight: bold;}
+    .sign i{font-style: normal;padding-left: 20px;}
+    .sign-name{margin-top: 10px;overflow: hidden;}
+    .sign-name li{float: left;width: 50%;line-height: 30px;}
+    .sign-see{margin-top: 30px;}
+    .sign-see li{line-height: 30px;}
+    .margin70{margin-top: 160px;}
   </style>
