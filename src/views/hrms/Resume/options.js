@@ -17,10 +17,10 @@ import { mergeByFirst } from '@/util/util'
       prop: 'realName',
       label: '姓名',
     },
-    {
-      prop: 'resumeName',
-      label: '简历名字',
-    },
+    // {
+    //   prop: 'resumeName',
+    //   label: '简历名字',
+    // },
     {
       prop: 'job',
       label: '应聘职位',     
@@ -47,7 +47,7 @@ import { mergeByFirst } from '@/util/util'
     return {
       resumeId: '',
       realName: '', //姓名
-      resumeName: '', //简历名字
+      // resumeName: '', //简历名字
       birthday: '', //出生日期
       province: '', //现住地址 省
       city:'', //现住地址 市
@@ -70,21 +70,21 @@ import { mergeByFirst } from '@/util/util'
   const initSearchForm = () => {
     return {
       realName: '', //姓名
-      resumeName: '', //简历名字  
+      // resumeName: '', //简历名字  
     }
   }
 
   const initDtoSearchForm = () => {
     return {
       realName: '', //姓名
-      resumeName: '', //简历名字
+      // resumeName: '', //简历名字
     }
   }
 
   const toDtoSearchForm = (row) => {
     const newForm = mergeByFirst(initDtoSearchForm(), row)
     newForm.realName = row.realName ? row.realName : null
-    newForm.resumeName = row.resumeName ? row.resumeName : null
+    // newForm.resumeName = row.resumeName ? row.resumeName : null
     return newForm
   }
 
@@ -92,7 +92,7 @@ import { mergeByFirst } from '@/util/util'
     return {
       resumeId: '',
       realName: '', //姓名
-      resumeName: '', //简历名字
+      // resumeName: '', //简历名字
       birthday: '', //出生日期
       province: '', //现住地址 省
       city:'', //现住地址 市
@@ -127,10 +127,10 @@ import { mergeByFirst } from '@/util/util'
         { required: true, message: '请填姓名', trigger: 'blur' },
         { min: 2, max: 4, message: '长度在 2 到 4 个字符', trigger: 'blur'},
     ],
-    resumeName: [
-        { required: true, message: '请填简历名字', trigger: 'blur' },
-        { max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur'},
-    ],
+    // resumeName: [
+    //     { required: true, message: '请填简历名字', trigger: 'blur' },
+    //     { max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur'},
+    // ],
     birthday: [
         { required: true, message: '请填出生日期', trigger: 'blur' },
     ],

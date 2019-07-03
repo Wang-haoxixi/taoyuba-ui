@@ -142,18 +142,18 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="申请类别" prop="applyType">
-              <el-select v-model="form.applyType" placeholder="请输入申请类别">
-                <el-option v-for="item in applyTypes" :key="item.id" :label="item.name" :value="item.id"></el-option>
-              </el-select>
-            </el-form-item> 
-          </el-col>
-          <el-col :span="8">
             <el-form-item label="是否需要培训" prop="isTrain">
               <el-radio-group v-model="form.isTrain">
                 <el-radio v-for="(item,i) in dictsMap.isTrain" :key="i" :label="+i">{{item}}</el-radio>
               </el-radio-group>
             </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="申请类别" prop="applyType">
+              <el-select v-model="form.applyType" placeholder="请输入申请类别">
+                <el-option v-for="item in applyTypes" :key="item.id" :label="item.name" :value="item.id"></el-option>
+              </el-select>
+            </el-form-item> 
           </el-col>
            <!-- <el-col :span="8">
             <el-form-item label="所属渔村区域" prop="villageId">
@@ -262,6 +262,7 @@ export default {
    
     if (this.userId) {
       getCrewByUserId(this.userId).then(({ data }) => {
+        console.log(data)
         this.form = this.$mergeByFirst(initForm(), data.data)
           let villageId = this.form.villageId
           let districtId = this.form.districtId
@@ -410,6 +411,15 @@ export default {
     },
     'regionChosen.village': function (val) {
       this.form.villageId = val
+    },
+    'form.idcard': {
+      handler: function (val) {
+        if (val.length === 18) {
+          var bri = val.substr(6,8).replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3')
+          this.form.birthday = bri
+        }
+      },
+      deep: true,
     },
   },
   methods: {
