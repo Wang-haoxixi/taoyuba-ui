@@ -229,7 +229,7 @@
           </td>
         </tr>
       </table>
-      <div class="con-detail" style="margin-top: 100px">
+      <div class="con-detail margin160">
         <h2>一般条款</h2>
         <h3>一、甲方权利与义务</h3>
         <p>1.甲方营运渔船应具备船舶有效证件，并按照法律法规、行业规范配备救生、消防、无线电等应急设备，确保应急设备的正常使用和船舶的安全适航。</p>
@@ -448,5 +448,5 @@ export default {
     .sign-name li{float: left;width: 50%;line-height: 30px;}
     .sign-see{margin-top: 30px;}
     .sign-see li{line-height: 30px;}
-    .margin70{margin-top: 160px;}
+    .margin160{margin-top: 160px;}
   </style>
