@@ -2,7 +2,46 @@
   <div class="contract-box">
     <basic-container>
       <page-header title="合同"></page-header>
-      <iep-button v-if="mlms_contract_add" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+      <operation-container>
+        <template slot="left">
+          <iep-button v-if="mlms_contract_add" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+        </template>
+        <template slot="right">
+          <div class="input-wrapper">
+            <el-input :placeholder="placeholder" prefix-icon="el-icon-search" size="small" v-model="input" :maxlength="20">
+              <iep-button class="search-btn" slot="append" @click="handleSearch">搜索</iep-button>
+            </el-input>
+            <el-popover placement="bottom-end" width="350" trigger="click">
+                <el-form :model="form" label-width="120px" size="mini">
+                  <el-form-item label="船名：">
+                    <el-input v-model="form.shipName"></el-input>
+                  </el-form-item>
+                  <el-form-item label="船东身份证：">
+                    <el-input v-model="form.shipownerIdcard"></el-input>
+                  </el-form-item>
+                  <el-form-item label="船员身份证：">
+                    <el-input v-model="form.employeeIdcard"></el-input>
+                  </el-form-item>
+                  <el-form-item label="合同编号：">
+                    <el-input v-model="form.contractNumber"></el-input>
+                  </el-form-item>
+                  <el-form-item label="日期区间：">
+                    <div class="block">
+                      <el-date-picker v-model="timeList" valueFormat="yyyy-MM-dd" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+                    </div>
+                  </el-form-item>
+                  <el-form-item>
+                    <operation-wrapper>
+                      <iep-button type="primary" @click="handleSearch">搜索</iep-button>
+                      <iep-button @click="clearSearchParam">清空</iep-button>
+                    </operation-wrapper>
+                  </el-form-item>
+                </el-form>
+              <iep-button class="senior-btn el-icon-arrow-down" slot="reference"></iep-button>
+            </el-popover>
+          </div>
+        </template>
+      </operation-container>
       <avue-tree-table :option="options" style="margin-top: 20px;">
         <el-table-column label="操作">
           <template slot-scope="scope">                     
@@ -36,6 +75,16 @@ import {downloadFile} from '../options'
 
 export default {
   name: 'contract',
+  props: {
+    placeholder: {
+      type: String,
+      default: '请输入拥有者关键字搜索',
+    },
+    prop: {
+      type: String,
+      default: 'shipowner',
+    },
+  },
   data () {
     return {
       contractList: [],
@@ -53,6 +102,9 @@ export default {
       periodTypeDict: [],
       payComputeTypeDict: [],
       payTypeDict: [],
+      input: '',
+      form: {},
+      timeList: [],
     }
   },
   created () {
@@ -100,7 +152,6 @@ export default {
   methods: {
     isShow (flag, contract) {
       let user = this.$store.getters.userInfo
-      console.log(user)
       return flag && (user.userId === contract.userId || user.userId === contract.shipownerId || user.userId === contract.employeeId)
     },
     getContractList () {
@@ -235,6 +286,38 @@ export default {
               })
               //this.$message.success('下载成功')
     },
+    handleSearch () {
+      this.form[this.prop] = this.input
+      var params = {}
+      console.log(this.timeList)
+      if (this.timeList) {
+        this.form.periodDateStart = this.timeList[0]
+        this.form.periodDateEnd = this.timeList[1]
+      }
+      getUserInfo().then(res => {
+        if(res.data.data.roles.indexOf(111) !== -1 || res.data.data.roles.indexOf(1) !== -1){
+          params = {...this.form}
+          console.log(params)
+        } else {
+          params = {...this.form}
+          params.userId = res.data.data.sysUser.userId
+          params.shipownerId = res.data.data.sysUser.userId
+          params.employeeId = res.data.data.sysUser.userId
+        }
+        getContractList(params).then(({data}) => {
+          if (data.code === 0) {
+            this.contractList = data.data.records
+            this.total = data.data.total
+          }
+        }, (error) => {
+          this.$message.error(error.message)
+        })
+      })
+    },
+    clearSearchParam () {
+      this.form = {}
+      this.timeList = []
+    },
   },
 }
 </script>
@@ -242,5 +325,33 @@ export default {
 <style lang="scss" scoped>
 .contract-box {
   padding: 20px;
+}
+</style>
+
+<style scoped>
+.input-wrapper {
+  display: flex;
+  max-width: 350px;
+}
+.input-wrapper > * {
+  margin-right: 5px;
+}
+.input-wrapper >>> .el-input.is-active .el-input__inner {
+  border-color: #c0c4cc;
+}
+.input-wrapper >>> .el-input__inner:focus {
+  border-color: #c0c4cc;
+}
+.input-wrapper >>> .senior-btn {
+  margin-left: -6px;
+  padding: 9px 5px;
+  border-radius: 0 3px 3px 0;
+}
+.input-wrapper >>> .el-input-group {
+  width: inherit;
+}
+.search-btn:hover,
+.search-btn:focus {
+  opacity: 0.8;
 }
 </style>

@@ -9,9 +9,14 @@
               <el-input v-model="form.realName" :disabled="haveInfo.realName"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="简历名字：" prop="resumeName">
               <el-input v-model="form.resumeName"></el-input>
+            </el-form-item>
+          </el-col> -->
+          <el-col :span="12">
+            <el-form-item label="联系电话：" prop="contactPhone">
+              <el-input v-model="form.contactPhone" :disabled="haveInfo.phone"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -33,9 +38,14 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="联系电话：" prop="contactPhone">
               <el-input v-model="form.contactPhone" :disabled="haveInfo.phone"></el-input>
+            </el-form-item>
+          </el-col> -->
+          <el-col :span="12">
+            <el-form-item label="特殊技能：" prop="skill">
+              <el-input v-model="form.skill"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -95,11 +105,11 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="特殊技能：" prop="skill">
               <el-input v-model="form.skill"></el-input>
             </el-form-item>
-          </el-col>
+          </el-col> -->
           <!-- <el-col :span="12">
             <el-form-item label="是否推荐：" prop="isRcmd">
               <el-radio-group v-model="form.isRcmd">

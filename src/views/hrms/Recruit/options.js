@@ -182,10 +182,6 @@ const rules = {
     { required: true, message: '请填招聘人数', trigger: 'blur' },
     { max: 4, message: '不得超过5位数', trigger: 'blur'},
   ],
-  salary: [
-    { required: true, message: '请填月薪', trigger: 'blur' },
-    { max: 10, message: '不得超过10位数', trigger: 'blur'},
-  ],
   salaryCurrency: [
     { required: true, message: '请填货币种类', trigger: 'blur' },
   ],

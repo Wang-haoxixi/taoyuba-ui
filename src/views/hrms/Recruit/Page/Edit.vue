@@ -43,15 +43,15 @@
         </el-row>
         <el-row>
           <el-col :span="12">
+            <el-form-item label="证书职务：" prop="certTitle">        
+              <iep-dict-select v-model="form.certTitle" dict-name="tyb_crew_cert_title"></iep-dict-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
            <el-form-item label="证书等级：" prop="certLevel">       
               <el-select v-model="form.certLevel" placeholder="请选择">
                 <el-option v-for="item in level" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="年龄要求：" prop="ageRequire">
-              <iep-dict-select v-model="form.ageRequire" dict-name="tyb_position_agerequirement">></iep-dict-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -88,9 +88,9 @@
           </el-col>
         </el-row>
         <el-row>
-            <el-col :span="12">
-            <el-form-item label="证书职务：" prop="certTitle">        
-              <iep-dict-select v-model="form.certTitle" dict-name="tyb_crew_cert_title"></iep-dict-select>
+          <el-col :span="12">
+            <el-form-item label="年龄要求：" prop="ageRequire">
+              <iep-dict-select v-model="form.ageRequire" dict-name="tyb_position_agerequirement">></iep-dict-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">       
@@ -99,7 +99,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>                       
+        <el-row>                   
           <el-col :span="12">                          
             <el-form-item label="备注：" prop="remark">                              
               <el-input   type="textarea" v-model="form.remark" ></el-input>

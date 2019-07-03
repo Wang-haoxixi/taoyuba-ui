@@ -10,6 +10,10 @@ const dictsMap = {
 
 const columnsMap = [
     {
+      prop: 'userId',
+      label: '用户ID',
+    },
+    {
       prop: 'realName',
       label: '联系人',
     },

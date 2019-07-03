@@ -72,10 +72,20 @@ export default {
       if(this.userData.roles.indexOf(111) === -1 && this.userData.roles.indexOf(1) === -1){
         let data = await this.loadTable(param, getMyRecruitPage)
         this.pagedTable = data.records
+        this.pagedTable.forEach(ele => {
+          if (ele.salary === 0) {
+            ele.salary = '面议'
+          }
+        })
         this.manager = false
       } else {
         let data = await this.loadTable(param, getRecruitPage)
         this.pagedTable = data.records
+        this.pagedTable.forEach(ele => {
+          if (ele.salary === 0) {
+            ele.salary = '面议'
+          }
+        })
         this.manager = true
         // 需要给switch一个字段识别
         // this.pagedTable.forEach( item=>{
