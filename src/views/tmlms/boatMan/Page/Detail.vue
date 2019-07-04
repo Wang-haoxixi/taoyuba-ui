@@ -189,6 +189,7 @@ import { getArea,getPosition} from '@/api/post/admin'
 import { saveCrew, detailCrew, editCrew } from '@/api/tmlms/boatMan'
 import { certificateColumns } from '@/views/hrms/ComponentsNew/options'
 // import { getUserInfo } from '@/api/login'
+import { addUserRole } from '@/api/admin/user'
 import information from '@/mixins/information'
 import VueSocketio from 'vue-socket.io'
 import Vue from 'vue'
@@ -289,6 +290,10 @@ export default {
         {id:1, name:'以旧换新'}, {id:2, name:'普通船员'}, {id:3, name:'职务船员'}, {id:4, name:'证书换发'}, 
         {id:5, name:'证书补发'}, {id:6, name:'其他'}, 
       ],
+      userRole: {
+        userId: '',
+        roleId: 105,
+      },
     }
   },
   methods: {
@@ -340,6 +345,8 @@ export default {
                 }).catch(err=>{
                   this.$message.error(err.message)
                 })
+                this.userRole.userId = data.userId
+                addUserRole(this.userRole)
             }
           } else {
           return false

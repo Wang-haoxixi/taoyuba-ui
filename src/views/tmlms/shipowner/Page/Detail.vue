@@ -53,6 +53,7 @@
 import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable/'
 import { getArea } from '@/api/post/address.js'
 import { saveShipowner, getShipownerDetail, getAllArea, editShipowner, getAllAreaName } from '@/api/tmlms/shipowner'
+import { addUserRole } from '@/api/admin/user'
 import Vue from 'vue'
 import information from '@/mixins/information'
 import VueSocketio from 'vue-socket.io'
@@ -141,6 +142,10 @@ export default {
         children: 'childList',
       },
       arr:[],
+      userRole: {
+        userId: '',
+        roleId: 108,
+      },
     }
   },
   components: { InlineFormTable },
@@ -188,6 +193,8 @@ export default {
               }).catch(err=>{
                 this.$message.error(err.message)
               })
+              this.userRole.userId = data.userId
+              addUserRole(this.userRole)
             }
           } else {
           return false

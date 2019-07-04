@@ -20,8 +20,18 @@
                 <span class="say">{{timeFix}}，{{userInfo.sysUser.username}}
                   <iep-identity-mark icon="iep2-iconchengyuan" title="成员"></iep-identity-mark>
                   <span class="welcome-text">
-                    <!-- {{welcome}} -->
-                    <span v-for="(item,index) in userInfo.roleName" :key="index" style="margin-left:5px">{{item}}</span>
+                    <!-- {{welcome}} -->                  
+                    <span v-for="(item,index) in userInfo.roleName" :key="index" style="margin-left:5px">
+                      <span v-if="item !== '船员' && item !== '船东' && item !== '船员中介' && item !== '渔村'">{{item}}</span>
+                      <span v-if="item === '船员' && crewStatus === 2">船员</span>
+                      <span v-if="item === '船员' && crewStatus === 1">船员(待审核)</span>
+                      <span v-if="item === '船东' && shipOwnerStatus === 2">船东</span>
+                      <span v-if="item === '船东' && shipOwnerStatus === 1">船东(待审核)</span>
+                      <span v-if="item === '船员中介' && agentStatus === 2">船员中介</span>
+                      <span v-if="item === '船员中介' && agentStatus === 1">船员中介(待审核)</span>
+                      <span v-if="item === '渔村' && villageStatus === 2">渔村</span>
+                      <span v-if="item === '渔村' && villageStatus === 1">渔村(待审核)</span>
+                    </span>                   
                   </span>
                 </span>
               </div>
@@ -112,6 +122,10 @@ import { getIndex } from '@/api/wel/index'
 import { getUserInfo } from '@/api/login'
 import { timeFix, welcome } from '@/util/text'
 import { getObj } from '@/api/admin/role'
+import { getCrewByUserId } from '@/api/post/crew'
+import { getShipownerDetail } from '@/api/tmlms/shipowner/index'
+import { detailAgent } from '@/api/tmlms/agent/index'
+import { detailVillage } from '@/api/tmlms/bvillage/index'
 const initIndexForm = () => {
   return {
     name: '', //名字
@@ -160,6 +174,10 @@ export default {
           role: 112,
         },
       ],
+      crewStatus: '',
+      shipOwnerStatus: '',
+      agentStatus: '',
+      villageStatus: '',
     }
   },
   computed: {
@@ -225,6 +243,18 @@ export default {
         this.$set(this.userInfo,'roleName',[])
         this.userInfo.roles.forEach(item=>{
           this.getRole(item)
+        })
+        getCrewByUserId(this.userInfo.sysUser.userId).then((data) => {
+          this.crewStatus = data.data.data.status
+        })
+        getShipownerDetail(this.userInfo.sysUser.userId).then((data) => {
+          this.shipOwnerStatus = data.data.data.status
+        })
+        detailAgent(this.userInfo.sysUser.userId).then((data) => {
+          this.agentStatus = data.data.data.status
+        })
+        detailVillage(this.userInfo.sysUser.userId).then((data) => {
+          this.villageStatus = data.data.data.status
         })
       })
       this.pageLoading = true
