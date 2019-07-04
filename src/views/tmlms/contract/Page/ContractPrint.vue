@@ -4,6 +4,7 @@
       <div class="con-cover">
         <p class="cover-num">合同编号：{{formData.contractNumber}}</p>
         <h1>渔船劳务（雇员）合同</h1>
+        <h2>模 板</h2>
         <div class="cover-tip">
           <p>浙江省海洋渔业船舶交易服务中心 编制</p>
           <p>2019年 4月版</p>
@@ -11,7 +12,7 @@
       </div>
       <table class="contract-table margin70">
         <tr>
-          <th rowspan="6">甲方(雇主)</th>
+          <th rowspan="6">甲方<p>(雇主)</p></th>
           <td><label>船名</label></td>
           <td>{{formData.shipName}}</td>
           <td colspan="2"><label>所有权登记号</label></td>
@@ -53,7 +54,7 @@
           <td>{{formData.shipownerAgentAddr}}</td>
         </tr>
         <tr>
-          <th rowspan="4">乙方(雇员)</th>
+          <th rowspan="4">乙方<p>(雇员)</p></th>
           <td><label>姓名</label></td>
           <td>{{formData.employeeName}}</td>
           <td colspan="2"><label>身份证号</label></td>
@@ -227,7 +228,7 @@
           </td>
         </tr>
       </table>
-      <div class="con-detail" style="margin-top: 100px">
+      <div class="con-detail margin160" >
         <h2>一般条款</h2>
         <h3>一、甲方权利与义务</h3>
         <p>1.甲方营运渔船应具备船舶有效证件，并按照法律法规、行业规范配备救生、消防、无线电等应急设备，确保应急设备的正常使用和船舶的安全适航。</p>
@@ -294,7 +295,7 @@
           内容与本合同其他部分产生冲突，以 “ 特别约定” 为准。
         </p>
         <h3>五、特别约定</h3>
-        <p v-if="formData.content.length > 0">{{formData.content}}</p>
+        <p class="special" v-if="formData.content.length > 0">{{formData.content}}</p>
         <p v-else> 无 </p>
       </div>
       <div class="sign">
@@ -302,12 +303,12 @@
         <ul class="sign-name">
           <li>甲方：</li>
           <li>乙方：</li>
-          <li>签署日期：</li>
-          <li>签署日期：</li>
+          <li>签署日期：<span><i>年</i><i>月</i><i>日</i></span></li>
+          <li>签署日期：<span><i>年</i><i>月</i><i>日</i></span></li>
         </ul>
         <ul class="sign-see">
           <li>见证人：</li>
-          <li>签署日期：</li>
+          <li>签署日期：<span><i>年</i><i>月</i><i>日</i></span></li>
         </ul>
       </div>
     </div>

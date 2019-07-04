@@ -448,5 +448,6 @@ export default {
     .sign-name li{float: left;width: 50%;line-height: 30px;}
     .sign-see{margin-top: 30px;}
     .sign-see li{line-height: 30px;}
+    .margin70{margin-top: 70px;}
     .margin160{margin-top: 160px;}
   </style>
