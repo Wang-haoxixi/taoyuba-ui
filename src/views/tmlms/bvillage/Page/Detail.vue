@@ -57,6 +57,7 @@ import { saveVillage,detailVillage,editVillage } from '@/api/tmlms/bvillage'
 import { getAllArea, getAllAreaName } from '@/api/tmlms/shipowner'
 import { lazyAMapApiLoaderInstance } from 'vue-amap'
 import { getArea } from '@/api/post/address.js'
+import { addUserRole } from '@/api/admin/user'
 import information from '@/mixins/information'
 export default {
   mixins: [information],
@@ -125,7 +126,11 @@ export default {
           children: 'childList',
         },
         arr: [],
-       }
+        userRole: {
+        userId: '',
+        roleId: 105,
+        },
+      }
   },
   methods: {
     // 提交表单
@@ -185,6 +190,8 @@ export default {
               }).catch(err=>{
                 this.$message.error(err.message)
               })
+              this.userRole.userId = data.userId
+              addUserRole(this.userRole)
             }
           } else {
           return false

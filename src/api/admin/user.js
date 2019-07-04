@@ -67,3 +67,11 @@ export function setOrg (id) {
     method: 'post',
   })
 }
+
+export function addUserRole (obj) {
+  return request({
+    url: '/admin/user/insertUserRole',
+    method: 'post',
+    data: obj,
+  })
+}
