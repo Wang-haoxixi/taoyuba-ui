@@ -58,7 +58,7 @@ import { saveAgent, detailAgent, editAgent } from '@/api/tmlms/agent'
 import information from '@/mixins/information'
 import store from '@/store'
 // import { getUserInfo } from '@/api/login'
-import { addUserRole } from '@/api/admin/user'
+// import { addUserRole } from '@/api/admin/user'
 export default {
   mixins: [information],
   data () {
@@ -105,10 +105,10 @@ export default {
         label: 'name',
         children: 'children',
       },
-      userRole: {
-        userId: '',
-        roleId: 109,
-      },
+      // userRole: {
+      //   userId: '',
+      //   roleId: 109,
+      // },
     }
   },
   methods: {
@@ -147,8 +147,8 @@ export default {
                 }).catch(err=>{
                   this.$message.error(err.message)
                 })
-                this.userRole.userId = data.userId
-                addUserRole(this.userRole)
+                // this.userRole.userId = data.userId
+                // addUserRole(this.userRole)
             }
           } else {
           return false
