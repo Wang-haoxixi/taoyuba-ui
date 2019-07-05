@@ -10,8 +10,22 @@
         <el-form-item label="甲方（雇主方）">
           <el-row>
             <el-col :span="12">
-              <el-form-item label="船名：" prop="shipName">
+              <!-- <el-form-item label="船名：" prop="shipName">
                 <el-input maxlength="20" v-model="formData.shipName" @blur="getShipName"></el-input>
+              </el-form-item> -->
+              <el-form-item label="船名：" prop="shipName">
+                <el-select v-model="formData.shipName"
+                           placeholder="请选择"
+                           filterable
+                           remote
+                           maxlength="20"
+                           :loading="loading"
+                           allow-create
+                           clearable
+                           @change="shipNameChange"
+                           :remote-method="getShipNameList">
+                  <el-option v-for="item in shipNames" :key="item.id" :label="item.shipName + '(渔船编号：' + item.shipNo + ')'" :value="item"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -243,6 +257,7 @@
 <script>                                                                     
 import IepDatePicker from '@/components/IepForm/DatePicker'
 import { getContract, addContract, editContract, getDict } from '@/api/tmlms/contract'
+import { getShipNames } from '@/api/ships/index'
 import { getShipOwners,getShip } from '@/api/mlms/shipowner'
 import { getEmployees } from '@/api/mlms/employee'
 import debounce from 'lodash/debounce'
@@ -252,12 +267,14 @@ export default {
   components: {
     IepDatePicker,
   },
-  data () {         
+  data () {
+    this.getShipNameList = debounce(this.getShipNameList, 800)       
     this.getShipOwnerList = debounce(this.getShipOwnerList, 800)
     this.getEmployeeList = debounce(this.getEmployeeList, 800)
     return {
       formData: {
         shipName: '',
+        shipNo: '',
         shipLicenses: '',
         shipAttr: 1,
         shipownerId: '',
@@ -292,6 +309,7 @@ export default {
         payType: '',
         payTypeValue: '',
       },
+      shipNames: [],
       shipowners: [],
       employees: [],
       loading: false,
@@ -461,6 +479,7 @@ export default {
              //await this.getMyPdf()         
               this.$message.success('添加成功！')
               this.$emit('onPdf',this.record)
+              this.$emit('onGoBack')
             }
           }, (error) => {
             this.$message.error(error.message)
@@ -479,6 +498,35 @@ export default {
     },
     handleBack () {
       this.$emit('onGoBack')
+    },
+    getShipNameList (name) {
+      this.loading = false
+      if (name !== '') {
+        getShipNames(name).then(({data}) => {
+          if (data.code === 0) {
+            this.shipNames = data.data
+          }
+        })
+      } else {
+        this.shipNames = []
+      }
+      this.loading = false
+    },
+    shipNameChange (ship) {
+      if (typeof ship === 'object') {
+        this.refreshShipName(ship)
+      } else {
+        this.refreshShipName({shipName: ship})
+      }
+    },
+    refreshShipName (ship) {
+      let {shipName = '', licensesOwnerShip = '', shipowner ='', shipownerIdcard = '', mobile ='', address = ''} = ship
+      this.formData.shipName = shipName
+      this.formData.shipLicenses = licensesOwnerShip
+      this.formData.shipowner = shipowner
+      this.formData.shipownerIdcard = shipownerIdcard
+      this.formData.shipownerPhone = mobile
+      this.formData.shipownerAddr = address
     },
     getShipOwnerList (name) {
       this.loading = true

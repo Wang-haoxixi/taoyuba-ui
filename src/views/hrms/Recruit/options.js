@@ -46,7 +46,7 @@ const initForm = () => {
     positionId: '', //招聘岗位
     contactPhone: '', //联系电话
     recruitNo: '', //招聘人数
-    salary: '', //月薪
+    salary: '面议', //月薪
     salaryCurrency: '', //货币种类
     certRequire: '', //证书要求
     ageRequire: '', //年龄要求
@@ -181,6 +181,10 @@ const rules = {
   recruitNo: [
     { required: true, message: '请填招聘人数', trigger: 'blur' },
     { max: 4, message: '不得超过5位数', trigger: 'blur'},
+  ],
+  salary: [
+    { required: true, message: '请填月薪', trigger: 'blur' },
+    { max: 10, message: '不得超过10位数', trigger: 'blur'},
   ],
   salaryCurrency: [
     { required: true, message: '请填货币种类', trigger: 'blur' },

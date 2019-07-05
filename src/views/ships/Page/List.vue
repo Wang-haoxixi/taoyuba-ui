@@ -4,7 +4,7 @@
       <page-header title="渔船管理"></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain v-if="!manager">新增</iep-button>
+          <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain v-if="manager">新增</iep-button>
         </template>
         <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -24,7 +24,7 @@
         <el-table-column prop="operation" label="操作" width="220">
           <template slot-scope="scope">
             <operation-wrapper>
-              <iep-button plain @click="handleEdit(scope.row.shipId)" v-if="!manager">编辑</iep-button>
+              <iep-button plain @click="handleEdit(scope.row.shipId)" v-if="manager">编辑</iep-button>
               <iep-button @click="handleView(scope.row.shipId)">查看</iep-button>
               <iep-button type="warning" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
             </operation-wrapper>
