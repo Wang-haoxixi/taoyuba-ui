@@ -23,6 +23,7 @@
     </div>
     <div class="top-right">
       <top-search-icon></top-search-icon>
+      <top-code></top-code>
       <top-guide></top-guide>
       <top-message></top-message>
       <top-user></top-user>
@@ -36,6 +37,7 @@ import TopMessage from './TopMessage'
 import TopGuide from './TopGuide'
 import TopSearchIcon from './TopSearchIcon'
 import TopUser from './TopUser'
+import TopCode from './TopCode'
 export default {
   components: {
     TopNavbar,
@@ -43,6 +45,7 @@ export default {
     TopSearchIcon,
     TopGuide,
     TopUser,
+    TopCode,
   },
   name: 'Top',
   data () {
