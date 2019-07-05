@@ -12,7 +12,8 @@
             <div class="address"><iep-dict-detail :value="form.positionId" dict-name="tyb_resume_position"></iep-dict-detail>{{form.province}}{{form.city}}</div>
           </div>
           <div class="right">
-            <div class="pay">薪资：{{form.salary}}</div>
+            <div class="pay" v-if="form.salary === 0">薪资：面议</div>
+            <div class="pay" v-else>薪资：{{form.salary}}</div>
             <div class="info-detail">
               <label>联系电话：{{form.contactPhone}}</label>
               <label>招{{form.recruitNo}}人</label>

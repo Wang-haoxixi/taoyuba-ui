@@ -17,7 +17,7 @@
           <template slot-scope="scope">
             <operation-wrapper>
               <iep-button type="warning" plain @click="handleEdit(scope.row)">编辑</iep-button>
-              <iep-button @click="handleDetail(scope.row)">查看</iep-button>
+              <!-- <iep-button @click="handleDetail(scope.row)">查看</iep-button> -->
               <iep-button type="default" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
             </operation-wrapper>
           </template>

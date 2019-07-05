@@ -142,7 +142,11 @@ export default {
         label: '美元（USD）', 
       }],
       form: initForm(),
-      level: [        
+      level: [
+          {
+             value: '0', 
+              label: '--',
+          },      
           {
              value: '1', 
               label: '一级',
@@ -170,6 +174,9 @@ export default {
     if (this.recruitId) {
       getRecruitById(this.recruitId).then(({ data }) => {
         this.form = this.$mergeByFirst(initForm(), data.data)
+        if (this.form.salary === 0) {
+          this.form.salary = '面议'
+        }
         this.form.recruitNo = this.form.recruitNo.toString()
         this.form.salary = this.form.salary.toString()
         this.form.hullLength = this.form.hullLength.toString()
@@ -247,6 +254,9 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           const publish = isPublish === true ? true : false
+          if (this.form.salary === '面议') {
+            this.form.salary = 0
+          }
           submitFunction(formToDto(this.form), publish).then(({ data }) => {
             if (data.data) {
               this.$message({

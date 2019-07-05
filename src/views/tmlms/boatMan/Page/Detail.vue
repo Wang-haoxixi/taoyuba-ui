@@ -142,19 +142,19 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="申请类别" prop="applyType">
-                    <el-select v-model="form.applyType" placeholder="请输入申请类别">
-                        <el-option v-for="item in applyTypes" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                    </el-select>
-                    </el-form-item> 
-                </el-col>
-                <el-col :span="8">
                     <el-form-item label="是否需要培训" prop="isTrain">
                     <el-radio-group v-model="form.isTrain">
                         <el-radio  :label="0">否</el-radio>
                         <el-radio  :label="1">是</el-radio>
                     </el-radio-group>
                     </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="申请类别" prop="applyType">
+                    <el-select v-model="form.applyType" placeholder="请输入申请类别">
+                        <el-option v-for="item in applyTypes" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                    </el-select>
+                    </el-form-item> 
                 </el-col>
                 <!-- <el-col :span="8">
                     <el-form-item label="所属渔村区域" prop="villageId">
@@ -271,9 +271,9 @@ export default {
         positionId: [
             { required: true, message: '请填写职位', trigger: 'blur' },
         ],
-        crewCert: [
-            { required: true, message: '请填写船员号码', trigger: 'blur' },
-        ],
+        // crewCert: [
+        //     { required: true, message: '请填写船员号码', trigger: 'blur' },
+        // ],
         applyType: [
             { required: true, message: '请填写申请类别', trigger: 'blur' },
         ],
@@ -480,7 +480,18 @@ export default {
           } 
           return string 
       } 
-  }
+   }
+  },
+  watch: {
+    'form.idcard': {
+      handler: function (val) {
+        if (val.length === 18) {
+          var bri = val.substr(6,8).replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3')
+          this.form.birthday = bri
+        }
+      },
+      deep: true,
+    },
   },
 }
 </script>

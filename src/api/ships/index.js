@@ -52,7 +52,14 @@ export function getMyShipList (params) {
     method: 'get',
     params: params,
   })
-}    
+}   
+
+export function getShipNames (name) {
+  return request({
+    url: `${prefixUrl}/findship/${name}`,
+    method: 'get',
+  })
+} 
 
 
 
