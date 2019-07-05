@@ -6,8 +6,8 @@
         <h1>渔船劳务（雇员）合同</h1>
         <h2>模 板</h2>
         <div class="cover-tip">
-          <p>浙江省海洋渔业船舶交易服务中心 编制</p>
-          <p>2019年 4月版</p>
+          <p>象山县渔业船员综合服务中心 编制</p>
+          <p>2019年版</p>
         </div>
       </div>
       <table class="contract-table margin70">
