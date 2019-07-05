@@ -1,5 +1,5 @@
 <template>
-  <el-popover placement="bottom" width="336" trigger="click">
+  <el-popover placement="bottom" width="280" trigger="click">
     <!-- TODO: -->
     <iep-img src="/img/qrCode.png"></iep-img>
     <el-tooltip slot="reference" effect="dark" content="手机版二维码" placement="bottom">

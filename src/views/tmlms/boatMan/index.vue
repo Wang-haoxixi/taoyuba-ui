@@ -52,7 +52,7 @@
             {{ scope.row.status | typeFilter}}
           </template>
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" width="180">
             <template slot-scope="scope">
               <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.userId)">查看
               </el-button>
@@ -87,6 +87,10 @@ export default {
       options: {
         expandAll: false,
         columns: [
+          {
+            text: '用户ID',
+            value: 'userId',
+          },
           {
             text: '姓名',
             value: 'realName',
