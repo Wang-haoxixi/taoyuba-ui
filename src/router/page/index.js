@@ -21,6 +21,17 @@ export default [
     },
   },
   {
+    path: '/tmlms_spa/contract_detail',
+    name: '查看淘渔吧合同详情页',
+    component: () =>
+      import(/* webpackChunkName: "views" */ '@/views/tmlms/contract/Page/ContractPrintCopy'),
+    meta: {
+      keepAlive: false,
+      isTab: false,
+      isAuth: false,
+    },
+  },
+  {
     path: '/register',
     name: '注册页',
     component: () =>

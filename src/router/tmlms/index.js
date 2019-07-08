@@ -121,4 +121,16 @@ export default [
           },
         ],
       },
+      // {
+      //   path: '/tmlms_spa',
+      //   component: Layout,
+      //   children: [
+      //     {
+      //       path: 'contract_detail',
+      //       name: '查看淘渔吧合同详情页',
+      //       component: () => import('@/views/tmlms/contract/Page/ContractPrintCopy'),
+      //       meta: noKeepAlive,
+      //     },
+      //   ],
+      // },
 ]

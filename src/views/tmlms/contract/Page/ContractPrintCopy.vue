@@ -1,11 +1,11 @@
 <template>      
   <div id="contract-print">
     <div id="contract" class="body-width">
-      <div ref="pdfDom">
+      <!-- <div ref="pdfDom"> -->
       <div class="con-cover">
         <p class="cover-num">合同编号：{{formData.contractNumber}}</p>
         <h1>渔船劳务（雇员）合同</h1>
-        <h2>模 板</h2>
+        <!-- <h2>模 板</h2> -->
         <div class="cover-tip">
           <p>象山县渔业船员综合服务中心 编制</p>
           <p>2019年版</p>
@@ -296,7 +296,7 @@
           内容与本合同其他部分产生冲突，以 “ 特别约定” 为准。
         </p>
         <h3>五、特别约定</h3>
-        <p class="special" v-if="formData.content.length > 0">{{formData.content}}</p>
+        <p class="special" v-if="formData.content">{{formData.content}}</p>
         <p v-else> 无 </p>
       </div>
       <div class="sign">
@@ -312,15 +312,15 @@
           <li>签署日期：<span><i>年</i><i>月</i><i>日</i></span></li>
         </ul>
       </div>·
-      </div>
+      <!-- </div> -->
     </div>
   </div>
 </template>
 
 <script>                  
 import { getContract,getDict} from '@/api/tmlms/contract'                                                                                                          
-import {getMyPdf} from '../conoptions' 
-import  { Loading }  from  'element-ui'
+// import {getMyPdf} from '../conoptions' 
+// import  { Loading }  from  'element-ui'
 export default {                                
   name: 'print',
   props: {
@@ -335,12 +335,12 @@ export default {
             periodTypeDict: [],
             payComputeTypeDict: [],
             payTypeDict: [],
-            options:{
-                  fullscreen:true,
-                  text: 'pdf文件生成中',
-                  spinner: 'el-icon-loading',
-                  background: 'rgba(0, 0, 0, 0.8)',
-            },
+            // options:{
+            //       fullscreen:true,
+            //       text: 'pdf文件生成中',
+            //       spinner: 'el-icon-loading',
+            //       background: 'rgba(0, 0, 0, 0.8)',
+            // },
       }
   },
   methods: {        
@@ -364,9 +364,10 @@ export default {
       }
       return str.replace(/零(仟|佰|拾|角)/g, '零').replace(/(零)+/g, '零').replace(/零(兆|万|亿|元)/g, '$1').replace(/(兆|亿)万/g, '$1').replace(/(京|兆)亿/g, '$1').replace(/(京)兆/g, '$1').replace(/(京|兆|亿|仟|佰|拾)(万?)(.)仟/g, '$1$2零$3仟').replace(/^元零?|零分/g, '').replace(/(元|角)$/g, '$1整')
     },
-    getContract () {        
-          getContract(this.record).then(({data}) => {
+    getContract () {    
+          getContract(this.record = this.$route.query.id).then(({data}) => {
                 this.formData  = data.data
+                // console.log(this.formData)
           },(error) => {
                 this.$message.error(error.message)
             }      
@@ -390,29 +391,29 @@ export default {
             if (data.code === 0) this.payTypeDict = data.data
           })
     },
-   downLoadpdf () {                                                                                                           
-          let loadingInstance   =  Loading.service(this.options)
-          this.$nextTick(() => {
-                    getMyPdf(this.record)
-            })
-          loadingInstance.close()
-    },
+  //  downLoadpdf () {                                                                                                           
+  //         let loadingInstance   =  Loading.service(this.options)
+  //         this.$nextTick(() => {
+  //                   getMyPdf(this.record)
+  //           })
+  //         loadingInstance.close()
+  //   },
   },
   created () {    
       this.getContract()
       this.getDicts()
   },
   mounted () {     
-        let loadingInstance   =  Loading.service(this.options)                                                                                                                                                                                                                                                                                                                                                                                       
-        this.$nextTick( () => {       
-          setTimeout(() => {
-               let  pdfDom  = this.$refs.pdfDom    
-                getMyPdf(this.record,pdfDom)
-                loadingInstance.close()
-               this.$emit('onGoBack')     
-          }, 1000)                                                                                                                   
-            }
-        )
+        // let loadingInstance   =  Loading.service(this.options)                                                                                                                                                                                                                                                                                                                                                                                       
+        // this.$nextTick( () => {       
+        //   setTimeout(() => {
+        //        let  pdfDom  = this.$refs.pdfDom    
+        //         getMyPdf(this.record,pdfDom)
+        //         loadingInstance.close()
+        //        this.$emit('onGoBack')     
+        //   }, 1000)                                                                                                                   
+        //     }
+        // )
   },
 }
 </script>     
@@ -450,4 +451,8 @@ export default {
     .sign-see li{line-height: 30px;}
     .margin70{margin-top: 70px;}
     .margin160{margin-top: 160px;}
+    #contract-print {
+      height: 100%;
+      overflow: auto;
+    }
   </style>
