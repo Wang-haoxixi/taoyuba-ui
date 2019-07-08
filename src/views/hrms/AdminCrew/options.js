@@ -98,7 +98,7 @@ const columnsMap = [
       positionId:'',
       shipId:0,//
       userId:'',
-      nationality: '', //国籍
+      nationality: '中国', //国籍
       nation: '', //名族
       applyType: 1, //申请类别
       isTrain: 0, //是否需要培训

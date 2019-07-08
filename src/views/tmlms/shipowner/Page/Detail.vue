@@ -278,10 +278,12 @@ export default {
         if(this.$route.query.edit || this.$route.query.see){
           this.getarr(res.data.data,this.arr)
           data.villageId = this.arr
-          data.shiplist.forEach((item,index)=>{
+          if(data.shiplist) {
+            data.shiplist.forEach((item,index)=>{
               item.annex = item.certFile
               item.id = index
-          })
+            })
+          }
           this.shipowner = data
         }
       })

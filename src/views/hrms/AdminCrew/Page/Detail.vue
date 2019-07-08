@@ -16,7 +16,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
+        <!-- <el-row>
           <el-col :span="12">
             <el-form-item label="身份证号码：" prop="idcard">
               <el-input v-model="form.idcard"></el-input>
@@ -27,7 +27,7 @@
               <iep-date-picker v-model="form.birthday" type="date" placeholder="选择日期"></iep-date-picker>
             </iep-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-row>
           <el-col :span="12">
             <el-form-item label="身份证号码：" prop="idcard">

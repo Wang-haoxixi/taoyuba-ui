@@ -27,7 +27,7 @@
                   </el-form-item>
                   <el-form-item label="日期区间：">
                     <div class="block">
-                      <el-date-picker v-model="timeList" valueFormat="yyyy-MM-dd" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+                      <el-date-picker v-model="timeList" value-format="yyyy-MM-dd HH:mm:ss" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
                     </div>
                   </el-form-item>
                   <el-form-item>

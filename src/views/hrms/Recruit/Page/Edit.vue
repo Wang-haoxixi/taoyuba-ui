@@ -94,14 +94,14 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">       
-            <el-form-item label="船名：" prop="shipName">
+            <el-form-item label="船名：" prop="shipName" v-if="manager">
               <el-input v-model="form.shipName" ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>                   
           <el-col :span="12">                          
-            <el-form-item label="备注：" prop="remark">                              
+            <el-form-item label="备注：" prop="remark" v-if="manager">                              
               <el-input   type="textarea" v-model="form.remark" ></el-input>
             </el-form-item>
           </el-col>
@@ -120,6 +120,7 @@ import { getRecruitById, addRecruit, putRecruit} from '@/api/post/recruit'
 import { getArea } from '@/api/post/address'
 import { initForm, formToDto, rules, dictsMap } from '../options'
 import information from '@/mixins/information'
+import { getUserInfo } from '@/api/login'
 export default {
   mixins: [information],
   data () {
@@ -160,6 +161,8 @@ export default {
             label: '三级',
           },
       ],
+      manager: false,
+      userId: '',
     }
   },
   computed: {
@@ -184,6 +187,14 @@ export default {
         this.selectTown()
       })
     }
+    getUserInfo().then(res => {
+      if (res.data.data.sysUser.userId !== 1) {
+        this.manager = false
+      } else {
+        this.manager = true
+      }
+      res.data.data.sysUser.userId
+    })
     this.getProvince()
   },
   mounted () {

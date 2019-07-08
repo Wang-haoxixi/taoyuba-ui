@@ -217,6 +217,7 @@ export default {
           districtId: '',
           remark:'',
           positionId: '',
+          nationality: '中国',
           certList: [],
       },
       agent:{

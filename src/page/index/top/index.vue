@@ -22,7 +22,7 @@
       <top-navbar></top-navbar>
     </div>
     <div class="top-right">
-      <top-search-icon></top-search-icon>
+      <!-- <top-search-icon></top-search-icon> -->
       <top-code></top-code>
       <top-guide></top-guide>
       <top-message></top-message>
@@ -35,14 +35,14 @@ import website from '@/const/website'
 import TopNavbar from './TopNavbar'
 import TopMessage from './TopMessage'
 import TopGuide from './TopGuide'
-import TopSearchIcon from './TopSearchIcon'
+// import TopSearchIcon from './TopSearchIcon'
 import TopUser from './TopUser'
 import TopCode from './TopCode'
 export default {
   components: {
     TopNavbar,
     TopMessage,
-    TopSearchIcon,
+    // TopSearchIcon,
     TopGuide,
     TopUser,
     TopCode,
