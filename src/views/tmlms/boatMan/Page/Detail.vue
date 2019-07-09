@@ -188,7 +188,7 @@
 import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable/'
 import { getArea,getPosition} from '@/api/post/admin'
 import { saveCrew, detailCrew, editCrew } from '@/api/tmlms/boatMan'
-import { getDataBuspayLoad } from '@/api/hrms/databuspayload'
+import { getLastData } from '@/api/hrms/databuspayload'
 import { certificateColumns } from '@/views/hrms/ComponentsNew/options'
 // import { getUserInfo } from '@/api/login'
 // import { addUserRole } from '@/api/admin/user'
@@ -214,6 +214,11 @@ export default {
     return {
       certificateColumns,
       form: {
+          address: '',
+          idcard: '',
+          realName: '',
+          birthday: '',
+          nation: '',
           gender: 1,
           isTrain: 0,
           districtId: '',
@@ -382,9 +387,12 @@ export default {
     handleSave () {},
     collect () {
       this.sn = '0501320180621000714049807115793'
-      getDataBuspayLoad({sn:this.sn}).then((data) => {
-        console.log(data)
-        this.dataLoad = data
+      getLastData({sn:this.sn}).then((data) => {
+        this.form.address = data.data.data.address
+        this.form.idcard = data.data.data.identityNumber
+        this.form.realName = data.data.data.name
+        this.form.birthday = data.data.data.birth
+        this.form.nation = data.data.data.nation
       }) 
     },
   },
