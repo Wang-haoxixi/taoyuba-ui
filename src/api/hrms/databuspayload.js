@@ -1,6 +1,6 @@
 import request from '@/router/axios'
 
-const prefixUrl = '/hrms/databuspayload'
+const prefixUrl = '/tybhrms/databuspayload'
 
 export function getDataBuspayLoad (query) {
     return request({
