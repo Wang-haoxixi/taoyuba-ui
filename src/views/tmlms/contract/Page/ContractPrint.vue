@@ -72,16 +72,16 @@
           <td colspan="2"><label>联系人及联系电话</label></td>
           <td>{{formData.employeeLinkMan + `(${formData.employeeLinkPhone})`}}</td>
         </tr>
-        <tr>
+        <tr class="paylist">
           <td><label>劳动报酬支付账户</label></td>
-          <td colspan="4">
+          <td colspan="4" class="textL10">
             <span v-for="item in employeePayTypeDict" :key="item.value">
               <input v-if="item.value == formData.employeePayType" checked="true" type="checkbox"/>
               <input v-else type="checkbox"/>
               {{item.label}}
             </span>
-           <p>（请在选项“ □” 上打“ √” 并下面填写相关内容）</p>
-           <p class="margint10">支付账号：523653542</p>
+           <span>（请在选项“ □” 上打“ √” 并下面填写相关内容）</span>
+           <p class="margint10 class="textL10"">支付账号：523653542</p>
           </td>
         </tr>
         <tr>

@@ -220,8 +220,13 @@ export default {
           let h = window.open('', '_blank')
           h.document.write(`
             <style>
-             @page {size: A4 portrait;margin: 3.7cm 2.6cm 3.5cm;}
-            .con-cover,.contract-table,.con-detail{page-break-before: always;}
+            @page {
+              size: A4 portrait;
+              margin: 3.7cm 2.6cm 3.5cm;
+            }
+            .con-cover,.contract-table,.con-detail{
+                page-break-before: always;
+              }
               h1, h2, h3, h4, h5 { page-break-after: avoid; }
               table, figure{ page-break-inside: avoid; }
               *{padding: 0px;margin:0px;}
@@ -229,7 +234,7 @@ export default {
             .body-width{width: 210mm;color: #333;}
             #contract{margin:0px auto;font-size:14px;}
             .contract-table{border:solid 1px #606266;border-collapse:collapse;border-spacing:0px;width:100%; height: 297mm;overflow: hidden;}
-            .contract-table td,.contract-table th{color:#606266;border-bottom: solid 1px #606266;border-right: solid 1px #333;text-align: center;font-size:12px;padding:10px 0px;}
+            .contract-table td,.contract-table th{color:#606266;border-bottom: solid 1px #606266;border-right: solid 1px #333;text-align: center;font-size:12px;padding:10px;}
             .contract-table td.check{text-align: left;padding: 10px 25px 10px 10px;}
             .contract-table td label{display: inline-block; width:100px;}
             .contract-table th{font-weight: normal;padding:0px 10px;}
@@ -258,6 +263,11 @@ export default {
             .sign-see li{line-height: 30px;}
             .margint10{margin-top: 10px;}
             .contract-table .el-checkbox__label{font-size:12px;}
+            .paylist{text-align: center;}
+            .paylist .el-checkbox-group{text-align: left;}
+            .paylist .el-checkbox{margin-right: 0px;}
+            .paylist .el-checkbox-group label{width:60px;}
+            .contract-table .textL10{text-align: left;}
             </style>
           `)
           h.document.write(el.outerHTML)      
