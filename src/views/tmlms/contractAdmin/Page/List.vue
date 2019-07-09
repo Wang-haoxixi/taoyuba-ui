@@ -259,38 +259,44 @@ export default {
           let h = window.open('', '_blank')
           h.document.write(`
             <style>
-               ul,li{list-style: none;}
-              .body-width{width: 210mm;color: #333;}
-              #contract{margin:0px auto;font-size:14px;}
-              .contract-table{border:solid 1px #606266;border-collapse:collapse;border-spacing:0px;width:90%;height: 297mm;overflow: hidden;margin:20mm auto;}
-              .contract-table td,.contract-table th{color:#606266;border-bottom: solid 1px #606266;border-right: solid 1px #333;height: 30px;line-height: 30px;text-align: center;font-size:12px;}
-              .contract-table td.check{text-align: left;padding:10px 30px;}
-              .contract-table th{font-weight: normal;padding:0px 10px;}
-              .check el-date-picker{}
-              .set-width .el-input{width: 50%;margin: 5px 0px;}
-              .contract-table .el-checkbox-group{display: inline-block;}
-              .con-cover{text-align: center;height: 297mm;overflow: hidden;}
-              .cover-num{text-align: right;padding: 80px 0px;font-weight:normal;font-size:18px;margin-right: 50px;}
-              .con-cover h1{font-size: 30px;font-weight: bold;margin-top: 120px;margin-bottom: 50px}
-              .con-cover h2{font-size:30px;font-weight: bold;}
-              .cover-tip{margin-top:600px;}
-              .cover-tip p{margin-bottom: 40px;font-weight:normal;font-size:18px;}
-              .body-width td.check{padding:0px 30px;}
-              .con-detail{width:90%;margin:0 auto;margin-top:220px;}
-              .con-detail h2{text-align: center;font-size: 20px;font-weight: bold;}
-              .con-detail h3{font-size: 16px;font-weight: bold;margin-top: 15px;}
-              .con-detail p{text-indent: 2em;line-height: 35px;font-size:16px;}
-              .con-detail .special{text-decoration: underline;}
-              .sign{width:90%;margin:0 auto;margin-top: 50px;font-size:16px;}
-              .sign span{padding-left: 50px;}
-              .sign h3{font-size:18px;font-weight: bold;}
-              .sign i{font-style: normal;padding-left: 20px;}
-              .sign-name{margin-top: 10px;overflow: hidden;}
-              .sign-name li{float: left;width: 50%;line-height: 30px;}
-              .sign-see{margin-top: 30px;}
-              .sign-see li{line-height: 30px;}
-              .margin70{margin-top: 70px;}
-              .margin160{margin-top: 160px;}
+             @page {size: A4 portrait;margin: 3.7cm 2.6cm 3.5cm;}
+            .con-cover,.contract-table,.con-detail{page-break-before: always;}
+            h1, h2, h3, h4, h5 { page-break-after: avoid; }
+            table, figure{ page-break-inside: avoid; }
+            *{padding: 0px;margin:0px;}
+            ul,li{list-style: none;}
+            .body-width{width: 210mm;color: #333;}
+            #contract{margin:0px auto;font-size:14px;}
+            .contract-table{border:solid 1px #606266;border-collapse:collapse;border-spacing:0px;width:100%; height: 297mm;overflow: hidden;}
+            .contract-table td,.contract-table th{color:#606266;border-bottom: solid 1px #606266;border-right: solid 1px #333;text-align: center;font-size:12px;padding:10px 0px;}
+            .contract-table td.check{text-align: left;padding: 10px 25px 10px 10px;}
+            .contract-table td label{display: inline-block; width:100px;}
+            .contract-table th{font-weight: normal;padding:0px 10px;}
+            .contract-table td label{display: inline-block; width:80px;}
+            .check el-date-picker{}
+            .set-width .el-input{width: 50%;margin: 5px 0px;}
+            .contract-table .el-checkbox-group{display: inline-block;}
+            .con-cover{text-align: center;height: 297mm;overflow: hidden;}
+            .cover-num{text-align: right;padding: 20px 0px;font-weight:normal;font-size:18px;margin-right: 50px;}
+            .con-cover h1{font-size: 30px;font-weight: bold;margin-top: 180px;margin-bottom: 50px}
+            .con-cover h2{font-size:30px;font-weight: bold;}
+            .cover-tip{margin-top:750px;}
+            .cover-tip p{margin-bottom: 40px;font-weight:normal;font-size:18px;}
+            .con-detail{width:100%;margin:0 auto;}
+            .con-detail h2{text-align: center;font-size: 20px;font-weight: bold;}
+            .con-detail h3{font-size: 16px;font-weight: bold;margin-top: 15px;}
+            .con-detail p{text-indent: 2em;line-height: 32px;font-size:16px;}
+            .con-detail .special{text-decoration: underline;}
+            .sign{width:100%;margin:0 auto;margin-top: 50px;font-size:16px;}
+            .sign span{padding-left: 50px;}
+            .sign h3{font-size:18px;font-weight: bold;}
+            .sign i{font-style: normal;padding-left: 20px;}
+            .sign-name{margin-top: 10px;overflow: hidden;}
+            .sign-name li{float: left;width: 50%;line-height: 30px;}
+            .sign-see{margin-top: 30px;}
+            .sign-see li{line-height: 30px;}
+            .margint10{margin-top: 10px;}
+            .contract-table font-size:12px;
             </style>
           `)
           h.document.write(el.outerHTML)

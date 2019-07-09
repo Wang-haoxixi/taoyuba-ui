@@ -6,11 +6,11 @@
         <h1>渔船劳务（雇员）合同</h1>
         <!-- <h2>模 板</h2> -->
         <div class="cover-tip">
-          <p>象山县渔业船员综合服务中心 编制</p>
+          <p>象山县渔业船员综合服务中心 &nbsp;&nbsp;编制</p>
           <p>2019年版</p>
         </div>
       </div>
-      <table class="contract-table margin70">
+      <table class="contract-table">
         <tr>
           <th rowspan="6">甲方<p>(雇主)</p></th>
           <td><label>船名</label></td>
@@ -80,7 +80,8 @@
               <input v-else type="checkbox"/>
               {{item.label}}
             </span>
-            <span>（请在选项“ □” 上打“ √” 并下面填写相关内容）</span>
+           <p>（请在选项“ □” 上打“ √” 并下面填写相关内容）</p>
+           <p class="margint10">支付账号：523653542</p>
           </td>
         </tr>
         <tr>
@@ -153,7 +154,7 @@
               <input v-else type="checkbox"/>
               按自然月计算
             </span>
-          <td colspan="3">
+          <td colspan="3" class="check">
             <span v-if="1 == formData.payComputeType">每月人民币{{formData.payMoney}}元(大写：{{moneyTransilate(formData.payMoney)}})</span>
           </td>
         </tr>
@@ -164,7 +165,7 @@
               <input v-else type="checkbox"/>
               按雇佣天数计算
             </span>
-          <td colspan="3">
+          <td colspan="3" class="check">
           <span v-if="2 == formData.payComputeType">每天人民币{{formData.payMoney}}元(大写：{{moneyTransilate(formData.payMoney)}})</span>
           </td>
         </tr>
@@ -175,7 +176,7 @@
               <input v-else type="checkbox"/>
               按登船至下船日期计算
             </span>
-          <td colspan="3">        
+          <td colspan="3" class="check">        
           <span v-if="3 == formData.payComputeType">每天人民币{{formData.payMoney}}元(大写：{{moneyTransilate(formData.payMoney)}})</span>
           </td>
         </tr>
@@ -228,7 +229,7 @@
           </td>
         </tr>
       </table>
-      <div class="con-detail margin160" >
+      <div class="con-detail" >
         <h2>一般条款</h2>
         <h3>一、甲方权利与义务</h3>
         <p>1.甲方营运渔船应具备船舶有效证件，并按照法律法规、行业规范配备救生、消防、无线电等应急设备，确保应急设备的正常使用和船舶的安全适航。</p>
