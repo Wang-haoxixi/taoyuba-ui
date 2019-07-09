@@ -55,7 +55,7 @@ import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable/'
 import { getArea } from '@/api/post/address.js'
 import { saveShipowner, getShipownerDetail, getAllArea, editShipowner, getAllAreaName } from '@/api/tmlms/shipowner'
 // import { addUserRole } from '@/api/admin/user'
-import { getDataBuspayLoad } from '@/api/hrms/databuspayload'
+import { getLastData } from '@/api/hrms/databuspayload'
 import Vue from 'vue'
 import information from '@/mixins/information'
 import VueSocketio from 'vue-socket.io'
@@ -117,6 +117,9 @@ export default {
       ],
       shipowner:{
         shiplist:[],
+        address: '',
+        idcard: '',
+        realName:'',
       },
       rules: {
           realName: [
@@ -148,7 +151,6 @@ export default {
       //   userId: '',
       //   roleId: 108,
       // },
-      dataLoad: [],
       sn: '',
     }
   },
@@ -252,9 +254,10 @@ export default {
     },
     collect () {
       this.sn = '0501320180621000714049807115793'
-      getDataBuspayLoad({sn:this.sn}).then((data) => {
-        console.log(data)
-        this.dataLoad = data
+      getLastData({sn:this.sn}).then((data) => {
+        this.shipowner.address = data.data.data.address
+        this.shipowner.idcard = data.data.data.identityNumber
+        this.shipowner.realName = data.data.data.name
       }) 
     },
   },
