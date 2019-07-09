@@ -4,7 +4,7 @@
       <div class="con-cover">
         <p class="cover-num">合同编号：{{formData.contractNumber}}</p>
         <h1>渔船劳务（雇员）合同</h1>
-        <h2>模 板</h2>
+        <!-- <h2>模 板</h2> -->
         <div class="cover-tip">
           <p>象山县渔业船员综合服务中心 编制</p>
           <p>2019年版</p>

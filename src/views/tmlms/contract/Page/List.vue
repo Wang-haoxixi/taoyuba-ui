@@ -2,7 +2,7 @@
   <div class="contract-box">
     <basic-container>
       <page-header title="合同"></page-header>
-      <operation-container>
+      <!-- <operation-container>
         <template slot="left">
           <iep-button v-if="mlms_contract_add" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
@@ -41,7 +41,7 @@
             </el-popover>
           </div>
         </template>
-      </operation-container>
+      </operation-container> -->
       <avue-tree-table :option="options" style="margin-top: 20px;">
         <el-table-column label="操作">
           <template slot-scope="scope">                     

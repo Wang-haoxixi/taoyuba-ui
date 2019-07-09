@@ -45,6 +45,7 @@
         <div style="text-align:center">
           <el-button @click="save" v-if="!$route.query.see">提交</el-button>
           <el-button @click="$router.go(-1)">返回</el-button>
+          <el-button @click="collect">数据采集</el-button>
         </div>
     </basic-container>
   </div>
@@ -54,6 +55,7 @@ import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable/'
 import { getArea } from '@/api/post/address.js'
 import { saveShipowner, getShipownerDetail, getAllArea, editShipowner, getAllAreaName } from '@/api/tmlms/shipowner'
 // import { addUserRole } from '@/api/admin/user'
+import { getDataBuspayLoad } from '@/api/hrms/databuspayload'
 import Vue from 'vue'
 import information from '@/mixins/information'
 import VueSocketio from 'vue-socket.io'
@@ -146,6 +148,8 @@ export default {
       //   userId: '',
       //   roleId: 108,
       // },
+      dataLoad: [],
+      sn: '',
     }
   },
   components: { InlineFormTable },
@@ -245,6 +249,13 @@ export default {
           this.getarr(node.child)
         }
       }
+    },
+    collect () {
+      this.sn = '0501320180621000714049807115793'
+      getDataBuspayLoad({sn:this.sn}).then((data) => {
+        console.log(data)
+        this.dataLoad = data
+      }) 
     },
   },
   computed: {

@@ -179,6 +179,7 @@
         <div style="text-align:center">
           <el-button @click="save" v-if="!$route.query.see">提交</el-button>
           <el-button @click="$router.go(-1)">返回</el-button>
+          <el-button @click="collect">数据采集</el-button>
         </div>
     </basic-container>
   </div>
@@ -187,6 +188,7 @@
 import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable/'
 import { getArea,getPosition} from '@/api/post/admin'
 import { saveCrew, detailCrew, editCrew } from '@/api/tmlms/boatMan'
+import { getDataBuspayLoad } from '@/api/hrms/databuspayload'
 import { certificateColumns } from '@/views/hrms/ComponentsNew/options'
 // import { getUserInfo } from '@/api/login'
 // import { addUserRole } from '@/api/admin/user'
@@ -295,6 +297,8 @@ export default {
       //   userId: '',
       //   roleId: 105,
       // },
+      dataLoad: [],
+      sn: '',
     }
   },
   methods: {
@@ -376,6 +380,13 @@ export default {
     },
     // handleSave
     handleSave () {},
+    collect () {
+      this.sn = '0501320180621000714049807115793'
+      getDataBuspayLoad({sn:this.sn}).then((data) => {
+        console.log(data)
+        this.dataLoad = data
+      }) 
+    },
   },
   components: { InlineFormTable },
   created () {
