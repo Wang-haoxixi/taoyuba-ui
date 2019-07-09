@@ -81,7 +81,7 @@
               {{item.label}}
             </span>
            <span>（请在选项“ □” 上打“ √” 并下面填写相关内容）</span>
-           <p class="margint10 class="textL10"">支付账号：523653542</p>
+           <p class="margint10 textL10">支付账号：523653542</p>
           </td>
         </tr>
         <tr>
