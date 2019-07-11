@@ -93,3 +93,31 @@ export const logout = () => {
     method: 'delete',
   })
 }
+
+// 获取忘记密码验证码
+export function getForGetCode (mobile) {
+  return request({
+    url: `/admin/mobile/edit/${mobile}`,
+    method: 'get',
+  })
+}
+
+// 忘记密码
+export function getForGet (data) {
+  return request({
+    url: '/admin/user/forgetPassword',
+    method: 'post',
+    params: data,
+  })
+}
+
+const initForm = () => {      
+  return {
+    phone: '',
+    vCode: '',
+    newPassword: '',
+    rePassword: '',
+  }
+}      
+
+export{initForm}

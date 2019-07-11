@@ -211,7 +211,7 @@ export default {
             callback()
         }
       }
-    return {
+    return {        
       certificateColumns,
       form: {
           gender: 1,
@@ -396,14 +396,14 @@ export default {
     getPosition('tyb_resume_position').then(({ data }) => {
         this.position = data.data
     })
-    if(this.$route.query.edit || this.$route.query.see){
+    if(this.$route.query.edit || this.$route.query.see || this.$route.query.userId){
       getAll.call(this)
     }
     this.getInformation('form',['phone','realName',true])
         // 获取编辑数据
-    async function getAll () {
+    async function getAll () {    
       // 异步获取ID
-      let data = await detailCrew(this.$route.query.edit || this.$route.query.see).then( res=>{
+      let data = await detailCrew(this.$route.query.edit || this.$route.query.see || this.$route.query.userId).then( res=>{
         return res.data.data
       })
       // 拿到ID 同步获取地址和选中的地址

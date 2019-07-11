@@ -7,18 +7,18 @@
     </el-steps>
     <el-form v-if="active === 0" class="login-form" status-icon :rules="registerRule" ref="form" :model="form" label-width="0px">
       <el-form-item prop="phone">
-        <a-input ref="phone" v-model="form.phone" auto-complete="off" placeholder="请输入手机号码" size="large">
+        <a-input ref="phone" v-model="form.phone" auto-complete="off" placeholder="请输入手机号码" size="large" @blur="checkphone()">
           <a-icon slot="prefix" type="phone" />
           <a-icon v-if="form.phone" slot="suffix" type="close-circle" @click="emitEmpty('phone')" />
         </a-input>
       </el-form-item>
       <el-form-item class="input-last" prop="code">
         <a-input-search :maxlength="4" v-model="form.code" auto-complete="off" placeholder="请输入验证码" @search="handleSend" size="large">
-          <a-button slot="enterButton" :class="[{ display: msgKey }]">{{ msgText }}</a-button>
+          <a-button slot="enterButton" :class="[{ display: msgKey }]" >{{ msgText }}</a-button>
         </a-input-search>
       </el-form-item>
       <el-form-item>
-        <a-button type="primary" size="large" @click="active ++ " block>下一步</a-button>
+        <a-button type="primary" size="large" @click="active ++;checkcode()" block>下一步</a-button>
       </el-form-item>
     </el-form>
     <el-form v-if="active === 1" class="login-form" status-icon :rules="registerRule" ref="form" :model="form" label-width="0">
@@ -35,7 +35,7 @@
         </a-input>
       </el-form-item>
       <el-form-item>
-        <a-button type="primary" size="large" @click="active ++ " block>确定</a-button>
+        <a-button type="primary" size="large" @click="refreshpassword()" block>确定</a-button>
       </el-form-item>
     </el-form>
     <div v-if="active === 2" class="login-menu">
@@ -47,8 +47,8 @@
 <script>
 import { randomLenNum } from '@/util/util'
 import { mapGetters } from 'vuex'
-import { getMobileCode } from '@/api/admin/mobile'
-import { registerUser, validRegisterUserName, validRegisterUserPhone } from '@/api/login'
+// import { getMobileCode } from '@/api/admin/mobile' `    
+import { registerUser, validRegisterUserName, validRegisterUserPhone,getForGetCode,initForm,getForGet } from '@/api/login'
 import { isvalidatemobile } from '@/util/validate'
 const MSGINIT = '获取验证码',
   MSGSCUCCESS = '${time}秒后重发',
@@ -134,6 +134,7 @@ export default {
         phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
       },
       passwordType: 'password',
+      passform: initForm(),
     }
   },
   created () {
@@ -153,13 +154,22 @@ export default {
     },
     handleSend () {
       if (this.msgKey) return
-      getMobileCode(this.form.phone).then(response => {
-        if (response.data.data) {
-          this.$message.success('验证码发送成功')
-        } else {
-          this.$message.error(response.data.msg)
+      // getMobileCode(this.form.phone).then(response => {
+      //   if (response.data.data) {
+      //     this.$message.success('验证码发送成功')
+      //   } else {
+      //     this.$message.error(response.data.msg)
+      //   }
+      // })
+      getForGetCode(this.form.phone).then(response => {
+          if(response.data.data)  {
+                this.$message.success('验证码发送成功')
+          }else {
+             this.$message.error(response.data.msg)
+          }
         }
-      })
+      )
+
 
       this.msgText = MSGSCUCCESS.replace('${time}', this.msgTime)
       this.msgKey = true
@@ -208,6 +218,49 @@ export default {
         }
       })
     },
+    checkcode () {      
+        if(!this.form.code) {
+              this.$message.error('验证码不能为空')
+              this.active--
+        }
+    },
+    checkphone () {
+        if(!this.form.phone) {
+           this.$message.error('手机号不能为空')
+            return  false
+        }
+           var reg = /(^1[0-9]{10}$)|(^0\d{2,3}-?\d{7,8}$)/
+            if(!reg.test(this.form.phone)) 
+              this.$message.error('请输入正确的手机号码')
+        },
+  refreshpassword () {
+    if(!this.form.password) {
+      this.$message.error('请输入密码')
+      return false
+    }
+
+  if(!this.form.cpassword) {
+      this.$message.error('请再次输入密码')
+      return false
+    }
+    if(this.form.password !== this.form.cpassword){
+        this.$message.error('密码不一致!')
+        return false
+      }
+    this.passform.phone  = this.form.phone
+    this.passform.vCode  = this.form.code
+    this.passform.newPassword  =  this.form.password
+    this.passform.rePassword  = this.form.cpassword
+
+      getForGet (this.passform).then(({data}) => {
+            if(data.code  === 0){
+                   this.$message.success('修改密码成功')
+                   this.active++
+            }else {
+                this.$message.error(data.message)
+            }  
+      })
+  },
   },
 }
 </script>
