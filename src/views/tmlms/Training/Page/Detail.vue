@@ -5,7 +5,7 @@
         <h1 v-if="$route.query.userId">完善个人信息</h1>
         <el-form :model="training" ref="form" label-width="150px" :rules="rules">
           <el-row>
-            <el-col :span="8">
+            <el-col :span="8">            
               <el-form-item label="机构名称:" prop="deptName">
                 <el-input v-model="training.deptName" placeholder="" v-if="!$route.query.see"></el-input>
                 <div v-else>{{ training.deptName }}</div>
@@ -17,13 +17,13 @@
                 <div v-else>{{ training.deptName }}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="8">        
               <el-form-item label="手机号码:" prop="phone">
                 <el-input v-model="training.phone" placeholder="" v-if="!$route.query.see"></el-input>
                 <div v-else>{{ training.deptName }}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="24">
+            <el-col :span="24">           
               <el-form-item label="机构地址:" prop="address" class="amap-page-container is-required">
                 <el-amap-search-box class="search-box training" :search-option="searchOption" :on-search-result="onSearchResult"></el-amap-search-box>
                 <el-amap vid="amapDemo" :center="mapCenter" :zoom="15" class="amap-demo" :plugin="plugin">
@@ -153,10 +153,10 @@ export default {
         lazyAMapApiLoaderInstance.load().then(() => {
               setTimeout(()=>{ 
                   this.show = true
-                  if(this.$route.query.edit || this.$route.query.see){
-                  detailTraining(this.$route.query.edit || this.$route.query.see).then( res=>{
+                  if(this.$route.query.edit || this.$route.query.see || this.$route.query.userId){                                                    
+                  detailTraining(this.$route.query.edit || this.$route.query.see || this.$route.query.userId).then( res=>{
                     this.training = res.data.data
-                    document.getElementsByClassName(
+                    document.getElementsByClassName(            
                       'search-box-wrapper'
                     )[0].childNodes[0].value = this.training.address
                     this.mapCenter = [this.training.lng,this.training.lat]

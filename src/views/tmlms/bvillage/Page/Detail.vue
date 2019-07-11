@@ -253,7 +253,7 @@ export default {
           setTimeout(()=>{ 
             this.show = true 
             // 编辑新增放同一个组件 判断分别
-            if(this.$route.query.edit || this.$route.query.see){
+            if(this.$route.query.edit || this.$route.query.see || this.$route.query.userId){
               getAll.call(this)
             }else {
               getArea(0).then(res=>{
@@ -269,7 +269,7 @@ export default {
     // 获取编辑数据
     async function getAll () {
       // 异步获取ID
-      let data = await detailVillage(this.$route.query.edit || this.$route.query.see).then( res=>{
+      let data = await detailVillage(this.$route.query.edit || this.$route.query.see || this.$route.query.userId).then( res=>{
         return res.data.data
       })
       // 拿到ID 同步获取地址和选中的地址
