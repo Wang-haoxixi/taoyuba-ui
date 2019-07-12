@@ -30,6 +30,12 @@ export default [
         component: () => import('@/views/tmlms/shipowner/index'),
         meta: noKeepAlive,
       },
+      {
+      path: 'apply_detail',
+        name: 'applyDetailShipowner',
+        component: () => import('@/views/tmlms/shipowner/Page/Apply_Detail'),
+        meta: noKeepAlive,
+      },
     ],
   },
   // 培训机构

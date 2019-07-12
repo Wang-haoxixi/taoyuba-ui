@@ -217,7 +217,7 @@ export default {
                 this.$router.push({name: 'detailBoatMan',query: {userId: this.userInfo.sysUser.userId}})
                 break
             case 108:
-                this.$router.push({name: 'detailShipowner',query: {userId: this.userInfo.sysUser.userId}})
+                this.$router.push({name: 'applyDetailShipowner',query: {userId: this.userInfo.sysUser.userId}})
                 break
             case 109:
                 this.$router.push({name: 'detailAgent',query: {userId: this.userInfo.sysUser.userId}})
