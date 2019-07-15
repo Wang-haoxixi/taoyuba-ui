@@ -364,14 +364,18 @@ export default {
       }
       return str.replace(/零(仟|佰|拾|角)/g, '零').replace(/(零)+/g, '零').replace(/零(兆|万|亿|元)/g, '$1').replace(/(兆|亿)万/g, '$1').replace(/(京|兆)亿/g, '$1').replace(/(京)兆/g, '$1').replace(/(京|兆|亿|仟|佰|拾)(万?)(.)仟/g, '$1$2零$3仟').replace(/^元零?|零分/g, '').replace(/(元|角)$/g, '$1整')
     },
-    getContract () {    
-          getContract(this.record = this.$route.query.id).then(({data}) => {
-                this.formData  = data.data
-                // console.log(this.formData)
-          },(error) => {
-                this.$message.error(error.message)
-            }      
-          )
+    getContract () {
+      let path = this.$route.fullPath.split('?')[1]
+      let Base64 = require('js-base64').Base64
+      let id = Base64.decode(path).substring(3)
+      console.log(id)
+      getContract(id).then(({data}) => {
+        this.formData  = data.data
+          // console.log(this.formData)
+      },(error) => {
+        this.$message.error(error.message)
+        }      
+      )
     },
     getDicts () {
           getDict('tyb_contract_ship_attr').then(({data}) => {
