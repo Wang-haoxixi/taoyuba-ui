@@ -167,7 +167,9 @@ export default {
       // this.$emit('onDetail', contractId)
       let urlHttp = window.location.href.split('//')[0]
       let urlHeade = window.location.href.split('/')[0,2]
-      window.open(`${urlHttp}//${urlHeade}/tmlms_spa/contract_detail?id=${contractId}`, '_blank')
+      let Base64 = require('js-base64').Base64
+      let rlt = Base64.encodeURI(`id=${contractId}`)
+      window.open(`${urlHttp}//${urlHeade}/tmlms_spa/contract_detail?${rlt}`, '_blank')
       // getContract(contractId).then(({data}) => {
       //   if (data.code == 0) {
       //     let formData = data.data

@@ -47,12 +47,12 @@
           <template slot-scope="scope">                     
             <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">查看
             </el-button>
-            <el-button type="text" icon="el-icon-view" size="mini" @click="handleDown(scope.row.contractId)">下载PDF
-            </el-button>
-            <el-button v-if="isShow(mlms_contract_edit, scope.row)" type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.contractId)">编辑
-            </el-button>
-            <el-button v-if="isShow(mlms_contract_del, scope.row)" type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.contractId)">删除
-            </el-button>
+            <!-- <el-button type="text" icon="el-icon-view" size="mini" @click="handleDown(scope.row.contractId)">下载PDF
+            </el-button> -->
+            <!-- <el-button v-if="isShow(mlms_contract_edit, scope.row)" type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.contractId)">编辑
+            </el-button> -->
+            <!-- <el-button v-if="isShow(mlms_contract_del, scope.row)" type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.contractId)">删除
+            </el-button> -->
             <el-button type="text" icon="el-icon-delete" size="mini" @click="handlePrint(scope.row.contractId)">打印
             </el-button>
           </template>
@@ -70,7 +70,7 @@ import { getContractList, deleteContract, getContract, getDict } from '@/api/tml
 import { getUserInfo } from '@/api/login'
 import { mapGetters } from 'vuex'
 import contractPrint from './ContractPrint.vue'
-import Vue from 'vue'    
+import Vue from 'vue' 
 import {downloadFile} from '../options'
 
 export default {
@@ -187,7 +187,12 @@ export default {
       this.$emit('onAdd')
     },
     handleView (contractId) {
-      this.$emit('onDetail', contractId)
+      // this.$emit('onDetail', contractId)
+      let urlHttp = window.location.href.split('//')[0]
+      let urlHeade = window.location.href.split('/')[0,2]
+      let Base64 = require('js-base64').Base64
+      let rlt = Base64.encodeURI(`id=${contractId}`)
+      window.open(`${urlHttp}//${urlHeade}/tmlms_spa/contract_detail?${rlt}`, '_blank')
     },
     handleEdit (contractId) {
       this.$emit('onEdit', contractId)
