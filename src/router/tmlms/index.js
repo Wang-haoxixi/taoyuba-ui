@@ -127,6 +127,19 @@ export default [
           },
         ],
       },
+      //绑定机器
+      {
+        path: '/bindSn',
+        component: Layout,
+        children: [
+          {
+            path: 'detail',
+            name: 'detailBindSn',
+            component: () => import('@/views/tmlms/bindsn/index'),
+            meta: noKeepAlive,
+          },
+        ],
+      },
       // {
       //   path: '/tmlms_spa',
       //   component: Layout,

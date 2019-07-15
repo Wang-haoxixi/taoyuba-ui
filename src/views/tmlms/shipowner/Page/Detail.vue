@@ -13,7 +13,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="身份证号:" prop="idcard">
-                <el-input v-model="shipowner.idcard" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.idcard"></el-input>
+                <el-input v-model="shipowner.idcard" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.idcard" @blur="ifexist"></el-input>
                 <div v-else>{{ shipowner.idcard }}</div>
               </el-form-item>
             </el-col>
@@ -29,14 +29,14 @@
                 <div v-else>{{ shipowner.phone }}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="16">
-              <el-form-item label="所属渔村区:" prop="villageId">
+            <el-col :span="16">                                       
+              <el-form-item label="所属渔村区:" prop="villageId">                                                                                                 
                 <el-cascader v-if="!$route.query.see" :options="options" @active-item-change="handleItemChange" :props="props" v-model="shipowner.villageId" ></el-cascader>
                 <div v-else>{{ shipowner.villageId }}</div>
               </el-form-item>
             </el-col>
             <el-col>
-                <iep-form-item prop="workExperience" label-name="资质证书">
+                <iep-form-item prop="workExperience" label-name="资质证书">     
                   <inline-form-table :table-data="shipowner.shiplist" :columns="certificateColumns" requestName="certificate" type="employee_profile" @add="setData"></inline-form-table>
                 </iep-form-item>
             </el-col>
@@ -253,12 +253,20 @@ export default {
       }
     },
     collect () {
-      this.sn = '0501320180621000714049807115793'
-      getLastData({sn:this.sn}).then((data) => {
+      this.sn = ''    
+      getLastData({sn:this.sn}).then((data) => {  
+        console.log(data.data.code)                                      
+        if(data.data.code === 0){
         this.shipowner.address = data.data.data.address
         this.shipowner.idcard = data.data.data.identityNumber
         this.shipowner.realName = data.data.data.name
-      }) 
+        } 
+      }).catch(err=>{
+                this.$message.error(err.message)
+              })
+    },
+    ifexist () {    
+          //
     },
   },
   computed: {
