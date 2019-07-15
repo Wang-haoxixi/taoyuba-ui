@@ -179,7 +179,7 @@
         <div style="text-align:center">
           <el-button @click="save" v-if="!$route.query.see">提交</el-button>
           <el-button @click="$router.go(-1)">返回</el-button>
-          <el-button @click="collect">数据采集</el-button>
+          <el-button v-if="manager" @click="collect">数据读取</el-button>
         </div>
     </basic-container>
   </div>
@@ -190,7 +190,7 @@ import { getArea,getPosition} from '@/api/post/admin'
 import { saveCrew, detailCrew, editCrew } from '@/api/tmlms/boatMan'
 import { getLastData } from '@/api/hrms/databuspayload'
 import { certificateColumns } from '@/views/hrms/ComponentsNew/options'
-// import { getUserInfo } from '@/api/login'
+import { getUserInfo } from '@/api/login'
 // import { addUserRole } from '@/api/admin/user'
 import information from '@/mixins/information'
 import VueSocketio from 'vue-socket.io'
@@ -304,6 +304,7 @@ export default {
       // },
       dataLoad: [],
       sn: '',
+      manager: false,
     }
   },
   methods: {
@@ -425,6 +426,14 @@ export default {
       })
       this.form = data
     }
+    getUserInfo().then(res => {
+      if (res.data.data.roles.includes(111)) {
+        this.manager = true
+      } else {
+        this.manager = false
+      }
+      res.data.data.sysUser.userId
+    })
   },
   mounted () {
             //添加socket事件监听

@@ -188,10 +188,10 @@ export default {
       })
     }
     getUserInfo().then(res => {
-      if (res.data.data.sysUser.userId !== 1) {
-        this.manager = false
-      } else {
+      if (res.data.data.roles.includes(111)) {
         this.manager = true
+      } else {
+        this.manager = false
       }
       res.data.data.sysUser.userId
     })

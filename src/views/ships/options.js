@@ -135,84 +135,84 @@ const columnsMap = [
   }
 
   const rules = {
-    zipcode: [
-      {required: true, validator: numberValidate, trigger: 'blur', length: 6, message: '请输入正确的邮政！'},
-    ],
-    engineTotalPower: [
-      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
-    ],
-    mainEnginePower: [
-      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
-    ],
-    dualPower: [
-      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
-    ],
-    mainEngineModel: [
-      {required: true, message: '该选项必填！', trigger: 'blur'},
-    ],
-    grossTonnage: [
-      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 0, message: '请输入0~999的整数！'},
-    ],
-    hullLength: [
-      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
-    ],
-    mouldedBreadth: [
-      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
-    ],
-    mouldedDepth: [
-      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
-    ],
-    netTonnage: [
-      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 0, message: '请输入0~999的整数！'},
-    ],
+    // zipcode: [
+    //   {required: true, validator: numberValidate, trigger: 'blur', length: 6, message: '请输入正确的邮政！'},
+    // ],
+    // engineTotalPower: [
+    //   {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+    // ],
+    // mainEnginePower: [
+    //   {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+    // ],
+    // dualPower: [
+    //   {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+    // ],
+    // mainEngineModel: [
+    //   {required: true, message: '该选项必填！', trigger: 'blur'},
+    // ],
+    // grossTonnage: [
+    //   {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 0, message: '请输入0~999的整数！'},
+    // ],
+    // hullLength: [
+    //   {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+    // ],
+    // mouldedBreadth: [
+    //   {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+    // ],
+    // mouldedDepth: [
+    //   {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+    // ],
+    // netTonnage: [
+    //   {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 0, message: '请输入0~999的整数！'},
+    // ],
     villageId: [
       {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
-    activityType: [
-      {required: true, message: '该选项必填！', trigger: 'change'},
-    ],
+    // activityType: [
+    //   {required: true, message: '该选项必填！', trigger: 'change'},
+    // ],
     address: [
       {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
-    buildDate: [
-      {required: true, message: '该选项必填！', trigger: 'blur'},
-    ],
+    // buildDate: [
+    //   {required: true, message: '该选项必填！', trigger: 'blur'},
+    // ],
     createTime: [
       {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
-    fishType: [
-      {required: true, message: '该选项必填！', trigger: 'blur'},
-    ],
-    fishingGear: [
-      {required: true, message: '该选项必填！', trigger: 'change'},
-    ],
-    hullMaterial: [
-      {required: true, message: '该选项必填！', trigger: 'change'},
-    ],
-    licensesDateExpire: [
-      {required: true, message: '该选项必填！', trigger: 'blur'},
-    ],
-    licensesDateIssue: [
-      {required: true, message: '该选项必填！', trigger: 'blur'},
-    ],
+    // fishType: [
+    //   {required: true, message: '该选项必填！', trigger: 'blur'},
+    // ],
+    // fishingGear: [
+    //   {required: true, message: '该选项必填！', trigger: 'change'},
+    // ],
+    // hullMaterial: [
+    //   {required: true, message: '该选项必填！', trigger: 'change'},
+    // ],
+    // licensesDateExpire: [
+    //   {required: true, message: '该选项必填！', trigger: 'blur'},
+    // ],
+    // licensesDateIssue: [
+    //   {required: true, message: '该选项必填！', trigger: 'blur'},
+    // ],
     licensesFishingNo: [
       {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
-    licensesInspectionNo: [
-      {required: true, message: '该选项必填！', trigger: 'blur'},
-    ],
-    licensesNationalNo: [
-      {required: true, message: '该选项必填！', trigger: 'blur'},
-    ],
+    // licensesInspectionNo: [
+    //   {required: true, message: '该选项必填！', trigger: 'blur'},
+    // ],
+    // licensesNationalNo: [
+    //   {required: true, message: '该选项必填！', trigger: 'blur'},
+    // ],
     licensesOwnerShip: [
       {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
     mobile: [
       {required: true, validator: numberValidate, trigger: 'blur', length: 11, decimal: 0, message: '请输入正确的手机号码！'},
     ],
-    portRegister: [
-      {required: true, message: '该选项必填！', trigger: 'change'},
-    ],
+    // portRegister: [
+    //   {required: true, message: '该选项必填！', trigger: 'change'},
+    // ],
     shipId: [
       {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
@@ -234,12 +234,12 @@ const columnsMap = [
     updateTime: [
       {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
-    workMode: [
-      {required: true, message: '该选项必填！', trigger: 'change'},
-    ],
-    workMode2: [
-      {required: true, message: '该选项必填！', trigger: 'change'},
-    ],
+    // workMode: [
+    //   {required: true, message: '该选项必填！', trigger: 'change'},
+    // ],
+    // workMode2: [
+    //   {required: true, message: '该选项必填！', trigger: 'change'},
+    // ],
   }
 
   const initSearchForm = () => {

@@ -45,7 +45,7 @@
         <div style="text-align:center">
           <el-button @click="save" v-if="!$route.query.see">提交</el-button>
           <el-button @click="$router.go(-1)">返回</el-button>
-          <el-button @click="collect">数据采集</el-button>
+          <el-button v-if="manager" @click="collect">数据读取</el-button>
         </div>
     </basic-container>
   </div>
@@ -55,6 +55,7 @@
 import { getArea } from '@/api/post/address.js'
 import { saveShipowner, getShipownerDetail, getAllArea, editShipowner, getAllAreaName } from '@/api/tmlms/shipowner'
 // import { addUserRole } from '@/api/admin/user'
+import { getUserInfo } from '@/api/login'
 import { getLastData } from '@/api/hrms/databuspayload'
 import Vue from 'vue'
 import information from '@/mixins/information'
@@ -152,6 +153,7 @@ export default {
       //   roleId: 108,
       // },
       sn: '',
+      manager: false,
     }
   },
   // components: { InlineFormTable },
@@ -302,6 +304,14 @@ export default {
         }
       })
     }
+    getUserInfo().then(res => {
+      if (res.data.data.roles.includes(111)) {
+        this.manager = true
+      } else {
+        this.manager = false
+      }
+      res.data.data.sysUser.userId
+    })
   },
   mounted () {
           //添加socket事件监听
