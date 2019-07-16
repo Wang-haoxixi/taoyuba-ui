@@ -258,7 +258,7 @@
 <script>                                                                     
 import IepDatePicker from '@/components/IepForm/DatePicker'
 import { getContract, addContract, editContract, getDict } from '@/api/tmlms/contract'
-import { getShipNames } from '@/api/ships/index'
+import { getShipNames,findMyship } from '@/api/ships/index'
 import { getShipOwners,getShip } from '@/api/mlms/shipowner'
 import { getEmployees } from '@/api/mlms/employee'
 import debounce from 'lodash/debounce'
@@ -358,6 +358,7 @@ export default {
       payComputeTypeDict: [],
       payTypeDict: [],
       flag: false,
+      shipflag: false,
     }
   },
   props: {
@@ -471,8 +472,12 @@ export default {
       }
       return verification
     },
-    handleSubmit () {
+  async  handleSubmit () {
       if (this.formDataVerification()) {
+        //渔船信息匹配
+      await  this.validship()
+      console.log(this.shipflag)
+      if( this.shipflag){   
         if (this.type === 'add') {
           addContract( this.formData).then(data => {
             if (data.data.code === 0) {           
@@ -495,6 +500,7 @@ export default {
             this.$message.error(error.message)
           })
         }
+      }
       }
     },
     handleBack () {
@@ -604,9 +610,26 @@ export default {
         this.formData.shipownerAddr = address
       })
     },
-    checkship () {
-        //
-
+    checkship () {                 
+        getShipNames(this.formData.shipName).then(({data}) => {
+          if (data.code === 0) {
+              //
+          }
+        }).catch(error =>
+            this.$message.error(error.message)
+        )
+    },
+async validship () {
+   await  findMyship (this.formData.shipName).then( data =>{
+              if(data.data.code  === 0){
+                this.shipflag = true
+              }else {   
+                this.shipflag = false
+              }
+        }, (error) => {
+            this.shipflag = false
+            this.$message.error(error.message)
+          })
     },
   },
   watch: {

@@ -61,6 +61,13 @@ export function getShipNames (name) {
   })
 } 
 
+export  function  findMyship (name) {
+  return request({
+    url: `${prefixUrl}/findmyship/${name}`,
+    method: 'get',
+  })
+}
+
 
 
 
