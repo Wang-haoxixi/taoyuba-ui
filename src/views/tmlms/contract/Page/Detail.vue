@@ -13,7 +13,7 @@
               <!-- <el-form-item label="船名：" prop="shipName">
                 <el-input maxlength="20" v-model="formData.shipName" @blur="getShipName"></el-input>
               </el-form-item> -->
-              <el-form-item label="船名：" prop="shipName">
+              <el-form-item label="船名：" prop="shipName">              
                 <el-select v-model="formData.shipName"
                            placeholder="请选择"
                            filterable
@@ -23,7 +23,8 @@
                            allow-create
                            clearable
                            @change="shipNameChange"
-                           :remote-method="getShipNameList">
+                           :remote-method="getShipNameList"
+                           @blur="checkship">
                   <el-option v-for="item in shipNames" :key="item.id" :label="item.shipName + '(渔船编号：' + item.shipNo + ')'" :value="item"></el-option>
                 </el-select>
               </el-form-item>
@@ -602,6 +603,10 @@ export default {
         this.formData.shipownerPhone = mobile
         this.formData.shipownerAddr = address
       })
+    },
+    checkship () {
+        //
+
     },
   },
   watch: {

@@ -386,15 +386,19 @@ export default {
     },
     // handleSave
     handleSave () {},
-    collect () {
-      this.sn = '0501320180621000714049807115793'
+    collect () {    
+      this.sn = ''
       getLastData({sn:this.sn}).then((data) => {
+        if(data.data.code === 0){
         this.form.address = data.data.data.address
         this.form.idcard = data.data.data.identityNumber
         this.form.realName = data.data.data.name
         this.form.birthday = data.data.data.birth
         this.form.nation = data.data.data.nation
-      }) 
+        }
+      }).catch(err=>{
+                this.$message.error(err.message)
+      })    
     },
   },
   components: { InlineFormTable },
