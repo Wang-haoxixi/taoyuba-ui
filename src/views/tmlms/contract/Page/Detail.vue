@@ -527,13 +527,14 @@ export default {
       }
     },
     refreshShipName (ship) {
-      let {shipName = '', licensesOwnerShip = '', shipowner ='', shipownerIdcard = '', mobile ='', address = ''} = ship
+      let {shipName = '', licensesOwnerShip = '', shipowner ='', shipownerIdcard = '', mobile ='', address = '',userId = ''} = ship
       this.formData.shipName = shipName
       this.formData.shipLicenses = licensesOwnerShip
       this.formData.shipowner = shipowner
       this.formData.shipownerIdcard = shipownerIdcard
       this.formData.shipownerPhone = mobile
       this.formData.shipownerAddr = address
+      this.formData.shipownerId = userId
     },
     getShipOwnerList (name) {
       this.loading = true
@@ -548,12 +549,12 @@ export default {
       }
       this.loading = false
     },
-    shipownerChange (owner) {
-      if (typeof owner === 'object') {
+    shipownerChange (owner) {                                
+      if (typeof owner === 'object') {      
         this.refreshShipowner(owner)
-      } else {
+      } else {                                                    
         this.refreshShipowner({realName: owner, userId: 0})
-      }
+      }          
     },
     refreshShipowner (owner) {
       let {address = '', idcard = '', phone = '', realName = '', userId = ''} = owner
