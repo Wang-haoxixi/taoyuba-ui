@@ -227,6 +227,11 @@ export default {
                 type: 'warning',
               })
             }
+          }).catch(err => {
+            this.$message({
+              type: 'warning',
+              message: err,
+            })
           })
         }
       })
