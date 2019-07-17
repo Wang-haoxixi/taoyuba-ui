@@ -270,9 +270,9 @@ export default {
         nationality: [
             { required: true, message: '请填写国籍', trigger: 'blur' },
         ],
-        certExpDate: [
-            { required: true, message: '请填写有效期限', trigger: 'blur' },
-        ],
+        // certExpDate: [
+        //     { required: true, message: '请填写有效期限', trigger: 'blur' },
+        // ],
         contactPhone: [
             { required: true, message: '请填写联系电话', trigger: 'blur' },
         ],
