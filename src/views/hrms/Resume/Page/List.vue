@@ -5,6 +5,7 @@
       <operation-container>
         <template slot="left">
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+          <iep-button @click="handleExport()" type="primary" plain>导出</iep-button>
         </template>
         <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -43,7 +44,7 @@
   </div>
 </template>
 <script>
-import { getResumePage, deleteResumeById, getResumeMyCerts,statusAgent } from '@/api/post/resume'
+import { getResumePage, deleteResumeById, getResumeMyCerts, statusAgent, ExportExcel } from '@/api/post/resume'
 import AdvanceSearch from './AdvanceSearch'
 import { getUserInfo } from '@/api/login'
 import mixins from '@/mixins/mixins'
@@ -59,10 +60,13 @@ export default {
       userData: {roles: []},
       pagedTable: [],
       manager: true,
+      ids: [],
+      roleDate:[],
     }
   },
   created () {
     this.loadPage()
+    this.getIds()
   },
   methods: {
     handleSelectionChange (val) {
@@ -100,6 +104,28 @@ export default {
           this.loadPage()
       })
     },
+    handleExport () {
+      ExportExcel(this.ids).catch(err => {
+        this.$message({
+          type: 'warning',
+          message: err,
+        })
+      })
+    },
+    async getIds () {     
+      this.roleDate = await getUserInfo().then(res => {
+        return res.data.data.roles
+      })
+      if (this.roleDate.includes(111) || this.roleDate.includes(1)) {
+        getResumePage().then((data) => {
+          this.ids = data.data.data.records.map( m => m.resumeId)
+        })
+      } else {
+        getResumeMyCerts().then((data) => {
+          this.ids = data.data.data.records.map( m => m.resumeId)
+        })
+      }
+    },
     // 调取接口
     async loadPage (param = this.searchForm) {
       this.userData = await getUserInfo().then(res => {
@@ -133,6 +159,11 @@ export default {
       //    this.pagedTable = res.records
       //    console.log(this.pagedTable)
       //  })
+    },
+  },
+  watch: {
+    pagedTable (newVal) {
+      this.ids = newVal.map(v => { return v.resumeId })
     },
   },
 }

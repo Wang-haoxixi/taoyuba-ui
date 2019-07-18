@@ -169,6 +169,53 @@
                     </el-form-item>
                 </el-col> -->
                 </el-row>
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="特长：" prop="speciality">
+                      <el-input v-model="form.speciality"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="身份证正面照片：" prop="photoFront">
+                      <el-upload
+                        class="avatar-uploader"
+                        action="/api/admin/file/upload/avatar"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccessFront">
+                        <img v-if="form.photoFront" :src="form.photoFront" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                      </el-upload>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="身份证反面照片：" prop="photoReverse">
+                      <el-upload
+                        class="avatar-uploader"
+                        action="/api/admin/file/upload/avatar"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccessReverse">
+                        <img v-if="form.photoReverse" :src="form.photoReverse" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                      </el-upload>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="身份证头像：" prop="idcardPhoto">
+                      <el-image v-if="form.idcardPhoto" :src="form.idcardPhoto"></el-image>
+                      <i v-else class="el-icon-picture-outline"></i>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="人脸照：" prop="facePhoto">
+                      <el-image v-if="form.facePhoto" :src="form.facePhoto"></el-image>
+                      <i v-else class="el-icon-picture-outline"></i>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
                 <iep-form-item class="form-half" prop="remark" label-name="备注信息" tip="请输入备注信息" v-if="!$route.query.userId">
                 <iep-input-area v-model="form.remark"></iep-input-area>
                 </iep-form-item>
@@ -225,6 +272,11 @@ export default {
           remark:'',
           positionId: '',
           nationality: '中国',
+          speciality: '',
+          photoFront: '',
+          photoReverse: '',
+          idcardPhoto: '',
+          facePhoto: '',
           certList: [],
       },
       agent:{
@@ -292,6 +344,9 @@ export default {
             { required: true, message: '请填写联系电话', trigger: 'blur' },
             { validator: checkPhone, trigger: 'blur' },
         ],
+        // speciality: [
+        //     { required: true, message: '请填写特长', trigger: 'blur' },
+        // ],
       },
       options: [],
       applyTypes: [
@@ -395,10 +450,18 @@ export default {
         this.form.realName = data.data.data.name
         this.form.birthday = data.data.data.birth
         this.form.nation = data.data.data.nation
+        this.form.idcardPhoto = data.data.data.photo
+        this.form.facePhoto = data.data.data.picture
         }
       }).catch(err=>{
                 this.$message.error(err.message)
       })    
+    },
+    handleAvatarSuccessFront (response) {
+      this.form.photoFront = response.data.url
+    },
+    handleAvatarSuccessReverse (response) {
+      this.form.photoReverse = response.data.url
     },
   },
   components: { InlineFormTable },
@@ -552,7 +615,7 @@ export default {
     text-align: center;
   }
   .avatar {
-    width: 178px;
+    width: 356px;
     height: 178px;
     display: block;
   }
