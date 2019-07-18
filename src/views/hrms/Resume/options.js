@@ -63,6 +63,7 @@ import { mergeByFirst } from '@/util/util'
       skill: '', //特殊技能
       workRequire: '', //作业要求
       workDetail: '', //作业方式
+      workExprience: '',
       // isRcmd: '', //是否推荐
     }
   }
@@ -108,6 +109,7 @@ import { mergeByFirst } from '@/util/util'
       skill: '', //特殊技能
       workRequire: '', //作业要求
       workDetail: '', //作业方式
+      workExprience: '',
       // isRcmd: '', //是否推荐
     }
   }
@@ -167,9 +169,6 @@ import { mergeByFirst } from '@/util/util'
     job: [
         { required: true, message: '请填应聘职位', trigger: 'blur' },
     ],
-    seniority: [
-        { required: true, message: '请填航海经验', trigger: 'blur' },
-    ],
     skill: [
         { required: true, message: '请填特殊技能', trigger: 'blur' },
         { max: 25, message: '长度在 0 到 25 个字符', trigger: 'blur'},
@@ -177,9 +176,8 @@ import { mergeByFirst } from '@/util/util'
     workRequire: [
         { required: true, message: '请填作业要求', trigger: 'blur' },
     ],
-    workDetail: [
-        { required: true, message: '请填作业方式', trigger: 'blur' },
-        { max: 100, message: '长度在 0 到 100 个字符', trigger: 'blur'},
+    workExprience: [
+      { required: true, message: '请填工作经验', trigger: 'blur' },
     ],
     // isRcmd: [
     //   { required: true, message: '请填是否推荐', trigger: 'blur' },
