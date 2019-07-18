@@ -94,12 +94,12 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="航海经验：" prop="seniority">
-              <iep-dict-select v-model="form.seniority" dict-name="tyb_resume_seniority">></iep-dict-select>
+            <el-form-item label="工作经验：" prop="workExprience">                                                                                
+              <iep-dict-select v-model="form.workExprience" dict-name="tyb_work_exprience">></iep-dict-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="作业要求：" prop="workRequire">
+            <el-form-item label="作业方式：" prop="workRequire">          
               <iep-dict-select v-model="form.workRequire" dict-name="tyb_resume_worktype">></iep-dict-select>
             </el-form-item>
           </el-col>
@@ -118,11 +118,6 @@
             </el-form-item>
           </el-col> -->
         </el-row>
-
-        <iep-form-item class="form-half" prop="workDetail" label-name="作业方式：">
-          <iep-input-area v-model="form.workDetail"></iep-input-area>
-        </iep-form-item>
-
         <el-form-item label="">
           <operation-wrapper>
             <iep-button type="primary" @click="handleSubmit">保存</iep-button>

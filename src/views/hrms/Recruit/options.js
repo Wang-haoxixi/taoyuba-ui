@@ -60,6 +60,7 @@ const initForm = () => {
     certTitle: '',
     shipName: '',
     remark: '',
+    workExprience: '',
   }
 }
 
@@ -84,6 +85,7 @@ const initDtoForm = () => {
     certTitle: '',
     shipName: '',
     remark: '',
+    workExprience: '',
   }
 }
 
@@ -208,6 +210,9 @@ const rules = {
     { required: true, message: '请填主机总功率', trigger: 'blur' },
     // { validator: amount1, trigger: 'blur'},
     {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+  ],
+  workExprience: [
+    { required: true, message: '请填工作经验', trigger: 'blur' },
   ],
   // shipName: [
   //   { required: true, message: '请填船名', trigger: 'blur' },

@@ -99,7 +99,12 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>                   
+        <el-row>
+           <el-col :span="12">                       
+           <el-form-item label="工作经验：" prop="workExprience">               
+                <iep-dict-select v-model="form.workExprience" dict-name="tyb_work_exprience">></iep-dict-select>    
+            </el-form-item>
+           </el-col>
           <el-col :span="12">                          
             <el-form-item label="备注：" prop="remark" v-if="manager">                              
               <el-input   type="textarea" v-model="form.remark" ></el-input>
