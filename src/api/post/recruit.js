@@ -52,3 +52,11 @@ export function putRecruit (obj, publish) {
     data: obj,
   })
 }
+
+export function ExportExcel (ids) {
+  return request({
+    url: 'tybhrms/tybExcelExport/recruit',
+    method: 'post',
+    data: ids,
+  })
+}

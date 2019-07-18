@@ -66,14 +66,14 @@ const certificateColumns = [
     dictName: 'tyb_crew_cert_type',
   },
   {
-    prop: 'certTitle',
+    prop: 'certLevel',
     label: '证书等级',
     type: 'dict',
     dictName: 'tyb_crew_cert_level',
   },
   {
-    prop: 'certNo',
-    label: '证书编号',
+    prop: 'certTitle',
+    label: '证书职务',
     type: 'dict',
     dictName: 'tyb_crew_cert_title',
   },

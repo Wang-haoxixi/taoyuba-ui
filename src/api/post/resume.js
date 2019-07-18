@@ -59,3 +59,11 @@ export function putResume (obj, publish) {
     data: obj,
   })
 }
+
+export function ExportExcel (ids) {
+  return request({
+    url: 'tybhrms/tybExcelExport/resume',
+    method: 'post',
+    data: ids,
+  })
+}

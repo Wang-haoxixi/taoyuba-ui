@@ -5,6 +5,7 @@
       <operation-container>
         <template slot="left">
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+          <iep-button @click="handleExport()" type="primary" plain>导出</iep-button>
         </template>
         <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -27,7 +28,7 @@
   </div>
 </template>
 <script>
-import { getRecruitPage, deleteRecruitById,getMyRecruitPage} from '@/api/post/recruit'
+import { getRecruitPage, deleteRecruitById,getMyRecruitPage, ExportExcel} from '@/api/post/recruit'
 import AdvanceSearch from './AdvanceSearch'
 import mixins from '@/mixins/mixins'
 import { columnsMap, dictsMap } from '../options'
@@ -40,10 +41,13 @@ export default {
       dictsMap,
       columnsMap,
       searchData: 'contactName',
+      ids: [],
+      roleDate:[],
     }
   },
   created () {
     this.loadPage()
+    this.getIds()
   },
   methods: {
     handleSelectionChange (val) {
@@ -64,6 +68,28 @@ export default {
     },
     handleDetail (row) {
       this.$emit('onDetail', row)
+    },
+    handleExport () {
+      ExportExcel(this.ids).catch(err => {
+        this.$message({
+          type: 'warning',
+          message: err,
+        })
+      })
+    },
+    async getIds () {     
+      this.roleDate = await getUserInfo().then(res => {
+        return res.data.data.roles
+      })
+      if (this.roleDate.includes(111) || this.roleDate.includes(1)) {
+        getRecruitPage().then((data) => {
+          this.ids = data.data.data.records.map( m => m.recruitId)
+        })
+      } else {
+        getMyRecruitPage().then((data) => {
+          this.ids = data.data.data.records.map( m => m.recruitId)
+        })
+      }
     },
     async loadPage (param = this.searchForm) {
       this.userData = await getUserInfo().then(res => {
@@ -96,6 +122,11 @@ export default {
         //   }
         // })
       }
+    },
+  },
+  watch: {
+    pagedTable (newVal) {
+      this.ids = newVal.map(v => { return v.recruitId })
     },
   },
 }

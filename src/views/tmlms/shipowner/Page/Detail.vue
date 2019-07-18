@@ -35,6 +35,18 @@
                 <div v-else>{{ shipowner.villageId }}</div>
               </el-form-item>
             </el-col>
+            <el-col :span="12">
+              <el-form-item label="身份证头像：" prop="idcardPhoto">
+                <el-image v-if="shipowner.idcardPhoto" :src="shipowner.idcardPhoto"></el-image>
+                <i v-else class="el-icon-picture-outline"></i>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="人脸照：" prop="facePhoto">
+                <el-image v-if="shipowner.facePhoto" :src="shipowner.facePhoto"></el-image>
+                <i v-else class="el-icon-picture-outline"></i>
+              </el-form-item>
+            </el-col>
             <el-col>
                 <iep-form-item prop="workExperience" label-name="资质证书">     
                   <inline-form-table :table-data="shipowner.shiplist" :columns="certificateColumns" requestName="certificate" type="employee_profile" @add="setData"></inline-form-table>
@@ -121,6 +133,8 @@ export default {
         address: '',
         idcard: '',
         realName:'',
+        idcardPhoto: '',
+        facePhoto: '',
       },
       rules: {
           realName: [
