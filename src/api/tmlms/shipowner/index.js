@@ -52,3 +52,11 @@ export function statusShipowner (switchs,userId) {
         method: 'post',
     })
 }
+
+export function uploadPic (data) {
+  return request({
+    url: 'admin/file/upload/avatar',
+    method: 'post',
+    data: data,
+  })
+}

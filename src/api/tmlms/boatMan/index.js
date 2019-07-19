@@ -58,3 +58,11 @@ export function detailCrew (id) {
         method: 'get',
     })
 }
+
+export function uploadPic (data) {
+    return request({
+      url: 'admin/file/upload/avatar',
+      method: 'post',
+      data: data,
+    })
+  }

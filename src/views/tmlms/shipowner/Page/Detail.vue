@@ -37,13 +37,13 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="身份证头像：" prop="idcardPhoto">
-                <el-image v-if="shipowner.idcardPhoto" :src="shipowner.idcardPhoto"></el-image>
+                <img v-if="shipowner.idcardPhoto" :src="shipowner.idcardPhoto">
                 <i v-else class="el-icon-picture-outline"></i>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="人脸照：" prop="facePhoto">
-                <el-image v-if="shipowner.facePhoto" :src="shipowner.facePhoto"></el-image>
+                <img v-if="shipowner.facePhoto" :src="shipowner.facePhoto" style="width:350px;height:200px">
                 <i v-else class="el-icon-picture-outline"></i>
               </el-form-item>
             </el-col>
@@ -65,7 +65,7 @@
 <script>
 import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable/'
 import { getArea } from '@/api/post/address.js'
-import { saveShipowner, getShipownerDetail, getAllArea, editShipowner, getAllAreaName } from '@/api/tmlms/shipowner'
+import { saveShipowner, getShipownerDetail, getAllArea, editShipowner, getAllAreaName, uploadPic } from '@/api/tmlms/shipowner'
 // import { addUserRole } from '@/api/admin/user'
 import { getUserInfo } from '@/api/login'
 import { getLastData } from '@/api/hrms/databuspayload'
@@ -173,16 +173,22 @@ export default {
   components: { InlineFormTable },
   methods: {
     // 提交表单
-    save () {
+    async save () {
+      await this.getIdcardFile()
+      await this.getFaceFile()
       this.$refs['form'].validate((valid) => {
           if (valid) {
-            let shipowner = JSON.parse(JSON.stringify(this.shipowner))
-            shipowner.shiplist.forEach(item=>{
-              item.certFile = item.annex
-            })
+            // let shipowner = JSON.parse(JSON.stringify(this.shipowner))
+            let shipowner = this.shipowner
+            if (shipowner.shiplist) {
+              shipowner.shiplist.forEach(item=>{
+                item.certFile = item.annex
+              })
+            }
             let type = 1
             if(this.$route.query.edit){
-              let data = JSON.parse(JSON.stringify(shipowner))
+              // let data = JSON.parse(JSON.stringify(shipowner))
+              let data = shipowner
               data.villageId = data.villageId[data.villageId.length-1]
                // 用户调用这个界面的时候 需要传入ID
               if(this.$route.query.userId){
@@ -273,9 +279,11 @@ export default {
       getLastData({sn:this.sn}).then((data) => {  
         console.log(data.data.code)                                      
         if(data.data.code === 0){
-        this.shipowner.address = data.data.data.address
-        this.shipowner.idcard = data.data.data.identityNumber
-        this.shipowner.realName = data.data.data.name
+          this.shipowner.address = data.data.data.address
+          this.shipowner.idcard = data.data.data.identityNumber
+          this.shipowner.realName = data.data.data.name
+          this.shipowner.idcardPhoto = 'data:image/png;base64,' + data.data.data.photo
+          this.shipowner.facePhoto = 'data:image/png;base64,' + data.data.data.picture    
         } 
       }).catch(err=>{
                 this.$message.error(err.message)
@@ -283,6 +291,36 @@ export default {
     },
     ifexist () {    
           //
+    },
+    async getIdcardFile () {
+      let idcardFile = this.dataURLtoFile(this.shipowner.idcardPhoto)
+      let formdata  =  new FormData() 
+      formdata.append('file', idcardFile)
+      await uploadPic(formdata).then(res => {
+        return this.shipowner.idcardPhoto = res.data.data.url
+      })
+    },
+    async getFaceFile () {
+      let faceFile = this.dataURLtoFile(this.shipowner.facePhoto)
+      let formdata  =  new FormData() 
+      formdata.append('file', faceFile)
+      await uploadPic(formdata).then(res => {
+        return this.shipowner.facePhoto = res.data.data.url
+      })
+    },
+    dataURLtoFile (dataurl, filename = 'img') {
+      let arr = dataurl.split(',')
+      let mime = arr[0].match(/:(.*?);/)[1]
+      let suffix = mime.split('/')[1]
+      let bstr = atob(arr[1])
+      let n = bstr.length
+      let u8arr = new Uint8Array(n)
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n)
+      }
+      return new File([u8arr], `${filename}.${suffix}`, {
+        type: mime,
+      })
     },
   },
   computed: {

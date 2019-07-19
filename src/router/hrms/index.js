@@ -68,7 +68,7 @@ export default [
       },
       {
         path: 'crew_views/:userId',
-        name: '船员表单',
+        name: '船员表单详情页',
         component: () => import('@/views/hrms/crew/Page/Detail.vue'),
         meta: noKeepAlive,
       },

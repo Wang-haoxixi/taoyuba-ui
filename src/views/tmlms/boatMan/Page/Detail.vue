@@ -178,7 +178,7 @@
                 </el-row>
                 <el-row>
                   <el-col :span="12">
-                    <el-form-item label="身份证正面照片：" prop="photoFront">
+                    <el-form-item v-if="manager" label="身份证正面照片：" prop="photoFront">
                       <el-upload
                         class="avatar-uploader"
                         action="/api/admin/file/upload/avatar"
@@ -190,7 +190,7 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
-                    <el-form-item label="身份证反面照片：" prop="photoReverse">
+                    <el-form-item v-if="manager" label="身份证反面照片：" prop="photoReverse">
                       <el-upload
                         class="avatar-uploader"
                         action="/api/admin/file/upload/avatar"
@@ -204,14 +204,14 @@
                 </el-row>
                 <el-row>
                   <el-col :span="12">
-                    <el-form-item label="身份证头像：" prop="idcardPhoto">
-                      <el-image v-if="form.idcardPhoto" :src="form.idcardPhoto"></el-image>
+                    <el-form-item v-if="manager" label="身份证头像：" prop="idcardPhoto">
+                      <img v-if="form.idcardPhoto" :src="form.idcardPhoto">
                       <i v-else class="el-icon-picture-outline"></i>
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
-                    <el-form-item label="人脸照：" prop="facePhoto">
-                      <el-image v-if="form.facePhoto" :src="form.facePhoto"></el-image>
+                    <el-form-item v-if="manager" label="人脸照：" prop="facePhoto">
+                      <img v-if="form.facePhoto" :src="form.facePhoto" style="width:350px;height:200px">
                       <i v-else class="el-icon-picture-outline"></i>
                     </el-form-item>
                   </el-col>
@@ -234,7 +234,7 @@
 <script>
 import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable/'
 import { getArea,getPosition} from '@/api/post/admin'
-import { saveCrew, detailCrew, editCrew } from '@/api/tmlms/boatMan'
+import { saveCrew, detailCrew, editCrew, uploadPic } from '@/api/tmlms/boatMan'
 import { getLastData } from '@/api/hrms/databuspayload'
 import { certificateColumns } from '@/views/hrms/ComponentsNew/options'
 import { getUserInfo } from '@/api/login'
@@ -368,17 +368,21 @@ export default {
   },
   methods: {
     // 提交表单
-    save () {
+    async save () {
+      await this.getIdcardFile()
+      await this.getFaceFile()
       console.log(this.form)
       this.$refs['form'].validate((valid) => {
           if (valid) {
-            let form = JSON.parse(JSON.stringify(this.form))
+            // let form = JSON.parse(JSON.stringify(this.form))
+            let form = this.form
             form.certList.forEach(item=>{
               item.certFile = item.annex
             })
             let type = 1
             if(this.$route.query.edit){
-              let data = JSON.parse(JSON.stringify(form))
+              // let data = JSON.parse(JSON.stringify(form))
+              let data = form
               if(this.$route.query.userId){
                 type = 2
                 data.userId = this.$route.query.userId
@@ -454,8 +458,8 @@ export default {
         this.form.realName = data.data.data.name
         this.form.birthday = data.data.data.birth
         this.form.nation = data.data.data.nation
-        this.form.idcardPhoto = data.data.data.photo
-        this.form.facePhoto = data.data.data.picture
+        this.form.idcardPhoto = 'data:image/png;base64,' + data.data.data.photo
+        this.form.facePhoto = 'data:image/png;base64,' + data.data.data.picture
         }
       }).catch(err=>{
                 this.$message.error(err.message)
@@ -466,6 +470,36 @@ export default {
     },
     handleAvatarSuccessReverse (response) {
       this.form.photoReverse = response.data.url
+    },
+    async getIdcardFile () {
+      let idcardFile = this.dataURLtoFile(this.form.idcardPhoto)
+      let formdata  =  new FormData() 
+      formdata.append('file', idcardFile)
+      await uploadPic(formdata).then(res => {
+        return this.form.idcardPhoto = res.data.data.url
+      })
+    },
+    async getFaceFile () {
+      let faceFile = this.dataURLtoFile(this.form.facePhoto)
+      let formdata  =  new FormData() 
+      formdata.append('file', faceFile)
+      await uploadPic(formdata).then(res => {
+        return this.form.facePhoto = res.data.data.url
+      })
+    },
+    dataURLtoFile (dataurl, filename = 'img') {
+      let arr = dataurl.split(',')
+      let mime = arr[0].match(/:(.*?);/)[1]
+      let suffix = mime.split('/')[1]
+      let bstr = atob(arr[1])
+      let n = bstr.length
+      let u8arr = new Uint8Array(n)
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n)
+      }
+      return new File([u8arr], `${filename}.${suffix}`, {
+        type: mime,
+      })
     },
   },
   components: { InlineFormTable },
