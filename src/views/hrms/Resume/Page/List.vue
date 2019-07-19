@@ -44,7 +44,7 @@
   </div>
 </template>
 <script>
-import { getResumePage, deleteResumeById, getResumeMyCerts, statusAgent, ExportExcel } from '@/api/post/resume'
+import { getResumePage, deleteResumeById, getResumeMyCerts, statusAgent, exportExcel } from '@/api/post/resume'
 import AdvanceSearch from './AdvanceSearch'
 import { getUserInfo } from '@/api/login'
 import mixins from '@/mixins/mixins'
@@ -105,7 +105,7 @@ export default {
       })
     },
     handleExport () {
-      ExportExcel(this.ids).catch(err => {
+      exportExcel(this.ids).catch(err => {
         this.$message({
           type: 'warning',
           message: err,

@@ -94,54 +94,54 @@
               <el-input maxlength="50" v-model="form.licensesInspectionNo"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <iep-form-item class="form-half" prop="licensesDateIssue" label-name="签发日期">
               <iep-date-picker v-model="form.licensesDateIssue" type="date" placeholder="选择日期"></iep-date-picker>
             </iep-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
+          </el-col> -->
           <el-col :span="12">
             <iep-form-item class="form-half" prop="licensesDateExpire" label-name="证书有效期">
               <iep-date-picker v-model="form.licensesDateExpire" type="date" placeholder="选择日期"></iep-date-picker>
             </iep-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="主机总功率(kw)：" prop="engineTotalPower">
               <el-input maxlength="6" v-model="form.engineTotalPower"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="主机功率(kw)：" prop="mainEnginePower">
               <el-input maxlength="6" v-model="form.mainEnginePower"></el-input>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="双控功率(kw)：" prop="dualPower">
               <el-input maxlength="6" v-model="form.dualPower"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="主机型号：" prop="mainEngineModel">
               <el-input maxlength="50" v-model="form.mainEngineModel"></el-input>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="总吨位：" prop="grossTonnage">
               <el-input maxlength="3" v-model="form.grossTonnage"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="船长（m）：" prop="hullLength">
               <el-input maxlength="6" v-model="form.hullLength"></el-input>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="船体材料：" prop="hullMaterial">
               <el-select v-model="form.hullMaterial">
@@ -153,8 +153,6 @@
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="船籍港：" prop="portRegister">
               <el-select v-model="form.portRegister">
@@ -166,6 +164,8 @@
               </el-select>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="渔具名称：" prop="fishingGear">
               <el-select v-model="form.fishingGear">
@@ -177,13 +177,13 @@
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="建造完工日期：" prop="buildDate">
               <iep-date-picker v-model="form.buildDate" type="date" placeholder="选择日期"></iep-date-picker>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="作业类型：" prop="activityType">
               <el-select v-model="form.activityType">
@@ -195,8 +195,6 @@
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="作业方式1：" prop="workMode">
               <el-select v-model="form.workMode">
@@ -208,6 +206,8 @@
               </el-select>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="作业方式2：" prop="workMode">
               <el-select v-model="form.workMode2">
@@ -219,25 +219,25 @@
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="主捕种类：" prop="fishType">
               <el-input maxlength="100" v-model="form.fishType"></el-input>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="型宽：" prop="mouldedBreadth">
               <el-input maxlength="6" v-model="form.mouldedBreadth"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="型深：" prop="mouldedDepth">
               <el-input maxlength="6" v-model="form.mouldedDepth"></el-input>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="净吨位：" prop="netTonnage">
               <el-input maxlength="3" v-model="form.netTonnage"></el-input>

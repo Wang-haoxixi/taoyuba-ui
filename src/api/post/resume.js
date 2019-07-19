@@ -1,4 +1,5 @@
 import request from '@/router/axios'
+import {exportDownload} from '@/util/export'
 
 const prefixUrl = 'tybhrms/resume'
 
@@ -60,10 +61,10 @@ export function putResume (obj, publish) {
   })
 }
 
-export function ExportExcel (ids) {
-  return request({
-    url: 'tybhrms/tybExcelExport/resume',
-    method: 'post',
+export function exportExcel (ids) {
+  return exportDownload({
+    url: 'tybhrms/tybExcelExport/recruit',
     data: ids,
+    title: '招聘信息',
   })
 }

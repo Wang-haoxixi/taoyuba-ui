@@ -79,7 +79,7 @@ const certificateColumns = [
   },
   {
     prop: 'certDateIssus',
-    label: '签发日期',
+    label: '有效期至',
     type: 'date',
   },
   {
@@ -89,7 +89,7 @@ const certificateColumns = [
   },
   {
     prop: 'annex',
-    label: '附件',
+    label: '扫描件',
     type: 'file',
   },
 ]
