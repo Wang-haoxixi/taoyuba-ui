@@ -5,7 +5,7 @@
       <operation-container>
         <template slot="left">
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
-          <iep-button @click="handleExport()" type="primary" plain>导出</iep-button>
+          <iep-button @click="exportExcel()" type="primary" plain>导出</iep-button>
         </template>
         <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -28,7 +28,7 @@
   </div>
 </template>
 <script>
-import { getRecruitPage, deleteRecruitById,getMyRecruitPage, ExportExcel} from '@/api/post/recruit'
+import { getRecruitPage, deleteRecruitById,getMyRecruitPage,exportExcel} from '@/api/post/recruit'
 import AdvanceSearch from './AdvanceSearch'
 import mixins from '@/mixins/mixins'
 import { columnsMap, dictsMap } from '../options'
@@ -43,6 +43,7 @@ export default {
       searchData: 'contactName',
       ids: [],
       roleDate:[],
+      url: '/tybhrms/tybExcelExport/recruit',
     }
   },
   created () {
@@ -69,14 +70,14 @@ export default {
     handleDetail (row) {
       this.$emit('onDetail', row)
     },
-    handleExport () {
-      ExportExcel(this.ids).catch(err => {
+  exportExcel () {  
+    exportExcel (this.ids).catch(err => {
         this.$message({
           type: 'warning',
           message: err,
         })
-      })
-    },
+   })
+  },
     async getIds () {     
       this.roleDate = await getUserInfo().then(res => {
         return res.data.data.roles
