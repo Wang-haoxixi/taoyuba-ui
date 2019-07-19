@@ -124,7 +124,7 @@ export default {
     handleAvatarSuccess (res) {
       // this.$emit('input', res.data.url)
       console.log(res.data.url)
-      // this.form.image = res.data.url
+      this.form.image = res.data.url
     },
   },
   watch: {
