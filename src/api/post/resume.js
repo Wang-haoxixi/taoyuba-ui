@@ -63,8 +63,8 @@ export function putResume (obj, publish) {
 
 export function exportExcel (ids) {
   return exportDownload({
-    url: 'tybhrms/tybExcelExport/recruit',
+    url: 'tybhrms/tybExcelExport/resume',
     data: ids,
-    title: '招聘信息',
+    title: '简历信息',
   })
 }
