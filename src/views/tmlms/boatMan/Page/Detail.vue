@@ -183,7 +183,7 @@
                         class="avatar-uploader"
                         action="/api/admin/file/upload/avatar"
                         :show-file-list="false"
-                        :on-success="handleAvatarSuccessFront">
+                        :on-success="handleAvatarSuccessFront" :headers="headers"  accept="image/*">
                         <img v-if="form.photoFront" :src="form.photoFront" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                       </el-upload>
@@ -195,7 +195,7 @@
                         class="avatar-uploader"
                         action="/api/admin/file/upload/avatar"
                         :show-file-list="false"
-                        :on-success="handleAvatarSuccessReverse">
+                        :on-success="handleAvatarSuccessReverse" :headers="headers"  accept="image/*">
                         <img v-if="form.photoReverse" :src="form.photoReverse" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                       </el-upload>
@@ -242,6 +242,7 @@ import { getUserInfo } from '@/api/login'
 import information from '@/mixins/information'
 import VueSocketio from 'vue-socket.io'
 import Vue from 'vue'
+import store from '@/store'
 Vue.use(new VueSocketio({
     debug: false,
     connection: 'http://localhost:5000', //地址+端口，由后端提供
@@ -360,6 +361,9 @@ export default {
       dataLoad: [],
       sn: '',
       manager: false,
+      headers: {
+        Authorization: 'Bearer ' + store.getters.access_token,
+      },
     }
   },
   methods: {
