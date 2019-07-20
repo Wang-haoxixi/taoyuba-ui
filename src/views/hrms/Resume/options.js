@@ -14,6 +14,10 @@ import { mergeByFirst } from '@/util/util'
   
   const columnsMap = [
     {
+      prop: 'resumeId',
+      label: '编号',
+    },
+    {
       prop: 'realName',
       label: '姓名',
     },
@@ -68,9 +72,13 @@ import { mergeByFirst } from '@/util/util'
     }
   }
 
-  const initSearchForm = () => {
+  const initSearchForm = () => {    
     return {
       realName: '', //姓名
+      resumeId: '',
+      startdate: '',
+      resumeCrestartdate: '',
+      resumeCreenddate: '',
       // resumeName: '', //简历名字  
     }
   }
@@ -78,6 +86,10 @@ import { mergeByFirst } from '@/util/util'
   const initDtoSearchForm = () => {
     return {
       realName: '', //姓名
+      resumeId: '',
+      startdate: '',
+      resumeCrestartdate: '',
+      resumeCreenddate:'',
       // resumeName: '', //简历名字
     }
   }

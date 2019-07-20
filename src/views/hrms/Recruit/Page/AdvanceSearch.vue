@@ -1,10 +1,23 @@
 <template>
   <el-form :model="form" label-width="120px" size="mini">
+    <el-form-item label="招聘编号：">
+      <el-input v-model="form.recruitId"></el-input>  
+    </el-form-item>
     <el-form-item label="联系人：">
       <el-input v-model="form.contactName"></el-input>
     </el-form-item>
     <el-form-item label="招聘岗位：">
       <iep-dict-select v-model="form.positionId" dict-name="tyb_resume_position"></iep-dict-select>
+    </el-form-item>
+    <el-form-item label="招聘发布时间：">            
+        <el-date-picker
+              v-model="form.startdate"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              value-format="yyyy-MM-dd">
+    </el-date-picker>
     </el-form-item>
     <el-form-item>
       <operation-wrapper>
@@ -52,6 +65,10 @@ export default {
   },
   methods: {
     searchPage () {
+        if(this.form.startdate){
+          this.form.recruitCrestartdate = this.form.startdate[0]
+          this.form.recruitCreenddate = this.form.startdate[1]
+      }
       this.$emit('search-page', toDtoSearchForm(this.form))
     },
     clearSearchParam () {

@@ -43,7 +43,7 @@
     </basic-container>
   </div>
 </template>
-<script>
+<script>          
 import { getResumePage, deleteResumeById, getResumeMyCerts, statusAgent, exportExcel } from '@/api/post/resume'
 import AdvanceSearch from './AdvanceSearch'
 import { getUserInfo } from '@/api/login'
