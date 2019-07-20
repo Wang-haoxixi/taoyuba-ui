@@ -3,8 +3,18 @@
     <el-form-item label="姓名：">
       <el-input v-model="form.realName"></el-input>
     </el-form-item>
-    <el-form-item label="简历名字：">
-      <el-input v-model="form.resumeName"></el-input>
+    <el-form-item label="简历编号：">
+      <el-input v-model="form.resumeId"></el-input>
+    </el-form-item>
+    <el-form-item label="简历发布时间：">            
+        <el-date-picker
+              v-model="form.startdate"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              value-format="yyyy-MM-dd">
+    </el-date-picker>
     </el-form-item>
     <el-form-item>
       <operation-wrapper>
@@ -52,12 +62,21 @@ export default {
   },
   methods: {
     searchPage () {
+      if(this.form.startdate){
+          this.form.resumeCrestartdate = this.form.startdate[0]
+          this.form.resumeCreenddate = this.form.startdate[1]
+      }
       this.$emit('search-page', toDtoSearchForm(this.form))
     },
     clearSearchParam () {
       this.form = initSearchForm()
       // this.$emit('clear-search-param')
     },
+  },
+  watch: {    
+       'form.startdate': function (val) {   
+            console.log(val)
+       },
   },
 }
 </script>

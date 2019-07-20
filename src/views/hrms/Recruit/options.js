@@ -11,6 +11,10 @@ const dictsMap = {
 
 const columnsMap = [
   {
+    prop: 'recruitId',
+    label: '编号',
+  },
+  {
     prop: 'contactName',
     label: '联系人',
   },
@@ -98,6 +102,10 @@ const initSearchForm = () => {
   return {
     contactName: '', // 联系人
     positionId: '', // 招聘岗位
+    recruitId: '',
+    startdate:'',
+    recruitCrestartdate: '',
+    recruitCreenddate: '',
   }
 }
 
@@ -105,6 +113,9 @@ const initDtoSearchForm = () => {
   return {
     contactName: '', // 联系人
     positionId: '', // 招聘岗位
+    recruitId:'',
+    recruitCrestartdate: '',
+    recruitCreenddate: '',
   }
 }
 

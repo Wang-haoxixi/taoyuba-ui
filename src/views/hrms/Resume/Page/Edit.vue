@@ -21,7 +21,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <el-col :span="12">             
             <el-form-item label="出生日期：" prop="birthday">
               <el-date-picker v-model="form.birthday" type="date" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" :picker-options="pickerOptions"></el-date-picker> 
             </el-form-item>       
