@@ -528,6 +528,8 @@ export default {
       // 拿到ID 同步获取地址和选中的地址
       let a = await this.choseProvince(data.provinceId)
       let b = await this.choseCity(data.cityId) 
+      console.log(a)
+      console.log(b)
       data.certList.forEach((item,index)=>{
         item.annex = item.certFile
         item.id = index
