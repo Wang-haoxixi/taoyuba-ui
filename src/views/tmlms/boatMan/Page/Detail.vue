@@ -369,8 +369,12 @@ export default {
   methods: {
     // 提交表单
     async save () {
-      await this.getIdcardFile()
-      await this.getFaceFile()
+      if (this.form.idcardPhoto.length > 200) {
+        await this.getIdcardFile()
+      }
+      if (this.form.facePhoto.length > 200) {
+        await this.getFaceFile()
+      }
       console.log(this.form)
       this.$refs['form'].validate((valid) => {
           if (valid) {
@@ -456,7 +460,7 @@ export default {
         this.form.address = data.data.data.address
         this.form.idcard = data.data.data.identityNumber
         this.form.realName = data.data.data.name
-        this.form.birthday = data.data.data.birth
+        // this.form.birthday = data.data.data.birth
         this.form.nation = data.data.data.nation
         this.form.idcardPhoto = 'data:image/png;base64,' + data.data.data.photo
         this.form.facePhoto = 'data:image/png;base64,' + data.data.data.picture
@@ -488,6 +492,7 @@ export default {
       })
     },
     dataURLtoFile (dataurl, filename = 'img') {
+      console.log(dataurl)
       let arr = dataurl.split(',')
       let mime = arr[0].match(/:(.*?);/)[1]
       let suffix = mime.split('/')[1]
@@ -523,8 +528,6 @@ export default {
       // 拿到ID 同步获取地址和选中的地址
       let a = await this.choseProvince(data.provinceId)
       let b = await this.choseCity(data.cityId) 
-      console.log(a)
-      console.log(b)
       data.certList.forEach((item,index)=>{
         item.annex = item.certFile
         item.id = index
