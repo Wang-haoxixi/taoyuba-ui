@@ -25,7 +25,7 @@
                 </el-col>
                 <el-col :span="12">
                     <iep-form-item class="form-half" prop="birthday" label-name="出生日期">
-                    <iep-date-picker v-model="form.birthday" type="date" placeholder="选择日期"></iep-date-picker>
+                    <iep-date-picker v-model="form.birthday" type="date" placeholder="选择日期" readonly></iep-date-picker>
                     </iep-form-item>
                 </el-col>
                 </el-row>
