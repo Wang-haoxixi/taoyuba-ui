@@ -255,7 +255,7 @@ export default {
       }
     },
     collect () {
-      this.sn = '0501320180621000714049807115793'
+      this.sn = ''
       getLastData({sn:this.sn}).then((data) => {
         this.shipowner.address = data.data.data.address
         this.shipowner.idcard = data.data.data.identityNumber
