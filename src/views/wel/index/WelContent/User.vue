@@ -223,7 +223,7 @@ export default {
                 this.$router.push({name: 'detailAgent',query: {userId: this.userInfo.sysUser.userId}})
                 break
             case 112:
-                this.$router.push({name: 'detailBvillage',query: {userId: this.userInfo.sysUser.userId}})
+                this.$router.push({name: 'applyBvillage',query: {userId: this.userInfo.sysUser.userId}})
                 break
             default:
                 return false

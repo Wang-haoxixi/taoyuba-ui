@@ -74,6 +74,12 @@ export default [
         component: () => import('@/views/tmlms/bvillage/index'),
         meta: noKeepAlive,
       },
+      {
+      path: 'applyDetail',
+        name: 'applyBvillage',
+        component: () => import('@/views/tmlms/bvillage/Page/Apply_Detail'),
+        meta: noKeepAlive,
+      },
     ],
   },
   // 中介
