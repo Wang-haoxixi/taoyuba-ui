@@ -1,95 +1,33 @@
-<template>
+<template>    
   <div class="contract-box">
     <basic-container>
-        <h1 v-if="!$route.query.userId">{{ $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }}船东信息</h1>
-        <h1 v-if="$route.query.userId">完善个人信息</h1>
-        <el-form :model="shipowner" ref="form" label-width="150px" :rules="rules">
-          <el-row>
-            <el-col :span="8">
-              <el-form-item label="姓名:" prop="realName">
-                <el-input v-model="shipowner.realName" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.realName"></el-input>
-                <div v-else>{{ shipowner.realName }}</div>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="身份证号:" prop="idcard">
-                <el-input v-model="shipowner.idcard" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.idcard"></el-input>
-                <div v-else>{{ shipowner.idcard }}</div>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="联系地址:" prop="address">
-                <el-input v-model="shipowner.address" placeholder="" v-if="!$route.query.see"></el-input>
-                <div v-else>{{ shipowner.address }}</div>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="手机号码:" prop="phone">
-                <el-input v-model="shipowner.phone" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.phone"></el-input>
-                <div v-else>{{ shipowner.phone }}</div>
-              </el-form-item>
-            </el-col>
-            <el-col :span="16">
-              <el-form-item label="所属渔村区:" prop="villageId">
-                <el-cascader v-if="!$route.query.see" :options="options" @active-item-change="handleItemChange" :props="props" v-model="shipowner.villageId" ></el-cascader>
-                <div v-else>{{ shipowner.villageId }}</div>
-              </el-form-item>
-            </el-col>
-            <!-- <el-col>
-                <iep-form-item prop="workExperience" label-name="资质证书">
-                  <inline-form-table :table-data="shipowner.shiplist" :columns="certificateColumns" requestName="certificate" type="employee_profile" @add="setData"></inline-form-table>
+        <h1>{{ $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }}渔船信息</h1>       
+        <el-form :model="tybvillage" ref="form" label-width="150px" :rules="rules">    
+          <el-row>                      
+            <el-col>
+                <iep-form-item prop="workExperience" label-name="渔船信息">                    
+                  <inline-form-table :table-data="tybvillage.shiplist" :columns="certificateColumns" requestName="certificate" type="employee_profile" @add="setData"></inline-form-table>
                 </iep-form-item>
-            </el-col> -->
+            </el-col>
           </el-row>
-        </el-form>
-        <div style="text-align:center">
-          <el-button @click="save" v-if="!$route.query.see">提交</el-button>
-          <el-button @click="$router.go(-1)">返回</el-button>
-          <el-button v-if="manager" @click="collect">数据读取</el-button>
-        </div>
+        </el-form>                                                                                                                        
+        <div style="text-align:center">                                          
+          <el-button @click="save" v-if="!$route.query.see">提交</el-button>                        
+          <el-button @click="$router.go(-1)">返回</el-button>                                 
+        </div>                      
     </basic-container>
   </div>
-</template>
+</template>   
 <script>
-// import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable/'
-import { getArea } from '@/api/post/address.js'
-import { saveShipowner, getShipownerDetail, getAllArea, editShipowner, getAllAreaName } from '@/api/tmlms/shipowner'
+import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable/'
+import { getArea } from '@/api/post/address.js'   
+import { saveShipowner, getShipownerDetail, getAllArea, editShipowner, getAllAreaName, uploadPic } from '@/api/tmlms/shipowner'
 // import { addUserRole } from '@/api/admin/user'
-import { getUserInfo } from '@/api/login'
-import { getLastData } from '@/api/hrms/databuspayload'
-import Vue from 'vue'
-import information from '@/mixins/information'
-import VueSocketio from 'vue-socket.io'
-Vue.use(new VueSocketio({
-    debug: true,
-    connection: 'http://localhost:5000', //地址+端口，由后端提供
-}))
-export default {
-  mixins: [information],
-  data () {
-    // 验证
-      var card = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入身份证号'))
-        } else if (!value.match(/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/)) {
-          callback(new Error('请输入正确的身份证号码!'))
-        } else {
-          callback()
-        }
-      }
-      var checkPhone = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入联系电话'))
-        } else if (!value.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[0-9]|18[0-9]|14[0-9]|19[0-9]|16[0-9])[0-9]{8}$/)) {
-          callback(new Error('请输入正确的手机号码!'))
-        } else {
-            callback()
-        }
-      }
-    return {
-      haveInfo: {
-        phone: false,
-      },
+import { getUserInfo } from '@/api/login'           
+import { getLastData } from '@/api/hrms/databuspayload'        
+export default {                    
+  data () {                                                                                                                                                            
+    return {                                                                        
       certificateColumns: [
           {
             prop: 'shipName',
@@ -116,30 +54,10 @@ export default {
             label: '船舶检验证书编号',
           },
       ],
-      shipowner:{
+      tybvillage:{          
         shiplist:[],
-        address: '',
-        idcard: '',
-        realName:'',
       },
-      rules: {
-          realName: [
-            { required: true, message: '请输入姓名', trigger: 'blur' },
-          ],
-          idcard: [
-            { required: true, message: '请输入身份证号', trigger: 'blur' },
-            { validator: card, trigger: 'blur' },
-          ],
-          address: [
-            { required: true, message: '请输入联系地址', trigger: 'blur' },
-          ],
-          phone: [
-            { required: true, message: '请输入联系电话', trigger: 'blur' },
-            { validator: checkPhone, trigger: 'blur' },
-          ],
-          villageId: [
-            { required: true, message: '请输入所属渔村区', trigger: 'blur' },
-          ],
+      rules: {      
       },
       options: [],
       props: {
@@ -147,28 +65,28 @@ export default {
         label: 'name',
         children: 'childList',
       },
-      arr:[],
-      // userRole: {
-      //   userId: '',
-      //   roleId: 108,
-      // },
-      sn: '',
       manager: false,
     }
-  },
-  // components: { InlineFormTable },
-  methods: {
+  },        
+  components: { InlineFormTable },        
+  methods: {        
     // 提交表单
-    save () {
+    async save () {
+      await this.getIdcardFile()
+      await this.getFaceFile()
       this.$refs['form'].validate((valid) => {
           if (valid) {
-            let shipowner = JSON.parse(JSON.stringify(this.shipowner))
-            shipowner.shiplist.forEach(item=>{
-              item.certFile = item.annex
-            })
+            // let shipowner = JSON.parse(JSON.stringify(this.shipowner))
+            let shipowner = this.shipowner
+            if (shipowner.shiplist) {
+              shipowner.shiplist.forEach(item=>{
+                item.certFile = item.annex
+              })
+            }
             let type = 1
             if(this.$route.query.edit){
-              let data = JSON.parse(JSON.stringify(shipowner))
+              // let data = JSON.parse(JSON.stringify(shipowner))
+              let data = shipowner
               data.villageId = data.villageId[data.villageId.length-1]
                // 用户调用这个界面的时候 需要传入ID
               if(this.$route.query.userId){
@@ -255,12 +173,52 @@ export default {
       }
     },
     collect () {
-      this.sn = ''
-      getLastData({sn:this.sn}).then((data) => {
-        this.shipowner.address = data.data.data.address
-        this.shipowner.idcard = data.data.data.identityNumber
-        this.shipowner.realName = data.data.data.name
-      }) 
+      this.sn = ''    
+      getLastData({sn:this.sn}).then((data) => {  
+        console.log(data.data.code)                                      
+        if(data.data.code === 0){
+          this.shipowner.address = data.data.data.address
+          this.shipowner.idcard = data.data.data.identityNumber
+          this.shipowner.realName = data.data.data.name
+          this.shipowner.idcardPhoto = 'data:image/png;base64,' + data.data.data.photo
+          this.shipowner.facePhoto = 'data:image/png;base64,' + data.data.data.picture    
+        } 
+      }).catch(err=>{
+                this.$message.error(err.message)
+              })
+    },
+    ifexist () {    
+          //
+    },
+    async getIdcardFile () {
+      let idcardFile = this.dataURLtoFile(this.shipowner.idcardPhoto)
+      let formdata  =  new FormData() 
+      formdata.append('file', idcardFile)
+      await uploadPic(formdata).then(res => {
+        return this.shipowner.idcardPhoto = res.data.data.url
+      })
+    },
+    async getFaceFile () {
+      let faceFile = this.dataURLtoFile(this.shipowner.facePhoto)
+      let formdata  =  new FormData() 
+      formdata.append('file', faceFile)
+      await uploadPic(formdata).then(res => {
+        return this.shipowner.facePhoto = res.data.data.url
+      })
+    },
+    dataURLtoFile (dataurl, filename = 'img') {
+      let arr = dataurl.split(',')
+      let mime = arr[0].match(/:(.*?);/)[1]
+      let suffix = mime.split('/')[1]
+      let bstr = atob(arr[1])
+      let n = bstr.length
+      let u8arr = new Uint8Array(n)
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n)
+      }
+      return new File([u8arr], `${filename}.${suffix}`, {
+        type: mime,
+      })
     },
   },
   computed: {
