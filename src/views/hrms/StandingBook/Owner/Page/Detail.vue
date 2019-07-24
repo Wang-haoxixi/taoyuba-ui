@@ -162,18 +162,15 @@ export default {
               })
             }
             let type = 3
-            getIdcardCheck(shipowner.idcard).then(data => {
-              // if(!shipowner.userId) {
-              // shipowner.userId = data.data.data.userId
-              // }
-              console.log(shipowner)
-              console.log(data.data.data)
-              if(data.data.data !== true) {
-                let uid = data.data.data.userId
-                if (uid) {
+            getIdcardCheck(shipowner.idcard).then(res => {
+              let uid = res.data.data.userId
+              if(res.data.data !== true) {
                   let data = JSON.parse(JSON.stringify(shipowner))
                   if (data.villageId) {
                     data.villageId = data.villageId[data.villageId.length-1]
+                  }
+                  if (!data.userId) {
+                    data.userId = uid
                   }
                   // 用户调用这个界面的时候 需要传入ID
                   editShipowner(data,type).then(res=>{
@@ -185,26 +182,25 @@ export default {
                   }).catch(err=>{
                     this.$message.error(err.message)
                   })
-                }else{
-                  let data = JSON.parse(JSON.stringify(shipowner))
-                  if (data.villageId) {
-                    data.villageId = data.villageId[data.villageId.length-1]
-                  }
-                  // 用户调用这个界面的时候 需要传入ID
-                  saveShipowner(data,type).then(res=>{
-                      this.$message({
-                        message: res.data.msg,
-                        type: 'success',
-                      })
-                      this.$router.go(-1) 
-                  }).catch(err=>{
-                    this.$message.error(err.message)
-                  })
-                  // this.userRole.userId = data.userId
-                  // addUserRole(this.userRole)
+              } else {      
+                let data = JSON.parse(JSON.stringify(shipowner))
+                if (data.villageId) {
+                  data.villageId = data.villageId[data.villageId.length-1]
                 }
-              } else {
-                console.log('1111')
+                // console.log(uid)
+                // if (!data.userId) {
+                //   console.log('1111')
+                // }
+                // 用户调用这个界面的时候 需要传入ID
+                saveShipowner(data,type).then(res=>{
+                    this.$message({
+                      message: res.data.msg,
+                      type: 'success',
+                    })
+                    this.$router.go(-1) 
+                }).catch(err=>{
+                  this.$message.error(err.message)
+                }) 
               }
             })
           } else {
