@@ -65,7 +65,7 @@ export default {
       var checkPhone = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入联系电话'))
-        } else if (!value.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/)) {
+        } else if (!value.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[0-9]|18[0-9]|14[579]|19[89]|16[67])[0-9]{8}$/)) {
           callback(new Error('请输入正确的手机号码!'))
         } else {
             callback()
