@@ -31,7 +31,7 @@
                 </el-row>
                 <el-row>
                 <el-col :span="12">
-                    <el-form-item label="地址：" prop="districtId">
+                    <el-form-item label="籍贯地区：" prop="districtId">
                     <el-select
                         v-model="form.provinceId"
                         @change="choseProvince(form.provinceId)"

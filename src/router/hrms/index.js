@@ -132,6 +132,12 @@ export default [
         component: () => import('@/views/hrms/StandingBook/BoatsFiles/Page/CrewList.vue'),
         meta: noKeepAlive,
       },
+      {
+        path: 'village_shipOwner_detail',                  
+        name: '渔村下船东详情页',                     
+        component: () => import('@/views/hrms/StandingBook/Owner/Page/Detail.vue'),
+        meta: noKeepAlive,
+      },
     ],
   },
   {

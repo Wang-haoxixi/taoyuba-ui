@@ -27,39 +27,21 @@
             :key="index"
             :prop="item.value"  
             :label="item.text"
-            :width="item.css"
           >
           </el-table-column>
           <el-table-column
-            prop="status"  
-            label="审核操作"
-          >
-          <template slot-scope="scope">
-            <div>
-              <el-switch
-                v-model="scope.row.swith"
-                active-color="#13ce66"
-                @change="getStatus(scope.row.swith,scope.row.userId)"
-                inactive-color="#ff4949">
-              </el-switch>
-            </div>
-          </template>
-          </el-table-column>
-          <!-- <el-table-column
             prop="status"  
             label="审核状态"
           >
           <template slot-scope="scope">
             {{ scope.row.status | typeFilter}}
           </template>
-          </el-table-column> -->
-          <el-table-column label="操作" width="180">
+          </el-table-column>
+          <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.userId)">查看
               </el-button>
               <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.userId)">编辑
-              </el-button>
-              <el-button type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.userId)">删除
               </el-button>
             </template>
           </el-table-column>
@@ -71,7 +53,8 @@
   </div>
 </template>
 <script>
-import { getCrew,deleteCrew,statusCrew } from '@/api/tmlms/boatMan'
+import { getVillageShipowner, detailVillage } from '@/api/tmlms/bvillage'
+import { getUserInfo } from '@/api/login'
 export default {
   data () {
     return {
@@ -84,38 +67,26 @@ export default {
         idcard: '',
         realName: '',
         status: '',
+        villageId: 0,
       },
       options: {
         expandAll: false,
         columns: [
           {
-            text: '用户ID',
-            value: 'userId',
-            css: '80',
-          },
-          {
             text: '姓名',
             value: 'realName',
-            css: '100',
           },
           {
             text: '身份证号码',
             value: 'idcard',
-            css: '182',
           },
           {
             text: '联系地址',
             value: 'address',
-            css: '170',
           },
           {
             text: '联系电话',
             value: 'phone',
-          },
-          {
-            text: '备注信息',
-            value: 'remark',
-            css: '250',
           },
         ],
       },
@@ -133,6 +104,8 @@ export default {
           value: 3,
         },
       ],
+      userId: '',
+      villageId: '',
     }
   },
   methods: {
@@ -143,73 +116,32 @@ export default {
     },
     // 跳转新增页面
     addShipowner () {
-      this.$router.push({name: 'detailBoatMan'})
+      // this.$router.push({path: '/hrms_spa/village_shipOwner_detail/0'})
+      this.$router.push({
+        path: '/hrms_spa/village_shipOwner_detail',
+      })  
     },
     // 查看
     handleView (val) {
-      this.$router.push({name: 'detailBoatMan',query:{ see: val }})
+      this.$router.push({path: '/hrms_spa/village_shipOwner_detail', query:{ see: val }})
     },
     // 编辑
     handleEdit (val) {
-      this.$router.push({name: 'detailBoatMan',query:{ edit: val }})
+      this.$router.push({path: '/hrms_spa/village_shipOwner_detail', query:{ edit: val }})
     },
     // 获取列表数据
     getData () {
-      getCrew(this.params).then(res=>{
-        this.shipownerList = res.data.data.records
-        // this.shipownerList.map(m => { 
-        //   return m.remark.substring(0, 20)
-        // })
-        this.shipownerList.forEach(item => {
-          if(item.remark.length > 19) {
-            item.remark = item.remark.substring(0, 20) + '....'
-          }
-        })
-        console.log(this.shipownerList)
-        this.shipownerList.forEach( item=>{
-          if(item.status === 2){
-            item.swith = true
-          }else{
-            item.swith = false
-          }
-        })
-        this.total = res.data.data.total
-      })
-    },
-    // 删除
-    handleDel (id) {
-        this.$confirm('此操作将永久删除该船员, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        }).then(() => {
-          deleteCrew(id).then(res=>{
-            this.$message({
-              type: 'success',
-              message: res.data.msg,
-            })
-            this.getData()
-          }).catch(err=>{
-            this.$message.error(err.data.msg)
+      getUserInfo().then(data => {
+        this.userId = data.data.data.sysUser.userId
+        detailVillage(this.userId).then(data => {
+          this.villageId = data.data.data.villageId
+          this.params.villageId = this.villageId
+          getVillageShipowner(this.params).then(res=>{
+            this.shipownerList = res.data.data.records
+            this.total = res.data.data.total
           })
-        }).catch(() => {         
         })
-    },
-    // 审核
-    getStatus (switchs,userId) {
-      let data = ''
-      if(switchs){
-        data = 2
-      }else{
-        data = 3
-      }
-      statusCrew(data,userId).then( res=>{
-          this.$message({
-            type: 'success',
-            message: res.data.msg,
-          })
-          this.getData()
-      })
+      })     
     },
   },
   computed: {
