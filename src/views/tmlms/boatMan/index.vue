@@ -33,6 +33,7 @@
           <el-table-column
             prop="status"  
             label="审核操作"
+            width="100"
           >
           <template slot-scope="scope">
             <div>
@@ -104,18 +105,17 @@ export default {
             css: '182',
           },
           {
-            text: '联系地址',
-            value: 'address',
-            css: '170',
-          },
-          {
             text: '联系电话',
             value: 'phone',
+            css: '120',
+          },
+          {
+            text: '联系地址',
+            value: 'address',
           },
           {
             text: '备注信息',
             value: 'remark',
-            css: '250',
           },
         ],
       },
