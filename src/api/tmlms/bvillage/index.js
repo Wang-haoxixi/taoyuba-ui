@@ -40,3 +40,11 @@ export function statusVillage (switchs,userId) {
         method: 'post',
     })
 }
+
+export function getVillageShipowner (params) {
+    return request({
+        url: `${prefixUrl}/page/villageshipowner`,
+        method: 'get',
+        params: params,
+    })
+}

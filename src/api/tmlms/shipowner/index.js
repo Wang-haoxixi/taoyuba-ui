@@ -60,3 +60,13 @@ export function uploadPic (data) {
     data: data,
   })
 }
+
+export function getIdcardCheck (idcard) {
+    return request({
+        url: `${prefixUrl}/idcardcheck`,
+        method: 'get',
+        params: {
+          idcard: idcard,
+        },
+    }) 
+}
