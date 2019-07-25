@@ -80,6 +80,12 @@ export default [
         component: () => import('@/views/tmlms/bvillage/Page/Apply_Detail'),
         meta: noKeepAlive,
       },
+      {
+        path: 'shipInfo',
+          name: 'allotship',
+          component: () => import('@/views/tmlms/bvillage/shipinfo'),
+          meta: noKeepAlive,
+        },
     ],
   },
   // 中介

@@ -48,3 +48,4 @@ export function getVillageShipowner (params) {
         params: params,
     })
 }
+
