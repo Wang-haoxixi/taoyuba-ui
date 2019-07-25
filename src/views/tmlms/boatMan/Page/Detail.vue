@@ -225,7 +225,7 @@
             </el-form>
         <div style="text-align:center">
           <el-button @click="save" v-if="!$route.query.see">提交</el-button>
-          <el-button @click="$router.go(-1)">返回</el-button>
+          <el-button @click="$router.push({name:'boatMan'})">返回</el-button>
           <el-button v-if="manager" @click="collect">数据读取</el-button>
         </div>
     </basic-container>

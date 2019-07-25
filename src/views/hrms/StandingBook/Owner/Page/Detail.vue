@@ -12,7 +12,20 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="身份证号:" prop="idcard">
-                <el-input v-model="shipowner.idcard" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.idcard"></el-input>
+                <!-- <el-input v-model="shipowner.idcard" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.idcard"></el-input>
+                <div v-else>{{ shipowner.idcard }}</div> -->
+                <el-select v-if="!$route.query.see" :disabled="haveInfo.idcard" v-model="shipowner.idcard"
+                           placeholder="请选择"
+                           filterable
+                           remote
+                           maxlength="20"
+                           :loading="loading"
+                           allow-create
+                           clearable
+                           @change="idcardChange"
+                           :remote-method="getidcardList">
+                  <el-option v-for="item in idcards" :key="item.id" :label="item.idcard + '(手机号：' + item.phone + ')'" :value="item"></el-option>
+                </el-select>
                 <div v-else>{{ shipowner.idcard }}</div>
               </el-form-item>
             </el-col>
@@ -24,7 +37,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="手机号码:" prop="phone">
-                <el-input v-model="shipowner.phone" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.phone"></el-input>
+                <el-input v-model="shipowner.phone" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.phone" :readonly ="isReadonly"></el-input>
                 <div v-else>{{ shipowner.phone }}</div>
               </el-form-item>
             </el-col>
@@ -53,6 +66,7 @@ import { getLastData } from '@/api/hrms/databuspayload'
 import Vue from 'vue'
 import information from '@/mixins/information'
 import VueSocketio from 'vue-socket.io'
+import debounce from 'lodash/debounce'
 Vue.use(new VueSocketio({
     debug: true,
     connection: 'http://localhost:5000', //地址+端口，由后端提供
@@ -60,6 +74,7 @@ Vue.use(new VueSocketio({
 export default {
   mixins: [information],
   data () {
+    this.getidcardList = debounce(this.getidcardList, 800)
     // 验证
       var card = (rule, value, callback) => {
         if (value === '') {
@@ -114,6 +129,7 @@ export default {
         address: '',
         idcard: '',
         realName:'',
+        phone: '',
       },
       rules: {
           realName: [
@@ -147,13 +163,17 @@ export default {
       // },
       sn: '',
       manager: false,
+      idcards: [],
+      loading: false,
+      isReadonly: false,
+      // isCheck: false,
     }
   },
   // components: { InlineFormTable },
   methods: {
     // 提交表单
-  save () {
-     this.$refs['form'].validate((valid) => {
+    save () {
+      this.$refs['form'].validate((valid) => {
          if (valid) {
             let shipowner = JSON.parse(JSON.stringify(this.shipowner))
             if(shipowner.shiplist) {
@@ -260,6 +280,55 @@ export default {
         this.shipowner.idcard = data.data.data.identityNumber
         this.shipowner.realName = data.data.data.name
       }) 
+    },
+    idcardChange (card) {
+      if (typeof card === 'object') {
+        this.refreshCard(card)
+      } else {
+        this.refreshCard({idcard: card})
+      }
+      this.idcards = []
+    },
+    refreshCard (card) {
+      if(card !== null) {
+        console.log(card)
+        let { idcard = '', phone = '' } = card
+        this.shipowner.phone = phone
+        this.shipowner.idcard = idcard
+        if (phone === '') {
+          console.log('1111')
+          this.isReadonly = false
+        } else {
+          console.log('222')
+          this.isReadonly = true
+        }
+        // if (this.isCheck == true) {
+        //   this.isReadonly = true
+        // } else if (this.isCheck == false) {
+        //   this.isReadonly = false
+        // }
+      } else {
+        this.shipowner.phone = ''
+        this.shipowner.idcard = ''
+        this.isReadonly = false
+      }
+    },
+    getidcardList (number) {
+      this.loading = false
+      console.log('333')
+      this.isReadonly = false
+      if (number !== '') {
+        getIdcardCheck(number).then(({data}) => {
+          if (data.data !== true) {
+            this.idcards.push(data.data)
+            // this.isCheck = true
+            // this.isReadonly = true
+          }
+        })
+      } else {
+        this.idcards = []
+      }
+      this.loading = false
     },
   },
   computed: {
