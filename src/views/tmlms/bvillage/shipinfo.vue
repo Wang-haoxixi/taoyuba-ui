@@ -50,11 +50,7 @@ export default {
     // 提交表单
    save () {                 
       this.$refs['form'].validate((valid) => {    
-          if (valid) {
-              if( this.tybvillage.shiplist.length === 0){          
-                  this.$message.error('无数据提交')   
-                  return            
-               }       
+          if (valid) {        
             let shipinfolist  =  this.tybvillage.shiplist       
              let  userId  =  this.$route.query.allot
             if(this.ifexist){                          
@@ -80,17 +76,21 @@ export default {
                 this.$message.error(err.message)
               })
             }else{  
-              //新增     
-              console.log(userId)
-              let   shiparray2  =  new Array()   
-               if( this.tybvillage.shiplist.length > 0) {
+              //新增 
+                if( this.tybvillage.shiplist.length === 0){          
+                  this.$message.error('无数据提交')   
+                  return            
+               }                       
+              console.log(userId)       
+              let   shiparray2  =  new Array()           
+               if( this.tybvillage.shiplist.length > 0) {          
                       for(let i=0;i< shipinfolist.length;i++){      
                             let  shipinfo = {villageUserid:userId,shipname:'',shipno:'',shipowner:'',mobile:''}   
                           Object.assign(shipinfo,shipinfolist[i])   
                           shiparray2.push(shipinfo)
-                      }
+                      }   
                  }                     
-              let data  = JSON.parse(JSON.stringify(shiparray2))   
+              let data  = JSON.parse(JSON.stringify(shiparray2))           
               batchsave(data).then(res=>{  
                 if(res.data.code === 0) {       
                   this.$message({
