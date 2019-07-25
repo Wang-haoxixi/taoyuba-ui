@@ -23,8 +23,7 @@
                            allow-create
                            clearable
                            @change="shipNameChange"
-                           :remote-method="getShipNameList"
-                           @blur="checkship">
+                           :remote-method="getShipNameList">
                   <el-option v-for="item in shipNames" :key="item.id" :label="item.shipName + '(渔船编号：' + item.shipNo + ')'" :value="item"></el-option>
                 </el-select>
               </el-form-item>
