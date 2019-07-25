@@ -6,7 +6,7 @@
           <el-row>                                 
             <el-col>
                 <iep-form-item prop="workExperience" label-name="渔船信息">                              
-                  <inline-form-table :table-data="tybvillage.shiplist" :columns="certificateColumns" requestName="certificate" type="employee_profile" @add="setData"></inline-form-table>         
+                  <inline-form-table :table-data="tybvillage.shiplist" :columns="certificateColumns" requestName="certificate" type="employee_profile" @add="setData" @changeval="changeval"></inline-form-table>         
                 </iep-form-item>
             </el-col>
           </el-row>
@@ -25,35 +25,22 @@ import { getUserInfo } from '@/api/login'
 export default {                         
   data () {                                                                                                                                                            
     return {                                                                                        
-      certificateColumns: [                                                                             
+      certificateColumns: [                                                                                                     
           {
             prop: 'shipname',
             label: '渔船名',
           },
-          {
-            prop: 'shipno',
-            label: '渔船编号',
-          },
-          {
-            prop: 'shipowner',
+          {     
+            prop: 'shipowner',    
             label: '持证人',
-          },
-          {                                                                                                               
-            prop: 'mobile',           
-            label: '手机号码',
-          },
+          },    
       ],
       tybvillage:{          
         shiplist:[],
       },
       rules: {      
       },
-      options: [],      
-      props: {
-        value: 'areaCode',
-        label: 'name',
-        children: 'childList',
-      },
+      options: [],     
       manager: false,
       ifexist: false,
     }
@@ -65,14 +52,12 @@ export default {
       this.$refs['form'].validate((valid) => {    
           if (valid) {
               if( this.tybvillage.shiplist.length === 0){          
-                  this.$message.error('无数据提交')
-                  return
+                  this.$message.error('无数据提交')   
+                  return            
                }       
-            let shipinfolist  =  this.tybvillage.shiplist
-            console.log(shipinfolist)           
+            let shipinfolist  =  this.tybvillage.shiplist       
              let  userId  =  this.$route.query.allot
-            if(this.ifexist){   
-                  console.log('edit')                   
+            if(this.ifexist){                          
                 let   shiparray  =  new Array()
                  if( this.tybvillage.shiplist.length > 0) {      
                       for(var i=0;i< shipinfolist.length;i++){
@@ -104,8 +89,7 @@ export default {
                           Object.assign(shipinfo,shipinfolist[i])   
                           shiparray2.push(shipinfo)
                       }
-                 }       
-                 console.log(shiparray2)        
+                 }                     
               let data  = JSON.parse(JSON.stringify(shiparray2))   
               batchsave(data).then(res=>{  
                 if(res.data.code === 0) {       
@@ -127,6 +111,11 @@ export default {
     // 获取子组件数据
     setData (val) {     
       this.tybvillage.shiplist = val
+    },
+    changeval (data) {
+      var  newArray  =  Object.assign([],data)
+      this.tybvillage.shiplist  = newArray    
+      console.log(this.tybvillage.shiplist)   
     },
   },
   computed: {

@@ -131,6 +131,7 @@ export default {
       target.isNew = false
     },
     remove (id) {
+     
       const newData = this.data.filter(item => item.id !== id)
       // del(id, this.requestName).then(() => {
       //   this.$message({
@@ -139,6 +140,7 @@ export default {
       //   })
       // })
       this.data = newData
+        this.$emit('changeval',this.data)  
     },
     cancel (id) {
       const target = this.data.filter(item => item.id === id)[0]
