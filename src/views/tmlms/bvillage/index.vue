@@ -61,6 +61,8 @@
               </el-button>
               <el-button type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.userId)">删除
               </el-button>
+                <el-button type="text" icon="el-icon-delete" size="mini" @click="handleShip(scope.row.userId)">渔船分配
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -143,6 +145,10 @@ export default {
     // 编辑
     handleEdit (val) {
       this.$router.push({name: 'detailBvillage',query:{ edit: val }})
+    },
+    //分配渔船
+    handleShip (val) {
+          this.$router.push({name: 'allotship',query:{ allot: val }})
     },
     // 获取列表数据
     getData () {
