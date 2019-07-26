@@ -4,8 +4,9 @@
       <div class="shipowner_title">
         <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button>
         <div style="float:right">
-          <span><el-input v-model="params.idcard" placeholder="请输入身份证" size="small"></el-input></span>
           <span><el-input v-model="params.realName" placeholder="请输入姓名" size="small"></el-input></span>
+          <span><el-input v-model="params.idcard" placeholder="请输入身份证" size="small"></el-input></span>
+          <span><el-input v-model="params.phone" placeholder="请输入联系电话" size="small"></el-input></span>
           <span><el-select v-model="params.status" placeholder="请选择状态" size="small">
               <el-option
                 v-for="item in status"
