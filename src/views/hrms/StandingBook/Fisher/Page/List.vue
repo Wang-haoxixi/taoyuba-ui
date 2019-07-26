@@ -6,11 +6,11 @@
         <template slot="left">
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
-        <template slot="right">
+        <!-- <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
             <advance-search @search-page="searchPage"></advance-search>
           </operation-search>
-        </template>
+        </template> -->
       </operation-container>
       <iep-table                    
               :isLoadTable="isLoadTable"
@@ -35,13 +35,13 @@
 </template>
 <script>
 import { getVillageShip } from '@/api/tmlms/bvillage/index'
-import advanceSearch from './AdvanceSearch.vue'
+// import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
 export default {
-  components: {
-    advanceSearch,
-  },
+  // components: {
+  //   advanceSearch,
+  // },
   mixins: [mixins],
   data () {
     return {
