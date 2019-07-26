@@ -138,6 +138,12 @@ export default [
         component: () => import('@/views/hrms/StandingBook/Owner/Page/Detail.vue'),
         meta: noKeepAlive,
       },
+      {
+        path: 'village_ship_detail',                  
+        name: '渔村下渔船详情页',                     
+        component: () => import('@/views/hrms/StandingBook/Fisher/Page/Detail.vue'),
+        meta: noKeepAlive,
+      },
     ],
   },
   {

@@ -26,4 +26,9 @@ export  function  batchUpdate (data,userId) {
       })
 }
 
-
+export  function  getVillageshipinfoById (id) {                
+    return request({
+        url: `${prefixUrl}/${id}`,
+        method: 'get',
+    })
+}
