@@ -291,22 +291,14 @@ export default {
     },
     refreshCard (card) {
       if(card !== null) {
-        console.log(card)
         let { idcard = '', phone = '' } = card
         this.shipowner.phone = phone
         this.shipowner.idcard = idcard
         if (phone === '') {
-          console.log('1111')
           this.isReadonly = false
         } else {
-          console.log('222')
           this.isReadonly = true
         }
-        // if (this.isCheck == true) {
-        //   this.isReadonly = true
-        // } else if (this.isCheck == false) {
-        //   this.isReadonly = false
-        // }
       } else {
         this.shipowner.phone = ''
         this.shipowner.idcard = ''
@@ -315,14 +307,11 @@ export default {
     },
     getidcardList (number) {
       this.loading = false
-      console.log('333')
       this.isReadonly = false
       if (number !== '') {
         getIdcardCheck(number).then(({data}) => {
           if (data.data !== true) {
             this.idcards.push(data.data)
-            // this.isCheck = true
-            // this.isReadonly = true
           }
         })
       } else {

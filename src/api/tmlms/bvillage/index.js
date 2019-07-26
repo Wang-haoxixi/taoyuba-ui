@@ -49,3 +49,10 @@ export function getVillageShipowner (params) {
     })
 }
 
+export function getVillageShip (params) {
+    return request({
+        url: `${prefixUrl}/page/villageship`,
+        method: 'get',
+        params: params,
+    })
+}
