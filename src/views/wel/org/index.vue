@@ -6,8 +6,8 @@
           <i class="el-icon-warning"></i>
           <span v-if="noOrg" class="remind-text">您尚未加入任何组织，请选择</span>
           <span v-else class="remind-text">您已在 {{userInfo.orgName}} 的组织</span>
-          <el-button :type="`${tabsActive ? 'default':'primary'}`" size="mini" @click="tabsActive=0">加入组织</el-button>
-          <el-button :type="`${tabsActive ? 'primary':'default'}`" size="mini" @click="tabsActive=1">创建组织</el-button>
+          <el-button :type="`${tabsActive ? 'default':'primary'}`" size="mini" @click="tabsActive=0">加入组织</el-button>   
+          <el-button :type="`${tabsActive ? 'primary':'default'}`" size="mini" @click="tabsActive=1" v-if="ifismanage">创建组织</el-button>    
         </div>
         <div class="bottom-wrapper">
           <template v-if="tabsActive===0">
@@ -58,6 +58,7 @@
 import { mapGetters } from 'vuex'
 import { initForm } from './options'
 import { getOrgList, addObj, applyObj, validOrgName } from '@/api/goms/org'
+import { getUserInfo } from '@/api/login'       
 export default {
   name: 'org',
   data () {
@@ -98,16 +99,19 @@ export default {
           { min: 3, max: 2000, message: '组织简介必须超过 3 个字符，但不得超过 2000 个字符', trigger: 'blur' },
         ],
       },
+      ifismanage: false,    
     }
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters([   
       'userInfo',
       'noOrg',
     ]),
   },
   created () {
     this.loadPage()
+    this.checkmanage()                 
+    console.log(this.ifismanage)    
   },
   methods: {
     handleSubmitApply () {
@@ -166,13 +170,20 @@ export default {
               this.form = initForm()
             } else {
               this.$message({
-                message: data.msg,
-                type: 'warning',
+                message: data.msg,        
+                type: 'warning',            
               })
             }
           })
         }
       })
+    },
+    checkmanage () {
+         getUserInfo().then(res => {
+                  if(res.data.data.roles.includes(1)){
+                        this.ifismanage = true
+                  }
+         })
     },
   },
 }
