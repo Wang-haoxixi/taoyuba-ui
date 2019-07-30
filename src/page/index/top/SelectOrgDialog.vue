@@ -1,8 +1,8 @@
 <template>
-  <iep-dialog :dialog-show="dialogShow" title="选择组织切换" width="520px" @close="loadPage">
+  <iep-dialog :dialog-show="dialogShow" title="选择区域切换" width="520px" @close="loadPage">
     <el-form :model="orgForm" ref="orgForm" label-width="100px">
-      <el-form-item label="组织名称" prop="name">
-        <el-select v-model="orgForm.orgId" placeholder="请选择">
+      <el-form-item label="区域名称" prop="name">
+        <el-select v-model="orgForm.orgId" placeholder="请选择">    
           <el-option v-for="item in orgList" :key="item.orgId" :label="item.name" :value="item.orgId">
           </el-option>
         </el-select>
@@ -50,7 +50,7 @@ export default {
             spinner: 'el-icon-loading',
             background: 'rgba(0, 0, 0, 0.7)',
           })
-          setTimeout(async () => {
+          setTimeout(async () => {      
             const data = await this.GetMenu()
             this.$router.$avueRouter.formatRoutes(data, true)
             loading.close()

@@ -4,10 +4,10 @@
       <div class="select-org-wrapper">
         <div class="top-wrapper">
           <i class="el-icon-warning"></i>
-          <span v-if="noOrg" class="remind-text">您尚未加入任何组织，请选择</span>
-          <span v-else class="remind-text">您已在 {{userInfo.orgName}} 的组织</span>
-          <el-button :type="`${tabsActive ? 'default':'primary'}`" size="mini" @click="tabsActive=0">加入组织</el-button>   
-          <el-button :type="`${tabsActive ? 'primary':'default'}`" size="mini" @click="tabsActive=1" v-if="ifismanage">创建组织</el-button>    
+          <span v-if="noOrg" class="remind-text">您尚未加入任何区域，请选择</span>
+          <span v-else class="remind-text">您已在 {{userInfo.orgName}} 的区域</span>
+          <el-button :type="`${tabsActive ? 'default':'primary'}`" size="mini" @click="tabsActive=0">加入区域</el-button>       
+          <el-button :type="`${tabsActive ? 'primary':'default'}`" size="mini" @click="tabsActive=1" v-if="ifismanage">创建区域</el-button>    
         </div>
         <div class="bottom-wrapper">
           <template v-if="tabsActive===0">
@@ -17,7 +17,7 @@
               <el-button :disabled="!!item.isApplyed" class="grid-item" v-for="(item,index) in orgList" :key="index" @click="handleApplyJoin(item)">{{item.name}}</el-button>
             </div>
           </template>
-          <div v-if="tabsActive===1" class="create-org-container">
+          <div v-if="tabsActive===1" class="create-org-container">      
             <el-form ref="form" :rules="rules" size="small" :model="form" label-width="80px">
               <el-form-item label="组织名称" prop="name">
                 <el-input v-model="form.name" :maxlength="110"></el-input>
@@ -179,7 +179,7 @@ export default {
       })
     },
     checkmanage () {
-         getUserInfo().then(res => {
+         getUserInfo().then(res => {    
                   if(res.data.data.roles.includes(1)){
                         this.ifismanage = true
                   }

@@ -16,7 +16,7 @@
         </a-menu-item>    
         <!-- 后期增加标签       -->
         <a-menu-item @click="$openPage('/wel/org')"> 
-             加入或创建新组织
+             加入或创建新区域   
         </a-menu-item>    
         <a-menu-item @click="goInfo()">
           个人信息
