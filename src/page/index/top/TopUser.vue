@@ -7,12 +7,16 @@
         <a-icon type="down" />
       </div>
       <a-menu slot="overlay">
-        <a-menu-item @click="$openPage('/')">
+        <a-menu-item @click="$openPage('/')">               
           工作台
         </a-menu-item>
         <a-menu-item @click="handleOrg(orgText.type)">
           {{orgText.tipText}}&nbsp;&nbsp;&nbsp;
           <a-icon type="swap" />
+        </a-menu-item>    
+        <!-- 后期增加标签       -->
+        <a-menu-item @click="$openPage('/wel/org')"> 
+             加入或创建新组织
         </a-menu-item>    
         <a-menu-item @click="goInfo()">
           个人信息
