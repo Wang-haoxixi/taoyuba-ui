@@ -54,7 +54,7 @@ export function statusCrew (switchs,userId) {
 }
 export function detailCrew (id) {
     return request({
-        url: `${prefixUrl}/getCrewByUserId?userId=${id}`,
+        url: `${prefixUrl}/getCrewByidcard?idcard=${id}`,
         method: 'get',
     })
 }
@@ -65,4 +65,11 @@ export function uploadPic (data) {
       method: 'post',
       data: data,
     })
-  }
+}
+
+export function getCrewData (id) {
+    return request({
+        url: `${prefixUrl}/idcardcheck?idcard=${id}`,
+        method: 'get',
+    })
+}

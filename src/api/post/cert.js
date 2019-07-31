@@ -71,7 +71,14 @@ export  function  getMyPage (params) {
         params:params,
     })  
 }
-
-
+export function getMyCretList (id) {
+  return request({
+    url:`${prefixUrl}/mycertlist`,
+    method: 'get',
+    params: {
+      idcard: id,
+    },
+  })
+}
 
 

@@ -3,7 +3,7 @@
     <basic-container>
         <h1 v-if="!$route.query.userId">{{ $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }}船员信息</h1>
         <h1 v-if="$route.query.userId">完善个人信息</h1>                
-              <el-form ref="form" :model="form" :rules="rules" label-width="150px" size="small">
+              <el-form ref="form" :model="form" :rules="rules" label-width="150px" size="small" :disabled="type === 1">
                 <el-row>
                 <el-col :span="12">
                     <el-form-item label="个人姓名：" prop="realName">
@@ -103,7 +103,7 @@
                     </el-form-item>
                 </el-col>
                 </el-row>
-                <el-row>
+                <!-- <el-row>
                 <el-col :span="12">
                     <el-form-item label="船民证号码" prop="crewCert">
                     <el-input v-model="form.crewCert"></el-input>
@@ -114,7 +114,7 @@
                     <iep-date-picker v-model="form.certExpDate" type="date" placeholder="选择日期"></iep-date-picker>
                     </el-form-item>
                 </el-col>               
-                </el-row>
+                </el-row> -->
                 <el-row>
                 <!-- <el-col :span="8">
                     <el-form-item label="四小件上传：" prop="fourSmallCard">
@@ -127,35 +127,35 @@
                     <!-- <cert-form-table  :crewData="tableData" :crewId="userId" :columns="certificateColumns"></cert-form-table>
                     </iep-form-item>
                 </el-col> -->
-                <el-col :span="8">
-                    <el-form-item label="职位" prop="positionId">
-                    <el-select
-                        v-model="form.positionId"
-                        placeholder="职位">
-                        <el-option
-                        v-for="item in position"
-                        :key="item.id"
-                        :label="item.label"
-                        :value="item.value">
-                        </el-option>
-                    </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="是否需要培训" prop="isTrain">
-                    <el-radio-group v-model="form.isTrain">
-                        <el-radio  :label="0">否</el-radio>
-                        <el-radio  :label="1">是</el-radio>
-                    </el-radio-group>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="申请类别" prop="applyType">
-                    <el-select v-model="form.applyType" placeholder="请输入申请类别">
-                        <el-option v-for="item in applyTypes" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                    </el-select>
-                    </el-form-item> 
-                </el-col>
+                  <el-col :span="8">
+                      <el-form-item label="职位" prop="positionId">
+                      <el-select
+                          v-model="form.positionId"
+                          placeholder="职位">
+                          <el-option
+                          v-for="item in position"
+                          :key="item.id"
+                          :label="item.label"
+                          :value="item.value">
+                          </el-option>
+                      </el-select>
+                      </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                      <el-form-item label="是否需要培训" prop="isTrain">
+                      <el-radio-group v-model="form.isTrain">
+                          <el-radio  :label="0">否</el-radio>
+                          <el-radio  :label="1">是</el-radio>
+                      </el-radio-group>
+                      </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                      <el-form-item label="申请类别" prop="applyType">
+                      <el-select v-model="form.applyType" placeholder="请输入申请类别">
+                          <el-option v-for="item in applyTypes" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                      </el-select>
+                      </el-form-item> 
+                  </el-col>
                 <!-- <el-col :span="8">
                     <el-form-item label="所属渔村区域" prop="villageId">
                     <span v-for="(region, key) in regions" :key="key">
@@ -169,11 +169,11 @@
                     </el-form-item>
                 </el-col> -->
                 </el-row>
-                <el-row>
-                  <el-col :span="12">
-                    <el-form-item label="特长：" prop="speciality">
-                      <el-input v-model="form.speciality"></el-input>
-                    </el-form-item>
+                  <el-row>
+                    <el-col :span="12">
+                      <el-form-item label="特长：" prop="speciality">
+                        <el-input v-model="form.speciality"></el-input>
+                      </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row>
@@ -215,29 +215,84 @@
                       <i v-else class="el-icon-picture-outline"></i>
                     </el-form-item>
                   </el-col>
-                </el-row>
+                </el-row>            
                 <iep-form-item class="form-half" prop="remark" label-name="备注信息" tip="请输入备注信息" v-if="!$route.query.userId">
-                <iep-input-area v-model="form.remark"></iep-input-area>
+                  <iep-input-area v-model="form.remark"></iep-input-area>
                 </iep-form-item>
-                <iep-form-item prop="workExperience" label-name="资质证书">
-                  <inline-form-table :table-data="form.certList" :columns="certificateColumns" requestName="certificate" type="employee_profile" @load-page="handleSave" @add="setData"></inline-form-table>
-                </iep-form-item>
+                <h1 style="font-size: 18px;">资质证书: </h1> 
+                <div v-for="(item, index) in form.certList" :key="index">
+                  <el-form label-width="150px" size="small" :disabled="type === 1">
+                    <el-row>
+                        <el-col :span="9">
+                          <el-form-item label="证书编码：" prop="certNo">
+                            <el-input v-model="item.certNo"></el-input>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                          <el-form-item label="证书类型：" prop="certType">
+                            <iep-dict-select v-model="item.certType" dict-name="tyb_crew_cert_type"></iep-dict-select>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="7">
+                          <el-form-item label="证书等级：" prop="certLevel">
+                            <iep-dict-select v-model="item.certLevel" dict-name="tyb_crew_cert_level"></iep-dict-select>
+                          </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                          <el-form-item label="证书职务：" prop="certTitle">
+                            <iep-dict-select v-model="item.certTitle" dict-name="tyb_crew_cert_title"></iep-dict-select>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                          <el-form-item label="证书起始日期：" prop="certDateIssue">
+                            <el-date-picker v-model="item.certDateIssue" type="date" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期"></el-date-picker> 
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                          <el-form-item label="证书结束日期：" prop="certDateExpire">
+                            <el-date-picker v-model="item.certDateExpire" type="date" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期"></el-date-picker> 
+                          </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                          <el-form-item label="扫描件：" prop="certFile">
+                            <el-upload class="upload-demo" action="/api/admin/file/upload/avatar" :show-file-list="false"
+                            :on-success="handleAvatarSuccessFile" :limit="1"  :headers="headers" accept="image/*">
+                            <el-button size="mini" type="primary" @click="fileUpload(index)">点击上传</el-button>
+                            <img v-if="item.certFile" :src="item.certFile" class="certAvatar">
+                            <i v-else class="el-icon-picture-outline"></i>
+                            </el-upload>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="4" style="text-align:center">
+                          <el-button type="primary" size="small" plain @click="remove(index)">删除</el-button>
+                        </el-col>
+                    </el-row>
+                  </el-form>
+                </div>               
+                <div style="text-align:center">
+                  <iep-button style="width: 86%; margin-top: 5px; margin-bottom: 8px" icon="el-icon-plus" plain @click="newMember">新增</iep-button>
+                </div>
             </el-form>
         <div style="text-align:center">
           <el-button @click="save" v-if="!$route.query.see">提交</el-button>
           <el-button @click="$router.push({name:'boatMan'})">返回</el-button>
-          <el-button v-if="manager" @click="collect">数据读取</el-button>
+          <el-button v-if="manager && !$route.query.see" @click="collect">数据读取</el-button>
         </div>
     </basic-container>
   </div>
 </template>
 <script>
-import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable/'
+// import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable'
 import { getArea,getPosition} from '@/api/post/admin'
-import { saveCrew, detailCrew, editCrew, uploadPic } from '@/api/tmlms/boatMan'
+import { saveCrew, detailCrew, editCrew, uploadPic, getCrewData } from '@/api/tmlms/boatMan'
 import { getLastData } from '@/api/hrms/databuspayload'
 import { certificateColumns } from '@/views/hrms/ComponentsNew/options'
 import { getUserInfo } from '@/api/login'
+import { getMyCretList } from '@/api/post/cert'
 // import { addUserRole } from '@/api/admin/user'
 import information from '@/mixins/information'
 import VueSocketio from 'vue-socket.io'
@@ -364,6 +419,9 @@ export default {
       headers: {
         Authorization: 'Bearer ' + store.getters.access_token,
       },
+      isIdcard: false,
+      // fileList:[],
+      idx:'',
     }
   },
   methods: {
@@ -380,9 +438,11 @@ export default {
           if (valid) {
             // let form = JSON.parse(JSON.stringify(this.form))
             let form = this.form
-            form.certList.forEach(item=>{
-              item.certFile = item.annex
-            })
+            // if (form.certList) {
+            //   form.certList.forEach(item=>{
+            //     item.certFile = item.annex
+            //   })
+            // }
             let type = 1
             if(this.$route.query.edit){
               // let data = JSON.parse(JSON.stringify(form))
@@ -391,7 +451,7 @@ export default {
                 type = 2
                 data.userId = this.$route.query.userId
               }
-              editCrew(data,type).then(res=>{
+              editCrew(data,type).then(res=>{            
                   this.$message({
                     message: res.data.msg,
                     type: 'success',
@@ -410,19 +470,35 @@ export default {
                   type = 2
                   data.userId = this.$route.query.userId
                 }
-                saveCrew(data,type).then(res=>{
-                    this.$message({
-                      message: res.data.msg,
-                      type: 'success',
-                    })
-                    if(this.$route.query.userId){
-                        this.$router.go(-1) 
-                    }else{
-                        this.$router.push({name:'boatMan'})  
-                    }
-                }).catch(err=>{
-                  this.$message.error(err.message)
-                })
+                if (this.isIdcard === true) {
+                  editCrew(data,type).then(res=>{
+                      this.$message({
+                        message: res.data.msg,
+                        type: 'success',
+                      })
+                      if(this.$route.query.userId){
+                            this.$router.go(-1) 
+                      }else{
+                            this.$router.push({name:'boatMan'})  
+                      }
+                  }).catch(err=>{
+                    this.$message.error(err.message)
+                  })
+                } else {
+                  saveCrew(data,type).then(res=>{
+                      this.$message({
+                        message: res.data.msg,
+                        type: 'success',
+                      })
+                      if(this.$route.query.userId){
+                          this.$router.go(-1) 
+                      }else{
+                          this.$router.push({name:'boatMan'})  
+                      }
+                  }).catch(err=>{
+                    this.$message.error(err.message)
+                  })
+                }
                 // this.userRole.userId = data.userId
                 // addUserRole(this.userRole)
             }
@@ -453,20 +529,45 @@ export default {
     },
     // handleSave
     handleSave () {},
-    collect () {    
+    collect () {
+      // const crewData = 
       this.sn = ''
       getLastData({sn:this.sn}).then((data) => {
-        if(data.data.code === 0){
-        this.form.address = data.data.data.address
-        this.form.idcard = data.data.data.identityNumber
-        this.form.realName = data.data.data.name
-        // this.form.birthday = data.data.data.birth
-        this.form.nation = data.data.data.nation
-        this.form.idcardPhoto = 'data:image/png;base64,' + data.data.data.photo
-        this.form.facePhoto = 'data:image/png;base64,' + data.data.data.picture
-        }
+        getCrewData(data.data.data.identityNumber).then(res => {
+          if (res.data.data !== true) {
+            this.form = res.data.data
+            // this.form.certList = []
+            this.$set(this.form, 'certList',[])
+            this.isIdcard = true
+            getMyCretList(data.data.data.identityNumber).then(val => {
+              // this.form.certList = val.data.data.map(v => v)
+              val.data.data.forEach(item =>{
+                this.form.certList.push(item)
+                // this.form.certList.forEach(item => {
+                //   item.annex = item.certFile
+                // })
+                // this.$set(this.form.certList[index], 'certType', item.certType)
+                // this.$set(this.form.certList[index], 'certLevel', item.certLevel)
+                // this.$set(this.form.certList[index], 'certTitle', item.certTitle)
+                // this.$set(this.form.certList[index], 'certDateIssus', item.certDateIssus)
+                // this.$set(this.form.certList[index], 'certDateExpire', item.certDateExpire)
+                // this.$set(this.form.certList[index], 'annex', item.certFile)
+              })   
+            })
+          } else {
+            if(data.data.code === 0){
+              this.form.address = data.data.data.address
+              this.form.idcard = data.data.data.identityNumber
+              this.form.realName = data.data.data.name
+              // this.form.birthday = data.data.data.birth
+              this.form.nation = data.data.data.nation
+              this.form.idcardPhoto = 'data:image/png;base64,' + data.data.data.photo
+              this.form.facePhoto = 'data:image/png;base64,' + data.data.data.picture
+            }
+          }
+        })
       }).catch(err=>{
-                this.$message.error(err.message)
+        this.$message.error(err.message)
       })    
     },
     handleAvatarSuccessFront (response) {
@@ -506,8 +607,39 @@ export default {
         type: mime,
       })
     },
+    newMember () {
+      if (!this.form.certList) {
+        this.$set(this.form, 'certList',[])
+      }
+      const length = this.form.certList.length
+      if (length < 2) {
+        this.form.certList.push({
+          id: length ? (parseInt(this.form.certList[length - 1].id) + 1).toString() : '0',
+        })
+      } else {
+        this.$message({
+          message: '最多两个证书',
+          type: 'warning',
+        })
+      }
+    },
+    remove (index) {
+      if (this.form.certList.length === 2) {
+        const newCase = this.form.certList.filter(item => item.id != index)
+        this.form.certList = newCase
+      } else if (this.form.certList.length === 1) {
+        const newCase = this.form.certList.filter(item => item.id == 2)
+        this.form.certList = newCase
+      } 
+    },
+    handleAvatarSuccessFile (response) {
+      this.$set(this.form.certList[this.idx],'certFile', response.data.url)
+    },
+    fileUpload (index) {
+      this.idx = index
+    },
   },
-  components: { InlineFormTable },
+  // components: { InlineFormTable },
   created () {
     getArea(0).then(({ data }) => {
         this.province = data.data
@@ -522,7 +654,7 @@ export default {
         // 获取编辑数据
     async function getAll () {    
       // 异步获取ID
-      let data = await detailCrew(this.$route.query.edit || this.$route.query.see || this.$route.query.userId).then( res=>{
+      let data = await detailCrew(this.$route.query.edit || this.$route.query.see || this.$route.query.idcard).then( res=>{
         return res.data.data
       })
       // 拿到ID 同步获取地址和选中的地址
@@ -530,10 +662,8 @@ export default {
       let b = await this.choseCity(data.cityId) 
       console.log(a)
       console.log(b)
-      data.certList.forEach((item,index)=>{
-        item.annex = item.certFile
-        item.id = index
-      })
+      // if(data.certList) {
+      // }
       this.form = data
     }
     getUserInfo().then(res => {
@@ -621,6 +751,14 @@ export default {
       } 
    }
   },
+  computed: {
+    type () {
+      if (this.$route.query.see) {
+        return 1
+      }
+      return 2
+    },
+  },
   watch: {
     'form.idcard': {
       handler: function (val) {
@@ -660,6 +798,11 @@ export default {
   .avatar {
     width: 356px;
     height: 178px;
+    display: block;
+  }
+  .certAvatar {
+    width: 80px;
+    height: 30px;
     display: block;
   }
 }

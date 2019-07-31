@@ -60,6 +60,10 @@ const trainingColumns = [
 
 const certificateColumns = [
   {
+    prop: 'certNo',
+    label: '证书编码',
+  },
+  {
     prop: 'certType',
     label: '证书类型',
     type: 'dict',
@@ -78,7 +82,7 @@ const certificateColumns = [
     dictName: 'tyb_crew_cert_title',
   },
   {
-    prop: 'certDateIssus',
+    prop: 'certDateIssue',
     label: '有效期至',
     type: 'date',
   },

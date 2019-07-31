@@ -51,7 +51,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
+        <!-- <el-row>
           <el-col :span="12">
             <el-form-item label="船民证号码" prop="crewCert">
               <el-input v-model="form.crewCert"></el-input>
@@ -62,7 +62,7 @@
               <el-input v-model="form.certExpDate"></el-input>
             </el-form-item>
           </el-col>          
-        </el-row>
+        </el-row> -->
         <el-row>
           <el-col :span="12">
             <iep-form-item class="form-half" prop="createTime" label-name="开始时间">
