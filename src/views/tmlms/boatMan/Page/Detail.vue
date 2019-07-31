@@ -19,9 +19,21 @@
                 </el-row>
                 <el-row>
                 <el-col :span="12">
-                    <el-form-item label="身份证号码：" prop="idcard">
-                    <el-input v-model="form.idcard" :disabled="haveInfo.idcard"></el-input>
-                    </el-form-item>
+                  <el-form-item label="身份证号码：" prop="idcard">
+                    <!-- <el-input v-model="form.idcard" :disabled="haveInfo.idcard"></el-input> -->
+                    <el-select :disabled="haveInfo.idcard" v-model="form.idcard"
+                              placeholder="请选择"
+                              filterable
+                              remote
+                              maxlength="20"
+                              :loading="loading"
+                              allow-create
+                              clearable
+                              @change="idcardChange"
+                              :remote-method="getidcardList">
+                      <el-option v-for="item in idcards" :key="item.id" :label="item.idcard + '(手机号：' + item.phone + ')'" :value="item"></el-option>
+                    </el-select>
+                  </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <iep-form-item class="form-half" prop="birthday" label-name="出生日期">
@@ -298,6 +310,7 @@ import information from '@/mixins/information'
 import VueSocketio from 'vue-socket.io'
 import Vue from 'vue'
 import store from '@/store'
+import debounce from 'lodash/debounce'
 Vue.use(new VueSocketio({
     debug: false,
     connection: 'http://localhost:5000', //地址+端口，由后端提供
@@ -305,6 +318,7 @@ Vue.use(new VueSocketio({
 export default {
   mixins: [information],
   data () {
+    this.getidcardList = debounce(this.getidcardList, 800)
       var checkPhone = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入联系电话'))
@@ -333,6 +347,7 @@ export default {
           photoReverse: '',
           idcardPhoto: '',
           facePhoto: '',
+          cityId:'',
           certList: [],
       },
       agent:{
@@ -422,6 +437,8 @@ export default {
       isIdcard: false,
       // fileList:[],
       idx:'',
+      loading: false,
+      idcards: [],
     }
   },
   methods: {
@@ -535,6 +552,8 @@ export default {
       getLastData({sn:this.sn}).then((data) => {
         getCrewData(data.data.data.identityNumber).then(res => {
           if (res.data.data !== true) {
+            this.choseProvince(res.data.data.provinceId)
+            this.choseCity(res.data.data.cityId)
             this.form = res.data.data
             // this.form.certList = []
             this.$set(this.form, 'certList',[])
@@ -638,6 +657,71 @@ export default {
     },
     fileUpload (index) {
       this.idx = index
+    },
+    idcardChange (card) {
+      if (typeof card === 'object') {
+        this.refreshCard(card)
+      } else {
+        this.refreshCard({idcard: card})
+      }
+      this.idcards = []
+    },
+    refreshCard (card) {
+      if(card !== null) {
+        let { idcard = ''} = card
+        this.form.idcard = idcard
+      } else {
+        this.form.idcard = ''
+      }
+    },
+    getidcardList (number) {
+      this.loading = false
+      if (number !== '') {
+        getCrewData(number).then(res => {
+          if(res.data.data !== true) {
+            this.choseProvince(res.data.data.provinceId)
+            this.choseCity(res.data.data.cityId)
+            this.form = res.data.data
+            this.$set(this.form, 'certList',[])
+            this.isIdcard = true
+            getMyCretList(number).then(val => {
+              val.data.data.forEach(item =>{
+                this.form.certList.push(item)
+                  if(this.form.certList) {
+                    let id = 0
+                    this.form.certList.forEach(item => {
+                      item.id = id
+                      id ++
+                    })
+                  }
+              })   
+            })
+          } else {
+            this.form.realName = ''
+            this.form.positionId = ''
+            this.form.birthday = ''
+            this.form.provinceId = ''
+            this.form.cityId = ''
+            this.form.districtId = ''
+            this.form.address = ''
+            this.form.phone = ''
+            this.form.contactName = ''
+            this.form.contactPhone = ''
+            this.form.applyType = ''
+            this.form.remark = ''
+            this.form.nation = ''
+            this.form.speciality = ''
+            this.form.photoFront = ''
+            this.form.photoReverse = ''
+            this.form.idcardPhoto = ''
+            this.form.facePhoto = ''
+            this.form.certList = []
+          }
+        })
+      } else {
+        this.idcards = []
+      }
+      this.loading = false
     },
   },
   // components: { InlineFormTable },
