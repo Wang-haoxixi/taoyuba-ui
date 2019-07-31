@@ -25,6 +25,9 @@
             <operation-wrapper>                   
               <iep-button @click="handleView(scope.row.shipId)">查看船员列表</iep-button>     
             </operation-wrapper>
+              <operation-wrapper>                   
+              <iep-button @click="handleIntoinsure(scope.row.shipId)">渔船保单</iep-button>         
+            </operation-wrapper>
           </template>
         </el-table-column>
       </iep-table>
@@ -57,6 +60,11 @@ export default {
     handleView (id) {                                                                          
       this.$router.push({       
         path: `/hrms_spa/ship_crew_list/${id}`,
+      })
+    },
+    handleIntoinsure (id) {       
+       this.$router.push({       
+        path: `/hrms_spa/ship_insure/${id}`,
       })
     },
     async loadPage (param = this.searchForm) { 

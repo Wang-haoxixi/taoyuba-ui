@@ -4,6 +4,10 @@ const initNow = () => {
   return moment().format('YYYY-MM-DD HH:mm:ss')
 }
 
+const  initdate  = () => {    
+    return moment().format('YYYY-MM-DD')
+}
+
 const calcDate = (date1, date2) => {
   var date3 = date2 - date1
 
@@ -28,4 +32,4 @@ const calcDate = (date1, date2) => {
   }
 }
 
-export { initNow, calcDate }
+export { initNow, calcDate,initdate }
