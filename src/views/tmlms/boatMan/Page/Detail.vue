@@ -543,15 +543,16 @@ export default {
               // this.form.certList = val.data.data.map(v => v)
               val.data.data.forEach(item =>{
                 this.form.certList.push(item)
+                  if(this.form.certList) {
+                    let id = 0
+                    this.form.certList.forEach(item => {
+                      item.id = id
+                      id ++
+                    })
+                  }
                 // this.form.certList.forEach(item => {
                 //   item.annex = item.certFile
                 // })
-                // this.$set(this.form.certList[index], 'certType', item.certType)
-                // this.$set(this.form.certList[index], 'certLevel', item.certLevel)
-                // this.$set(this.form.certList[index], 'certTitle', item.certTitle)
-                // this.$set(this.form.certList[index], 'certDateIssus', item.certDateIssus)
-                // this.$set(this.form.certList[index], 'certDateExpire', item.certDateExpire)
-                // this.$set(this.form.certList[index], 'annex', item.certFile)
               })   
             })
           } else {
@@ -662,8 +663,13 @@ export default {
       let b = await this.choseCity(data.cityId) 
       console.log(a)
       console.log(b)
-      // if(data.certList) {
-      // }
+      if(data.certList) {
+        let id = 0
+        data.certList.forEach(item => {
+          item.id = id
+          id ++
+        })
+      }
       this.form = data
     }
     getUserInfo().then(res => {
