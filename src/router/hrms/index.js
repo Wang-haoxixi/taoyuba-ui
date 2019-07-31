@@ -144,6 +144,12 @@ export default [
         component: () => import('@/views/hrms/StandingBook/Fisher/Page/Detail.vue'),
         meta: noKeepAlive,
       },
+      {   
+        path: 'ship_insure/:shipId',                        
+        name: '渔船保单表单',                                   
+        component: () => import('@/views/hrms/StandingBook/BoatsFiles/Page/Shipinsure.vue'),        
+        meta: noKeepAlive,
+      },
     ],
   },
   {
