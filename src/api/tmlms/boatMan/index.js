@@ -17,7 +17,7 @@ export function saveCrew (data,type) {
 }
 export function deleteCrew (id) {
     return request({
-        url: `${prefixUrl}/delete?userId=${id}`,
+        url: `${prefixUrl}/delete?idcard=${id}`,
         method: 'post',
     })
 }
