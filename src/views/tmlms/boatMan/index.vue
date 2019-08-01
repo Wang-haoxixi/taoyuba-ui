@@ -91,11 +91,6 @@ export default {
         expandAll: false,
         columns: [
           {
-            text: '用户ID',
-            value: 'userId',
-            css: '80',
-          },
-          {
             text: '姓名',
             value: 'realName',
             css: '100',
