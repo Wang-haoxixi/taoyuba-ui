@@ -16,7 +16,7 @@
               </el-option>
             </el-select>
           </span>
-          <el-button size="small"  @click="getData">搜索</el-button>
+          <el-button size="small"  @click="getParamData">搜索</el-button> 
         </div>
       </div>
         <el-table
@@ -176,6 +176,11 @@ export default {
         })
         this.total = res.data.data.total
       })
+    },
+    //搜索
+    getParamData () {
+        this.params.current = 1
+         this.getData()
     },
     // 删除
     handleDel (id) {
