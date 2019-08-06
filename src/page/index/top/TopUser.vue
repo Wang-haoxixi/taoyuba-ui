@@ -94,8 +94,8 @@ export default {
     // 根据角色跳转
     // $openPage('BaseSettings','name')
     goInfo () {
-      getUserInfo().then(res=>{
-        this.$router.push({name: 'detailIformation',query: {userId: res.data.data.sysUser.userId,edit: res.data.data.sysUser.userId}})
+      getUserInfo().then(() =>{
+        this.$router.push({name: 'detailIformation'})
       })
     },
   },

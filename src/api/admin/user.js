@@ -75,3 +75,11 @@ export function addUserRole (obj) {
     data: obj,
   })
 }
+
+export function userEdit (obj) {
+  return request({
+    url: '/admin/user/updateSysUser',
+    method: 'post',
+    data: obj,
+  })
+}

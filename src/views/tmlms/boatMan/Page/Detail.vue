@@ -291,7 +291,8 @@
             </el-form>
         <div style="text-align:center">
           <el-button @click="save" v-if="!$route.query.see">提交</el-button>
-          <el-button @click="$router.push({name:'boatMan'})">返回</el-button>
+          <el-button v-if="manager" @click="$router.push({name:'boatMan'})">返回</el-button>
+          <el-button v-if="!manager" @click="$router.push({ path: '/'} )">返回</el-button>
           <el-button v-if="manager && !$route.query.see" @click="collect">数据读取</el-button>
         </div>
     </basic-container>
@@ -644,13 +645,28 @@ export default {
       }
     },
     remove (index) {
-      if (this.form.certList.length === 2) {
-        const newCase = this.form.certList.filter(item => item.id != index)
-        this.form.certList = newCase
-      } else if (this.form.certList.length === 1) {
-        const newCase = this.form.certList.filter(item => item.id == 2)
-        this.form.certList = newCase
-      } 
+      this.$confirm('此操作将永久删除该证书, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        if (this.form.certList.length === 2) {
+          const newCase = this.form.certList.filter(item => item.id != index)
+          this.form.certList = newCase
+        } else if (this.form.certList.length === 1) {
+          const newCase = this.form.certList.filter(item => item.id == 2)
+          this.form.certList = newCase
+        }
+        this.$message({
+          type: 'success',
+          message: '删除成功!',
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除',
+        })
+      })
     },
     handleAvatarSuccessFile (response) {
       this.$set(this.form.certList[this.idx],'certFile', response.data.url)

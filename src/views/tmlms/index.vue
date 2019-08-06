@@ -3,6 +3,7 @@
         <div v-if="roles !== [2]">
           <h1>编辑信息</h1>
           <el-tabs tab-position="left">
+              <el-tab-pane label="个人信息"><v-info></v-info></el-tab-pane>
               <el-tab-pane label="船员" v-if="roles.indexOf(105) !== -1"><v-boat></v-boat></el-tab-pane>
               <el-tab-pane label="船东" v-if="roles.indexOf(108) !== -1"><v-shipowner></v-shipowner></el-tab-pane>
               <el-tab-pane label="中介" v-if="roles.indexOf(109) !== -1"><v-agent></v-agent></el-tab-pane>
@@ -14,13 +15,13 @@
   </div>
 </template>
 <script>
+import vInfo from '@/views/tmlms/informa/index'
 import vShipowner from '@/views/tmlms/shipowner/Page/Detail'
 // import vTraining from '@/views/tmlms/Training/Page/Detail'
 import vAgent from '@/views/tmlms/agent/Page/Detail'
 import vBvillage from '@/views/tmlms/bvillage/Page/Detail'
 import vBoat from '@/views/tmlms/boatMan/Page/Detail'
 import { getUserInfo } from '@/api/login'
-
 export default {
   data () {
     return {
@@ -39,6 +40,7 @@ export default {
     })
   },
   components : {
+    vInfo,
     vShipowner,
     // vTraining,
     vAgent,
