@@ -96,12 +96,12 @@ export default {
       }
       userEdit(this.form).then(() => {
         this.$message.success('修改成功!')
+        this.$router.push({
+          path: '/',
+        }) 
       }).catch(() => {
         this.$message.error('修改失败!')
       })
-      this.$router.push({
-        path: '/',
-      }) 
     },
   },
 }
