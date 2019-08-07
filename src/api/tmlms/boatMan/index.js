@@ -73,3 +73,10 @@ export function getCrewData (id) {
         method: 'get',
     })
 }
+
+export function getIdcardCheck (id) {
+    return request({
+        url: `${prefixUrl}/idcardcheck?idcard=${id}`,
+        method: 'get',
+    })
+}

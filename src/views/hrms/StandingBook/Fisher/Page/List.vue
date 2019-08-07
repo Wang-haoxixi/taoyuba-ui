@@ -21,11 +21,19 @@
               @current-change="handleCurrentChange"
               @selection-change="handleSelectionChange"
               is-mutiple-selection>
-        <el-table-column prop="operation" label="操作" width="220">
+        <el-table-column prop="operation" label="操作" width="140">
           <template slot-scope="scope">
             <operation-wrapper>
-              <iep-button plain @click="handleEdit(scope.row.shipId)">编辑</iep-button>
-              <iep-button @click="handleView(scope.row.shipId)">查看</iep-button>
+              <iep-button size="mini" plain @click="handleEdit(scope.row.shipId)">编辑</iep-button>
+              <iep-button size="mini" @click="handleView(scope.row.shipId)">查看</iep-button>
+            </operation-wrapper>
+          </template>
+        </el-table-column>
+        <el-table-column prop="particular" label="详情" width="140">
+          <template slot-scope="scope">
+            <operation-wrapper>
+              <iep-button size="mini" type="primary" @click="handleIntoinsure(scope.row.shipId)">保单</iep-button>
+              <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipId)">船员</iep-button>
             </operation-wrapper>
           </template>
         </el-table-column>
@@ -70,7 +78,16 @@ export default {
     async loadPage (param = this.searchForm) {   
       let data = await this.loadTable(param, getVillageShip)
       this.pagedTable = data.records
-      console.log(this.pagedTable)
+    },
+    handleIntoinsure (id) {
+      this.$router.push({       
+        path: `/hrms_spa/ship_insure/${id}`,
+      })
+    },
+    handleCrew (id) {
+      this.$router.push({       
+        path: `/hrms_spa/ship_crew/${id}`,
+      })
     },
   },
 }

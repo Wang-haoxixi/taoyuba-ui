@@ -150,6 +150,24 @@ export default [
         component: () => import('@/views/hrms/StandingBook/BoatsFiles/Page/Shipinsure.vue'),        
         meta: noKeepAlive,
       },
+      {   
+        path: 'ship_crew/:shipId',                        
+        name: '渔船船员表单',                                   
+        component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/index.vue'),        
+        meta: noKeepAlive,
+      },
+      {   
+        path: 'shipCrew_list/',                        
+        name: '渔船下船员列表页',                                   
+        component: () => import('@/views/hrms/StandingBook/Fisher/index.vue'),        
+        meta: noKeepAlive,
+      },
+      {   
+        path: 'shipCrew_Detial/:idcard',                        
+        name: '渔船下船员详情页',                                   
+        component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/Detail.vue'),        
+        meta: noKeepAlive,
+      },
     ],
   },
   {

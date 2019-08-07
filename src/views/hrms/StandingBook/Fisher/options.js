@@ -31,6 +31,27 @@ const columnsMap = [
       label: '双控功率(kw)',
     },
   ]
+  
+  const crewColumnsMap = [
+    {
+      prop: 'realName',
+      label: '姓名',
+    },
+    {
+      prop: 'idcard',
+      label: '身份证号码',
+    },
+    {
+      prop: 'phone',
+      label: '联系电话',
+    },
+    {
+      prop: 'positionId',
+      label: '职位',
+      dictName: 'tyb_resume_position',
+      type: 'dictGroup',
+    },
+  ]
 
   const initForm = () => {      
     return {
@@ -267,4 +288,4 @@ const columnsMap = [
     return newForm
   }
 
-export{columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm}
+export{columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm, crewColumnsMap}
