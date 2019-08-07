@@ -151,9 +151,6 @@ export default {
             { required: true, message: '请输入联系电话', trigger: 'blur' },
             { validator: checkPhone, trigger: 'blur' },
           ],
-          villageId: [
-            { required: true, message: '请输入所属渔村区', trigger: 'blur' },
-          ],
       },
       options: [],
       props: {
@@ -173,9 +170,13 @@ export default {
   components: { InlineFormTable },
   methods: {
     // 提交表单
-    async save () {
-      await this.getIdcardFile()
-      await this.getFaceFile()
+    async save () {     
+        if (this.shipowner.idcardPhoto.length > 200) {
+        await this.getIdcardFile()
+      }
+      if (this.shipowner.facePhoto.length > 200) {
+        await this.getFaceFile()
+      }
       this.$refs['form'].validate((valid) => {
           if (valid) {
             // let shipowner = JSON.parse(JSON.stringify(this.shipowner))
@@ -206,6 +207,7 @@ export default {
               })
             }else{
               let data = JSON.parse(JSON.stringify(shipowner))
+              if(data.villageId)            
               data.villageId = data.villageId[data.villageId.length-1]
               // 用户调用这个界面的时候 需要传入ID
               if(this.$route.query.userId){
@@ -346,11 +348,23 @@ export default {
         return res.data.data
       })
       // 拿到ID 同步获取地址和选中的地址
+      if(data.villageId !== 0){
       getAllArea(data.villageId).then( res=>{
         this.options = res.data.data
       })
+      }
+      if(data.villageId === 0){
+          if(data.shiplist) {
+            data.shiplist.forEach((item,index)=>{
+              item.annex = item.certFile
+              item.id = index
+            })
+          }       
+       this.shipowner = data
+      }else {   
       getAllAreaName(data.villageId).then( res=>{
         // 处理后端数据变成我要用的数据
+       
         if(this.$route.query.edit || this.$route.query.see){
           this.getarr(res.data.data,this.arr)
           data.villageId = this.arr
@@ -362,7 +376,10 @@ export default {
           }
           this.shipowner = data
         }
+        
       })
+    }
+      
     }
     getUserInfo().then(res => {
       if (res.data.data.roles.includes(111)) {
