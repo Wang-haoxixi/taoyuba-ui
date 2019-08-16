@@ -19,18 +19,18 @@
                 <el-input v-model="bvillage.phone" placeholder="" :disabled="haveInfo.phone"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="16">
               <el-form-item label="介绍:" prop="content">
-                <el-input v-model="bvillage.content" placeholder=""></el-input>
+                <el-input v-model="bvillage.content" type="textarea" placeholder=""></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="16">
+            <!-- <el-col :span="16">
               <el-form-item label="所属渔村区:" prop="villageId">
                 <el-cascader  :options="options" @active-item-change="handleItemChange" :props="props" v-model="bvillage.villageId" ></el-cascader>
               </el-form-item>
-            </el-col>
+            </el-col> -->
             <el-col :span="24">
-              <el-form-item label="渔村地址:" prop="address" class="amap-page-container is-required">
+              <el-form-item label="渔村地址:" prop="address" class="amap-page-container">
                 <el-amap-search-box class="search-box bvillage" :search-option="searchOption" :on-search-result="onSearchResult" ></el-amap-search-box>
                 <el-amap vid="amapDemoD" :center="mapCenter" :zoom="15" class="amap-demo" :plugin="plugin">
                     <el-amap-marker :position="marker"></el-amap-marker>
@@ -85,12 +85,12 @@ export default {
                 { required: true, message: '请输入联系电话', trigger: 'blur' },
                 { validator: checkPhone, trigger: 'blur' },
             ],
-            content: [
-                { required: true, message: '请输入介绍', trigger: 'blur' },
-            ],
-            villageId: [
-                { required: true, message: '请输入社区', trigger: 'blur' },
-            ],
+            // content: [
+            //     { required: true, message: '请输入介绍', trigger: 'blur' },
+            // ],
+            // villageId: [
+            //     { required: true, message: '请输入社区', trigger: 'blur' },
+            // ],
         },
         options: [],
         // 地图配置
@@ -143,10 +143,10 @@ export default {
             data.address = document.getElementsByClassName(
                 'bvillage'
             )[0].childNodes[0].childNodes[0].value
-            if(!data.address){
-                this.$message.error('地址不能为空!')
-                return false
-            }
+            // if(!data.address){
+            //     this.$message.error('地址不能为空!')
+            //     return false
+            // }
             console.log(this.isDetail)
             if (!this.isDetail) {
                 console.log('1111')

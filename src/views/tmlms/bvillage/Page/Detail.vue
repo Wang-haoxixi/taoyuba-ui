@@ -1,12 +1,12 @@
 <template>
   <div class="bvillage_detail">
     <basic-container v-if="show">
-        <h1 v-if="!$route.query.userId">{{ $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }}渔村信息</h1>
+        <h1 v-if="!$route.query.userId">{{ $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }}村信息</h1>
         <h1 v-if="$route.query.userId">完善个人信息</h1>        
         <el-form :model="bvillage" ref="form" label-width="150px" :rules="rules">
           <el-row>
             <el-col :span="8">
-              <el-form-item label="渔村名称:" prop="villageName">
+              <el-form-item label="村名称:" prop="villageName">
                 <el-input v-model="bvillage.villageName" placeholder="" v-if="!$route.query.see"></el-input>
                 <div v-else>{{ bvillage.villageName  }}</div>
               </el-form-item>
@@ -23,20 +23,20 @@
                 <div v-else>{{  bvillage.phone  }}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="16">
               <el-form-item label="介绍:" prop="content">
-                <el-input v-model="bvillage.content" placeholder="" v-if="!$route.query.see"></el-input>
+                <el-input v-model="bvillage.content" type="textarea" placeholder="" v-if="!$route.query.see"></el-input>
                 <div v-else>{{ bvillage.content  }}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="16">
+            <!-- <el-col :span="16">
               <el-form-item label="所属渔村区:" prop="villageId">
                 <el-cascader v-if="!$route.query.see" :options="options" @active-item-change="handleItemChange" :props="props" v-model="bvillage.villageId" ></el-cascader>
                 <div v-else>{{  bvillage.villageId }}</div>
               </el-form-item>
-            </el-col>
+            </el-col> -->
             <el-col :span="24">
-              <el-form-item label="渔村地址:" prop="address" class="amap-page-container is-required">
+              <el-form-item label="村地址:" prop="address" class="amap-page-container">
                 <el-amap-search-box class="search-box bvillage" :search-option="searchOption" :on-search-result="onSearchResult" ></el-amap-search-box>
                 <el-amap vid="amapDemoD" :center="mapCenter" :zoom="15" class="amap-demo" :plugin="plugin">
                     <el-amap-marker :position="marker"></el-amap-marker>
@@ -92,12 +92,12 @@ export default {
                 { required: true, message: '请输入联系电话', trigger: 'blur' },
                 { validator: checkPhone, trigger: 'blur' },
             ],
-            content: [
-                { required: true, message: '请输入介绍', trigger: 'blur' },
-            ],
-            villageId: [
-                { required: true, message: '请输入社区', trigger: 'blur' },
-            ],
+            // content: [
+            //     { required: true, message: '请输入介绍', trigger: 'blur' },
+            // ],
+            // villageId: [
+            //     { required: true, message: '请输入社区', trigger: 'blur' },
+            // ],
         },
         options: [],
         // 地图配置
@@ -150,10 +150,10 @@ export default {
               data.address = document.getElementsByClassName(
                   'bvillage'
           )[0].childNodes[0].childNodes[0].value
-            if(!data.address){
-              this.$message.error('地址不能为空!')
-              return false
-            }
+            // if(!data.address){
+            //   this.$message.error('地址不能为空!')
+            //   return false
+            // }
               if(this.$route.query.userId){
                 type = 2
                 data.userId = this.$route.query.userId
@@ -176,10 +176,10 @@ export default {
               data.address =  document.getElementsByClassName(
                   'bvillage'
           )[0].childNodes[0].childNodes[0].value
-            if(!data.address){
-              this.$message.error('地址不能为空!')
-              return false
-            }
+            // if(!data.address){
+            //   this.$message.error('地址不能为空!')
+            //   return false
+            // }
               if(this.$route.query.userId){
                 type = 2
                 data.userId = this.$route.query.userId
