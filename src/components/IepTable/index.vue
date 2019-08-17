@@ -27,6 +27,9 @@
           <template v-else-if="item.type==='tag'">
             <iep-tag-detail :value="scope.row[item.prop]"></iep-tag-detail>
           </template>
+          <template v-else-if="item.type==='image'">
+            <a @click="openImage(scope.row[item.prop])">查看保单图片</a>
+          </template>
           <template v-else>
             <iep-table-detail :value="scope.row[item.prop]"></iep-table-detail>
           </template>
@@ -196,6 +199,9 @@ export default {
     // 切换某一行的选中状态
     toggleRowSelection (row, selected) {
       this.$refs['table'].toggleRowSelection(row, selected)
+    },
+    openImage (url) {
+      window.open(url, '_blank')
     },
   },
 }

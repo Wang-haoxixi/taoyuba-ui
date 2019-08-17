@@ -39,6 +39,13 @@ export  function  getByShipId (id) {
      })
 }
                                                                                      
+export function getShipinsureList (params) {
+  return request({
+    url:`${prefixUrl}/page`,
+    method: 'get',
+    params: params,
+  })
+}
 
 
 

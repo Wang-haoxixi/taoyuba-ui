@@ -71,6 +71,21 @@ const  columnsMap = [
   },    
 ]
 
+const insureColumnsMap = [
+  {
+    prop: 'insurename',
+    label: '标题',
+  },
+  {
+    prop: 'image',
+    label: '图片',
+    type: 'image',
+  },
+  {
+    prop: 'insureDate',
+    label: '年份',
+  },
+]
 
 const initDtoForm = () => {     
     return {
@@ -147,7 +162,7 @@ const initDtoForm = () => {
   }
 
 
-  export{columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm}
+  export{columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm, insureColumnsMap}
 
 
 

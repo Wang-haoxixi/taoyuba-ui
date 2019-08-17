@@ -1,7 +1,7 @@
 <template>    
   <div class="contract-box">            
     <basic-container>
-        <h1>{{ ifexist ? '编辑' : '新增' }}渔船保单信息</h1>                    
+        <h1>{{ $route.query.edit? '编辑' : '新增' }}渔船保单信息</h1>                    
         <el-form :model="tybShipInsure" ref="form" label-width="150px" :rules="rules">          
           <el-row>                                 
             <el-col :span="12">
@@ -25,7 +25,7 @@
             </el-col>
           </el-row>   
         </el-form>  
-        <div style="margin-left:3%" v-if="ifexist" class="year">                                                            
+        <div style="margin-left:3%" v-if="$route.query.edit" class="year">                                                            
             <span>保单年份: {{tybShipInsure.insureDate}} </span>                                 
         </div>                                                                                                                      
         <div style="text-align:center">                                          
@@ -36,7 +36,7 @@
   </div>
 </template>   
 <script>                                                                                                                                                                                                                                                                         
-import { getByShipId, createShipinsure, updateShipinsure } from '@/api/ships/shipinsure'      
+import { getShipinsureDetail, createShipinsure, updateShipinsure } from '@/api/ships/shipinsure'      
 import store from '@/store'      
 import { initdate} from '@/util/date'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 export default {                         
@@ -58,7 +58,6 @@ export default {
           ],   
       },    
       manager: false,
-      ifexist: false,
        headers: {
         Authorization: 'Bearer ' + store.getters.access_token,
       },
@@ -68,12 +67,11 @@ export default {
     // 提交表单
    save () {                 
       this.$refs['form'].validate((valid) => {    
-          if (valid) {
-             this.tybShipInsure.shipId = this.shipId             
-            if(this.ifexist){         
+          if (valid) {        
+            if(this.$route.query.edit){         
               //编辑              
-              this.tybShipInsure.insureDate  =   initdate                 
-            let data = JSON.parse(JSON.stringify(this.tybShipInsure))                                                                                                          
+              this.tybShipInsure.insureDate = initdate                 
+              let data = JSON.parse(JSON.stringify(this.tybShipInsure))                                                                                                          
               updateShipinsure(data).then(res=>{
                 if(res.data.code === 0) {
                   this.$message({
@@ -86,7 +84,8 @@ export default {
                 this.$message.error(err.message)
               })
             }else{  
-              //新增                   
+              //新增
+              this.tybShipInsure.shipId = this.$route.query.add                 
               let data  = JSON.parse(JSON.stringify(this.tybShipInsure))           
               createShipinsure(data).then(res=>{  
                 if(res.data.code === 0) {       
@@ -111,23 +110,23 @@ export default {
     },
   },
   computed: {        
-      shipId () {   
-            return  this.$route.params.shipId
-      },
+    insureId () {
+      return  this.$route.query.edit
+    },
   },      
-  created () {              
+  created () {
     // 编辑新增放同一个组件 判断分别
-      getAll.call(this)
-    async function getAll () {          
+    getAll.call(this)
+    async function getAll () {       
       // 异步获取数据   
-     await getByShipId(this.shipId).then( res=>{   
-        if(res.data.code === 0 && res.data.data) {
-          this.tybShipInsure = res.data.data
-          if(this.tybShipInsure.id)  this.ifexist = true   
-          console.log(this.tybShipInsure)     
-        }                  
-      })
-  }
+      await getShipinsureDetail(this.insureId).then( res=>{   
+          if(res.data.code === 0 && res.data.data) {
+            this.tybShipInsure = res.data.data
+            if(this.tybShipInsure.id) 
+            console.log(this.tybShipInsure)     
+          }
+        })
+      }
   },
 }
 </script>

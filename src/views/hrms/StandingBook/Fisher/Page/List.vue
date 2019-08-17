@@ -81,7 +81,7 @@ export default {
     },
     handleIntoinsure (id) {
       this.$router.push({       
-        path: `/hrms_spa/ship_insure/${id}`,
+        path: `/hrms_spa/ship_insure_list/${id}`,
       })
     },
     handleCrew (id) {
