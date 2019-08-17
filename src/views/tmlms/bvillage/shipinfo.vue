@@ -19,7 +19,7 @@
   </div>
 </template>   
 <script>                                                                                                                                  
-import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable/'                                                                                                                                
+import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable/newIndex'                                                                                                                                
 import { getVillageshipinfoByuser, batchsave, batchUpdate } from '@/api/tmlms/bvillage/villageship'                                          
 import { getUserInfo } from '@/api/login'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
 export default {                         
@@ -33,7 +33,11 @@ export default {
           {     
             prop: 'shipowner',    
             label: '持证人',
-          },    
+          },
+          {     
+            prop: 'mobile',    
+            label: '联系电话',
+          },  
       ],
       tybvillage:{          
         shiplist:[],
@@ -114,8 +118,7 @@ export default {
     },
     changeval (data) {
       var  newArray  =  Object.assign([],data)
-      this.tybvillage.shiplist  = newArray    
-      console.log(this.tybvillage.shiplist)   
+      this.tybvillage.shiplist  = newArray
     },
   },
   computed: {
@@ -141,6 +144,8 @@ export default {
       res.data.data.sysUser.userId
     })
   }
+  },
+  watch: {
   },
 }
 </script>
