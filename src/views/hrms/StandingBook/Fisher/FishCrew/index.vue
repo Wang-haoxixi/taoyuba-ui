@@ -37,6 +37,7 @@
           <template slot-scope="scope">
             <operation-wrapper>
               <iep-button size="mini" type="primary" @click="handleProtocol(scope.row.idcard)">协议</iep-button>
+              <iep-button size="mini" type="primary" @click="handleInsure(scope.row.idcard)">证书</iep-button>
             </operation-wrapper>
           </template>
         </el-table-column>
@@ -84,6 +85,9 @@ export default {
     //   this.$router.push({       
     //     path: `/hrms_spa/ship_insure/${id}`,
     //   })
+    },
+    handleInsure (val) {
+      this.$router.push({ path: `/hrms_spa/shipCrew_Insure/${val}` })
     },
     backPage () {
       this.$router.push({path: '/hrms_spa/shipCrew_list'})

@@ -174,6 +174,12 @@ export default [
         component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/Detail.vue'),        
         meta: noKeepAlive,
       },
+      {   
+        path: 'shipCrew_Insure/:idcard',                        
+        name: '渔船下船员证书列表页',                                   
+        component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/Insure.vue'),        
+        meta: noKeepAlive,
+      },
     ],
   },
   {

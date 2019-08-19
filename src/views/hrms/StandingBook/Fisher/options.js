@@ -53,6 +53,35 @@ const columnsMap = [
     },
   ]
 
+  // const insureColumnsMap = [
+  //   {
+  //     prop: 'certNo',
+  //     label: '证书编码',
+  //   },
+  //   {
+  //     prop: 'certType',
+  //     label: '证书类型',
+  //     dictName: 'tyb_crew_cert_type',
+  //     type: 'dictGroup',
+  //   },
+  //   {
+  //     prop: 'certLevel',
+  //     label: '证书等级',
+  //     dictName: 'tyb_crew_cert_level',
+  //     type: 'dictGroup',
+  //   },
+  //   {
+  //     prop: 'certTitle',
+  //     label: '证书职务',
+  //     dictName: 'tyb_crew_cert_title',
+  //     type: 'dictGroup',
+  //   },
+  //   {
+  //     prop: 'createTime',
+  //     label: '日期',
+  //   },
+  // ]
+
   const initForm = () => {      
     return {
       activityType: '',
@@ -288,4 +317,4 @@ const columnsMap = [
     return newForm
   }
 
-export{columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm, crewColumnsMap}
+export{columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm, crewColumnsMap }
