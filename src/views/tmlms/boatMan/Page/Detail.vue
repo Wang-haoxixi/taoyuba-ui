@@ -719,12 +719,9 @@ export default {
                   }
               })   
             })
-            console.log(this.form)
             if (this.form.phone === '') {
-              console.log(1111)
               this.isPhone = false
             } else {
-              console.log(2222)
               this.isPhone = true
             }         
           } else {
