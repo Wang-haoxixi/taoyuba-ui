@@ -42,7 +42,7 @@
   </div>
 </template>
 <script>
-import { getVillageShip } from '@/api/tmlms/bvillage/index'
+import { getVillageShipList } from '@/api/tmlms/bvillage/index'
 // import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
@@ -76,7 +76,7 @@ export default {
       this.$router.push({path: '/hrms_spa/village_ship_detail', query:{ edit: val }})
     },
     async loadPage (param = this.searchForm) {   
-      let data = await this.loadTable(param, getVillageShip)
+      let data = await this.loadTable(param, getVillageShipList)
       this.pagedTable = data.records
     },
     handleIntoinsure (id) {

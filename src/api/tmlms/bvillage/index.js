@@ -56,3 +56,11 @@ export function getVillageShip (params) {
         params: params,
     })
 }
+
+export function getVillageShipList (params) {
+    return request({
+        url: '/tmlms/tybship/page',
+        method: 'get',
+        params: params,
+    })
+}
