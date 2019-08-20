@@ -1,11 +1,11 @@
 <template>
   <div class="bvillage_detail">
     <basic-container>
-        <h1>申请村公司</h1>
+        <h1>申请基层组织</h1>
         <el-form :model="bvillage" ref="form" label-width="150px" :rules="rules">
           <el-row>
             <el-col :span="8">
-              <el-form-item label="渔村名称:" prop="villageName">
+              <el-form-item label="基层名称:" prop="villageName">
                 <el-input v-model="bvillage.villageName" placeholder=""></el-input>
               </el-form-item>
             </el-col>
@@ -19,6 +19,23 @@
                 <el-input v-model="bvillage.phone" placeholder="" :disabled="haveInfo.phone"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="8">
+              <el-form-item label="基层组织类型:" prop="type">
+                <el-radio-group v-model="bvillage.type">
+                  <el-radio :label="1">公司</el-radio>
+                  <el-radio :label="2">服务站</el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="基层地址:" prop="address" class="amap-page-container">
+                <!-- <el-amap-search-box class="search-box bvillage" :search-option="searchOption" :on-search-result="onSearchResult" ></el-amap-search-box>
+                <el-amap vid="amapDemoD" :center="mapCenter" :zoom="15" class="amap-demo" :plugin="plugin">
+                    <el-amap-marker :position="marker"></el-amap-marker>
+                </el-amap> -->
+                <el-input v-model="bvillage.address" placeholder="请输入地址"></el-input>
+              </el-form-item>
+            </el-col>
             <el-col :span="16">
               <el-form-item label="介绍:" prop="content">
                 <el-input v-model="bvillage.content" type="textarea" placeholder=""></el-input>
@@ -29,14 +46,6 @@
                 <el-cascader  :options="options" @active-item-change="handleItemChange" :props="props" v-model="bvillage.villageId" ></el-cascader>
               </el-form-item>
             </el-col> -->
-            <el-col :span="24">
-              <el-form-item label="渔村地址:" prop="address" class="amap-page-container">
-                <el-amap-search-box class="search-box bvillage" :search-option="searchOption" :on-search-result="onSearchResult" ></el-amap-search-box>
-                <el-amap vid="amapDemoD" :center="mapCenter" :zoom="15" class="amap-demo" :plugin="plugin">
-                    <el-amap-marker :position="marker"></el-amap-marker>
-                </el-amap>
-              </el-form-item>
-            </el-col>
           </el-row>
         </el-form>
         <div style="text-align:center">
@@ -73,6 +82,7 @@ export default {
             content: '',
             villageId: '',
             villageName: '',
+            type: 1,
         },
         rules: {
             villageName: [
@@ -140,9 +150,9 @@ export default {
             data.lat = this.marker[1]
             data.lng = this.marker[0]
             data.villageId = data.villageId[data.villageId.length-1]
-            data.address = document.getElementsByClassName(
-                'bvillage'
-            )[0].childNodes[0].childNodes[0].value
+            // data.address = document.getElementsByClassName(
+            //     'bvillage'
+            // )[0].childNodes[0].childNodes[0].value
             // if(!data.address){
             //     this.$message.error('地址不能为空!')
             //     return false
@@ -230,9 +240,9 @@ export default {
         this.getarr(res.data.data, this.arr)
         data.villageId = this.arr
         this.bvillage = data
-        document.getElementsByClassName(
-                'bvillage'
-        )[0].childNodes[0].childNodes[0].value = this.bvillage.address
+        // document.getElementsByClassName(
+        //         'bvillage'
+        // )[0].childNodes[0].childNodes[0].value = this.bvillage.address
         this.mapCenter = [this.bvillage.lng,this.bvillage.lat]
         this.marker = [this.bvillage.lng,this.bvillage.lat]
         })

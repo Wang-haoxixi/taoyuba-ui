@@ -170,7 +170,7 @@ export default {
           select: false,
           role: 109,
         },{
-          name: '村公司',
+          name: '基层组织',
           select: false,
           role: 112,
         },

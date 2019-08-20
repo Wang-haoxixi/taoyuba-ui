@@ -99,7 +99,8 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="联系电话" prop="phone">
-                    <el-input v-model="form.phone" :disabled="haveInfo.phone"></el-input>
+                    <el-input v-model="form.phone" v-if="isPhone === true" disabled></el-input>
+                    <el-input v-model="form.phone" v-else></el-input>
                     </el-form-item>
                 </el-col>
                 </el-row>
@@ -440,6 +441,7 @@ export default {
       idx:'',
       loading: false,
       idcards: [],
+      isPhone: false,
     }
   },
   methods: {
@@ -694,6 +696,11 @@ export default {
       this.loading = false
       if (number !== '') {
         getCrewData(number).then(res => {
+          if (res.data.data.userId !== 0) {
+            this.$message.error('该船员已存在，请重新填写！')
+            this.form = {}
+            return
+          }
           if(res.data.data !== true) {
             this.choseProvince(res.data.data.provinceId)
             this.choseCity(res.data.data.cityId)
@@ -712,6 +719,14 @@ export default {
                   }
               })   
             })
+            console.log(this.form)
+            if (this.form.phone === '') {
+              console.log(1111)
+              this.isPhone = false
+            } else {
+              console.log(2222)
+              this.isPhone = true
+            }         
           } else {
             this.form.realName = ''
             this.form.positionId = ''
@@ -743,8 +758,8 @@ export default {
   // components: { InlineFormTable },
   created () {
     getArea(0).then(({ data }) => {
-        this.province = data.data
-      })
+      this.province = data.data
+    })
     getPosition('tyb_resume_position').then(({ data }) => {
         this.position = data.data
     })
@@ -771,6 +786,9 @@ export default {
         })
       }
       this.form = data
+      if (this.form.phone !== '') {
+        this.isPhone = true
+      }
     }
     getUserInfo().then(res => {
       if (res.data.data.roles.includes(111)) {
@@ -868,7 +886,7 @@ export default {
   watch: {
     'form.idcard': {
       handler: function (val) {
-        if (val.length === 18) {
+        if ( val !== undefined && val.length === 18) {
           var bri = val.substr(6,8).replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3')
           this.form.birthday = bri
         }
