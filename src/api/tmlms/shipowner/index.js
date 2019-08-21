@@ -17,13 +17,19 @@ export function saveShipowner (data,type) {
 }
 export function deleteShipowner (id) {
     return request({
-        url: `${prefixUrl}/delete?userId=${id}`,
+        url: `${prefixUrl}/delete?idcard=${id}`,
         method: 'post',
     })
 }
 export function getShipownerDetail (id) {
     return request({
         url: `${prefixUrl}/detail?userId=${id}`,
+        method: 'get',
+    })
+}
+export function getShipownerByidcard (idcard) {
+    return request({
+        url: `${prefixUrl}/getDetail?idcard=${idcard}`,
         method: 'get',
     })
 }
@@ -49,6 +55,12 @@ export function getAllAreaName (id) {
 export function statusShipowner (switchs,userId) {
     return request({
         url: `${prefixUrl}/review?status=${switchs}&userId=${userId}`,
+        method: 'post',
+    })
+}
+export function statusShipownerByidcard (switchs,idcard) {
+    return request({
+        url: `${prefixUrl}/newReview?status=${switchs}&idcard=${idcard}`,
         method: 'post',
     })
 }

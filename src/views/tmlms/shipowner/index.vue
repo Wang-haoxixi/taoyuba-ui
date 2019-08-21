@@ -39,7 +39,7 @@
               <el-switch
                 v-model="scope.row.swith"
                 active-color="#13ce66"
-                @change="getStatus(scope.row.swith,scope.row.userId)"
+                @change="getStatus(scope.row.swith,scope.row.idcard)"
                 inactive-color="#ff4949">
               </el-switch>
             </div>
@@ -55,11 +55,11 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.userId)">查看
+              <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.idcard)">查看
               </el-button>
-              <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.userId)">编辑
+              <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.idcard)">编辑
               </el-button>
-              <el-button type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.userId)">删除
+              <el-button type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.idcard)">删除
               </el-button>
             </template>
           </el-table-column>
@@ -71,7 +71,7 @@
   </div>
 </template>
 <script>
-import { getShipowner,deleteShipowner,statusShipowner } from '@/api/tmlms/shipowner'
+import { getShipowner,deleteShipowner,statusShipownerByidcard } from '@/api/tmlms/shipowner'
 export default {
   data () {
     return {
@@ -174,14 +174,14 @@ export default {
         })
     },
     // 审核
-    getStatus (switchs,userId) {
+    getStatus (switchs,idcard) {
       let data = ''
       if(switchs){
         data = 2
       }else{
         data = 3
       }
-      statusShipowner(data,userId).then( res=>{
+      statusShipownerByidcard(data,idcard).then( res=>{
           this.$message({
             type: 'success',
             message: res.data.msg,

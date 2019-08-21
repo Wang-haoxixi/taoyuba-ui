@@ -29,12 +29,12 @@
                 <div v-else>{{ shipowner.phone }}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="16">                                       
+            <!-- <el-col :span="16">                                       
               <el-form-item label="所属渔村区:" prop="villageId">                                                                                                 
                 <el-cascader v-if="!$route.query.see" :options="options" @active-item-change="handleItemChange" :props="props" v-model="shipowner.villageId" ></el-cascader>
                 <div v-else>{{ shipowner.villageId }}</div>
               </el-form-item>
-            </el-col>
+            </el-col> -->
             <el-col :span="12">
               <el-form-item label="身份证头像：" prop="idcardPhoto">
                 <img v-if="shipowner.idcardPhoto" :src="shipowner.idcardPhoto">
@@ -65,7 +65,7 @@
 <script>
 import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable/'
 import { getArea } from '@/api/post/address.js'
-import { saveShipowner, getShipownerDetail, getAllArea, editShipowner, getAllAreaName, uploadPic } from '@/api/tmlms/shipowner'
+import { saveShipowner, getShipownerByidcard, getAllArea, editShipowner, getAllAreaName, uploadPic } from '@/api/tmlms/shipowner'
 // import { addUserRole } from '@/api/admin/user'
 import { getUserInfo } from '@/api/login'
 import { getLastData } from '@/api/hrms/databuspayload'
@@ -344,7 +344,7 @@ export default {
     // 获取编辑数据
     async function getAll () {
       // 异步获取ID
-      let data = await getShipownerDetail(this.$route.query.edit || this.$route.query.see).then( res=>{
+      let data = await getShipownerByidcard(this.$route.query.edit || this.$route.query.see).then( res=>{
         return res.data.data
       })
       // 拿到ID 同步获取地址和选中的地址
@@ -359,7 +359,7 @@ export default {
               item.annex = item.certFile
               item.id = index
             })
-          }       
+          }      
        this.shipowner = data
       }else {   
       getAllAreaName(data.villageId).then( res=>{

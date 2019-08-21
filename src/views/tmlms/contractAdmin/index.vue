@@ -3,7 +3,7 @@
 </template>
 <script>
 import List from './Page/List'
-import Detail from '../contract/Page/Detail'
+import Detail from '../contract/Page/NewDetail'
 import ContractPrint from '../contract/Page/ContractPrint.vue'
 
 export default {
