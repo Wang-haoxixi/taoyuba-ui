@@ -29,11 +29,12 @@
             </operation-wrapper>
           </template>
         </el-table-column>
-        <el-table-column prop="particular" label="详情" width="140">
+        <el-table-column prop="particular" label="详情" width="220">
           <template slot-scope="scope">
             <operation-wrapper>
               <iep-button size="mini" type="primary" @click="handleIntoinsure(scope.row.shipId)">保单</iep-button>
               <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipId)">船员</iep-button>
+              <iep-button size="mini" type="primary" @click="handleOperat(scope.row.shipId)">经营人</iep-button>
             </operation-wrapper>
           </template>
         </el-table-column>
@@ -87,6 +88,11 @@ export default {
     handleCrew (id) {
       this.$router.push({       
         path: `/hrms_spa/ship_crew/${id}`,
+      })
+    },
+    handleOperat (id) {
+      this.$router.push({       
+        path: `/hrms_spa/ship_operat/${id}`,
       })
     },
   },

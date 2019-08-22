@@ -180,6 +180,18 @@ export default [
         component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/Insure.vue'),        
         meta: noKeepAlive,
       },
+      {   
+        path: 'ship_operat/:shipId',                        
+        name: '渔船船员表单',                                   
+        component: () => import('@/views/hrms/StandingBook/Fisher/Operat/index.vue'),        
+        meta: noKeepAlive,
+      },
+      {   
+        path: 'shipOperat_Detial/:id',                        
+        name: '渔船下船员详情页',                                   
+        component: () => import('@/views/hrms/StandingBook/Fisher/Operat/Detail.vue'),        
+        meta: noKeepAlive,
+      },
     ],
   },
   {

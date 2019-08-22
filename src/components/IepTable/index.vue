@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table v-bind="$attrs" ref="table" class="table" v-loading="isLoadTable" :data="formatData" style="width: 100%;" :header-cell-style="headerCellStyle" :cell-class-name="cellClassName" :row-style="rowStyle" @row-click="rowClick" @select="selectLine" @select-all="selectAll">
+    <el-table v-bind="$attrs" ref="table" class="table" v-loading="isLoadTable" :data="formatData" style="width: 100%;" :header-cell-style="headerCellStyle" :cell-class-name="cellClassName" :row-style="rowStyle" @row-click="rowClick" @select="selectLine" @select-all="selectAll" :empty-text="emptyText">
       <el-table-column v-if="isMutipleSelection" type="selection" :selectable="checkboxInit" width="55" :align="align">
       </el-table-column>
       <el-table-column v-if="isIndex" type="index" width="50" :align="align">
@@ -142,6 +142,10 @@ export default {
           return ''
         }
       },
+    },
+    emptyText: {
+      type: String,
+      default: '暂无数据',
     },
   },
   computed: {

@@ -19,16 +19,8 @@ const columnsMap = [
       label: '持证人身份证',
     },
     {
-      prop: 'engineTotalPower',
-      label: '主机总功率(kw)',
-    },
-    {
       prop: 'hullLength',
       label: '船长(m)',
-    },
-    {
-      prop: 'dualPower',
-      label: '双控功率(kw)',
     },
   ]
   
@@ -50,6 +42,25 @@ const columnsMap = [
       label: '职位',
       dictName: 'tyb_resume_position',
       type: 'dictGroup',
+    },
+  ]
+
+  const operatColumnsMap = [
+    {
+      prop: 'shipName',
+      label: '船名号',
+    },
+    {
+      prop: 'shipNo',
+      label: '渔船编号',
+    },
+    {
+      prop: 'realName',
+      label: '姓名',
+    },
+    {
+      prop: 'phone',
+      label: '联系电话',
     },
   ]
 
@@ -317,4 +328,4 @@ const columnsMap = [
     return newForm
   }
 
-export{columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm, crewColumnsMap }
+export{columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm, crewColumnsMap, operatColumnsMap }

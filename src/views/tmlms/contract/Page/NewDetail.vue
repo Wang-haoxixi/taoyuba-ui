@@ -250,7 +250,23 @@
             </el-col>
           </el-row>
           <el-row>
-              2
+            <el-form-item label="支付方式：" prop="payType">
+              <el-radio-group v-model="formData.payType">
+                <el-radio :label="1">定期支付</el-radio>
+                <el-radio :label="2">一次性支付</el-radio>
+                <el-radio :label="3">不定期支付</el-radio> 
+              </el-radio-group>
+            </el-form-item>
+            <div v-show="formData.payType == 1">
+              <el-form-item label="微信账号：" prop="payTypeValue">  
+                <el-input maxlength="20" v-model="formData.employeePayAccount" style="width:200px"></el-input>
+              </el-form-item>
+            </div>
+            <div v-show="formData.payType == 2">
+              <el-form-item label="微信账号：" prop="payTypeValue">  
+                <el-input maxlength="20" v-model="formData.employeePayAccount" style="width:200px"></el-input>
+              </el-form-item>
+            </div>
           </el-row>
         </el-form-item>
       </el-form>

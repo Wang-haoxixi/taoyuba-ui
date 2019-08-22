@@ -9,7 +9,7 @@ export function getShipList (params) {
   })
 }     
 
-export function getShipDetail (id) {      
+export function getShipDetail (id) {
   return request({
     url: `${prefixUrl}/${id}`,
     method: 'get',

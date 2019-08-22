@@ -411,6 +411,7 @@ export default {
         this.shipnameInfo = data.data.data.shipname
         findMyship(this.shipnameInfo).then(res => {
           if (res.data.data === false) {
+            this.form = {}
             this.form.shipName = this.shipnameInfo
             this.isState = false
           } else {  

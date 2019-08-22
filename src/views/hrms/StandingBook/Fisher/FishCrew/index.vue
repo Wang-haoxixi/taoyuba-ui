@@ -23,6 +23,7 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               @selection-change="handleSelectionChange"
+              :emptyText="message"
               is-mutiple-selection>
         <el-table-column prop="operation" label="操作" width="140">
           <template slot-scope="scope">
@@ -55,6 +56,7 @@ export default {
     return {
       crewColumnsMap,
       searchData: 'contactName',
+      message: '此渔船暂无相关网签劳务合同信息',
     }
   },
   created () {
