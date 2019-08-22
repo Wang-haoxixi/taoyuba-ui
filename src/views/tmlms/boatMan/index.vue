@@ -61,7 +61,7 @@
               </el-button>
               <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.idcard)">编辑
               </el-button>
-              <el-button type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.idcard)">删除
+              <el-button v-if="manager" type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.idcard)">删除
               </el-button>
             </template>
           </el-table-column>
@@ -74,6 +74,7 @@
 </template>
 <script>
 import { getCrew,deleteCrew,statusCrew } from '@/api/tmlms/boatMan'
+import { getUserInfo } from '@/api/login'
 export default {
   data () {
     return {
@@ -129,6 +130,8 @@ export default {
           value: 3,
         },
       ],
+      manager: false,
+      userData: {roles: []},
     }
   },
   methods: {
@@ -212,11 +215,20 @@ export default {
           this.getData()
       })
     },
+    async isManager () {
+      this.userData = await getUserInfo().then(res => {
+        return res.data.data
+      })
+      if(this.userData.roles.indexOf(111) !== -1) {
+        this.manager = true
+      }
+    },
   },
   computed: {
   },
   created () {
     this.getData()
+    this.isManager()
   },
   filters: {
     typeFilter (type) {
