@@ -64,7 +64,7 @@ export default {
       this.$router.push({path: `/hrms_spa/shipOperat_Detial/${val}`,query:{ see: val }})
     },
     async loadPage (param = this.searchForm) { 
-      param.shipId = this.$route.params.shipId
+      param.shipNo = this.$route.params.shipNo
       let data = await this.loadTable(param, getShipManagerList)
       this.pagedTable = data.records
     },

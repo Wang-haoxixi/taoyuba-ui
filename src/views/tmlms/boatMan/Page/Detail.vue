@@ -7,7 +7,7 @@
                 <el-row>
                 <el-col :span="12">
                     <el-form-item label="个人姓名：" prop="realName">
-                    <el-input v-model="form.realName" :disabled="haveInfo.realName"></el-input>
+                    <el-input v-model="form.realName" :disabled="isManger"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -21,7 +21,7 @@
                 <el-col :span="12">
                   <el-form-item label="身份证号码：" prop="idcard">
                     <!-- <el-input v-model="form.idcard" :disabled="haveInfo.idcard"></el-input> -->
-                    <el-select :disabled="haveInfo.idcard" v-model="form.idcard"
+                    <el-select :disabled="isManger" v-model="form.idcard"
                               placeholder="请选择"
                               filterable
                               remote
@@ -442,6 +442,7 @@ export default {
       loading: false,
       idcards: [],
       isPhone: false,
+      isManger: false,
     }
   },
   methods: {
@@ -763,7 +764,7 @@ export default {
     if(this.$route.query.edit || this.$route.query.see || this.$route.query.userId){
       getAll.call(this)
     }
-    this.getInformation('form',['phone','realName',true])
+    // this.getInformation('form',['phone','realName',true])
         // 获取编辑数据
     async function getAll () {    
       // 异步获取ID
@@ -793,6 +794,13 @@ export default {
       } else {
         this.manager = false
       }
+      if (res.data.data.roles.indexOf(111) !== -1) {
+        this.isManger = false
+      } else if (res.data.data.roles.indexOf(112) !== -1) {
+        this.isManger = false
+      } else {
+        this.isManger = true
+      }   
       res.data.data.sysUser.userId
     })
   },

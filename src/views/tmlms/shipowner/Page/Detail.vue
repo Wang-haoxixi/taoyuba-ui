@@ -7,13 +7,13 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="姓名:" prop="realName">
-                <el-input v-model="shipowner.realName" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.realName"></el-input>
+                <el-input v-model="shipowner.realName" placeholder="" v-if="!$route.query.see" :disabled="isManger"></el-input>
                 <div v-else>{{ shipowner.realName }}</div>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="身份证号:" prop="idcard">
-                <el-input v-model="shipowner.idcard" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.idcard" @blur="ifexist"></el-input>
+                <el-input v-model="shipowner.idcard" placeholder="" v-if="!$route.query.see" @blur="ifexist" :disabled="isManger"></el-input>
                 <div v-else>{{ shipowner.idcard }}</div>
               </el-form-item>
             </el-col>
@@ -25,7 +25,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="手机号码:" prop="phone">
-                <el-input v-model="shipowner.phone" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.phone"></el-input>
+                <el-input v-model="shipowner.phone" placeholder="" v-if="!$route.query.see" :disabled="isManger"></el-input>
                 <div v-else>{{ shipowner.phone }}</div>
               </el-form-item>
             </el-col>
@@ -165,6 +165,7 @@ export default {
       // },
       sn: '',
       manager: false,
+      isManger: false,
     }
   },
   components: { InlineFormTable },
@@ -340,7 +341,7 @@ export default {
       })
     }
     // 判断是否有数据
-    this.getInformation('shipowner',['phone','realName',true])
+    // this.getInformation('shipowner',['phone','realName',true])
     // 获取编辑数据
     async function getAll () {
       // 异步获取ID
@@ -387,6 +388,13 @@ export default {
       } else {
         this.manager = false
       }
+      if (res.data.data.roles.indexOf(111) !== -1) {
+        this.isManger = false
+      } else if (res.data.data.roles.indexOf(112) !== -1) {
+        this.isManger = false
+      } else {
+        this.isManger = true
+      } 
       res.data.data.sysUser.userId
     })
   },

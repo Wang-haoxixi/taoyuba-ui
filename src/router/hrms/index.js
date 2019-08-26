@@ -181,7 +181,7 @@ export default [
         meta: noKeepAlive,
       },
       {   
-        path: 'ship_operat/:shipId',                        
+        path: 'ship_operat/:shipNo',                        
         name: '渔船船员表单',                                   
         component: () => import('@/views/hrms/StandingBook/Fisher/Operat/index.vue'),        
         meta: noKeepAlive,
