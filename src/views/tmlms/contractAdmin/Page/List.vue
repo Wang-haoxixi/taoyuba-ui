@@ -45,14 +45,14 @@
       <avue-tree-table :option="options" style="margin-top: 20px;">
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">查看
-            </el-button>
+            <!-- <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">查看
+            </el-button> -->
             <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.contractId)">编辑
             </el-button>
             <el-button type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.contractId)">删除
             </el-button>
-            <el-button type="text" icon="el-icon-delete" size="mini" @click="handlePrint(scope.row.contractId)">打印
-            </el-button>
+            <!-- <el-button type="text" icon="el-icon-delete" size="mini" @click="handlePrint(scope.row.contractId)">打印
+            </el-button> -->
           </template>
         </el-table-column>
       </avue-tree-table>
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { getContractList, getContractListAdmin, deleteContract, getContract, getDict } from '@/api/tmlms/contract'
+import { getContractList, deleteContract, getContract, getDict } from '@/api/tmlms/newContract'
 import { getUserInfo } from '@/api/login'
 import { mapGetters } from 'vuex'
 import contractPrint from '../../contract/Page/ContractPrint.vue'
@@ -101,6 +101,32 @@ export default {
       input: '',
       form: {},
       timeList: [],
+      statusDict: [
+        { 
+          lable: 0, 
+          value: '未审核',
+        },
+        { 
+          lable: 1, 
+          value: '合同成立',
+        },
+        { 
+          lable: 2, 
+          value: '未通过审核',
+        },
+        { 
+          lable: 3, 
+          value: '合同纠纷',
+        },
+        { 
+          lable: 4, 
+          value: '合同解除',
+        },
+        { 
+          lable: 5, 
+          value: '合同过期',
+        },
+      ],
     }
   },
   created () {
@@ -130,7 +156,7 @@ export default {
           },
           {
             text: '船舶拥有者',
-            value: 'shipowner',
+            value: 'shipownerName',
           },
           {
             text: '船名',
@@ -140,6 +166,10 @@ export default {
             text: '雇员姓名',
             value: 'employeeName',
           },
+          {
+            text: '状态',
+            value: 'status',
+          },
         ],
         data: this.contractList,
       }
@@ -147,9 +177,16 @@ export default {
   },
   methods: {
     getContractList () {
-      getContractListAdmin(this.params).then(({data}) => {
+      getContractList(this.params).then(({data}) => {
         if (data.code === 0) {
           this.contractList = data.data.records
+          this.contractList.forEach(v => {
+            this.statusDict.forEach(m => {
+              if (v.status === m.lable) {
+                v.status = m.value
+              }
+            })
+          })
           this.total = data.data.total
         }
       }, (error) => {

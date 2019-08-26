@@ -306,7 +306,7 @@ export default {
       }
     },
     getidcardList (number) {
-      this.loading = false
+      this.loading = true
       this.isReadonly = false
       if (number !== '') {
         getIdcardCheck(number).then(({data}) => {

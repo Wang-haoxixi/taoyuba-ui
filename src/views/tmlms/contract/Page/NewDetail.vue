@@ -19,8 +19,22 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="船名：" prop="shipName">
+              <!-- <el-form-item label="船名：" prop="shipName">
                 <el-input maxlength="20" v-model="formData.shipName"></el-input>
+              </el-form-item> -->
+              <el-form-item label="船名：:" prop="shipName">
+                <el-select v-model="formData.shipName"
+                           placeholder="请选择"
+                           filterable
+                           remote
+                           maxlength="20"
+                           :loading="loading"
+                           allow-create
+                           clearable
+                           @change="shipNameChange"
+                           :remote-method="getShipNameList">
+                  <el-option v-for="item in shipNames" :key="item.shipId" :label="item.shipName" :value="item"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -58,7 +72,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="签约人身份性质：" prop="employerProp">
-                <el-radio-group v-model="formData.employerProp">
+                <el-radio-group v-model="formData.employerProp" @change="employerPropChange">
                   <el-radio :label="1">船舶持证人</el-radio>
                   <el-radio :label="2">船舶承租人</el-radio> 
                   <el-radio :label="3">船长或授权代理人</el-radio> 
@@ -68,7 +82,9 @@
             <el-col :span="12">
               <el-form-item label="船名及船舶登记号：">
                 <div>
-                  <div style="font-size:10px">船名：{{formData.shipName}}</div>
+                  <div v-if="formData.shipName && !(formData.shipName instanceof Object)" style="font-size:10px">船名：{{formData.shipName}}</div>
+                  <div v-if="formData.shipName.shipName" style="font-size:10px">船名：{{formData.shipName.shipName}}</div>
+                  <div v-if="!formData.shipName && !formData.shipName.shipName" style="font-size:10px">船名：</div>
                   <div style="font-size:10px">船舶登记号：{{formData.shipLicenses}}</div>
                 </div>
               </el-form-item>
@@ -84,7 +100,7 @@
               <el-form-item label="船舶是否共有：" prop="shipJoint">
                 <el-radio-group v-model="formData.shipJoint">
                   <el-radio :label="1">是，<el-input v-model="formData.shipJointYes" placeholder="人数（数字）" size="mini" style="width:100px"></el-input>共有（权证附后）</el-radio>
-                  <el-radio :label="0">否，<el-input v-model="formData.shipJointNo" size="mini" style="width:100px" disabled>{{formData.shipownerName}}</el-input>独有</el-radio> 
+                  <el-radio :label="0">否，{{formData.employerName}} 独有</el-radio> 
                 </el-radio-group>
               </el-form-item>
             </el-col>
@@ -106,7 +122,19 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="身份证号：" prop="employeeIdcard">
-                <el-input maxlength="20" v-model="formData.employeeIdcard"></el-input>
+                <!-- <el-input maxlength="20" v-model="formData.employeeIdcard"></el-input> -->
+                <el-select v-model="formData.employeeIdcard"
+                           placeholder="请选择"
+                           filterable
+                           remote
+                           maxlength="20"
+                           :loading="loading"
+                           allow-create
+                           clearable
+                           @change="idcardChange"
+                           :remote-method="getidcardList">
+                  <el-option v-for="item in idcards" :key="item.id" :label="item.idcard" :value="item"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
@@ -218,7 +246,7 @@
             </el-col>
             <el-col>
               <el-form-item label="试用期" prop="workProbationTypeValue">  
-                <el-input maxlength="10" v-model="formData.workProbationTypeValue" style="width:150px"></el-input>
+                <el-input type="number" min="0" v-model="formData.workProbationTypeValue" style="width:150px"></el-input>
                 <el-radio-group v-model="formData.workProbationType" style="margin:15px">
                   <el-radio :label="1">天</el-radio>
                   <el-radio :label="2">月</el-radio>
@@ -233,7 +261,7 @@
             <el-col :span="16">
               <el-form-item label="按渔业生产周期：" prop="period">
                 <el-date-picker v-model="period" type="daterange" range-separator="至"
-                  tart-placeholder="开始" end-placeholder="结束"></el-date-picker>
+                  tart-placeholder="开始" end-placeholder="结束"  value-format="yyyy-MM-dd"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-row>
@@ -258,29 +286,93 @@
               </el-radio-group>
             </el-form-item>
             <div v-show="formData.payType == 1">
-              <el-form-item label="微信账号：" prop="payTypeValue">  
-                <el-input maxlength="20" v-model="formData.employeePayAccount" style="width:200px"></el-input>
+              <el-form-item label="工资产生后次月" prop="payTypeValue">  
+                <el-input maxlength="4" v-model="formData.payTypeValue" style="width:50px" size="mini"></el-input>日前支付
               </el-form-item>
             </div>
             <div v-show="formData.payType == 2">
-              <el-form-item label="微信账号：" prop="payTypeValue">  
-                <el-input maxlength="20" v-model="formData.employeePayAccount" style="width:200px"></el-input>
+              <el-form-item label="期限结束、航次结束后的" prop="payTypeValue">  
+                <el-input maxlength="4" v-model="formData.payTypeValue" style="width:50px" size="mini"></el-input>日内支付
               </el-form-item>
             </div>
           </el-row>
         </el-form-item>
+        <el-form-item label="其他约定">
+          <el-row>
+            <el-col>
+              <span style="margin:40px">本部分选填，可约定：1.其他未尽事宜；2.排除、变更适用背部条款。本处约定与<span style="color:red">其他部分冲突者，以本处约定为准</span></span>
+            </el-col>
+            <el-col>
+              <el-input type="textarea" placeholder="请输入内容" v-model="formData.otherContent" show-word-limit style="width:720px;margin:10px 0 0 40px"></el-input>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item label="补充">
+          <el-row>
+            <el-col>
+              <el-form-item label="甲方如违约，支付" prop="employerBreakValue">  
+                <el-input maxlength="4" v-model="formData.employerBreakValue" style="width:50px" size="mini"></el-input>日工资。
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="乙方如违约，支付" prop="employeeBreakValue">  
+                <el-input maxlength="4" v-model="formData.employeeBreakValue" style="width:50px" size="mini"></el-input>日工资。
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-row>
+          <el-col>
+            <el-form-item label="渔船所有权登记证书上传：" prop="licensesOwnerShipImage">
+              <el-upload
+                action="/api/admin/file/upload/avatar"
+                list-type="picture-card"
+                :on-preview="handlePictureCardPreview"
+                :limit="1"
+                :on-success="handleLicensesSuccessFront" :headers="headers"  accept="image/*">
+                <img v-if="dialogVisible" :src="this.formData.licensesOwnerShipImage" style="width:148px;height:148px">
+                <i v-else class="el-icon-plus"></i>
+              </el-upload>
+            </el-form-item>
+           </el-col>
+        </el-row>
+        <!-- <el-row>
+          <el-col>
+            <el-form-item label="纸质合同照片（多张）：" prop="contractImage">
+              <el-upload
+                action="/api/admin/file/upload/avatar"
+                list-type="picture-card"
+                :on-preview="handlePictureCardPreview"
+                :limit="4"
+                :on-success="handleContractSuccessFront" :headers="headers"  accept="image/*">
+                <i class="el-icon-plus"></i>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+        </el-row> -->
       </el-form>
+      <div style="text-align: center;padding: 20px 0;">                   
+        <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add' || type === 'edit'" type="primary" @click="handleSubmit">保存</iep-button>
+        <iep-button :disabeld="false" @click="handleBack">返回</iep-button>            
+      </div>
     </basic-container>
   </div>
 </template>
 
 <script>
+import debounce from 'lodash/debounce'
+import store from '@/store'
+import { findMyship } from '@/api/ships/index'
+import { getShipManagerList } from '@/api/ships/shipoperat/index'
+import { detailCrew } from '@/api/tmlms/boatMan/index'
+import { addContract, updateContract, getContractDetail } from '@/api/tmlms/newContract'
 export default {
   props: {
     record: {},
     type: {},
   },
   data () {
+    this.getShipNameList = debounce(this.getShipNameList, 800)
     return {
       formData: {
         shipownerName: '',
@@ -312,11 +404,18 @@ export default {
         workPosition: '',
         workSkill: '',
         workProbationTypeValue: '',
-        workProbationType: '',
+        workProbationType: 1,
         workDateStart: '',
         workDateEnd: '',
-        paySalaryType: '',
+        paySalaryType: 1,
         paySalaryTypeValue: '',
+        payType: 1,
+        payTypeValue: '',
+        otherContent: '',
+        employerBreakValue: '',
+        employeeBreakValue: '',
+        licensesOwnerShipImage: '',
+        contractImage:'',
       },
       period: [],
       rules: {
@@ -366,9 +465,21 @@ export default {
           required: true, message: '请输入现有资格证书', trigger: 'blur',
         }],
         employeeAddr: [{ 
-          required: true, message: '请输入甲方（雇主)地址', trigger: 'blur',
+          required: true, message: '请输入乙方（雇主)地址', trigger: 'blur',
         }],
       },
+      shipNames: [],
+      loading: false,
+      idcards: [],
+      headers: {
+        Authorization: 'Bearer ' + store.getters.access_token,
+      },
+      dialogVisible: false,
+    }
+  },
+  created () {
+    if (this.record) {
+      this.getList()
     }
   },
   computed: {
@@ -380,6 +491,159 @@ export default {
       } else {
         return '合同查看'
       }
+    },
+  },
+  methods: {
+    getList () {
+      getContractDetail (this.record).then(data =>{
+        this.formData = data.data.data
+        if (this.formData.workDateStart && this.formData.workDateEnd) {
+          this.period.push(this.formData.workDateStart)
+          this.period.push(this.formData.workDateEnd)
+        }
+        if (this.formData.licensesOwnerShipImage) {
+          this.dialogVisible = true
+        }
+      })
+    },
+    handleBack () {
+      this.$emit('onGoBack')
+    },
+    shipNameChange (name) {                             
+      if (typeof name === 'object') {      
+        this.refreshShipName(name)
+      } else {                                                    
+        this.refreshShipName({shipName: name})
+      }   
+      this.shipNames = []       
+    },
+    refreshShipName (name) {
+      if (name !== null) {
+        let {shipowner = '', shipownerIdcard = '', licensesOwnerShip = '', mobile = '', address = '' } = name
+        this.formData.shipownerName = shipowner
+        this.formData.shipownerIdcard = shipownerIdcard
+        this.formData.shipLicenses = licensesOwnerShip
+        this.formData.shipownerPhone = mobile
+        this.formData.shipownerAddr = address
+      } else {
+        this.formData.shipName = ''
+        this.formData.shipownerName = ''
+        this.formData.shipownerIdcard = ''
+        this.formData.shipLicenses = ''
+        this.formData.shipownerPhone = ''
+        this.formData.shipownerAddr = ''
+      }
+    },
+    getShipNameList (shipName) {
+      this.loading = true
+      if (shipName !== '') {
+        findMyship(shipName).then(({data}) => {
+          if (data.data !== false) {
+            this.shipNames.push(data.data)
+          }
+        })
+      } else {
+        this.shipNames = []
+      }
+      this.loading = false
+    },
+    employerPropChange (val) {
+      if (val === 1) {
+        this.formData.employerName = this.formData.shipownerName
+        this.formData.employerIdcard = this.formData.shipownerIdcard
+        this.formData.employerPhone = this.formData.shipownerPhone
+        this.formData.employerAddr = this.formData.shipownerAddr
+      } else if (val === 2) {
+        getShipManagerList (this.formData.shipName).then(data => {
+          this.formData.employerName = data.data.data.records[0].realName
+          this.formData.employerIdcard = data.data.data.records[0].idcard
+          this.formData.employerPhone = data.data.data.records[0].phone
+          this.formData.employerAddr = data.data.data.records[0].address
+        })
+      } else if (val === 3) {
+          this.formData.employerName = ''
+          this.formData.employerIdcard = ''
+          this.formData.employerPhone = ''
+          this.formData.employerAddr = ''
+      }
+    },
+    idcardChange (card) {
+      if (typeof card === 'object') {
+        this.refreshCard(card)
+      } else {
+        this.refreshCard({idcard: card})
+      }
+      this.idcards = []
+    },
+    refreshCard (card) {
+      if(card !== null) {
+        let { realName = '', phone = '', address = '' } = card
+        this.formData.employeeName = realName
+        this.formData.employeePhone = phone
+        this.formData.employeeAddr = address 
+      } else {
+        this.formData.employeeName = ''
+        this.formData.employeePhone = ''
+        this.formData.employeeAddr = '' 
+      }
+    },
+    getidcardList (number) {
+      this.loading = true
+      if (number !== '') {
+        detailCrew(number).then(({data}) => {
+          if (Object.keys(data.data).length !== 0) {
+            this.idcards.push(data.data)
+          }
+        })
+      } else {
+        this.idcards = []
+      }
+      this.loading = false
+    },
+    handleLicensesSuccessFront (response) {
+      this.formData.licensesOwnerShipImage = response.data.url
+    },
+    handleContractSuccessFront (response) {
+      this.formData.contractImage = response.data.url
+    },
+    handlePictureCardPreview (file) {
+      this.formData.licensesOwnerShipImage = file.url
+      this.dialogVisible = true
+    },
+    handleSubmit () {
+      if (this.period) {
+        this.formData.workDateStart = this.period[0]
+        this.formData.workDateEnd = this.period[1]       
+      }    
+      this.formData.shipJointNo = this.formData.employerName
+      if (this.formData.shipName.shipName) {
+        this.formData.shipName = this.formData.shipName.shipName
+      }
+      if (this.formData.employeeIdcard.idcard) {
+        this.formData.employeeIdcard = this.formData.employeeIdcard.idcard
+      }
+      console.log(this.formData)
+      this.$refs['form'].validate(valid => {
+        if (valid) {
+          if (this.type === 'add') {
+            addContract(this.formData).then(() =>{
+              this.$message.success('新增成功！')
+              this.$emit('onGoBack')
+            }).catch(() => {
+              this.$message.error('新增失败！')
+              this.$emit('onGoBack')
+            })
+          } else if (this.type === 'edit') {
+            updateContract(this.formData).then(() =>{
+              this.$message.success('修改成功！')
+              this.$emit('onGoBack')
+            }).catch(() => {
+              this.$message.error('修改失败！')
+              this.$emit('onGoBack')
+            })
+          }      
+        }
+      })
     },
   },
 }
