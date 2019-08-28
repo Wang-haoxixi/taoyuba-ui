@@ -44,7 +44,7 @@
       </operation-container> -->
       <avue-tree-table :option="options" style="margin-top: 20px;">
         <el-table-column label="操作">
-          <template slot-scope="scope">                     
+          <template slot-scope="scope">                                                  
             <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">查看
             </el-button>
             <!-- <el-button type="text" icon="el-icon-view" size="mini" @click="handleDown(scope.row.contractId)">下载PDF
@@ -186,13 +186,15 @@ export default {
     handleAdd () {
       this.$emit('onAdd')
     },
-    handleView (contractId) {
+    handleView (contractId) {                       
       // this.$emit('onDetail', contractId)
-      let urlHttp = window.location.href.split('//')[0]
-      let urlHeade = window.location.href.split('/')[0,2]
-      let Base64 = require('js-base64').Base64
-      let rlt = Base64.encodeURI(`id=${contractId}`)
-      window.open(`${urlHttp}//${urlHeade}/tmlms_spa/contract_detail?${rlt}`, '_blank')
+      // let urlHttp = window.location.href.split('//')[0]
+      let urlHeade = window.location.href.split('/')[0,2]                    
+      // let Base64 = require('js-base64').Base64
+      // let rlt = Base64.encodeURI(`id=${contractId}`)     
+      let  dataMap  = '%7B%7D'        
+     this.$openPage(`//${urlHeade}/api/tmlms/downLoad/intoContractHtml?contractId=${contractId}&dataMap=${dataMap}`,'url') 
+      // window.open(`${urlHttp}//${urlHeade}/tmlms_spa/contract_detail?${rlt}`, '_blank')
     },
     handleEdit (contractId) {
       this.$emit('onEdit', contractId)

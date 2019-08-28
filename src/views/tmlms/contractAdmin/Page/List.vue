@@ -47,6 +47,8 @@
           <template slot-scope="scope">
             <!-- <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">查看
             </el-button> -->
+             <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">合同查看                          
+            </el-button>
             <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.contractId)">编辑
             </el-button>
             <el-button type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.contractId)">删除
@@ -200,13 +202,16 @@ export default {
     handleAdd () {
       this.$emit('onAdd')
     },
-    handleView (contractId) {
-      // this.$emit('onDetail', contractId)
-      let urlHttp = window.location.href.split('//')[0]
-      let urlHeade = window.location.href.split('/')[0,2]
-      let Base64 = require('js-base64').Base64
-      let rlt = Base64.encodeURI(`id=${contractId}`)
-      window.open(`${urlHttp}//${urlHeade}/tmlms_spa/contract_detail?${rlt}`, '_blank')
+    handleView (contractId) {                                                                                                                                                                                                                                    
+      // this.$emit('onDetail', contractId)                      
+      // let urlHttp = window.location.href.split('//')[0]                   
+      let urlHeade = window.location.href.split('/')[0,2]        
+      let  dataMap  = '%7B%7D'               
+      // let Base64 = require('js-base64').Base64      
+      // let rlt = Base64.encodeURI(`id=${contractId}`)                                                                 
+    //  window.open(`${urlHttp}//${urlHeade}/tmlms/downLoad/intoContractHtml?${rlt}`)             
+       this.$openPage(`//${urlHeade}/api/tmlms/downLoad/intoContractHtml?contractId=${contractId}&dataMap=${dataMap}`,'url') 
+      // window.location.href = `//${urlHeade}/tmlms/downLoad/intoContractHtml?contractId=${contractId}&dataMap=${dataMap}`                    
       // getContract(contractId).then(({data}) => {
       //   if (data.code == 0) {
       //     let formData = data.data
