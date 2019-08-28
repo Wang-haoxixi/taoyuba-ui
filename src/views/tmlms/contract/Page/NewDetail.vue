@@ -2,354 +2,449 @@
   <div class="contract">
     <basic-container id="pdfDom">
       <page-header :title="getTitle"></page-header>
-      <el-form :disabled="type !== 'add' && type !== 'edit'" :model="formData" size="small" ref="form" label-width="200px"
+      <el-form :disabled="type !== 'add' && type !== 'edit'" :model="formData" size="small" ref="form" label-width="120px"
         :rules="rules" class="form" >
-        <el-form-item label="持证人信息">
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="持证人姓名：" prop="shipownerName">
-                <el-input maxlength="6" v-model="formData.shipownerName"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="身份证号：" prop="shipownerIdcard">
-                <el-input maxlength="20" v-model="formData.shipownerIdcard"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <!-- <el-form-item label="船名：" prop="shipName">
-                <el-input maxlength="20" v-model="formData.shipName"></el-input>
-              </el-form-item> -->
-              <el-form-item label="船名：:" prop="shipName">
-                <el-select v-model="formData.shipName"
-                           placeholder="请选择"
-                           filterable
-                           remote
-                           maxlength="20"
-                           :loading="loading"
-                           allow-create
-                           clearable
-                           @change="shipNameChange"
-                           :remote-method="getShipNameList">
-                  <el-option v-for="item in shipNames" :key="item.shipId" :label="item.shipName" :value="item"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="船舶登记号：" prop="shipLicenses">
-                <el-input maxlength="20" v-model="formData.shipLicenses"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="联系电话：" prop="shipownerPhone">
-                <el-input maxlength="20" v-model="formData.shipownerPhone"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="家庭地址：" prop="shipownerAddr">
-                <el-input maxlength="20" v-model="formData.shipownerAddr"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form-item>
-        <el-form-item label="甲方（雇主）">
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="姓名：" prop="employerName">
-                <el-input maxlength="6" v-model="formData.employerName"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="身份证号：" prop="employerIdcard">
-                <el-input maxlength="20" v-model="formData.employerIdcard"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="签约人身份性质：" prop="employerProp">
-                <el-radio-group v-model="formData.employerProp" @change="employerPropChange">
-                  <el-radio :label="1">船舶持证人</el-radio>
-                  <el-radio :label="2">船舶承租人</el-radio> 
-                  <el-radio :label="3">船长或授权代理人</el-radio> 
-                </el-radio-group>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="船名及船舶登记号：">
-                <div>
-                  <div v-if="formData.shipName && !(formData.shipName instanceof Object)" style="font-size:10px">船名：{{formData.shipName}}</div>
-                  <div v-if="formData.shipName.shipName" style="font-size:10px">船名：{{formData.shipName.shipName}}</div>
-                  <div v-if="!formData.shipName && !formData.shipName.shipName" style="font-size:10px">船名：</div>
-                  <div style="font-size:10px">船舶登记号：{{formData.shipLicenses}}</div>
-                </div>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="联系电话：" prop="employerPhone">
-                <el-input maxlength="20" v-model="formData.employerPhone"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="船舶是否共有：" prop="shipJoint">
-                <el-radio-group v-model="formData.shipJoint">
-                  <el-radio :label="1">是，<el-input v-model="formData.shipJointYes" placeholder="人数（数字）" size="mini" style="width:100px"></el-input>共有（权证附后）</el-radio>
-                  <el-radio :label="0">否，{{formData.employerName}} 独有</el-radio> 
-                </el-radio-group>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">  
-              <el-form-item label="地址：" prop="employerAddr">
-                <el-input maxlength="20" v-model="formData.employerAddr"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form-item>
-        <el-form-item label="乙方（雇员）">
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="姓名：" prop="employeeName">
-                <el-input maxlength="6" v-model="formData.employeeName"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="身份证号：" prop="employeeIdcard">
-                <!-- <el-input maxlength="20" v-model="formData.employeeIdcard"></el-input> -->
-                <el-select v-model="formData.employeeIdcard"
-                           placeholder="请选择"
-                           filterable
-                           remote
-                           maxlength="20"
-                           :loading="loading"
-                           allow-create
-                           clearable
-                           @change="idcardChange"
-                           :remote-method="getidcardList">
-                  <el-option v-for="item in idcards" :key="item.id" :label="item.idcard" :value="item"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="联系电话：" prop="employeePhone">
-                <el-input maxlength="6" v-model="formData.employeePhone"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="现有资格证书：" prop="employeePosition">
-                <iep-dict-select v-model="formData.employeePosition" dict-name="tyb_resume_position">></iep-dict-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="地址：" prop="employeeAddr">
-                <el-input maxlength="20" v-model="formData.employeeAddr"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="紧急联系人及电话：">
-                <div>
-                  <div style="font-size:10px">紧急联系人：{{formData.employeeName}}</div>
-                  <div style="font-size:10px">联系电话：{{formData.employeePhone}}</div>
-                </div>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="有无晕船或不适宜从事航海的疾病或身体缺陷：" prop="employeeIsSick">
-                <el-radio-group v-model="formData.employeeIsSick">
-                  <el-radio :label="1">有，<el-input v-model="formData.employeeIsSickYes" size="mini" style="width:200px"></el-input></el-radio>
-                  <el-radio :label="0">无。</el-radio> 
-                </el-radio-group>
-              </el-form-item>
-            </el-col>  
-            <el-col :span="12">
-              <el-form-item label="有无航海经验：" prop="employeeIsExp">
-                <el-radio-group v-model="formData.employeeIsExp">
-                  <el-radio :label="1">有，<iep-dict-select v-model="formData.employeeIsExpYes" dict-name="tyb_resume_seniority" style="width:200px"></iep-dict-select></el-radio>
-                  <el-radio :label="0">无。</el-radio> 
-                </el-radio-group>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-row>
-              <el-form-item label="工资账户：" prop="employeePayType">
-                <el-radio-group v-model="formData.employeePayType">
-                  <el-radio :label="1">现金</el-radio>
-                  <el-radio :label="2">银行转账</el-radio>
-                  <el-radio :label="3">微信</el-radio> 
-                  <el-radio :label="4">支付宝</el-radio> 
-                </el-radio-group>
-              </el-form-item>
-              <div v-show="formData.employeePayType == 2">
+        <el-container>
+          <el-aside class="side">
+            <div class="tex">持证人信息</div>
+          </el-aside>
+          <el-container>
+            <el-header class="head"></el-header>
+            <el-main class="mai">
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="持证人姓名：" prop="shipownerName" class="e">
+                    <el-input maxlength="6" v-model="formData.shipownerName" style="width:380px"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="身份证号：" prop="shipownerIdcard">
+                    <el-input maxlength="20" v-model="formData.shipownerIdcard" style="width:380px"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <!-- <el-form-item label="船名：" prop="shipName">
+                    <el-input maxlength="20" v-model="formData.shipName"></el-input>
+                  </el-form-item> -->
+                  <el-form-item label="船名：:" prop="shipName">
+                    <el-select v-model="formData.shipName"
+                              placeholder="请选择"
+                              filterable
+                              remote
+                              maxlength="20"
+                              :loading="loading"
+                              allow-create
+                              clearable
+                              @change="shipNameChange"
+                              :remote-method="getShipNameList" style="width:380px!important">
+                      <el-option v-for="item in shipNames" :key="item.shipId" :label="item.shipName" :value="item"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="船舶登记号：" prop="shipLicenses">
+                    <el-input maxlength="20" v-model="formData.shipLicenses" style="width:380px"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="联系电话：" prop="shipownerPhone">
+                    <el-input maxlength="20" v-model="formData.shipownerPhone" style="width:380px"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="家庭地址：" prop="shipownerAddr">
+                    <el-input maxlength="20" v-model="formData.shipownerAddr" style="width:380px"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-main>
+          </el-container>
+        </el-container>
+        <el-container>
+          <el-aside class="sidea">
+            <div class="tex">甲方（雇主）</div>
+          </el-aside>
+          <el-container>
+            <el-header class="head"></el-header>
+            <el-main class="mai">
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="姓名：" prop="employerName">
+                    <el-input maxlength="6" v-model="formData.employerName" style="width:380px"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="身份证号：" prop="employerIdcard">
+                    <el-input maxlength="20" v-model="formData.employerIdcard" style="width:380px"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="签约人身份性质：" prop="employerProp">
+                    <el-radio-group v-model="formData.employerProp" @change="employerPropChange">
+                      <el-radio :label="1">船舶持证人</el-radio>
+                      <el-radio :label="2">船舶承租人</el-radio> 
+                      <el-radio :label="3">船长或授权代理人</el-radio> 
+                    </el-radio-group>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="船名及船舶登记号：">
+                    <div>
+                      <div v-if="formData.shipName && !(formData.shipName instanceof Object)" style="font-size:10px">船名：{{formData.shipName}}</div>
+                      <div v-if="formData.shipName.shipName" style="font-size:10px">船名：{{formData.shipName.shipName}}</div>
+                      <div v-if="!formData.shipName && !formData.shipName.shipName" style="font-size:10px">船名：</div>
+                      <div style="font-size:10px">船舶登记号：{{formData.shipLicenses}}</div>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="联系电话：" prop="employerPhone">
+                    <el-input maxlength="20" v-model="formData.employerPhone" style="width:380px">></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="船舶是否共有：" prop="shipJoint">
+                    <el-radio-group v-model="formData.shipJoint">
+                      <el-radio :label="1">是，<el-input v-model="formData.shipJointYes" placeholder="人数（数字）" size="mini" style="width:100px"></el-input>共有（权证附后）</el-radio>
+                      <el-radio :label="0">否，{{formData.employerName}} 独有</el-radio> 
+                    </el-radio-group>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">  
+                  <el-form-item label="地址：" prop="employerAddr">
+                    <el-input maxlength="20" v-model="formData.employerAddr" style="width:380px">></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-main>
+          </el-container>
+        </el-container>
+        <el-container>
+          <el-aside class="sideb">
+            <div class="tex">乙方（雇员）</div>
+          </el-aside>
+          <el-container>
+            <el-header class="head"></el-header>
+            <el-main class="mai">
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="姓名：" prop="employeeName">
+                    <el-input maxlength="6" v-model="formData.employeeName" style="width:380px"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="身份证号：" prop="employeeIdcard">
+                    <!-- <el-input maxlength="20" v-model="formData.employeeIdcard"></el-input> -->
+                    <el-select v-model="formData.employeeIdcard"
+                              placeholder="请选择"
+                              filterable
+                              remote
+                              maxlength="20"
+                              :loading="loading"
+                              allow-create
+                              clearable
+                              @change="idcardChange"
+                              :remote-method="getidcardList" style="width:380px!important">
+                      <el-option v-for="item in idcards" :key="item.id" :label="item.idcard" :value="item"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="联系电话：" prop="employeePhone">
+                    <el-input maxlength="6" v-model="formData.employeePhone" style="width:380px"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="现有资格证书：" prop="employeePosition">
+                    <iep-dict-select v-model="formData.employeePosition" dict-name="tyb_resume_position" style="width:380px!important" ></iep-dict-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="地址：" prop="employeeAddr">
+                    <el-input maxlength="20" v-model="formData.employeeAddr" style="width:380px"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="紧急联系人及电话：">
+                    <div>
+                      <!-- <div style="font-size:10px">紧急联系人：{{formData.employeeName}}</div>
+                      <div style="font-size:10px">联系电话：{{formData.employeePhone}}</div> -->
+                      <el-col>
+                        <el-form-item label="紧急联系人：">
+                          <el-input maxlength="6" v-model="formData.employeeName" style="width:150px" size="mini"></el-input>
+                        </el-form-item>
+                      </el-col>
+                      <el-col>
+                        <el-form-item label="联系电话：">
+                          <el-input maxlength="20" v-model="formData.employeePhone" style="width:150px" size="mini"></el-input>
+                        </el-form-item>
+                      </el-col>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="有无晕船或身体缺陷：" prop="employeeIsSick">
+                    <el-col>
+                      <el-radio-group v-model="formData.employeeIsSick">
+                        <el-radio :label="1">有，<el-input v-model="formData.employeeIsSickYes" size="mini" style="width:150px"></el-input></el-radio>
+                        <el-radio :label="0">无。</el-radio> 
+                      </el-radio-group>
+                    </el-col>
+                    <el-col>
+                      <div>（不适宜从事航海的疾病）</div>
+                    </el-col>
+                  </el-form-item>
+                </el-col>  
+                <el-col :span="12">
+                  <el-form-item label="有无航海经验：" prop="employeeIsExp">
+                    <el-radio-group v-model="formData.employeeIsExp">
+                      <el-radio :label="1">有，<iep-dict-select v-model="formData.employeeIsExpYes" dict-name="tyb_resume_seniority" style="width:150px!important"></iep-dict-select></el-radio>
+                      <el-radio :label="0">无。</el-radio> 
+                    </el-radio-group>
+                  </el-form-item>
+                </el-col>    
+              </el-row>
+              <el-row>
                 <el-row>
-                  <el-col :span="12">
-                    <el-form-item label="户名：" prop="employeePayBankAccount">
-                      <el-input maxlength="20" v-model="formData.employeePayBankAccount"></el-input>
+                  <el-form-item label="工资账户：" prop="employeePayType">
+                    <el-radio-group v-model="formData.employeePayType">
+                      <el-radio :label="1">现金</el-radio>
+                      <el-radio :label="2">银行转账</el-radio>
+                      <el-radio :label="3">微信</el-radio> 
+                      <el-radio :label="4">支付宝</el-radio> 
+                    </el-radio-group>
+                  </el-form-item>
+                  <div v-show="formData.employeePayType == 2">
+                    <el-row>
+                      <el-col :span="6">
+                        <el-form-item label="户名：" prop="employeePayBankAccount">
+                          <el-input maxlength="20" v-model="formData.employeePayBankAccount" style="width:200px"></el-input>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="6">
+                        <el-form-item label="账号：" prop="employeePayAccount">  
+                          <el-input maxlength="20" v-model="formData.employeePayAccount" style="width:200px"></el-input>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="6">
+                        <el-form-item label="开户行：" prop="employeePayBank">  
+                          <el-input maxlength="20" v-model="formData.employeePayBank" style="width:200px"></el-input>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>            
+                  </div>
+                  <div v-show="formData.employeePayType == 3">
+                    <el-form-item label="微信账号：" prop="employeePayAccount">  
+                      <el-input maxlength="20" v-model="formData.employeePayAccount" style="width:200px"></el-input>
                     </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
-                    <el-form-item label="账号：" prop="employeePayAccount">  
-                      <el-input maxlength="20" v-model="formData.employeePayAccount"></el-input>
+                  </div>
+                  <div v-show="formData.employeePayType == 4">
+                    <el-form-item label="支付宝实名账号：" prop="employeePayAccount">  
+                      <el-input maxlength="20" v-model="formData.employeePayAccount" style="width:200px"></el-input>
                     </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
-                    <el-form-item label="开户行：" prop="employeePayBank">  
-                      <el-input maxlength="20" v-model="formData.employeePayBank"></el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row>            
-              </div>
-              <div v-show="formData.employeePayType == 3">
-                <el-form-item label="微信账号：" prop="employeePayAccount">  
-                  <el-input maxlength="20" v-model="formData.employeePayAccount" style="width:200px"></el-input>
+                  </div>
+                </el-row>
+              </el-row>
+            </el-main>
+          </el-container>
+        </el-container>
+        <el-container>
+          <el-aside class="sidec">
+            <div class="tex">岗位及试用</div>
+          </el-aside>
+          <el-container>
+            <el-header class="head"></el-header>
+            <el-main class="mai">
+              <el-row>
+                <el-col :span="4">
+                  <el-form-item label="在" style="width: 150px!important" prop="workMode">
+                    <iep-dict-select v-model="formData.workMode" dict-name="tyb_resume_worktype" style="width: 100px!important"></iep-dict-select>
+                  </el-form-item >
+                </el-col>
+                <el-col :span="4">
+                  <el-form-item label="船担任" style="width: 150px!important" prop="workPosition">
+                    <iep-dict-select v-model="formData.workPosition" dict-name="tyb_resume_seniority" style="width: 100px!important"></iep-dict-select>
+                  </el-form-item >
+                </el-col>
+                <el-col :span="4">
+                  <el-form-item label="一职, 特长" prop="workSkill">  
+                    <el-input maxlength="4" v-model="formData.workSkill" style="width:100px"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="。试用期" prop="workProbationTypeValue"> 
+                    <el-col :span="6">
+                      <el-input type="number" min="0" v-model="formData.workProbationTypeValue" style="width:60px"></el-input>
+                    </el-col> 
+                    <el-col :span="12">
+                      <el-radio-group v-model="formData.workProbationType" style="margin-left: 15px; margin-right: auto;width:300px">
+                        <el-radio :label="1">天</el-radio>
+                        <el-radio :label="2">月</el-radio>
+                        <el-radio :label="3">航次</el-radio> 
+                      </el-radio-group>
+                    </el-col> 
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-main>
+          </el-container>
+        </el-container>
+        <el-container>
+          <el-aside class="sided">
+            <div class="tex">合同期限、工资标准及支付方式</div>
+          </el-aside>
+          <el-container>
+            <el-header class="head"></el-header>
+            <el-main class="mai">
+              <el-row>
+                <el-col :span="10">
+                  <el-form-item label="按渔业生产周期：" prop="period">
+                    <el-date-picker v-model="period" type="daterange" range-separator="至"
+                      tart-placeholder="开始" end-placeholder="结束"  value-format="yyyy-MM-dd" style="margin-top: 15px!important"></el-date-picker>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                  <el-form-item label="薪水类型：" prop="paySalaryType">
+                    <el-radio-group v-model="formData.paySalaryType">
+                      <el-radio :label="1">日薪</el-radio>
+                      <el-radio :label="2">月薪</el-radio>
+                      <el-radio :label="3">年薪</el-radio> 
+                    </el-radio-group>
+                    <el-input maxlength="10" v-model="formData.paySalaryTypeValue" size="mini" style="width:70px; margin:10px"></el-input><span>元</span>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-form-item label="支付方式：" prop="payType">
+                  <el-radio-group v-model="formData.payType" style="width:800px;margin-top: 20px!important">
+                    <el-row>
+                      <el-col :span="4"  style="margin-top: 10px!important">
+                        <el-radio :label="1">定期支付</el-radio>
+                      </el-col>
+                      <el-col :span="10">
+                        <el-form-item label="工资产生后次月" prop="payTypeValue">  
+                          <el-input :disabled="formData.payType === 2 || formData.payType === 3" maxlength="4" v-model="formData.payTypeValue" style="width:50px" size="mini"></el-input>日前支付
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span="4"  style="margin-top: 10px!important">
+                        <el-radio :label="2">一次性支付</el-radio>
+                      </el-col>
+                      <el-col :span="10">
+                        <el-form-item label="期限结束、航次结束后的" prop="payTypeValue" class="a">  
+                          <el-input :disabled="formData.payType === 1 || formData.payType === 3" maxlength="4" v-model="formData.payTypeValue" style="width:50px" size="mini"></el-input>日内支付
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-radio :label="3">不定期支付</el-radio>
+                    </el-row> 
+                  </el-radio-group>
                 </el-form-item>
-              </div>
-              <div v-show="formData.employeePayType == 4">
-                <el-form-item label="支付宝实名账号：" prop="employeePayAccount">  
-                  <el-input maxlength="20" v-model="formData.employeePayAccount" style="width:200px"></el-input>
-                </el-form-item>
-              </div>
-            </el-row>
-          </el-row>
-        </el-form-item>
-        <el-form-item label="岗位及试用">
-          <el-row>
-            <el-col :span="12">
-              <el-col :span="12">
-                <el-form-item label="在" style="width: 150px!important" prop="workMode">
-                  <iep-dict-select v-model="formData.workMode" dict-name="tyb_resume_worktype" style="width: 150px!important"></iep-dict-select>
-                </el-form-item >
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="船担任" style="width: 150px!important" prop="workPosition">
-                  <iep-dict-select v-model="formData.workPosition" dict-name="tyb_resume_seniority" style="width: 150px!important"></iep-dict-select>
-                </el-form-item >
-              </el-col>
-            </el-col>
-            <el-col>
-              <el-form-item label="特长" prop="workSkill">  
-                <el-input maxlength="4" v-model="formData.workSkill" style="width:150px"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col>
-              <el-form-item label="试用期" prop="workProbationTypeValue">  
-                <el-input type="number" min="0" v-model="formData.workProbationTypeValue" style="width:150px"></el-input>
-                <el-radio-group v-model="formData.workProbationType" style="margin:15px">
-                  <el-radio :label="1">天</el-radio>
-                  <el-radio :label="2">月</el-radio>
-                  <el-radio :label="3">航次</el-radio> 
-                </el-radio-group>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form-item>
-        <el-form-item label="合同期限、工资标准及支付方式">
-          <el-row>
-            <el-col :span="16">
-              <el-form-item label="按渔业生产周期：" prop="period">
-                <el-date-picker v-model="period" type="daterange" range-separator="至"
-                  tart-placeholder="开始" end-placeholder="结束"  value-format="yyyy-MM-dd"></el-date-picker>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col>
-              <el-form-item label="薪水类型：" prop="paySalaryType">
-                <el-radio-group v-model="formData.paySalaryType">
-                  <el-radio :label="1">日薪</el-radio>
-                  <el-radio :label="2">月薪</el-radio>
-                  <el-radio :label="3">年薪</el-radio> 
-                </el-radio-group>
-                <el-input maxlength="10" v-model="formData.paySalaryTypeValue" size="mini" style="width:70px; margin:10px"></el-input><span>元</span>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-form-item label="支付方式：" prop="payType">
-              <el-radio-group v-model="formData.payType">
-                <el-radio :label="1">定期支付</el-radio>
-                <el-radio :label="2">一次性支付</el-radio>
-                <el-radio :label="3">不定期支付</el-radio> 
-              </el-radio-group>
-            </el-form-item>
-            <div v-show="formData.payType == 1">
-              <el-form-item label="工资产生后次月" prop="payTypeValue">  
-                <el-input maxlength="4" v-model="formData.payTypeValue" style="width:50px" size="mini"></el-input>日前支付
-              </el-form-item>
-            </div>
-            <div v-show="formData.payType == 2">
-              <el-form-item label="期限结束、航次结束后的" prop="payTypeValue">  
-                <el-input maxlength="4" v-model="formData.payTypeValue" style="width:50px" size="mini"></el-input>日内支付
-              </el-form-item>
-            </div>
-          </el-row>
-        </el-form-item>
-        <el-form-item label="其他约定">
-          <el-row>
-            <el-col>
-              <span style="margin:40px">本部分选填，可约定：1.其他未尽事宜；2.排除、变更适用背部条款。本处约定与<span style="color:red">其他部分冲突者，以本处约定为准</span></span>
-            </el-col>
-            <el-col>
-              <el-input type="textarea" placeholder="请输入内容" v-model="formData.otherContent" show-word-limit style="width:720px;margin:10px 0 0 40px"></el-input>
-            </el-col>
-          </el-row>
-        </el-form-item>
-        <el-form-item label="补充">
-          <el-row>
-            <el-col>
-              <el-form-item label="甲方如违约，支付" prop="employerBreakValue">  
-                <el-input maxlength="4" v-model="formData.employerBreakValue" style="width:50px" size="mini"></el-input>日工资。
-              </el-form-item>
-            </el-col>
-            <el-col>
-              <el-form-item label="乙方如违约，支付" prop="employeeBreakValue">  
-                <el-input maxlength="4" v-model="formData.employeeBreakValue" style="width:50px" size="mini"></el-input>日工资。
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form-item>
-        <el-row>
-          <el-col>
-            <el-form-item label="渔船所有权登记证书上传：" prop="licensesOwnerShipImage">
+              </el-row>
+            </el-main>
+          </el-container>
+        </el-container>
+        <el-container>
+          <el-aside class="sidee">
+            <div class="tex">其他约定</div>
+          </el-aside>
+          <el-container>
+            <el-header class="head"></el-header>
+            <el-main class="mai">
+              <el-row>
+                <el-col>
+                  <span style="margin:40px">本部分选填，可约定：1.其他未尽事宜；2.排除、变更适用背部条款。本处约定与<span style="color:red">其他部分冲突者，以本处约定为准</span></span>
+                </el-col>
+                <el-col>
+                  <el-input type="textarea" placeholder="请输入内容" v-model="formData.otherContent" show-word-limit style="width:720px;margin:10px 0 0 40px"></el-input>
+                </el-col>
+              </el-row>
+            </el-main>
+          </el-container>
+        </el-container>
+        <el-container>
+          <el-aside class="sidef">
+            <div class="tex">补充</div>
+          </el-aside>
+          <el-container>
+            <el-header class="head"></el-header>
+            <el-main class="mai">
+              <el-row>
+                <el-col>
+                  <el-form-item label="甲方如违约，支付" prop="employerBreakValue">  
+                    <el-input maxlength="4" v-model="formData.employerBreakValue" style="width:50px" size="mini"></el-input>日工资。
+                  </el-form-item>
+                </el-col>
+                <el-col>
+                  <el-form-item label="乙方如违约，支付" prop="employeeBreakValue">  
+                    <el-input maxlength="4" v-model="formData.employeeBreakValue" style="width:50px" size="mini"></el-input>日工资。
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-main>
+          </el-container>
+        </el-container>
+        <el-container>
+          <el-aside class="sidef">
+            <div class="tex">渔船所有权登记证书上传</div>
+          </el-aside>
+          <el-container>
+            <el-header class="head"></el-header>
+            <el-main class="mai">
               <el-upload
                 action="/api/admin/file/upload/avatar"
                 list-type="picture-card"
-                :on-preview="handlePictureCardPreview"
+                :on-preview="handleLicensesCardPreview"
                 :limit="1"
-                :on-success="handleLicensesSuccessFront" :headers="headers"  accept="image/*">
-                <img v-if="dialogVisible" :src="this.formData.licensesOwnerShipImage" style="width:148px;height:148px">
+                :on-remove="handleLicensesRemove"
+                :on-success="handleLicensesSuccessFront" :headers="headers"  accept="image/*" style="margin-left:30px!important">
+                <img v-if="isLicenses" :src="licensesImage" style="width:148px;height:148px">
                 <i v-else class="el-icon-plus"></i>
               </el-upload>
-            </el-form-item>
-           </el-col>
-        </el-row>
-        <!-- <el-row>
-          <el-col>
-            <el-form-item label="纸质合同照片（多张）：" prop="contractImage">
+            </el-main>
+          </el-container>
+        </el-container>
+        <el-container>
+          <el-aside class="sidef">
+            <div class="tex">纸质合同照片（多张）</div>
+          </el-aside>
+          <el-container>
+            <el-header class="head"></el-header>
+            <el-main class="mai">
+              <div v-if="isContract">
+                <img v-for="(item, index) in contractImageList" :key="index" :src="item" style="width:148px;height:148px;margin-left:30px!important;float:left">
+              </div>
               <el-upload
                 action="/api/admin/file/upload/avatar"
                 list-type="picture-card"
-                :on-preview="handlePictureCardPreview"
+                :on-preview="handleContractCardPreview"
                 :limit="4"
-                :on-success="handleContractSuccessFront" :headers="headers"  accept="image/*">
+                :headers="headers"  accept="image/*" style="margin-left:30px!important;float:left"
+                v-if="!isContract"
+                >
                 <i class="el-icon-plus"></i>
               </el-upload>
-            </el-form-item>
-          </el-col>
-        </el-row> -->
+            </el-main>
+          </el-container>
+        </el-container>
       </el-form>
       <div style="text-align: center;padding: 20px 0;">                   
         <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add' || type === 'edit'" type="primary" @click="handleSubmit">保存</iep-button>
@@ -416,8 +511,11 @@ export default {
         employeeBreakValue: '',
         licensesOwnerShipImage: '',
         contractImage:'',
+        contractImages: [],
       },
       period: [],
+      licensesImage: '',
+      contractImageList: [],
       rules: {
         shipownerName: [{ 
           required: true, message: '请输入持证人姓名', trigger: 'blur',
@@ -474,7 +572,8 @@ export default {
       headers: {
         Authorization: 'Bearer ' + store.getters.access_token,
       },
-      dialogVisible: false,
+      isLicenses: false,
+      isContract: false,
     }
   },
   created () {
@@ -497,12 +596,20 @@ export default {
     getList () {
       getContractDetail (this.record).then(data =>{
         this.formData = data.data.data
+        console.log(this.formData)
         if (this.formData.workDateStart && this.formData.workDateEnd) {
           this.period.push(this.formData.workDateStart)
           this.period.push(this.formData.workDateEnd)
         }
         if (this.formData.licensesOwnerShipImage) {
-          this.dialogVisible = true
+          this.licensesImage = this.formData.licensesOwnerShipImage
+          this.isLicenses = true
+        }
+        if (this.formData.contractImages) {
+          this.contractImageList = this.formData.contractImages
+          this.isContract = true
+        } else {
+          this.isContract = false
         }
       })
     },
@@ -601,14 +708,26 @@ export default {
       this.loading = false
     },
     handleLicensesSuccessFront (response) {
-      this.formData.licensesOwnerShipImage = response.data.url
+      this.licensesImage = ''
+      this.licensesImage = response.data.url
+      this.isLicenses = false
     },
     handleContractSuccessFront (response) {
-      this.formData.contractImage = response.data.url
+      this.contractImageList.push(response.data.url)
     },
-    handlePictureCardPreview (file) {
+    handleLicensesCardPreview (file) {
       this.formData.licensesOwnerShipImage = file.url
-      this.dialogVisible = true
+    },
+    handleContractCardPreview (file) {
+      this.formData.contractImages = file.url
+    },
+    handleLicensesRemove () {
+      this.licensesImage = ''
+      this.formData.licensesOwnerShipImage = ''
+    },
+    handleContractRemove (file, fileList) {
+      console.log(222)
+      console.log(file, fileList)
     },
     handleSubmit () {
       if (this.period) {
@@ -622,7 +741,12 @@ export default {
       if (this.formData.employeeIdcard.idcard) {
         this.formData.employeeIdcard = this.formData.employeeIdcard.idcard
       }
-      console.log(this.formData)
+      if (this.contractImageList) {
+        this.formData.contractImages = this.contractImageList
+      }
+      if (this.licensesImage) {
+        this.formData.licensesOwnerShipImage = this.licensesImage
+      }
       this.$refs['form'].validate(valid => {
         if (valid) {
           if (this.type === 'add') {
@@ -631,7 +755,6 @@ export default {
               this.$emit('onGoBack')
             }).catch(() => {
               this.$message.error('新增失败！')
-              this.$emit('onGoBack')
             })
           } else if (this.type === 'edit') {
             updateContract(this.formData).then(() =>{
@@ -639,7 +762,6 @@ export default {
               this.$emit('onGoBack')
             }).catch(() => {
               this.$message.error('修改失败！')
-              this.$emit('onGoBack')
             })
           }      
         }
@@ -653,5 +775,58 @@ export default {
   .w-200 {
     width: 200px;
     margin: 0 20px;
+  }
+</style>
+
+<style lang="scss">
+  .a {
+      label {
+        width: 180px!important;
+      } 
+    }
+</style> 
+
+<style>
+  .side {
+    width: 120px!important;
+    height: 200px!important;
+  }
+  .sidea {
+    width: 120px!important;
+    height: 280px!important;
+  }
+  .sideb {
+    width: 120px!important;
+    height: 500px!important;
+  }
+  .sidec {
+    width: 120px!important;
+    height: 100px!important;
+  }
+  .sided {
+    width: 120px!important;
+    height: 300px!important;
+  }
+  .sidee {
+    width: 120px!important;
+    height: 150px!important;
+  }
+  .sidef {
+    width: 120px!important;
+    height: 200px!important;
+  }
+  .sideg {
+    width: 120px!important;
+    height: 600px!important;
+  }
+  .head {
+    height: 30px!important;
+  }
+  .mai {
+    flex-basis: 0!important;
+  }
+  .tex {
+    font-size: 16px;
+    text-align: center;
   }
 </style>
