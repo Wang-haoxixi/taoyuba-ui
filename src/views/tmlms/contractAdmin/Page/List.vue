@@ -45,16 +45,18 @@
       <avue-tree-table :option="options" style="margin-top: 20px;">
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <!-- <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">查看
-            </el-button> -->
-             <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">合同查看                          
+             <el-button v-if="mlms_contract_view" type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">合同查看                          
             </el-button>
-            <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.contractId)">编辑
+            <el-button v-if="mlms_contract_edit"  type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.contractId)">编辑
             </el-button>
-            <el-button type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.contractId)">删除
+            <el-button v-if="mlms_contract_del" type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.contractId)">删除
             </el-button>
-            <!-- <el-button type="text" icon="el-icon-delete" size="mini" @click="handlePrint(scope.row.contractId)">打印
-            </el-button> -->
+            <el-button v-if="mlms_contract_rev" type="text" icon="el-icon-edit" size="mini" @click="handleReview(scope.row.contractId)">审核
+            </el-button>
+            <el-button v-if="mlms_contract_pri" type="text" icon="el-icon-delete" size="mini" @click="handlePrint(scope.row.contractId)">打印
+            </el-button>
+            <el-button v-if="mlms_contract_rel" type="text" icon="el-icon-edit" size="mini" @click="handleRelieve(scope.row.contractId)">解除
+            </el-button>
           </template>
         </el-table-column>
       </avue-tree-table>
@@ -66,7 +68,7 @@
 </template>
 
 <script>
-import { getContractList, deleteContract, getContract, getDict } from '@/api/tmlms/newContract'
+import { getContractList, deleteContract, getContract, getDict, reviewContract, cancelContract, getContractDetail } from '@/api/tmlms/newContract'
 import { getUserInfo } from '@/api/login'
 import { mapGetters } from 'vuex'
 import contractPrint from '../../contract/Page/ContractPrint.vue'
@@ -95,6 +97,9 @@ export default {
       mlms_contract_view: false,
       mlms_contract_edit: false,
       mlms_contract_del: false,
+      mlms_contract_rev: false,
+      mlms_contract_pri: false,
+      mlms_contract_rel: false,
       shipAttrDict: [],
       employeePayTypeDict: [],
       periodTypeDict: [],
@@ -129,6 +134,7 @@ export default {
           value: '合同过期',
         },
       ],
+      contStatus: '',
     }
   },
   created () {
@@ -138,6 +144,9 @@ export default {
     this.mlms_contract_view = this.permissions['mlms_contract_view']
     this.mlms_contract_edit = this.permissions['mlms_contract_edit']
     this.mlms_contract_del = this.permissions['mlms_contract_del']
+    this.mlms_contract_rev = this.permissions['mlms_contract_rev']
+    this.mlms_contract_pri = this.permissions['mlms_contract_pri']
+    this.mlms_contract_rel = this.permissions['mlms_contract_rel']
   },
   computed: {
     ...mapGetters([
@@ -284,6 +293,30 @@ export default {
       }, (error) => {
         this.$message.error(error.message)
       })
+    },
+    handleReview (contractId) {
+      let revStatus = 1
+      reviewContract({contractId: contractId, status: revStatus}).then(() =>{
+        this.$message.success('审核成功')
+        this.getContractList()
+      }).catch(() => {
+        this.$message.console.error('审核失败！')
+      })
+    },
+    async  handleRelieve (contractId) {
+      this.contStatus = await getContractDetail(contractId).then(res => {
+        return res.data.data.status
+      })
+      if (this.contStatus === 1) {
+        cancelContract({contractId: contractId}).then(() => {
+          this.$message.success('解除成功！')
+          this.getContractList()
+        }).catch(() => {
+          this.$message.error('解除失败！')
+        })
+      } else {
+        this.$message.error('合同状态不正确，需要管理员审核！')
+      }
     },
     handlePrint (contractId) {
       getContract(contractId).then(({data}) => {

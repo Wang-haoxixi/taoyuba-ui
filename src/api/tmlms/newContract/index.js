@@ -52,3 +52,19 @@ export function getContractDetail (id) {
       method: 'get',
     })
 }
+
+export function reviewContract (params) {
+    return request({
+        url: `${prefixUrl}/review`,
+        method: 'post',
+        params: params,
+    })
+}
+
+export function cancelContract (contractId) {
+    return request({
+        url: `${prefixUrl}/cancel`,
+        method: 'post',
+        params: contractId,
+    })
+}
