@@ -684,14 +684,16 @@ export default {
     },
     refreshCard (card) {
       if(card !== null) {
-        let { realName = '', phone = '', address = '' } = card
+        let { realName = '', phone = '', address = '', positionId = '' } = card
         this.formData.employeeName = realName
         this.formData.employeePhone = phone
-        this.formData.employeeAddr = address 
+        this.formData.employeeAddr = address
+        this.formData.employeePosition = positionId
       } else {
         this.formData.employeeName = ''
         this.formData.employeePhone = ''
         this.formData.employeeAddr = '' 
+        this.formData.employeePosition = ''
       }
     },
     getidcardList (number) {

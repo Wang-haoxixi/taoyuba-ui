@@ -82,6 +82,7 @@ export default {
     },
     async loadPage (param = this.searchForm) {
       param.shipNo = this.$route.params.shipNo
+      param.status = 1
       let data = await this.loadTable(param, getContractList)
       this.pagedTable = data.records
     },

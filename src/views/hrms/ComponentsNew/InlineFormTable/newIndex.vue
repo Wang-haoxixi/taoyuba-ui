@@ -175,6 +175,7 @@ export default {
     handleSelect () {
       this.data[this.data.length-1].mobile = this.shipList.mobile
       this.data[this.data.length-1].shipowner = this.shipList.shipowner
+      this.restaurants = []
     },
   },
   watch: {

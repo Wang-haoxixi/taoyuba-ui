@@ -54,6 +54,7 @@
             prop="status"  
             label="是否审核"
             width="100"
+            v-if="mangner"
           >
           <template slot-scope="scope">
             <div>
@@ -158,7 +159,8 @@ export default {
           value: '合同过期',
         },
       ],
-      contStatus: '',      
+      contStatus: '',
+      mangner: false,    
     }
   },
   created () {
@@ -171,6 +173,13 @@ export default {
     this.mlms_contract_rev = this.permissions['mlms_contract_rev']
     this.mlms_contract_pri = this.permissions['mlms_contract_pri']
     this.mlms_contract_rel = this.permissions['mlms_contract_rel']
+    getUserInfo().then(res => {
+      if (res.data.data.roles.indexOf(111) !== -1) {
+        this.mangner = true
+      } else {
+        this.mangner = false
+      }
+    })
   },
   computed: {
     ...mapGetters([
@@ -318,8 +327,19 @@ export default {
     handleDel (contractId) {
       deleteContract(contractId).then((data) => {
         if (data.data.code === 0) {
-          this.$message.success('删除成功！')
-          this.getContractList()
+          this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+          }).then(() => {
+            this.$message.success('删除成功！')
+            this.getContractList()
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除',
+            })
+          }) 
         }
       }, (error) => {
         this.$message.error(error.message)

@@ -6,15 +6,23 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="姓名:" prop="realName">
-                <el-input v-model="shipowner.realName" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.realName"></el-input>
+                <!-- <el-input v-model="shipowner.realName" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.realName"></el-input> -->
+                <el-select v-model="shipowner.realName" v-if="!$route.query.see" placeholder="请选择渔船名" @change="realNameChange">
+                  <el-option
+                    v-for="item in realNameList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
                 <div v-else>{{ shipowner.realName }}</div>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="身份证号:" prop="idcard">
-                <!-- <el-input v-model="shipowner.idcard" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.idcard"></el-input>
-                <div v-else>{{ shipowner.idcard }}</div> -->
-                <el-select v-if="!$route.query.see" :disabled="haveInfo.idcard" v-model="shipowner.idcard"
+                <el-input v-model="shipowner.idcard" placeholder="" v-if="!$route.query.see" :disabled="haveInfo.idcard"></el-input>
+                <div v-else>{{ shipowner.idcard }}</div>
+                <!-- <el-select v-if="!$route.query.see" :disabled="haveInfo.idcard" v-model="shipowner.idcard"
                            placeholder="请选择"
                            filterable
                            remote
@@ -26,7 +34,7 @@
                            :remote-method="getidcardList">
                   <el-option v-for="item in idcards" :key="item.id" :label="item.idcard + '(手机号：' + item.phone + ')'" :value="item"></el-option>
                 </el-select>
-                <div v-else>{{ shipowner.idcard }}</div>
+                <div v-else>{{ shipowner.idcard }}</div> -->
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -59,10 +67,11 @@
 <script>
 // import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable/'
 import { getArea } from '@/api/post/address.js'
-import { saveShipowner, getShipownerDetail, getAllArea, editShipowner, getAllAreaName, getIdcardCheck } from '@/api/tmlms/shipowner'
+import { saveShipowner, editShipowner, getIdcardCheck, getShipownerByidcard } from '@/api/tmlms/shipowner'
 // import { addUserRole } from '@/api/admin/user'
 import { getUserInfo } from '@/api/login'
 import { getLastData } from '@/api/hrms/databuspayload'
+import { getVillageshipinfoByuser, getVillageshipinfoByName } from '@/api/tmlms/bvillage/villageship'
 import Vue from 'vue'
 import information from '@/mixins/information'
 import VueSocketio from 'vue-socket.io'
@@ -167,64 +176,94 @@ export default {
       loading: false,
       isReadonly: false,
       // isCheck: false,
+      realNameList: [],
     }
   },
   // components: { InlineFormTable },
   methods: {
     // 提交表单
+    // save () {
+    //   this.$refs['form'].validate((valid) => {
+    //      if (valid) {
+    //         let shipowner = JSON.parse(JSON.stringify(this.shipowner))
+    //         if(shipowner.shiplist) {
+    //           shipowner.shiplist.forEach(item=>{
+    //            item.certFile = item.annex
+    //           })
+    //         }
+    //         let type = 3
+    //         getIdcardCheck(shipowner.idcard).then(res => {
+    //           let uid = res.data.data.userId
+    //           if(res.data.data !== true) {
+    //               let data = JSON.parse(JSON.stringify(shipowner))
+    //               if (data.villageId) {
+    //                 data.villageId = data.villageId[data.villageId.length-1]
+    //               }
+    //               if (!data.userId) {
+    //                 data.userId = uid
+    //               }
+    //               // 用户调用这个界面的时候 需要传入ID
+    //               editShipowner(data,type).then(res=>{
+    //                   this.$message({
+    //                     message: res.data.msg,
+    //                     type: 'success',
+    //                   })
+    //                   this.$router.go(-1) 
+    //               }).catch(err=>{
+    //                 this.$message.error(err.message)
+    //               })
+    //           } else {      
+    //             let data = JSON.parse(JSON.stringify(shipowner))
+    //             if (data.villageId) {
+    //               data.villageId = data.villageId[data.villageId.length-1]
+    //             }
+    //             // console.log(uid)
+    //             // if (!data.userId) {
+    //             //   console.log('1111')
+    //             // }
+    //             // 用户调用这个界面的时候 需要传入ID
+    //             saveShipowner(data,type).then(res=>{
+    //                 this.$message({
+    //                   message: res.data.msg,
+    //                   type: 'success',
+    //                 })
+    //                 this.$router.go(-1) 
+    //             }).catch(err=>{
+    //               this.$message.error(err.message)
+    //             }) 
+    //           }
+    //         })
+    //       } else {
+    //       return false
+    //     }
+    //   })
+    // },
     save () {
       this.$refs['form'].validate((valid) => {
-         if (valid) {
-            let shipowner = JSON.parse(JSON.stringify(this.shipowner))
-            if(shipowner.shiplist) {
-              shipowner.shiplist.forEach(item=>{
-               item.certFile = item.annex
+        if (valid) {
+          let shipowner = JSON.parse(JSON.stringify(this.shipowner))
+          let type = 3 
+          if (this.$route.query.edit) {
+            editShipowner(shipowner,type).then(res=>{
+              this.$message({
+                message: res.data.msg,
+                type: 'success',
               })
-            }
-            let type = 3
-            getIdcardCheck(shipowner.idcard).then(res => {
-              let uid = res.data.data.userId
-              if(res.data.data !== true) {
-                  let data = JSON.parse(JSON.stringify(shipowner))
-                  if (data.villageId) {
-                    data.villageId = data.villageId[data.villageId.length-1]
-                  }
-                  if (!data.userId) {
-                    data.userId = uid
-                  }
-                  // 用户调用这个界面的时候 需要传入ID
-                  editShipowner(data,type).then(res=>{
-                      this.$message({
-                        message: res.data.msg,
-                        type: 'success',
-                      })
-                      this.$router.go(-1) 
-                  }).catch(err=>{
-                    this.$message.error(err.message)
-                  })
-              } else {      
-                let data = JSON.parse(JSON.stringify(shipowner))
-                if (data.villageId) {
-                  data.villageId = data.villageId[data.villageId.length-1]
-                }
-                // console.log(uid)
-                // if (!data.userId) {
-                //   console.log('1111')
-                // }
-                // 用户调用这个界面的时候 需要传入ID
-                saveShipowner(data,type).then(res=>{
-                    this.$message({
-                      message: res.data.msg,
-                      type: 'success',
-                    })
-                    this.$router.go(-1) 
-                }).catch(err=>{
-                  this.$message.error(err.message)
-                }) 
-              }
+                this.$router.go(-1) 
+            }).catch(err=>{
+              this.$message.error(err.message)
             })
           } else {
-          return false
+            saveShipowner(shipowner,type).then(res=>{
+              this.$message({
+                message: res.data.msg,
+                type: 'success',
+              })
+              this.$router.go(-1) 
+            }).catch(err=>{
+              this.$message.error(err.message)
+            }) 
+          }
         }
       })
     },
@@ -319,6 +358,24 @@ export default {
       }
       this.loading = false
     },
+    getrealNameList () {
+      getUserInfo().then(data => {
+        this.userId = data.data.data.sysUser.userId
+        getVillageshipinfoByuser(this.userId).then(data => {
+          this.realNameList = data.data.data.map(item => {
+            return {
+              label: item.shipowner,
+              value: item.shipowner,
+            }
+          })
+        })
+      })
+    },
+    realNameChange (val) {
+      getVillageshipinfoByName(val).then(data => {
+        this.shipowner.phone = data.data.data.mobile
+      })
+    },
   },
   computed: {
   },
@@ -335,28 +392,33 @@ export default {
       })
     }
     // 获取编辑数据
-    async function getAll () {
-      // 异步获取ID
-      let data = await getShipownerDetail(this.$route.query.edit || this.$route.query.see).then( res=>{
-        return res.data.data
-      })
-      // 拿到ID 同步获取地址和选中的地址
-      getAllArea(data.villageId).then( res=>{
-        this.options = res.data.data
-      })
-      getAllAreaName(data.villageId).then( res=>{
-        // 处理后端数据变成我要用的数据
-        if(this.$route.query.edit || this.$route.query.see){
-          this.getarr(res.data.data,this.arr)
-          data.villageId = this.arr
-          if(data.shiplist) {
-            data.shiplist.forEach((item,index)=>{
-              item.annex = item.certFile
-              item.id = index
-            })
-          }
-          this.shipowner = data
-        }
+    // async function getAll () {
+    //   // 异步获取ID
+    //   let data = await getShipownerDetail(this.$route.query.edit || this.$route.query.see).then( res=>{
+    //     return res.data.data
+    //   })
+    //   // 拿到ID 同步获取地址和选中的地址
+    //   getAllArea(data.villageId).then( res=>{
+    //     this.options = res.data.data
+    //   })
+    //   getAllAreaName(data.villageId).then( res=>{
+    //     // 处理后端数据变成我要用的数据
+    //     if(this.$route.query.edit || this.$route.query.see){
+    //       this.getarr(res.data.data,this.arr)
+    //       data.villageId = this.arr
+    //       if(data.shiplist) {
+    //         data.shiplist.forEach((item,index)=>{
+    //           item.annex = item.certFile
+    //           item.id = index
+    //         })
+    //       }
+    //       this.shipowner = data
+    //     }
+    //   })
+    // }
+    function getAll () {
+      getShipownerByidcard(this.$route.query.edit || this.$route.query.see).then(data => {
+        this.shipowner = data.data.data
       })
     }
     getUserInfo().then(res => {
@@ -367,6 +429,7 @@ export default {
       }
       res.data.data.sysUser.userId
     })
+    this.getrealNameList()
   },
   mounted () {
           //添加socket事件监听

@@ -32,3 +32,13 @@ export  function  getVillageshipinfoById (id) {
         method: 'get',
     })
 }
+
+export  function  getVillageshipinfoByName (shipowner) {                
+    return request({
+        url: `${prefixUrl}/getbyShipowner`,
+        method: 'get',
+        params: {
+          shipowner:shipowner,
+        },
+    })
+}
