@@ -26,19 +26,19 @@ const columnsMap = [
   
   const crewColumnsMap = [
     {
-      prop: 'realName',
+      prop: 'employeeName',
       label: '姓名',
     },
     {
-      prop: 'idcard',
+      prop: 'employeeIdcard',
       label: '身份证号码',
     },
     {
-      prop: 'phone',
+      prop: 'employeePhone',
       label: '联系电话',
     },
     {
-      prop: 'positionId',
+      prop: 'employeePosition',
       label: '职位',
       dictName: 'tyb_resume_position',
       type: 'dictGroup',

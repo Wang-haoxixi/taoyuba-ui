@@ -13,7 +13,7 @@
             <el-main class="mai">
               <el-row>
                 <el-col :span="12">
-                  <el-form-item label="持证人姓名：" prop="shipownerName" class="e">
+                  <el-form-item label="持证人姓名：" prop="shipownerName">
                     <el-input maxlength="6" v-model="formData.shipownerName" style="width:380px"></el-input>
                   </el-form-item>
                 </el-col>
@@ -348,7 +348,7 @@
                         <el-radio :label="2">一次性支付</el-radio>
                       </el-col>
                       <el-col :span="10">
-                        <el-form-item label="期限结束、航次结束后的" prop="payTypeValue" class="a">  
+                        <el-form-item label="期限结束、航次结束后的" prop="payTypeValue" class="spe">  
                           <el-input :disabled="formData.payType === 1 || formData.payType === 3" maxlength="4" v-model="formData.payTypeValue" style="width:50px" size="mini"></el-input>日内支付
                         </el-form-item>
                       </el-col>
@@ -389,12 +389,12 @@
             <el-main class="mai">
               <el-row>
                 <el-col>
-                  <el-form-item label="甲方如违约，支付" prop="employerBreakValue">  
+                  <el-form-item label="甲方如违约，支付" prop="employerBreakValue" class="spe">  
                     <el-input maxlength="4" v-model="formData.employerBreakValue" style="width:50px" size="mini"></el-input>日工资。
                   </el-form-item>
                 </el-col>
                 <el-col>
-                  <el-form-item label="乙方如违约，支付" prop="employeeBreakValue">  
+                  <el-form-item label="乙方如违约，支付" prop="employeeBreakValue" class="spe">  
                     <el-input maxlength="4" v-model="formData.employeeBreakValue" style="width:50px" size="mini"></el-input>日工资。
                   </el-form-item>
                 </el-col>
@@ -779,7 +779,7 @@ export default {
 </style>
 
 <style lang="scss">
-  .a {
+  .spe {
       label {
         width: 180px!important;
       } 

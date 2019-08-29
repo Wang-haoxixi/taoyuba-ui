@@ -4,7 +4,7 @@
       <page-header title="渔船经营人"></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button @click="handleAdd($route.params.shipId)" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+          <iep-button @click="handleAdd($route.params.shipNo)" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
         <template slot="right">
           <el-button @click="backPage">返回</el-button>
@@ -22,8 +22,8 @@
         <el-table-column prop="operation" label="操作" width="200">
           <template slot-scope="scope">
             <operation-wrapper>
-              <iep-button size="mini" plain @click="handleEdit(scope.row.id)">编辑</iep-button>
-              <iep-button size="mini" plain @click="handleView(scope.row.id)">查看</iep-button>
+              <iep-button size="mini" plain @click="handleEdit(scope.row.shipNo)">编辑</iep-button>
+              <iep-button size="mini" plain @click="handleView(scope.row.shipNo)">查看</iep-button>
               <iep-button size="mini" plain @click="handleDelete(scope.row.id)">删除</iep-button>    
             </operation-wrapper>
           </template>

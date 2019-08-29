@@ -68,7 +68,15 @@ export  function  findMyship (name) {
   })
 }
 
-
+export function getShipByShipNo (shipNo) {
+  return request({
+    url: `${prefixUrl}/searchByshipNo`,
+    method: 'get',
+    params: {
+      shipNo: shipNo,
+    },
+  })    
+} 
 
 
 

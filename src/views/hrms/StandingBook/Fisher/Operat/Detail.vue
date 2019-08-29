@@ -56,8 +56,8 @@
   </div>
 </template>
 <script>
-import { getShipDetail } from '@/api/ships/index'
-import { creatShipManager, getShipManagerInfo, updateShipManager } from '@/api/ships/shipoperat/index'
+import { getShipByShipNo } from '@/api/ships/index'
+import { creatShipManager, getShipManagerByShipNo, updateShipManager } from '@/api/ships/shipoperat/index'
 export default {
   data () {
     // 验证
@@ -113,17 +113,17 @@ export default {
   methods: {
     getShipInfo () {
       if (this.$route.query.add) {
-        getShipDetail (this.$route.query.add).then(res => {
+        getShipByShipNo (this.$route.query.add).then(res => {
           this.operator.shipName = res.data.data.shipName
           this.operator.shipNo = res.data.data.shipNo
           this.operator.shipLicenses =res.data.data.licensesOwnerShip
         })
       } else if (this.$route.query.edit) {
-        getShipManagerInfo (this.$route.query.edit).then(res => {
+        getShipManagerByShipNo (this.$route.query.edit).then(res => {
           this.operator = res.data.data
         })
       } else if (this.$route.query.see) {
-        getShipManagerInfo (this.$route.query.see).then(res => {
+        getShipManagerByShipNo (this.$route.query.see).then(res => {
           this.operator = res.data.data
         })
       } 

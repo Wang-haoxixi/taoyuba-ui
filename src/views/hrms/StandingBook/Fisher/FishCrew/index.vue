@@ -29,16 +29,16 @@
           <template slot-scope="scope">
             <operation-wrapper>
               <!-- <iep-button size="mini" plain @click="handleEdit(scope.row.idcard)">编辑</iep-button> -->
-              <iep-button size="mini" plain @click="handleDelete(scope.row.id)">删除</iep-button>
-              <iep-button size="mini" @click="handleView(scope.row.id)">查看</iep-button>
+              <!-- <iep-button size="mini" plain @click="handleDelete(scope.row.id)">删除</iep-button> -->
+              <iep-button size="mini" @click="handleView(scope.row.employeeIdcard)">查看</iep-button>
             </operation-wrapper>
           </template>
         </el-table-column>
         <el-table-column prop="particular" label="详情" width="140">
           <template slot-scope="scope">
             <operation-wrapper>
-              <iep-button size="mini" type="primary" @click="handleProtocol(scope.row.idcard)">协议</iep-button>
-              <iep-button size="mini" type="primary" @click="handleInsure(scope.row.idcard)">证书</iep-button>
+              <iep-button size="mini" type="primary" @click="handleProtocol(scope.row.contractId)">协议</iep-button>
+              <iep-button size="mini" type="primary" @click="handleInsure(scope.row.employeeIdcard)">证书</iep-button>
             </operation-wrapper>
           </template>
         </el-table-column>
@@ -47,7 +47,8 @@
   </div>
 </template>
 <script>
-import { getShipCrewList, delShipCrew } from '@/api/ships/shipcrew/index'
+// import { getShipCrewList, delShipCrew } from '@/api/ships/shipcrew/index'
+import { getContractList } from '@/api/tmlms/newContract'
 import mixins from '@/mixins/mixins'
 import { crewColumnsMap } from '../options'
 export default {
@@ -72,21 +73,22 @@ export default {
     // handleEdit (val) {
     //   this.$router.push({path: `/hrms_spa/shipCrew_Detial/${val}`,query:{ edit: val }})
     // },
-    handleDelete (row) {
-      this._handleGlobalDeleteById(row, delShipCrew)
-    },
+    // handleDelete (row) {
+    //   this._handleGlobalDeleteById(row, delShipCrew)
+    // },
     handleView (val) {
-      this.$router.push({path: `/hrms_spa/shipCrew_Detial/${val}`,query:{ see: val }})
+      // this.$router.push({path: `/hrms_spa/shipCrew_Detial/${val}`,query:{ see: val }})
+      this.$router.push({name: 'detailBoatMan',query:{ see: val }})
     },
-    async loadPage (param = this.searchForm) { 
-      param.shipId = this.$route.params.shipId
-      let data = await this.loadTable(param, getShipCrewList)
+    async loadPage (param = this.searchForm) {
+      param.shipNo = this.$route.params.shipNo
+      let data = await this.loadTable(param, getContractList)
       this.pagedTable = data.records
     },
-    handleProtocol () {
-    //   this.$router.push({       
-    //     path: `/hrms_spa/ship_insure/${id}`,
-    //   })
+    handleProtocol (contractId) {
+      let urlHeade = window.location.href.split('/')[0,2]        
+      let dataMap  = '%7B%7D'
+      this.$openPage(`//${urlHeade}/api/tmlms/downLoad/intoContractHtml?contractId=${contractId}&dataMap=${dataMap}`,'url') 
     },
     handleInsure (val) {
       this.$router.push({ path: `/hrms_spa/shipCrew_Insure/${val}` })

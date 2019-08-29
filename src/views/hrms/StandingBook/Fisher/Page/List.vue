@@ -33,7 +33,7 @@
           <template slot-scope="scope">
             <operation-wrapper>
               <iep-button size="mini" type="primary" @click="handleIntoinsure(scope.row.shipId)">保单</iep-button>
-              <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipId)">船员</iep-button>
+              <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">船员</iep-button>
               <iep-button size="mini" type="primary" @click="handleOperat(scope.row.shipNo)">经营人</iep-button>
             </operation-wrapper>
           </template>

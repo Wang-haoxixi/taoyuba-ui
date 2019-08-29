@@ -43,16 +43,39 @@
         </template>
       </operation-container>
       <avue-tree-table :option="options" style="margin-top: 20px;">
+        <!-- <el-table-column label="是否审核" prop="status">
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.status" active-color="#13ce66" inactive-color="#ff4949"
+            @change="handleReview(scope.row.swith, scope.row.contractId)">           
+            </el-switch>
+          </template>
+        </el-table-column> -->
+        <el-table-column
+            prop="status"  
+            label="是否审核"
+            width="100"
+          >
+          <template slot-scope="scope">
+            <div>
+              <el-switch
+                v-model="scope.row.swith"
+                active-color="#13ce66"
+                @change="handleReview(scope.row.swith,scope.row.contractId)"
+                inactive-color="#ff4949">
+              </el-switch>
+            </div>
+          </template>
+          </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
              <el-button v-if="mlms_contract_view" type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">合同查看                          
             </el-button>
-            <el-button v-if="mlms_contract_edit"  type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.contractId)">编辑
+            <el-button v-if="(mlms_contract_edit && scope.row.status === '未审核') || (mlms_contract_edit && scope.row.status === '未通过审核')"  type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.contractId)">编辑
             </el-button>
             <el-button v-if="mlms_contract_del" type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.contractId)">删除
             </el-button>
-            <el-button v-if="mlms_contract_rev" type="text" icon="el-icon-edit" size="mini" @click="handleReview(scope.row.contractId)">审核
-            </el-button>
+            <!-- <el-button v-if="mlms_contract_rev" type="text" icon="el-icon-edit" size="mini" @click="handleReview(scope.row.contractId)">审核
+            </el-button> -->
             <el-button v-if="mlms_contract_pri" type="text" icon="el-icon-delete" size="mini" @click="handlePrint(scope.row.contractId)">打印
             </el-button>
             <el-button v-if="mlms_contract_rel" type="text" icon="el-icon-edit" size="mini" @click="handleRelieve(scope.row.contractId)">解除
@@ -106,7 +129,8 @@ export default {
       payComputeTypeDict: [],
       payTypeDict: [],
       input: '',
-      form: {},
+      form: {
+      },
       timeList: [],
       statusDict: [
         { 
@@ -134,7 +158,7 @@ export default {
           value: '合同过期',
         },
       ],
-      contStatus: '',
+      contStatus: '',      
     }
   },
   created () {
@@ -166,19 +190,19 @@ export default {
             value: 'contractNumber',
           },
           {
-            text: '船舶拥有者',
-            value: 'shipownerName',
-          },
-          {
             text: '船名',
             value: 'shipName',
           },
           {
-            text: '雇员姓名',
+            text: '雇主（甲方）',
+            value: 'employerName',
+          },
+          {
+            text: '雇员（乙方）',
             value: 'employeeName',
           },
           {
-            text: '状态',
+            text: '合同状态',
             value: 'status',
           },
         ],
@@ -197,6 +221,13 @@ export default {
                 v.status = m.value
               }
             })
+          })
+          this.contractList.forEach( item=>{
+            if(item.status === '合同成立'){
+              item.swith = true
+            }else{
+              item.swith = false
+            }
           })
           this.total = data.data.total
         }
@@ -294,9 +325,14 @@ export default {
         this.$message.error(error.message)
       })
     },
-    handleReview (contractId) {
-      let revStatus = 1
-      reviewContract({contractId: contractId, status: revStatus}).then(() =>{
+    handleReview (switchs, contractId) {
+      let data = ''
+      if(switchs){
+        data = 1
+      }else{
+        data = 2
+      }
+      reviewContract({contractId: contractId, status: data}).then(() =>{
         this.$message.success('审核成功')
         this.getContractList()
       }).catch(() => {

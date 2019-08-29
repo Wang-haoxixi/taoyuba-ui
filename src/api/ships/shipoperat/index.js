@@ -38,3 +38,13 @@ export function deleteShipManager (id) {
     method: 'post',
   })
 }
+
+export function getShipManagerByShipNo (shipNo) {
+  return request({
+    url:`${prefixUrl}/findByShipno`,
+    method: 'get',
+    params: {
+      shipNo: shipNo,
+    },
+  })
+}
