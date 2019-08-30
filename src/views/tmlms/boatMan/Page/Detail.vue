@@ -281,7 +281,7 @@
                           </el-form-item>
                         </el-col>
                         <el-col :span="4" style="text-align:center">
-                          <el-button type="primary" size="small" plain @click="remove(index)">删除</el-button>
+                          <el-button v-if="manager || !$route.query.edit" type="primary" size="small" plain @click="remove(index)">删除</el-button>
                         </el-col>
                     </el-row>
                   </el-form>
