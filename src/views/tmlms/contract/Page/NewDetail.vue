@@ -279,7 +279,7 @@
                 </el-col>
                 <el-col :span="4">
                   <el-form-item label="船担任" style="width: 150px!important" prop="workPosition">
-                    <iep-dict-select v-model="formData.workPosition" dict-name="tyb_resume_seniority" style="width: 100px!important"></iep-dict-select>
+                    <iep-dict-select v-model="formData.workPosition" dict-name="tyb_resume_position" style="width: 100px!important"></iep-dict-select>
                   </el-form-item >
                 </el-col>
                 <el-col :span="4">
@@ -460,14 +460,14 @@ import store from '@/store'
 import { findMyship } from '@/api/ships/index'
 import { getShipManagerList } from '@/api/ships/shipoperat/index'
 import { detailCrew } from '@/api/tmlms/boatMan/index'
-import { addContract, updateContract, getContractDetail } from '@/api/tmlms/newContract'
+import { addContract, updateContract, getContractDetail, isCheckIdcard } from '@/api/tmlms/newContract'
 export default {
   props: {
     record: {},
     type: {},
   },
   data () {
-    this.getShipNameList = debounce(this.getShipNameList, 800)
+    this.getShipNameList = debounce(this.getShipNameList, 50)
     return {
       formData: {
         shipownerName: '',
@@ -697,17 +697,24 @@ export default {
       }
     },
     getidcardList (number) {
-      this.loading = true
-      if (number !== '') {
-        detailCrew(number).then(({data}) => {
-          if (Object.keys(data.data).length !== 0) {
-            this.idcards.push(data.data)
+      isCheckIdcard(number).then(res => {
+        if (res.data.data === false) {
+          this.formData.employeeIdcard = ''
+          this.idcards = []
+          this.$message.error('该船员已签订合同!')
+        } else {
+          if (number !== '') {
+            detailCrew(number).then(({data}) => {
+              if (Object.keys(data.data).length !== 0) {
+                this.idcards.push(data.data)
+              }
+            })
+          } else {
+            this.idcards = []
           }
-        })
-      } else {
-        this.idcards = []
-      }
-      this.loading = false
+        }  
+        this.loading = false
+      })
     },
     handleLicensesSuccessFront (response) {
       this.licensesImage = ''

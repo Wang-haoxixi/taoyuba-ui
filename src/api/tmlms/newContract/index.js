@@ -68,3 +68,13 @@ export function cancelContract (contractId) {
         params: contractId,
     })
 }
+
+export function isCheckIdcard (idCard) {
+    return request({
+      url: `${prefixUrl}/checkIdcard`,
+      method: 'get',
+      params: {
+        employeeIdcard: idCard,
+      },
+    })
+}
