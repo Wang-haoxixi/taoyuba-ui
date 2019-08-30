@@ -6,7 +6,7 @@
         <template slot="left">
           <iep-button v-if="mlms_contract_add" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
-        <template slot="right">
+        <!-- <template slot="right">
           <div class="input-wrapper">
             <el-input :placeholder="placeholder" prefix-icon="el-icon-search" size="small" v-model="input" :maxlength="20">
               <iep-button class="search-btn" slot="append" @click="handleSearch">搜索</iep-button>
@@ -40,7 +40,7 @@
               <iep-button class="senior-btn el-icon-arrow-down" slot="reference"></iep-button>
             </el-popover>
           </div>
-        </template>
+        </template> -->
       </operation-container>
       <avue-tree-table :option="options" style="margin-top: 20px;">
         <!-- <el-table-column label="是否审核" prop="status">
@@ -99,7 +99,8 @@
 
 <script>
 import {
-  getContractList, deleteContract,
+  getContractList, 
+  deleteContract,
   // getContract,
   getDict, reviewContract, cancelContract, getContractDetail } from '@/api/tmlms/newContract'
 import { getUserInfo } from '@/api/login'
@@ -335,25 +336,22 @@ export default {
       this.$emit('onEdit', contractId)
     },
     handleDel (contractId) {
-      deleteContract(contractId).then((data) => {
-        if (data.data.code === 0) {
-          this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-          }).then(() => {
-            this.$message.success('删除成功！')
-            this.getContractList()
-          }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消删除',
-            })
-          })
+      this.$confirm('此操作将永久删除该合同, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        deleteContract(contractId), (error) => {
+          this.$message.error(error.message)
         }
-      }, (error) => {
-        this.$message.error(error.message)
-      })
+        this.$message.success('删除成功！')
+        this.getContractList()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除',
+        })
+      }) 
     },
     handleReview (switchs, contractId) {
       let data = ''
@@ -373,16 +371,27 @@ export default {
       this.contStatus = await getContractDetail(contractId).then(res => {
         return res.data.data.status
       })
-      if (this.contStatus === 1) {
-        cancelContract({contractId: contractId}).then(() => {
-          this.$message.success('解除成功！')
-          this.getContractList()
-        }).catch(() => {
-          this.$message.error('解除失败！')
+      this.$confirm('此操作将解除该合同', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type:'warning',
+      }).then(() => {
+        if (this.contStatus === 1) {
+          cancelContract({contractId: contractId}).then(() => {
+            this.$message.success('解除成功！')
+            this.getContractList()
+          }).catch(() => {
+            this.$message.error('解除失败！')
+          })
+        } else {
+          this.$message.error('合同状态不正确，需要管理员审核！')
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消解除',
         })
-      } else {
-        this.$message.error('合同状态不正确，需要管理员审核！')
-      }
+      })  
     },
     handlePrint (contractId) {
       let urlHeade = window.location.origin
