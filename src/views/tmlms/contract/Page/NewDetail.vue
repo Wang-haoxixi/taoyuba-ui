@@ -495,6 +495,8 @@ export default {
         employeePayBankAccount: '',
         employeePayAccount: '',
         employeePayBank: '',
+        employeeLinkMan: '',
+        employeeLinkPhone: '',
         workMode: '',
         workPosition: '',
         workSkill: '',
@@ -610,6 +612,12 @@ export default {
           this.isContract = true
         } else {
           this.isContract = false
+        }
+        if (this.formData.employeeLinkMan) {
+          this.formData.contactName = this.formData.employeeLinkMan
+        }
+        if (this.formData.employeeLinkPhone) {
+          this.formData.contactPhone= this.formData.employeeLinkPhone
         }
       })
     },
@@ -759,6 +767,12 @@ export default {
       }
       if (this.licensesImage) {
         this.formData.licensesOwnerShipImage = this.licensesImage
+      }
+      if (this.formData.contactName) {
+        this.formData.employeeLinkMan = this.formData.contactName
+      }
+      if (this.formData.contactPhone) {
+        this.formData.employeeLinkPhone = this.formData.contactPhone
       }
       this.$refs['form'].validate(valid => {
         if (valid) {
