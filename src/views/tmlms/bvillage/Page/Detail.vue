@@ -37,7 +37,8 @@
                 <el-amap vid="amapDemoD" :center="mapCenter" :zoom="15" class="amap-demo" :plugin="plugin">
                     <el-amap-marker :position="marker"></el-amap-marker>
                 </el-amap> -->
-                <el-input v-model="bvillage.address" placeholder="请输入地址"></el-input>
+                <el-input v-model="bvillage.address" v-if="!$route.query.see"  placeholder="请输入地址"></el-input>
+                <div v-else>{{  bvillage.address  }}</div>
               </el-form-item>
             </el-col>
             <el-col :span="16">
