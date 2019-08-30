@@ -7,9 +7,14 @@
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain v-if="manager">新增</iep-button>
         </template>
         <template slot="right">
-          <operation-search @search-page="searchPage" advance-search :prop="searchData">
+          <!-- <operation-search @search-page="searchPage" advance-search :prop="searchData">
             <advance-search @search-page="searchPage"></advance-search>
-          </operation-search>
+          </operation-search> -->
+          <span><el-input v-model="params.shipName" placeholder="请输入船名号" size="small" clearable></el-input></span>
+          <span><el-input v-model="params.shipNo" placeholder="请输入渔船编号" size="small" clearable></el-input></span>
+          <span><el-input v-model="params.shipowner" placeholder="请输入持证人姓名" size="small" clearable></el-input></span>
+          <span><el-input v-model="params.shipownerIdcard" placeholder="请输入持证人身份证" size="small" clearable></el-input></span>
+          <el-button size="small"  @click="loadPage(params)">搜索</el-button>
         </template>
       </operation-container>
       <iep-table                    
@@ -36,20 +41,28 @@
 </template>
 <script>
 import { getShipList, deleteShip, getMyShipList } from '@/api/ships'
-import advanceSearch from './AdvanceSearch.vue'
+// import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
 import { getUserInfo } from '@/api/login'
 export default {
-  components: {
-    advanceSearch,
-  },
+  // components: {
+  //   advanceSearch,
+  // },
   mixins: [mixins],
   data () {
     return {
       columnsMap,
-      searchData: 'contactName',
+      // searchData: 'shipName',
       manager: false,
+      params: {
+        current: 1,
+        size: 10,
+        shipName: '',
+        shipNo: '',
+        shipowner: '',
+        shipownerIdcard: '',
+      },
     }
   },
   created () {

@@ -53,7 +53,7 @@
   </div>
 </template>
 <script>
-import { getVillageShipowner, detailVillage } from '@/api/tmlms/bvillage'
+import { getVillageShipowner } from '@/api/tmlms/bvillage'
 import { getUserInfo } from '@/api/login'
 export default {
   data () {
@@ -133,14 +133,15 @@ export default {
     getData () {
       getUserInfo().then(data => {
         this.userId = data.data.data.sysUser.userId
-        detailVillage(this.userId).then(data => {
-          this.villageId = data.data.data.villageId
-          this.params.villageId = this.villageId
+        // detailVillage(this.userId).then(data => {
+        //   console.log(data.data.data)
+        //   this.villageId = data.data.data.villageId
+          this.params.villageId = this.userId
           getVillageShipowner(this.params).then(res=>{
             this.shipownerList = res.data.data.records
             this.total = res.data.data.total
           })
-        })
+        // })
       })     
     },
   },

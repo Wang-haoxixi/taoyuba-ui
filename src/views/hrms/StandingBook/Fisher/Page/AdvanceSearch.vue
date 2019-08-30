@@ -1,10 +1,16 @@
 <template>
   <el-form :model="form" label-width="120px" size="mini">
-    <el-form-item label="联系人：">
-      <el-input v-model="form.contactName"></el-input>
+    <el-form-item label="船名号：">
+      <el-input v-model="form.shipName"></el-input>
     </el-form-item>
-    <el-form-item label="岗位名称：">
-        <el-input v-model="form.positionName"></el-input>
+    <el-form-item label="渔船编号：">
+        <el-input v-model="form.shipNo"></el-input>
+    </el-form-item>
+    <el-form-item label="持证人姓名：">
+        <el-input v-model="form.shipowner"></el-input>
+    </el-form-item>
+    <el-form-item label="持证人身份证：">
+        <el-input v-model="form.shipownerIdcard"></el-input>
     </el-form-item>
     <el-form-item>
       <operation-wrapper>

@@ -6,11 +6,16 @@
         <template slot="left">
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
-        <!-- <template slot="right">
-          <operation-search @search-page="searchPage" advance-search :prop="searchData">
+        <template slot="right">
+          <!-- <operation-search @search-page="searchPage" advance-search :prop="searchData">
             <advance-search @search-page="searchPage"></advance-search>
-          </operation-search>
-        </template> -->
+          </operation-search> -->
+          <span><el-input v-model="params.shipName" placeholder="请输入船名号" size="small" clearable></el-input></span>
+          <span><el-input v-model="params.shipNo" placeholder="请输入渔船编号" size="small" clearable></el-input></span>
+          <span><el-input v-model="params.shipowner" placeholder="请输入持证人姓名" size="small" clearable></el-input></span>
+          <span><el-input v-model="params.shipownerIdcard" placeholder="请输入持证人身份证" size="small" clearable></el-input></span>
+          <el-button size="small"  @click="loadPage(params)">搜索</el-button>
+        </template>
       </operation-container>
       <iep-table                    
               :isLoadTable="isLoadTable"
@@ -55,7 +60,15 @@ export default {
   data () {
     return {
       columnsMap,
-      searchData: 'contactName',
+      // searchData: 'shipName',
+      params: {
+        current: 1,
+        size: 10,
+        shipName: '',
+        shipNo: '',
+        shipowner: '',
+        shipownerIdcard: '',
+      },
     }
   },
   created () {
@@ -79,6 +92,20 @@ export default {
     async loadPage (param = this.searchForm) {   
       let data = await this.loadTable(param, getVillageShipList)
       this.pagedTable = data.records
+      this.pagedTable.forEach(v => {
+        if (v.shipNo === '0') {
+          v.shipNo = '请完善'
+        }
+        if (v.shipowner === '') {
+          v.shipowner = '请完善'
+        }
+        if (v.shipownerIdcard === '0') {
+          v.shipownerIdcard = '请完善'
+        }
+        if (v.hullLength === 0) {
+          v.hullLength = '请完善'
+        }
+      })
     },
     handleIntoinsure (id) {
       this.$router.push({       
