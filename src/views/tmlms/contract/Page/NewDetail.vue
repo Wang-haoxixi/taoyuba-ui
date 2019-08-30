@@ -114,7 +114,7 @@
                   <el-form-item label="船舶是否共有：" prop="shipJoint">
                     <el-radio-group v-model="formData.shipJoint">
                       <el-radio :label="1">是，<el-input v-model="formData.shipJointYes" placeholder="人数（数字）" size="mini" style="width:100px"></el-input>共有（权证附后）</el-radio>
-                      <el-radio :label="0">否，{{formData.employerName}} 独有</el-radio> 
+                      <el-radio :label="0">否，{{formData.shipownerName}} 独有</el-radio>
                     </el-radio-group>
                   </el-form-item>
                 </el-col>
@@ -185,12 +185,12 @@
                       <div style="font-size:10px">联系电话：{{formData.employeePhone}}</div> -->
                       <el-col>
                         <el-form-item label="紧急联系人：">
-                          <el-input maxlength="6" v-model="formData.employeeName" style="width:150px" size="mini"></el-input>
+                          <el-input maxlength="6" v-model="formData.contactName" style="width:150px" size="mini"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col>
                         <el-form-item label="联系电话：">
-                          <el-input maxlength="20" v-model="formData.employeePhone" style="width:150px" size="mini"></el-input>
+                          <el-input maxlength="20" v-model="formData.contactPhone" style="width:150px" size="mini"></el-input>
                         </el-form-item>
                       </el-col>
                     </div>
@@ -422,7 +422,7 @@
             </el-main>
           </el-container>
         </el-container>
-        <el-container>
+        <!-- <el-container>
           <el-aside class="sidef">
             <div class="tex">纸质合同照片（多张）</div>
           </el-aside>
@@ -444,7 +444,7 @@
               </el-upload>
             </el-main>
           </el-container>
-        </el-container>
+        </el-container> -->
       </el-form>
       <div style="text-align: center;padding: 20px 0;">                   
         <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add' || type === 'edit'" type="primary" @click="handleSubmit">保存</iep-button>
@@ -684,16 +684,20 @@ export default {
     },
     refreshCard (card) {
       if(card !== null) {
-        let { realName = '', phone = '', address = '', positionId = '' } = card
+        let { realName = '', phone = '', address = '', positionId = '', contactName = '', contactPhone = ''} = card
         this.formData.employeeName = realName
         this.formData.employeePhone = phone
         this.formData.employeeAddr = address
         this.formData.employeePosition = positionId
+        this.formData.contactName = contactName
+        this.formData.contactPhone = contactPhone
       } else {
         this.formData.employeeName = ''
         this.formData.employeePhone = ''
         this.formData.employeeAddr = '' 
         this.formData.employeePosition = ''
+        this.formData.contactName = ''
+        this.formData.contactPhone = ''
       }
     },
     getidcardList (number) {

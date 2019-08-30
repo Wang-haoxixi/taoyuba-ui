@@ -1,6 +1,7 @@
 <template>
   <div class="contract-box">
     <basic-container>
+      <page-header title="持证人管理"></page-header>
       <div class="shipowner_title">
         <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button>
         <!-- <div style="float:right">
