@@ -46,12 +46,12 @@
         <!-- <el-table-column label="是否审核" prop="status">
           <template slot-scope="scope">
             <el-switch v-model="scope.row.status" active-color="#13ce66" inactive-color="#ff4949"
-            @change="handleReview(scope.row.swith, scope.row.contractId)">           
+            @change="handleReview(scope.row.swith, scope.row.contractId)">
             </el-switch>
           </template>
         </el-table-column> -->
         <el-table-column
-            prop="status"  
+            prop="status"
             label="是否审核"
             width="100"
             v-if="mangner"
@@ -69,7 +69,7 @@
           </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-             <el-button v-if="mlms_contract_view" type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">合同查看                          
+             <el-button v-if="mlms_contract_view" type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">合同查看
             </el-button>
             <el-button v-if="(mlms_contract_edit && scope.row.status === '未审核') || (mlms_contract_edit && scope.row.status === '未通过审核')"  type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.contractId)">编辑
             </el-button>
@@ -87,16 +87,26 @@
       <div style="text-align: center;margin: 20px 0;">
         <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
       </div>
+      <iframe id="iframe"
+          style="visibility: hidden;"
+          title="Inline Frame Example"
+          width="300"
+          height="200"
+          src="http://localhost:8090/api/tmlms/downLoad/intoContractHtml?contractId=8&dataMap=%7B%7D">
+      </iframe>
     </basic-container>
   </div>
 </template>
 
 <script>
-import { getContractList, deleteContract, getContract, getDict, reviewContract, cancelContract, getContractDetail } from '@/api/tmlms/newContract'
+import {
+  getContractList, deleteContract,
+  // getContract,
+  getDict, reviewContract, cancelContract, getContractDetail } from '@/api/tmlms/newContract'
 import { getUserInfo } from '@/api/login'
 import { mapGetters } from 'vuex'
-import contractPrint from '../../contract/Page/ContractPrint.vue'
-import Vue from 'vue'
+// import contractPrint from '../../contract/Page/ContractPrint.vue'
+// import Vue from 'vue'
 export default {
   name: 'contract',
   props: {
@@ -134,33 +144,33 @@ export default {
       },
       timeList: [],
       statusDict: [
-        { 
-          lable: 0, 
+        {
+          lable: 0,
           value: '未审核',
         },
-        { 
-          lable: 1, 
+        {
+          lable: 1,
           value: '合同成立',
         },
-        { 
-          lable: 2, 
+        {
+          lable: 2,
           value: '未通过审核',
         },
-        { 
-          lable: 3, 
+        {
+          lable: 3,
           value: '合同纠纷',
         },
-        { 
-          lable: 4, 
+        {
+          lable: 4,
           value: '合同解除',
         },
-        { 
-          lable: 5, 
+        {
+          lable: 5,
           value: '合同过期',
         },
       ],
       contStatus: '',
-      mangner: false,    
+      mangner: false,
     }
   },
   created () {
@@ -251,16 +261,16 @@ export default {
     handleAdd () {
       this.$emit('onAdd')
     },
-    handleView (contractId) {                                                                                                                                                                                                                                    
-      // this.$emit('onDetail', contractId)                      
-      // let urlHttp = window.location.href.split('//')[0]                   
-      let urlHeade = window.location.href.split('/')[0,2]        
-      let  dataMap  = '%7B%7D'               
-      // let Base64 = require('js-base64').Base64      
-      // let rlt = Base64.encodeURI(`id=${contractId}`)                                                                 
-    //  window.open(`${urlHttp}//${urlHeade}/tmlms/downLoad/intoContractHtml?${rlt}`)             
-       this.$openPage(`//${urlHeade}/api/tmlms/downLoad/intoContractHtml?contractId=${contractId}&dataMap=${dataMap}`,'url') 
-      // window.location.href = `//${urlHeade}/tmlms/downLoad/intoContractHtml?contractId=${contractId}&dataMap=${dataMap}`                    
+    handleView (contractId) {
+      // this.$emit('onDetail', contractId)
+      // let urlHttp = window.location.href.split('//')[0]
+      let urlHeade = window.location.href.split('/')[0,2]
+      let  dataMap  = '%7B%7D'
+      // let Base64 = require('js-base64').Base64
+      // let rlt = Base64.encodeURI(`id=${contractId}`)
+    //  window.open(`${urlHttp}//${urlHeade}/tmlms/downLoad/intoContractHtml?${rlt}`)
+       this.$openPage(`//${urlHeade}/api/tmlms/downLoad/intoContractHtml?contractId=${contractId}&dataMap=${dataMap}`,'url')
+      // window.location.href = `//${urlHeade}/tmlms/downLoad/intoContractHtml?contractId=${contractId}&dataMap=${dataMap}`
       // getContract(contractId).then(({data}) => {
       //   if (data.code == 0) {
       //     let formData = data.data
@@ -339,7 +349,7 @@ export default {
               type: 'info',
               message: '已取消删除',
             })
-          }) 
+          })
         }
       }, (error) => {
         this.$message.error(error.message)
@@ -375,81 +385,88 @@ export default {
       }
     },
     handlePrint (contractId) {
-      getContract(contractId).then(({data}) => {
-        if (data.code == 0) {
-          let formData = data.data
-          let print = Vue.extend(contractPrint)
-          let el = new print({
-            propsData:{
-              formData: formData,
-              shipAttrDict: this.shipAttrDict,
-              employeePayTypeDict: this.employeePayTypeDict,
-              periodTypeDict: this.periodTypeDict,
-              payComputeTypeDict: this.payComputeTypeDict,
-              payTypeDict: this.payTypeDict,
-            },
-          }).$mount().$el
-          let h = window.open('', '_blank')
-          h.document.write(`
-            <style>
-             @page {
-                size: A4 portrait;
-                margin: 3.7cm 2.6cm 3.5cm;
-              }
-              .con-cover,.contract-table,.con-detail{
-                  page-break-before: always;
-                }
-                h1, h2, h3, h4, h5 { page-break-after: avoid; }
-                table, figure{ page-break-inside: avoid; }
-                *{padding: 0px;margin:0px;}
-              ul,li{list-style: none;}
-              .body-width{width: 210mm;color: #333;}
-              #contract{margin:0px auto;font-size:14px;}
-              .contract-table{border:solid 1px #606266;border-collapse:collapse;border-spacing:0px;width:100%; height: 297mm;overflow: hidden;}
-              .contract-table td,.contract-table th{color:#606266;border-bottom: solid 1px #606266;border-right: solid 1px #333;text-align: center;font-size:12px;padding:10px;}
-              .contract-table td.check{text-align: left;padding: 10px 25px 10px 10px;}
-              .contract-table td label{display: inline-block; width:100px;}
-              .contract-table th{font-weight: normal;padding:0px 10px;}
-              .contract-table td label{display: inline-block; width:80px;}
-              .check el-date-picker{}
-              .set-width .el-input{width: 50%;margin: 5px 0px;}
-              .contract-table .el-checkbox-group{display: inline-block;}
-              .con-cover{text-align: center;height: 297mm;overflow: hidden;}
-              .cover-num{text-align: right;padding: 20px 0px;font-weight:normal;font-size:18px;margin-right: 50px;}
-              .con-cover h1{font-size: 30px;font-weight: bold;margin-top: 180px;margin-bottom: 50px}
-              .con-cover h2{font-size:30px;font-weight: bold;}
-              .cover-tip{margin-top:750px;}
-              .cover-tip p{margin-bottom: 40px;font-weight:normal;font-size:18px;}
-              .con-detail{width:100%;margin:0 auto;}
-              .con-detail h2{text-align: center;font-size: 20px;font-weight: bold;}
-              .con-detail h3{font-size: 16px;font-weight: bold;margin-top: 15px;}
-              .con-detail p{text-indent: 2em;line-height: 32px;font-size:16px;}
-              .con-detail .special{text-decoration: underline;}
-              .sign{width:100%;margin:0 auto;margin-top: 50px;font-size:16px;}
-              .sign span{padding-left: 50px;}
-              .sign h3{font-size:18px;font-weight: bold;}
-              .sign i{font-style: normal;padding-left: 20px;}
-              .sign-name{margin-top: 10px;overflow: hidden;}
-              .sign-name li{float: left;width: 50%;line-height: 30px;}
-              .sign-see{margin-top: 30px;}
-              .sign-see li{line-height: 30px;}
-              .margint10{margin-top: 10px;}
-              .contract-table .el-checkbox__label{font-size:12px;}
-              .paylist{text-align: center;}
-              .paylist .el-checkbox-group{text-align: left;}
-              .paylist .el-checkbox{margin-right: 0px;}
-              .paylist .el-checkbox-group label{width:60px;}
-              .contract-table .textL10{text-align: left;}
-            </style>
-          `)
-          h.document.write(el.outerHTML)
-          h.document.close()
-          h.print()
-          h.close()
-        }
-      }, (error) => {
-        this.$message.error(error.message)
-      })
+      let urlHeade = window.location.href.split('/')[0,2]
+      let  dataMap  = '%7B%7D'
+      this.contractAddr = `//${urlHeade}/api/tmlms/downLoad/intoContractHtml?contractId=${contractId}&dataMap=${dataMap}`
+      let iframe = window.document.getElementById('iframe')
+      iframe.contentWindow.focus()
+      iframe.contentWindow.print()
+      // getContract(contractId).then(({data}) => {
+      //   if (data.code == 0) {
+      //     let formData = data.data
+      //     let print = Vue.extend(contractPrint)
+      //     let el = new print({
+      //       propsData:{
+      //         formData: formData,
+      //         shipAttrDict: this.shipAttrDict,
+      //         employeePayTypeDict: this.employeePayTypeDict,
+      //         periodTypeDict: this.periodTypeDict,
+      //         payComputeTypeDict: this.payComputeTypeDict,
+      //         payTypeDict: this.payTypeDict,
+      //       },
+      //     }).$mount().$el
+      //     console.log(el,print)
+      //     let h = window.open('http://localhost:8090/api/tmlms/downLoad/intoContractHtml?contractId=8&dataMap=%7B%7D', '_blank')
+      //     // h.document.write(`
+      //     //   <style>
+      //     //    @page {
+      //     //       size: A4 portrait;
+      //     //       margin: 3.7cm 2.6cm 3.5cm;
+      //     //     }
+      //     //     .con-cover,.contract-table,.con-detail{
+      //     //         page-break-before: always;
+      //     //       }
+      //     //       h1, h2, h3, h4, h5 { page-break-after: avoid; }
+      //     //       table, figure{ page-break-inside: avoid; }
+      //     //       *{padding: 0px;margin:0px;}
+      //     //     ul,li{list-style: none;}
+      //     //     .body-width{width: 210mm;color: #333;}
+      //     //     #contract{margin:0px auto;font-size:14px;}
+      //     //     .contract-table{border:solid 1px #606266;border-collapse:collapse;border-spacing:0px;width:100%; height: 297mm;overflow: hidden;}
+      //     //     .contract-table td,.contract-table th{color:#606266;border-bottom: solid 1px #606266;border-right: solid 1px #333;text-align: center;font-size:12px;padding:10px;}
+      //     //     .contract-table td.check{text-align: left;padding: 10px 25px 10px 10px;}
+      //     //     .contract-table td label{display: inline-block; width:100px;}
+      //     //     .contract-table th{font-weight: normal;padding:0px 10px;}
+      //     //     .contract-table td label{display: inline-block; width:80px;}
+      //     //     .check el-date-picker{}
+      //     //     .set-width .el-input{width: 50%;margin: 5px 0px;}
+      //     //     .contract-table .el-checkbox-group{display: inline-block;}
+      //     //     .con-cover{text-align: center;height: 297mm;overflow: hidden;}
+      //     //     .cover-num{text-align: right;padding: 20px 0px;font-weight:normal;font-size:18px;margin-right: 50px;}
+      //     //     .con-cover h1{font-size: 30px;font-weight: bold;margin-top: 180px;margin-bottom: 50px}
+      //     //     .con-cover h2{font-size:30px;font-weight: bold;}
+      //     //     .cover-tip{margin-top:750px;}
+      //     //     .cover-tip p{margin-bottom: 40px;font-weight:normal;font-size:18px;}
+      //     //     .con-detail{width:100%;margin:0 auto;}
+      //     //     .con-detail h2{text-align: center;font-size: 20px;font-weight: bold;}
+      //     //     .con-detail h3{font-size: 16px;font-weight: bold;margin-top: 15px;}
+      //     //     .con-detail p{text-indent: 2em;line-height: 32px;font-size:16px;}
+      //     //     .con-detail .special{text-decoration: underline;}
+      //     //     .sign{width:100%;margin:0 auto;margin-top: 50px;font-size:16px;}
+      //     //     .sign span{padding-left: 50px;}
+      //     //     .sign h3{font-size:18px;font-weight: bold;}
+      //     //     .sign i{font-style: normal;padding-left: 20px;}
+      //     //     .sign-name{margin-top: 10px;overflow: hidden;}
+      //     //     .sign-name li{float: left;width: 50%;line-height: 30px;}
+      //     //     .sign-see{margin-top: 30px;}
+      //     //     .sign-see li{line-height: 30px;}
+      //     //     .margint10{margin-top: 10px;}
+      //     //     .contract-table .el-checkbox__label{font-size:12px;}
+      //     //     .paylist{text-align: center;}
+      //     //     .paylist .el-checkbox-group{text-align: left;}
+      //     //     .paylist .el-checkbox{margin-right: 0px;}
+      //     //     .paylist .el-checkbox-group label{width:60px;}
+      //     //     .contract-table .textL10{text-align: left;}
+      //     //   </style>
+      //     // `)
+      //     // h.document.write(el.outerHTML)
+      //     // h.document.close()
+      //     h.print()
+      //     // h.close()
+      //   }
+      // }, (error) => {
+      //   this.$message.error(error.message)
+      // })
     },
     getDicts () {
       getDict('tyb_contract_ship_attr').then(({data}) => {
