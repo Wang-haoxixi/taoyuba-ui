@@ -91,8 +91,7 @@
           style="visibility: hidden;"
           title="Inline Frame Example"
           width="300"
-          height="200"
-          src="http://localhost:8090/api/tmlms/downLoad/intoContractHtml?contractId=8&dataMap=%7B%7D">
+          height="200">
       </iframe>
     </basic-container>
   </div>
@@ -170,6 +169,7 @@ export default {
         },
       ],
       contStatus: '',
+      contractAddr: '',
       mangner: false,
     }
   },
@@ -385,12 +385,16 @@ export default {
       }
     },
     handlePrint (contractId) {
-      let urlHeade = window.location.href.split('/')[0,2]
+      let urlHeade = window.location.origin
       let  dataMap  = '%7B%7D'
-      this.contractAddr = `//${urlHeade}/api/tmlms/downLoad/intoContractHtml?contractId=${contractId}&dataMap=${dataMap}`
+      let url = `${urlHeade}/api/tmlms/downLoad/intoContractHtml?contractId=${contractId}&dataMap=${dataMap}`
+      // console.log('url',url)
       let iframe = window.document.getElementById('iframe')
-      iframe.contentWindow.focus()
-      iframe.contentWindow.print()
+      iframe.src = url
+      iframe.onload = function () {
+        iframe.contentWindow.focus()
+        iframe.contentWindow.print()
+      }
       // getContract(contractId).then(({data}) => {
       //   if (data.code == 0) {
       //     let formData = data.data
