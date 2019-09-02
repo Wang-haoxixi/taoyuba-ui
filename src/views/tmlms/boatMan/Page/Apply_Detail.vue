@@ -20,7 +20,6 @@
                 <el-row>
                 <el-col :span="12">
                   <el-form-item label="身份证号码：" prop="idcard">
-                    <!-- <el-input v-model="form.idcard" :disabled="haveInfo.idcard"></el-input> -->
                     <el-select :disabled="isManger" v-model="form.idcard"
                               placeholder="请选择"
                               filterable
@@ -99,8 +98,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="联系电话" prop="phone">
-                    <el-input v-model="form.phone" v-if="isPhone === true" disabled></el-input>
-                    <el-input v-model="form.phone" v-else></el-input>
+                    <el-input v-model="form.phone"></el-input>
                     </el-form-item>
                 </el-col>
                 </el-row>
@@ -116,30 +114,7 @@
                     </el-form-item>
                 </el-col>
                 </el-row>
-                <!-- <el-row>
-                <el-col :span="12">
-                    <el-form-item label="船民证号码" prop="crewCert">
-                    <el-input v-model="form.crewCert"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item class="form-half" prop="certExpDate" label="船民证有效期限">
-                    <iep-date-picker v-model="form.certExpDate" type="date" placeholder="选择日期"></iep-date-picker>
-                    </el-form-item>
-                </el-col>               
-                </el-row> -->
                 <el-row>
-                <!-- <el-col :span="8">
-                    <el-form-item label="四小件上传：" prop="fourSmallCard">
-                    <iep-avatar v-model="form.fourSmallCard"></iep-avatar>
-                    </el-form-item>
-                </el-col> -->
-                <!-- <el-col>        
-                    <iep-form-item v-if="userId" label-name="资质证书" tip="1.请务必按照证书准确填写全称；2.请务必按照证书准确填写编号；3.请务必按照证书准确填写颁发单位全称，忌单位简称；4.请务必上传电子版证书，否则证书不做任何加分项；"> -->
-                    <!-- <inline-form-table :table-data="userCert" :columns="certificateColumns" requestName="certificate" type="employee_profile" @load-page="handleSave"></inline-form-table> -->
-                    <!-- <cert-form-table  :crewData="tableData" :crewId="userId" :columns="certificateColumns"></cert-form-table>
-                    </iep-form-item>
-                </el-col> -->
                   <el-col :span="8">
                       <el-form-item label="职位：" prop="positionId">
                       <el-select
@@ -169,18 +144,6 @@
                       </el-select>
                       </el-form-item> 
                   </el-col>
-                <!-- <el-col :span="8">
-                    <el-form-item label="所属渔村区域" prop="villageId">
-                    <span v-for="(region, key) in regions" :key="key">
-                        <el-select v-model="regionChosen[key]">
-                        <el-option v-for="item in region"
-                                    :key="item.areaCode"
-                                    :value="item.areaCode"
-                                    :label="item.name"></el-option>
-                        </el-select>
-                    </span>
-                    </el-form-item>
-                </el-col> -->
                 </el-row>
                   <el-row>
                     <el-col :span="12">
@@ -443,6 +406,10 @@ export default {
       idcards: [],
       isPhone: false,
       isManger: false,
+      cards: '',
+      isDate: false,
+      nameA: '',
+      idcardB: '',
     }
   },
   methods: {
@@ -457,71 +424,30 @@ export default {
       console.log(this.form)
       this.$refs['form'].validate((valid) => {
           if (valid) {
-            // let form = JSON.parse(JSON.stringify(this.form))
             let form = this.form
-            // if (form.certList) {
-            //   form.certList.forEach(item=>{
-            //     item.certFile = item.annex
-            //   })
-            // }
-            let type = 1
-            if(this.$route.query.edit){
-              // let data = JSON.parse(JSON.stringify(form))
-              let data = form
-              if(this.$route.query.userId){
-                type = 2
-                data.userId = this.$route.query.userId
-              }
+            let type = 2
+            if (this.isDate === true) {
+              let data = JSON.parse(JSON.stringify(form))
               editCrew(data,type).then(res=>{            
-                  this.$message({
-                    message: res.data.msg,
-                    type: 'success',
-                  })
-                   if(this.$route.query.userId){
-                        this.$router.go(-1) 
-                   }else{
-                        this.$router.push({name:'boatMan'})  
-                   }
+                this.$message({
+                message: res.data.msg,
+                type: 'success',
+                })
+                this.$router.go(-1)       
               }).catch(err=>{
                 this.$message.error(err.message)
               })
-            }else {
-                let data = JSON.parse(JSON.stringify(form))
-                if(this.$route.query.userId){
-                  type = 2
-                  data.userId = this.$route.query.userId
-                }
-                if (this.isIdcard === true) {
-                  editCrew(data,type).then(res=>{
-                      this.$message({
-                        message: res.data.msg,
-                        type: 'success',
-                      })
-                      if(this.$route.query.userId){
-                            this.$router.go(-1) 
-                      }else{
-                            this.$router.push({name:'boatMan'})  
-                      }
-                  }).catch(err=>{
-                    this.$message.error(err.message)
-                  })
-                } else {
-                  saveCrew(data,type).then(res=>{
-                      this.$message({
-                        message: res.data.msg,
-                        type: 'success',
-                      })
-                      if(this.$route.query.userId){
-                          this.$router.go(-1) 
-                      }else{
-                          this.$router.push({name:'boatMan'})  
-                      }
-                  }).catch(err=>{
-                    this.$message.error(err.message)
-                  })
-                }
-                // this.userRole.userId = data.userId
-                // addUserRole(this.userRole)
+            } else {
+              let data = JSON.parse(JSON.stringify(form))
+              saveCrew(data,type).then(res=>{
+                this.$message({
+                  message: res.data.msg,
+                  type: 'success',
+                })
+                  this.$router.go(-1) 
+              }).catch(err=>{
+                this.$message.error(err.message)
+              })
             }
           } else {
           return false
@@ -764,18 +690,43 @@ export default {
     if(this.$route.query.edit || this.$route.query.see || this.$route.query.userId){
       getAll.call(this)
     }
-    // this.getInformation('form',['phone','realName',true])
-        // 获取编辑数据
-    async function getAll () {    
+    async function getAll () {
+      this.cards = await getUserInfo().then(res => {
+        this.nameA = res.data.data.sysUser.realName
+        this.idcardB = res.data.data.sysUser.idCard
+        if (res.data.data.roles.includes(111)) {
+          this.manager = true
+        } else {
+          this.manager = false
+        }
+        res.data.data.sysUser.userId
+        return res.data.data.sysUser.idCard
+      })
       // 异步获取ID
-      let data = await detailCrew(this.$route.query.edit || this.$route.query.see || this.$route.query.idcard).then( res=>{
-        return res.data.data
+      let data = await detailCrew(this.cards).then( res=>{
+        console.log(res.data.data)
+        if (Object.keys(res.data.data).length !== 0) {
+          this.isDate = true
+        }
+        console.log(this.isDate)
+        if (this.isDate === true) {
+          res.data.data.realName = this.nameA
+          res.data.data.idcard = this.idcardB
+          return res.data.data
+        } else {
+          res.data.data = this.form
+          res.data.data.realName = this.nameA
+          res.data.data.idcard = this.idcardB
+          return res.data.data
+        }    
       })
       // 拿到ID 同步获取地址和选中的地址
-      let a = await this.choseProvince(data.provinceId)
-      let b = await this.choseCity(data.cityId) 
-      console.log(a)
-      console.log(b)
+      if(data.provinceId) {
+        await this.choseProvince(data.provinceId)
+      }
+      if (data.cityId) {
+        await this.choseCity(data.cityId) 
+      }
       if(data.certList) {
         let id = 0
         data.certList.forEach(item => {

@@ -137,6 +137,12 @@ export default [
             component: () => import('@/views/tmlms/boatMan/index'),
             meta: noKeepAlive,
           },
+          {
+            path: 'apply_detail',
+              name: 'applyDetailBoatMan',
+              component: () => import('@/views/tmlms/boatMan/Page/Apply_Detail'),
+              meta: noKeepAlive,
+          },
         ],
       },
       //绑定机器

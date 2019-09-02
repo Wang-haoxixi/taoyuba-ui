@@ -91,13 +91,14 @@
           </el-col>
         </el-row>
       </el-card>
-      <span style="margin:20px" >
-      <i class="el-icon-warning"></i>
-      您已加入
-        <span v-for="(item,index) in userInfo.roleName" :key="index" style="margin-left:5px">
-            {{item}}
-        </span>
-      <el-button style="color:#0185d8" type="text" @click="openDialog">请选择</el-button></span>
+      <span style="margin:20px" v-if="!isManger">
+        <i class="el-icon-warning"></i>
+        您已加入
+          <span v-for="(item,index) in userInfo.roleName" :key="index" style="margin-left:5px">
+              {{item}}
+          </span>
+        <el-button style="color:#0185d8" type="text" @click="openDialog">请选择</el-button>
+      </span>
     </a-spin>
     <el-dialog
       title="选择角色"
@@ -179,6 +180,8 @@ export default {
       shipOwnerStatus: '',
       agentStatus: '',
       villageStatus: '',
+      isIdCard: false,
+      isManger: false,
     }
   },
   computed: {
@@ -212,28 +215,42 @@ export default {
     // 选好角色后新增信息
     addUser () {
       if(this.select){
-        switch(this.select) {
-            case 105:
-                this.$router.push({name: 'detailBoatMan',query: {userId: this.userInfo.sysUser.userId}})
-                break
-            case 108:
-                this.$router.push({name: 'applyDetailShipowner',query: {userId: this.userInfo.sysUser.userId}})
-                break
-            case 109:
-                this.$router.push({name: 'detailAgent',query: {userId: this.userInfo.sysUser.userId}})
-                break
-            case 112:
-                this.$router.push({name: 'applyBvillage',query: {userId: this.userInfo.sysUser.userId}})
-                break
-            default:
-                return false
-        } 
+        // switch(this.select) {
+        //     case 105:
+        //         this.$router.push({name: 'detailBoatMan',query: {userId: this.userInfo.sysUser.userId}})
+        //         break
+        //     case 108:
+        //         this.$router.push({name: 'applyDetailShipowner',query: {userId: this.userInfo.sysUser.userId}})
+        //         break
+        //     case 109:
+        //         this.$router.push({name: 'detailAgent',query: {userId: this.userInfo.sysUser.userId}})
+        //         break
+        //     case 112:
+        //         this.$router.push({name: 'applyBvillage',query: {userId: this.userInfo.sysUser.userId}})
+        //         break
+        //     default:
+        //         return false
+        // } 
+        if (this.select === 105 && this.isIdCard === true) {
+          this.$router.push({name: 'applyDetailBoatMan',query: {userId: this.userInfo.sysUser.userId}})
+        } else if (this.select === 108 && this.isIdCard === true) {
+          this.$router.push({name: 'applyDetailShipowner',query: {userId: this.userInfo.sysUser.userId}})
+        } else if (this.select === 109 && this.isIdCard === true) {
+          this.$router.push({name: 'detailAgent',query: {userId: this.userInfo.sysUser.userId}})
+        } else if (this.select === 112 && this.isIdCard === true) {
+          this.$router.push({name: 'applyBvillage',query: {userId: this.userInfo.sysUser.userId}})
+        } else {
+          this.$router.push({name: 'detailIformation'})
+        }
       }else{
         this.$message.error('请选择角色!')
       }
     },
     // 获取roles
     getRole (val) {
+      if (val === 111) {
+        this.isManger = true
+      }
       getObj(val).then(res=>{
          this.userInfo.roleName.push(res.data.data.roleName)
       })
@@ -241,6 +258,11 @@ export default {
     loadPage () {
       getUserInfo().then(res=>{
         this.userInfo = res.data.data
+        if (res.data.data.sysUser.idCard && res.data.data.sysUser.idCard !== '') {
+          this.isIdCard = true
+        } else {
+          this.isIdCard = false
+        }
         this.$set(this.userInfo,'roleName',[])
         this.userInfo.roles.forEach(item=>{
           this.getRole(item)

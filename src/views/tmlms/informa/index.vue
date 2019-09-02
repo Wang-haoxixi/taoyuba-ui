@@ -19,6 +19,13 @@
         </el-row>
         <el-row>
           <el-col :span="12">
+            <el-form-item label="身份证：" prop="idCard">
+              <el-input v-model="form.idCard" :disabled="isIdCard"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
             <el-form-item label="头像：" prop="avatar">
               <!-- <iep-avatar v-model="form.avatar"></iep-avatar> -->
                 <el-upload
@@ -52,6 +59,7 @@ export default {
       form: {
         realName: '',
         avatar: '',
+        idCard: '',
       },
       backOption: {
         isBack: true,
@@ -61,6 +69,7 @@ export default {
       headers: {
         Authorization: 'Bearer ' + store.getters.access_token,
       },
+      isIdCard: false,
     }
   },
   computed: {
@@ -73,6 +82,10 @@ export default {
       this.form.userId = res.data.data.sysUser.userId
       this.form.realName = res.data.data.sysUser.realName
       this.form.phone = res.data.data.sysUser.phone
+      this.form.idCard = res.data.data.sysUser.idCard
+      if (this.form.idCard && this.form.idCard !== '') {
+        this.isIdCard = true
+      }
       this.form.avatar = res.data.data.sysUser.avatar
     })
   },
@@ -87,21 +100,37 @@ export default {
     handleAvatarSuccess (response) {
       this.form.avatar = response.data.url
     },
-    handleSubmit () {
+    card (val) {
+      console.log(val.match(/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/))
+      if (val && val.match(/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/)) {
+        return true
+      } else {
+        return false
+      }
+    },
+    async handleSubmit () {
       if (!this.form.realName) {
         this.form.realName = this.userInfo.realName
       }
       if (!this.form.avatar) {
         this.form.avatar = this.userInfo.avatar
       }
-      userEdit(this.form).then(() => {
-        this.$message.success('修改成功!')
-        this.$router.push({
-          path: '/',
-        }) 
-      }).catch(() => {
-        this.$message.error('修改失败!')
-      })
+      let m = await this.card(this.form.idCard)
+      if (m === true) {
+        userEdit(this.form).then(() => {
+          this.$message.success('修改成功!')
+          this.$router.push({
+            path: '/',
+          }) 
+        }).catch(res => {
+          this.$message({
+            message: res,
+            type: 'error',
+          })
+        })
+      } else {
+        this.$message.error('请输入正确的身份证号码!')
+      }
     },
   },
 }
