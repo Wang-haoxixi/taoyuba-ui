@@ -7,7 +7,7 @@
                 <el-row>
                 <el-col :span="12">
                     <el-form-item label="个人姓名：" prop="realName">
-                    <el-input v-model="form.realName" :disabled="isManger"></el-input>
+                    <el-input v-model="form.realName"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -21,7 +21,7 @@
                 <el-col :span="12">
                   <el-form-item label="身份证号码：" prop="idcard">
                     <!-- <el-input v-model="form.idcard" :disabled="haveInfo.idcard"></el-input> -->
-                    <el-select :disabled="isManger" v-model="form.idcard"
+                    <el-select :disabled="$route.query.edit" v-model="form.idcard"
                               placeholder="请选择"
                               filterable
                               remote
@@ -99,8 +99,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="联系电话" prop="phone">
-                    <el-input v-model="form.phone" v-if="isPhone === true" disabled></el-input>
-                    <el-input v-model="form.phone" v-else></el-input>
+                    <el-input v-model="form.phone"></el-input>
                     </el-form-item>
                 </el-col>
                 </el-row>
@@ -350,6 +349,10 @@ export default {
           idcardPhoto: '',
           facePhoto: '',
           cityId:'',
+          contactPhone: '',
+          contactName: '',
+          phone: '',
+          applyType: '',
           certList: [],
       },
       agent:{
@@ -441,8 +444,6 @@ export default {
       idx:'',
       loading: false,
       idcards: [],
-      isPhone: false,
-      isManger: false,
     }
   },
   methods: {
@@ -554,6 +555,7 @@ export default {
       // const crewData = 
       this.sn = ''
       getLastData({sn:this.sn}).then((data) => {
+        console.log(data)
         getCrewData(data.data.data.identityNumber).then(res => {
           if (res.data.data !== true) {
             this.choseProvince(res.data.data.provinceId)
@@ -719,12 +721,7 @@ export default {
                     })
                   }
               })   
-            })
-            if (this.form.phone === '') {
-              this.isPhone = false
-            } else {
-              this.isPhone = true
-            }         
+            })        
           } else {
             this.form.realName = ''
             this.form.positionId = ''
@@ -784,9 +781,6 @@ export default {
         })
       }
       this.form = data
-      if (this.form.phone !== '') {
-        this.isPhone = true
-      }
     }
     getUserInfo().then(res => {
       if (res.data.data.roles.includes(111)) {
