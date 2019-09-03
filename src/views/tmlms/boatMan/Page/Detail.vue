@@ -217,14 +217,14 @@
                 <el-row>
                   <el-col :span="12">
                     <el-form-item v-if="manager" label="身份证头像：" prop="idcardPhoto">
-                      <img v-if="form.idcardPhoto" :src="form.idcardPhoto">
-                      <i v-else class="el-icon-picture-outline"></i>
+                      <img v-show="form.idcardPhoto" :title="form.idcardPhoto" :src="form.idcardPhoto">
+                      <i v-show="!form.idcardPhoto" :title="form.idcardPhoto" class="el-icon-picture-outline"></i>
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
                     <el-form-item v-if="manager" label="人脸照：" prop="facePhoto">
-                      <img v-if="form.facePhoto" :src="form.facePhoto" style="width:350px;height:200px">
-                      <i v-else class="el-icon-picture-outline"></i>
+                      <img v-if="form.facePhoto" :title="form.facePhoto" :src="form.facePhoto" style="width:350px;height:200px">
+                      <i v-show="!form.facePhoto" :title="form.facePhoto" class="el-icon-picture-outline"></i>
                     </el-form-item>
                   </el-col>
                 </el-row>            
@@ -555,7 +555,6 @@ export default {
       // const crewData = 
       this.sn = ''
       getLastData({sn:this.sn}).then((data) => {
-        console.log(data)
         getCrewData(data.data.data.identityNumber).then(res => {
           if (res.data.data !== true) {
             this.choseProvince(res.data.data.provinceId)
