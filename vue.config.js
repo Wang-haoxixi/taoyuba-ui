@@ -98,18 +98,18 @@ module.exports = {
       //   'axios': 'axios'
       // }
       // 为生产环境修改配置...
-      config.plugins.push(
-        //生产环境自动删除console
-        new UglifyJsPlugin({
-          uglifyOptions: {
-            warnings: false,
-            drop_debugger: true,
-            drop_console: true,
-          },
-          sourceMap: false,
-          parallel: true,
-        })
-      )
+      // config.plugins.push(
+      //   //生产环境自动删除console
+      //   new UglifyJsPlugin({
+      //     uglifyOptions: {
+      //       warnings: false,
+      //       drop_debugger: true,
+      //       drop_console: true,
+      //     },
+      //     sourceMap: false,
+      //     parallel: true,
+      //   })
+      // )
     } else {
       // 为开发环境修改配置...
     }

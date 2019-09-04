@@ -217,14 +217,14 @@
                 <el-row>
                   <el-col :span="12">
                     <el-form-item v-if="manager" label="身份证头像：" prop="idcardPhoto">
-                      <img v-show="form.idcardPhoto" :title="form.idcardPhoto" :src="form.idcardPhoto">
-                      <i v-show="!form.idcardPhoto" :title="form.idcardPhoto" class="el-icon-picture-outline"></i>
+                      <img v-if="form.idcardPhoto" :src="form.idcardPhoto">
+                      <i v-else class="el-icon-picture-outline"></i>
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
                     <el-form-item v-if="manager" label="人脸照：" prop="facePhoto">
-                      <img v-if="form.facePhoto" :title="form.facePhoto" :src="form.facePhoto" style="width:350px;height:200px">
-                      <i v-show="!form.facePhoto" :title="form.facePhoto" class="el-icon-picture-outline"></i>
+                      <img v-if="form.facePhoto" :src="form.facePhoto" style="width:350px;height:200px">
+                      <i v-else class="el-icon-picture-outline"></i>
                     </el-form-item>
                   </el-col>
                 </el-row>            
@@ -560,6 +560,8 @@ export default {
             this.choseProvince(res.data.data.provinceId)
             this.choseCity(res.data.data.cityId)
             this.form = res.data.data
+            this.$set(this.form, 'idcardPhoto', 'data:image/png;base64,' + data.data.data.photo)
+            this.$set(this.form, 'facePhoto', 'data:image/png;base64,' + data.data.data.picture)
             // this.form.certList = []
             this.$set(this.form, 'certList',[])
             this.isIdcard = true
@@ -586,8 +588,10 @@ export default {
               this.form.realName = data.data.data.name
               // this.form.birthday = data.data.data.birth
               this.form.nation = data.data.data.nation
-              this.form.idcardPhoto = 'data:image/png;base64,' + data.data.data.photo
-              this.form.facePhoto = 'data:image/png;base64,' + data.data.data.picture
+              this.$set(this.form, 'idcardPhoto', 'data:image/png;base64,' + data.data.data.photo)
+              this.$set(this.form, 'facePhoto', 'data:image/png;base64,' + data.data.data.picture)
+              // this.form.idcardPhoto = 'data:image/png;base64,' + data.data.data.photo
+              // this.form.facePhoto = 'data:image/png;base64,' + data.data.data.picture
             }
           }
         })
