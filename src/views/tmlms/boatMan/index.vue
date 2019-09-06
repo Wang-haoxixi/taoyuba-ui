@@ -42,7 +42,8 @@
                 v-model="scope.row.swith"
                 active-color="#13ce66"
                 @change="getStatus(scope.row.swith,scope.row.userId)"
-                inactive-color="#ff4949">
+                :disabled="scope.row.isDisabled"
+                >
               </el-switch>
             </div>
           </template>
@@ -166,10 +167,17 @@ export default {
         })
         console.log(this.shipownerList)
         this.shipownerList.forEach( item=>{
-          if(item.status === 2){
-            item.swith = true
-          }else{
+          if(item.status === 2 && item.userId !== 0){
+            item.swith = true  
+          }else{      
             item.swith = false
+          }
+        })
+        this.shipownerList.forEach(v => {
+          if (v.swith === false && v.userId === 0) {
+            v.isDisabled = true
+          } else {
+            v.isDisabled = false
           }
         })
         this.total = res.data.data.total

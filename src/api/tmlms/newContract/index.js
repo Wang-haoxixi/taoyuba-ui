@@ -78,3 +78,11 @@ export function isCheckIdcard (idCard) {
       },
     })
 }
+
+export function complantContract (cancelId) {
+    return request({
+        url: `${prefixUrl}/complant`,
+        method: 'post',
+        params: cancelId,
+    })
+}

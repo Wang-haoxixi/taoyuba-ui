@@ -48,7 +48,8 @@
   </div>
 </template>
 <script>
-import { getVillageShipList } from '@/api/tmlms/bvillage/index'
+// import { getVillageShipList } from '@/api/tmlms/bvillage/index'
+import { getVillageShipList } from '@/api/ships'
 // import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'

@@ -78,7 +78,13 @@ export function getShipByShipNo (shipNo) {
   })    
 } 
 
-
+export function getVillageShipList (params) {
+  return request({
+      url: `${prefixUrl}/newpage`,
+      method: 'get',
+      params: params,
+  })
+}
 
 
 

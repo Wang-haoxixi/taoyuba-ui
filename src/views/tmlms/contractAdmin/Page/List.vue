@@ -4,7 +4,7 @@
       <page-header title="网签合同"></page-header>
             <operation-container>
         <template slot="left">
-          <iep-button v-if="mlms_contract_add" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+          <iep-button v-if="mlms_contract_add && mangner" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
         <!-- <template slot="right">
           <div class="input-wrapper">
@@ -73,13 +73,17 @@
             </el-button>
             <el-button v-if="(mlms_contract_edit && scope.row.status === '未审核') || (mlms_contract_edit && scope.row.status === '未通过审核')"  type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.contractId)">编辑
             </el-button>
-            <el-button v-if="mlms_contract_del" type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.contractId)">删除
+            <el-button v-if="mlms_contract_del && scope.row.status === '未通过审核'" type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.contractId)">删除
             </el-button>
             <!-- <el-button v-if="mlms_contract_rev" type="text" icon="el-icon-edit" size="mini" @click="handleReview(scope.row.contractId)">审核
             </el-button> -->
-            <el-button v-if="mlms_contract_pri" type="text" icon="el-icon-delete" size="mini" @click="handlePrint(scope.row.contractId)">打印
+            <el-button v-if="mlms_contract_pri && scope.row.status === '合同成立'" type="text" icon="el-icon-delete" size="mini" @click="handlePrint(scope.row.contractId)">打印
             </el-button>
-            <el-button v-if="mlms_contract_rel" type="text" icon="el-icon-edit" size="mini" @click="handleRelieve(scope.row.contractId)">解除
+            <el-button v-if="mlms_contract_rel && scope.row.status === '合同成立'" type="text" icon="el-icon-edit" size="mini" @click="handleRelieve(scope.row.contractId)">解除
+            </el-button>
+            <el-button v-if="mlms_relieve_rel" type="text" icon="el-icon-edit" size="mini" @click="goTo(scope.row.contractId)">解除
+            </el-button>
+            <el-button v-if="mlms_contract_com && scope.row.status === '合同纠纷'" type="text" icon="el-icon-edit" size="mini" @click="go(scope.row.contractId)">投诉
             </el-button>
           </template>
         </el-table-column>
@@ -134,6 +138,8 @@ export default {
       mlms_contract_rev: false,
       mlms_contract_pri: false,
       mlms_contract_rel: false,
+      mlms_relieve_rel: false,
+      mlms_contract_com: false,
       shipAttrDict: [],
       employeePayTypeDict: [],
       periodTypeDict: [],
@@ -184,6 +190,8 @@ export default {
     this.mlms_contract_rev = this.permissions['mlms_contract_rev']
     this.mlms_contract_pri = this.permissions['mlms_contract_pri']
     this.mlms_contract_rel = this.permissions['mlms_contract_rel']
+    this.mlms_relieve_rel = this.permissions['mlms_relieve_rel']
+    this.mlms_contract_com = this.permissions['mlms_contract_com']
     getUserInfo().then(res => {
       if (res.data.data.roles.indexOf(111) !== -1) {
         this.mangner = true
@@ -367,7 +375,7 @@ export default {
         this.$message.console.error('审核失败！')
       })
     },
-    async  handleRelieve (contractId) {
+    async handleRelieve (contractId) {
       this.contStatus = await getContractDetail(contractId).then(res => {
         return res.data.data.status
       })
@@ -501,7 +509,6 @@ export default {
     handleSearch () {
       this.form[this.prop] = this.input
       var params = {}
-      console.log(this.timeList)
       if (this.timeList) {
         this.form.periodDateStart = this.timeList[0]
         this.form.periodDateEnd = this.timeList[1]
@@ -509,7 +516,6 @@ export default {
       getUserInfo().then(res => {
         if(res.data.data.roles.indexOf(111) !== -1 || res.data.data.roles.indexOf(1) !== -1){
           params = {...this.form}
-          console.log(params)
         } else {
           params = {...this.form}
           params.userId = res.data.data.sysUser.userId
@@ -529,6 +535,16 @@ export default {
     clearSearchParam () {
       this.form = {}
       this.timeList = []
+    },
+    goTo (contractId) {
+      this.$router.push({ 
+        path: `/tmlms_spa/contractCancel_list/${contractId}`, 
+      })
+    },
+    go (contractId) {
+      this.$router.push({ 
+        path: `/tmlms_spa/contractCancel_admin/${contractId}`, 
+      })
     },
   },
 }

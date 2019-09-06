@@ -11,6 +11,18 @@ export default [
         component: () => import('@/views/tmlms/contractAdmin/Page/List'),
         meta: noKeepAlive,
       },
+      {
+        path: 'contractCancel_list/:contractId',
+        name: '合同解除和投诉列表',
+        component: () => import('@/views/tmlms/relieve/Page/List'),
+        meta: noKeepAlive,
+      },
+      {
+        path: 'contractCancel_admin/:contractId',
+        name: '管理员合同解除和投诉列表',
+        component: () => import('@/views/tmlms/relieve/Page/AdminList'),
+        meta: noKeepAlive,
+      },
     ],
   },
   // 船东
