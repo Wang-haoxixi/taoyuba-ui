@@ -350,9 +350,9 @@ export default {
       })
       // 拿到ID 同步获取地址和选中的地址
       if(data.villageId !== 0){
-      getAllArea(data.villageId).then( res=>{
-        this.options = res.data.data
-      })
+        getAllArea(data.villageId).then( res=>{
+          this.options = res.data.data
+        })
       }
       if(data.villageId === 0){
           if(data.shiplist) {

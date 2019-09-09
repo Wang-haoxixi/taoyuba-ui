@@ -6,41 +6,26 @@
         <template slot="left">
           <iep-button v-if="mlms_contract_add && mangner" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
-        <!-- <template slot="right">
-          <div class="input-wrapper">
-            <el-input :placeholder="placeholder" prefix-icon="el-icon-search" size="small" v-model="input" :maxlength="20">
-              <iep-button class="search-btn" slot="append" @click="handleSearch">搜索</iep-button>
-            </el-input>
-            <el-popover placement="bottom-end" width="350" trigger="click">
-                <el-form :model="form" label-width="120px" size="mini">
-                  <el-form-item label="船名：">
-                    <el-input v-model="form.shipName"></el-input>
-                  </el-form-item>
-                  <el-form-item label="船东身份证：">
-                    <el-input v-model="form.shipownerIdcard"></el-input>
-                  </el-form-item>
-                  <el-form-item label="船员身份证：">
-                    <el-input v-model="form.employeeIdcard"></el-input>
-                  </el-form-item>
-                  <el-form-item label="合同编号：">
-                    <el-input v-model="form.contractNumber"></el-input>
-                  </el-form-item>
-                  <el-form-item label="日期区间：">
-                    <div class="block">
-                      <el-date-picker v-model="timeList" value-format="yyyy-MM-dd HH:mm:ss" type="daterange" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-                    </div>
-                  </el-form-item>
-                  <el-form-item>
-                    <operation-wrapper>
-                      <iep-button type="primary" @click="handleSearch">搜索</iep-button>
-                      <iep-button @click="clearSearchParam">清空</iep-button>
-                    </operation-wrapper>
-                  </el-form-item>
-                </el-form>
-              <iep-button class="senior-btn el-icon-arrow-down" slot="reference"></iep-button>
-            </el-popover>
-          </div>
-        </template> -->
+        <template slot="right">
+          <span><el-input v-model="params.shipName" placeholder="请输入船名号" size="small" style="width:120px"></el-input></span>
+          <span><el-input v-model="params.shipownerName" placeholder="请输入持证人姓名" size="small" style="width:120px"></el-input></span>
+          <span><el-input v-model="params.employerName" placeholder="请输入甲方姓名" size="small" style="width:120px"></el-input></span>
+          <span><el-input v-model="params.employeeName" placeholder="请输入乙方姓名" size="small" style="width:120px"></el-input></span>
+          <span style="width:220px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" 
+            value-format="yyyy-MM-dd"  size="mini"></el-date-picker>
+          </span>
+          <span style="width:120px"><el-select v-model="conStatus" placeholder="请选择合同状态" size="small">
+              <el-option
+                v-for="item in statusDict"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                >
+              </el-option>
+            </el-select>
+          </span>
+          <el-button size="small"  @click="getParamData">搜索</el-button> 
+        </template>
       </operation-container>
       <avue-tree-table :option="options" style="margin-top: 20px;">
         <!-- <el-table-column label="是否审核" prop="status">
@@ -127,6 +112,12 @@ export default {
     return {
       contractList: [],
       params: {
+        shipName: '',
+        shipownerName: '',
+        employerName: '',
+        employeeName: '',
+        timeLists:'', 
+        status: '',
         current: 1,
         size: 10,
       },
@@ -178,6 +169,7 @@ export default {
       contStatus: '',
       contractAddr: '',
       mangner: false,
+      conStatus: '',
     }
   },
   created () {
@@ -209,17 +201,12 @@ export default {
         expandAll: false,
         columns: [
           {
-            text: '合同ID',
-            value: 'contractId',
-            width: 100,
-          },
-          {
-            text: '合同编号',
-            value: 'contractNumber',
-          },
-          {
             text: '船名',
             value: 'shipName',
+          },
+          {
+            text: '持证人',
+            value: 'shipownerName',
           },
           {
             text: '雇主（甲方）',
@@ -228,6 +215,10 @@ export default {
           {
             text: '雇员（乙方）',
             value: 'employeeName',
+          },
+          {
+            text: '合同创建日期',
+            value: 'createTime',
           },
           {
             text: '合同状态',
@@ -240,6 +231,7 @@ export default {
   },
   methods: {
     getContractList () {
+      console.log(this.params)
       getContractList(this.params).then(({data}) => {
         if (data.code === 0) {
           this.contractList = data.data.records
@@ -262,6 +254,21 @@ export default {
       }, (error) => {
         this.$message.error(error.message)
       })
+    },
+    getParamData () {
+      if (this.params.timeLists) {
+        this.params.timeStart = this.params.timeLists[0]
+        this.params.timeEnd = this.params.timeLists[1]
+      }
+      if (this.conStatus) {
+        this.statusDict.forEach(m => {
+          if(m.value === this.conStatus) {
+            this.params.status = m.lable
+          }
+        })
+      }
+      this.params.current = 1
+      this.getContractList()
     },
     currentChange (current) {
       this.params.current = current

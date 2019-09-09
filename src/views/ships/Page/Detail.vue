@@ -40,7 +40,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="所属渔村区域：" prop="villageId">
+            <!-- <el-form-item label="所属渔村区域：" prop="villageId">
               <span v-for="(region, key) in regions" :key="key">
                 <el-select v-model="regionChosen[key]" v-show="region.length > 0">
                   <el-option v-for="item in region"
@@ -49,6 +49,9 @@
                              :label="item.name"></el-option>
                 </el-select>
               </span>
+            </el-form-item> -->
+            <el-form-item label="所属行政区域：" prop="regionId">
+              <el-cascader v-model="form.regionId" :options="options" @active-item-change="handleItemChange" :props="props"></el-cascader>
             </el-form-item>
           </el-col>
         </el-row>
@@ -254,7 +257,10 @@
   </div>
 </template>
 <script>        
-import { getShipDetail, createShip, updateShip, getRogionList } from '@/api/ships/index'
+import { getShipDetail, createShip, updateShip, 
+  // getRogionList
+} from '@/api/ships/index'
+import { getArea, getAllArea, getAllAreaName } from '@/api/post/address'
 import { initForm , rules } from '../options'
 export default {
   data () {
@@ -281,6 +287,13 @@ export default {
         village: '',
       },
       init: false,
+      options: [],
+      props: {
+        value: 'areaCode',
+        label: 'name',
+        children: 'childList',
+      },
+      arr:[],
     }                               
   },
   computed: {                                                                                                                                                               
@@ -295,45 +308,99 @@ export default {
     },
   },
   created () {                                    
-    this.getRogionList(0, 'province')                         
+    // this.getRogionList(0, 'province')                         
     if (this.type !== 'create' && this.shipId) {                                      
       this.getShipDetail()
     } else {        
-      this.init = true
+      getArea(330000000000).then(res=>{
+        this.options = res.data.data
+        this.options.forEach(item=>{
+          this.$set(item,'childList',[])
+        })
+      })
     }
   },
   mounted () {                    
   },
-  methods: {                                                                                                                                                                                                                                                                                                      
-    getRogionList (pid, target) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-      getRogionList(pid).then(({data}) =>   {                                  
-        if (data.code === 0) {
-          this.regions[target] = data.data
+  methods: {  
+    handleItemChange (val) {
+      getArea(val[val.length-1]).then(res=>{
+        let data = res.data.data
+        this.getNode(this.options,val[val.length-1],data)
+      })
+    },
+    getNode (node,val,data) {
+      node.forEach(res=>{
+        if(res.areaCode == val){
+          res.childList = data
+          if(res.level < 3){
+              res.childList.forEach(item=>{
+                if(item.childList === undefined){
+                    this.$set(item,'childList',[])
+                }
+              })
+          }
+        }else{
+          if(res.childList && res.childList.length !== 0){
+            this.getNode(res.childList,val,data)
+          }
         }
-      }, (error) => {       
-        this.$message.error(error.message)
-      })                                                                                                                                              
-    },                                      
+      })
+    },                                                                                                                                                                                                                                                                                           
+    // getRogionList (pid, target) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+    //   getRogionList(pid).then(({data}) =>   {                                  
+    //     if (data.code === 0) {
+    //       this.regions[target] = data.data
+    //     }
+    //   }, (error) => {       
+    //     this.$message.error(error.message)
+    //   })                                                                                                                                              
+    // },                                      
     getShipDetail () {                                      
       getShipDetail(this.shipId).then(({data}) => {
         if (data.code === 0) {
-          this.form = data.data
-          this.regionChosen.province = data.data.province
-          this.regionChosen.city = data.data.city
-          this.regionChosen.district = data.data.district
-          this.regionChosen.town = data.data.town
-          this.regionChosen.village = data.data.villageId
-          this.$nextTick(() => {
-            this.init = true
-          })
+          // this.regionChosen.province = data.data.province
+          // this.regionChosen.city = data.data.city
+          // this.regionChosen.district = data.data.district
+          // this.regionChosen.town = data.data.town
+          // this.regionChosen.village = data.data.villageId
+          if(data.data.regionId !== 0){
+            getAllArea(data.data.regionId).then( res=>{
+              this.options = res.data.data
+            })
+          }
+          if(data.data.regionId === 0){
+            this.form = data.data  
+            getArea(330000000000).then(res=>{
+              this.options = res.data.data
+              this.options.forEach(item=>{
+                this.$set(item,'childList',[])
+              })
+            })
+            this.form.regionId = this.options        
+          }else {
+            getAllAreaName(data.data.regionId).then( res=>{
+              // 处理后端数据变成我要用的数据
+              this.getarr(res.data.data,this.arr)
+              data.data.regionId = this.arr
+              this.form = data.data
+            })
+          }
         }
       }, (error) => {
         this.$message.error(error.message)
       })
     },
+    getarr (node) {
+      this.arr.push(node.areaCode)
+      if(node.child){
+        this.getarr(node.child)
+      }
+    },
     handleSubmit () {
       this.$refs.form.validate(valid => {
         if (valid) {
+          this.form.regionId = this.form.regionId[this.form.regionId.length - 1]
           if (this.type === 'create') {
             createShip(this.form).then(({data}) => {
               if (data.code === 0) {
@@ -363,49 +430,49 @@ export default {
     },
   },
   watch: {
-    'regionChosen.province': function (val) {
-      if (this.init) {
-        this.regionChosen.city = ''
-        this.regionChosen.district = ''
-        this.regionChosen.town = ''
-        this.regionChosen.village = ''
-      }
-      this.regions.city = []
-      this.regions.district = []
-      this.regions.town = []
-      this.regions.village = []
-      if (val) this.getRogionList(val, 'city')
-    },
-    'regionChosen.city': function (val) {
-      if (this.init) {
-        this.regionChosen.district = ''
-        this.regionChosen.town = ''
-        this.regionChosen.village = ''
-      }
-      this.regions.district = []
-      this.regions.town = []
-      this.regions.village = []
-      if (val) this.getRogionList(val, 'district')
-    },
-    'regionChosen.district': function (val) {
-      if (this.init) {
-        this.regionChosen.town = ''
-        this.regionChosen.village = ''
-      }
-      this.regions.town = []
-      this.regions.village = []
-      if (val) this.getRogionList(val, 'town')
-    },
-    'regionChosen.town': function (val) {
-      if (this.init) {
-        this.regionChosen.village = ''
-      }
-      this.regions.village = []
-      if (val) this.getRogionList(val, 'village')
-    },
-    'regionChosen.village': function (val) {
-      this.form.villageId = val
-    },
+    // 'regionChosen.province': function (val) {
+    //   if (this.init) {
+    //     this.regionChosen.city = ''
+    //     this.regionChosen.district = ''
+    //     this.regionChosen.town = ''
+    //     this.regionChosen.village = ''
+    //   }
+    //   this.regions.city = []
+    //   this.regions.district = []
+    //   this.regions.town = []
+    //   this.regions.village = []
+    //   if (val) this.getRogionList(val, 'city')
+    // },
+    // 'regionChosen.city': function (val) {
+    //   if (this.init) {
+    //     this.regionChosen.district = ''
+    //     this.regionChosen.town = ''
+    //     this.regionChosen.village = ''
+    //   }
+    //   this.regions.district = []
+    //   this.regions.town = []
+    //   this.regions.village = []
+    //   if (val) this.getRogionList(val, 'district')
+    // },
+    // 'regionChosen.district': function (val) {
+    //   if (this.init) {
+    //     this.regionChosen.town = ''
+    //     this.regionChosen.village = ''
+    //   }
+    //   this.regions.town = []
+    //   this.regions.village = []
+    //   if (val) this.getRogionList(val, 'town')
+    // },
+    // 'regionChosen.town': function (val) {
+    //   if (this.init) {
+    //     this.regionChosen.village = ''
+    //   }
+    //   this.regions.village = []
+    //   if (val) this.getRogionList(val, 'village')
+    // },
+    // 'regionChosen.village': function (val) {
+    //   this.form.villageId = val
+    // },
   },
 }
 </script>

@@ -22,3 +22,17 @@ export function getAreacode (name) {
     method: 'get',
   })
 }
+
+export function getAllArea (id) {
+  return request({
+      url: `admin/region/wholeInfoList?areaCode=${id}`,
+      method: 'get',
+  })
+}
+
+export function getAllAreaName (id) {
+  return request({
+      url: `admin/region/wholeInfo?areaCode=${id}`,
+      method: 'get',
+  })
+}

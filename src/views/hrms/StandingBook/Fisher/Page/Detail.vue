@@ -48,89 +48,96 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="邮政编码：" prop="zipcode">
-              <el-input maxlength="6" v-model="form.zipcode"></el-input>
+            <el-form-item label="所属行政区域：" prop="regionId">
+              <el-cascader v-model="form.regionId" :options="options" @active-item-change="handleItemChange" :props="props"></el-cascader>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
+          <el-col :span="12">
+            <el-form-item label="邮政编码：" prop="zipcode">
+              <el-input maxlength="6" v-model="form.zipcode"></el-input>
+            </el-form-item>
+          </el-col>
           <el-col :span="12">
             <el-form-item label="手机号码：" prop="mobile">
               <el-input maxlength="13" v-model="form.mobile"></el-input>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="联系地址：" prop="address">
               <el-input maxlength="100" v-model="form.address"></el-input>
             </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
+          </el-col> 
           <el-col :span="12">
             <el-form-item label="渔船所有权登记证书：" prop="licensesOwnerShip">
               <el-input maxlength="20" v-model="form.licensesOwnerShip"></el-input>
-            </el-form-item>
-          </el-col> 
-          <el-col :span="12">
-            <el-form-item label="捕捞许可证编号：" prop="licensesFishingNo">
-              <el-input maxlength="50" v-model="form.licensesFishingNo"></el-input>
             </el-form-item>
           </el-col>         
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="国籍证书编号：" prop="licensesNationalNo">
-              <el-input maxlength="50" v-model="form.licensesNationalNo"></el-input>
+            <el-form-item label="捕捞许可证编号：" prop="licensesFishingNo">
+              <el-input maxlength="50" v-model="form.licensesFishingNo"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="船舶检验证书编号：" prop="licensesInspectionNo">
-              <el-input maxlength="50" v-model="form.licensesInspectionNo"></el-input>
+            <el-form-item label="国籍证书编号：" prop="licensesNationalNo">
+              <el-input maxlength="50" v-model="form.licensesNationalNo"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>   
           <el-col :span="12">
+            <el-form-item label="船舶检验证书编号：" prop="licensesInspectionNo">
+              <el-input maxlength="50" v-model="form.licensesInspectionNo"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <iep-form-item class="form-half" prop="licensesDateExpire" label-name="证书有效期">
               <iep-date-picker v-model="form.licensesDateExpire" type="date" placeholder="选择日期"></iep-date-picker>
             </iep-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="主机总功率(kw)：" prop="engineTotalPower">
               <el-input maxlength="6" v-model="form.engineTotalPower"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="主机功率(kw)：" prop="mainEnginePower">
               <el-input maxlength="6" v-model="form.mainEnginePower"></el-input>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="双控功率(kw)：" prop="dualPower">
               <el-input maxlength="6" v-model="form.dualPower"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="主机型号：" prop="mainEngineModel">
               <el-input maxlength="50" v-model="form.mainEngineModel"></el-input>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="总吨位：" prop="grossTonnage">
               <el-input maxlength="3" v-model="form.grossTonnage"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="船长（m）：" prop="hullLength">
               <el-input maxlength="6" v-model="form.hullLength"></el-input>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="船体材料：" prop="hullMaterial">
               <el-select v-model="form.hullMaterial">
@@ -142,8 +149,6 @@
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="船籍港：" prop="portRegister">
               <el-select v-model="form.portRegister">
@@ -155,6 +160,8 @@
               </el-select>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="渔具名称：" prop="fishingGear">
               <el-select v-model="form.fishingGear">
@@ -166,13 +173,13 @@
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="建造完工日期：" prop="buildDate">
               <iep-date-picker v-model="form.buildDate" type="date" placeholder="选择日期"></iep-date-picker>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="作业类型：" prop="activityType">
               <el-select v-model="form.activityType">
@@ -184,8 +191,6 @@
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="作业方式1：" prop="workMode">
               <el-select v-model="form.workMode">
@@ -197,6 +202,8 @@
               </el-select>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="作业方式2：" prop="workMode">
               <el-select v-model="form.workMode2">
@@ -208,25 +215,25 @@
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="主捕种类：" prop="fishType">
               <el-input maxlength="100" v-model="form.fishType"></el-input>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="型宽：" prop="mouldedBreadth">
               <el-input maxlength="6" v-model="form.mouldedBreadth"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="型深：" prop="mouldedDepth">
               <el-input maxlength="6" v-model="form.mouldedDepth"></el-input>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="净吨位：" prop="netTonnage">
               <el-input maxlength="3" v-model="form.netTonnage"></el-input>
@@ -243,10 +250,13 @@
   </div>
 </template>
 <script>        
-import { getShipDetail, createShip, updateShip, getRogionList, findMyship } from '@/api/ships/index'
+import { getShipDetail, createShip, updateShip, 
+// getRogionList, 
+findMyship } from '@/api/ships/index'
 import { initForm , rules } from '../options'
 import { getVillageshipinfoByuser, getVillageshipinfoById } from '@/api/tmlms/bvillage/villageship'
 import { getUserInfo } from '@/api/login'
+import { getArea, getAllArea, getAllAreaName } from '@/api/post/address'
 export default {
   data () {
     return {                  
@@ -276,6 +286,13 @@ export default {
       userId: '',
       shipnameInfo:'',
       isState: true, 
+      options: [],
+      props: {
+        value: 'areaCode',
+        label: 'name',
+        children: 'childList',
+      },
+      arr:[],
     }                               
   },
   computed: {                                                                                                                                                               
@@ -301,38 +318,85 @@ export default {
     },
   },
   created () {                                    
-    this.getRogionList(0, 'province')                         
+    // this.getRogionList(0, 'province')                         
     if ((this.$route.query.see || this.$route.query.edit)&& this.shipId) {                              
       this.getShipDetail()
     } else {       
-      this.init = true
+      getArea(330000000000).then(res=>{
+        this.options = res.data.data
+        this.options.forEach(item=>{
+          this.$set(item,'childList',[])
+        })
+      })
     } 
     this.getshipNameList()
   },
   mounted () {                    
   },
-  methods: {                                                                                                                                                                                                                                                                                                      
-    getRogionList (pid, target) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-      getRogionList(pid).then(({data}) =>   {                                  
-        if (data.code === 0) {
-          this.regions[target] = data.data
+  methods: {
+    handleItemChange (val) {
+      getArea(val[val.length-1]).then(res=>{
+        let data = res.data.data
+        this.getNode(this.options,val[val.length-1],data)
+      })
+    },
+    getNode (node,val,data) {
+      node.forEach(res=>{
+        if(res.areaCode == val){
+          res.childList = data
+          if(res.level < 3){
+              res.childList.forEach(item=>{
+                if(item.childList === undefined){
+                    this.$set(item,'childList',[])
+                }
+              })
+          }
+        }else{
+          if(res.childList && res.childList.length !== 0){
+            this.getNode(res.childList,val,data)
+          }
         }
-      }, (error) => {       
-        this.$message.error(error.message)
-      })                                                                                                                                              
-    },                                      
+      })
+    },                                                                                                                                                                                                                                                                                                     
+    // getRogionList (pid, target) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+    //   getRogionList(pid).then(({data}) =>   {                                  
+    //     if (data.code === 0) {
+    //       this.regions[target] = data.data
+    //     }
+    //   }, (error) => {       
+    //     this.$message.error(error.message)
+    //   })                                                                                                                                              
+    // },                                      
     getShipDetail () {                                      
       getShipDetail(this.shipId).then(({data}) => {
         if (data.code === 0) {
-          this.form = data.data
-          this.regionChosen.province = data.data.province
-          this.regionChosen.city = data.data.city
-          this.regionChosen.district = data.data.district
-          this.regionChosen.town = data.data.town
-          this.regionChosen.village = data.data.villageId
-          this.$nextTick(() => {
-            this.init = true
-          })
+          // this.regionChosen.province = data.data.province
+          // this.regionChosen.city = data.data.city
+          // this.regionChosen.district = data.data.district
+          // this.regionChosen.town = data.data.town
+          // this.regionChosen.village = data.data.villageId
+          if(data.data.regionId !== 0){
+            getAllArea(data.data.regionId).then( res=>{
+              this.options = res.data.data
+            })
+          }
+          if(data.data.regionId === 0){
+            this.form = data.data  
+            getArea(330000000000).then(res=>{
+              this.options = res.data.data
+              this.options.forEach(item=>{
+                this.$set(item,'childList',[])
+              })
+            })
+            this.form.regionId = this.options        
+          }else {
+            getAllAreaName(data.data.regionId).then( res=>{
+              // 处理后端数据变成我要用的数据
+              this.getarr(res.data.data,this.arr)
+              data.data.regionId = this.arr
+              this.form = data.data
+            })
+          }
         }
       }, (error) => {
         this.$message.error(error.message)
@@ -365,8 +429,15 @@ export default {
     //     }
     //   })
     // },
+    getarr (node) {
+      this.arr.push(node.areaCode)
+      if(node.child){
+        this.getarr(node.child)
+      }
+    },
     handleSubmit () {
       this.$refs.form.validate(valid => {
+        this.form.regionId = this.form.regionId[this.form.regionId.length - 1]
         if (valid) {
           if (this.isState === false) {
             createShip(this.form).then(({data}) => {
@@ -423,49 +494,49 @@ export default {
     },
   },
   watch: {
-    'regionChosen.province': function (val) {
-      if (this.init) {
-        this.regionChosen.city = ''
-        this.regionChosen.district = ''
-        this.regionChosen.town = ''
-        this.regionChosen.village = ''
-      }
-      this.regions.city = []
-      this.regions.district = []
-      this.regions.town = []
-      this.regions.village = []
-      if (val) this.getRogionList(val, 'city')
-    },
-    'regionChosen.city': function (val) {
-      if (this.init) {
-        this.regionChosen.district = ''
-        this.regionChosen.town = ''
-        this.regionChosen.village = ''
-      }
-      this.regions.district = []
-      this.regions.town = []
-      this.regions.village = []
-      if (val) this.getRogionList(val, 'district')
-    },
-    'regionChosen.district': function (val) {
-      if (this.init) {
-        this.regionChosen.town = ''
-        this.regionChosen.village = ''
-      }
-      this.regions.town = []
-      this.regions.village = []
-      if (val) this.getRogionList(val, 'town')
-    },
-    'regionChosen.town': function (val) {
-      if (this.init) {
-        this.regionChosen.village = ''
-      }
-      this.regions.village = []
-      if (val) this.getRogionList(val, 'village')
-    },
-    'regionChosen.village': function (val) {
-      this.form.villageId = val
-    },
+    // 'regionChosen.province': function (val) {
+    //   if (this.init) {
+    //     this.regionChosen.city = ''
+    //     this.regionChosen.district = ''
+    //     this.regionChosen.town = ''
+    //     this.regionChosen.village = ''
+    //   }
+    //   this.regions.city = []
+    //   this.regions.district = []
+    //   this.regions.town = []
+    //   this.regions.village = []
+    //   if (val) this.getRogionList(val, 'city')
+    // },
+    // 'regionChosen.city': function (val) {
+    //   if (this.init) {
+    //     this.regionChosen.district = ''
+    //     this.regionChosen.town = ''
+    //     this.regionChosen.village = ''
+    //   }
+    //   this.regions.district = []
+    //   this.regions.town = []
+    //   this.regions.village = []
+    //   if (val) this.getRogionList(val, 'district')
+    // },
+    // 'regionChosen.district': function (val) {
+    //   if (this.init) {
+    //     this.regionChosen.town = ''
+    //     this.regionChosen.village = ''
+    //   }
+    //   this.regions.town = []
+    //   this.regions.village = []
+    //   if (val) this.getRogionList(val, 'town')
+    // },
+    // 'regionChosen.town': function (val) {
+    //   if (this.init) {
+    //     this.regionChosen.village = ''
+    //   }
+    //   this.regions.village = []
+    //   if (val) this.getRogionList(val, 'village')
+    // },
+    // 'regionChosen.village': function (val) {
+    //   this.form.villageId = val
+    // },
   },
 }
 </script>

@@ -127,10 +127,11 @@ const columnsMap = [
       shipownerIdcard: '',
       updateTime: '',
       userId: '',
-      villageId: '',
+      // villageId: '',
       workMode: '',
       workMode2: '',
       zipcode: '',
+      regionId: '',
     }
   }               
                  
@@ -168,10 +169,11 @@ const columnsMap = [
       shipownerIdcard: '',
       updateTime: '',
       userId: '',
-      villageId: '',
+      // villageId: '',
       workMode: '',
       workMode2: '',
       zipcode: '',
+      regionId: '',
     }
   }
 
@@ -241,7 +243,10 @@ const columnsMap = [
     // netTonnage: [
     //   {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 0, message: '请输入0~999的整数！'},
     // ],
-    villageId: [
+    // villageId: [
+    //   {required: true, message: '该选项必填！', trigger: 'blur'},
+    // ],
+    regionId: [
       {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
     // activityType: [
