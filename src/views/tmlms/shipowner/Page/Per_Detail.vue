@@ -38,7 +38,7 @@
   </div>
 </template>
 <script>
-import { getShipownerByidcard, editShipowner } from '@/api/tmlms/shipowner'
+import { getShipownerByidcard, newEditShipowner } from '@/api/tmlms/shipowner'
 import { getUserInfo } from '@/api/login'
 export default {
   data () {
@@ -102,7 +102,7 @@ export default {
           } else {
             type = 2
           }
-          editShipowner(this.shipowner, type).then(res=>{
+          newEditShipowner(this.shipowner, type).then(res=>{
             this.$message({
               message: res.data.msg,
               type: 'success',

@@ -82,3 +82,11 @@ export function getIdcardCheck (idcard) {
         },
     }) 
 }
+
+export function newEditShipowner (data,type) {
+    return request({
+        url: `${prefixUrl}/newedit?type=${type}`,
+        method: 'post',
+        data: data,
+    })
+}

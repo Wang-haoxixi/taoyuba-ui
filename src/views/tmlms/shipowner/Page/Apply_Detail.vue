@@ -56,7 +56,7 @@ import { getArea } from '@/api/post/address.js'
 import { saveShipowner, 
         getShipownerByidcard, 
         // getAllArea, 
-        editShipowner, 
+        newEditShipowner, 
         // getAllAreaName 
         } from '@/api/tmlms/shipowner'
 // import { addUserRole } from '@/api/admin/user'
@@ -174,7 +174,7 @@ export default {
             let type = 2
             if (this.isIdCard === true) {
               let data = JSON.parse(JSON.stringify(shipowner))
-              editShipowner(data,type).then(res=>{
+              newEditShipowner(data,type).then(res=>{
                   this.$message({
                     message: res.data.msg,
                     type: 'success',
