@@ -182,4 +182,23 @@ export default [
       //     },
       //   ],
       // },
+      // 培训机构
+  {
+    path: '/Gov',
+    component: Layout,
+    children: [
+      {
+        path: 'detail',
+        name: 'detailGov',
+        component: () => import('@/views/tmlms/gov/Page/Detail'),
+        meta: noKeepAlive,
+      },
+      {
+        path: '/admin/gov',
+        name: 'Gov',
+        component: () => import('@/views/tmlms/gov/index'),
+        meta: noKeepAlive,
+      },
+    ],
+  },      
 ]
