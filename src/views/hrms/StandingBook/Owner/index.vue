@@ -55,7 +55,7 @@
 </template>
 <script>
 import { getVillageShipowner } from '@/api/tmlms/bvillage'
-import { getUserInfo } from '@/api/login'
+// import { getUserInfo } from '@/api/login'
 export default {
   data () {
     return {
@@ -132,18 +132,22 @@ export default {
     },
     // 获取列表数据
     getData () {
-      getUserInfo().then(data => {
-        this.userId = data.data.data.sysUser.userId
-        // detailVillage(this.userId).then(data => {
-        //   console.log(data.data.data)
-        //   this.villageId = data.data.data.villageId
-          this.params.villageId = this.userId
-          getVillageShipowner(this.params).then(res=>{
-            this.shipownerList = res.data.data.records
-            this.total = res.data.data.total
-          })
-        // })
-      })     
+      // getUserInfo().then(data => {
+      //   this.userId = data.data.data.sysUser.userId
+      //   // detailVillage(this.userId).then(data => {
+      //   //   console.log(data.data.data)
+      //   //   this.villageId = data.data.data.villageId
+      //     this.params.villageId = this.userId
+      //     getVillageShipowner(this.params).then(res=>{
+      //       this.shipownerList = res.data.data.records
+      //       this.total = res.data.data.total
+      //     })
+      //   // })
+      // })
+      getVillageShipowner(this.params).then(res=>{
+        this.shipownerList = res.data.data.records
+        this.total = res.data.data.total
+      }) 
     },
   },
   computed: {

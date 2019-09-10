@@ -16,7 +16,7 @@
 </template>
 <script>
 import vInfo from '@/views/tmlms/informa/index'
-import vShipowner from '@/views/tmlms/shipowner/Page/Detail'
+import vShipowner from '@/views/tmlms/shipowner/Page/Per_Detail'
 // import vTraining from '@/views/tmlms/Training/Page/Detail'
 import vAgent from '@/views/tmlms/agent/Page/Detail'
 import vBvillage from '@/views/tmlms/bvillage/Page/Detail'
