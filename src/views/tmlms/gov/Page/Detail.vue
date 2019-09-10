@@ -23,6 +23,14 @@
                 <div v-else>{{ gov.phone }}</div>
               </el-form-item>
             </el-col>
+            <el-col :span="8">        
+              <el-form-item label="区域类型:" prop="regionType">
+                <el-select v-if="!$route.query.see" v-model="gov.regionType" placeholder="请选择">
+                  <el-option v-for="(item, index) in typeList" :key="index" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+                <div v-else>{{ gov.regionType }}</div>
+              </el-form-item>
+            </el-col>
             <el-col :span="8">
               <el-form-item label="单位地址:" prop="address">
                 <el-input v-model="gov.address" placeholder="" v-if="!$route.query.see"></el-input>
@@ -59,6 +67,28 @@ export default {
           address: '',
         },
         userId: '',
+        typeList: [
+          {
+            value: 1,
+            label: '省',
+          },
+          {
+            value: 2,
+            label: '市',
+          },
+          {
+            value: 3,
+            label: '县区',
+          },
+          {
+            value: 4,
+            label: '乡镇',
+          },
+          {
+            value: 5,
+            label: '村级',
+          },
+        ],
         rules: {
             govName: [
                 { required: true, message: '请输入单位名称', trigger: 'blur' },
@@ -106,6 +136,13 @@ export default {
       if (this.$route.query.edit || this.$route.query.see) {
         detailGov(this.userId).then(data => {
           this.gov = data.data.data
+          if (this.$route.query.see) {
+            this.typeList.forEach(m => {
+              if(this.gov.regionType === m.value) {
+                this.gov.regionType  = m.label
+              }
+            })
+          }
         })
       }
     },
