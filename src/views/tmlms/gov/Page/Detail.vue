@@ -37,6 +37,12 @@
                 <div v-else>{{ gov.address }}</div>
               </el-form-item>
             </el-col>
+            <el-col :span="12">
+              <el-form-item label="所属行政区域：" prop="regionId">
+                <el-cascader v-model="gov.regionId" :options="options" @active-item-change="handleItemChange" :props="props" v-if="!$route.query.see"></el-cascader>
+                <div v-else>{{ gov.regionId }}</div>
+              </el-form-item>
+            </el-col>
           </el-row>
         </el-form>
         <div style="text-align:center">
@@ -48,6 +54,7 @@
 </template>
 <script>
 import { detailGov, saveGov, updateGov } from '@/api/tmlms/gov'
+import { getArea, getAllArea, getAllAreaName, getInfo } from '@/api/post/address'
 export default {
   data () {
       var checkPhone = (rule, value, callback) => {
@@ -68,10 +75,10 @@ export default {
         },
         userId: '',
         typeList: [
-          {
-            value: 1,
-            label: '省',
-          },
+          // {
+          //   value: 1,
+          //   label: '省',
+          // },
           {
             value: 2,
             label: '市',
@@ -101,12 +108,23 @@ export default {
                 { validator: checkPhone, trigger: 'blur' },
             ],
         },
-       }
+        options: [],
+        props: {
+          value: 'areaCode',
+          label: 'name',
+          children: 'childList',
+        },
+        arr:[],
+      }
   },
   methods: {
     // 提交表单
     save () {
       this.$refs['form'].validate((valid) => {
+        console.log(this.gov.regionId)
+        if (this.gov.regionId) {
+          this.gov.regionId = this.gov.regionId[this.gov.regionId.length - 1]
+        } 
         if (valid) {
           if (!this.$route.query.edit) {
             saveGov(this.gov).then(() => {
@@ -126,7 +144,7 @@ export default {
         }
       })
     },
-    getData () {
+    getData () {     
       if (this.$route.query.edit) {
         this.userId = this.$route.query.edit
       }
@@ -135,22 +153,98 @@ export default {
       }
       if (this.$route.query.edit || this.$route.query.see) {
         detailGov(this.userId).then(data => {
-          this.gov = data.data.data
-          if (this.$route.query.see) {
-            this.typeList.forEach(m => {
-              if(this.gov.regionType === m.value) {
-                this.gov.regionType  = m.label
-              }
-            })
+          if (data.data.code === 0) {
+            if(data.data.data.regionId !== 0){
+              getAllArea(data.data.data.regionId).then( res=>{
+                this.options = res.data.data
+              })
+            }
+            if(data.data.data.regionId === 0){
+              this.gov = data.data.data
+              getArea(330000000000).then(res=>{
+                this.options = res.data.data
+                this.options.forEach(item=>{
+                  this.$set(item, 'childList',[])
+                })
+              })
+              this.gov.regionId = this.options
+              if (this.$route.query.see) {
+                this.typeList.forEach(m => {
+                  if(this.gov.regionType === m.value) {
+                    this.gov.regionType  = m.label
+                  }
+                })
+                this.gov.regionId = ''
+              }      
+            }else {
+              getAllAreaName(data.data.data.regionId).then( res=>{
+                // 处理后端数据变成我要用的数据
+                this.getarr(res.data.data, this.arr)
+                data.data.data.regionId = this.arr
+                this.gov = data.data.data
+                if (this.$route.query.see) {
+                  this.typeList.forEach(m => {
+                    if(this.gov.regionType === m.value) {
+                      this.gov.regionType  = m.label
+                    }
+                  })
+                  this.gov.regionId.forEach(v => {
+                    this.gov.regionId = ''
+                    getInfo(v).then(res => { 
+                      this.gov.regionId += res.data.data.name 
+                    })   
+                  })
+                }
+              })
+            }
           }
         })
+      }
+    },
+    handleItemChange (val) {
+      getArea(val[val.length-1]).then(res=>{
+        let data = res.data.data
+        this.getNode(this.options,val[val.length-1],data)
+      })
+    },
+    getNode (node,val,data) {
+      node.forEach(res=>{
+        if(res.areaCode == val){
+          res.childList = data
+          if(res.level < 3){
+              res.childList.forEach(item=>{
+                if(item.childList === undefined){
+                    this.$set(item,'childList',[])
+                }
+              })
+          }
+        }else{
+          if(res.childList && res.childList.length !== 0){
+            this.getNode(res.childList,val,data)
+          }
+        }
+      })
+    },
+    getarr (node) {
+      this.arr.push(node.areaCode)
+      if(node.child){
+        this.getarr(node.child)
       }
     },
   },
   computed: {
   },
   created () {
-    this.getData()
+    if (this.$route.query.see || this.$route.query.edit) {                              
+      this.getData()
+    } else {       
+      getArea(330000000000).then(res=>{
+        this.options = res.data.data
+        this.options.forEach(item=>{
+          this.$set(item,'childList',[])
+        })
+      })
+    } 
   },
 }
 </script>
