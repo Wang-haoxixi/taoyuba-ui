@@ -368,19 +368,25 @@ export default {
         })
       }) 
     },
-    handleReview (switchs, contractId) {
-      let data = ''
-      if(switchs){
-        data = 1
-      }else{
-        data = 2
-      }
-      reviewContract({contractId: contractId, status: data}).then(() =>{
-        this.$message.success('审核成功')
-        this.getContractList()
+    handleReview (contractId) {
+      this.$confirm('此操作将审核该合同', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type:'warning',
+      }).then(() => {
+        let data = 1
+        reviewContract({contractId: contractId, status: data}).then(() =>{
+          this.$message.success('审核成功')
+          this.getContractList()
+        }).catch(() => {
+          this.$message.console.error('审核失败！')
+        })
       }).catch(() => {
-        this.$message.console.error('审核失败！')
-      })
+        this.$message({
+          type: 'info',
+          message: '已取消审核',
+        })
+      })     
     },
     async handleRelieve (contractId) {
       this.contStatus = await getContractDetail(contractId).then(res => {
