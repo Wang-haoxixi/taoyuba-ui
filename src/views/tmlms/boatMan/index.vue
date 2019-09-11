@@ -35,6 +35,7 @@
             prop="status"  
             label="审核操作"
             width="100"
+            v-if="manager"
           >
           <template slot-scope="scope">
             <div>
@@ -103,6 +104,11 @@ export default {
             css: '182',
           },
           {
+            text: '年龄',
+            value: 'birthday',
+            css: '80',
+          },
+          {
             text: '联系电话',
             value: 'phone',
             css: '120',
@@ -164,6 +170,9 @@ export default {
           if(item.remark.length > 19) {
             item.remark = item.remark.substring(0, 20) + '....'
           }
+          let now = new Date()
+          let year = now.getFullYear()
+          item.birthday = year - item.birthday.substring(0,4)
         })
         console.log(this.shipownerList)
         this.shipownerList.forEach( item=>{
@@ -185,8 +194,8 @@ export default {
     },
     //搜索
     getParamData () {
-        this.params.current = 1
-         this.getData()
+      this.params.current = 1
+      this.getData()
     },
     // 删除
     handleDel (id) {

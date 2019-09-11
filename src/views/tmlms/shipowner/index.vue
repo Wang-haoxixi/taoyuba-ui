@@ -4,10 +4,10 @@
       <div class="shipowner_title">
         <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button>
         <div style="float:right">
-          <span><el-input v-model="params.idcard" placeholder="请输入身份证" size="small"></el-input></span>
-          <span><el-input v-model="params.realName" placeholder="请输入姓名" size="small"></el-input></span>
-          <span><el-input v-model="params.phone" placeholder="请输入联系电话" size="small"></el-input></span>
-          <span><el-select v-model="params.status" placeholder="请选择状态" size="small">
+          <span><el-input v-model="params.idcard" placeholder="请输入身份证" size="small" clearable></el-input></span>
+          <span><el-input v-model="params.realName" placeholder="请输入姓名" size="small" clearable></el-input></span>
+          <span><el-input v-model="params.phone" placeholder="请输入联系电话" size="small" clearable></el-input></span>
+          <span><el-select v-model="params.status" placeholder="请选择状态" size="small" clearable>
               <el-option
                 v-for="item in status"
                 :key="item.value"
@@ -16,7 +16,7 @@
               </el-option>
             </el-select>
           </span>
-          <el-button size="small"  @click="getData">搜索</el-button>
+          <el-button size="small"  @click="getParamData">搜索</el-button>
         </div>
       </div>
         <el-table
@@ -199,6 +199,11 @@ export default {
       if(this.userData.roles.indexOf(111) !== -1) {
         this.manager = true
       }
+    },
+    //搜索
+    getParamData () {
+      this.params.current = 1
+      this.getData()
     },
   },
   computed: {

@@ -76,8 +76,9 @@ export default {
       })
     },
     async loadPage (param = this.searchForm) {              
-       let userId = this.$store.getters.userInfo.userId
-       this.loadTable({ userId: userId, ...param }, getShipList)
+      //  let userId = this.$store.getters.userInfo.userId
+      let idcard = this.$store.getters.userInfo.idCard
+       this.loadTable({ shipownerIdcard: idcard, ...param }, getShipList)
     },
   },
 }

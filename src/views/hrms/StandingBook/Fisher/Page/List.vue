@@ -14,10 +14,10 @@
           <span><el-input v-model="params.shipNo" placeholder="请输入渔船编号" size="small" clearable></el-input></span>
           <span><el-input v-model="params.shipowner" placeholder="请输入持证人姓名" size="small" clearable></el-input></span>
           <span><el-input v-model="params.shipownerIdcard" placeholder="请输入持证人身份证" size="small" clearable></el-input></span>
-          <el-button size="small"  @click="loadPage(params)">搜索</el-button>
+          <el-button size="small"  @click="getParamData">搜索</el-button>
         </template>
       </operation-container>
-      <iep-table                    
+      <!-- <iep-table                    
               :isLoadTable="isLoadTable"
               :pagination="pagination"
               :columnsMap="columnsMap"
@@ -25,7 +25,18 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               @selection-change="handleSelectionChange"
-              is-mutiple-selection>
+              is-mutiple-selection> -->
+      <el-table
+          :data="pagedTable"
+          stripe
+          style="width: 100%">
+        <el-table-column
+          v-for="(item,index) in options.columns"
+          :key="index"
+          :prop="item.value"  
+          :label="item.text"
+        >
+          </el-table-column>
         <el-table-column prop="operation" label="操作" width="140">
           <template slot-scope="scope">
             <operation-wrapper>
@@ -43,7 +54,10 @@
             </operation-wrapper>
           </template>
         </el-table-column>
-      </iep-table>
+      </el-table>
+      <div style="text-align: center;margin: 20px 0;">
+        <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
+      </div>
     </basic-container>
   </div>
 </template>
@@ -60,8 +74,10 @@ export default {
   mixins: [mixins],
   data () {
     return {
+      pagedTabl: [],
       columnsMap,
       // searchData: 'shipName',
+      total: 10,
       params: {
         current: 1,
         size: 10,
@@ -70,14 +86,43 @@ export default {
         shipowner: '',
         shipownerIdcard: '',
       },
+      options: {
+        expandAll: false,
+        columns: [
+          {
+            value: 'shipName',
+            text: '渔船名',
+          },
+          {
+            value: 'shipNo',
+            text: '渔船编号',
+          },
+          {
+            value: 'shipowner',
+            text: '持证人',
+          },
+          {
+            value: 'shipownerIdcard',
+            text: '持证人身份证',
+          },
+          {
+            value: 'hullLength',
+            text: '船长(m)',
+          },
+        ],
+      },
     }
   },
   created () {
-    this.loadPage()
+    this.getData()
   },
   methods: {
     handleSelectionChange (val) {     
       this.multipleSelection = val.map(m => m.id)
+    },
+    currentChange (val) {
+      this.params.current = val
+      this.getData()
     },
     handleAdd () {
       this.$router.push({
@@ -90,23 +135,26 @@ export default {
     handleEdit (val) {
       this.$router.push({path: '/hrms_spa/village_ship_detail', query:{ edit: val }})
     },
-    async loadPage (param = this.searchForm) {   
-      let data = await this.loadTable(param, getVillageShipList)
-      this.pagedTable = data.records
-      this.pagedTable.forEach(v => {
-        if (v.shipNo === '0') {
-          v.shipNo = '请完善'
-        }
-        if (v.shipowner === '') {
-          v.shipowner = '请完善'
-        }
-        if (v.shipownerIdcard === '0') {
-          v.shipownerIdcard = '请完善'
-        }
-        if (v.hullLength === 0) {
-          v.hullLength = '请完善'
-        }
+    getData () {
+      getVillageShipList(this.params).then(data => {
+        this.pagedTable = data.data.data.records
+         this.pagedTable.forEach(v => {
+          if (v.shipNo === '0') {
+            v.shipNo = '请完善'
+          }
+          if (v.shipowner === '') {
+            v.shipowner = '请完善'
+          }
+          if (v.shipownerIdcard === '0') {
+            v.shipownerIdcard = '请完善'
+          }
+          if (v.hullLength === 0) {
+            v.hullLength = '请完善'
+          }
+        })
+        this.total = data.data.data.total
       })
+     
     },
     handleIntoinsure (id) {
       this.$router.push({       
@@ -122,6 +170,11 @@ export default {
       this.$router.push({       
         path: `/hrms_spa/ship_operat/${id}`,
       })
+    },
+    //搜索
+    getParamData () {
+      this.params.current = 1
+      this.getData()
     },
   },
 }

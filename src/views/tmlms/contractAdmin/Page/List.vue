@@ -35,7 +35,7 @@
             </el-switch>
           </template>
         </el-table-column> -->
-        <el-table-column
+        <!-- <el-table-column
             prop="status"
             label="是否审核"
             width="100"
@@ -51,7 +51,7 @@
               </el-switch>
             </div>
           </template>
-          </el-table-column>
+          </el-table-column> -->
         <el-table-column label="操作">
           <template slot-scope="scope">
              <el-button v-if="mlms_contract_view" type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">合同查看
@@ -60,8 +60,8 @@
             </el-button>
             <el-button v-if="mlms_contract_del && scope.row.status === '未通过审核'" type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.contractId)">删除
             </el-button>
-            <!-- <el-button v-if="mlms_contract_rev" type="text" icon="el-icon-edit" size="mini" @click="handleReview(scope.row.contractId)">审核
-            </el-button> -->
+            <el-button v-if="mlms_contract_rev && scope.row.status === '未审核'" type="text" icon="el-icon-edit" size="mini" @click="handleReview(scope.row.contractId)">审核
+            </el-button>
             <el-button v-if="mlms_contract_pri && scope.row.status === '合同成立'" type="text" icon="el-icon-delete" size="mini" @click="handlePrint(scope.row.contractId)">打印
             </el-button>
             <el-button v-if="mlms_contract_rel && scope.row.status === '合同成立'" type="text" icon="el-icon-edit" size="mini" @click="handleRelieve(scope.row.contractId)">解除
