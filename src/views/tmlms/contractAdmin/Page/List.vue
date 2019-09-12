@@ -82,6 +82,13 @@
           width="300"
           height="200">
       </iframe>
+      <el-dialog title="提示" :visible.sync="revDialog" width="30%" :before-close="canClose">
+        <span>是否同意审核合同</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="agreeReview">同 意</el-button>
+          <el-button type="primary" @click="cancelReview">拒 绝</el-button>
+        </span>
+      </el-dialog>
     </basic-container>
   </div>
 </template>
@@ -170,6 +177,8 @@ export default {
       contractAddr: '',
       mangner: false,
       conStatus: '',
+      revDialog: false,
+      cd: '',
     }
   },
   created () {
@@ -368,25 +377,29 @@ export default {
         })
       }) 
     },
-    handleReview (contractId) {
-      this.$confirm('此操作将审核该合同', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type:'warning',
-      }).then(() => {
-        let data = 1
-        reviewContract({contractId: contractId, status: data}).then(() =>{
-          this.$message.success('审核成功')
-          this.getContractList()
-        }).catch(() => {
-          this.$message.console.error('审核失败！')
-        })
+    agreeReview () {
+      let data = 1
+      reviewContract({contractId: this.cd, status: data}).then(() =>{
+        this.$message.success('审核通过！')
+        this.getContractList()
+        this.revDialog = false
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消审核',
-        })
-      })     
+        this.$message.console.error('审核通过失败！')
+      })
+    },
+    cancelReview () {
+      let data = 2
+      reviewContract({contractId: this.cd, status: data}).then(() =>{
+        this.$message.success('审核不通过')
+        this.getContractList()
+        this.revDialog = false
+      }).catch(() => {
+        this.$message.console.error('审核不通过失败！')
+      })
+    },
+    handleReview (contractId) {
+      this.revDialog = true
+      this.cd = contractId
     },
     async handleRelieve (contractId) {
       this.contStatus = await getContractDetail(contractId).then(res => {
