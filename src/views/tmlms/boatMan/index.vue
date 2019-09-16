@@ -2,12 +2,13 @@
   <div class="contract-box">
     <basic-container>
       <div class="shipowner_title">
-        <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button>
+        <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button>                                    
+        <el-button v-if="manager"  type="primary" size="small" icon="el-icon-edit" @click="exportInfo">导出信息</el-button>             
         <div style="float:right">
           <span><el-input v-model="params.realName" placeholder="请输入姓名" size="small"></el-input></span>
           <span><el-input v-model="params.idcard" placeholder="请输入身份证" size="small"></el-input></span>
           <span><el-input v-model="params.phone" placeholder="请输入联系电话" size="small"></el-input></span>
-          <span><el-select v-model="params.status" placeholder="请选择状态" size="small">
+          <span><el-select v-model="params.status" placeholder="请选择状态" size="small">                                                        
               <el-option
                 v-for="item in status"
                 :key="item.value"
@@ -16,7 +17,7 @@
               </el-option>
             </el-select>
           </span>
-          <el-button size="small"  @click="getParamData">搜索</el-button> 
+          <el-button size="small"  @click="getParamData">搜索</el-button>                          
         </div>
       </div>
         <el-table
@@ -68,14 +69,14 @@
             </template>
           </el-table-column>
         </el-table>
-      <div style="text-align: center;margin: 20px 0;">
+      <div style="text-align: center;margin: 20px 0;">            
         <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
-      </div>
-    </basic-container>
-  </div>
-</template>
-<script>
-import { getCrew,deleteCrew,statusCrew } from '@/api/tmlms/boatMan'
+      </div>                
+    </basic-container>        
+  </div>          
+</template>                                                           
+<script>                                                                                                                                                      
+import { getCrew,deleteCrew,statusCrew,exportExcel } from '@/api/tmlms/boatMan'                   
 import { getUserInfo } from '@/api/login'
 export default {
   data () {
@@ -89,6 +90,13 @@ export default {
         idcard: '',
         realName: '',
         status: '',
+        phone: '',
+      },
+      exportParams: {                                       
+         idcard: '',
+        realName: '',
+        status: '',
+        phone: '',
       },
       options: {
         expandAll: false,
@@ -143,7 +151,7 @@ export default {
   },
   methods: {
     // 分页
-    currentChange (val) {
+    currentChange (val) {                      
       this.params.current = val
       this.getData()
     },
@@ -198,8 +206,8 @@ export default {
       this.getData()
     },
     // 删除
-    handleDel (id) {
-        this.$confirm('此操作将永久删除该船员, 是否继续?', '提示', {
+    handleDel (id) {                                                                            
+        this.$confirm('此操作将永久删除该船员, 是否继续?', '提示', {                                            
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
@@ -240,6 +248,14 @@ export default {
         this.manager = true
       }
     },
+    exportInfo () {                  
+      exportExcel (this.exportParams).catch(err => {
+        this.$message({
+          type: 'warning',
+          message: err,
+        })
+   })
+    },
   },
   computed: {
   },
@@ -256,6 +272,20 @@ export default {
       }
       return typeMap[type]
     },
+  },
+  watch: {
+      'params.idcard': function (val) {          
+            this.exportParams.idcard  = val
+      },
+      'params.realName': function (val) {
+            this.exportParams.realName  = val
+      },
+      'params.phone': function (val) {
+            this.exportParams.phone  = val
+      },
+      'params.status': function (val) {                
+            this.exportParams.status  = val
+      },
   },
 }
 </script>

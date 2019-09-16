@@ -1,5 +1,6 @@
 import request from '@/router/axios'
-const prefixUrl = '/tmlms/ship_owner'
+const prefixUrl = '/tmlms/ship_owner'           
+import {exportDownload} from '@/util/export'
 
 export function getShipowner (query) {
     return request({
@@ -90,3 +91,11 @@ export function newEditShipowner (data,type) {
         data: data,
     })
 }
+
+export function exportExcel (params) {                                    
+    return exportDownload({
+      url: 'tmlms/tybmlmsExcelExport/downloadOwner',
+      data: params,                             
+      title: '船东信息',
+    })
+  }
