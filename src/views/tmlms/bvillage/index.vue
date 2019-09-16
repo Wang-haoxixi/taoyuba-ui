@@ -91,7 +91,7 @@ export default {
         expandAll: false,
         columns: [
           {
-            text: '渔村名称',
+            text: '机构名称',
             value: 'villageName',
           },
           {

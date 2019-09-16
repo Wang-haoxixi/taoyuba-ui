@@ -75,10 +75,10 @@ export default {
         },
         userId: '',
         typeList: [
-          // {
-          //   value: 1,
-          //   label: '省',
-          // },
+          {
+            value: 1,
+            label: '省',
+          },
           {
             value: 2,
             label: '市',
@@ -211,7 +211,8 @@ export default {
           let data = res.data.data
           this.getNode(this.options,val[val.length-1],data)
         })
-      } else if (this.cityVal === 3) {
+      }   
+      else if (this.cityVal === 2) {
         getArea(val[val.length-1]).then(res=>{
           this.options.forEach(v => {
             if (v.areaCode === val[val.length-1]) {
@@ -220,7 +221,7 @@ export default {
           })
         })
       }
-      else if (this.cityVal === 4) {
+      else if (this.cityVal === 3) {
         let a = val[val.length-1]
         if (val.length === 2) {
           let b = val[val.length-1]
@@ -236,6 +237,54 @@ export default {
             }
           })
         }   
+        getArea(a).then(res=>{
+          this.options.forEach(v => {
+            if (v.areaCode === val[val.length-1]) {
+              v.childList = res.data.data
+              v.childList.forEach(m => {
+                this.$set(m,'childList',[])               
+              })
+            }    
+          })
+        })
+      }
+      else if (this.cityVal === 4) {
+        let a = val[val.length-1]
+        if (val.length === 2) {
+          let b = val[val.length-1]
+          this.options.forEach(h => {
+            if (h.childList.length > 0) {
+              h.childList.forEach(i => {
+                if (i.areaCode === b) {
+                  getArea(b).then(n => {
+                    i.childList = n.data.data
+                    i.childList.forEach(f => {
+                      this.$set(f,'childList',[]) 
+                    })
+                  })
+                }
+              })
+            }
+          })
+        }
+        if (val.length === 3) {
+          let c = val[val.length-1]
+          this.options.forEach(r => {
+            if( r.childList.length > 0) {
+              r.childList.forEach(e => {
+                if (e.childList.length > 0) {
+                  e.childList.forEach(s => {
+                    if(s.areaCode === c) {
+                      getArea(c).then(z => {
+                        s.childList = z.data.data
+                      })
+                    }
+                  })
+                }
+              })
+            }
+          })
+        }
         getArea(a).then(res=>{
           this.options.forEach(v => {
             if (v.areaCode === val[val.length-1]) {
@@ -276,25 +325,32 @@ export default {
       this.gov.regionId = []
       this.cityVal = val
       if (this.cityVal === 5) {
-        getArea(330000000000).then(res=>{
+        getArea(0).then(res=>{
           this.options = res.data.data
           this.options.forEach(item=>{
             this.$set(item,'childList',[])
           })
         })
-      } else if (this.cityVal === 2) {
-        getArea(330000000000).then(res=>{
+      } else if (this.cityVal === 1) {
+        getArea(0).then(res=>{
           this.options = res.data.data
         })
+      } else if (this.cityVal === 2) {
+        getArea(0).then(res=>{
+          this.options = res.data.data
+          this.options.forEach(item =>{
+            this.$set(item,'childList',[])
+          })
+        })
       } else if (this.cityVal === 3) {
-        getArea(330000000000).then(res=>{
+        getArea(0).then(res=>{
           this.options = res.data.data
           this.options.forEach(item =>{
             this.$set(item,'childList',[])
           })
         })
       } else if (this.cityVal === 4) {
-        getArea(330000000000).then(res=>{
+        getArea(0).then(res=>{
           this.options = res.data.data
           this.options.forEach(item =>{
             this.$set(item,'childList',[])
