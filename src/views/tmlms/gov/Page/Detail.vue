@@ -25,7 +25,7 @@
             </el-col>
             <el-col :span="8">        
               <el-form-item label="区域类型:" prop="regionType">
-                <el-select v-if="!$route.query.see" v-model="gov.regionType" placeholder="请选择">
+                <el-select v-if="!$route.query.see" v-model="gov.regionType" placeholder="请选择" @change="handleChange">
                   <el-option v-for="(item, index) in typeList" :key="index" :label="item.label" :value="item.value"></el-option>
                 </el-select>
                 <div v-else>{{ gov.regionType }}</div>
@@ -37,7 +37,7 @@
                 <div v-else>{{ gov.address }}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="12" v-if="cityVal || gov.regionType">
               <el-form-item label="所属行政区域：" prop="regionId">
                 <el-cascader v-model="gov.regionId" :options="options" @active-item-change="handleItemChange" :props="props" v-if="!$route.query.see"></el-cascader>
                 <div v-else>{{ gov.regionId }}</div>
@@ -107,6 +107,9 @@ export default {
                 { required: true, message: '请输入联系电话', trigger: 'blur' },
                 { validator: checkPhone, trigger: 'blur' },
             ],
+            regionType: [
+                { required: true, message: '请输入区域类型', trigger: 'blur' },
+            ],
         },
         options: [],
         props: {
@@ -115,13 +118,14 @@ export default {
           children: 'childList',
         },
         arr:[],
+        cityVal: '',
+        codeId: '',
       }
   },
   methods: {
     // 提交表单
     save () {
       this.$refs['form'].validate((valid) => {
-        console.log(this.gov.regionId)
         if (this.gov.regionId) {
           this.gov.regionId = this.gov.regionId[this.gov.regionId.length - 1]
         } 
@@ -202,10 +206,47 @@ export default {
       }
     },
     handleItemChange (val) {
-      getArea(val[val.length-1]).then(res=>{
-        let data = res.data.data
-        this.getNode(this.options,val[val.length-1],data)
-      })
+      if (this.cityVal === 5) {
+        getArea(val[val.length-1]).then(res=>{
+          let data = res.data.data
+          this.getNode(this.options,val[val.length-1],data)
+        })
+      } else if (this.cityVal === 3) {
+        getArea(val[val.length-1]).then(res=>{
+          this.options.forEach(v => {
+            if (v.areaCode === val[val.length-1]) {
+              v.childList = res.data.data
+            }
+          })
+        })
+      }
+      else if (this.cityVal === 4) {
+        let a = val[val.length-1]
+        if (val.length === 2) {
+          let b = val[val.length-1]
+          this.options.forEach(h => {
+            if(h.childList.length > 0) {
+              h.childList.forEach(i => {
+                if(i.areaCode === b) {
+                  getArea(b).then(n => {
+                    i.childList = n.data.data
+                  })
+                }
+              })
+            }
+          })
+        }   
+        getArea(a).then(res=>{
+          this.options.forEach(v => {
+            if (v.areaCode === val[val.length-1]) {
+              v.childList = res.data.data
+              v.childList.forEach(m => {
+                this.$set(m,'childList',[])               
+              })
+            }    
+          })
+        })
+      }
     },
     getNode (node,val,data) {
       node.forEach(res=>{
@@ -214,7 +255,7 @@ export default {
           if(res.level < 3){
               res.childList.forEach(item=>{
                 if(item.childList === undefined){
-                    this.$set(item,'childList',[])
+                  this.$set(item,'childList',[])
                 }
               })
           }
@@ -231,20 +272,48 @@ export default {
         this.getarr(node.child)
       }
     },
+    handleChange (val) {
+      this.gov.regionId = []
+      this.cityVal = val
+      if (this.cityVal === 5) {
+        getArea(330000000000).then(res=>{
+          this.options = res.data.data
+          this.options.forEach(item=>{
+            this.$set(item,'childList',[])
+          })
+        })
+      } else if (this.cityVal === 2) {
+        getArea(330000000000).then(res=>{
+          this.options = res.data.data
+        })
+      } else if (this.cityVal === 3) {
+        getArea(330000000000).then(res=>{
+          this.options = res.data.data
+          this.options.forEach(item =>{
+            this.$set(item,'childList',[])
+          })
+        })
+      } else if (this.cityVal === 4) {
+        getArea(330000000000).then(res=>{
+          this.options = res.data.data
+          this.options.forEach(item =>{
+            this.$set(item,'childList',[])
+          })
+        })
+      }
+    },
   },
   computed: {
   },
   created () {
     if (this.$route.query.see || this.$route.query.edit) {                              
       this.getData()
-    } else {       
-      getArea(330000000000).then(res=>{
-        this.options = res.data.data
-        this.options.forEach(item=>{
-          this.$set(item,'childList',[])
-        })
-      })
-    } 
+    }
+  },
+  watch: {
+    // 'gov.regionType' () {
+    //   this.gov.regionId = []
+    // },
   },
 }
 </script>
