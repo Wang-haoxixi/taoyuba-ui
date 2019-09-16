@@ -1,5 +1,6 @@
 import request from '@/router/axios'
-const prefixUrl = '/tmlms/crew'
+const prefixUrl = '/tmlms/crew'     
+import {exportDownload} from '@/util/export'
 
 export function getCrew (query) {
     return request({
@@ -80,3 +81,11 @@ export function getIdcardCheck (id) {
         method: 'get',
     })
 }
+
+export function exportExcel (params) {                                          
+    return exportDownload({
+      url: 'tmlms/tybmlmsExcelExport/downloadCrew',
+      data: params,                 
+      title: '船员信息',
+    })
+  }

@@ -1,8 +1,10 @@
 <template>
   <div class="contract-box">
     <basic-container>
-      <div class="shipowner_title">
-        <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button>
+      <div class="shipowner_title">           
+        <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button>                                                                                                                       
+        <el-button v-if="manager" type="primary" icon="el-icon-edit" size="small" @click="exportInfo">信息导出      
+          </el-button>            
         <div style="float:right">
           <span><el-input v-model="params.idcard" placeholder="请输入身份证" size="small" clearable></el-input></span>
           <span><el-input v-model="params.realName" placeholder="请输入姓名" size="small" clearable></el-input></span>
@@ -71,7 +73,7 @@
   </div>
 </template>
 <script>
-import { getShipowner,deleteShipowner,statusShipownerByidcard } from '@/api/tmlms/shipowner'
+import { getShipowner,deleteShipowner,statusShipownerByidcard, exportExcel } from '@/api/tmlms/shipowner'   
 import { getUserInfo } from '@/api/login'
 export default {
   data () {
@@ -85,6 +87,13 @@ export default {
         idcard: '',
         realName: '',
         status: '',
+        phone: '',
+      },
+      exportParams: {   
+         idcard: '',
+        realName: '',
+        status: '',   
+        phone: '',
       },
       options: {
         expandAll: false,
@@ -205,6 +214,14 @@ export default {
       this.params.current = 1
       this.getData()
     },
+    exportInfo () {           
+        exportExcel (this.exportParams).catch(err => {      
+        this.$message({
+          type: 'warning',
+          message: err,
+        })
+       })
+    },
   },
   computed: {
   },
@@ -221,6 +238,20 @@ export default {
       }
       return typeMap[type]
     },
+  },
+  watch : {                                   
+          'params.idcard' : function (val) {                                           
+                this.exportParams.idcard  =  val  
+          },
+          'params.realName' : function (val) {                                 
+                this.exportParams.realName  =  val
+          },
+           'params.phone' : function (val) {                                               
+                this.exportParams.phone  =  val
+          },        
+          'params.status' : function (val) {                                                            
+                this.exportParams.status  =  val
+          },     
   },
 }
 </script>
