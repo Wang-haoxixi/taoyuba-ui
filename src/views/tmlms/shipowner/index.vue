@@ -3,7 +3,7 @@
     <basic-container>
       <div class="shipowner_title">           
         <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button>                                                                                                                       
-        <el-button v-if="manager" type="primary" icon="el-icon-edit" size="small" @click="exportInfo">信息导出      
+        <el-button v-if="manager" type="primary" icon="el-icon-edit" size="small" @click="exportInfo">导出      
           </el-button>            
         <div style="float:right">
           <span><el-input v-model="params.idcard" placeholder="请输入身份证" size="small" clearable></el-input></span>
@@ -36,13 +36,24 @@
             prop="status"  
             label="审核操作"
           >
-          <template slot-scope="scope">
+          <!-- <template slot-scope="scope">
             <div>
               <el-switch
                 v-model="scope.row.swith"
                 active-color="#13ce66"
                 @change="getStatus(scope.row.swith,scope.row.idcard)"
                 inactive-color="#ff4949">
+              </el-switch>
+            </div>
+          </template> -->
+          <template slot-scope="scope">
+            <div>
+              <el-switch
+                v-model="scope.row.swith"
+                active-color="#13ce66"
+                @change="getStatus(scope.row.swith,scope.row.idcard)"
+                :disabled="scope.row.isDisabled"
+                >
               </el-switch>
             </div>
           </template>
@@ -157,10 +168,17 @@ export default {
       getShipowner(this.params).then(res=>{
         this.shipownerList = res.data.data.records
         this.shipownerList.forEach( item=>{
-          if(item.status === 2){
+          if(item.status === 2 && item.userId !== 0) {
             item.swith = true
           }else{
             item.swith = false
+          }
+        })
+        this.shipownerList.forEach(v => {
+          if (v.swith === false && v.userId === 0) {
+            v.isDisabled = true
+          } else {
+            v.isDisabled = false
           }
         })
         this.total = res.data.data.total
