@@ -91,7 +91,7 @@ export default {
         expandAll: false,
         columns: [
           {
-            text: '机构名称',
+            text: '基层名称',
             value: 'villageName',
           },
           {
@@ -103,7 +103,7 @@ export default {
             value: 'phone',
           },
           {
-            text: '机构地址',
+            text: '基层地址',
             value: 'address',
           },
           {

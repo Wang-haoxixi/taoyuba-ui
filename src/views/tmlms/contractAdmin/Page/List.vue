@@ -66,9 +66,9 @@
             </el-button>
             <el-button v-if="mlms_contract_rel && scope.row.status === '合同成立'" type="text" icon="el-icon-edit" size="mini" @click="handleRelieve(scope.row.contractId)">解除
             </el-button>
-            <el-button v-if="mlms_relieve_rel" type="text" icon="el-icon-edit" size="mini" @click="goTo(scope.row.contractId)">解除
+            <el-button v-if="mlms_relieve_rel" type="text" icon="el-icon-edit" size="mini" @click="goTo(scope.row.contractId)">解除投诉
             </el-button>
-            <el-button v-if="mlms_contract_com && scope.row.status === '合同纠纷'" type="text" icon="el-icon-edit" size="mini" @click="go(scope.row.contractId)">投诉
+            <el-button v-if="mlms_contract_com && scope.row.status === '合同纠纷'" type="text" icon="el-icon-edit" size="mini" @click="go(scope.row.contractId)">投诉管理
             </el-button>
           </template>
         </el-table-column>
