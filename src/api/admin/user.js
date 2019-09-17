@@ -83,3 +83,11 @@ export function userEdit (obj) {
     data: obj,
   })
 }
+
+export function editPass (obj) {
+  return request({
+    url:'/admin/user/edit',
+    method: 'put',
+    data: obj,
+  })
+}
