@@ -60,7 +60,7 @@ export default {
       contStatus: [
         {
           id: 0,
-          label: '待审核或待通过',
+          label: '待通过',
         },
         {
           id: 1,
