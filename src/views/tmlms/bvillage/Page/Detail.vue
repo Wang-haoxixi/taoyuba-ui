@@ -1,7 +1,7 @@
 <template>
   <div class="bvillage_detail">
     <basic-container v-if="show">
-        <h1 v-if="!$route.query.userId">{{ $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }}村信息</h1>
+        <h1 v-if="!$route.query.userId">{{ $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }}基层组织</h1>
         <h1 v-if="$route.query.userId">完善个人信息</h1>        
         <el-form :model="bvillage" ref="form" label-width="150px" :rules="rules">
           <el-row>
@@ -102,7 +102,7 @@ export default {
         },
         rules: {
             villageName: [
-                { required: true, message: '请输入机构名称', trigger: 'blur' },
+                { required: true, message: '请输入基层组织名称', trigger: 'blur' },
             ],
             contactName: [
                 { required: true, message: '请输入联系人', trigger: 'blur' },

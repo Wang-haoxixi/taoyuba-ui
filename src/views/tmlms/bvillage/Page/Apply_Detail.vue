@@ -86,7 +86,7 @@ export default {
         },
         rules: {
             villageName: [
-                { required: true, message: '请输入机构名称', trigger: 'blur' },
+                { required: true, message: '请输入基层组织名称', trigger: 'blur' },
             ],
             contactName: [
                 { required: true, message: '请输入联系人', trigger: 'blur' },

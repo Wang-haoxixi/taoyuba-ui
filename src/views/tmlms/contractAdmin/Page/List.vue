@@ -7,11 +7,11 @@
           <iep-button v-if="mlms_contract_add" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
         <template slot="right">
-          <span><el-input v-model="params.shipName" placeholder="请输入船名号" size="small" style="width:120px"></el-input></span>
-          <span><el-input v-model="params.shipownerName" placeholder="请输入持证人姓名" size="small" style="width:120px"></el-input></span>
-          <span><el-input v-model="params.employerName" placeholder="请输入甲方姓名" size="small" style="width:120px"></el-input></span>
-          <span><el-input v-model="params.employeeName" placeholder="请输入乙方姓名" size="small" style="width:120px"></el-input></span>
-          <span style="width:220px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" 
+          <span><el-input v-model="params.shipName" placeholder="船名号" size="small" style="width:120px"></el-input></span>
+          <span><el-input v-model="params.shipownerName" placeholder="持证人姓名" size="small" style="width:120px"></el-input></span>
+          <span><el-input v-model="params.employerName" placeholder="甲方姓名" size="small" style="width:120px"></el-input></span>
+          <span><el-input v-model="params.employeeName" placeholder="乙方姓名" size="small" style="width:120px"></el-input></span>
+          <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
             value-format="yyyy-MM-dd"  size="mini"></el-date-picker>
           </span>
           <span style="width:120px"><el-select v-model="conStatus" placeholder="请选择合同状态" size="small">
