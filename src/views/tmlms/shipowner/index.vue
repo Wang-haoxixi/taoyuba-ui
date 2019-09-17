@@ -52,6 +52,7 @@
                 v-model="scope.row.swith"
                 active-color="#13ce66"
                 @change="getStatus(scope.row.swith,scope.row.idcard)"
+                inactive-color="#F00"
                 :disabled="scope.row.isDisabled"
                 >
               </el-switch>
