@@ -15,7 +15,7 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.type === '投诉' && scope.row.status === '待审核或待通过'" type="text" icon="el-icon-edit" size="mini" @click="complain(scope.row.contractId, scope.row.id)">是否同意投诉</el-button>
+            <el-button v-if="scope.row.type === '投诉' && scope.row.status === '待通过'" type="text" icon="el-icon-edit" size="mini" @click="complain(scope.row.contractId, scope.row.id)">是否同意投诉</el-button>
           </template>
         </el-table-column>
       </avue-tree-table>
