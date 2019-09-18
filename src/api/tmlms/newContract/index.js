@@ -86,3 +86,11 @@ export function complantContract (cancelId) {
         params: cancelId,
     })
 }
+
+export function getList (query) {
+    return request({
+        url: `${prefixUrl}/villagePage`,
+        method: 'get',
+        params: query,
+    })
+}

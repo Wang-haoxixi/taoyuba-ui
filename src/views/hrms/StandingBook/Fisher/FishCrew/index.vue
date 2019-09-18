@@ -48,7 +48,7 @@
 </template>
 <script>
 // import { getShipCrewList, delShipCrew } from '@/api/ships/shipcrew/index'
-import { getContractList } from '@/api/tmlms/newContract'
+import { getList } from '@/api/tmlms/newContract'
 import mixins from '@/mixins/mixins'
 import { crewColumnsMap } from '../options'
 export default {
@@ -83,7 +83,7 @@ export default {
     async loadPage (param = this.searchForm) {
       param.shipNo = this.$route.params.shipNo
       param.status = 1
-      let data = await this.loadTable(param, getContractList)
+      let data = await this.loadTable(param, getList)
       this.pagedTable = data.records
     },
     handleProtocol (contractId) {
