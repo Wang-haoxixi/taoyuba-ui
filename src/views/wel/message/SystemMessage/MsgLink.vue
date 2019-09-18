@@ -1,7 +1,7 @@
 <template>
   <div>
     {{link.content}}
-    <a href="#" v-if="isCommon" @click.prevent="handleOpen">进入</a>
+    <!-- <a href="#" v-if="isCommon" @click.prevent="handleOpen">进入</a> -->
   </div>
 </template>
 <script>

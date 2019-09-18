@@ -60,6 +60,7 @@ export default {
         realName: '',
         avatar: '',
         idCard: '',
+        phone: '',
       },
       backOption: {
         isBack: true,
