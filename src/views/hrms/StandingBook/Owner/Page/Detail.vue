@@ -54,6 +54,12 @@
                   <inline-form-table :table-data="shipowner.shiplist" :columns="certificateColumns" requestName="certificate" type="employee_profile" @add="setData"></inline-form-table>
                 </iep-form-item>
             </el-col> -->
+            <el-col :span="12">
+              <el-form-item label="所属行政村：" prop="regionId">
+                <el-cascader v-model="shipowner.regionId" :options="options" v-if="!$route.query.see" @active-item-change="handleItemChange" :props="props"></el-cascader>
+                <div v-else>{{ shipowner.regionId }}</div>
+              </el-form-item>
+            </el-col>
           </el-row>
         </el-form>
         <div style="text-align:center">
@@ -66,7 +72,7 @@
 </template>
 <script>
 // import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable/'
-import { getArea } from '@/api/post/address.js'
+import { getArea, getAllAreaName, getAllArea, getInfo } from '@/api/post/address'
 import { saveShipowner, editShipowner, getIdcardCheck, getShipownerByidcard } from '@/api/tmlms/shipowner'
 // import { addUserRole } from '@/api/admin/user'
 import { getUserInfo } from '@/api/login'
@@ -139,6 +145,7 @@ export default {
         idcard: '',
         realName:'',
         phone: '',
+        regionId: '',
       },
       rules: {
           realName: [
@@ -155,9 +162,9 @@ export default {
             { required: true, message: '请输入联系电话', trigger: 'blur' },
             { validator: checkPhone, trigger: 'blur' },
           ],
-        //   villageId: [
-        //     { required: true, message: '请输入所属渔村区', trigger: 'blur' },
-        //   ],
+          regionId: [
+            { required: true, message: '请输入所属行政村', trigger: 'blur' },
+          ],
       },
       options: [],
       props: {
@@ -177,6 +184,7 @@ export default {
       isReadonly: false,
       // isCheck: false,
       realNameList: [],
+      cId: '',
     }
   },
   // components: { InlineFormTable },
@@ -240,9 +248,17 @@ export default {
     // },
     save () {
       this.$refs['form'].validate((valid) => {
+        if (this.shipowner.regionId) {
+          this.shipowner.regionId = this.shipowner.regionId[this.shipowner.regionId.length - 1]
+        } 
         if (valid) {
           let shipowner = JSON.parse(JSON.stringify(this.shipowner))
-          let type = 3 
+          let type = ''
+          if (this.manager) {
+            type = 1
+          } else {
+            type = 3
+          }         
           if (this.$route.query.edit) {
             editShipowner(shipowner,type).then(res=>{
               this.$message({
@@ -376,51 +392,75 @@ export default {
         this.shipowner.phone = data.data.data.mobile
       })
     },
+    getData () {
+      if (this.$route.query.edit) {
+        this.cId = this.$route.query.edit
+      }
+      if (this.$route.query.see) {
+        this.cId = this.$route.query.see
+      }     
+      if (this.$route.query.edit || this.$route.query.see) {
+        getShipownerByidcard(this.cId).then(data => {
+          if (data.data.code === 0) {
+            if(data.data.data.regionId !== 0){
+              getAllArea(data.data.data.regionId).then( res=>{
+                this.options = res.data.data
+              })
+            }
+            if(data.data.data.regionId === 0){
+              this.shipowner = data.data.data
+              getArea(0).then(res=>{
+                this.options = res.data.data
+                this.options.forEach(item=>{
+                  this.$set(item, 'childList',[])
+                })
+              })
+              this.shipowner.regionId = this.options
+              if (this.$route.query.see) {
+                this.typeList.forEach(m => {
+                  if(this.shipowner.regionType === m.value) {
+                    this.shipowner.regionType  = m.label
+                  }
+                })
+                this.shipowner.regionId = ''
+              }      
+            }else {
+              getAllAreaName(data.data.data.regionId).then( res=>{
+                // 处理后端数据变成我要用的数据
+                this.getarr(res.data.data, this.arr)
+                data.data.data.regionId = this.arr
+                this.shipowner = data.data.data
+                if (this.$route.query.see) {
+                  this.typeList.forEach(m => {
+                    if(this.shipowner.regionType === m.value) {
+                      this.shipowner.regionType  = m.label
+                    }
+                  })
+                  this.shipowner.regionId.forEach(v => {
+                    this.shipowner.regionId = ''
+                    getInfo(v).then(res => { 
+                      this.shipowner.regionId += res.data.data.name 
+                    })   
+                  })
+                }
+              })
+            }
+          }
+        })
+      }
+    },
   },
   computed: {
   },
   created () {
-    // 编辑新增放同一个组件 判断分别
-    if(this.$route.query.edit || this.$route.query.see){
-      getAll.call(this)
-    }else {
-      getArea(0).then(res=>{
-        this.options = res.data.data
-        this.options.forEach(item=>{
-          this.$set(item,'childList',[])
-        })
-      })
+    if (this.$route.query.see || this.$route.query.edit) {                              
+      this.getData()
     }
-    // 获取编辑数据
-    // async function getAll () {
-    //   // 异步获取ID
-    //   let data = await getShipownerDetail(this.$route.query.edit || this.$route.query.see).then( res=>{
-    //     return res.data.data
-    //   })
-    //   // 拿到ID 同步获取地址和选中的地址
-    //   getAllArea(data.villageId).then( res=>{
-    //     this.options = res.data.data
-    //   })
-    //   getAllAreaName(data.villageId).then( res=>{
-    //     // 处理后端数据变成我要用的数据
-    //     if(this.$route.query.edit || this.$route.query.see){
-    //       this.getarr(res.data.data,this.arr)
-    //       data.villageId = this.arr
-    //       if(data.shiplist) {
-    //         data.shiplist.forEach((item,index)=>{
-    //           item.annex = item.certFile
-    //           item.id = index
-    //         })
-    //       }
-    //       this.shipowner = data
-    //     }
+    // function getAll () {
+    //   getShipownerByidcard(this.$route.query.edit || this.$route.query.see).then(data => {
+    //     this.shipowner = data.data.data
     //   })
     // }
-    function getAll () {
-      getShipownerByidcard(this.$route.query.edit || this.$route.query.see).then(data => {
-        this.shipowner = data.data.data
-      })
-    }
     getUserInfo().then(res => {
       if (res.data.data.roles.includes(111)) {
         this.manager = true

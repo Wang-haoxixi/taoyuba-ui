@@ -65,7 +65,7 @@
 <script>
 import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable/'
 import { getArea } from '@/api/post/address.js'
-import { saveShipowner, getShipownerByidcard, getAllArea, editShipowner, getAllAreaName, uploadPic } from '@/api/tmlms/shipowner'
+import { saveShipowner, getShipownerByidcard, editShipowner, uploadPic } from '@/api/tmlms/shipowner'
 // import { addUserRole } from '@/api/admin/user'
 import { getUserInfo } from '@/api/login'
 import { getLastData } from '@/api/hrms/databuspayload'
@@ -349,38 +349,39 @@ export default {
         return res.data.data
       })
       // 拿到ID 同步获取地址和选中的地址
-      if(data.villageId !== 0){
-        getAllArea(data.villageId).then( res=>{
-          this.options = res.data.data
-        })
-      }
-      if(data.villageId === 0){
-          if(data.shiplist) {
-            data.shiplist.forEach((item,index)=>{
-              item.annex = item.certFile
-              item.id = index
-            })
-          }      
-       this.shipowner = data
-      }else {   
-      getAllAreaName(data.villageId).then( res=>{
-        // 处理后端数据变成我要用的数据
+      // if(data.villageId !== 0){
+      //   getAllArea(data.villageId).then( res=>{
+      //     this.options = res.data.data
+      //   })
+      // }
+    //   if(data.villageId === 0){     
        
-        if(this.$route.query.edit || this.$route.query.see){
-          this.getarr(res.data.data,this.arr)
-          data.villageId = this.arr
-          if(data.shiplist) {
-            data.shiplist.forEach((item,index)=>{
-              item.annex = item.certFile
-              item.id = index
-            })
-          }
-          this.shipowner = data
-        }
+    //   }else {   
+    //   getAllAreaName(data.villageId).then( res=>{
+    //     // 处理后端数据变成我要用的数据
+       
+    //     if(this.$route.query.edit || this.$route.query.see){
+    //       this.getarr(res.data.data,this.arr)
+    //       data.villageId = this.arr
+    //       if(data.shiplist) {
+    //         data.shiplist.forEach((item,index)=>{
+    //           item.annex = item.certFile
+    //           item.id = index
+    //         })
+    //       }
+    //       this.shipowner = data
+    //     }
         
-      })
-    }
-      
+    //   })
+    //   this.shipowner = data
+    // }
+      if(data.shiplist) {
+        data.shiplist.forEach((item,index)=>{
+          item.annex = item.certFile
+          item.id = index
+        })
+      } 
+      this.shipowner = data
     }
     getUserInfo().then(res => {
       if (res.data.data.roles.includes(111)) {

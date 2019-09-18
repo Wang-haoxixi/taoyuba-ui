@@ -48,7 +48,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="所属行政区域：" prop="regionId">
+            <el-form-item label="所属行政村：" prop="regionId">
               <el-cascader v-model="form.regionId" :options="options" @active-item-change="handleItemChange" :props="props"></el-cascader>
             </el-form-item>
           </el-col>
