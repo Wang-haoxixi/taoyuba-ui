@@ -163,7 +163,7 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item label="联系电话：" prop="employeePhone">
-                    <el-input maxlength="6" v-model="formData.employeePhone" style="width:380px"></el-input>
+                    <el-input maxlength="11" v-model="formData.employeePhone" style="width:380px"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -185,12 +185,12 @@
                       <div style="font-size:10px">联系电话：{{formData.employeePhone}}</div> -->
                       <el-col>
                         <el-form-item label="紧急联系人：">
-                          <el-input maxlength="6" v-model="formData.contactName" style="width:150px" size="mini"></el-input>
+                          <el-input maxlength="20" v-model="formData.contactName" style="width:150px" size="mini"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col>
                         <el-form-item label="联系电话：">
-                          <el-input maxlength="20" v-model="formData.contactPhone" style="width:150px" size="mini"></el-input>
+                          <el-input maxlength="11" v-model="formData.contactPhone" style="width:150px" size="mini"></el-input>
                         </el-form-item>
                       </el-col>
                     </div>
