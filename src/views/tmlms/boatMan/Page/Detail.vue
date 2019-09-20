@@ -392,9 +392,9 @@ export default {
         birthday: [
             { required: true, message: '请填写生日信息', trigger: 'blur' },
         ],
-        districtId: [
-            { required: true, message: '请填写地区', trigger: 'blur' },
-        ],
+        // districtId: [
+        //     { required: true, message: '请填写地区', trigger: 'blur' },
+        // ],
         nationality: [
             { required: true, message: '请填写国籍', trigger: 'blur' },
         ],
