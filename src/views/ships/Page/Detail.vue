@@ -75,7 +75,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="渔船所有权登记证书：" prop="licensesOwnerShip">
-              <el-input maxlength="20" v-model="form.licensesOwnerShip"></el-input>
+              <el-input maxlength="30" v-model="form.licensesOwnerShip"></el-input>
             </el-form-item>
           </el-col>          
         </el-row>
