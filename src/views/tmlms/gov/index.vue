@@ -3,6 +3,13 @@
     <basic-container>
       <div class="shipowner_title">
         <el-button type="primary" size="small" icon="el-icon-edit" @click="addGov">新增</el-button>
+        <div style="float:right">
+          <span><el-input v-model="params.govName" placeholder="请输入主管单位名称" size="small" clearable></el-input></span>
+          <span><el-input v-model="params.contactName" placeholder="请输入联系人" size="small" clearable></el-input></span>
+          <span><el-input v-model="params.phone" placeholder="请输入联系电话" size="small" clearable></el-input></span>   
+          <span><el-input v-model="params.address" placeholder="请输入机构地址" size="small" clearable></el-input></span>
+          <el-button size="small"  @click="getData">搜索</el-button>
+        </div>
       </div>
         <el-table
           :data="govList"
@@ -43,8 +50,10 @@ export default {
       params: {
         current: 1,
         size: 10,
-        idcard: '',
-        realName: '',
+        govName: '',
+        contactName: '',
+        phone: '',
+        address: '',
       },
       options: {
         columns: [
