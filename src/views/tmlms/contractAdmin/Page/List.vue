@@ -83,7 +83,8 @@
           height="200">
       </iframe>
       <el-dialog title="提示" :visible.sync="revDialog" width="30%" :before-close="canClose">
-        <span>是否同意审核合同</span>
+        <p>是否同意审核合同：</p>
+        <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="content"></el-input>
         <span slot="footer" class="dialog-footer">
           <el-button @click="agreeReview">同 意</el-button>
           <el-button type="primary" @click="cancelReview">拒 绝</el-button>
@@ -179,6 +180,7 @@ export default {
       conStatus: '',
       revDialog: false,
       cd: '',
+      content: '',
     }
   },
   created () {
@@ -389,13 +391,18 @@ export default {
     },
     cancelReview () {
       let data = 2
-      reviewContract({contractId: this.cd, status: data}).then(() =>{
-        this.$message.success('审核不通过')
-        this.getContractList()
-        this.revDialog = false
-      }).catch(() => {
-        this.$message.console.error('审核不通过失败！')
-      })
+      if (this.content && this.content !== '') {
+        reviewContract({contractId: this.cd, status: data, content: this.content}).then(() =>{
+          this.$message.success('审核不通过')
+          this.getContractList()
+          this.revDialog = false
+        }).catch(() => {
+          this.$message.console.error('审核不通过失败！')
+        })
+      } else {
+        this.$message.error('请填写理由！')
+      }
+      
     },
     handleReview (contractId) {
       this.revDialog = true
@@ -571,6 +578,10 @@ export default {
       this.$router.push({ 
         path: `/tmlms_spa/contractCancel_admin/${contractId}`, 
       })
+    },
+    canClose () {
+      this.revDialog = false
+      this.content = ''
     },
   },
 }
