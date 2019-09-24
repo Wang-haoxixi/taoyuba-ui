@@ -74,7 +74,7 @@
 
 <script>
 import { cancelContract, getContractDetail } from '@/api/tmlms/newContract'
-import { addContractCancel, getContractCancelList, disallowContract } from '@/api/tmlms/contractCancel/index'
+import { addContractCancel, getContractCancelList, refuseContract } from '@/api/tmlms/contractCancel/index'
 import { getUserInfo } from '@/api/login'
 import { getObj } from '@/api/admin/user'
 import store from '@/store'
@@ -267,7 +267,7 @@ export default {
       this.dialogVisible = true
     },
     cancelRelieve () {
-      disallowContract(this.i).then(() => {
+      refuseContract(this.i).then(() => {
         this.$message.success('已拒绝对方解除申请')
         this.getContractList()
         this.canDialog = false
