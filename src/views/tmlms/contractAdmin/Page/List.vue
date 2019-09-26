@@ -70,6 +70,8 @@
             </el-button>
             <el-button v-if="mlms_contract_com && scope.row.status === '合同纠纷'" type="text" icon="el-icon-edit" size="mini" @click="go(scope.row.contractId)">投诉管理
             </el-button>
+            <el-button v-if="mlms_contract_eva && scope.row.status === '合同解除' && scope.row.isRate === 1 " type="text" icon="el-icon-edit" size="mini" @click="handleEvaluate(scope.row.contractId)">评价
+            </el-button>
           </template>
         </el-table-column>
       </avue-tree-table>
@@ -90,6 +92,58 @@
           <el-button type="primary" @click="cancelReview">拒 绝</el-button>
         </span>
       </el-dialog>
+      <el-dialog title="评价打分" :visible.sync="seaDialog" width="30%" :before-close="seaClose">  
+        <el-row>
+          <el-col :span="6">
+            <span>工作环境：</span>
+          </el-col>
+          <el-col :span="12">
+            <el-rate v-model="rateList.rateEnv"></el-rate>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="6">
+            <span>劳务关系：</span>
+          </el-col>
+          <el-col :span="12">
+            <el-rate v-model="rateList.rateEmploy"></el-rate>
+          </el-col>
+        </el-row>
+        <el-row>
+          <span>评价：</span>
+          <el-input type="textarea" v-model="rateList.content"></el-input>
+        </el-row>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="seaClose">取 消</el-button>
+          <el-button type="primary" @click="seaSave">确 定</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog title="评价打分" :visible.sync="ownDialog" width="30%" :before-close="ownClose">
+        <el-row>
+          <el-col :span="6">
+            <span>作业技能：</span>
+          </el-col>
+          <el-col :span="12">
+            <el-rate v-model="rateList.rateSkill"></el-rate>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="6">
+            <span>身体素质：</span>
+          </el-col>
+          <el-col :span="12">
+            <el-rate v-model="rateList.rateBody"></el-rate>
+          </el-col>
+        </el-row>
+        <el-row>
+          <span>评价：</span>
+          <el-input type="textarea" v-model="rateList.content"></el-input>
+        </el-row>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="ownClose">取 消</el-button>
+          <el-button type="primary" @click="ownSave">确 定</el-button>
+        </span>
+      </el-dialog>
     </basic-container>
   </div>
 </template>
@@ -100,6 +154,7 @@ import {
   deleteContract,
   // getContract,
   getDict, reviewContract, cancelContract, getContractDetail } from '@/api/tmlms/newContract'
+import { saveRate, getRate } from '@/api/tmlms/rate'
 import { getUserInfo } from '@/api/login'
 import { mapGetters } from 'vuex'
 // import contractPrint from '../../contract/Page/ContractPrint.vue'
@@ -139,6 +194,7 @@ export default {
       mlms_contract_rel: false,
       mlms_relieve_rel: false,
       mlms_contract_com: false,
+      mlms_contract_eva: false,
       shipAttrDict: [],
       employeePayTypeDict: [],
       periodTypeDict: [],
@@ -179,8 +235,26 @@ export default {
       mangner: false,
       conStatus: '',
       revDialog: false,
+      seaDialog: false,
+      ownDialog: false,
       cd: '',
       content: '',
+      rateList: {
+        contractId: '',
+        type: '',
+        employerName: '',
+        employerIdcard: '',
+        employeeName: '',
+        employeeIdcard: '',
+        rateEnv: '',
+        rateEmploy: '',
+        rateSkill: '',
+        rateBody: '',
+        content: '',
+      },
+      idCardVal: '',
+      nameVal: '',
+      obj: {},
     }
   },
   created () {
@@ -195,12 +269,15 @@ export default {
     this.mlms_contract_rel = this.permissions['mlms_contract_rel']
     this.mlms_relieve_rel = this.permissions['mlms_relieve_rel']
     this.mlms_contract_com = this.permissions['mlms_contract_com']
+    this.mlms_contract_eva = this.permissions['mlms_contract_eva']
     getUserInfo().then(res => {
       if (res.data.data.roles.indexOf(111) !== -1) {
         this.mangner = true
       } else {
         this.mangner = false
       }
+      this.idCardVal = res.data.data.sysUser.idCard
+      this.nameVal = res.data.data.sysUser.realName
     })
   },
   computed: {
@@ -242,7 +319,6 @@ export default {
   },
   methods: {
     getContractList () {
-      console.log(this.params)
       getContractList(this.params).then(({data}) => {
         if (data.code === 0) {
           this.contractList = data.data.records
@@ -252,14 +328,19 @@ export default {
                 v.status = m.value
               }
             })
+            getRate(v.contractId).then(res => {
+              if(res.data.data.records.length !== 0) {
+                this.$set(v, 'isRate', 1)
+              }
+            })
           })
-          this.contractList.forEach( item=>{
-            if(item.status === '合同成立'){
-              item.swith = true
-            }else{
-              item.swith = false
-            }
-          })
+          // this.contractList.forEach( item=>{
+            // if(item.status === '合同成立'){
+            //   item.swith = true
+            // }else{
+            //   item.swith = false
+            // }   
+          // })
           this.total = data.data.total
         }
       }, (error) => {
@@ -582,6 +663,49 @@ export default {
     canClose () {
       this.revDialog = false
       this.content = ''
+    },
+    handleEvaluate (val) {
+      this.rateList.contractId = val
+      getContractDetail(val).then(data => {
+        this.obj = data.data.data
+        if (this.obj.employerIdcard === this.idCardVal) {
+          this.rateList.type = 1
+          this.rateList.employerName = this.nameVal
+          this.rateList.employerIdcard = this.idCardVal
+          this.ownDialog = true 
+        } else if (this.obj.employeeIdcard === this.idCardVal) {
+          this.rateList.type = 2
+          this.rateList.employeeName = this.nameVal
+          this.rateList.employeeIdcard = this.idCardVal
+          this.seaDialog = true
+        }
+      })
+    },
+    ownClose () {
+      this.ownDialog = false
+      this.rateList = {}
+    },
+    seaClose () {
+      this.seaDialog = false
+      this.rateList = {}
+    },
+    seaSave () {
+      saveRate(this.rateList).then(() => {
+        this.$message.success('评分成功！')
+        this.seaDialog = false
+        this.rateList = {}
+      }).catch(err => {
+        this.$message.error(err.message)
+      })
+    },
+    ownSave () {
+      saveRate(this.rateList).then(() => {
+        this.$message.success('评分成功！')
+        this.ownDialog = false
+        this.rateList = {}
+      }).catch(err => {
+        this.$message.error(err.message)
+      })
     },
   },
 }
