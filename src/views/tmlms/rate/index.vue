@@ -138,10 +138,10 @@ export default {
           cancelButtonText: '取消',
           type: 'warning',
         }).then(() => {
-          delRate(id).then(res=>{
+          delRate(id).then(() =>{
             this.$message({
               type: 'success',
-              message: res.data.msg,
+              message: '删除成功！',
             })
             this.getData()
           }).catch(err=>{
