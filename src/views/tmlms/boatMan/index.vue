@@ -5,10 +5,14 @@
         <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button>                                    
         <el-button v-if="manager"  type="primary" size="small" icon="el-icon-edit" @click="exportInfo">导出信息</el-button>             
         <div style="float:right">
-          <span><el-input v-model="params.realName" placeholder="请输入姓名" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.idcard" placeholder="请输入身份证" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.phone" placeholder="请输入联系电话" size="small" clearable></el-input></span>
-          <span><el-select v-model="params.status" placeholder="请选择状态" size="small">                                                        
+          <span style="width:120px"><el-input v-model="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
+          <span style="width:120px"><el-input v-model="params.idcard" placeholder="身份证" size="small" clearable></el-input></span>
+          <span style="width:120px"><el-input v-model="params.phone" placeholder="联系电话" size="small" clearable></el-input></span>
+          <span style="width:120px"><el-input v-model="params.remark" placeholder="备注信息" size="small" clearable></el-input></span>
+          <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
+            value-format="yyyy-MM-dd"  size="mini"></el-date-picker>
+          </span>
+          <span style="width:120px"><el-select v-model="params.status" placeholder="请选择状态" size="small">                                                        
               <el-option
                 v-for="item in status"
                 :key="item.value"
@@ -92,6 +96,8 @@ export default {
         realName: '',
         status: '',
         phone: '',
+        remark: '',
+        timeLists: '',
       },
       exportParams: {                                       
          idcard: '',
@@ -203,6 +209,10 @@ export default {
     },
     //搜索
     getParamData () {
+      if (this.params.timeLists) {
+        this.params.startDate = this.params.timeLists[0]
+        this.params.endDate = this.params.timeLists[1]
+      }
       this.params.current = 1
       this.getData()
     },
