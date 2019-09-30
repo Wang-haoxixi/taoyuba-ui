@@ -104,6 +104,9 @@ export default {
         realName: '',
         status: '',
         phone: '',
+        remark:'',
+        startDate:'',
+        endDate:'',
       },
       options: {
         expandAll: false,
@@ -296,6 +299,13 @@ export default {
       },
       'params.status': function (val) {                
             this.exportParams.status  = val
+      },
+       'params.timeLists': function (val) {                
+            this.exportParams.startDate  = val[0]
+             this.exportParams.endDate  = val[1]
+      },
+          'params.remark': function (val) {                
+            this.exportParams.remark  = val
       },
   },
 }
