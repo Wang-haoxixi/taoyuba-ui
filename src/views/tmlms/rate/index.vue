@@ -22,12 +22,13 @@
             :label="item.text"
           >
           </el-table-column>
+          <el-table-column label="工作环境" prop="rateEnv" v-if="mangner === true || employee ===true"></el-table-column>
+          <el-table-column label="劳务关系" prop="rateEmploy" v-if="mangner === true || employee ===true"></el-table-column>
+          <el-table-column label="作业技能" prop="rateSkill" v-if="mangner === true || employer ===true"></el-table-column>
+          <el-table-column label="身体素质" prop="rateBody" v-if="mangner === true || employer ===true"></el-table-column>
+          <el-table-column label="评价内容" prop="content"></el-table-column>
           <el-table-column label="操作" v-if="mangner === true">
             <template slot-scope="scope">
-              <!-- <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.userId)">查看
-              </el-button>
-              <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.userId)">编辑
-              </el-button> -->
               <el-button type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.id)">删除
               </el-button>
             </template>
@@ -49,6 +50,7 @@ export default {
       total: 10,
       // 查询数据
       params: {
+        type: '',
         current: 1,
         size: 10,
       },
@@ -63,12 +65,12 @@ export default {
             value: 'type',
           },
           {
-            text: '评价内容',
-            value: 'content',
+            text: '雇主姓名',
+            value: 'employerName',
           },
           {
-            text: '状态',
-            value: 'status',
+            text: '雇员姓名',
+            value: 'employeeName',
           },
         ],
       },
@@ -93,6 +95,8 @@ export default {
         },
       ],
       mangner: false,
+      employee: false,
+      employer: false,
     }
   },
   methods: {
@@ -102,7 +106,15 @@ export default {
       this.getData()
     },
     // 获取列表数据
-    getData () {
+    async getData () {
+      this.params.type = await getUserInfo().then(res => {
+        if (res.data.data.roles.indexOf(105) !== -1) {
+          return 2
+        }
+        if (res.data.data.roles.indexOf(108) !== -1) {
+          return 1
+        } 
+      })
       getRate(this.params).then(data =>{
         this.rateList = data.data.data.records
         this.rateList.forEach(v => {
@@ -148,6 +160,18 @@ export default {
         this.mangner = true
       } else {
         this.mangner = false
+      }
+      if (res.data.data.roles.indexOf(105) !== -1) {
+        this.employee = true
+        this.params.type = 2
+      } else {
+        this.employee = false
+      }
+      if (res.data.data.roles.indexOf(108) !== -1) {
+        this.employer = true
+        this.params.type = 1
+      } else {
+        this.employer = false
       }
     })
   },

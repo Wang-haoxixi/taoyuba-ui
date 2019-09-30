@@ -111,7 +111,7 @@
           <el-button type="primary" @click="relClose">取 消</el-button>
         </span>
       </el-dialog>
-      <el-dialog title="评价打分" :visible.sync="seaDialog" width="30%" :before-close="seaClose">  
+      <el-dialog :title="aName" :visible.sync="seaDialog" width="30%" :before-close="seaClose">  
         <el-row>
           <el-col :span="6">
             <span>工作环境：</span>
@@ -137,7 +137,7 @@
           <el-button type="primary" @click="seaSave">确 定</el-button>
         </span>
       </el-dialog>
-      <el-dialog title="评价打分" :visible.sync="ownDialog" width="30%" :before-close="ownClose">
+      <el-dialog :title="bName" :visible.sync="ownDialog" width="30%" :before-close="ownClose">
         <el-row>
           <el-col :span="6">
             <span>作业技能：</span>
@@ -193,6 +193,8 @@ export default {
   },
   data () {
     return {
+      aName: '',
+      bName: '',
       contractList: [],
       params: {
         shipName: '',
@@ -286,6 +288,7 @@ export default {
       headers: {
         Authorization: 'Bearer ' + store.getters.access_token,
       },
+      rateType: 0,
     }
   },
   created () {
@@ -350,7 +353,15 @@ export default {
     },
   },
   methods: {
-    getContractList () {
+    async getContractList () {
+      this.rateType = await getUserInfo().then(res => {
+        if (res.data.data.roles.indexOf(105) !== -1) {
+          return 2
+        }
+        if (res.data.data.roles.indexOf(108) !== -1) {
+          return 1
+        } 
+      })
       getContractList(this.params).then(({data}) => {
         if (data.code === 0) {
           this.contractList = data.data.records
@@ -360,19 +371,14 @@ export default {
                 v.status = m.value
               }
             })
-            getRate({contractId: v.contractId}).then(res => {
+            getRate({contractId: v.contractId, type: this.rateType}).then(res => {
               if(res.data.data.records.length !== 0) {
-                res.data.data.records.length.forEach(m => {
-                  if(m.employerIdcard === this.idCardVal) {
-                    this.$set(v, 'isRate', 1)
-                  } else if (m.employeeIdcard === this.idCardVal) {
-                    this.$set(v, 'isRate', 1)
-                  }
-                })     
+                this.$set(v, 'isRate', 1)
               } else {
                 this.$set(v, 'isRate', 0)
               }
             })
+
           })
           // this.contractList.forEach( item=>{
             // if(item.status === '合同成立'){
@@ -546,17 +552,23 @@ export default {
         type:'warning',
       }).then(() => {
         this.relform.contractId = this.rd
-        if (this.contStatus === 1) {
-          cancelContract(this.relform).then(() => {
-            this.relDialog = false
-            this.$message.success('解除成功！')
-            this.getContractList()
-          }).catch(() => {
-            this.$message.error('解除失败！')
-          })
+        if(this.relform.content === '') {
+          this.$message.error('请输入解除理由！')
+        } else if (this.relform.image === '') {
+          this.$message.error('请上传图片证明！')
         } else {
-          this.$message.error('合同状态不正确，需要管理员审核！')
-        }
+          if (this.contStatus === 1) {
+            cancelContract(this.relform).then(() => {
+              this.relDialog = false
+              this.$message.success('解除成功！')
+              this.getContractList()
+            }).catch(() => {
+              this.$message.error('解除失败！')
+            })
+          } else {
+            this.$message.error('合同状态不正确，需要管理员审核！')
+          }
+        }  
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -726,12 +738,18 @@ export default {
           this.rateList.type = 1
           this.rateList.employerName = this.nameVal
           this.rateList.employerIdcard = this.idCardVal
+          this.rateList.employeeName = this.obj.employeeName
+          this.rateList.employeeIdcard = this.obj.employeeIdcard
           this.ownDialog = true 
+          this.bName = '对' + this.obj.employeeName + '评价：'
         } else if (this.obj.employeeIdcard === this.idCardVal) {
           this.rateList.type = 2
           this.rateList.employeeName = this.nameVal
           this.rateList.employeeIdcard = this.idCardVal
+          this.rateList.employerName = this.obj.employerName
+          this.rateList.employerIdcard = this.obj.employerIdcard
           this.seaDialog = true
+          this.aName = '对' + this.obj.employerName + '评价：'
         }
       })
     },
@@ -744,24 +762,40 @@ export default {
       this.rateList = {}
     },
     seaSave () {
-      saveRate(this.rateList).then(() => {
-        this.$message.success('评分成功！')
-        this.seaDialog = false
-        this.rateList = {}
-        this.getContractList()
-      }).catch(err => {
-        this.$message.error(err.message)
-      })
+      if (this.rateList.rateEnv === 0) {
+        this.$message.error('请给工作环境打分！')
+      } else if (this.rateList.rateEmploy === 0) {
+        this.$message.error('请给劳务关系打分！')
+      } else if (this.rateList.content === '') {
+        this.$message.error('评价不能为空！')
+      } else {
+        saveRate(this.rateList).then(() => {
+          this.$message.success('评分成功！')
+          this.seaDialog = false
+          this.rateList = {}
+          this.getContractList()
+        }).catch(err => {
+          this.$message.error(err.message)
+        })
+      }  
     },
     ownSave () {
-      saveRate(this.rateList).then(() => {
-        this.$message.success('评分成功！')
-        this.ownDialog = false
-        this.rateList = {}
-        this.getContractList()
-      }).catch(err => {
-        this.$message.error(err.message)
-      })
+      if (this.rateList.rateSkill === 0) {
+        this.$message.error('请给作业技能打分！')
+      } else if (this.rateList.rateBody === 0) {
+        this.$message.error('请给身体素质打分！')
+      } else if (this.rateList.content === '') {
+        this.$message.error('评价不能为空！')
+      } else {
+        saveRate(this.rateList).then(() => {
+          this.$message.success('评分成功！')
+          this.ownDialog = false
+          this.rateList = {}
+          this.getContractList()
+        }).catch(err => {
+          this.$message.error(err.message)
+        })
+      } 
     },
     handleAvatarSuccess (res) {
       this.relform.image = res.data.url
