@@ -62,15 +62,17 @@
             </el-button>
             <el-button v-if="mlms_contract_rev && scope.row.status === '未审核'" type="text" icon="el-icon-edit" size="mini" @click="handleReview(scope.row.contractId)">审核
             </el-button>
+            <iep-button v-if="mlms_contract_rec && scope.row.status === '未通过审核'" type="text" icon="el-icon-edit" size="mini" @click="handleRecord(scope.row.contractId)">审核记录
+            </iep-button>
             <el-button v-if="mlms_contract_pri && scope.row.status === '合同成立'" type="text" icon="el-icon-delete" size="mini" @click="handlePrint(scope.row.contractId)">打印
             </el-button>
             <el-button v-if="mlms_contract_rel && scope.row.status === '合同成立'" type="text" icon="el-icon-edit" size="mini" @click="handleRelieve(scope.row.contractId)">解除
             </el-button>
-            <el-button v-if="mlms_relieve_rel" type="text" icon="el-icon-edit" size="mini" @click="goTo(scope.row.contractId)">解除投诉
+            <el-button v-if="mlms_relieve_rel" type="text" icon="el-icon-edit" size="mini" @click="goTo(scope.row.contractId)">申请解除
             </el-button>
             <el-button v-if="mlms_contract_com && scope.row.status === '合同纠纷'" type="text" icon="el-icon-edit" size="mini" @click="go(scope.row.contractId)">投诉管理
             </el-button>
-            <el-button v-if="mlms_contract_eva && scope.row.status === '合同解除' && scope.row.isRate === 1 " type="text" icon="el-icon-edit" size="mini" @click="handleEvaluate(scope.row.contractId)">评价
+            <el-button v-if="mlms_contract_eva && scope.row.status === '合同解除' && scope.row.isRate === 0 " type="text" icon="el-icon-edit" size="mini" @click="handleEvaluate(scope.row.contractId)">评价
             </el-button>
           </template>
         </el-table-column>
@@ -85,11 +87,28 @@
           height="200">
       </iframe>
       <el-dialog title="提示" :visible.sync="revDialog" width="30%" :before-close="canClose">
-        <p>是否同意审核合同：</p>
+        <p>是否通过此合同？如拒绝请输入拒绝理由：</p>
         <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="content"></el-input>
         <span slot="footer" class="dialog-footer">
           <el-button @click="agreeReview">同 意</el-button>
           <el-button type="primary" @click="cancelReview">拒 绝</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog title="提示" :visible.sync="relDialog" width="30%" :before-close="relClose">
+        <p>是否解除此合同？如拒绝请输入解除理由：</p>
+        <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="relform.content"></el-input>
+        <span>图片：</span>
+        <el-upload
+          class="avatar-uploader"
+          action="/api/admin/file/upload/avatar"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess" :headers="headers"  accept="image/*">
+         <img v-if="relform.image" :src="relform.image" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="agreeRelieve">同 意</el-button>
+          <el-button type="primary" @click="relClose">取 消</el-button>
         </span>
       </el-dialog>
       <el-dialog title="评价打分" :visible.sync="seaDialog" width="30%" :before-close="seaClose">  
@@ -159,6 +178,7 @@ import { getUserInfo } from '@/api/login'
 import { mapGetters } from 'vuex'
 // import contractPrint from '../../contract/Page/ContractPrint.vue'
 // import Vue from 'vue'
+import store from '@/store'
 export default {
   name: 'contract',
   props: {
@@ -195,6 +215,7 @@ export default {
       mlms_relieve_rel: false,
       mlms_contract_com: false,
       mlms_contract_eva: false,
+      mlms_contract_rec: false,
       shipAttrDict: [],
       employeePayTypeDict: [],
       periodTypeDict: [],
@@ -237,6 +258,7 @@ export default {
       revDialog: false,
       seaDialog: false,
       ownDialog: false,
+      relDialog: false,
       cd: '',
       content: '',
       rateList: {
@@ -255,6 +277,15 @@ export default {
       idCardVal: '',
       nameVal: '',
       obj: {},
+      relform: {
+        contractId: '',
+        content: '',
+        image: '',
+      },
+      rd: '',
+      headers: {
+        Authorization: 'Bearer ' + store.getters.access_token,
+      },
     }
   },
   created () {
@@ -270,6 +301,7 @@ export default {
     this.mlms_relieve_rel = this.permissions['mlms_relieve_rel']
     this.mlms_contract_com = this.permissions['mlms_contract_com']
     this.mlms_contract_eva = this.permissions['mlms_contract_eva']
+    this.mlms_contract_rec = this.permissions['mlms_contract_rec']
     getUserInfo().then(res => {
       if (res.data.data.roles.indexOf(111) !== -1) {
         this.mangner = true
@@ -328,9 +360,17 @@ export default {
                 v.status = m.value
               }
             })
-            getRate(v.contractId).then(res => {
+            getRate({contractId: v.contractId}).then(res => {
               if(res.data.data.records.length !== 0) {
-                this.$set(v, 'isRate', 1)
+                res.data.data.records.length.forEach(m => {
+                  if(m.employerIdcard === this.idCardVal) {
+                    this.$set(v, 'isRate', 1)
+                  } else if (m.employeeIdcard === this.idCardVal) {
+                    this.$set(v, 'isRate', 1)
+                  }
+                })     
+              } else {
+                this.$set(v, 'isRate', 0)
               }
             })
           })
@@ -368,6 +408,9 @@ export default {
     },
     handleAdd () {
       this.$emit('onAdd')
+    },
+    handleRecord (contractId) {
+      this.$emit('onRecord', contractId)
     },
     handleView (contractId) {
       // this.$emit('onDetail', contractId)
@@ -489,8 +532,12 @@ export default {
       this.revDialog = true
       this.cd = contractId
     },
-    async handleRelieve (contractId) {
-      this.contStatus = await getContractDetail(contractId).then(res => {
+    handleRelieve (contractId) {
+      this.relDialog = true
+      this.rd = contractId
+    },
+    async agreeRelieve () {
+      this.contStatus = await getContractDetail(this.rd).then(res => {
         return res.data.data.status
       })
       this.$confirm('此操作将解除该合同', '提示', {
@@ -498,8 +545,10 @@ export default {
         cancelButtonText: '取消',
         type:'warning',
       }).then(() => {
+        this.relform.contractId = this.rd
         if (this.contStatus === 1) {
-          cancelContract({contractId: contractId}).then(() => {
+          cancelContract(this.relform).then(() => {
+            this.relDialog = false
             this.$message.success('解除成功！')
             this.getContractList()
           }).catch(() => {
@@ -664,6 +713,11 @@ export default {
       this.revDialog = false
       this.content = ''
     },
+    relClose () {
+      this.relDialog = false
+      this.relform.content = ''
+      this.relform.image = ''
+    },
     handleEvaluate (val) {
       this.rateList.contractId = val
       getContractDetail(val).then(data => {
@@ -694,6 +748,7 @@ export default {
         this.$message.success('评分成功！')
         this.seaDialog = false
         this.rateList = {}
+        this.getContractList()
       }).catch(err => {
         this.$message.error(err.message)
       })
@@ -703,9 +758,13 @@ export default {
         this.$message.success('评分成功！')
         this.ownDialog = false
         this.rateList = {}
+        this.getContractList()
       }).catch(err => {
         this.$message.error(err.message)
       })
+    },
+    handleAvatarSuccess (res) {
+      this.relform.image = res.data.url
     },
   },
 }
@@ -743,4 +802,30 @@ export default {
 .search-btn:focus {
   opacity: 0.8;
 }
+</style>
+
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
 </style>

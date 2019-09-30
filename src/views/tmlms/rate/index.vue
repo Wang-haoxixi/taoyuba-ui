@@ -22,7 +22,7 @@
             :label="item.text"
           >
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" v-if="mangner === true">
             <template slot-scope="scope">
               <!-- <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.userId)">查看
               </el-button>
@@ -41,6 +41,7 @@
 </template>
 <script>
 import { getRate, delRate } from '@/api/tmlms/rate'
+import { getUserInfo } from '@/api/login'
 export default {
   data () {
     return {
@@ -91,6 +92,7 @@ export default {
           value: '已审核',
         },
       ],
+      mangner: false,
     }
   },
   methods: {
@@ -141,6 +143,13 @@ export default {
   },
   created () {
     this.getData()
+    getUserInfo().then(res => {
+      if (res.data.data.roles.indexOf(111) !== -1) {
+        this.mangner = true
+      } else {
+        this.mangner = false
+      }
+    })
   },
 }
 </script>

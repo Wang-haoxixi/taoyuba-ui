@@ -1,13 +1,13 @@
 <template>
   <div class="contract-box">
     <basic-container>
-      <page-header title="解除投诉"></page-header>
+      <page-header title="解除列表"></page-header>
         <operation-container>
           <template slot="left">
             <iep-button v-if="contractList.length < 1" @click="handleAdd" type="primary" icon="el-icon-plus" plain>申请解除</iep-button>
           </template>
           <template slot="right">
-            <iep-button @click="$router.go(-1)" plain>返回</iep-button>
+            <iep-button @click="back" plain>返回</iep-button>
           </template>
         </operation-container>
         <avue-tree-table :option="options" style="margin-top: 20px;">
@@ -156,7 +156,7 @@ export default {
             value: 'receiverId',
           },
           {
-            text: '解除或投诉原因',
+            text: '解除原因',
             value: 'content',
           },
           {
@@ -181,6 +181,7 @@ export default {
         return res.data.data.sysUser.realName
       })
       this.params.idcard = this.idCard
+      this.params.type = 1
       getContractCancelList(this.params).then(({data}) => {
         if (data.code === 0) {
           this.contractList = data.data.records
@@ -206,6 +207,11 @@ export default {
         }
       }, (error) => {
         this.$message.error(error.message)
+      })
+    },
+    back () {
+      this.$router.push({
+        path:'/tmlms_spa/contract_list',
       })
     },
     currentChange (current) {

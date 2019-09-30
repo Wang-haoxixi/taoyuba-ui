@@ -61,11 +61,11 @@ export function reviewContract (params) {
     })
 }
 
-export function cancelContract (contractId) {
+export function cancelContract (data) {
     return request({
         url: `${prefixUrl}/cancel`,
         method: 'post',
-        params: contractId,
+        data: data,
     })
 }
 

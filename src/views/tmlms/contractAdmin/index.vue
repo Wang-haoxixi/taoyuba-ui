@@ -1,14 +1,15 @@
 <template>
-  <component @onAdd="handleAdd" @onDetail="handleDetail" @onEdit="handleEdit" @onGoBack="handleGoBack" :record="record" :type="type" :is="currentComponet"></component>
+  <component @onAdd="handleAdd" @onDetail="handleDetail" @onEdit="handleEdit" @onGoBack="handleGoBack" :record="record" :type="type" :is="currentComponet" @onRecord="handleRecord"></component>
 </template>
 <script>
 import List from './Page/List'
 import Detail from '../contract/Page/NewDetail'
 import ContractPrint from '../contract/Page/ContractPrint.vue'
+import Record from '../contract/Page/record'
 
 export default {
   name: 'TableListWrapper',
-  components: { List, Detail, ContractPrint },
+  components: { List, Detail, ContractPrint, Record },
   data () {
     return {
       currentComponet: 'List',
@@ -36,6 +37,11 @@ export default {
       this.record = ''
       this.type = ''
       this.currentComponet = 'List'
+    },
+    handleRecord (id) {
+      this.record = id
+      this.type = 'rec'
+      this.currentComponet = 'Record'
     },
   },
   watch: {
