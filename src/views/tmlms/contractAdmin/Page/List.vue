@@ -72,7 +72,7 @@
             </el-button>
             <el-button v-if="mlms_contract_com && scope.row.status === '合同纠纷'" type="text" icon="el-icon-edit" size="mini" @click="go(scope.row.contractId)">投诉管理
             </el-button>
-            <el-button v-if="mlms_contract_eva && scope.row.status === '合同解除' && scope.row.isRate === 0 " type="text" icon="el-icon-edit" size="mini" @click="handleEvaluate(scope.row.contractId)">评价
+            <el-button v-if="mlms_contract_eva && scope.row.status === '合同解除' && scope.row.isRate === 0 && scope.row.isDate === 0" type="text" icon="el-icon-edit" size="mini" @click="handleEvaluate(scope.row.contractId)">评价
             </el-button>
           </template>
         </el-table-column>
@@ -363,9 +363,18 @@ export default {
         } 
       })
       getContractList(this.params).then(({data}) => {
+        var day = new Date()
+        var day2 = new Date(day)
+        day2.setDate(day.getDate() - 7)
+        var now = day2.getFullYear() + '-' + (day2.getMonth() + 1) + '-' + day2.getDate()
         if (data.code === 0) {
           this.contractList = data.data.records
           this.contractList.forEach(v => {
+            if( (day > new Date(Date.parse(v.workDateStart))) && (new Date(Date.parse(now)) < new Date(Date.parse(v.cancelTime.substring(0, 10)))) ) {
+              this.$set(v, 'isDate', 0)
+            } else {
+              this.$set(v, 'isDate', 1)
+            }
             this.statusDict.forEach(m => {
               if (v.status === m.lable) {
                 v.status = m.value
