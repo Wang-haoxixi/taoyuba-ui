@@ -22,6 +22,8 @@
             :label="item.text"
           >
           </el-table-column>
+          <el-table-column label="雇主姓名" prop="employerName" v-if="mangner === true || employee ===true"></el-table-column>
+          <el-table-column label="雇员姓名" prop="employeeName" v-if="mangner === true || employer ===true"></el-table-column>
           <el-table-column label="工作环境" prop="rateEnv" v-if="mangner === true || employee ===true"></el-table-column>
           <el-table-column label="劳务关系" prop="rateEmploy" v-if="mangner === true || employee ===true"></el-table-column>
           <el-table-column label="作业技能" prop="rateSkill" v-if="mangner === true || employer ===true"></el-table-column>
@@ -59,18 +61,6 @@ export default {
           {
             text: '合同ID',
             value: 'contractId',
-          },
-          {
-            text: '类型',
-            value: 'type',
-          },
-          {
-            text: '雇主姓名',
-            value: 'employerName',
-          },
-          {
-            text: '雇员姓名',
-            value: 'employeeName',
           },
         ],
       },
