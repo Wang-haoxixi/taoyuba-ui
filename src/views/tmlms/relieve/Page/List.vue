@@ -174,13 +174,14 @@ export default {
   },
   methods: {
     async getContractList () {
-      this.idCard = await getUserInfo().then(res => {
-        return res.data.data.sysUser.idCard
-      })
+      // this.idCard = await getUserInfo().then(res => {
+      //   return res.data.data.sysUser.idCard
+      // })
       this.recName = await getUserInfo().then(res => {
         return res.data.data.sysUser.realName
       })
-      this.params.idcard = this.idCard
+      // this.params.idcard = this.idCard
+      this.params.contractId = this.$route.params.contractId
       this.params.type = 1
       getContractCancelList(this.params).then(({data}) => {
         if (data.code === 0) {
