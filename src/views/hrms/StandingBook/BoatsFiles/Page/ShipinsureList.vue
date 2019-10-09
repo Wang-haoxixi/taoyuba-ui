@@ -1,10 +1,10 @@
 <template>
   <div>
     <basic-container>
-      <page-header title="渔船保单"></page-header>
+      <page-header :title="`${$route.params.shipName}渔船保单`"></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button @click="handleAdd($route.params.shipId)" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+          <iep-button @click="handleAdd($route.params.shipName)" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
         <!-- <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -37,7 +37,7 @@
   </div>
 </template>
 <script>
-import { getShipinsureList, deleteShipinsure } from '@/api/ships/shipinsure/index'
+import { getShipinsureList, deleteShipinsure } from '@/api/ships/shipnewinsure/index'
 import mixins from '@/mixins/mixins'
 import { insureColumnsMap } from '../shipoptions'   
 export default {
@@ -47,6 +47,15 @@ export default {
       insureColumnsMap,
       searchData: 'contactName',
       ifexist: true,
+      typeList: [
+        {
+          label: '渔船险',
+          value: 1,
+        }, {
+          label: '雇主责任险',
+          value: 2,
+        },
+      ],
     }
   },
   created () {
@@ -67,9 +76,16 @@ export default {
     },
     handleView () {
     },
-    async loadPage (param = this.searchForm) { 
-      param.shipId = this.$route.params.shipId
+    async loadPage (param = this.searchForm) {
+      param.shipName = this.$route.params.shipName
       let data = await this.loadTable(param, getShipinsureList)
+      data.records.forEach(v => {
+        this.typeList.forEach(m => {
+          if (v.type === m.value) {
+            v.type = m.label
+          }
+        })
+      })
       this.pagedTable = data.records
     },
     backPage () {

@@ -73,17 +73,20 @@ const  columnsMap = [
 
 const insureColumnsMap = [
   {
-    prop: 'insurename',
-    label: '标题',
+    prop: 'type',
+    label: '类型',
   },
   {
-    prop: 'image',
-    label: '图片',
-    type: 'image',
+    prop: 'amount',
+    label: '保额',
+  },
+  {
+    prop: 'premium',
+    label: '保费',
   },
   {
     prop: 'insureDate',
-    label: '年份',
+    label: '投保日期',
   },
 ]
 
