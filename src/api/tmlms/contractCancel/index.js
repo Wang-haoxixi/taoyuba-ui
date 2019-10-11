@@ -41,13 +41,3 @@ export function disallowContract (id) {
     },
   })
 }
-
-export function refuseContract (id) {
-  return request({
-    url:`${prefixUrl}/refuse`,
-    method: 'post',
-    params: {
-      cancelId : id,
-    },
-  })
-}

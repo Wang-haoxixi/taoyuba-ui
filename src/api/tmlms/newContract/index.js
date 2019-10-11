@@ -94,3 +94,13 @@ export function getList (query) {
         params: query,
     })
 }
+
+export function refuseContract (id) {
+    return request({
+      url:`${prefixUrl}/refuse`,
+      method: 'post',
+      params: {
+        cancelId : id,
+      },
+    })
+  }

@@ -74,7 +74,8 @@
 
 <script>
 import { cancelContract, getContractDetail } from '@/api/tmlms/newContract'
-import { addContractCancel, getContractCancelList, refuseContract } from '@/api/tmlms/contractCancel/index'
+import { addContractCancel, getContractCancelList } from '@/api/tmlms/contractCancel/index'
+import { refuseContract } from '@/api/tmlms/newContract/index'
 import { getUserInfo } from '@/api/login'
 import { getObj } from '@/api/admin/user'
 import store from '@/store'
