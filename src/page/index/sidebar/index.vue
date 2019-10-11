@@ -1,13 +1,16 @@
 <template>
   <div class="avue-sidebar" :style="{width: keyCollapse ? '' : '200px'}">
     <el-scrollbar style="height:calc(100vh - 60px);" native>
-      <main-item :mainMenu="mainMenu" :collapse="keyCollapse"></main-item>
-      <sidebar-item :menu="mainMenu.children" :screen="screen" first :props="website.menu.props" :collapse="keyCollapse"></sidebar-item>
+      <!-- <main-item :mainMenu="mainMenu" :collapse="keyCollapse"></main-item>
+      <sidebar-item :menu="mainMenu.children" :screen="screen" first :props="website.menu.props" :collapse="keyCollapse"></sidebar-item> -->
       <div class="sub-menu-wrapper" v-if="mainMenu.path === '/wel'">
         <el-menu default-active="-1" :collapse="keyCollapse">
-          <el-menu-item :index="omenu.path" v-for="omenu in otherMenus" :key="omenu.path" @click="openModuleMenus(omenu)">
+          <el-menu-item :index="omenu.path" v-for="omenu in otherMenus" :key="omenu.path">
             <i :class="omenu.icon"></i>
             <span slot="title">{{omenu.label}}</span>
+            <el-menu-item-group>
+               <el-menu-item index="1-1">选项1</el-menu-item>
+            </el-menu-item-group>
           </el-menu-item>
         </el-menu>
       </div>
@@ -17,13 +20,13 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import MainItem from './MainItem'
-import sidebarItem from './sidebarItem'
+// import MainItem from './MainItem'
+// import sidebarItem from './sidebarItem'
 import displayMixins from '@/mixins/displayMixins'
 export default {
   mixins: [displayMixins],
   name: 'Sidebar',
-  components: { sidebarItem, MainItem },
+  // components: { sidebarItem, MainItem },
   computed: {
     ...mapGetters(['website', 'menu', 'mainMenu', 'otherMenus', 'menusMap', 'screen']),
     keyCollapse () {
@@ -33,6 +36,9 @@ export default {
         return true
       }
     },
+  },
+  created () {
+    console.log(this.otherMenus)
   },
   methods: {
     ...mapMutations({ setMainMenu: 'SET_MAINMENU', setOtherMenus: 'SET_OTHERMENUS', setmenusMap: 'SET_menusMap' }),
