@@ -100,7 +100,7 @@ export function refuseContract (id) {
       url:`${prefixUrl}/refuse`,
       method: 'post',
       params: {
-        cancelId : id,
+        contractId : id,
       },
     })
   }
