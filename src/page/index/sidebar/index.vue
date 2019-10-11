@@ -5,13 +5,20 @@
       <sidebar-item :menu="mainMenu.children" :screen="screen" first :props="website.menu.props" :collapse="keyCollapse"></sidebar-item> -->
       <div class="sub-menu-wrapper" v-if="mainMenu.path === '/wel'">
         <el-menu default-active="-1" :collapse="keyCollapse">
-          <el-menu-item :index="omenu.path" v-for="omenu in otherMenus" :key="omenu.path">
+          <!-- <el-menu-item :index="omenu.path" v-for="omenu in otherMenus" :key="omenu.path" @click="openModuleMenus(omenu)">
             <i :class="omenu.icon"></i>
             <span slot="title">{{omenu.label}}</span>
-            <el-menu-item-group>
-               <el-menu-item index="1-1">选项1</el-menu-item>
-            </el-menu-item-group>
-          </el-menu-item>
+          </el-menu-item> -->
+          <el-submenu :index="omenu.path" v-for="omenu in otherMenus" :key="omenu.path">
+            <template slot="title">
+              <i :class="omenu.icon"></i>
+              <span slot="title">{{omenu.label}}</span>
+            </template>
+            <el-submenu index="1-4">
+              <span slot="title">选项4</span>
+              <el-menu-item index="1-4-1">选项1</el-menu-item>
+            </el-submenu>
+          </el-submenu>
         </el-menu>
       </div>
     </el-scrollbar>
