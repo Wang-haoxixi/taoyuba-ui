@@ -370,10 +370,12 @@ export default {
         if (data.code === 0) {
           this.contractList = data.data.records
           this.contractList.forEach(v => {
-            if( (day > new Date(Date.parse(v.workDateStart))) && (new Date(Date.parse(now)) < new Date(Date.parse(v.cancelTime.substring(0, 10)))) ) {
-              this.$set(v, 'isDate', 0)
-            } else {
-              this.$set(v, 'isDate', 1)
+            if(v.cancelTime) {
+              if( (day > new Date(Date.parse(v.workDateStart))) && (new Date(Date.parse(now)) < new Date(Date.parse(v.cancelTime.substring(0, 10)))) ) {
+                this.$set(v, 'isDate', 0)
+              } else {
+                this.$set(v, 'isDate', 1)
+              }
             }
             this.statusDict.forEach(m => {
               if (v.status === m.lable) {
