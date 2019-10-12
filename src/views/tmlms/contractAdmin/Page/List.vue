@@ -64,7 +64,7 @@
             </el-button>
             <iep-button v-if="mlms_contract_rec && scope.row.status === '未通过审核'" type="text" icon="el-icon-edit" size="mini" @click="handleRecord(scope.row.contractId)">审核记录
             </iep-button>
-            <iep-button v-if="mlms_contract_rem && scope.row.status === '合同解除'" type="text" icon="el-icon-edit" size="mini" @click="handleRemove(scope.row.contractId)">解除记录
+            <iep-button v-if="mlms_contract_rem && (scope.row.status === '合同解除' || scope.row.status === '合同纠纷')" type="text" icon="el-icon-edit" size="mini" @click="handleRemove(scope.row.contractId)">解除记录
             </iep-button>
             <el-button v-if="mlms_contract_pri && scope.row.status === '合同成立'" type="text" icon="el-icon-delete" size="mini" @click="handlePrint(scope.row.contractId)">打印
             </el-button>
