@@ -66,8 +66,8 @@ export default {
       return this.noOrg ? noObj : haveObj
     },
   },
-  methods: {
-    ...mapActions(['LogOut']),
+  methods: {                                                                                                       
+    ...mapActions(['LogOut']),           
     handleOrg (type) {    
       if (type === 0) {
         this.$router.push({ name: '选择组织' })
@@ -91,9 +91,9 @@ export default {
         },
       })
     },
-    // 根据角色跳转
+    // 根据角色跳转       
     // $openPage('BaseSettings','name')
-    goInfo () {
+    goInfo () {                                          
       getUserInfo().then(() =>{
         this.$router.push({name: 'detailIformation'})
       })
