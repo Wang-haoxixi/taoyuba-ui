@@ -3,8 +3,8 @@
     <el-scrollbar style="height:calc(100vh - 60px);" native>
       <!-- <main-item :mainMenu="mainMenu" :collapse="keyCollapse"></main-item>
       <sidebar-item :menu="mainMenu.children" :screen="screen" first :props="website.menu.props" :collapse="keyCollapse"></sidebar-item> -->
-      <div class="sub-menu-wrapper" v-if="mainMenu.path === '/wel'">
-        <el-menu default-active="-1" :collapse="keyCollapse" unique-opened="true">
+      <div class="sub-menu-wrapper">
+        <el-menu default-active="-1" :collapse="keyCollapse" :unique-opened="nuique" :default-openeds="defpath">
           <!-- <el-menu-item :index="omenu.path" v-for="omenu in otherMenus" :key="omenu.path" @click="openModuleMenus(omenu)">
             <i :class="omenu.icon"></i>
             <span slot="title">{{omenu.label}}</span>
@@ -19,12 +19,12 @@
                 <el-submenu :index="child.path"  v-if="child.id === item">
                   <span slot="title">{{child.label}}</span>
                   <el-menu-item-group>
-                    <el-menu-item :index="childone.path" v-for="childone in child.children" :key="childone.path"  @click="goTo">{{childone.label}}</el-menu-item>
+                    <el-menu-item :index="childone.path" v-for="childone in child.children" :key="childone.path"  @click="goTo(childone.path)">{{childone.label}}</el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>
               </div>
               <div v-for="(items, index) in secondList" :key="index + 10000">
-                 <el-menu-item v-if="child.id === items.id" @click="goTo">{{items.label}}</el-menu-item>
+                 <el-menu-item  :index="items.path" v-if="child.id === items.id" @click="goTo(items.path)">{{items.label}}</el-menu-item>
               </div>
             </div>
           </el-submenu>
@@ -47,6 +47,8 @@ export default {
     return {
       oneList: [],
       secondList: [],
+      defpath: [],
+      nuique: true,
     }
   },
   computed: {
@@ -82,14 +84,18 @@ export default {
           if (m.children.length > 0) {
             this.oneList.push(m.id)
           } else {
-            let cont = {id: m.id, label: m.label}
+            let cont = {id: m.id, label: m.label, path: m.path}
             this.secondList.push(cont)
           }
         })
       })
     },
-    goTo () {
-      console.log(111)
+    goTo (path) {
+      this.$router.push({
+        path: path,
+      })
+      this.defpath.push(path)
+      console.log(this.defpath)
     },
   },
 }
