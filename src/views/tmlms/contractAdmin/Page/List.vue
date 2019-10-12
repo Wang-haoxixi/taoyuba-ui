@@ -97,7 +97,7 @@
         </span>
       </el-dialog>
       <el-dialog title="提示" :visible.sync="relDialog" width="30%" :before-close="relClose">
-        <p>如同意解除请输入解除理由：</p>
+        <p>是否解除此合同？如同意解除请输入解除理由：</p>
         <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="relform.content"></el-input>
         <span>上传双方签名的解除协议：</span>
         <el-upload
