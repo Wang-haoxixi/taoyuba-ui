@@ -64,6 +64,8 @@
             </el-button>
             <iep-button v-if="mlms_contract_rec && scope.row.status === '未通过审核'" type="text" icon="el-icon-edit" size="mini" @click="handleRecord(scope.row.contractId)">审核记录
             </iep-button>
+            <iep-button v-if="mlms_contract_rem && scope.row.status === '合同解除'" type="text" icon="el-icon-edit" size="mini" @click="handleRemove(scope.row.contractId)">解除记录
+            </iep-button>
             <el-button v-if="mlms_contract_pri && scope.row.status === '合同成立'" type="text" icon="el-icon-delete" size="mini" @click="handlePrint(scope.row.contractId)">打印
             </el-button>
             <el-button v-if="mlms_contract_rel && scope.row.status === '合同成立'" type="text" icon="el-icon-edit" size="mini" @click="handleRelieve(scope.row.contractId)">解除
@@ -218,6 +220,7 @@ export default {
       mlms_contract_com: false,
       mlms_contract_eva: false,
       mlms_contract_rec: false,
+      mlms_contract_rem: false,
       shipAttrDict: [],
       employeePayTypeDict: [],
       periodTypeDict: [],
@@ -305,6 +308,7 @@ export default {
     this.mlms_contract_com = this.permissions['mlms_contract_com']
     this.mlms_contract_eva = this.permissions['mlms_contract_eva']
     this.mlms_contract_rec = this.permissions['mlms_contract_rec']
+    this.mlms_contract_rem = this.permissions['mlms_contract_rem']
     getUserInfo().then(res => {
       if (res.data.data.roles.indexOf(111) !== -1) {
         this.mangner = true
@@ -428,6 +432,9 @@ export default {
     },
     handleRecord (contractId) {
       this.$emit('onRecord', contractId)
+    },
+    handleRemove (contractId) {
+      this.$emit('onRemove', contractId)
     },
     handleView (contractId) {
       // this.$emit('onDetail', contractId)
