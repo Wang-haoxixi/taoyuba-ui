@@ -1,10 +1,10 @@
 <template>
   <div class="avue-sidebar" :style="{width: keyCollapse ? '' : '200px'}">
     <el-scrollbar style="height:calc(100vh - 60px);" native>
-      <!-- <main-item :mainMenu="mainMenu" :collapse="keyCollapse"></main-item>
-      <sidebar-item :menu="mainMenu.children" :screen="screen" first :props="website.menu.props" :collapse="keyCollapse"></sidebar-item> -->
+      <main-item :mainMenu="mainMenu" :collapse="keyCollapse"></main-item>
+      <sidebar-item :menu="mainMenu.children" :screen="screen" first :props="website.menu.props" :collapse="keyCollapse"></sidebar-item>
       <div class="sub-menu-wrapper">
-        <el-menu default-active="-1" :collapse="keyCollapse" :unique-opened="nuique" :default-openeds="defpath">
+        <el-menu default-active="-1" :collapse="keyCollapse" unique-opened="true">
           <!-- <el-menu-item :index="omenu.path" v-for="omenu in otherMenus" :key="omenu.path" @click="openModuleMenus(omenu)">
             <i :class="omenu.icon"></i>
             <span slot="title">{{omenu.label}}</span>
@@ -24,7 +24,7 @@
                 </el-submenu>
               </div>
               <div v-for="(items, index) in secondList" :key="index + 10000">
-                 <el-menu-item  :index="items.path" v-if="child.id === items.id" @click="goTo(items.path)">{{items.label}}</el-menu-item>
+                 <el-menu-item v-if="child.id === items.id" @click="goTo(items.path)">{{items.label}}</el-menu-item>
               </div>
             </div>
           </el-submenu>
@@ -36,19 +36,17 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-// import MainItem from './MainItem'
-// import sidebarItem from './sidebarItem'
+import MainItem from './MainItem'
+import sidebarItem from './sidebarItem'
 import displayMixins from '@/mixins/displayMixins'
 export default {
   mixins: [displayMixins],
   name: 'Sidebar',
-  // components: { sidebarItem, MainItem },
+  components: { sidebarItem, MainItem },
   data () {
     return {
       oneList: [],
       secondList: [],
-      defpath: [],
-      nuique: true,
     }
   },
   computed: {
@@ -63,6 +61,7 @@ export default {
   },
   created () {
     this.isMenu()
+    console.log(this.otherMenus)
   },
   methods: {
     ...mapMutations({ setMainMenu: 'SET_MAINMENU', setOtherMenus: 'SET_OTHERMENUS', setmenusMap: 'SET_menusMap' }),
@@ -94,8 +93,8 @@ export default {
       this.$router.push({
         path: path,
       })
-      this.defpath.push(path)
-      console.log(this.defpath)
+      // this.defpath.push(path)
+      // console.log(this.defpath)
     },
   },
 }
