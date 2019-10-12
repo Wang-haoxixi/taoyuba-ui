@@ -4,7 +4,7 @@
       <!-- <main-item :mainMenu="mainMenu" :collapse="keyCollapse"></main-item>
       <sidebar-item :menu="mainMenu.children" :screen="screen" first :props="website.menu.props" :collapse="keyCollapse"></sidebar-item> -->
       <div class="sub-menu-wrapper" v-if="mainMenu.path === '/wel'">
-        <el-menu default-active="-1" :collapse="keyCollapse">
+        <el-menu default-active="-1" :collapse="keyCollapse" unique-opened="true">
           <!-- <el-menu-item :index="omenu.path" v-for="omenu in otherMenus" :key="omenu.path" @click="openModuleMenus(omenu)">
             <i :class="omenu.icon"></i>
             <span slot="title">{{omenu.label}}</span>
@@ -13,11 +13,20 @@
             <template slot="title">
               <i :class="omenu.icon"></i>
               <span slot="title">{{omenu.label}}</span>
-            </template>
-            <el-submenu index="1-4">
-              <span slot="title">选项4</span>
-              <el-menu-item index="1-4-1">选项1</el-menu-item>
-            </el-submenu>
+            </template> 
+            <div :index="child.path" v-for="child in omenu.children" :key="child.path">
+              <div v-for="(item, index) in oneList" :key="index">
+                <el-submenu :index="child.path"  v-if="child.id === item">
+                  <span slot="title">{{child.label}}</span>
+                  <el-menu-item-group>
+                    <el-menu-item :index="childone.path" v-for="childone in child.children" :key="childone.path">{{childone.label}}</el-menu-item>
+                  </el-menu-item-group>
+                </el-submenu>
+              </div>
+              <div v-for="(items, index) in secondList" :key="index + 10000">
+                 <el-menu-item v-if="child.id === items.id">{{items.label}}</el-menu-item>
+              </div>
+            </div>
           </el-submenu>
         </el-menu>
       </div>
@@ -34,6 +43,12 @@ export default {
   mixins: [displayMixins],
   name: 'Sidebar',
   // components: { sidebarItem, MainItem },
+  data () {
+    return {
+      oneList: [],
+      secondList: [],
+    }
+  },
   computed: {
     ...mapGetters(['website', 'menu', 'mainMenu', 'otherMenus', 'menusMap', 'screen']),
     keyCollapse () {
@@ -45,7 +60,7 @@ export default {
     },
   },
   created () {
-    console.log(this.otherMenus)
+    this.isMenu()
   },
   methods: {
     ...mapMutations({ setMainMenu: 'SET_MAINMENU', setOtherMenus: 'SET_OTHERMENUS', setmenusMap: 'SET_menusMap' }),
@@ -59,6 +74,18 @@ export default {
       }
       this.$router.push({
         path: findMenuChidrenPath(menu),
+      })
+    },
+    isMenu () {
+      this.otherMenus.forEach(v => {
+        v.children.forEach(m => {
+          if (m.children.length > 0) {
+            this.oneList.push(m.id)
+          } else {
+            let cont = {id: m.id, label: m.label}
+            this.secondList.push(cont)
+          }
+        })
       })
     },
   },
