@@ -275,7 +275,7 @@ export default {
       this.dialogVisible = true
     },
     cancelRelieve () {
-      refuseContract(this.i).then(() => {
+      refuseContract(this.cd).then(() => {
         this.$message.success('已拒绝对方解除申请')
         this.getContractList()
         this.canDialog = false
