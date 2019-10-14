@@ -8,19 +8,13 @@
       <el-container>
         <el-aside :width="asideWidth">
           <!-- 左侧导航栏 -->
-          <sidebar />
+          <sidebar @tabList="addList"></sidebar >
         </el-aside>
         <el-main>
           <!-- 主体视图层 -->
           <el-scrollbar style="height:100%">
-            <el-tabs v-model="editableTabsValue" type="card" closable @tabList="addList">
-              <el-tab-pane
-                v-for="(item, index) in editableTabs"
-                :key="item.name"
-                :label="item.title"
-                :name="item.name"
-                :index ='index'
-              >
+            <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="removeTab" @tab-click="handleClick" @edit="handleTabsEdit">
+              <el-tab-pane v-for="(item, index) in editableTabs" :key="item.name" :label="item.title" :name="item.name" :index ="index">
               </el-tab-pane>
             </el-tabs>
             <keep-alive>
@@ -63,16 +57,8 @@ export default {
       refreshLock: false,
       //刷新token的时间
       refreshTime: '',
-      editableTabsValue: '2',
-      editableTabs: [{
-        title: 'Tab 1',
-        name: '1',
-        content: 'Tab 1 content',
-      }, {
-        title: 'Tab 2',
-        name: '2',
-        content: 'Tab 2 content',
-      }],
+      editableTabsValue: '0',
+      editableTabs: [],
     }
   },
   created () {
@@ -197,7 +183,57 @@ export default {
     //   }
     // },
     addList (val) {
-      console.log(val)
+      var tabObj = {
+        title: val.label,
+        name: val.id.toString(),
+        path: val.path,
+      }
+      if (this.editableTabs.length === 0) {
+        this.editableTabs.push(tabObj)
+        this.editableTabsValue = tabObj.name
+      } else {
+        if (JSON.stringify(this.editableTabs).indexOf(JSON.stringify(tabObj)) === -1) {
+          this.editableTabs.push(tabObj)
+          this.editableTabsValue = tabObj.name
+        } else {
+          this.editableTabsValue = tabObj.name
+          this.$router.push({
+            path: tabObj.path,
+          })
+        }
+      }
+    },
+    removeTab (targetName) {
+      let tabs = this.editableTabs
+      let activeName = this.editableTabsValue
+      if (activeName === targetName) {
+        tabs.forEach((tab, index) => {
+          if (tab.name === targetName) {
+            let nextTab = tabs[index + 1] || tabs[index - 1]
+            if (nextTab) {
+              activeName = nextTab.name
+            }
+          }
+        })
+      }
+      this.editableTabsValue = activeName
+      this.editableTabs = tabs.filter(tab => tab.name !== targetName)
+    },
+    handleClick (tab) {
+      this.$router.push({
+        path: this.editableTabs[tab.index].path,
+      })
+    },
+    handleTabsEdit (action) {
+      for(var i =0; i < this.editableTabs.length; i++ ) {
+        if(this.editableTabs[i].name.indexOf(action) !== -1) {
+          this.editableTabs.splice(i, 1)
+        }
+      }
+      this.editableTabsValue = this.editableTabs[this.editableTabs.length-1].name
+      this.$router.push({
+        path: this.editableTabs[this.editableTabs.length-1].path,
+      })
     },
   },
 }

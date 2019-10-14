@@ -19,12 +19,12 @@
                 <el-submenu :index="child.path"  v-if="child.id === item">
                   <span slot="title">{{child.label}}</span>
                   <el-menu-item-group>
-                    <el-menu-item :index="childone.path" v-for="childone in child.children" :key="childone.path"  @click="goTo(childone.path)">{{childone.label}}</el-menu-item>
+                    <el-menu-item :index="childone.path" v-for="childone in child.children" :key="childone.path"  @click="goTo(childone)">{{childone.label}}</el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>
               </div>
               <div v-for="(items, index) in secondList" :key="index + 10000">
-                 <el-menu-item v-if="child.id === items.id" @click="goTo(items.path)">{{items.label}}</el-menu-item>
+                 <el-menu-item v-if="child.id === items.id" @click="goTo(items)">{{items.label}}</el-menu-item>
               </div>
             </div>
           </el-submenu>
@@ -89,12 +89,11 @@ export default {
         })
       })
     },
-    goTo (path) {
+    goTo (val) {
       this.$router.push({
-        path: path,
+        path: val.path,
       })
-      let data = 1111
-      this.$emit('tabList', data)
+      this.$emit('tabList', val)
     },
   },
 }
