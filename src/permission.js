@@ -47,6 +47,8 @@ router.beforeEach(async (to, from, next) => {
           const parentPath = to.matched[0].path
           const isMatchedMenu = menuPathList.includes(parentPath)
           const currentMenu = menu.find(m => m.path === parentPath)
+          const allMenus = menu
+          store.commit('SET_ALLMENUS', allMenus)
           if (isMatchedMenu && currentMenu) {
             let Menus = [mainMenu, ...otherMenus]
             Menus = orderBy(Menus, ['sort'], ['asc'])

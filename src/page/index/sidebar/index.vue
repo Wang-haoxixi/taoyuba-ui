@@ -1,15 +1,15 @@
 <template>
   <div class="avue-sidebar" :style="{width: keyCollapse ? '' : '200px'}">
     <el-scrollbar style="height:calc(100vh - 60px);" native>
-      <main-item :mainMenu="mainMenu" :collapse="keyCollapse"></main-item>
-      <sidebar-item :menu="mainMenu.children" :screen="screen" first :props="website.menu.props" :collapse="keyCollapse"></sidebar-item>
+      <!-- <main-item :mainMenu="mainMenu" :collapse="keyCollapse"></main-item>
+      <sidebar-item :menu="mainMenu.children" :screen="screen" first :props="website.menu.props" :collapse="keyCollapse"></sidebar-item> -->
       <div class="sub-menu-wrapper">
-        <el-menu default-active="-1" :collapse="keyCollapse" unique-opened="true">
+        <el-menu default-active="-1" :collapse="keyCollapse" :unique-opened="unique">
           <!-- <el-menu-item :index="omenu.path" v-for="omenu in otherMenus" :key="omenu.path" @click="openModuleMenus(omenu)">
             <i :class="omenu.icon"></i>
             <span slot="title">{{omenu.label}}</span>
           </el-menu-item> -->
-          <el-submenu :index="omenu.path" v-for="omenu in otherMenus" :key="omenu.path">
+          <el-submenu :index="omenu.path" v-for="omenu in allMenus" :key="omenu.path">
             <template slot="title">
               <i :class="omenu.icon"></i>
               <span slot="title">{{omenu.label}}</span>
@@ -36,21 +36,22 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import MainItem from './MainItem'
-import sidebarItem from './sidebarItem'
+// import MainItem from './MainItem'
+// import sidebarItem from './sidebarItem'
 import displayMixins from '@/mixins/displayMixins'
 export default {
   mixins: [displayMixins],
   name: 'Sidebar',
-  components: { sidebarItem, MainItem },
+  // components: { sidebarItem, MainItem },
   data () {
     return {
       oneList: [],
       secondList: [],
+      unique: true,
     }
   },
   computed: {
-    ...mapGetters(['website', 'menu', 'mainMenu', 'otherMenus', 'menusMap', 'screen']),
+    ...mapGetters(['website', 'menu', 'mainMenu', 'otherMenus', 'menusMap', 'screen', 'allMenus']),
     keyCollapse () {
       if (this.isDesktop()) {
         return false
@@ -61,10 +62,9 @@ export default {
   },
   created () {
     this.isMenu()
-    console.log(this.otherMenus)
   },
   methods: {
-    ...mapMutations({ setMainMenu: 'SET_MAINMENU', setOtherMenus: 'SET_OTHERMENUS', setmenusMap: 'SET_menusMap' }),
+    ...mapMutations({ setMainMenu: 'SET_MAINMENU', setOtherMenus: 'SET_OTHERMENUS', setAllMenus: 'SET_ALLMENUS', setmenusMap: 'SET_menusMap' }),
     openModuleMenus (menu) {
       function findMenuChidrenPath (cMenu) {
         if (cMenu.children.length) {
@@ -78,7 +78,7 @@ export default {
       })
     },
     isMenu () {
-      this.otherMenus.forEach(v => {
+      this.allMenus.forEach(v => {
         v.children.forEach(m => {
           if (m.children.length > 0) {
             this.oneList.push(m.id)
@@ -93,8 +93,8 @@ export default {
       this.$router.push({
         path: path,
       })
-      // this.defpath.push(path)
-      // console.log(this.defpath)
+      let data = 1111
+      this.$emit('tabList', data)
     },
   },
 }

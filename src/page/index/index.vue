@@ -13,6 +13,16 @@
         <el-main>
           <!-- 主体视图层 -->
           <el-scrollbar style="height:100%">
+            <el-tabs v-model="editableTabsValue" type="card" closable @tabList="addList">
+              <el-tab-pane
+                v-for="(item, index) in editableTabs"
+                :key="item.name"
+                :label="item.title"
+                :name="item.name"
+                :index ='index'
+              >
+              </el-tab-pane>
+            </el-tabs>
             <keep-alive>
               <router-view class="avue-view" v-if="$route.meta.keepAlive" />
             </keep-alive>
@@ -53,6 +63,16 @@ export default {
       refreshLock: false,
       //刷新token的时间
       refreshTime: '',
+      editableTabsValue: '2',
+      editableTabs: [{
+        title: 'Tab 1',
+        name: '1',
+        content: 'Tab 1 content',
+      }, {
+        title: 'Tab 2',
+        name: '2',
+        content: 'Tab 2 content',
+      }],
     }
   },
   created () {
@@ -176,6 +196,9 @@ export default {
     //     console.log('Disconnected')
     //   }
     // },
+    addList (val) {
+      console.log(val)
+    },
   },
 }
 </script>

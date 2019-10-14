@@ -63,7 +63,8 @@ const menu = {
           })
           commit('SET_MENU', menu)
           if (state.menuPathList.length === 0) {
-            const { mainMenu, otherMenus, menusMap, menuPathList } = detachMenu(menu)
+            const { mainMenu, otherMenus, menusMap, menuPathList, allMenus } = detachMenu(menu)
+            commit('SET_ALLMENUS', allMenus)
             commit('SET_MAINMENU', mainMenu)
             commit('SET_OTHERMENUS', otherMenus)
             commit('SET_MENUSMAP', menusMap)
@@ -96,6 +97,14 @@ const menu = {
       setStore({
         name: 'other_menus',
         content: otherMenus,
+        type: 'session',
+      })
+    },
+    SET_ALLMENUS: (state, allMenus) => {
+      state.allMenus = allMenus
+      setStore({
+        name: 'all_menus',
+        content: allMenus,
         type: 'session',
       })
     },
