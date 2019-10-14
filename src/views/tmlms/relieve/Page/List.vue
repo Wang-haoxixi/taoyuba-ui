@@ -20,7 +20,7 @@
           <template slot-scope="scope">
             <el-button v-if="(scope.row.status === '待通过' && scope.row.type === '解除合同') && (scope.row.receiverId === recName)" 
               type="text" icon="el-icon-edit" size="mini" @click="agree(scope.row.contractId, scope.row.id)">同意解除合同</el-button>
-            <el-button v-if="scope.row.status === '不通过' && (scope.row.userId === recName) && contractList.length < 2" type="text" icon="el-icon-edit" size="mini" @click="complain(scope.row.contractId, scope.row.id)">投诉</el-button>
+            <!-- <el-button v-if="scope.row.status === '不通过' && (scope.row.userId === recName) && contractList.length < 2" type="text" icon="el-icon-edit" size="mini" @click="complain(scope.row.contractId, scope.row.id)">投诉</el-button> -->
           </template>
         </el-table-column>
       </avue-tree-table>
