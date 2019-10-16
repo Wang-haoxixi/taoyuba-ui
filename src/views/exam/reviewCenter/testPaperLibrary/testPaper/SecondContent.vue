@@ -572,8 +572,6 @@ export default {
           this.form.hardNum = sortMap[difficulty]
         }
       }
-
-
     },
 
     /**

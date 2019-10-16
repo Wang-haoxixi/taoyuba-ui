@@ -24,6 +24,7 @@ const getters = {
   menu: state => state.menu.menu,
   mainMenu: state => state.menu.mainMenu,
   otherMenus: state => state.menu.otherMenus,
+  allMenus: state => state.menu.allMenus,
   menusMap: state => state.menu.menusMap,
   menuPathList: state => state.menu.menuPathList,
   // cache
