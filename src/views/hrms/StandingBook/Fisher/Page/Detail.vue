@@ -19,19 +19,19 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="渔船编号：" prop="shipNo">
-              <el-input maxlength="50" v-model="form.shipNo"></el-input>
+              <el-input maxlength="50" v-model="form.shipNo" :disabled="manager"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item label="持证人：" prop="shipowner">
-              <el-input maxlength="20" v-model="form.shipowner"></el-input>
+              <el-input maxlength="20" v-model="form.shipowner" :disabled="manager"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="持证人身份证号码：" prop="shipownerIdcard">
-              <el-input maxlength="18" v-model="form.shipownerIdcard"></el-input>
+              <el-input maxlength="18" v-model="form.shipownerIdcard" :disabled="manager"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -293,6 +293,7 @@ export default {
         children: 'childList',
       },
       arr:[],
+      manager: false,
     }                               
   },
   computed: {                                                                                                                                                               
@@ -467,6 +468,11 @@ export default {
     getshipNameList () {
       getUserInfo().then(data => {
         this.userId = data.data.data.sysUser.userId
+        if (data.data.data.roles.includes(111)) {
+          this.manager = false
+        } else {
+          this.manager = true
+        }
         getVillageshipinfoByuser(this.userId).then(data => {
           this.shipNameList = data.data.data.map(item => {
             return {

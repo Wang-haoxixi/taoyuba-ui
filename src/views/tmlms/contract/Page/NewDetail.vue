@@ -35,7 +35,6 @@
                               remote
                               maxlength="20"
                               :loading="loading"
-                              allow-create
                               clearable
                               @change="shipNameChange"
                               :remote-method="getShipNameList" style="width:380px!important">
@@ -655,6 +654,8 @@ export default {
         findMyship(shipName).then(({data}) => {
           if (data.data !== false) {
             this.shipNames.push(data.data)
+          } else {
+            this.$message.error(data.msg)
           }
         })
       } else {

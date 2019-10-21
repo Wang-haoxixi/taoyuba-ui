@@ -187,9 +187,15 @@ export default [
         meta: noKeepAlive,
       },
       {   
-        path: 'shipOperat_Detial/:id',                        
-        name: '渔船下船员详情页',                                   
-        component: () => import('@/views/hrms/StandingBook/Fisher/Operat/Detail.vue'),        
+        path: 'shipChange_Detial/:id',                        
+        name: '渔船变更详情页',                                   
+        component: () => import('@/views/hrms/StandingBook/ShipChange/Page/Detail.vue'),        
+        meta: noKeepAlive,
+      },
+      {   
+        path: 'shipChange__list/',                        
+        name: '渔船变更列表页',                                   
+        component: () => import('@/views/hrms/StandingBook/ShipChange/index.vue'),        
         meta: noKeepAlive,
       },
     ],

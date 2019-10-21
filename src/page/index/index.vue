@@ -20,9 +20,7 @@
             <keep-alive>
               <router-view class="avue-view" v-if="$route.meta.keepAlive" />
             </keep-alive>
-            <keep-alive>
-              <router-view class="avue-view" v-if="!$route.meta.keepAlive" />
-            </keep-alive>
+            <router-view class="avue-view" v-if="!$route.meta.keepAlive" />
           </el-scrollbar>
         </el-main>
       </el-container>

@@ -64,3 +64,11 @@ export function getVillageShipList (params) {
         params: params,
     })
 }
+
+export function getByVillagename (params) {
+    return request({
+        url: `${prefixUrl}/getByVillagename`,
+        method: 'get',
+        params: params,
+    })
+}
