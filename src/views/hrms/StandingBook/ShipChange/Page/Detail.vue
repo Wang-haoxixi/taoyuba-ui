@@ -97,7 +97,7 @@
           </el-row>
         </el-form>
         <div style="text-align:center">
-          <el-button @click="save">提交</el-button>
+          <el-button @click="save" v-if="shipChange.type > 0">提交</el-button>
           <el-button @click="$router.go(-1)">返回</el-button>
         </div>
     </basic-container>
@@ -113,15 +113,15 @@ import store from '@/store'
 export default {
   data () {
     // this.getShipNameList = debounce(this.getShipNameList, 50)
-    //   var checkPhone = (rule, value, callback) => {
-    //     if (value === '') {
-    //       callback(new Error('请输入手机号码'))
-    //     } else if (!value.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[0-9]|18[0-9]|14[0-9]|19[0-9]|16[0-9])[0-9]{8}$/)) {
-    //       callback(new Error('请输入正确的手机号码!'))
-    //     } else {
-    //       callback()
-    //     }
-    //   }
+      // var checkPhone = (rule, value, callback) => {
+      //   if (value === '') {
+      //     callback(new Error('请输入手机号码'))
+      //   } else if (!value.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[0-9]|18[0-9]|14[0-9]|19[0-9]|16[0-9])[0-9]{8}$/)) {
+      //     callback(new Error('请输入正确的手机号码!'))
+      //   } else {
+      //     callback()
+      //   }
+      // }
     return {
         show: false,
         shipChange: {
@@ -144,16 +144,19 @@ export default {
           contractimages: '',
         },
         rules: {
-            shipName: [
-                { required: true, message: '请输入渔船名', trigger: 'blur' },
-            ],
-            type: [
-                { required: true, message: '请输入变更类型', trigger: 'blur' },
-            ],
-            // phone: [
-            //     { required: true, message: '请输入联系电话', trigger: 'blur' },
-            //     { validator: checkPhone, trigger: 'blur' },
-            // ],
+          shipName: [
+            { required: true, message: '请输入渔船名', trigger: 'blur' },
+          ],
+          type: [
+            { required: true, message: '请输入变更类型', trigger: 'blur' },
+          ],
+          // newShipName: [
+          //   { required: true, message: '请输入变更渔船名', trigger: 'blur' },
+          // ],
+          // phone: [
+          //     { required: true, message: '请输入联系电话', trigger: 'blur' },
+          //     { validator: checkPhone, trigger: 'blur' },
+          // ],
         },
         headers: {
           Authorization: 'Bearer ' + store.getters.access_token,
@@ -250,6 +253,7 @@ export default {
       })
     },
     changeType () {
+      this.$refs.form.clearValidate()
       if (this.$refs.uploadIdcard) {
         this.$refs.uploadIdcard.clearFiles()
       }
@@ -409,10 +413,62 @@ export default {
   computed: {
     isType () {
       if (this.shipChange.type === 1) {
+        let rule = [
+          {
+            required: true, message: '请输入变更渔船名', trigger: 'blur',
+          },
+        ]
+        this.$set(this.rules, 'newShipName', rule)
+        this.$delete(this.rules, 'shipownerName')
+        this.$delete(this.rules, 'shipownerIdcard')
+        this.$delete(this.rules, 'shipownerPhone')
+        this.$delete(this.rules, 'villageId')
         return 1
       } else if (this.shipChange.type === 2) {
+        var checkPhone = (rule, value, callback) => {
+          if (value === '') {
+            callback(new Error('请输入手机号码'))
+          } else if (!value.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[0-9]|18[0-9]|14[0-9]|19[0-9]|16[0-9])[0-9]{8}$/)) {
+            callback(new Error('请输入正确的手机号码!'))
+          } else {
+            callback()
+          }
+        }
+        let rule1 = [
+          {
+            required: true, message: '请输入持证人姓名', trigger: 'blur',
+          },
+        ]
+        let rule2 = [
+          {
+            required: true, message: '请输入持证人身份证', trigger: 'blur',
+          },
+        ]
+        let rule3 = [
+          {
+            required: true, message: '请输入联系电话', trigger: 'blur',
+          },
+          { 
+            validator: checkPhone, trigger: 'blur',
+          },
+        ]
+        this.$set(this.rules, 'shipownerName', rule1)
+        this.$set(this.rules, 'shipownerIdcard', rule2)
+        this.$set(this.rules, 'shipownerPhone', rule3)
+        this.$delete(this.rules, 'newShipName')
+        this.$delete(this.rules, 'villageId')
         return 2
       } else if (this.shipChange.type === 3) {
+        let rule = [
+          {
+            required: true, message: '请输入挂靠基层', trigger: 'blur',
+          },
+        ]
+        this.$set(this.rules, 'villageId', rule)
+        this.$delete(this.rules, 'newShipName')
+        this.$delete(this.rules, 'shipownerName')
+        this.$delete(this.rules, 'shipownerIdcard')
+        this.$delete(this.rules, 'shipownerPhone')   
         return 3
       } else {
         return 0
