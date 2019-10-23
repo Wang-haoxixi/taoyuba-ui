@@ -50,6 +50,7 @@ const menu = {
     otherMenus: getStore({ name: 'other_menus' }) || [],
     menusMap: getStore({ name: 'menus_map' }) || {},
     menuPathList: getStore({ name: 'menu_path_list' }) || [],
+    allMenus: getStore({ name: 'all_menus' }) || [],
   },
   actions: {
     // 获取系统菜单
