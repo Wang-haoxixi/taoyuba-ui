@@ -68,3 +68,17 @@ export  function  addContractFile (data) {
           data,
     })
 }
+
+export function getChild (id) {
+    return request({
+      url: `/admin/dict/getChild/${id}`,
+      method: 'get',
+    })
+  }
+
+  export function getById (id) {
+    return request({
+      url: `/admin/dict/${id}`,
+      method: 'get',
+    })
+  }
