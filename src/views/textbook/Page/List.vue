@@ -4,71 +4,80 @@
       <page-header title="教材管理"></page-header>      
       <operation-container>
         <template slot="left">
-          <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
-        </template>
-        <template slot="right">
-          <operation-search @search-page="searchPage" advance-search :prop="searchData">
-            <advance-search @search-page="searchPage"></advance-search>
-          </operation-search>
+          <iep-button v-if="hrms_book_add" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
       </operation-container>
-      <iep-table
-              :isLoadTable="isLoadTable"
-              :pagination="pagination"
-              :columnsMap="columnsMap"
-              :pagedTable="pagedTable"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              @selection-change="handleSelectionChange"
-              is-mutiple-selection>
-        <el-table-column prop="operation" label="操作" width="220">
-          <template slot-scope="scope">                   
-            <operation-wrapper>     
-              <iep-button plain @click="handleEdit(scope.row.textbookId)">编辑</iep-button>
-              <iep-button @click="handleView(scope.row.textbookId)">查看</iep-button>
-              <iep-button type="warning" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
-            </operation-wrapper>
-          </template>
-        </el-table-column>
-      </iep-table>
+      <el-table
+          :data="bookList"
+          stripe
+          style="width: 100%">
+          <el-table-column label="分类" prop="type">
+          </el-table-column>
+          <el-table-column
+            v-for="(item,index) in options.columns"
+            :key="index"
+            :prop="item.value"  
+            :label="item.text"
+          >
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button v-if="ship_change_edit" type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.id)">编辑
+              </el-button>
+              <el-button v-if="ship_change_del" type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.id)">删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
     </basic-container>      
   </div>
 </template>
 <script>                                                                    
-import { getTextbookList, delTextbook } from '@/api/textbook'
-import advanceSearch from './AdvanceSearch.vue'
-import mixins from '@/mixins/mixins'
-import { columnsMap } from '../options'   
+import { mapGetters } from 'vuex'
 export default {
-  components: {
-    advanceSearch,
-  },
-  mixins: [mixins],
   data () {
     return {
-      columnsMap,
-      searchData: 'title',
+      bookList: {},
+      options: {
+        expandAll: false,
+        columns: [
+          {
+            text: '教材名称',
+            value: 'title',
+          },
+          {
+            text: '定价',
+            value: 'price',
+          },
+          {
+            text: '具体适用对象',
+            value: 'info',
+          },
+        ],
+      },
+      hrms_book_add: false,
+      hrms_book_edit: false,
+      hrms_book_del: false,
     }
   },
   created () {                         
-    this.loadPage()
+    this.getData()
+    this.hrms_book_add = this.permissions['hrms_book_add']
+    this.hrms_book_edit = this.permissions['hrms_book_edit']
+    this.hrms_book_del = this.permissions['hrms_book_del']
+  },
+  computed: {
+    ...mapGetters([
+      'permissions',
+    ]),
   },
   methods: {
-    handleSelectionChange (val) {
-      this.multipleSelection = val.map(m => m.id)       
-    },
-    handleDelete (row) {          
-      this._handleGlobalDeleteById(row.textbookId, delTextbook)
+    handleDelete () {          
+      
     },
     handleAdd () {
       this.$router.push({
         path: '/textbook_spa/detail/create/0',
-      })
-    },
-    handleView (id) {                    
-      console.log('id='+id)
-      this.$router.push({
-        path: `/textbook_spa/detail/view/${id}`,
       })
     },
     handleEdit (id) {
@@ -76,8 +85,8 @@ export default {
         path: `/textbook_spa/detail/update/${id}`,
       })
     },
-    async loadPage (param = this.searchForm) {    
-       this.loadTable(param, getTextbookList)
+    getData () {
+
     },
   },
 }

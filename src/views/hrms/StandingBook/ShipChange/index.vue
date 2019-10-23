@@ -1,6 +1,7 @@
 <template>
   <div class="contract-box">
     <basic-container>
+      <page-header title="渔船变更"></page-header>
       <div class="shipowner_title">
         <el-button v-if="ship_change_add" type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button>
         <!-- <div style="float:right">
