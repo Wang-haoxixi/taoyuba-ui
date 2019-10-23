@@ -494,6 +494,9 @@ export default {
       this.getData()
     } 
   },
+  // activated () {
+  //   this.$refs.form.resetFields()
+  // },
 }
 </script>
 <style lang="scss">

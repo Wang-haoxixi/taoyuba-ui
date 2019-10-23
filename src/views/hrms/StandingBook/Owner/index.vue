@@ -165,6 +165,9 @@ export default {
       return typeMap[type]
     },
   },
+  // activated () {
+  //   this.getData()
+  // },
 }
 </script>
 <style lang="scss" scoped>

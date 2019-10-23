@@ -183,6 +183,9 @@ export default {
     this.ship_change_del = this.permissions['ship_change_del']
     this.ship_change_aud = this.permissions['ship_change_aud']
   },
+  // activated () {
+  //   this.getData()
+  // },
  }
 </script>
 <style lang="scss" scoped>
