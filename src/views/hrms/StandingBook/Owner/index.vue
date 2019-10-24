@@ -42,8 +42,8 @@
             <template slot-scope="scope">
               <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.idcard)">查看
               </el-button>
-              <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.idcard)">编辑
-              </el-button>
+              <!-- <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.idcard)">编辑
+              </el-button> -->
             </template>
           </el-table-column>
         </el-table>

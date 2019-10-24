@@ -59,7 +59,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">        
-              <el-form-item label="持证人身份证照片:" prop="imageIdcard" v-if="isType === 1 || isType === 2">
+              <el-form-item label="持证人身份证照片:" prop="idcardimages" v-if="isType === 1 || isType === 2">
                 <el-upload action="/api/admin/file/upload/avatar" list-type="picture-card" ref="uploadIdcard"
                   :on-success="handleImageIdcard" :headers="headers" :file-list="idcardList"
                   :on-remove="handleIdcardRemove" :limit="num" accept="image/*">
@@ -68,7 +68,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">        
-              <el-form-item label="转移证明:" prop="imageChange" v-if="isType === 1">
+              <el-form-item label="转移证明:" prop="changeimages" v-if="isType === 1">
                 <el-upload action="/api/admin/file/upload/avatar" list-type="picture-card" ref="uploadChange"
                   :on-success="handleImageChange" :headers="headers" :file-list="changeList"
                   :on-remove="handleChangeRemove" :limit="num" accept="image/*">
@@ -77,7 +77,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">        
-              <el-form-item label="船名核准书:" prop="imageShipname" v-if="isType === 1">
+              <el-form-item label="船名核准书:" prop="shipNameimages" v-if="isType === 1">
                 <el-upload action="/api/admin/file/upload/avatar" list-type="picture-card" ref="uploadShipname"
                   :on-success="handleShipnameChange" :headers="headers" :file-list="shipnameList"
                   :on-remove="handleShipnameRemove" :limit="num" accept="image/*">
@@ -86,7 +86,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">        
-              <el-form-item label="挂靠合同:" prop="imageContract" v-if="isType === 2 || isType === 3">
+              <el-form-item label="挂靠合同:" prop="contractimages" v-if="isType === 2 || isType === 3">
                 <el-upload action="/api/admin/file/upload/avatar" list-type="picture-card" ref="uploadContract"
                   :on-success="handleImageContract" :headers="headers" :file-list="contractList"
                   :on-remove="handleContractRemove" :limit="num" accept="image/*">
@@ -418,11 +418,30 @@ export default {
             required: true, message: '请输入变更渔船名', trigger: 'blur',
           },
         ]
+        let rule2 = [
+          {
+            required: true, message: '请输入持证人身份证照片', trigger: 'blur',
+          },
+        ]
+        let rule3 = [
+          {
+            required: true, message: '请输入转移证明', trigger: 'blur',
+          },
+        ]
+        let rule4 = [
+          {
+            required: true, message: '请输入船名核准书', trigger: 'blur',
+          },
+        ]
         this.$set(this.rules, 'newShipName', rule)
+        this.$set(this.rules, 'idcardimages', rule2)
+        this.$set(this.rules, 'changeimages', rule3)
+        this.$set(this.rules, 'shipNameimages', rule4)
         this.$delete(this.rules, 'shipownerName')
         this.$delete(this.rules, 'shipownerIdcard')
         this.$delete(this.rules, 'shipownerPhone')
         this.$delete(this.rules, 'villageId')
+        this.$delete(this.rules, 'contractimages')
         return 1
       } else if (this.shipChange.type === 2) {
         var checkPhone = (rule, value, callback) => {
@@ -452,11 +471,25 @@ export default {
             validator: checkPhone, trigger: 'blur',
           },
         ]
+        let rule4 = [
+          {
+            required: true, message: '请输入持证人身份证照片', trigger: 'blur',
+          },
+        ]
+        let rule5 = [
+          {
+            required: true, message: '请输入挂靠合同', trigger: 'blur',
+          },
+        ]
         this.$set(this.rules, 'shipownerName', rule1)
         this.$set(this.rules, 'shipownerIdcard', rule2)
         this.$set(this.rules, 'shipownerPhone', rule3)
+        this.$set(this.rules, 'idcardimages', rule4)
+        this.$set(this.rules, 'contractimages', rule5)
         this.$delete(this.rules, 'newShipName')
         this.$delete(this.rules, 'villageId')
+        this.$delete(this.rules, 'shipNameimages')
+        this.$delete(this.rules, 'imageShipname')
         return 2
       } else if (this.shipChange.type === 3) {
         let rule = [
@@ -464,11 +497,20 @@ export default {
             required: true, message: '请输入挂靠基层', trigger: 'blur',
           },
         ]
+        let rule2 = [
+          {
+            required: true, message: '请输入挂靠合同', trigger: 'blur',
+          },
+        ]
         this.$set(this.rules, 'villageId', rule)
+        this.$set(this.rules, 'contractimages', rule2)
         this.$delete(this.rules, 'newShipName')
         this.$delete(this.rules, 'shipownerName')
         this.$delete(this.rules, 'shipownerIdcard')
-        this.$delete(this.rules, 'shipownerPhone')   
+        this.$delete(this.rules, 'shipownerPhone')
+        this.$delete(this.rules, 'idcardimages')  
+        this.$delete(this.rules, 'imageChange')  
+        this.$delete(this.rules, 'changeimages')     
         return 3
       } else {
         return 0

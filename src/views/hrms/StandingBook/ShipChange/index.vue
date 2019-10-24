@@ -61,6 +61,10 @@ export default {
         expandAll: false,
         columns: [
           {
+            text: '变更类型',
+            value: 'type',
+          },
+          {
             text: '船名号',
             value: 'shipName',
           },
@@ -96,6 +100,18 @@ export default {
         },{
           label: '审核未通过',
           value: 2,
+        },
+      ],
+      typeList: [
+        {
+          label: '变更船名',
+          value: 1,
+        }, {
+          label: '变更持证人',
+          value: 2,
+        }, {
+          label: '变更服务公司',
+          value: 3,
         },
       ],
     }
@@ -147,6 +163,11 @@ export default {
           this.statusList.forEach(m => {
             if (v.status === m.value) {
               v.status = m.label
+            }
+          })
+          this.typeList.forEach(k => {
+            if(v.type === k.value) {
+              v.type = k.label
             }
           })
         })
