@@ -52,16 +52,20 @@ export default {
         expandAll: false,
         columns: [
           {
+            text: '订单号',
+            value: 'orderId',
+          },
+          {
             text: '教材名称',
             value: 'title',
           },
           {
-            text: '定价',
+            text: '单价',
             value: 'price',
           },
           {
-            text: '具体适用对象',
-            value: 'info',
+            text: '数量',
+            value: 'quantity',
           },
         ],
       },
