@@ -37,6 +37,13 @@
       <div style="text-align: center;margin: 20px 0;">
         <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
       </div>
+      <el-dialog title="提示" :visible.sync="audDialog" width="30%" :before-close="audClose">
+        <span>是否同意审核</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="agreeAudit">同 意</el-button>
+          <el-button type="primary" @click="cancelAudit">拒 绝</el-button>
+        </span>
+      </el-dialog>
     </basic-container>
   </div>
 </template>
@@ -114,6 +121,8 @@ export default {
           value: 3,
         },
       ],
+      audDialog: false,
+      aid: '',
     }
   },
   computed: {
@@ -136,23 +145,25 @@ export default {
       this.$router.push({path: `/hrms_spa/shipChange_Detial/${val}`, query:{ edit: val }}) 
     },
     handleAudit (val) {
-      let type = 1
-      this.$confirm('该操作将审核该渔船变更，是否继续？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-        }).then(() => {
-          reviewShipChange({id: val, status: type}).then(() => {
-            this.$message.success('审核通过！')
-            this.getData()
-          }).catch(err => {
-            this.message.error(err.msg)
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除',
-          })
-        })
+      this.audDialog = true
+      this.aid =val
+      // let type = 1
+      // this.$confirm('该操作将审核该渔船变更，是否继续？', '提示', {
+      //     confirmButtonText: '确定',
+      //     cancelButtonText: '取消',
+      //   }).then(() => {
+      //     reviewShipChange({id: val, status: type}).then(() => {
+      //       this.$message.success('审核通过！')
+      //       this.getData()
+      //     }).catch(err => {
+      //       this.message.error(err.msg)
+      //     })
+      //   }).catch(() => {
+      //     this.$message({
+      //       type: 'info',
+      //       message: '已取消审核！',
+      //     })
+      //   })
     },
     // 获取列表数据
     getData () {
@@ -194,6 +205,29 @@ export default {
           type: 'info',
           message: '已取消删除',
         })        
+      })
+    },
+    audClose () {
+      this.audDialog = false
+    },
+    agreeAudit () {
+      let type = 1
+      reviewShipChange({id: this.aid, status: type}).then(() => {
+        this.$message.success('审核通过！')
+        this.getData()
+        this.audDialog = false
+      }).catch(err => {
+        this.message.error(err.msg)
+      })
+    },
+    cancelAudit () {
+      let type = 2
+      reviewShipChange({id: this.aid, status: type}).then(() => {
+        this.$message.success('审核不通过！')
+        this.getData()
+        this.audDialog = false
+      }).catch(err => {
+        this.message.error(err.msg)
       })
     },
   },
