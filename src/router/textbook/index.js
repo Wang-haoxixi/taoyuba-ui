@@ -12,6 +12,17 @@ export default [
         component: () => import('@/views/textbook/Page/Detail.vue'),
         meta: noKeepAlive,
       },
+      {
+        path: 'order_detail',
+        name: '新增审批',
+        component: () => import('@/views/textbook/order/Detail.vue'),
+        meta: noKeepAlive,
+      },
     ],
+  },
+  {
+    path: '/print_order/:id',
+    name: '打印页面',
+    component: () => import('@/views/textbook/order/Print.vue'),
   },
 ]
