@@ -42,6 +42,18 @@ export default [
         component: () => import('@/views/train/Agent/Page/List.vue'),
         meta: noKeepAlive,
       },
+      {   
+        path: 'Class_Detial/:id',                        
+        name: '培训开班详情页',                                   
+        component: () => import('@/views/train/Class/Page/Detail.vue'),        
+        meta: noKeepAlive,
+      },
+      {   
+        path: 'class_list',                        
+        name: '培训开班列表页',                                   
+        component: () => import('@/views/train/Class/index.vue'),        
+        meta: noKeepAlive,
+      },
     ],
   },
 ]
