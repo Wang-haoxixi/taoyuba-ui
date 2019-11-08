@@ -4,13 +4,12 @@
       <page-header title="培训开班"></page-header>
       <div class="shipowner_title">
         <el-button v-if="train_class_add" type="primary" size="small" icon="el-icon-edit" @click="addTrainClass">新增</el-button>
-        <!-- <div style="float:right">
-          <span><el-input v-model="params.deptName" placeholder="请输入机构名称" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.contactName" placeholder="请输入联系人" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.phone" placeholder="请输入联系电话" size="small" clearable></el-input></span>   
-          <span><el-input v-model="params.address" placeholder="请输入机构地址" size="small" clearable></el-input></span>   
+        <div style="float:right">
+          <span><el-input v-model="params.title" placeholder="请输入开班名称" size="small" clearable></el-input></span>
+          <span><el-date-picker v-model="params.openTime" type="date" value-format="yyyy-MM-dd" placeholder="请输入开班日期"></el-date-picker></span>
+          <span><el-input v-model="params.address" placeholder="请输入开班地点" size="small" clearable></el-input></span>    
           <el-button size="small"  @click="getData">搜索</el-button>
-        </div> -->
+        </div>
       </div>
         <el-table
           :data="trainClassList"
@@ -50,7 +49,7 @@
   </div>
 </template>
 <script>
-import { getClassPage } from '@/api/train/class'
+import { getClassPage, deleteClass } from '@/api/train/class'
 import { getUserInfo } from '@/api/login'
 import { getObj } from '@/api/admin/user'
 import { mapGetters } from 'vuex'
@@ -63,6 +62,9 @@ export default {
       params: {
         current: 1,
         size: 10,
+        title: '',
+        openTime: '',
+        address: '',
       },
       options: {
         expandAll: false,
@@ -74,6 +76,10 @@ export default {
           {
             text: '机构名称',
             value: 'userId',
+          },
+          {
+            text: '开班地点',
+            value: 'address',
           },
           {
             text: '开班时间',
@@ -117,8 +123,7 @@ export default {
     },
     // 编辑
     handleEdit (val) {
-    //   this.$router.push({path: `/hrms_spa/shipChange_Detial/${val}`, query:{ edit: val }})
-    console.log(val) 
+      this.$router.push({path: `/article_spa/Class_Detial/${val}`, query:{ edit: val }})
     },
     handleAudit (val) {
       this.audDialog = true
@@ -169,21 +174,20 @@ export default {
     },
     // 删除
     handleDel (id) {
-      console.log(id)
-      this.$confirm('此操作将永久删除该渔船变更数据, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该培训开班数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
       }).then(() => {
-        // deleteShipChange(id).then(res=>{
-        //   this.$message({
-        //     type: 'success',
-        //     message: res.data.msg,
-        //   })
-        //   this.getData()
-        // }).catch(err=>{
-        //   this.$message.error(err.data.msg)
-        // })
+        deleteClass(id).then(res=>{
+          this.$message({
+            type: 'success',
+            message: res.data.msg,
+          })
+          this.getData()
+        }).catch(err=>{
+          this.$message.error(err.data.msg)
+        })
       }).catch(() => { 
         this.$message({
           type: 'info',
@@ -214,8 +218,8 @@ export default {
     //     this.message.error(err.msg)
     //   })
     },
-    handleSign () {
-
+    handleSign (val) {
+      console.log(val)
     },
     getNow () {
       var date = new Date()
@@ -238,10 +242,8 @@ export default {
         } else {
           this.mangner = true
         }
-        if (this.mangner === true) {
-          console.log(111)
-          console.log(this.options.columns)
-        //   this.$delete(this.options.columns, 'uesrId')
+        if (this.mangner === false) {
+          this.options.columns.splice(1, 1)
         }
       })
     },

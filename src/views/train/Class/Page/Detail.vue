@@ -54,7 +54,7 @@
   </div>
 </template>
 <script>
-import { saveClass } from '@/api/train/class'
+import { saveClass, detailClass, updateClass } from '@/api/train/class'
 export default {
   data () {
     return {
@@ -95,7 +95,12 @@ export default {
               this.$message.error(err.msg)
             })
           } else if(this.$route.query.edit) {
-            console.log(222)
+            updateClass(this.trainClass).then(() => {
+              this.$message.success('修改成功！')
+              this.$router.push('/article_spa/class_list') 
+            }).catch(err => {
+              this.$message.error(err.msg)
+            })
           }
         } else {
           return false
@@ -103,7 +108,11 @@ export default {
       })
     },
     getData () {
-  
+      detailClass(this.$route.query.edit).then(data => {
+        this.trainClass = data.data.data
+        this.applyTime.push(this.trainClass.applyStartTime)
+        this.applyTime.push(this.trainClass.applyEndTime)
+      })
     },
   },
   computed: {
