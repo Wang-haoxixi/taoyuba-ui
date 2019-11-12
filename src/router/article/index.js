@@ -54,6 +54,18 @@ export default [
         component: () => import('@/views/train/Class/index.vue'),        
         meta: noKeepAlive,
       },
+      {   
+        path: 'sign_list/:id',                        
+        name: '签到列表页',                                   
+        component: () => import('@/views/train/Sign/index.vue'),        
+        meta: noKeepAlive,
+      },
+      {   
+        path: 'myClass_list',                        
+        name: '我的培训列表页',                                   
+        component: () => import('@/views/train/MyClass/index.vue'),        
+        meta: noKeepAlive,
+      },
     ],
   },
 ]

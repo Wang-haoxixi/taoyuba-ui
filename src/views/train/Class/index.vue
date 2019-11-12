@@ -24,13 +24,13 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button v-if="train_class_aud" type="text" icon="el-icon-edit" size="mini" @click="handleAudit(scope.row.id)">审核
+              <el-button v-if="train_class_aud && scope.row.status === 0" type="text" icon="el-icon-edit" size="mini" @click="handleAudit(scope.row.id)">审核
               </el-button>
               <el-button v-if="train_class_edit" type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.id)">编辑
               </el-button>
               <el-button v-if="train_class_del" type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.id)">删除
               </el-button>
-              <el-button v-if="train_class_sign" type="text" icon="el-icon-delete" size="mini" @click="handleSign(scope.row.id)">签到记录
+              <el-button v-if="train_class_sign && scope.row.openClass === '开班中'" type="text" icon="el-icon-delete" size="mini" @click="handleSign(scope.row.id)">签到记录
               </el-button>
             </template>
           </el-table-column>
@@ -52,6 +52,7 @@
 import { getClassPage, deleteClass } from '@/api/train/class'
 import { getUserInfo } from '@/api/login'
 import { getObj } from '@/api/admin/user'
+import { audit } from '@/api/tmlms/audit'
 import { mapGetters } from 'vuex'
 export default {
   data () {
@@ -87,7 +88,7 @@ export default {
           },
           {
             text: '状态',
-            value: 'status',
+            value: 'classStatus',
           },
           {
             text: '开班',
@@ -148,29 +149,34 @@ export default {
     },
     // 获取列表数据
     getData () {
-      getClassPage(this.params).then(data => {
-        this.trainClassList = data.data.data.records
-        var oDate1 = new Date(this.now)
-        this.trainClassList.forEach(v => {
-          var oDate2 = new Date(v.openTime)
-          if(oDate1.getTime() > oDate2.getTime()){
-            v.openClass = '开班中'
-          } else {
-            v.openClass = '未开班'
-          }
-          var d1 = new Date(v.applyStartTime)
-          var d2 = new Date(v.applyEndTime)
-          if (oDate1 >= d1 && oDate1 <= d2) {
-            v.status = '报名中'
-          }
-          else {
-            v.status = '未在报名日期内'
-          }
-          getObj(v.userId).then(data => {
-            v.userId = data.data.data.realName
+      getUserInfo().then(res => {
+        if (res.data.data.roles.indexOf(111) === -1) {
+          this.params.userId = res.data.data.sysUser.userId
+        }
+         getClassPage(this.params).then(data => {
+          this.trainClassList = data.data.data.records
+          var oDate1 = new Date(this.now)
+          this.trainClassList.forEach(v => {
+            var oDate2 = new Date(v.openTime)
+            if(oDate1.getTime() > oDate2.getTime()){
+              v.openClass = '开班中'
+            } else {
+              v.openClass = '未开班'
+            }
+            var d1 = new Date(v.applyStartTime)
+            var d2 = new Date(v.applyEndTime)
+            if (oDate1 >= d1 && oDate1 <= d2) {
+              v.classStatus = '报名中'
+            }
+            else {
+              v.classStatus = '未在报名日期内'
+            }
+            getObj(v.userId).then(data => {
+              v.userId = data.data.data.realName
+            })
           })
         })
-      })
+      }) 
     },
     // 删除
     handleDel (id) {
@@ -199,27 +205,31 @@ export default {
       this.audDialog = false
     },
     agreeAudit () {
-    //   let type = 1
-    //   reviewShipChange({id: this.aid, status: type}).then(() => {
-    //     this.$message.success('审核通过！')
-    //     this.getData()
-    //     this.audDialog = false
-    //   }).catch(err => {
-    //     this.message.error(err.msg)
-    //   })
+      let statusAudit = 1
+      let statusTable = 1
+      let tableName = 'tyb_train'
+      audit(this.aid, statusAudit, statusTable, tableName).then(() => {
+        this.$message.success('审核通过！')
+        this.getData()
+        this.audDialog = false
+      }).catch(err => {
+        this.message.error(err.msg)
+      })
     },
     cancelAudit () {
-    //   let type = 2
-    //   reviewShipChange({id: this.aid, status: type}).then(() => {
-    //     this.$message.success('审核不通过！')
-    //     this.getData()
-    //     this.audDialog = false
-    //   }).catch(err => {
-    //     this.message.error(err.msg)
-    //   })
+      let statusAudit = 2
+      let statusTable = 2
+      let tableName = 'tyb_train'
+      audit(this.aid, statusAudit, statusTable, tableName).then(() => {
+        this.$message.success('审核不通过！')
+        this.getData()
+        this.audDialog = false
+      }).catch(err => {
+        this.message.error(err.msg)
+      })
     },
     handleSign (val) {
-      console.log(val)
+      this.$router.push({ path: `/article_spa/sign_list/${val}` })
     },
     getNow () {
       var date = new Date()
