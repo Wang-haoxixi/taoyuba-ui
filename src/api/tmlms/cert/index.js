@@ -15,3 +15,21 @@ export function getCertDetail (id) {
         method: 'get',
     })
 }
+
+export function deleteCert (id) {
+    return request({
+        url: `${prefixUrl}/delete/${id}`,
+        method: 'post',
+    })
+}
+
+export function cancelCert (id, status) {
+    return request({
+        url: `${prefixUrl}/cancle`,
+        method: 'post',
+        params: {
+          id: id,
+          status: status,
+        },
+    })
+}

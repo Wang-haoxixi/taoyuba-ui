@@ -229,7 +229,7 @@ export default {
       })
     },
     handleSign (val) {
-      this.$router.push({ path: `/article_spa/sign_list/${val}` })
+      this.$router.push({ path: `/article_spa/sign_information/${val}` })
     },
     getNow () {
       var date = new Date()

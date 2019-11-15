@@ -11,8 +11,8 @@
           </span>
           <span><iep-dict-select v-model="params.certTitle" dict-name="tyb_crew_cert_title" placeholder="请输入证书职务" size="small" clearable></iep-dict-select></span>
           <span><iep-dict-select v-model="params.certLevel" dict-name="tyb_crew_cert_level" placeholder="请输入证书职务" size="small" clearable></iep-dict-select></span>
-          <span><el-input v-model="params.agentId" placeholder="请输入办证中介" size="small" clearable></el-input></span>
-          <span><el-date-picker v-model="params.createTime" type="date" value-format="yyyy-MM-dd" placeholder="请输入提交时间"></el-date-picker></span>
+          <span><el-input v-model="params.agentName" placeholder="请输入办证中介" size="small" clearable></el-input></span>
+          <span><el-date-picker v-model="params.time" type="date" size="small" value-format="yyyy-MM-dd" placeholder="请输入提交时间"></el-date-picker></span>
           <span>
             <el-select v-model="params.status" placeholder="请输入办证状态" size="small" clearable >
               <el-option v-for="item in statusList" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -34,9 +34,9 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button type="text" icon="el-icon-delete" size="mini" @click="handleCancel(scope.row.id)">取消办理</el-button>
+              <el-button type="text" v-if="scope.row.status !== '已取消'" icon="el-icon-delete" size="mini" @click="handleCancel(scope.row.id)">取消办理</el-button>
               <el-button type="text" icon="el-icon-delete" size="mini" @click="handleDetail(scope.row.id)">查看</el-button>
-              <el-button type="text" icon="el-icon-delete" size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
+              <el-button type="text" v-if="scope.row.status === '待确认'" icon="el-icon-delete" size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -86,7 +86,7 @@
   </div>
 </template>
 <script>
-import { getCertPage, getCertDetail } from '@/api/tmlms/cert'
+import { getCertPage, getCertDetail, deleteCert, cancelCert } from '@/api/tmlms/cert'
 import { getUserInfo } from '@/api/login'
 import { getObj } from '@/api/admin/user'
 import { mapGetters } from 'vuex'
@@ -102,10 +102,9 @@ export default {
         type: '',
         certTitle: '',
         certLevel: '',
-        agentId: '',
-        createTime: '',
+        agentName: '',
+        time: '',
         status: '',
-        userId: '',
       },
       options: {
         expandAll: false,
@@ -229,17 +228,16 @@ export default {
         cancelButtonText: '取消',
         type: 'warning',
       }).then(() => {
-        console.log(val)
-        // let status = 0
-        // reviewApply(val, status).then(() => {
-        //   this.$message({
-        //     type: 'success',
-        //     message: '取消成功！',
-        //   })
-        //   this.getData()
-        // }).catch(err=>{
-        //   this.$message.error(err.data.msg)
-        // })
+        let status = 4
+        cancelCert(val, status).then(() => {
+          this.$message({
+            type: 'success',
+            message: '取消成功！',
+          })
+          this.getData()
+        }).catch(err=>{
+          this.$message.error(err.data.msg)
+        })
       }).catch(() => { 
         this.$message({
           type: 'info',
@@ -281,7 +279,27 @@ export default {
         })
       })
     },
-    handleDelete () {
+    handleDelete (val) {
+      this.$confirm('此操作将永久删除该我的办证数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        deleteCert(val).then(res=>{
+          this.$message({
+            type: 'success',
+            message: res.data.msg,
+          })
+          this.getData()
+        }).catch(err=>{
+          this.$message.error(err.data.msg)
+        })
+      }).catch(() => { 
+        this.$message({
+          type: 'info',
+          message: '已取消删除',
+        })        
+      })
     },
   },
   created () {

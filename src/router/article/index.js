@@ -55,9 +55,9 @@ export default [
         meta: noKeepAlive,
       },
       {   
-        path: 'sign_list/:id',                        
-        name: '签到列表页',                                   
-        component: () => import('@/views/train/Sign/index.vue'),        
+        path: 'sign_information/:id',                        
+        name: '签到信息页',                                   
+        component: () => import('@/views/train/Sign/information.vue'),        
         meta: noKeepAlive,
       },
       {   

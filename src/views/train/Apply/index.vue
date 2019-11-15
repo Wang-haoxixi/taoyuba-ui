@@ -124,7 +124,7 @@ export default {
       })
     },
     handleSign (val) {
-      this.$router.push({ path: `/article_spa/sign_list/${val}` })
+      this.$router.push({ path: `/article_spa/sign_information/${val}` })
     },
     handleCancel (val) {
       this.$confirm('此操作将取消该培训, 是否继续?', '提示', {

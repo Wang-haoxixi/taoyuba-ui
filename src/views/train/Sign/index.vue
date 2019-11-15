@@ -1,36 +1,63 @@
 <template>
-  <basic-container>
-    <page-header title="签到信息"></page-header>
-    <div style="float:right">
-       <el-button style="margin-bottom: 10px" size="small" v-if="this.mangner === true || this.institution === true" @click="$router.push('/article_spa/class_list')">返回</el-button>
-       <el-button style="margin-bottom: 10px"  size="small" v-else @click="$router.push('/article_spa/myClass_list')">返回</el-button>
-    </div>
-    <el-table
-      :data="signList"
-      border
-      style="width: 100%">
-      <el-table-column
-        v-for="(item,index) in options.columns"
-        :key="index"
-        :prop="item.value"  
-        :label="item.text"
-      >
-      </el-table-column>
-    </el-table>
-  </basic-container>
+  <div class="contract-box">
+    <basic-container>
+      <page-header title="签到记录"></page-header>
+      <div class="shipowner_title">
+        <div style="float:right">
+          <span><el-input v-model="params.trainTitle" placeholder="请输入培训课程" size="small" clearable></el-input></span>
+          <span><el-input v-model="params.userId" placeholder="请输入签到人" size="small" clearable></el-input></span>
+          <span><el-input v-model="params.signPlace" placeholder="请输入签到地点" size="small" clearable></el-input></span>
+          <span><el-date-picker v-model="params.createTime" type="date" value-format="yyyy-MM-dd" placeholder="请输入开班日期"></el-date-picker></span>
+          <el-button size="small"  @click="getData">搜索</el-button>
+        </div>
+      </div>
+        <el-table
+          :data="signList"
+          stripe
+          style="width: 100%">
+          <el-table-column
+            prop="userId"
+            label="签到人"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            v-for="(item,index) in options.columns"
+            :key="index"
+            :prop="item.value"  
+            :label="item.text"
+          >
+          </el-table-column>
+        </el-table>
+      <div style="text-align: center;margin: 20px 0;">
+        <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
+      </div>
+    </basic-container>
+  </div>
 </template>
 <script>
-import { getSignPage } from '@/api/train/sign'
-import { getUserInfo } from '@/api/login'
+// import { getUserInfo } from '@/api/login'
+// import { getObj } from '@/api/admin/user'
+// import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
       signList: [],
+      total: 10,
+      // 查询数据
+      params: {
+        current: 1,
+        size: 10,
+        type: '',
+        trainTitle: '',
+        userId: '',
+        signPlace: '',
+        createTime: '',
+      },
       options: {
         expandAll: false,
         columns: [
           {
-            text: '开班名称',
+            text: '培训课程',
             value: 'trainTitle',
           },
           {
@@ -41,45 +68,41 @@ export default {
             text: '签到时间',
             value: 'createTime',
           },
+          {
+            text: '进度',
+            value: 'plan',
+          },
         ],
       },
-      mangner: false,
-      institution: false,
-      uid: '',
     }
+  },
+  methods: {
+    // 分页
+    currentChange (val) {
+      this.params.current = val
+      this.getData()
+    },
+    // 获取列表数据
+    getData () {
+    },
   },
   created () {
     this.getData()
   },
-  methods: {
-    async getData () {
-      this.uid = await getUserInfo().then(res => {
-        if (res.data.data.roles.indexOf(111) === -1) {
-          this.mangner = false
-        } else {
-          this.mangner = true
-        }
-        if (res.data.data.roles.indexOf(110) === -1) {
-          this.institution = false
-        } else {
-          this.institution = true
-        }
-        return res.data.data.sysUser.userId
-      })
-      if (this.mangner === true) {
-        getSignPage({ trainId: this.$route.params.id }).then(data => {
-          this.signList = data.data.data.records
-        })
-      } else if (this.institution === true) {
-        getSignPage({ agentId: this.uid, trainId: this.$route.params.id }).then(data => {
-          this.signList = data.data.data.records
-        })
-      } else {
-        getSignPage({ userId: this.uid, trainId: this.$route.params.id }).then(data => {
-          this.signList = data.data.data.records
-        })
-      }
-    },
-  },
-}
+  // activated () {
+  //   this.getData()
+  // },
+ }
 </script>
+<style lang="scss" scoped>
+.shipowner {
+  padding: 20px;
+}
+.shipowner_title {
+  span {
+    width: 150px;
+    display: inline-block;
+    margin: 0 5px;
+  }
+}
+</style>
