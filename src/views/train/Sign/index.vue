@@ -5,10 +5,11 @@
       <div class="shipowner_title">
         <div style="float:right">
           <span><el-input v-model="params.trainTitle" placeholder="请输入培训课程" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.userId" placeholder="请输入签到人" size="small" clearable></el-input></span>
+          <span><el-input v-model="params.userName" placeholder="请输入签到人" size="small" clearable></el-input></span>
           <span><el-input v-model="params.signPlace" placeholder="请输入签到地点" size="small" clearable></el-input></span>
-          <span><el-date-picker v-model="params.createTime" type="date" value-format="yyyy-MM-dd" placeholder="请输入开班日期"></el-date-picker></span>
-          <el-button size="small"  @click="getData">搜索</el-button>
+          <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
+              value-format="yyyy-MM-dd HH:mm:ss"  size="mini"></el-date-picker></span>
+          <el-button size="small"  @click="getParamData">搜索</el-button>
         </div>
       </div>
         <el-table
@@ -19,6 +20,9 @@
             prop="userId"
             label="签到人"
             width="180">
+            <template slot-scope="scope">
+              <div @click="getUserList(scope.row.userId)">{{scope.row.userId}}</div>
+            </template>
           </el-table-column>
           <el-table-column
             v-for="(item,index) in options.columns"
@@ -26,6 +30,11 @@
             :prop="item.value"  
             :label="item.text"
           >
+          </el-table-column>
+          <el-table-column prop="progress" label="进度">
+            <template slot-scope="scope">
+              <el-progress :percentage="scope.row.progress"></el-progress>
+            </template>
           </el-table-column>
         </el-table>
       <div style="text-align: center;margin: 20px 0;">
@@ -35,8 +44,9 @@
   </div>
 </template>
 <script>
+import { getSignPage } from '@/api/train/sign'
 // import { getUserInfo } from '@/api/login'
-// import { getObj } from '@/api/admin/user'
+import { getObj } from '@/api/admin/user'
 // import { mapGetters } from 'vuex'
 export default {
   data () {
@@ -49,9 +59,9 @@ export default {
         size: 10,
         type: '',
         trainTitle: '',
-        userId: '',
+        userName: '',
         signPlace: '',
-        createTime: '',
+        timeLists: '',
       },
       options: {
         expandAll: false,
@@ -68,10 +78,6 @@ export default {
             text: '签到时间',
             value: 'createTime',
           },
-          {
-            text: '进度',
-            value: 'plan',
-          },
         ],
       },
     }
@@ -84,6 +90,32 @@ export default {
     },
     // 获取列表数据
     getData () {
+      getSignPage(this.params).then(data => {
+        this.signList = data.data.data.records
+        this.signList.forEach(v => {
+          getObj(v.userId).then(data => {
+            v.userId = data.data.data.realName
+          })
+        })
+      })
+    },
+    getParamData () {
+      if (this.params.timeLists) {
+        this.params.signStartTime = this.params.timeLists[0]
+        this.params.signEndTime = this.params.timeLists[1]
+      }
+      this.params.current = 1
+      this.getData()
+    },
+    getUserList (val) {
+      getSignPage({ userName: val, current: 1, size: 10 }).then(data => {
+        this.signList = data.data.data.records
+        this.signList.forEach(v => {
+          getObj(v.userId).then(data => {
+            v.userId = data.data.data.realName
+          })
+        })
+      })
     },
   },
   created () {

@@ -71,7 +71,7 @@ export default {
           this.signList = data.data.data.records
         })
       } else if (this.institution === true) {
-        getSignPage({ agentId: this.uid, trainId: this.$route.params.id }).then(data => {
+        getSignPage({ deptId: this.uid, trainId: this.$route.params.id }).then(data => {
           this.signList = data.data.data.records
         })
       } else {
