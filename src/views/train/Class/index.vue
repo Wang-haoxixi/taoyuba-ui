@@ -3,18 +3,19 @@
     <basic-container>
       <page-header title="培训开班"></page-header>
       <div class="shipowner_title">
-        <el-button v-if="train_class_add" type="primary" size="small" icon="el-icon-edit" @click="addTrainClass">新增</el-button>
+        <el-button v-if="train_class_add" type="primary" size="mini" @click="addTrainClass" plain>+新增</el-button>
         <div style="float:right">
-          <span><el-input v-model="params.title" placeholder="请输入开班名称" size="small" clearable></el-input></span>
-          <span><el-date-picker v-model="params.openTime" type="date" value-format="yyyy-MM-dd" placeholder="请输入开班日期"></el-date-picker></span>
-          <span><el-input v-model="params.address" placeholder="请输入开班地点" size="small" clearable></el-input></span>    
-          <el-button size="small"  @click="getData">搜索</el-button>
+          <span><el-input v-model="params.title" placeholder="请输入开班名称" size="mini" clearable></el-input></span>
+          <span><el-date-picker v-model="params.openTime" type="date" size="mini" value-format="yyyy-MM-dd" placeholder="请输入开班日期"></el-date-picker></span>
+          <span><el-input v-model="params.address" placeholder="请输入开班地点" size="mini" clearable></el-input></span>    
+          <el-button size="mini"  @click="getData">搜索</el-button>
         </div>
       </div>
         <el-table
           :data="trainClassList"
+          :header-cell-style="{background:'#eef1f6', color:'#606266'}"
           stripe
-          style="width: 100%">
+          style="width: 100%; margin-top: 30px">
           <el-table-column
             v-for="(item,index) in options.columns"
             :key="index"
@@ -22,15 +23,27 @@
             :label="item.text"
           >
           </el-table-column>
+          <el-table-column label="状态（是否报名中）">
+            <template slot-scope="scope">
+              <el-button v-if="scope.row.classStatus === '报名中'" type="success" size="mini" plain>{{scope.row.classStatus}}</el-button>
+              <el-button v-if="scope.row.classStatus === '未报名'" type="danger" size="mini" plain>{{scope.row.classStatus}}</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column label="开班（是/否）">
+            <template slot-scope="scope">
+              <span v-if="scope.row.openClass === '已开班'" style="color: #0099FF">● {{scope.row.openClass}}</span>
+              <span v-if="scope.row.openClass === '未开班'" style="color: #B0B0B0">● {{scope.row.openClass}}</span>
+            </template>
+          </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button v-if="train_class_aud && scope.row.status === 0" type="text" icon="el-icon-edit" size="mini" @click="handleAudit(scope.row.id)">审核
+              <el-button v-if="train_class_aud && scope.row.status === 0" type="warning" size="mini" @click="handleAudit(scope.row.id)" plain>审核
               </el-button>
-              <el-button v-if="train_class_edit" type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.id)">编辑
+              <el-button v-if="train_class_edit" type="warning" size="mini" @click="handleEdit(scope.row.id)" plain>编辑
               </el-button>
-              <el-button v-if="train_class_del" type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.id)">删除
+              <el-button v-if="train_class_sign && scope.row.openClass === '已开班'" size="mini" @click="handleSign(scope.row.id)" plain>签到记录
               </el-button>
-              <el-button v-if="train_class_sign && scope.row.openClass === '开班中'" type="text" icon="el-icon-delete" size="mini" @click="handleSign(scope.row.id)">签到记录
+              <el-button v-if="train_class_del" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.id)">
               </el-button>
             </template>
           </el-table-column>
@@ -85,14 +98,6 @@ export default {
           {
             text: '开班时间',
             value: 'openTime',
-          },
-          {
-            text: '状态',
-            value: 'classStatus',
-          },
-          {
-            text: '开班',
-            value: 'openClass',
           },
         ],
       },
@@ -159,7 +164,7 @@ export default {
           this.trainClassList.forEach(v => {
             var oDate2 = new Date(v.openTime)
             if(oDate1.getTime() > oDate2.getTime()){
-              v.openClass = '开班中'
+              v.openClass = '已开班'
             } else {
               v.openClass = '未开班'
             }
@@ -169,7 +174,7 @@ export default {
               v.classStatus = '报名中'
             }
             else {
-              v.classStatus = '未在报名日期内'
+              v.classStatus = '未报名'
             }
             getObj(v.userId).then(data => {
               v.userId = data.data.data.realName

@@ -1,20 +1,22 @@
 <template>
   <div class="contract-box">
     <basic-container>
+      <page-header title="培训机构"></page-header>
       <div class="shipowner_title">
-        <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button>
+        <el-button type="primary" size="mini" @click="addShipowner" plain>+新增</el-button>
         <div style="float:right">
-          <span><el-input v-model="params.deptName" placeholder="请输入机构名称" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.contactName" placeholder="请输入联系人" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.phone" placeholder="请输入联系电话" size="small" clearable></el-input></span>   
-          <span><el-input v-model="params.address" placeholder="请输入机构地址" size="small" clearable></el-input></span>   
-          <el-button size="small"  @click="getData">搜索</el-button>
+          <span><el-input v-model="params.deptName" placeholder="请输入机构名称" size="mini" clearable></el-input></span>
+          <span><el-input v-model="params.contactName" placeholder="请输入联系人" size="mini" clearable></el-input></span>
+          <span><el-input v-model="params.phone" placeholder="请输入联系电话" size="mini" clearable></el-input></span>   
+          <span><el-input v-model="params.address" placeholder="请输入机构地址" size="mini" clearable></el-input></span>   
+          <el-button plain size="mini"  @click="getData">搜索</el-button>
         </div>
       </div>
         <el-table
           :data="shipownerList"
+          :header-cell-style="{background:'#eef1f6', color:'#606266'}"
           stripe
-          style="width: 100%">
+          style="width: 100%;margin-top: 30px">
           <el-table-column
             v-for="(item,index) in options.columns"
             :key="index"
@@ -24,11 +26,11 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.userId)">查看
+              <el-button plain type="warning" size="small" @click="handleView(scope.row.userId)">查看
               </el-button>
-              <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.userId)">编辑
+              <el-button plain size="small" @click="handleEdit(scope.row.userId)">编辑
               </el-button>
-              <el-button type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.userId)">删除
+              <el-button plain icon="el-icon-delete" size="small" @click="handleDel(scope.row.userId)">
               </el-button>
             </template>
           </el-table-column>

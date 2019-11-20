@@ -1,54 +1,67 @@
 <template>
   <div class="training_detail">
     <basic-container>
-        <h1>{{ $route.query.edit ? '编辑' :'新增' }}培训开班信息</h1>
+      <div style="display: flex">
+        <h1 style="flex: 1">{{ $route.query.edit ? '编辑' :'新增' }}培训开班信息</h1>
+        <el-button size="mini" style="width: 60px; height:35px" @click="$router.push('/article_spa/class_list')">返回</el-button>
+      </div>
         <el-form :model="trainClass" ref="form" label-width="150px" :rules="rules">
           <el-row>
             <el-col :span="12">        
               <el-form-item label="开班名称:" prop="title">
-                <el-input v-model="trainClass.title" placeholder=""></el-input>
+                <el-input v-model="trainClass.title" placeholder="" size="mini"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">        
-              <el-form-item label="开班时间:" prop="openTime">
-                <el-date-picker v-model="trainClass.openTime" type="date" value-format="yyyy-MM-dd" placeholder="选择开班日期"></el-date-picker>
+              <el-form-item label="培训时间:" prop="classTime">
+                <!-- <el-date-picker v-model="trainClass.openTime" type="date" value-format="yyyy-MM-dd" placeholder="选择开班日期"></el-date-picker> -->
+                <el-date-picker v-model="classTime" type="daterange" value-format="yyyy-MM-dd" range-separator="-" start-placeholder="开班日期" end-placeholder="结束日期" size="mini"></el-date-picker>
               </el-form-item>
             </el-col>
+          </el-row>
+          <el-row>  
             <el-col :span="12">        
               <el-form-item label="报名时间:" prop="applyTime">
-                <el-date-picker v-model="applyTime" type="daterange" value-format="yyyy-MM-dd" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+                <el-date-picker v-model="applyTime" type="daterange" value-format="yyyy-MM-dd" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" size="mini"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="12">        
               <el-form-item label="开班地点:" prop="address">
-                <el-input v-model="trainClass.address" placeholder=""></el-input>
+                <el-input v-model="trainClass.address" placeholder="" size="mini"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="12">        
               <el-form-item label="人数:" prop="persons">
-                <el-input v-model="trainClass.persons" placeholder="" type="number"></el-input>
+                <el-input v-model="trainClass.persons" placeholder="" type="number" size="mini"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">        
               <el-form-item label="培训天数:" prop="trainDays">
-                <el-input v-model="trainClass.trainDays" placeholder="" type="number"></el-input>
+                <el-input v-model="trainClass.trainDays" placeholder="" type="number" size="mini"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="18">        
+          </el-row>
+          <el-row>
+            <el-col :span="24">        
               <el-form-item label="内容:" prop="content">
-                <el-input v-model="trainClass.content" placeholder="" type="textarea"></el-input>
+                <!-- <el-input v-model="trainClass.content" placeholder="" type="textarea"></el-input> -->
+                <iep-froala-editor v-model="trainClass.content"></iep-froala-editor>
               </el-form-item>
             </el-col>
-            <el-col :span="18">        
+          </el-row>
+          <el-row>  
+            <el-col :span="24">        
               <el-form-item label="注意事项:" prop="note">
-                <el-input v-model="trainClass.note" placeholder="" type="textarea"></el-input>
+                <!-- <el-input v-model="trainClass.note" placeholder="" type="textarea"></el-input> -->
+                <iep-froala-editor v-model="trainClass.note"></iep-froala-editor>
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
-        <div style="text-align:center">
-          <el-button @click="save">提交</el-button>
-          <el-button @click="$router.push('/article_spa/class_list')">返回</el-button>
+        <div style="margin-left: 150px">
+          <el-button size="mini" type="primary" @click="save">提交</el-button>
         </div>
     </basic-container>
   </div>
@@ -62,6 +75,7 @@ export default {
         trainClass: {
           title: '',
           openTime: '',
+          finishTime: '',
           applyStartTime: '',
           applyEndTime: '',
           address: '',
@@ -76,6 +90,7 @@ export default {
           ],
         },
         applyTime: [],
+        classTime: [],
     }
   },
   methods: {
@@ -85,6 +100,10 @@ export default {
         if (this.applyTime.length > 0) {
            this.trainClass.applyStartTime = this.applyTime[0]
            this.trainClass.applyEndTime = this.applyTime[1]
+        }
+        if (this.classTime.length > 0) {
+           this.trainClass.openTime = this.classTime[0]
+           this.trainClass.finishTime = this.classTime[1]
         }
         if (valid) {
           if (+this.$route.query.add === 0) {
@@ -112,6 +131,8 @@ export default {
         this.trainClass = data.data.data
         this.applyTime.push(this.trainClass.applyStartTime)
         this.applyTime.push(this.trainClass.applyEndTime)
+        this.classTime.push(this.trainClass.openTime)
+        this.classTime.push(this.trainClass.finishTime)
       })
     },
   },

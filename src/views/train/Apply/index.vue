@@ -3,19 +3,20 @@
     <basic-container>
       <page-header title="报名管理"></page-header>
       <div class="shipowner_title">
-        <div style="float:right">
-          <span><el-input v-model="params.title" placeholder="请输入开班名称" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.realName" placeholder="请输入报名人" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.idcard" placeholder="请输入身份证" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.phone" placeholder="请输入联系电话" size="small" clearable></el-input></span>
-          <span><el-date-picker v-model="params.openTime" type="date" value-format="yyyy-MM-dd" placeholder="请输入开班日期"></el-date-picker></span>
-          <el-button size="small"  @click="getData">搜索</el-button>
+        <div style="margin-left: 340px">
+          <span><el-input v-model="params.title" placeholder="请输入开班名称" size="mini" clearable></el-input></span>
+          <span><el-input v-model="params.realName" placeholder="请输入报名人" size="mini" clearable></el-input></span>
+          <span><el-input v-model="params.idcard" placeholder="请输入身份证" size="mini" clearable></el-input></span>
+          <span><el-input v-model="params.phone" placeholder="请输入联系电话" size="mini" clearable></el-input></span>
+          <span><el-date-picker v-model="params.openTime" type="date" value-format="yyyy-MM-dd" placeholder="请输入开班日期" size="mini"></el-date-picker></span>
+          <el-button size="mini"  @click="getData">搜索</el-button>
         </div>
       </div>
         <el-table
           :data="trainClassList"
+          :header-cell-style="{background:'#eef1f6', color:'#606266'}"
           stripe
-          style="width: 100%">
+          style="width: 100%; margin-top: 30px">
           <el-table-column
             v-for="(item,index) in options.columns"
             :key="index"
@@ -23,9 +24,15 @@
             :label="item.text"
           >
           </el-table-column>
+          <el-table-column label="状态">
+            <template slot-scope="scope">
+              <span v-if="scope.row.status === 1" style="color: #0099FF">● 正常</span>
+              <span v-if="scope.row.status === 0" style="color: #B0B0B0">● 已取消</span>
+            </template>
+          </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button v-if="scope.row.status === '正常'" type="text" icon="el-icon-delete" size="mini" @click="handleCancel(scope.row.id)">取消</el-button>
+              <el-button v-if="scope.row.status === 1" size="small" @click="handleCancel(scope.row.id)" plain>取消</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -82,21 +89,17 @@ export default {
             text: '报名时间',
             value: 'createTime',
           },
-          {
-            text: '状态',
-            value: 'status',
-          },
         ],
       },
-      statusList: [
-        {
-          label: '取消',
-          value: 0,
-        }, {
-          label: '正常',
-          value: 1,
-        },
-      ],
+      // statusList: [
+      //   {
+      //     label: '取消',
+      //     value: 0,
+      //   }, {
+      //     label: '正常',
+      //     value: 1,
+      //   },
+      // ],
     }
   },
   computed: {
@@ -112,11 +115,11 @@ export default {
       getApplyPage(this.params).then(data => {
         this.trainClassList = data.data.data.records
         this.trainClassList.forEach(v => {
-          this.statusList.forEach(m => {
-            if (m.value === v.status) {
-              v.status = m.label
-            }
-          })
+          // this.statusList.forEach(m => {
+          //   if (m.value === v.status) {
+          //     v.status = m.label
+          //   }
+          // })
           getObj(v.trauserId).then(data => {
             v.trauserId = data.data.data.realName
           })

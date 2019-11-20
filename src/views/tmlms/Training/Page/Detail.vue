@@ -1,41 +1,43 @@
 <template>
   <div class="training_detail">
     <basic-container v-if="show">
-        <h1 v-if="!$route.query.userId">{{ $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }}机构信息</h1>
-        <h1 v-if="$route.query.userId">完善个人信息</h1>
-        <el-form :model="training" ref="form" label-width="150px" :rules="rules">
+      <div style="display: flex">
+        <h1 v-if="!$route.query.userId" style="flex: 1">{{ $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }}机构信息</h1>
+        <h1 v-if="$route.query.userId" style="flex: 1">完善个人信息</h1>
+        <el-button size="mini" style="width: 60px; height:35px" @click="$router.go(-1)">返回</el-button>
+      </div>  
+        <el-form :model="training" ref="form" label-width="150px" :rules="rules" style="margin-top: 30px">
           <el-row>
-            <el-col :span="8">            
+            <el-col :span="12">            
               <el-form-item label="机构名称:" prop="deptName">
-                <el-input v-model="training.deptName" placeholder="" v-if="!$route.query.see"></el-input>
+                <el-input v-model="training.deptName" placeholder="" v-if="!$route.query.see" size="mini"></el-input>
                 <div v-else>{{ training.deptName }}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="联系人:" prop="contactName">
-                <el-input v-model="training.contactName" placeholder="" v-if="!$route.query.see"></el-input>
+                <el-input v-model="training.contactName" placeholder="" v-if="!$route.query.see" size="mini"></el-input>
                 <div v-else>{{ training.deptName }}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="8">        
+            <el-col :span="12">        
               <el-form-item label="手机号码:" prop="phone">
-                <el-input v-model="training.phone" placeholder="" v-if="!$route.query.see"></el-input>
+                <el-input v-model="training.phone" placeholder="" v-if="!$route.query.see" size="mini"></el-input>
                 <div v-else>{{ training.deptName }}</div>
               </el-form-item>
             </el-col>
             <el-col :span="24">           
               <el-form-item label="机构地址:" prop="address" class="amap-page-container is-required">
-                <el-amap-search-box class="search-box training" :search-option="searchOption" :on-search-result="onSearchResult"></el-amap-search-box>
+                <el-amap-search-box class="search-box training" :search-option="searchOption" :on-search-result="onSearchResult" style="width: 450px; height:30px;margin-top: 10px"></el-amap-search-box>
                 <el-amap vid="amapDemo" :center="mapCenter" :zoom="15" class="amap-demo" :plugin="plugin">
-                    <el-amap-marker :position="marker"></el-amap-marker>
+                  <el-amap-marker :position="marker"></el-amap-marker>
                 </el-amap>
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
-        <div style="text-align:center">
-          <el-button @click="save" v-if="!$route.query.see">提交</el-button>
-          <el-button @click="$router.go(-1)">返回</el-button>
+        <div style="margin-left: 150px">
+          <el-button size="mini" type="primary" @click="save" v-if="!$route.query.see">提交</el-button>
         </div>
     </basic-container>
   </div>
@@ -202,3 +204,4 @@ export default {
     }
 }
 </style>
+

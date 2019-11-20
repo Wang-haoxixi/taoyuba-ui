@@ -4,15 +4,10 @@
       <page-header title="办证管理"></page-header>
       <div class="shipowner_title">
         <div style="float:right">
-          <span>
-            <el-select v-model="params.type" placeholder="请输入办证类型" size="small" clearable >
-              <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value"></el-option>
-            </el-select>
-          </span>
-          <span><iep-dict-select v-model="params.certTitle" dict-name="tyb_crew_cert_title" placeholder="请输入证书职务" size="small" clearable></iep-dict-select></span>
-          <span><iep-dict-select v-model="params.certLevel" dict-name="tyb_crew_cert_level" placeholder="请输入证书职务" size="small" clearable></iep-dict-select></span>
           <span><el-input v-model="params.agentName" placeholder="请输入办证中介" size="small" clearable></el-input></span>
           <span v-if="mangner === true"><el-input v-model="params.userName" placeholder="请输入办证人" size="small" clearable></el-input></span>
+          <span><el-input v-model="params.realName" placeholder="请输入联系人" size="small" clearable></el-input></span>
+          <span><el-input v-model="params.phone" placeholder="请输入联系电话" size="small" clearable></el-input></span>
           <span><el-date-picker v-model="params.time" type="date" size="small" value-format="yyyy-MM-dd" placeholder="请输入提交时间"></el-date-picker></span>
           <span>
             <el-select v-model="params.status" placeholder="请输入办证状态" size="small" clearable >
@@ -50,34 +45,10 @@
         <el-form ref="form" :model="form">
           <el-row>
             <el-col :span="12">
-              <el-form-item label="中介名称：">{{ form.agentId }}</el-form-item>
+              <el-form-item label="联系人：">{{ form.realName }}</el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="办证类型：">{{ form.type }}</el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="证书编号：">{{ form.certNo }}</el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="证书等级：">{{ form.certLevel }}</el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="证书职务：">{{ form.certTitle }}</el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="证书类型：">{{ form.certType }}</el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="身份证照片：">{{ form.imageIdcard }}</el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="证书附件：">{{ form.imageCert }}</el-form-item>
+              <el-form-item label="联系电话：">{{ form.phone }}</el-form-item>
             </el-col>
           </el-row>
         </el-form>
@@ -102,9 +73,8 @@ export default {
       params: {
         current: 1,
         size: 10,
-        type: '',
-        certTitle: '',
-        certLevel: '',
+        realName: '',
+        phon: '',
         agentName: '',
         userNam: '',
         time: '',
@@ -114,24 +84,20 @@ export default {
         expandAll: false,
         columns: [
           {
-            text: '办证类型',
-            value: 'type',
-          },
-          {
-            text: '证书职务',
-            value: 'certTitle',
-          },
-          {
-            text: '证书等级',
-            value: 'certLevel',
-          },
-          {
             text: '办证中介',
             value: 'agentId',
           },
           {
             text: '办证人',
             value: 'userId',
+          },
+          {
+            text: '联系人',
+            value: 'realName',
+          },
+          {
+            text: '联系电话',
+            value: 'phone',
           },
           {
             text: '提交时间',
@@ -143,46 +109,19 @@ export default {
           },
         ],
       },
-      typeList: [
-        {
-          label: '以旧换新',
-          value: 0,
-        }, {
-          label: '证书换发',
-          value: 1,
-        }, {
-          label: '证书补发',
-          value: 2,
-        },
-      ],
       statusList: [
         {
-          label: '待确认',
+          label: '已取消',
           value: 0,
         }, {
-          label: '已受理',
+          label: '正常',
           value: 1,
-        }, {
-          label: '办证中',
-          value: 2,
-        }, {
-          label: '已办理',
-          value: 3,
-        }, {
-          label: '已取消',
-          value: 4,
-        },
+        }, 
       ],
       dialogVisible: false,
       form: {
-        agentId: '',
-        type: '',
-        certNo: '',
-        certLevel: '',
-        certTitle: '',
-        certType: '',
-        imageIdcard: '',
-        imageCert: '',
+        realName: '',
+        phone: '',
       },
       hrms_doc_can: false,
       hrms_doc_acc: false,
@@ -215,21 +154,6 @@ export default {
           })
           getObj(v.userId).then(data => {
             v.userId = data.data.data.realName
-          })
-          this.typeList.forEach(m => {
-            if (v.type === m.value) {
-              v.type = m.label
-            }
-          })
-          this.dictGroup.tyb_crew_cert_title.forEach(k => {
-            if(v.certTitle === k.value) {
-              v.certTitle = k.label
-            }
-          })
-          this.dictGroup.tyb_crew_cert_level.forEach(i => {
-            if (v.certLevel === i.value) {
-              v.certLevel = i.label
-            }
           })
           this.statusList.forEach(n => {
             if (v.status === n.value) {
@@ -268,29 +192,9 @@ export default {
         getObj(this.form.agentId).then(data => {
           this.form.agentId = data.data.data.realName
         })
-        this.typeList.forEach(m => {
-          if (this.form.type === m.value) {
-            this.form.type = m.label
-          }
-        })
-        this.dictGroup.tyb_crew_cert_title.forEach(k => {
-          if(this.form.certTitle === k.value) {
-            this.form.certTitle = k.label
-          }
-        })
         this.statusList.forEach(n => {
           if (this.form.status === n.value) {
             this.form.status = n.label
-          }
-        })
-        this.dictGroup.tyb_crew_cert_level.forEach(i => {
-          if (this.form.certLevel === i.value) {
-            this.form.certLevel = i.label
-          }
-        })
-        this.dictGroup.tyb_crew_cert_type.forEach(y => {
-          if (this.form.certType === y.value) {
-            this.form.certType = y.label
           }
         })
       })
