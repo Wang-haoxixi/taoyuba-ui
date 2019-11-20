@@ -76,10 +76,11 @@
           </el-col>
         </el-row>
       </el-form>
-      <page-header title="教材订单书目清单"></page-header> 
+      <page-header style="margin-top:50px" title="书目清单"></page-header> 
       <el-table
         ref="multipleTable"
         :data="tableData"
+        :header-cell-style="{background:'#eef1f6', color:'#606266'}"
         tooltip-effect="dark"
         style="width: 70%; margin-left:100px"
         @row-click="handleRowClick"
@@ -96,7 +97,7 @@
       </el-table>
       <div style="margin-left:100px; margin-top:50px">合计：{{form.amount}}</div>
       <operation-wrapper style="margin-left:50px; margin-top:50px">
-        <iep-button type="primary" @click="save">保存</iep-button>
+        <iep-button type="primary" @click="save">订购</iep-button>
       </operation-wrapper>
     </basic-container>
   </div>
@@ -282,7 +283,7 @@ export default {
   },
   computed: {
     getTitle () {
-      return `${ JSON.stringify(this.$route.query) === '{}' ? '新增' : '查看' }订单信息`
+      return `${ JSON.stringify(this.$route.query) === '{}' ? '新增' : '查看' }教材订购`
     },
     isDisabled () {
       return JSON.stringify(this.$route.query) === '{}' ? false : true 

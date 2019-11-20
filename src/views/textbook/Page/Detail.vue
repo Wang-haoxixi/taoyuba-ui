@@ -25,7 +25,7 @@
         </el-row>
         <el-row>
           <el-col :span="12">                                    
-            <el-form-item label="具体适用对象：" prop="info">                                                                                                            
+            <el-form-item label="教材介绍：" prop="info">                                                                                                            
               <el-input v-model="form.info" type="textarea"></el-input>
             </el-form-item>
           </el-col>

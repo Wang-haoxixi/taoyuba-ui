@@ -2,17 +2,17 @@
   <div class="contract-box">
     <basic-container>
       <div class="shipowner_title">
-        <page-header title="订单管理"></page-header>
+        <page-header title="教材订单"></page-header>
         <div class="shipowner_title">
-          <iep-button type="primary" icon="el-icon-plus" @click="handleAdd" plain>新增</iep-button>
+          <iep-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd" plain>新增</iep-button>
           <div style="float:right">
-            <span style="width:120px"><el-input v-model="params.department" placeholder="单位" size="small" clearable></el-input></span>
-            <span style="width:120px"><el-input v-model="params.contactName" placeholder="联系人" size="small" clearable></el-input></span>
-            <span style="width:120px"><el-input v-model="params.phone" placeholder="电话" size="small" clearable></el-input></span>
+            <span style="width:120px"><el-input v-model="params.department" placeholder="单位" size="mini" clearable></el-input></span>
+            <span style="width:120px"><el-input v-model="params.contactName" placeholder="联系人" size="mini" clearable></el-input></span>
+            <span style="width:120px"><el-input v-model="params.phone" placeholder="电话" size="mini" clearable></el-input></span>
             <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
               value-format="yyyy-MM-dd"  size="mini"></el-date-picker>
             </span>
-            <span style="width:120px"><el-select v-model="params.isPayed" placeholder="请选择付款" size="small" clearable>                                                        
+            <span style="width:120px"><el-select v-model="params.isPayed" placeholder="请选择付款" size="mini" clearable>                                                        
                 <el-option
                   v-for="item in payStatus"
                   :key="item.value"
@@ -44,8 +44,9 @@
         </div>
         <el-table
           :data="orderList"
+          :header-cell-style="{background:'#eef1f6', color:'#606266'}"
           stripe
-          style="width: 100%">
+          style="width: 100%; margin-top: 30px">
             <el-table-column
               v-for="(item,index) in options.columns"
               :key="index"
@@ -55,11 +56,11 @@
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button type="text" icon="el-icon-edit" size="mini" @click="handlePrint(scope.row.id)">打印
+                <el-button type="warning" size="mini" @click="handlePrint(scope.row.id)" plain>打印
                 </el-button>
-                <el-button type="text" icon="el-icon-edit" size="mini" @click="handleDetail(scope.row.id)">查看
+                <el-button size="mini" @click="handleDetail(scope.row.id)" plain>查看
                 </el-button>
-                <el-button v-if="scope.row.isPayed === '未付款' && scope.row.status === 1" type="text" icon="el-icon-delete" size="mini" @click="handleCancel(scope.row.id)">取消
+                <el-button v-if="scope.row.isPayed === '未付款' && scope.row.status === 1" size="mini" @click="handleCancel(scope.row.id)" plain>取消
                 </el-button>
               </template>
             </el-table-column>

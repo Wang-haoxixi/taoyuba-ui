@@ -4,13 +4,21 @@
       <page-header title="教材管理"></page-header>      
       <operation-container>
         <template slot="left">
-          <iep-button v-if="hrms_book_add" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+          <iep-button v-if="hrms_book_add" @click="handleAdd" type="primary" size="mini" icon="el-icon-plus" plain>新增</iep-button>
+        </template>
+        <template slot="right">
+          <span><el-input v-model="params.title" placeholder="请输入教材名称" size="mini" clearable></el-input></span>
+          <span><el-input type="number" min="0" v-model="params.price" placeholder="价格" size="mini" clearable></el-input></span>   
+          <el-button size="mini"  @click="getData">搜索</el-button>
         </template>
       </operation-container>
       <el-table
           :data="bookList"
+          :header-cell-style="{background:'#eef1f6', color:'#606266'}"
           stripe
-          style="width: 100%">
+          style="width: 100%; margin-top: 30px">
+          <el-table-column label="编号" prop="id">
+          </el-table-column>
           <el-table-column label="分类" prop="type">
           </el-table-column>
           <el-table-column
@@ -22,9 +30,9 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button v-if="hrms_book_edit" type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.id)">编辑
+              <el-button v-if="hrms_book_edit" type="warning" size="mini" @click="handleEdit(scope.row.id)" plain>编辑
               </el-button>
-              <el-button v-if="hrms_book_del" type="text" icon="el-icon-delete" size="mini" @click="handleDelete(scope.row.id)">删除
+              <el-button v-if="hrms_book_del" icon="el-icon-delete" size="mini" @click="handleDelete(scope.row.id)">
               </el-button>
             </template>
           </el-table-column>
@@ -47,6 +55,7 @@ export default {
       params: {
         current: 1,
         size: 10,
+        title: '',
       },
       options: {
         expandAll: false,
@@ -123,6 +132,7 @@ export default {
           getChild(v.type).then(res => {
             v.type = res.data.data.label
           })
+          v.price = v.price + '元'
         })
       })
     },

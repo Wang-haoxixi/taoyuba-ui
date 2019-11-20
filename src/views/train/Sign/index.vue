@@ -3,19 +3,20 @@
     <basic-container>
       <page-header title="签到记录"></page-header>
       <div class="shipowner_title">
-        <div style="float:right">
+        <div style="margin-left: 400px">
           <span><el-input v-model="params.trainTitle" placeholder="请输入培训课程" size="small" clearable></el-input></span>
           <span><el-input v-model="params.userName" placeholder="请输入签到人" size="small" clearable></el-input></span>
           <span><el-input v-model="params.signPlace" placeholder="请输入签到地点" size="small" clearable></el-input></span>
           <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
               value-format="yyyy-MM-dd HH:mm:ss"  size="mini"></el-date-picker></span>
-          <el-button size="small"  @click="getParamData">搜索</el-button>
+          <el-button size="mini"  @click="getParamData">搜索</el-button>
         </div>
       </div>
         <el-table
           :data="signList"
+          :header-cell-style="{background:'#eef1f6', color:'#606266'}"
           stripe
-          style="width: 100%">
+          style="width: 100%; margin-top: 30px">
           <el-table-column
             prop="userId"
             label="签到人"

@@ -3,7 +3,7 @@
     <basic-container>
       <page-header title="办证管理"></page-header>
       <div class="shipowner_title">
-        <div style="float:right">
+        <div style="margin-left: 150px">
           <span><el-input v-model="params.agentName" placeholder="请输入办证中介" size="small" clearable></el-input></span>
           <span v-if="mangner === true"><el-input v-model="params.userName" placeholder="请输入办证人" size="small" clearable></el-input></span>
           <span><el-input v-model="params.realName" placeholder="请输入联系人" size="small" clearable></el-input></span>
@@ -19,8 +19,9 @@
       </div>
         <el-table
           :data="certList"
+          :header-cell-style="{background:'#eef1f6', color:'#606266'}"
           stripe
-          style="width: 100%">
+          style="width: 100%; margin-top: 30px">
           <el-table-column
             v-for="(item,index) in options.columns"
             :key="index"
@@ -28,7 +29,13 @@
             :label="item.text"
           >
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="状态">
+            <template slot-scope="scope">
+              <span v-if="scope.row.status === '正常'" style="color: #0099FF">● {{scope.row.status}}</span>
+              <span v-if="scope.row.status === '已取消'" style="color: #B0B0B0">● {{scope.row.status}}</span>
+            </template>
+          </el-table-column>
+          <!-- <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button v-if="hrms_doc_can" type="text" icon="el-icon-delete" size="mini" @click="handleStatus(scope.row.id, 4)">取消</el-button>
               <el-button v-if="hrms_doc_acc" type="text" icon="el-icon-delete" size="mini" @click="handleStatus(scope.row.id, 1)">受理</el-button>
@@ -36,7 +43,7 @@
               <el-button v-if="hrms_doc_fin" type="text" icon="el-icon-delete" size="mini" @click="handleStatus(scope.row.id, 3)">完成</el-button>
               <el-button v-if="hrms_doc_view" type="text" icon="el-icon-delete" size="mini" @click="handleDetail(scope.row.id)">查看</el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
       <div style="text-align: center;margin: 20px 0;">
         <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
@@ -74,9 +81,9 @@ export default {
         current: 1,
         size: 10,
         realName: '',
-        phon: '',
+        phone: '',
         agentName: '',
-        userNam: '',
+        userName: '',
         time: '',
         status: '',
       },
