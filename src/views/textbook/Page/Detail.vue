@@ -177,10 +177,10 @@ export default {
       })
     },
     onGoBack () {
-      // this.$router.push({
-      //   path: '/textbook_spa/textbook_list',
-      // })
-      this.$router.go(-1)
+      this.$router.push({
+        path: '/textbook_spa/textbook_list',
+      })
+      // this.$router.go(-1)
     },
     handleChange (val) {
       this.form.type = val[1]

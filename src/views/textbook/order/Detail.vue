@@ -224,7 +224,10 @@ export default {
       })
     },
     onGoBack () {
-      this.$router.go(-1)
+      // this.$router.go(-1)
+      this.$router.push({
+        path: '/textbook_spa/order_list',
+      })
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
