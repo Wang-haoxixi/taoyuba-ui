@@ -114,7 +114,7 @@ export default {
           content: '',
           note: '',
           tybTrainLessonList: [],
-          dels: [],
+          listOfIds: [],
         },
         rules: {
           title: [
@@ -123,7 +123,7 @@ export default {
         },
         applyTime: [],
         classTime: [],
-        delList: [],
+        dels: [],
     }
   },
   methods: {
@@ -144,14 +144,14 @@ export default {
             m.lessonEnd = m.lessonTime[1]
           })
         }
-        if (this.delList.length > 0) {
-          this.trainClass.dels = this.delList
+        if (this.dels.length > 0) {
+          this.trainClass.listOfIds = this.dels
         }
         this.trainClass.tybTrainLessonList.forEach(v => {
-          if(v.lid) {
-            v.flag = 0
+          if(typeof(v.lid) === 'string') {
+            v.flag = 'ad'
           } else {
-            v.flag = 1
+            v.flag = 'up'
           }
         })
         if (valid) {
@@ -215,18 +215,26 @@ export default {
       // }
     },
     remove (index) {
+      if (this.trainClass.tybTrainLessonList) {
+        let i = 0
+        this.trainClass.tybTrainLessonList.forEach(v => {
+          this.$set(v, 'lid', i++)
+        })
+      }
       this.$confirm('此操作将永久删除该课程, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
       }).then(() => {
+        console.log(index)
+        console.log(this.trainClass.tybTrainLessonList)
         if (this.trainClass.tybTrainLessonList.length > 1) {
           const newCase = this.trainClass.tybTrainLessonList.filter(item => item.lid != index)
-          this.delList.push(this.trainClass.tybTrainLessonList[index].id)
+          this.dels.push(this.trainClass.tybTrainLessonList[index].id)
           this.trainClass.tybTrainLessonList = newCase
         } else if (this.trainClass.tybTrainLessonList.length === 1) {
           const newCase = this.trainClass.tybTrainLessonList.filter(item => item.lid == 2)
-          this.delList.push(this.trainClass.tybTrainLessonList[index].id)
+          this.dels.push(this.trainClass.tybTrainLessonList[index].id)
           this.trainClass.tybTrainLessonList = newCase   
         }
         this.$message({
