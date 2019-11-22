@@ -110,10 +110,6 @@ export default {
             text: '提交时间',
             value: 'createTime',
           },
-          {
-            text: '状态',
-            value: 'status',
-          },
         ],
       },
       statusList: [
