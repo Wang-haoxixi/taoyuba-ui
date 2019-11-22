@@ -226,8 +226,6 @@ export default {
         cancelButtonText: '取消',
         type: 'warning',
       }).then(() => {
-        console.log(index)
-        console.log(this.trainClass.tybTrainLessonList)
         if (this.trainClass.tybTrainLessonList.length > 1) {
           const newCase = this.trainClass.tybTrainLessonList.filter(item => item.lid != index)
           this.dels.push(this.trainClass.tybTrainLessonList[index].id)
