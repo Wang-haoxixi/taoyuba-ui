@@ -71,7 +71,9 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="课程时间：" prop="lessonTime">
-                  <el-date-picker v-model="item.lessonTime" type="daterange" value-format="yyyy-MM-dd" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" size="mini"></el-date-picker>
+                  <el-date-picker v-model="item.lessonTime" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss"
+                  range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
+                  :default-time="['00:00:00']" size="mini"></el-date-picker>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -155,20 +157,24 @@ export default {
           }
         })
         if (valid) {
-          if (+this.$route.query.add === 0) {
-            saveClass(this.trainClass).then(() => {
-              this.$message.success('提交成功！')
-              this.$router.push('/article_spa/class_list') 
-            }).catch(err => {
-              this.$message.error(err.msg)
-            })
-          } else if(this.$route.query.edit) {
-            updateClass(this.trainClass).then(() => {
-              this.$message.success('修改成功！')
-              this.$router.push('/article_spa/class_list') 
-            }).catch(err => {
-              this.$message.error(err.msg)
-            })
+          if(this.trainClass.applyEndTime < this.trainClass.openTime) {
+            if (+this.$route.query.add === 0) {
+              saveClass(this.trainClass).then(() => {
+                this.$message.success('提交成功！')
+                this.$router.push('/article_spa/class_list') 
+              }).catch(err => {
+                this.$message.error(err.msg)
+              })
+            } else if(this.$route.query.edit) {
+              updateClass(this.trainClass).then(() => {
+                this.$message.success('修改成功！')
+                this.$router.push('/article_spa/class_list') 
+              }).catch(err => {
+                this.$message.error(err.msg)
+              })
+            }
+          } else {
+            this.$message.error('报名结束时间必须小于培训开班时间！')
           }
         } else {
           return false

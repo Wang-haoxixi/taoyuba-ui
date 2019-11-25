@@ -30,3 +30,19 @@ export function cancelBookOrder (id) {
     method: 'post',
   })
 }
+
+export function ticketBookOrder (params) {
+  return request({
+    url: `${prefixUrl}/ticket`,
+    method: 'get',
+    params: params,
+  })
+}
+
+export function deliveryBookOrder (params) {
+  return request({
+    url: `${prefixUrl}/delivery`,
+    method: 'get',
+    params: params,
+  })
+}

@@ -21,15 +21,16 @@
             :key="index"
             :prop="item.value"  
             :label="item.text"
+            :width="item.width"
           >
           </el-table-column>
-          <el-table-column label="状态（是否报名中）">
+          <el-table-column label="状态" width="90">
             <template slot-scope="scope">
               <el-button v-if="scope.row.classStatus === '报名中'" type="success" size="mini" plain>{{scope.row.classStatus}}</el-button>
               <el-button v-if="scope.row.classStatus === '未报名'" type="danger" size="mini" plain>{{scope.row.classStatus}}</el-button>
             </template>
           </el-table-column>
-          <el-table-column label="开班（是/否）">
+          <el-table-column label="开班" width="80">
             <template slot-scope="scope">
               <span v-if="scope.row.openClass === '已开班'" style="color: #0099FF">● {{scope.row.openClass}}</span>
               <span v-if="scope.row.openClass === '未开班'" style="color: #B0B0B0">● {{scope.row.openClass}}</span>
@@ -42,6 +43,8 @@
               <el-button v-if="train_class_edit" type="warning" size="mini" @click="handleEdit(scope.row.id)" plain>编辑
               </el-button>
               <el-button v-if="train_class_sign && scope.row.openClass === '已开班'" size="mini" @click="handleSign(scope.row.id)" plain>签到记录
+              </el-button>
+              <el-button size="mini" @click="handleLesson(scope.row.id)" plain>课程
               </el-button>
               <el-button v-if="train_class_del" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.id)">
               </el-button>
@@ -86,18 +89,22 @@ export default {
           {
             text: '开班名称',
             value: 'title',
+            width: 150,
           },
           {
             text: '机构名称',
             value: 'userId',
+            width: 150,
           },
           {
             text: '开班地点',
             value: 'address',
+            width: 250,
           },
           {
             text: '开班时间',
             value: 'openTime',
+            width: 120,
           },
         ],
       },
@@ -235,6 +242,9 @@ export default {
     },
     handleSign (val) {
       this.$router.push({ path: `/article_spa/sign_information/${val}` })
+    },
+    handleLesson (val) {
+      this.$router.push({ path: `/article_spa/lesson_list/${val}` })
     },
     getNow () {
       var date = new Date()

@@ -63,7 +63,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
+        <!-- <el-row>
           <el-col :span="12">            
             <el-form-item label="快递名称：" prop="expressName">
               <el-input v-model="form.expressName"></el-input>
@@ -74,7 +74,7 @@
               <el-input v-model="form.expressNum"></el-input>                    
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
       </el-form>
       <page-header style="margin-top:50px" title="书目清单"></page-header> 
       <el-table
@@ -86,14 +86,14 @@
         @row-click="handleRowClick"
         @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" :selectable="isa"></el-table-column>
-        <el-table-column prop="title" label="书 目" width="120"></el-table-column>
-        <el-table-column prop="price" label="单价"></el-table-column>
+        <el-table-column prop="title" label="书 目" width="300"></el-table-column>
+        <el-table-column prop="price" label="单价"  width="120"></el-table-column>
         <el-table-column prop="quantity" label="订购数（册）">
           <template slot-scope="scope">
-            <el-input-number v-model="scope.row.quantity" :min="0" size="mini" style="width: 50%"></el-input-number>
+            <el-input-number v-model="scope.row.quantity" :min="0" size="mini" style="width: 50%" @blur="handleChange(scope.row)"></el-input-number>
           </template>
         </el-table-column>
-        <el-table-column label="小计金额（元）" prop="total"></el-table-column>
+        <el-table-column label="小计金额（元）" prop="total" width="120"></el-table-column>
       </el-table>
       <div style="margin-left:100px; margin-top:50px">合计：{{form.amount}}</div>
       <operation-wrapper style="margin-left:50px; margin-top:50px">
@@ -134,8 +134,8 @@ export default {
         payerBank: '',
         payerAccount: '',
         amount: 0,
-        expressName: '',
-        expressNum: '',
+        // expressName: '',
+        // expressNum: '',
         tybBookOrderLists: [],
       },
       rules: {
@@ -171,12 +171,12 @@ export default {
         payerAccount: [
           { required: true, message: '请输入账号', trigger: 'blur' },
         ],
-        expressName: [
-          { required: true, message: '请输入快递名称', trigger: 'blur' },
-        ],
-        expressNum: [
-          { required: true, message: '请输入快递单号', trigger: 'blur' },
-        ],
+        // expressName: [
+        //   { required: true, message: '请输入快递名称', trigger: 'blur' },
+        // ],
+        // expressNum: [
+        //   { required: true, message: '请输入快递单号', trigger: 'blur' },
+        // ],
       },
       tableData: [],
       multipleSelection: [],
@@ -246,6 +246,9 @@ export default {
           this.form.amount += v.total
         })
       }
+    },
+    handleChange (row) {
+      this.handleRowClick(row)
     },
     save () {
       if (this.form.amount === 0 && this.multipleSelection.length > 0) {

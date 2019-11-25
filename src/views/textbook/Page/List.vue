@@ -17,7 +17,7 @@
           :header-cell-style="{background:'#eef1f6', color:'#606266'}"
           stripe
           style="width: 100%; margin-top: 30px">
-          <el-table-column label="编号" prop="id">
+          <el-table-column label="编号" prop="id" width="100">
           </el-table-column>
           <el-table-column label="分类" prop="type">
           </el-table-column>
@@ -26,6 +26,7 @@
             :key="index"
             :prop="item.value"  
             :label="item.text"
+            :width="item.width"
           >
           </el-table-column>
           <el-table-column label="操作">
@@ -67,10 +68,12 @@ export default {
           {
             text: '教材介绍',
             value: 'info',
+            width: 350,
           },
           {
             text: '单价',
             value: 'price',
+            width: 150,
           },
         ],
       },
@@ -96,7 +99,7 @@ export default {
       this.getData()
     },
     handleDelete (val) {
-      this.$confirm('此操作将永久删除该渔船变更数据, 是否继续?', '提示', {
+      this.$confirm('确定要删除此教材？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',

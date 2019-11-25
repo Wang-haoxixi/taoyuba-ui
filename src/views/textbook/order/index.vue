@@ -52,11 +52,16 @@
               :key="index"
               :prop="item.value"  
               :label="item.text"
+              :width="item.width"
             >
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button type="warning" size="mini" @click="handlePrint(scope.row.id)" plain>打印
+                </el-button>
+                <el-button v-if="scope.row.isInvoice === '未开票'" size="mini" @click="handleTicket(scope.row.id)" plain>开票
+                </el-button>
+                <el-button size="mini" @click="handleDelivery(scope.row.id)" plain>发货
                 </el-button>
                 <el-button size="mini" @click="handleDetail(scope.row.id)" plain>查看
                 </el-button>
@@ -74,12 +79,34 @@
           width="1200"
           height="500">
         </iframe>
+        <el-dialog title="发货" :visible.sync="deliveryDialog" width="30%" :before-close="handleClose">
+          <el-form ref="deliveryform" :model="deliveryform" :rules="rules" label-width="150px" size="small">
+            <el-row>          
+              <el-col :span="23">            
+                <el-form-item label="快递公司：" prop="expressName">
+                  <el-input v-model="deliveryform.expressName"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="23">         
+                <el-form-item label="快递号：" prop="expressNum">       
+                  <el-input v-model="deliveryform.expressNum"></el-input>                    
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button size="mini" @click="handleClose">取 消</el-button>
+            <el-button size="mini" type="primary" @click="saveDelivery">确 定</el-button>
+          </span>
+        </el-dialog>
       </div>
     </basic-container>
   </div>
 </template>
 <script>
-import { getBookOrderList, cancelBookOrder } from '@/api/bookorder'
+import { getBookOrderList, cancelBookOrder, ticketBookOrder, deliveryBookOrder } from '@/api/bookorder'
 // import printOrder from '@/views/textbook/order/Print.vue'
 export default {
   // components: {
@@ -97,36 +124,55 @@ export default {
         current: 1,
         size: 10,
       },
+      deliveryform: {
+        expressName: '',
+        expressNum: '',
+      },
+      rules: {
+        // expressName: [
+        //   { expressName: true, message: '请输入快递公司', trigger: 'blur' },
+        // ],
+        // expressNum: [
+        //   { expressNum: true, message: '请输入快递号', trigger: 'blur' },
+        // ],
+      },
       options: {
         expandAll: false,
         columns: [
           {
             text: '单位',
             value: 'department',
+            width: 120,
           },
           {
             text: '联系人',
             value: 'contactName',
+            width: 110,
           },
           {
             text: '电话',
             value: 'phone',
+            width: 140,
           },
           {
             text: '创建时间',
             value: 'createTime',
+            width: 170,
           },
           {
             text: '付款',
             value: 'isPayed',
+            width: 100,
           },
           {
             text: '发货',
             value: 'isShipped',
+            width: 100,
           },
           {
             text: '开票',
             value: 'isInvoice',
+            width: 100,
           },
         ],
       },
@@ -160,6 +206,8 @@ export default {
           label: '已开票',
         },
       ],
+      tid: '',
+      deliveryDialog: false,
     }
   },
   created () {
@@ -211,6 +259,46 @@ export default {
       this.$router.push({
         path: '/textbook_spa/order_detail', query: { see: val },
       })
+    },
+    handleTicket (val) {
+      this.$confirm('请确定该订单已开票，是否继续？','提示',{
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        ticketBookOrder({ id: val }).then(() => {
+          this.$message.success('开票成功！')
+          this.getData()
+        }).catch(() => {
+          this.$message.error('开票失败！')
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消此操作！',
+        })
+      }) 
+    },
+    handleDelivery (val) {
+      this.tid = val
+      this.deliveryform = {
+        expressName: '',
+        expressNum: '',
+      }
+      this.deliveryDialog = true
+    },
+    handleClose () {
+      this.deliveryDialog = false
+    },
+    saveDelivery () {
+      let pra = { id: this.tid, expressName: this.deliveryform.expressName, expressNum: this.deliveryform.expressNum }
+      deliveryBookOrder(pra).then(() => {
+        this.$message.success('提交成功！')
+        this.getData()
+        this.deliveryDialog = false
+      }).catch(() => {
+          this.$message.error('提交失败！')
+        })
     },
     handleCancel (val) {
       this.$confirm('此操作将取消该教材订单，是否继续？','提示',{

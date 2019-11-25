@@ -66,6 +66,12 @@ export default [
         component: () => import('@/views/train/MyClass/index.vue'),        
         meta: noKeepAlive,
       },
+      {   
+        path: 'lesson_list/:id',                        
+        name: '签到信息页',                                   
+        component: () => import('@/views/train/Class/Page/Lesson.vue'),        
+        meta: noKeepAlive,
+      },
     ],
   },
 ]
