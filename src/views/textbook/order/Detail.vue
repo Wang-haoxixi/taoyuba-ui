@@ -275,7 +275,9 @@ export default {
           if (JSON.stringify(this.$route.query) === '{}') {
             saveBookOrder(this.form).then(() => {
               this.$message.success('提交成功！')
-              this.$router.go(-1)
+              this.$router.push({
+                path: '/textbook_spa/order_list',
+              })
             }).catch(err => {
               this.$message.error(err.msg)
             })
