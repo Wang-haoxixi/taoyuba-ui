@@ -13,6 +13,7 @@ RouterPlugin.install = function (router, store) {
     })
     return result.join('&')
   }
+  
   this.$router.$avueRouter = {
     // 全局配置
     $website: this.$store.getters.website,
