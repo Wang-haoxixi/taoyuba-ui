@@ -13,4 +13,5 @@ export function delObj (token) {
     url: '/admin/token/' + token,
     method: 'delete',
   })
+  
 }
