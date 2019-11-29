@@ -8,3 +8,10 @@ export function getLessonPage (query) {
       params: query,
     })
   }
+
+  export function lessonById (id) {
+    return request({
+      url: `${prefixUrl}/${id}`,
+      method: 'get',
+    })
+  } 
