@@ -1,5 +1,6 @@
 import { mergeByFirst } from '@/util/util'
 
+
   const dictsMap = {
     resumeStatus: {
       0: '待审核', 1: '正常', 2: '不通过',
