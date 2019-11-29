@@ -6,6 +6,7 @@
   </a-locale-provider>
 </template>
 
+
 <script>
 import { mapActions, mapMutations } from 'vuex'
 import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
