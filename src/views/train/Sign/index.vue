@@ -4,8 +4,8 @@
       <page-header title="签到记录"></page-header>
       <div class="shipowner_title">
         <div style="margin-left: 90px">
-          <span><el-input v-model="params.deptId" placeholder="请输入机构名称" size="mini" clearable></el-input></span>
-          <span><el-input v-model="params.trainId" placeholder="请输入培训信息" size="mini" clearable></el-input></span>
+          <span><el-input v-model="params.deptName" placeholder="请输入机构名称" size="mini" clearable></el-input></span>
+          <span><el-input v-model="params.trainName" placeholder="请输入培训信息" size="mini" clearable></el-input></span>
           <span><el-input v-model="params.trainTitle" placeholder="请输入培训课程" size="mini" clearable></el-input></span>
           <span><el-input v-model="params.userName" placeholder="请输入签到人" size="mini" clearable></el-input></span>
           <span><el-input v-model="params.signPlace" placeholder="请输入签到地点" size="mini" clearable></el-input></span>
