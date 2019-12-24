@@ -154,7 +154,7 @@
                       </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                      <el-form-item label="是否需要培训" prop="isTrain">
+                      <el-form-item label="是否需要培训" prop="workStatus">
                       <el-radio-group v-model="form.isTrain">
                           <el-radio  :label="0">否</el-radio>
                           <el-radio  :label="1">是</el-radio>
@@ -180,6 +180,48 @@
                     </span>
                     </el-form-item>
                 </el-col> -->
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                      <el-form-item label="用工状态：" prop="workStatus">
+                      <el-radio-group v-model="form.workStatus">
+                          <el-radio  :label="0">未用工</el-radio>
+                          <el-radio  :label="1">合同期中</el-radio>
+                      </el-radio-group>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="婚姻状态：" prop="maritalStatus">
+                      <el-radio-group v-model="form.maritalStatus">
+                          <el-radio  :label="0">未婚</el-radio>
+                          <el-radio  :label="1">已婚</el-radio>
+                      </el-radio-group>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="期望薪资：" prop="salary">
+                        <el-input v-model="form.salary"></el-input>
+                      </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="12">
+                      <el-form-item label="现住地址：" prop="preAddress">
+                        <el-input v-model="form.preAddress"></el-input>
+                      </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="12">
+                      <el-form-item label="文化程度：" prop="eduDegree">
+                      <iep-dict-select v-model="form.eduDegree" dict-name="tyb_education_degree"></iep-dict-select>
+                      </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                      <el-form-item label="工作经验：" prop="workExprience">
+                      <iep-dict-select v-model="form.workExprience" dict-name="tyb_work_exprience"></iep-dict-select> 
+                      </el-form-item>
+                  </el-col>
                 </el-row>
                   <el-row>
                     <el-col :span="12">
@@ -354,6 +396,12 @@ export default {
           phone: '',
           applyType: '',
           certList: [],
+          workStatus:0,
+          maritalStatus:0,
+          salary:'',
+          preAddress:'',
+          eduDegree:'',
+          workExprience:'',
       },
       agent:{
         businessLicense:'',
