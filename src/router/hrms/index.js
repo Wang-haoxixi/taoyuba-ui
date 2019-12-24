@@ -182,8 +182,14 @@ export default [
       },
       {   
         path: 'ship_operat/:shipNo',                        
-        name: '渔船船员表单',                                   
+        name: '渔船下经营人表单',                                   
         component: () => import('@/views/hrms/StandingBook/Fisher/Operat/index.vue'),        
+        meta: noKeepAlive,
+      },
+      {   
+        path: 'shipOperat_Detial/:shipNo',                        
+        name: '渔船下经营人详情',                                   
+        component: () => import('@/views/hrms/StandingBook/Fisher/Operat/Detail.vue'),        
         meta: noKeepAlive,
       },
       {   
