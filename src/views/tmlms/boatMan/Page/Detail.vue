@@ -154,7 +154,7 @@
                       </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                      <el-form-item label="是否需要培训" prop="workStatus">
+                      <el-form-item label="是否需要培训" prop="isTrain">
                       <el-radio-group v-model="form.isTrain">
                           <el-radio  :label="0">否</el-radio>
                           <el-radio  :label="1">是</el-radio>
