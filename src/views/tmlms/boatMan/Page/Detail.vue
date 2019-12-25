@@ -210,6 +210,11 @@
                         <el-input v-model="form.preAddress"></el-input>
                       </el-form-item>
                   </el-col>
+                   <el-col :span="12">
+                      <el-form-item label="作业方式：" prop="workRequire">
+                        <iep-dict-select v-model="form.workRequire" dict-name="tyb_resume_worktype"></iep-dict-select>
+                      </el-form-item>
+                  </el-col>
                 </el-row>
                 <el-row>
                   <el-col :span="12">
