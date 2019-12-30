@@ -5,8 +5,8 @@ export default [
     path: '/hrms_spa',
     component: Layout,
     redirect: '/hrms_spa/growth_file/:id',
-    children: [
-      {
+    children: [   
+      {          
         path: 'growth_file/:id',
         name: '成长档案',
         component: () => import('@/views/hrms/GrowthFile/index.vue'),
@@ -126,7 +126,7 @@ export default [
         component: () => import('@/views/hrms/StandingBook/BoatsFiles/Page/ShipList.vue'),
         meta: noKeepAlive,
       },
-      {   
+      {         
         path: 'ship_crew_list/:shipId',                        
         name: '渔船下船员列表页',                     
         component: () => import('@/views/hrms/StandingBook/BoatsFiles/Page/CrewList.vue'),
@@ -168,7 +168,7 @@ export default [
         component: () => import('@/views/hrms/StandingBook/Fisher/index.vue'),        
         meta: noKeepAlive,
       },
-      {   
+      {          
         path: 'shipCrew_Detial/:idcard',                        
         name: '渔船下船员详情页',                                   
         component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/Detail.vue'),        

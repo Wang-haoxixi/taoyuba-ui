@@ -79,26 +79,26 @@ export default [
   {
     path: '/bvillage',
     component: Layout,
-    children: [
-      {
+    children: [                           
+      {           
         path: 'detail',
         name: 'detailBvillage',
         component: () => import('@/views/tmlms/bvillage/Page/Detail'),
         meta: noKeepAlive,
-      },
-      {
+      },  
+      {        
         path: '/admin/bvillage',
         name: 'bvillage',
         component: () => import('@/views/tmlms/bvillage/index'),
         meta: noKeepAlive,
-      },
-      {
-      path: 'applyDetail',
-        name: 'applyBvillage',
+      },    
+      {                                       
+      path: 'applyDetail',            
+        name: 'applyBvillage',          
         component: () => import('@/views/tmlms/bvillage/Page/Apply_Detail'),
         meta: noKeepAlive,
-      },
-      {
+      },      
+      {           
         path: 'shipInfo',
           name: 'allotship',
           component: () => import('@/views/tmlms/bvillage/shipinfo'),
