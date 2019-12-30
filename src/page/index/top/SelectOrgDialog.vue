@@ -12,7 +12,7 @@
       <iep-button type="primary" @click="submitForm()">切换</iep-button>
     </template>
   </iep-dialog>
-</template>
+</template>     
 <script>
 import { setOrg } from '@/api/admin/user'
 import { mapState, mapActions } from 'vuex'
@@ -26,10 +26,10 @@ export default {
       formRequestFn: () => { },
     }
   },
-  created () {
+  created () {                 
     this.orgForm.orgId = this.orgId
   },
-  computed: {
+  computed: {           
     ...mapState({
       orgList: state => state.user.orgs,
       orgId: state => state.user.userInfo.orgId,
@@ -40,9 +40,9 @@ export default {
       'GetUserInfo',
       'GetMenu',
     ]),
-    submitForm () {
-      setOrg(this.orgForm.orgId).then(() => {
-        this.GetUserInfo().then(() => {
+    submitForm () {                                                                                                                                               
+      setOrg(this.orgForm.orgId).then(() => {                                    
+        this.GetUserInfo().then(() => {   
           this.dialogShow = false
           const loading = this.$loading({
             lock: true,
@@ -50,19 +50,19 @@ export default {
             spinner: 'el-icon-loading',
             background: 'rgba(0, 0, 0, 0.7)',
           })
-          setTimeout(async () => {      
-            const data = await this.GetMenu()
+          setTimeout(async () => {                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+            const data = await this.GetMenu()                   
             this.$router.$avueRouter.formatRoutes(data, true)
-            loading.close()
-            this.$message({
+            loading.close()   
+            this.$message({       
               message: '组织切换成功!',
               type: 'success',
-            })
-            this.$router.push({
+            })          
+            this.$router.push({                                      
               path: '/',
             })
           }, 1000)
-        })
+        })              
       })
     },
     loadPage () {
