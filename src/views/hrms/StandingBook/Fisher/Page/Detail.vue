@@ -19,7 +19,12 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="渔船编号：" prop="shipNo">
-              <el-input maxlength="50" v-model="form.shipNo" :disabled="manager"></el-input>
+              <template v-if='form.shipNo'>
+              <el-input maxlength="50"  v-model="form.shipNo" :disabled="manager"></el-input>
+              </template>
+              <template v-else>
+              <el-input maxlength="50"  v-model="form.shipNo" ></el-input>
+              </template>
             </el-form-item>
           </el-col>
         </el-row>
@@ -31,7 +36,12 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="持证人身份证号码：" prop="shipownerIdcard">
+              <template v-if="form.shipownerIdcard">
               <el-input maxlength="18" v-model="form.shipownerIdcard" :disabled="manager"></el-input>
+              </template>
+              <template v-else>
+                <el-input maxlength="18" v-model="form.shipownerIdcard"></el-input>
+              </template>
             </el-form-item>
           </el-col>
         </el-row>
@@ -482,6 +492,13 @@ export default {
           })
         })
       })
+    },
+    showManager () {
+      for(let item of this.shipNameList){
+        if(!item.shipNo){
+          this.manager=false
+        }
+      }
     },
     shipNameChange (val) {
       getVillageshipinfoById(val).then(data => {
