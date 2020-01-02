@@ -12,9 +12,9 @@
           <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
             value-format="yyyy-MM-dd"  size="mini"></el-date-picker>
           </span>
-          <span style="width:120px"><el-select v-model="params.status" placeholder="请选择状态" size="small">                                                        
+          <span style="width:120px"><el-select v-model="params.workStatus" placeholder="请选择状态" size="small">                                                        
               <el-option
-                v-for="item in status"
+                v-for="item in workStatus"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
@@ -94,13 +94,13 @@ export default {
         size: 10,
         idcard: '',
         realName: '',
-        status: '',
+        workStatus: '',
         phone: '',
         remark: '',
         timeLists: '',
       },
       exportParams: {                                       
-         idcard: '',
+        idcard: '',
         realName: '',
         status: '',
         phone: '',
@@ -129,11 +129,17 @@ export default {
           {
             text: '联系电话',
             value: 'phone',
-            css: '120',
+            css: '140',
           },
           {
-            text: '联系地址',
-            value: 'address',
+            text: '用工状态',
+            value: 'workStatus',
+            css: '140',
+          },
+          {
+            text: '期望薪资',
+            value: 'salary',
+            css: '140',
           },
           {
             text: '备注信息',
@@ -141,6 +147,16 @@ export default {
           },
         ],
       },
+      workStatus:[
+        {
+          label: '未用工',
+          value: 0,
+        },
+        {
+          label: '合同期中',
+          value: 1,
+        },
+      ],
       status: [
         {
           label: '审核中',
@@ -192,12 +208,19 @@ export default {
           let year = now.getFullYear()
           item.birthday = year - item.birthday.substring(0,4)
         })
-        console.log(this.shipownerList)
         this.shipownerList.forEach( item=>{
           if(item.status === 2 && item.userId !== 0){
             item.swith = true  
           }else{      
             item.swith = false
+          }
+          if(item.workStatus==0){
+            item.workStatus='未用工'
+          }else if(item.workStatus==1){
+            item.workStatus='合同期中'
+          }
+          if(item.salary==0){
+            item.salary='面议'
           }
         })
         this.shipownerList.forEach(v => {
