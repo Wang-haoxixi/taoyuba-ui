@@ -543,7 +543,7 @@ export default {
   },
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .avatar-upload-wrapper {
   height: 200px;
   width: 100%;
@@ -597,19 +597,32 @@ export default {
     overflow: hidden;
   }
 }
-.avatar-uploader{
-  border: 1px solid #CCC;
-  text-align:center;
-  border-radius: 6px;
-  cursor: pointer;
-  .avatar-uploader-icon{
-    display: block;
+.avatar-uploader .el-upload {
+    border: 1px solid #CCC;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
-    width: 100%;
+    width: 178px;
     height: 178px;
     line-height: 178px;
     text-align: center;
   }
-}
+  .avatar {
+    width: 356px;
+    height: 178px;
+    display: block;
+  }
+  .certAvatar {
+    width: 80px;
+    height: 30px;
+    display: block;
+  }
 </style>
