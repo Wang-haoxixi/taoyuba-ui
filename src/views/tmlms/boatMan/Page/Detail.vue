@@ -359,6 +359,7 @@ import VueSocketio from 'vue-socket.io'
 import Vue from 'vue'
 import store from '@/store'
 import debounce from 'lodash/debounce'
+import { mapState } from 'vuex'   
 Vue.use(new VueSocketio({
     debug: false,
     connection: 'http://localhost:5000', //地址+端口，由后端提供
@@ -754,11 +755,13 @@ export default {
     getidcardList (number) {
       this.loading = false
       if (number !== '') {
-        getCrewData(number).then(res => {
-          if (res.data.data.userId !== 0 && res.data.data !== true ) {
-            this.$message.error('该船员已存在，请重新填写！')
-            this.form = {}
-            return
+        getCrewData(number).then(res => {           
+          if(!(this.roles.includes(111) || this.roles.includes(1))){                        
+            if (res.data.data.userId !== 0 && res.data.data !== true ) {
+              this.$message.error('该船员已存在，请重新填写！')
+              this.form = {}
+              return
+            }
           }
           if(res.data.data !== true) {
             this.choseProvince(res.data.data.provinceId)
@@ -937,6 +940,9 @@ export default {
       }
       return 2
     },
+    ...mapState({
+          roles: state => state.user.roles,    
+    }),
   },
   watch: {
     'form.idcard': {
