@@ -4,10 +4,11 @@
       <page-header title="持证人管理"></page-header>
       <div class="shipowner_title">
         <!-- <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button> -->
-        <!-- <div style="float:right">
-          <span><el-input v-model="params.idcard" placeholder="请输入身份证" size="small"></el-input></span>
+        <div style="float:right">
           <span><el-input v-model="params.realName" placeholder="请输入姓名" size="small"></el-input></span>
-          <span><el-select v-model="params.status" placeholder="请选择状态" size="small">
+          <span><el-input v-model="params.idcard" placeholder="请输入身份证" size="small"></el-input></span>
+          <span><el-input v-model="params.phone" placeholder="请输入电话" size="small"></el-input></span>
+          <!-- <span><el-select v-model="params.status" placeholder="请选择状态" size="small">
               <el-option
                 v-for="item in status"
                 :key="item.value"
@@ -15,9 +16,9 @@
                 :value="item.value">
               </el-option>
             </el-select>
-          </span>
+          </span> -->
           <el-button size="small"  @click="getData">搜索</el-button>
-        </div> -->
+        </div>
       </div>
         <el-table
           :data="shipownerList"
@@ -67,6 +68,7 @@ export default {
         size: 10,
         idcard: '',
         realName: '',
+        phone:'',
         status: '',
         villageId: 0,
       },

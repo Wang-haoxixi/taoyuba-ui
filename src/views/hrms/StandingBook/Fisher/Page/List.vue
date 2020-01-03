@@ -106,8 +106,8 @@ export default {
             text: '持证人身份证',
           },
           {
-            value: 'hullLength',
-            text: '船长(m)',
+            value: 'licensesOwnerShip',
+            text: '所有权登记证',
           },
         ],
       },
@@ -138,7 +138,7 @@ export default {
     getData () {
       getVillageShipList(this.params).then(data => {
         this.pagedTable = data.data.data.records
-         this.pagedTable.forEach(v => {
+        this.pagedTable.forEach(v => {
           if (v.shipNo === '0') {
             v.shipNo = '请完善'
           }
