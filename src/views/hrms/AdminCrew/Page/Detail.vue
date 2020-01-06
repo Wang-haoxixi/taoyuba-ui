@@ -160,6 +160,32 @@
             </el-form-item>
           </el-col> -->
         </el-row>
+        <el-row>
+          <el-col :span="12">
+              <el-form-item  label="身份证正面照片：" prop="photoFront">
+                <el-upload
+                  class="avatar-uploader"
+                  action="/api/admin/file/upload/avatar"
+                  :show-file-list="false"
+                  :on-success="handleAvatarSuccessFront" :headers="headers"  accept="image/*">
+                  <img v-if="form.photoFront" :src="form.photoFront" class="avatar">
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+              </el-form-item>
+          </el-col>
+          <el-col :span="12">
+              <el-form-item  label="身份证反面照片：" prop="photoReverse">
+                <el-upload
+                  class="avatar-uploader"
+                  action="/api/admin/file/upload/avatar"
+                  :show-file-list="false"
+                  :on-success="handleAvatarSuccessReverse" :headers="headers"  accept="image/*">
+                  <img v-if="form.photoReverse" :src="form.photoReverse" class="avatar">
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+              </el-form-item>
+         </el-col>
+        </el-row>
         <iep-form-item class="form-half" prop="remark" label-name="备注信息" tip="请输入备注信息">
           <iep-input-area v-model="form.remark"></iep-input-area>
         </iep-form-item>

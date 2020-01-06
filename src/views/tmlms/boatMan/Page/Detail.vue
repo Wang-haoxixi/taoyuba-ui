@@ -237,7 +237,7 @@
                 </el-row>
                 <el-row>
                   <el-col :span="12">
-                    <el-form-item v-if="manager" label="身份证正面照片：" prop="photoFront">
+                    <el-form-item  label="身份证正面照片：" prop="photoFront">
                       <el-upload
                         class="avatar-uploader"
                         action="/api/admin/file/upload/avatar"
@@ -249,7 +249,7 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
-                    <el-form-item v-if="manager" label="身份证反面照片：" prop="photoReverse">
+                    <el-form-item  label="身份证反面照片：" prop="photoReverse">
                       <el-upload
                         class="avatar-uploader"
                         action="/api/admin/file/upload/avatar"
