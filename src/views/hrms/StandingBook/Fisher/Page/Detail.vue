@@ -483,6 +483,9 @@ export default {
         } else {
           this.manager = true
         }
+        if(this.userId=='4113' || this.userId=='4114' || this.userId=='4115'){
+          this.manager = false
+        }
         getVillageshipinfoByuser(this.userId).then(data => {
           this.shipNameList = data.data.data.map(item => {
             return {
