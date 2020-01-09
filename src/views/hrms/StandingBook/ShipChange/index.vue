@@ -27,7 +27,9 @@
             <template slot-scope="scope">
               <el-button v-if="scope.row.status === '未审核' && ship_change_aud" type="text" icon="el-icon-edit" size="mini" @click="handleAudit(scope.row.id)">审核
               </el-button>
-              <el-button v-if="scope.row.status === '未审核' && ship_change_edit" type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.id)">编辑
+              <el-button v-if="scope.row.status === '未审核' && ship_change_edit && manager" type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.id)">编辑
+              </el-button>
+              <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.id)">查看
               </el-button>
               <el-button v-if="scope.row.status === '未审核' && ship_change_del" type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.id)">删除
               </el-button>
@@ -49,6 +51,7 @@
 </template>
 <script>
 import { getShipChange, deleteShipChange, reviewShipChange } from '@/api/hrms/shipchange'
+import { getUserInfo } from '@/api/login'
 import { mapGetters } from 'vuex'
 export default {
   data () {
@@ -97,6 +100,7 @@ export default {
       ship_change_edit: false,
       ship_change_del: false,
       ship_change_aud: false,
+      manager:true,
       statusList: [
         {
           label: '未审核',
@@ -143,6 +147,10 @@ export default {
     // 编辑
     handleEdit (val) {
       this.$router.push({path: `/hrms_spa/shipChange_Detial/${val}`, query:{ edit: val }}) 
+    },
+    // 查看
+    handleView (val) {
+      this.$router.push({path: `/hrms_spa/shipChange_Detial/${val}`, query:{ see: val }}) 
     },
     handleAudit (val) {
       this.audDialog = true
@@ -235,8 +243,16 @@ export default {
     this.getData()
     this.ship_change_add = this.permissions['ship_change_add']
     this.ship_change_edit = this.permissions['ship_change_edit']
+    this.ship_change_see = this.permissions['ship_change_see']
     this.ship_change_del = this.permissions['ship_change_del']
     this.ship_change_aud = this.permissions['ship_change_aud']
+    getUserInfo().then(res => {
+      if (res.data.data.roles.includes(111)) {
+        this.manager = false
+      } else {
+        this.manager = true
+      }
+    })
   },
   // activated () {
   //   this.getData()
