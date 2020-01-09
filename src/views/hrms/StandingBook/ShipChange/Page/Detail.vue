@@ -1,8 +1,8 @@
 <template>
   <div class="training_detail">
     <basic-container>
-        <h1>{{ $route.query.edit ? '编辑' :'新增' }}变更渔船信息</h1>
-        <el-form :model="shipChange" ref="form" label-width="150px" :rules="rules">
+        <h1>{{  $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }}变更渔船信息</h1>
+        <el-form :model="shipChange" ref="form" label-width="150px" :rules="rules" :disabled="seeManager">
           <el-row>
             <el-col :span="12">
               <el-form-item label="变更类型:" prop="type">
@@ -208,7 +208,7 @@ export default {
       this.marker = [pois[0].lng, pois[0].lat]
     },
     getData () {
-      detailShipChange(this.$route.query.edit).then(data => {
+      detailShipChange(this.$route.query.edit || this.$route.query.see).then(data => {
         this.shipChange = data.data.data
         if (this.shipChange.imageChange) {
           this.$set(this.shipChange, 'changeimages', '')
@@ -517,7 +517,14 @@ export default {
       }
     },
     isDisabled () {
-      if (this.$route.query.edit) {
+      if (this.$route.query.edit || this.$route.query.see) {
+        return true
+      } else {
+        return false
+      }
+    },
+    seeManager () {
+      if (this.$route.query.see) {
         return true
       } else {
         return false
@@ -532,7 +539,7 @@ export default {
     },
   },
   created () {
-    if (this.$route.query.edit) {
+    if (this.$route.query.edit || this.$route.query.see) {
       this.getData()
     } 
   },

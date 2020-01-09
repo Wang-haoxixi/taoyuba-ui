@@ -83,6 +83,7 @@
         :header-cell-style="{background:'#eef1f6', color:'#606266'}"
         tooltip-effect="dark"
         style="width: 70%; margin-left:100px"
+        height="350"
         @row-click="handleRowClick"
         @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" :selectable="isa"></el-table-column>
