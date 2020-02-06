@@ -47,6 +47,58 @@
                 <i v-else class="el-icon-picture-outline"></i>
               </el-form-item>
             </el-col>
+              <el-col :span="12">     
+                    <el-form-item  label="渔船所有权证书：" prop="licensesOwnerPhoto">    
+                      <el-upload
+                        class="avatar-uploader"
+                        action="/api/admin/file/upload/avatar"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccessOwner"    
+                         :headers="headers"  accept="image/*">    
+                        <img v-if="shipowner.licensesOwnerPhoto" :src="shipowner.licensesOwnerPhoto" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                      </el-upload>
+                    </el-form-item>
+                  </el-col>
+                <el-col :span="12">                    
+                    <el-form-item  label="捕捞许可证书：" prop="licensesFishingPhoto">    
+                      <el-upload
+                        class="avatar-uploader"
+                        action="/api/admin/file/upload/avatar"
+                        :show-file-list="false"                                             
+                        :on-success="handleAvatarSuccessFish"
+                         :headers="headers"  accept="image/*">    
+                        <img v-if="shipowner.licensesFishingPhoto" :src="shipowner.licensesFishingPhoto" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                      </el-upload>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">                    
+                    <el-form-item  label="国籍证书：" prop="licensesNationalPhoto">    
+                      <el-upload
+                        class="avatar-uploader"
+                        action="/api/admin/file/upload/avatar"
+                        :show-file-list="false"                                             
+                        :on-success="handleAvatarSuccessNation"
+                         :headers="headers"  accept="image/*">    
+                        <img v-if="shipowner.licensesNationalPhoto" :src="shipowner.licensesNationalPhoto" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                      </el-upload>
+                    </el-form-item>
+                </el-col>
+              <el-col :span="12">                               
+                    <el-form-item  label="船舶检验证书：" prop="licensesInspectionPhoto">    
+                      <el-upload
+                        class="avatar-uploader"
+                        action="/api/admin/file/upload/avatar"
+                        :show-file-list="false"                                             
+                        :on-success="handleAvatarSuccessInspect"
+                         :headers="headers"  accept="image/*">    
+                        <img v-if="shipowner.licensesInspectionPhoto" :src="shipowner.licensesInspectionPhoto" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                      </el-upload>
+                    </el-form-item>
+                </el-col>
             <el-col>
                 <iep-form-item prop="workExperience" label-name="资质证书">     
                   <inline-form-table :table-data="shipowner.shiplist" :columns="certificateColumns" requestName="certificate" type="employee_profile" @add="setData"></inline-form-table>
@@ -72,6 +124,7 @@ import { getLastData } from '@/api/hrms/databuspayload'
 import Vue from 'vue'
 import information from '@/mixins/information'
 import VueSocketio from 'vue-socket.io'
+import store from '@/store' 
 Vue.use(new VueSocketio({
     debug: true,
     connection: 'http://localhost:5000', //地址+端口，由后端提供
@@ -135,6 +188,10 @@ export default {
         realName:'',
         idcardPhoto: '',
         facePhoto: '',
+        licensesOwnerPhoto:'',
+        licensesFishingPhoto:'',
+        licensesNationalPhoto:'',
+        licensesInspectionPhoto:'',
       },
       rules: {
           realName: [
@@ -151,6 +208,19 @@ export default {
             { required: true, message: '请输入联系电话', trigger: 'blur' },
             { validator: checkPhone, trigger: 'blur' },
           ],
+          licensesOwnerPhoto: [
+                  { required: true, message: '请上传所有权登记证书', trigger: 'blur' },
+          ],
+         licensesFishingPhoto: [
+                  { required: true, message: '请上传捕捞许可证', trigger: 'blur' },
+          ],
+         licensesNationalPhoto: [
+                  { required: true, message: '请上传国籍证书', trigger: 'blur' },
+          ],
+          licensesInspectionPhoto: [          
+                  { required: true, message: '请上传船舶检验证书', trigger: 'blur' },
+          ],
+        
       },
       options: [],
       props: {
@@ -166,6 +236,9 @@ export default {
       sn: '',
       manager: false,
       isManger: false,
+      headers: {
+        Authorization: 'Bearer ' + store.getters.access_token,
+      },
     }
   },
   components: { InlineFormTable },
@@ -325,6 +398,18 @@ export default {
         type: mime,
       })
     },
+    handleAvatarSuccessOwner (response) {
+        this.shipowner.licensesOwnerPhoto = response.data.url
+    },
+    handleAvatarSuccessFish (response) {    
+        this.shipowner.licensesFishingPhoto =  response.data.url
+    },
+    handleAvatarSuccessInspect (response) {
+       this.shipowner.licensesInspectionPhoto =  response.data.url
+    },
+    handleAvatarSuccessNation (response) {    
+          this.shipowner.licensesNationalPhoto =  response.data.url
+    },
   },
   computed: {
   },
@@ -473,8 +558,38 @@ export default {
   },
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss" >
 .el-form {
   margin-right:16%;
 }
+ .avatar-uploader .el-upload {
+    border: 1px solid #CCC;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 356px;
+    height: 178px;
+    display: block;
+  }
+  .certAvatar {
+    width: 80px;
+    height: 30px;
+    display: block;
+  }
+
+
 </style>
