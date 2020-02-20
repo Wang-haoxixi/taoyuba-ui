@@ -63,8 +63,8 @@
             {{ scope.row.status | typeFilter}}
           </template>
           </el-table-column> -->
-          <el-table-column label="操作" width="180">
-            <template slot-scope="scope">
+          <el-table-column label="操作" width="180">                        
+            <template slot-scope="scope">                      
               <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.idcard)">查看
               </el-button>
               <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.idcard)">编辑
