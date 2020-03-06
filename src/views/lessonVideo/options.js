@@ -20,13 +20,14 @@ const columnsMap = [
     },
   ]
 
-  const initForm = () => {            
+  const initForm = () => {                
     return {
         vedioName: '',
         videoDescript: '',
         videoImg: '',
         videoSrc: '',
         videoViewerNum: '',
+        source:'',
     }
   }               
                  
@@ -37,11 +38,12 @@ const columnsMap = [
         videoImg: '',
         videoSrc: '',
         videoViewerNum: '',
+        source:'',
     }
   }
 
     
-  const rules = {
+  const rules = { 
 
     vedioName: [
       {required: true, message: '该选项必填！', trigger: 'blur'},
@@ -54,6 +56,9 @@ const columnsMap = [
     ],
     videoSrc: [
       {required: true, message: '该选项必填！', trigger: 'change'},
+    ],
+    source: [   
+      {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
   }
 

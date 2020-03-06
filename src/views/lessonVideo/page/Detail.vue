@@ -30,6 +30,12 @@
                 </el-upload>
               </el-form-item>
           </el-col>
+           <el-col :span="12">
+              <el-form-item  label="视频来源：" prop="source">
+             <el-input maxlength="100" v-model="form.source"> 
+              </el-input>
+              </el-form-item>
+          </el-col>
         </el-row>
         <el-row>      
           <el-col :span="24">
