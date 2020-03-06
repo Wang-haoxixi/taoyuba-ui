@@ -94,9 +94,10 @@ export default {
         this.$message.error(error.message)
       })
     },
-    handleSubmit () {
+    handleSubmit () {   
       this.$refs.form.validate(valid => {
         if (valid) {
+          this.form.videoSrc  = 'http://' + this.form.videoSrc
           if (this.type === 'create') {
             createVideo(this.form).then(({data}) => {
               if (data.code === 0) {

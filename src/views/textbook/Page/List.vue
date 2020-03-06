@@ -157,8 +157,8 @@ export default {
         })
       })
     },
-    handleChange (row) {       
-                                     
+    handleChange (row) {           
+               
        let newBook = { id:row.id,sort:row.sort }    
         updateBook(newBook).then(data => {
           if(data.data.data){                    

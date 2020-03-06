@@ -34,12 +34,25 @@
             </operation-wrapper>
           </template>
         </el-table-column>
+            <el-table-column label="排序" style="width:40px;" prop="sort">       
+              <template slot-scope="scope">                             
+              <el-input-number                                                                              
+                v-model="scope.row.sort"
+                 controls-position="right"  
+                 @change="handleChange(scope.row)"    
+                 @blur="handleChange(scope.row)"            
+                  :min="1"
+                 :max="100" 
+                 size="mini">
+              </el-input-number>
+               </template>    
+          </el-table-column>
       </iep-table>
     </basic-container>
   </div>
 </template>
 <script>
-import { getVideolist, deleteVideo } from '@/api/lessonVideo'           
+import { getVideolist, deleteVideo,updateVideo } from '@/api/lessonVideo'           
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
 import { getUserInfo } from '@/api/login'
@@ -96,6 +109,14 @@ export default {
         this.pagedTable = data.records
         this.manager = true
       }
+    },
+    handleChange (row) {                
+       let newVideo = { vedioId:row.vedioId,sort:row.sort }    
+        updateVideo(newVideo).then(data => {
+          if(data.data.data){                    
+              this.loadPage()      
+          }
+      })      
     },
   },
 }

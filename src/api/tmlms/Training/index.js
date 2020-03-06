@@ -34,3 +34,11 @@ export function detailTraining (id) {
         method: 'get',
     })
 }
+
+export function editSort (data) {       
+    return request({
+        url: `${prefixUrl}/editSort`,
+        method: 'post',
+        data: data,
+    })
+}
