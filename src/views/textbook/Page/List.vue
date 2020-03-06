@@ -37,8 +37,8 @@
               </el-button>
             </template>
           </el-table-column>
-            <el-table-column label="排序" style="width:40px;" prop="sort">      
-               <template slot-scope="scope">     
+            <el-table-column label="排序" style="width:40px;" prop="sort">       
+              <template slot-scope="scope">                             
               <el-input-number                                                                              
                 v-model="scope.row.sort"
                  controls-position="right"  
@@ -49,7 +49,7 @@
                  size="mini"    
                  :id="inputNum">
               </el-input-number>
-               </template>
+               </template>    
           </el-table-column>
         </el-table>
         <div style="text-align: center;margin: 20px 0;">

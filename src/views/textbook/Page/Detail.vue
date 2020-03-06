@@ -23,6 +23,20 @@
             </el-form-item>
           </el-col>
         </el-row>
+         <el-row>                                          
+            <el-col :span="12">
+              <el-form-item  label="教材封面：" prop="bookImg">
+                <el-upload
+                  class="avatar-uploader"
+                  action="/api/admin/file/upload/avatar"
+                  :show-file-list="false"
+                  :on-success="handleAvatarSuccessFront" :headers="headers"  accept="image/*">
+                  <img v-if="form.bookImg" :src="form.bookImg" class="avatar">
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+              </el-form-item>
+          </el-col>
+        </el-row>
         <el-row>
           <el-col :span="12">                                    
             <el-form-item label="教材介绍：" prop="info">                                                                                                            
@@ -42,7 +56,8 @@
 <script> 
 import { createBook, getBookDetail, updateBook }  from '@/api/book'
 import { mapGetters } from 'vuex' 
-import { getDict, getChild, getById } from '@/api/tmlms/contract'                                                     
+import { getDict, getChild, getById } from '@/api/tmlms/contract'      
+import store from '@/store'                                               
 export default {            
   data () {     
     return {
@@ -56,6 +71,7 @@ export default {
         title: '',
         price: '',
         info: '',
+        bookImg:'',
       },                           
       init: false,
       rules: {
@@ -70,6 +86,9 @@ export default {
         ],
         info: [
           { required: true, message: '请输入具体适用对象', trigger: 'blur' },
+        ],
+        bookImg: [
+          { required: true, message: '请上传教材封面', trigger: 'blur' }, 
         ],
       },
       typeVal: [],
@@ -92,6 +111,9 @@ export default {
         children: [],
         },
       ],
+      headers: {
+        Authorization: 'Bearer ' + store.getters.access_token,
+      },
     }
   },
   computed: {                                                                                       
@@ -185,8 +207,41 @@ export default {
     handleChange (val) {
       this.form.type = val[1]
     },
+    handleAvatarSuccessFront (response) {
+      this.form.bookImg = response.data.url
+    },
   },
   watch: {
   },
 }
 </script>
+<style lang="scss">
+  .avatar-uploader .el-upload {
+    border: 1px solid #CCC;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 356px;
+    height: 178px;
+    display: block;
+  }
+  .certAvatar {
+    width: 80px;
+    height: 30px;
+    display: block;
+  }
+</style>
