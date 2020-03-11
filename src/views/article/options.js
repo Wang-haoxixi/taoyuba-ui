@@ -44,6 +44,8 @@ const initDtoForm = () => {
     createTime: initNow(), 
     updateTime: initNow(), 
     articleContent:'', //资讯内容
+    isDispatch:'',
+    httpSrc:'',
   }
 }
 
@@ -80,6 +82,8 @@ const initForm = () => {
     createTime: initNow(), 
     updateTime: initNow(), 
     articleContent:'', //资讯内容
+    isDispatch:'',
+    httpSrc:'',    
   }
 }
 
@@ -103,10 +107,9 @@ const rules = {
   description: [
     { required: true, message: '请填描述', trigger: 'blur' },
     { min: 0, max: 50, message: '长度在 0 到 50 个字符', trigger: 'blur'},
-  ],
-  articleContent: [
-    { required: true, message: '请填资讯内容', trigger: 'blur' },
-    { min: 0, max: 200, message: '长度在 0 到 200 个字符', trigger: 'blur'},
+  ],    
+  isDispatch: [
+    { required: true, message: '请选择一个选项', trigger: 'blur' },
   ],
 }
 

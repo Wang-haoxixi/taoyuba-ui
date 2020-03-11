@@ -110,6 +110,11 @@ export default {
         label: '海洋渔业职务船员',
         children: [],
         },
+        {
+          value:5,
+          label:'教材新增', 
+          children: [],
+        },
       ],
       headers: {
         Authorization: 'Bearer ' + store.getters.access_token,
@@ -173,6 +178,12 @@ export default {
           this.typeList[3].children.push({ value: v.id, label: v.label})
         })
       })
+      getDict('tyb_textbook_new').then(data => {
+        data.data.data.forEach(v => {
+          this.typeList[4].children.push({ value: v.id, label: v.label})
+        })
+      })
+
     },
     handleSubmit () {
       this.$refs.form.validate(valid => {                   
