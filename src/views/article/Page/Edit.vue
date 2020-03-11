@@ -112,8 +112,8 @@ export default {
   mounted () {                  
      this.methodName =  this.articleId == 0  ? '发布' : '编辑'
   },
-  created () {            
-    if (this.articleId != 0) {
+  created () {                     
+    if (this.articleId != 0) {                                         
       getArticleDetail(this.articleId).then(({ data }) => {     
         this.form = this.$mergeByFirst(initForm(), data.data)
         let  isShow = this.form.isDispatch
@@ -128,7 +128,7 @@ export default {
       const submitFunction = this.articleId == 0 ? createArticle : updateArticle
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          if(this.articleId == 0) this.form.httpSrc = 'http://'  + this.form.httpSrc
+           this.form.httpSrc = 'http://'  + this.form.httpSrc
           const publish = isPublish === true ? true : false
           submitFunction(formToDto(this.form), publish).then(({ data }) => {
             if (data.data) {
