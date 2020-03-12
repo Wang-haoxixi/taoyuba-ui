@@ -17,8 +17,14 @@ const  columnsMap = [
       prop:'source',
   },
   {
-      label:'描述',     
-      prop:'description',             
+      label:'资讯类别',     
+      prop:'type',     
+      dictName: 'tyb_article_type',
+      type: 'dictGroup',        
+  },
+  {
+    label:'是否跳转链接',     
+    prop:'isDispatch',             
   },
   {
       label:'创建时间',

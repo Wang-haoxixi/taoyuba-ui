@@ -31,7 +31,7 @@
         </el-row>
         <el-row>
           <el-col :span="12">                                           
-            <el-form-item label="描述：" prop="description">
+            <el-form-item label="描述：" prop="description">        
               <el-input v-model="form.description"></el-input>
             </el-form-item>
           </el-col>

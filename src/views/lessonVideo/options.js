@@ -10,14 +10,6 @@ const columnsMap = [
       prop: 'vedioName',
       label: '视频标题',
     },
-    {
-      prop: 'videoDescript',
-      label: '视频简介',
-    },
-    {
-      prop: 'videoViewerNum',
-      label: '观看人数',
-    },
   ]
 
   const initForm = () => {                
@@ -43,7 +35,7 @@ const columnsMap = [
   }
 
     
-  
+
   const rules = { 
 
     vedioName: [
