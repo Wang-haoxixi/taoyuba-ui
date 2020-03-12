@@ -72,13 +72,9 @@ export default {
     async loadPage (param = this.searchForm) {    
        let data = await this.loadTable(param, getArticleList)
         this.pagedTable = data.records
-        if(this.pagedTable){
-          this.pagedTable.forEach(ele => {
-          if (ele.isDispatch == 0) {
-            ele.isDispatch = '否'
-          }else{
-              ele.isDispatch = '是'
-          }
+        if(this.pagedTable){  
+          this.pagedTable.forEach(ele => {  
+              ele.isDispatch =   ele.isDispatch == 0 ? '否' : '是'
         })
         }
         console.log(this.pagedTable)
