@@ -5,6 +5,7 @@
       <operation-container>
         <template slot="left">
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain v-if="manager">新增</iep-button>
+          <el-button v-if="manager"  type="primary" size="small" icon="el-icon-edit" @click="exportInfo">导出信息</el-button>      
         </template>
         <template slot="right">
           <!-- <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -39,8 +40,8 @@
     </basic-container>
   </div>
 </template>
-<script>
-import { getShipList, deleteShip, getMyShipList } from '@/api/ships'
+<script>    
+import { getShipList, deleteShip, getMyShipList,exportExcel } from '@/api/ships'
 // import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
@@ -58,6 +59,12 @@ export default {
       params: {
         current: 1,
         size: 10,
+        shipName: '',
+        shipNo: '',
+        shipowner: '',
+        shipownerIdcard: '',
+      },
+      exportParams: {
         shipName: '',
         shipNo: '',
         shipowner: '',
@@ -104,6 +111,28 @@ export default {
         this.manager = true
       }
     },
+    exportInfo () {   
+      exportExcel (this.exportParams).catch(err => {    
+          this.$message({
+            type: 'warning',
+            message: err,
+          })
+      })    
+    },
+  },
+  watch: {
+      'params.shipName': function (val) {          
+            this.exportParams.shipName  = val
+      },
+      'params.shipNo': function (val) {
+            this.exportParams.shipNo  = val
+      },
+      'params.shipowner': function (val) {
+            this.exportParams.shipowner  = val
+      },    
+      'params.shipownerIdcard': function (val) {                   
+            this.exportParams.shipownerIdcard  = val      
+      },
   },
 }
 </script>

@@ -1,4 +1,5 @@
-import request from '@/router/axios'
+import request from '@/router/axios'      
+import {exportDownload} from '@/util/export'
 const prefixUrl = '/tybship/tybship'
 
 export function getShipList (params) {
@@ -83,6 +84,13 @@ export function getVillageShipList (params) {
       url: `${prefixUrl}/newpage`,
       method: 'get',
       params: params,
+  })
+}
+export function exportExcel (params) {                                    
+  return exportDownload({
+    url: 'tybship/tybshipExcelExport/downShipInfo',
+    data: params,                             
+    title: '渔船信息',
   })
 }
 
