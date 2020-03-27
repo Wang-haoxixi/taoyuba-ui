@@ -17,6 +17,7 @@ import tmlmsRouter from './tmlms'
 import exceptionRouter from './exception/'
 import certRouter from './cert/'
 import textBookRouter from './textbook'
+import  videoRouter from './lessonVideo'
 import articleRouter from './article'
 import AvueRouter from './avue-router'
 import Store from '../store/'
@@ -60,6 +61,7 @@ Router.addRoutes([
   ...emptyRouter,
   ...tmlmsRouter,
   ...textBookRouter,
+  ...videoRouter,
   ...certRouter,
   ...articleRouter,
 ])

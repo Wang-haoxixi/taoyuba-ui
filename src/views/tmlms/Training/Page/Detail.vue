@@ -26,6 +26,19 @@
                 <div v-else>{{ training.deptName }}</div>
               </el-form-item>
             </el-col>
+              <el-col :span="12">        
+              <el-form-item label="座机号码:" prop="landlinePhone">
+                <el-input v-model="training.landlinePhone" placeholder="" v-if="!$route.query.see" size="mini"></el-input>
+                <div v-else>{{ training.deptName }}</div>
+              </el-form-item>
+            </el-col>
+             <el-col :span="24">        
+              <el-form-item label="培训范围:" prop="trainGroup">           
+                <el-checkbox-group v-model="trainGroup" @change="handleChange">
+                      <el-checkbox-button v-for="trainService in trainServices" :label="trainService" :key="trainService">{{trainService}}</el-checkbox-button>
+                  </el-checkbox-group>
+              </el-form-item>
+            </el-col>
             <el-col :span="24">           
               <el-form-item label="机构地址:" prop="address" class="amap-page-container is-required">
                 <el-amap-search-box class="search-box training" :search-option="searchOption" :on-search-result="onSearchResult" style="width: 450px; height:30px;margin-top: 10px"></el-amap-search-box>
@@ -59,7 +72,9 @@ export default {
     return {
         show: false,
         training:{
+            trainScope:'',
         },
+        trainGroup:[],
         rules: {
             deptName: [
                 { required: true, message: '请输入机构名称', trigger: 'blur' },
@@ -71,6 +86,9 @@ export default {
                 { required: true, message: '请输入联系电话', trigger: 'blur' },
                 { validator: checkPhone, trigger: 'blur' },
             ],
+            landlinePhone: [    
+                { required: true, message: '请输入座机电话', trigger: 'blur' },
+            ],
         },
         options: [],
         // 地图配置
@@ -81,6 +99,14 @@ export default {
         },
         mapCenter: [121.59996, 31.197646],
         plugin: [
+        ],
+        trainServices:[
+              '各类各级渔业职务船员培训',
+              'GMDSS无线电操作员培训、电机员培训',
+              '外海二级及以下渔业职务船员岗位适任培训',
+              '国内一级及以下渔业职务船员培训',
+              '普通船员培训',
+              '机驾长培训',
         ],
        }
   },
@@ -101,6 +127,11 @@ export default {
               this.$message.error('地址不能为空!')
               return false
             }
+            if(this.trainGroup.length === 0){
+                this.$message.error('请选择至少一个培训范围!')    
+                return false
+            }
+            data.trainScope = this.trainGroup.join(',')   
               if(this.$route.query.userId){
                 type = 2
                 data.userId = this.$route.query.userId
@@ -124,7 +155,12 @@ export default {
             if(!data.address){
               this.$message.error('地址不能为空!')
               return false
+            }     
+           if(this.trainGroup.length === 0){
+                this.$message.error('请选择至少一个培训范围!')    
+                return false
             }
+            data.trainScope = this.trainGroup.join(',')   
               if(this.$route.query.userId){
                 type = 2
                 data.userId = this.$route.query.userId
@@ -148,6 +184,9 @@ export default {
         this.mapCenter = [pois[0].lng, pois[0].lat]
         this.marker = [pois[0].lng, pois[0].lat]
     },
+    handleChange (value) {   
+          this.training.trainScope = value.join(',')
+    },
   },
   computed: {
   },
@@ -158,6 +197,10 @@ export default {
                   if(this.$route.query.edit || this.$route.query.see || this.$route.query.userId){                                                    
                   detailTraining(this.$route.query.edit || this.$route.query.see || this.$route.query.userId).then( res=>{
                     this.training = res.data.data
+                    //checkbox
+                    if(this.training.trainScope){
+                          this.trainGroup = this.training.trainScope.split(',')
+                    }
                     document.getElementsByClassName(            
                       'search-box-wrapper'
                     )[0].childNodes[0].value = this.training.address

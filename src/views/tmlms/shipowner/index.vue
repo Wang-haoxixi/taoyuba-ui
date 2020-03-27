@@ -3,7 +3,7 @@
     <basic-container>
       <div class="shipowner_title">           
         <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button>                                                                                                                       
-        <el-button v-if="manager" type="primary" icon="el-icon-edit" size="small" @click="exportInfo">导出      
+        <el-button v-if="manager" type="primary" icon="el-icon-edit" size="small" @click="exportInfo">导出信息      
           </el-button>            
         <div style="float:right">
           <span><el-input v-model="params.idcard" placeholder="请输入身份证" size="small" clearable></el-input></span>

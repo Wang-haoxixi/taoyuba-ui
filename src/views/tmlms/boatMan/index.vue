@@ -4,23 +4,23 @@
       <div class="shipowner_title">
         <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button>                                    
         <el-button v-if="manager"  type="primary" size="small" icon="el-icon-edit" @click="exportInfo">导出信息</el-button>             
-        <div style="float:right">
+        <div style="float:right">                             
           <span style="width:120px"><el-input v-model="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
           <span style="width:120px"><el-input v-model="params.idcard" placeholder="身份证" size="small" clearable></el-input></span>
           <span style="width:120px"><el-input v-model="params.phone" placeholder="联系电话" size="small" clearable></el-input></span>
           <span style="width:120px"><el-input v-model="params.remark" placeholder="备注信息" size="small" clearable></el-input></span>
           <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
             value-format="yyyy-MM-dd"  size="mini"></el-date-picker>
-          </span>
+          </span>                            
           <span style="width:120px"><el-select v-model="params.workStatus" placeholder="请选择状态" size="small">                                                        
               <el-option
-                v-for="item in workStatus"
+                v-for="item in workStatus"    
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
               </el-option>
             </el-select>
-          </span>
+          </span>                                                                                                               
           <el-button size="small"  @click="getParamData">搜索</el-button>                          
         </div>
       </div>
@@ -63,8 +63,8 @@
             {{ scope.row.status | typeFilter}}
           </template>
           </el-table-column> -->
-          <el-table-column label="操作" width="180">
-            <template slot-scope="scope">
+          <el-table-column label="操作" width="180">                        
+            <template slot-scope="scope">                      
               <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.idcard)">查看
               </el-button>
               <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.idcard)">编辑
@@ -111,6 +111,7 @@ export default {
         remark:'',
         startDate:'',
         endDate:'',
+        workStatus:'',
       },
       options: {
         expandAll: false,
@@ -324,7 +325,7 @@ export default {
         this.manager = true
       }
     },
-    exportInfo () {                  
+    exportInfo () {                               
       exportExcel (this.exportParams).catch(err => {
         this.$message({
           type: 'warning',
@@ -359,16 +360,16 @@ export default {
       },
       'params.phone': function (val) {
             this.exportParams.phone  = val
-      },
-      'params.status': function (val) {                
-            this.exportParams.status  = val
-      },
+      },    
        'params.timeLists': function (val) {                
             this.exportParams.startDate  = val[0]
              this.exportParams.endDate  = val[1]
       },
-          'params.remark': function (val) {                
+      'params.remark': function (val) {                
             this.exportParams.remark  = val
+      },
+      'params.workStatus': function (val) {                          
+            this.exportParams.workStatus  = val
       },
   },
 }

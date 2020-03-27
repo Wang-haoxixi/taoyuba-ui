@@ -242,7 +242,7 @@
                         class="avatar-uploader"
                         action="/api/admin/file/upload/avatar"
                         :show-file-list="false"
-                        :on-success="handleAvatarSuccessFront" :headers="headers"  accept="image/*">
+                        :on-success="handleSuccessFront" :headers="headers"  accept="image/*">
                         <img v-if="form.photoFront" :src="form.photoFront" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                       </el-upload>
@@ -274,7 +274,21 @@
                       <i v-else class="el-icon-picture-outline"></i>
                     </el-form-item>
                   </el-col>
-                </el-row>            
+                </el-row>      
+                <el-row>                                  
+                  <el-col :span="12">   
+                    <el-form-item  label="证件照：" prop="certPhoto">   
+                      <el-upload
+                        class="avatar-uploader"
+                        action="/api/admin/file/upload/avatar"
+                        :show-file-list="false"           
+                        :on-success="handleAvatarSuccessCert" :headers="headers"  accept="image/*">
+                        <img v-if="form.certPhoto" :src="form.certPhoto" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                      </el-upload>
+                    </el-form-item>
+                  </el-col>
+                </el-row>      
                 <iep-form-item class="form-half" prop="remark" label-name="备注信息" tip="请输入备注信息" v-if="!$route.query.userId">
                   <iep-input-area v-model="form.remark"></iep-input-area>
                 </iep-form-item>
@@ -403,11 +417,12 @@ export default {
           applyType: '',
           certList: [],
           workStatus:0,
-          maritalStatus:0,
+          maritalStatus:0,    
           salary:'',
           preAddress:'',
           eduDegree:'',
           workExprience:'',
+          certPhoto:'',
       },
       agent:{
         businessLicense:'',
@@ -656,8 +671,12 @@ export default {
     handleAvatarSuccessFront (response) {
       this.form.photoFront = response.data.url
     },
-    handleAvatarSuccessReverse (response) {
+    handleAvatarSuccessReverse (response) {   
       this.form.photoReverse = response.data.url
+    },
+    handleAvatarSuccessCert (response) {
+        this.form.certPhoto = response.data.url
+        console.log(this.form.certPhoto)
     },
     async getIdcardFile () {
       let idcardFile = this.dataURLtoFile(this.form.idcardPhoto)

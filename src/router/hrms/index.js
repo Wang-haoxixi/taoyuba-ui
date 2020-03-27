@@ -203,7 +203,7 @@ export default [
         name: '渔船变更列表页',                                   
         component: () => import('@/views/hrms/StandingBook/ShipChange/index.vue'),        
         meta: noKeepAlive,
-      },
+      },  
     ],
   },
   {

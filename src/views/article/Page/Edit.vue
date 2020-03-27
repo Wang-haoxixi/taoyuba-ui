@@ -15,15 +15,15 @@
             </el-form-item>
           </el-col>
         </el-row>   
-        <el-row>                                                                                                                         
+        <el-row>                                                                                                                                                
           <el-col :span="12">                                                                       
             <el-form-item label="来源：" prop="source">                                                                                                            
               <el-input v-model="form.source"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="是否推荐：" prop="isRcmd">
-              <el-radio-group v-model="form.isRcmd">
+          <el-col :span="12">                       
+            <el-form-item label="是否推荐：" prop="isRcmd">     
+              <el-radio-group v-model="form.isRcmd">      
                 <el-radio v-for="(item,i) in dictsMap.isRcmd" :key="i" :label="+i">{{item}}</el-radio>
               </el-radio-group>
             </el-form-item>
@@ -31,10 +31,20 @@
         </el-row>
         <el-row>
           <el-col :span="12">                                           
-            <el-form-item label="描述：" prop="description">
+            <el-form-item label="描述：" prop="description">        
               <el-input v-model="form.description"></el-input>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+             <el-form-item label="是否跳转：" prop="isDispatch">                                
+             <el-radio-group v-model="form.isDispatch"  @change="radioChange">      
+                 <el-radio :label="0">不跳转链接</el-radio>
+                 <el-radio :label="1">跳转链接</el-radio>
+              </el-radio-group>        
+             </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="图片：" prop="image">
               <el-upload
@@ -45,13 +55,19 @@
               </el-upload>
             </el-form-item>                
           </el-col>
+            <el-col :span="12">   
+              <el-form-item label="资讯跳转链接：" prop="httpSrc" v-show="isShow">       
+              <el-input maxlength="80" v-model="form.httpSrc">
+                <template slot="prepend">http://</template>     
+              </el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
-
         <!-- <iep-form-item class="form-half" prop="articleContent" label-name="资讯内容">
           <iep-input-area v-model="form.articleContent"></iep-input-area>
         </iep-form-item> -->
 
-        <el-form-item label="资讯内容：" prop="articleContent">
+        <el-form-item label="资讯内容：" prop="articleContent" v-show="isArticle">
           <iep-froala-editor v-model="form.articleContent"></iep-froala-editor>
         </el-form-item>
 
@@ -83,30 +99,36 @@ export default {
       headers: {
         Authorization: 'Bearer ' + store.getters.access_token,
       },
+      isShow:false,
+      isArticle:true,
+      methodName:'',
     }
   },
   computed: {                                                                                    
     articleId () {
-      return +this.$route.params.articleId        
-    },
-    methodName () {
-      return this.articleId ? '编辑' : '发布'
+      return  this.$route.params.articleId           
     },
   },
-  created () {        
-    if (this.articleId) {
-      getArticleDetail(this.articleId).then(({ data }) => {
+  mounted () {                  
+     this.methodName =  this.articleId == 0  ? '发布' : '编辑'
+  },
+  created () {                     
+    if (this.articleId != 0) {                                         
+      getArticleDetail(this.articleId).then(({ data }) => {     
         this.form = this.$mergeByFirst(initForm(), data.data)
+        let  isShow = this.form.isDispatch
+        this.isShow = isShow == 1
+        this.isArticle = isShow  == 0
+        if(this.form.httpSrc) this.form.httpSrc = this.form.httpSrc.substring(7)
       })
     }
-  },
-  mounted () {
-  },
+  },    
   methods: {
-    handleSubmit (isPublish) {
-      const submitFunction = this.articleId ? updateArticle : createArticle
+    handleSubmit (isPublish) {    
+      const submitFunction = this.articleId == 0 ? createArticle : updateArticle
       this.$refs['form'].validate((valid) => {
         if (valid) {
+           this.form.httpSrc = 'http://'  + this.form.httpSrc
           const publish = isPublish === true ? true : false
           submitFunction(formToDto(this.form), publish).then(({ data }) => {
             if (data.data) {
@@ -127,8 +149,18 @@ export default {
     },
     handleAvatarSuccess (res) {
       // this.$emit('input', res.data.url)
-      console.log(res.data.url)
-      // this.form.image = res.data.url
+      //console.log(res.data.url)   
+      this.form.image = res.data.url
+    },
+    radioChange (val) {       
+      if(val === 1){
+          this.isShow = true
+          this.isArticle = false
+      }
+      if(val === 0){
+          this.isShow = false
+          this.isArticle = true
+      }
     },
   },
   watch: {

@@ -46,7 +46,9 @@ export default [
         path: '/admin/list',
         name: 'Shipowner',
         component: () => import('@/views/tmlms/shipowner/index'),
-        meta: noKeepAlive,
+        meta: {
+          keepAlive: true,
+        },
       },
       {
       path: 'apply_detail',
@@ -153,7 +155,9 @@ export default [
             path: '/admin/bostMan',
             name: 'boatMan',
             component: () => import('@/views/tmlms/boatMan/index'),
-            meta: noKeepAlive,
+            meta: {   
+              keepAlive: true,
+            },
           },
           {
             path: 'apply_detail',

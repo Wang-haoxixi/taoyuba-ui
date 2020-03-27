@@ -12,7 +12,7 @@
           <el-button size="mini"  @click="getData">搜索</el-button>
         </template>
       </operation-container>
-      <el-table
+      <el-table     
           :data="bookList"
           :header-cell-style="{background:'#eef1f6', color:'#606266'}"
           stripe
@@ -37,6 +37,20 @@
               </el-button>
             </template>
           </el-table-column>
+            <el-table-column label="排序" style="width:40px;" prop="sort">       
+              <template slot-scope="scope">                             
+              <el-input-number                                                                              
+                v-model="scope.row.sort"
+                 controls-position="right"  
+                 @change="handleChange(scope.row)"    
+                 @blur="handleChange(scope.row)"            
+                  :min="1"
+                 :max="100" 
+                 size="mini"    
+                 :id="inputNum">
+              </el-input-number>
+               </template>    
+          </el-table-column>
         </el-table>
         <div style="text-align: center;margin: 20px 0;">
           <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
@@ -45,7 +59,7 @@
   </div>
 </template>
 <script>
-import { getBookList, delBook }  from '@/api/book'
+import { getBookList, delBook,updateBook }  from '@/api/book'
 import { getChild } from '@/api/tmlms/contract'                                                                    
 import { mapGetters } from 'vuex'
 export default {
@@ -80,6 +94,7 @@ export default {
       hrms_book_add: false,
       hrms_book_edit: false,
       hrms_book_del: false,
+      num:'1',
     }
   },
   created () {                         
@@ -92,6 +107,9 @@ export default {
     ...mapGetters([
       'permissions',
     ]),
+    inputNum () {
+        return 'num' + this._uid
+    },
   },
   methods: {
     currentChange (val) {
@@ -138,6 +156,15 @@ export default {
           v.price = v.price + '元'
         })
       })
+    },
+    handleChange (row) {           
+               
+       let newBook = { id:row.id,sort:row.sort }    
+        updateBook(newBook).then(data => {
+          if(data.data.data){                    
+              this.getData()        
+          }
+      })      
     },
   },
 }

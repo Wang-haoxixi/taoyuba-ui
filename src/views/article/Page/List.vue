@@ -20,7 +20,7 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               @selection-change="handleSelectionChange"
-              is-mutiple-selection>
+              is-mutiple-selection>   
         <el-table-column prop="operation" label="操作" width="220">
           <template slot-scope="scope">
             <operation-wrapper>     
@@ -70,7 +70,14 @@ export default {
       })
     },
     async loadPage (param = this.searchForm) {    
-       this.loadTable(param, getArticleList)
+       let data = await this.loadTable(param, getArticleList)
+        this.pagedTable = data.records
+        if(this.pagedTable){  
+          this.pagedTable.forEach(ele => {  
+              ele.isDispatch =   ele.isDispatch == 0 ? '否' : '是'
+        })
+        }
+        console.log(this.pagedTable)
     },
   },
 }

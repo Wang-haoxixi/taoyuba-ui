@@ -17,8 +17,14 @@ const  columnsMap = [
       prop:'source',
   },
   {
-      label:'描述',     
-      prop:'description',             
+      label:'资讯类别',     
+      prop:'type',     
+      dictName: 'tyb_article_type',
+      type: 'dictGroup',        
+  },
+  {
+    label:'是否跳转链接',     
+    prop:'isDispatch',             
   },
   {
       label:'创建时间',
@@ -44,6 +50,8 @@ const initDtoForm = () => {
     createTime: initNow(), 
     updateTime: initNow(), 
     articleContent:'', //资讯内容
+    isDispatch:'',
+    httpSrc:'',
   }
 }
 
@@ -80,6 +88,8 @@ const initForm = () => {
     createTime: initNow(), 
     updateTime: initNow(), 
     articleContent:'', //资讯内容
+    isDispatch:'',
+    httpSrc:'',    
   }
 }
 
@@ -103,10 +113,9 @@ const rules = {
   description: [
     { required: true, message: '请填描述', trigger: 'blur' },
     { min: 0, max: 50, message: '长度在 0 到 50 个字符', trigger: 'blur'},
-  ],
-  articleContent: [
-    { required: true, message: '请填资讯内容', trigger: 'blur' },
-    { min: 0, max: 200, message: '长度在 0 到 200 个字符', trigger: 'blur'},
+  ],    
+  isDispatch: [
+    { required: true, message: '请选择一个选项', trigger: 'blur' },
   ],
 }
 

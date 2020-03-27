@@ -34,6 +34,19 @@
               </el-button>
             </template>
           </el-table-column>
+             <el-table-column label="排序" style="width:40px;" prop="sort">       
+              <template slot-scope="scope">                             
+              <el-input-number                                                                              
+                v-model="scope.row.sort"
+                 controls-position="right"  
+                 @change="handleChange(scope.row)"    
+                 @blur="handleChange(scope.row)"            
+                  :min="1"
+                 :max="100" 
+                 size="mini">
+              </el-input-number>
+               </template>    
+          </el-table-column>
         </el-table>
       <div style="text-align: center;margin: 20px 0;">
         <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
@@ -42,7 +55,7 @@
   </div>
 </template>
 <script>
-import { getTraining,deleteTraining } from '@/api/tmlms/Training'
+import { getTraining,deleteTraining,editSort } from '@/api/tmlms/Training'
 export default {
   data () {
     return {
@@ -123,6 +136,14 @@ export default {
           })
         }).catch(() => {         
         })
+    },
+   handleChange (row) {                        
+       let newDept = { userId:row.userId,sort:row.sort }    
+        editSort(newDept).then(data => {
+          if(data.data.data){                    
+              this.getData()        
+          }
+      })      
     },
   },
   computed: {
