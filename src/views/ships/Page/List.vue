@@ -2,8 +2,8 @@
   <div>
     <basic-container>
       <page-header title="渔船管理"></page-header>
-      <operation-container>
-        <template slot="left">
+      <operation-container>       
+        <template slot="left">    
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain v-if="manager">新增</iep-button>
           <el-button v-if="manager"  type="primary" size="small" icon="el-icon-edit" @click="exportInfo">导出信息</el-button>      
         </template>
@@ -17,8 +17,8 @@
           <span><el-input v-model="params.shipownerIdcard" placeholder="请输入持证人身份证" size="small" clearable></el-input></span>
           <el-button size="small"  @click="loadPage(params)">搜索</el-button>
         </template>
-      </operation-container>
-      <iep-table                    
+      </operation-container>                
+      <iep-table                            
               :isLoadTable="isLoadTable"
               :pagination="pagination"
               :columnsMap="columnsMap"
@@ -29,7 +29,8 @@
               is-mutiple-selection>
         <el-table-column prop="operation" label="操作" width="220">
           <template slot-scope="scope">
-            <operation-wrapper>
+            <operation-wrapper>   
+              <iep-button plain @click="handleShow(scope.row.shipId)" v-if="manager">职务船员配置</iep-button>
               <iep-button plain @click="handleEdit(scope.row.shipId)" v-if="manager">编辑</iep-button>
               <iep-button @click="handleView(scope.row.shipId)">查看</iep-button>
               <iep-button type="warning" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
@@ -38,6 +39,13 @@
         </el-table-column>
       </iep-table>
     </basic-container>
+    <el-dialog title="职务船员配置情况" :visible.sync="dialogCertVisible" width="70%" append-to-body>      
+      <div  class="certDiv">
+          <p>最低配员标准:</p>
+          <p>实际配员:</p>
+          <p class="lackCert">缺少配员:</p>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>    
@@ -70,6 +78,7 @@ export default {
         shipowner: '',
         shipownerIdcard: '',
       },
+      dialogCertVisible:false,
     }
   },
   created () {
@@ -119,6 +128,9 @@ export default {
           })
       })    
     },
+    handleShow () {     
+          this.dialogCertVisible = true
+    },
   },
   watch: {
       'params.shipName': function (val) {          
@@ -136,3 +148,13 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>  
+.certDiv{   
+      font-weight: bold;
+      lackCert{
+          color: red;
+      }
+}
+
+</style>
