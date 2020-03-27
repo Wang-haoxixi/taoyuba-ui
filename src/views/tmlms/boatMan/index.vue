@@ -25,7 +25,7 @@
         </div>
       </div>
         <el-table
-          :data="shipownerList"
+          :data="ownerList"
           stripe
           style="width: 100%">
           <el-table-column
@@ -36,7 +36,7 @@
             :width="item.css"
           >
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             prop="status"  
             label="审核操作"
             width="100"
@@ -54,7 +54,7 @@
               </el-switch>
             </div>
           </template>
-          </el-table-column>
+          </el-table-column> -->
           <!-- <el-table-column
             prop="status"  
             label="审核状态"
@@ -83,10 +83,14 @@
 <script>                                                                                                                                                      
 import { getCrew,deleteCrew,statusCrew,exportExcel } from '@/api/tmlms/boatMan'                   
 import { getUserInfo } from '@/api/login'
+import { getArea,getPosition} from '@/api/post/admin'
+
 export default {
   data () {
     return {
       shipownerList: [],
+      ownerList:[],
+      provinces:[],
       total: 10,
       // 查询数据
       params: {
@@ -138,13 +142,21 @@ export default {
             css: '140',
           },
           {
-            text: '期望薪资',
-            value: 'salary',
+            text: '当前职位',
+            value: 'positionId',
             css: '140',
           },
           {
-            text: '备注信息',
+            text: '证书',
             value: 'remark',
+          },
+          {
+            text: '证书发放日期',
+            value: 'remark',
+          },
+          {
+            text: '船员户籍地',
+            value: 'provinceId',
           },
         ],
       },
@@ -194,6 +206,16 @@ export default {
     handleEdit (val) {
       this.$router.push({name: 'detailBoatMan',query:{ edit: val }})
     },
+    getProvince () {
+      getArea(0).then(({ data }) => {
+        this.provinces = data.data.map(item=>{
+          return {
+            label: item.name,
+            value: item.areaCode,  
+          }
+        })
+      })
+    },
     // 获取列表数据
     getData () {
       getCrew(this.params).then(res=>{
@@ -201,7 +223,23 @@ export default {
         // this.shipownerList.map(m => { 
         //   return m.remark.substring(0, 20)
         // })
-        this.shipownerList.forEach(item => {
+        getPosition('tyb_resume_position').then(({ data }) =>{
+            for( let res of data.data){
+              this.shipownerList.map( item =>{
+                if(res.value==item.positionId){
+                  item.positionId=res.label
+                }
+              })
+            }
+        })
+        this.provinces.map(res=>{
+          this.shipownerList.map( item =>{
+            if(item.provinceId==res.value){
+              item.provinceId=res.label
+            }
+          })
+        })
+        this.shipownerList .map(item => {
           if(item.remark.length > 19) {
             item.remark = item.remark.substring(0, 20) + '....'
           }
@@ -232,6 +270,7 @@ export default {
           }
         })
         this.total = res.data.data.total
+        this.ownerList=this.shipownerList
       })
     },
     //搜索
@@ -300,6 +339,7 @@ export default {
   created () {
     this.getData()
     this.isManager()
+    this.getProvince()
   },
   filters: {
     typeFilter (type) {

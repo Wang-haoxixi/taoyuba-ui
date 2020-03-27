@@ -1,33 +1,33 @@
 const navList = [
   {
-    id: '/app/index',
+    id: '/',
     name: '首页',
   }, {
-    id: '/app/person',
-    name: '国脉人',
+    id: '/ships/manage',
+    name: '渔船',
   }, {
-    id: '/app/resource',
-    name: '资源',
+    id: '/admin/bostMan',
+    name: '船员',
     show: 'show',
   }, {
-    id: '/app/products',
-    name: '产品',
+    id: '/admin/list',
+    name: '船东',
   }, {
-    id: '/app/project',
-    name: '项目',
+    id: '/account/standing',
+    name: '一船一档',
   }, {
-    id: '/app/college',
-    name: '学堂',
+    id: '/tmlms_spa/contract_list',
+    name: '合同',
   }, {
-    id: '/app/brand',
-    name: '品牌',
+    id: '/hrms_spa/recruit_list',
+    name: '招聘',
   }, {
     //   id: '/app/news',
     //   name: '要闻',
     // }, {
-    id: '/app/data',
-    name: '数据',
-    // }, {
+    // id: '/app/data',
+    // name: '数据',
+    // // }, {
     //   id: '/app/wealth',
     //   name: '财富',
   },

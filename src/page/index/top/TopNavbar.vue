@@ -22,13 +22,16 @@
           <span class="sub-menu" @click="open(name='crew')">船员</span>
         </el-menu-item>
         <el-menu-item>
-          <span class="sub-menu" @click="open(name='fish')">渔获</span>
+          <span class="sub-menu" @click="open(name='fish')">船东</span>
         </el-menu-item>
         <el-menu-item>
-          <span class="sub-menu" @click="open(name='mall')">商城</span>
+          <span class="sub-menu" @click="open(name='standing')">一船一档</span>
         </el-menu-item>
         <el-menu-item>
-          <span class="sub-menu" @click="open(name='article')">资讯</span>
+          <span class="sub-menu" @click="open(name='htgl')">合同</span>
+        </el-menu-item>
+        <el-menu-item>
+          <span class="sub-menu" @click="open(name='recruit')">招聘</span>
         </el-menu-item>
       </el-menu>
       <!-- <div class="search-con">
@@ -71,22 +74,32 @@ export default {
     open (name) {
       console.log(name)
       if(name === 'index') {
-        window.open('https://www.taoyu58.com/')
+        this.$router.push({ path: '/' })
+        // window.open('https://www.taoyu58.com/')
       }
       if(name === 'ship') {
-        window.open('https://www.taoyu58.com/ship/index.html')
+        this.$router.push({ path:'/ships/manage' })
+        // window.open('https://www.taoyu58.com/ship/index.html')
       }
       if(name === 'crew') {
-        window.open('https://www.taoyu58.com/crew/index.html')
+        this.$router.push({ path: '/admin/bostMan'})
+        // window.open('https://www.taoyu58.com/crew/index.html')
       }
       if(name === 'fish') {
-        window.open('https://www.taoyu58.com/fish/index.html')
+        this.$router.push({ path: '/admin/list' })
+        // window.open('https://www.taoyu58.com/fish/index.html')
       }
-      if(name === 'mall') {
-        window.open('https://www.taoyu58.com/mall/index.html')
+      if(name === 'standing') {
+        this.$router.push({ path: '/account/standing' })
+        // window.open('https://www.taoyu58.com/mall/index.html')
       }
-      if(name === 'article') {
-        window.open('https://www.taoyu58.com/article/index.html')
+      if(name === 'htgl') {
+        this.$router.push({ path: '/tmlms_spa/contract_list' })
+        // window.open('https://www.taoyu58.com/article/index.html')
+      }
+      if(name === 'recruit') {
+        this.$router.push({ path: '/hrms_spa/recruit_list' })
+        // window.open('https://www.taoyu58.com/article/index.html')
       }
     },
   },
