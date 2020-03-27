@@ -2,7 +2,7 @@
   <div class="contract-box">
     <basic-container>
       <div class="shipowner_title">           
-        <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button>                                                                                                                       
+        <el-button    v-if="manager"  type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button>                                                                                                                       
         <el-button v-if="manager" type="primary" icon="el-icon-edit" size="small" @click="exportInfo">导出信息      
           </el-button>            
         <div style="float:right">
@@ -71,7 +71,7 @@
             <template slot-scope="scope">
               <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.idcard)">查看
               </el-button>
-              <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.idcard)">编辑
+              <el-button  v-if="manager"  type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.idcard)">编辑
               </el-button>
               <el-button v-if="manager" type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.idcard)">删除
               </el-button>

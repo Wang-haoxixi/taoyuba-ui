@@ -3,8 +3,8 @@
     <basic-container>
       <page-header title="渔船船员"></page-header>
       <operation-container>
-        <template slot="left">
-          <iep-button @click="handleAdd($route.params.shipId)" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+        <template slot="left">    
+          <iep-button v-if="manager" @click="handleAdd($route.params.shipId)" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
         <!-- <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -27,7 +27,7 @@
               is-mutiple-selection>
         <el-table-column prop="operation" label="操作" width="140">
           <template slot-scope="scope">
-            <operation-wrapper>
+            <operation-wrapper>                       
               <!-- <iep-button size="mini" plain @click="handleEdit(scope.row.idcard)">编辑</iep-button> -->
               <!-- <iep-button size="mini" plain @click="handleDelete(scope.row.id)">删除</iep-button> -->
               <iep-button size="mini" @click="handleView(scope.row.employeeIdcard)">查看</iep-button>
@@ -51,6 +51,7 @@
 import { getList } from '@/api/tmlms/newContract'
 import mixins from '@/mixins/mixins'
 import { crewColumnsMap } from '../options'
+import { getUserInfo } from '@/api/login'
 export default {
   mixins: [mixins],
   data () {
@@ -58,10 +59,13 @@ export default {
       crewColumnsMap,
       searchData: 'contactName',
       message: '此渔船暂无相关网签劳务合同信息',
+      manager:false,
+      userData:{},
     }
   },
   created () {
     this.loadPage()
+    this.isManager()
   },
   methods: {
     handleSelectionChange (val) {     
@@ -96,6 +100,14 @@ export default {
     },
     backPage () {
       this.$router.push({path: '/hrms_spa/shipCrew_list'})
+    },
+   async isManager () {
+      this.userData = await getUserInfo().then(res => {
+        return res.data.data
+      })
+      if(this.userData.roles.indexOf(111) !== -1 || this.userData.roles.indexOf(1) !== -1) {
+        this.manager = true
+      }
     },
   },
 }

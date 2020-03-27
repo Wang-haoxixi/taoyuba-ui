@@ -4,7 +4,7 @@
       <page-header :title="`${$route.params.shipName}渔船保单`"></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button @click="handleAdd($route.params.shipName)" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+          <iep-button v-if="manager" @click="handleAdd($route.params.shipName)" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
         <!-- <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -27,8 +27,8 @@
         <el-table-column prop="operation" label="操作" width="140">
           <template slot-scope="scope">
             <operation-wrapper>
-              <iep-button size="mini" plain @click="handleEdit(scope.row.id)">编辑</iep-button>
-              <iep-button size="mini" plain @click="handleDelete(scope.row.id)">删除</iep-button>
+              <iep-button v-if="manager" size="mini" plain @click="handleEdit(scope.row.id)">编辑</iep-button>    
+              <iep-button v-if="manager" size="mini" plain @click="handleDelete(scope.row.id)">删除</iep-button>
             </operation-wrapper>
           </template>
         </el-table-column>
@@ -40,6 +40,7 @@
 import { getShipinsureList, deleteShipinsure } from '@/api/ships/shipnewinsure/index'
 import mixins from '@/mixins/mixins'
 import { insureColumnsMap } from '../shipoptions'   
+import { getUserInfo } from '@/api/login'
 export default {
   mixins: [mixins],
   data () {
@@ -56,10 +57,13 @@ export default {
           value: 2,
         },
       ],
+      manager:false,
+      userData:{},
     }
   },
   created () {
     this.loadPage()
+    this.isManager()
   },
   methods: {
     handleSelectionChange (val) {     
@@ -76,7 +80,7 @@ export default {
     },
     handleView () {
     },
-    async loadPage (param = this.searchForm) {
+    async loadPage (param = this.searchForm) {      
       param.shipName = this.$route.params.shipName
       let data = await this.loadTable(param, getShipinsureList)
       data.records.forEach(v => {
@@ -90,6 +94,14 @@ export default {
     },
     backPage () {
       this.$router.push({path: '/hrms_spa/shipCrew_list'})
+    },
+    async isManager () {
+      this.userData = await getUserInfo().then(res => {
+        return res.data.data
+      })
+      if(this.userData.roles.indexOf(111) !== -1 || this.userData.roles.indexOf(1) !== -1) {
+        this.manager = true
+      }
     },
   },
 }

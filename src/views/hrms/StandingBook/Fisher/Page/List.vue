@@ -40,7 +40,7 @@
         <el-table-column prop="operation" label="操作" width="140">
           <template slot-scope="scope">
             <operation-wrapper>
-              <iep-button size="mini" plain @click="handleEdit(scope.row.shipId)">编辑</iep-button>
+              <iep-button  v-if="manager" size="mini" plain @click="handleEdit(scope.row.shipId)">编辑</iep-button>
               <iep-button size="mini" @click="handleView(scope.row.shipId)">查看</iep-button>
             </operation-wrapper>
           </template>
@@ -67,6 +67,7 @@ import { getVillageShipList } from '@/api/ships'
 // import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
+import { getUserInfo } from '@/api/login'
 export default {
   // components: {
   //   advanceSearch,
@@ -111,10 +112,13 @@ export default {
           },
         ],
       },
+      manager:false,
+      userData:{},
     }
   },
   created () {
     this.getData()
+    this.isManager()
   },
   methods: {
     handleSelectionChange (val) {     
@@ -175,6 +179,14 @@ export default {
     getParamData () {
       this.params.current = 1
       this.getData()
+    },
+    async isManager () {
+      this.userData = await getUserInfo().then(res => {
+        return res.data.data
+      })
+      if(this.userData.roles.indexOf(111) !== -1 || this.userData.roles.indexOf(1) !== -1) {
+        this.manager = true
+      }
     },
   },
 }

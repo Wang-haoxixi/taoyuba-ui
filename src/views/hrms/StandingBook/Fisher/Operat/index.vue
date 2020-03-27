@@ -3,8 +3,8 @@
     <basic-container>
       <page-header title="渔船经营人"></page-header>
       <operation-container>
-        <template slot="left">
-          <iep-button @click="handleAdd($route.params.shipNo)" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+        <template slot="left">    
+          <iep-button v-if="manager" @click="handleAdd($route.params.shipNo)" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
         <template slot="right">
           <el-button @click="backPage">返回</el-button>
@@ -36,16 +36,20 @@
 import { getShipManagerList, deleteShipManager } from '@/api/ships/shipoperat/index'
 import mixins from '@/mixins/mixins'
 import { operatColumnsMap } from '../options'
+import { getUserInfo } from '@/api/login'
 export default {
   mixins: [mixins],
   data () {
     return {
       operatColumnsMap,
       searchData: 'contactName',
+      manager:false,
+      userData:{},
     }
   },
   created () {
     this.loadPage()
+    this.isManager()
   },
   methods: {
     handleSelectionChange (val) {     
@@ -70,6 +74,14 @@ export default {
     },
     backPage () {
       this.$router.push({path: '/hrms_spa/shipCrew_list'})
+    },
+     async isManager () {
+      this.userData = await getUserInfo().then(res => {
+        return res.data.data
+      })
+      if(this.userData.roles.indexOf(111) !== -1 || this.userData.roles.indexOf(1) !== -1) {
+        this.manager = true
+      }
     },
   },
 }
