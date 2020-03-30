@@ -3,8 +3,8 @@
     <basic-container>
       <page-header title="渔船船员"></page-header>
       <operation-container>
-        <template slot="left">
-          <iep-button @click="handleAdd($route.params.shipId)" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+        <template slot="left" v-if="$route.query.page">
+          <iep-button @click="getShipDetail($route.params.shipNo)" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
         <!-- <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -34,7 +34,7 @@
             </operation-wrapper>
           </template>
         </el-table-column>
-        <el-table-column prop="particular" label="详情" width="140">
+        <el-table-column prop="particular" label="详情" width="140"  v-if="!$route.query.page">
           <template slot-scope="scope">
             <operation-wrapper>
               <iep-button size="mini" type="primary" @click="handleProtocol(scope.row.contractId)">协议</iep-button>
@@ -51,6 +51,7 @@
 import { getList } from '@/api/tmlms/newContract'
 import mixins from '@/mixins/mixins'
 import { crewColumnsMap } from '../options'
+import { getShipByShipNo } from '@/api/ships'
 export default {
   mixins: [mixins],
   data () {
@@ -58,6 +59,7 @@ export default {
       crewColumnsMap,
       searchData: 'contactName',
       message: '此渔船暂无相关网签劳务合同信息',
+      getShipId:'',
     }
   },
   created () {
@@ -67,8 +69,14 @@ export default {
     handleSelectionChange (val) {     
       this.multipleSelection = val.map(m => m.id)
     },
+    getShipDetail (val){
+      getShipByShipNo(val).then(({data})=>{
+        this.handleAdd(data.data.shipId)
+      })
+    },
     handleAdd (val) {
-      this.$router.push({path: `/hrms_spa/shipCrew_Detial/${val}`, query:{ edit: val }}) 
+      this.$router.push({path: `/hrms_spa/shipCrew_Detial/${val}`}) 
+      // this.$router.push({path: `/hrms_spa/shipCrew_Detial/${val}`, query:{ add: val }}) 
     },
     // handleEdit (val) {
     //   this.$router.push({path: `/hrms_spa/shipCrew_Detial/${val}`,query:{ edit: val }})

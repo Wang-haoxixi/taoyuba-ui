@@ -155,9 +155,9 @@ const columnsMap = [
     // zipcode: [
     //   {required: true, validator: numberValidate, trigger: 'blur', length: 6, message: '请输入正确的邮政！'},
     // ],
-    // engineTotalPower: [
-    //   {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
-    // ],
+    engineTotalPower: [
+      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+    ],
     // mainEnginePower: [
     //   {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
     // ],
@@ -170,9 +170,9 @@ const columnsMap = [
     // grossTonnage: [
     //   {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 0, message: '请输入0~999的整数！'},
     // ],
-    // hullLength: [
-    //   {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
-    // ],
+    hullLength: [
+      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+    ],
     // mouldedBreadth: [
     //   {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
     // ],

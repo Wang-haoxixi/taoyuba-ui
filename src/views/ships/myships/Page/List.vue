@@ -26,6 +26,7 @@
             <operation-wrapper>
               <!-- <iep-button plain @click="handleEdit(scope.row.shipId)">编辑</iep-button> -->
               <iep-button @click="handleView(scope.row.shipId)">查看</iep-button>
+              <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">船员</iep-button>
               <!-- <iep-button type="warning" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button> -->
             </operation-wrapper>
           </template>
@@ -78,7 +79,15 @@ export default {
     async loadPage (param = this.searchForm) {              
       //  let userId = this.$store.getters.userInfo.userId
       let idcard = this.$store.getters.userInfo.idCard
-       this.loadTable({ shipownerIdcard: idcard, ...param }, getShipList)
+      this.loadTable({ shipownerIdcard: idcard, ...param }, getShipList)
+    },
+    handleCrew (id) {
+      this.$router.push({       
+        path: `/hrms_spa/ship_crew/${id}`,
+        query: { 
+          page: 1,
+        },
+      })
     },
   },
 }

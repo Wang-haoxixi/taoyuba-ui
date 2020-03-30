@@ -17,18 +17,19 @@
                 <div v-else>{{ form.idcard }}</div>
               </el-form-item> -->
               <el-form-item label="身份证号:" prop="idcard">
-                <el-select v-if="!$route.query.see" v-model="form.idcard"
-                           placeholder="请选择"
-                           filterable
-                           remote
-                           maxlength="20"
-                           :loading="loading"
-                           allow-create
-                           clearable
-                           @change="idcardChange"
-                           :remote-method="getidcardList">
+                <el-input v-model="form.idcard" placeholder="" v-if="!$route.query.see"></el-input>
+                <!-- <el-select v-if="!$route.query.see" v-model="form.idcard"
+                placeholder="请选择"
+                filterable
+                remote
+                maxlength="20"
+                :loading="loading"
+                allow-create
+                clearable
+                @change="idcardChange"
+                :remote-method="getidcardList">
                   <el-option v-for="item in idcards" :key="item.id" :label="item.idcard + '(手机号：' + item.phone + ')'" :value="item"></el-option>
-                </el-select>
+                </el-select> -->
                 <div v-else>{{ form.idcard }}</div>
               </el-form-item>
             </el-col>
@@ -258,9 +259,18 @@ export default {
     // 提交表单
     save () {
       this.$refs['form'].validate((valid) => {
-        this.form.shipId = this.$route.query.edit
+
+        // this.form.shipId = this.$route.query.edit
+        this.form.shipId=this.$route.params.shipId
+        console.log(this.$route.params.shipId)
         if (valid) {
-          if (this.$route.query.edit){
+          // if (this.$route.query.edit){
+          //   addShipCrew (this.form).then(() => {
+          //     this.$message.success('新增成功!')
+          //     this.$router.go(-1)
+          //   })
+          // }
+          if(this.$route.params.shipId){
             addShipCrew (this.form).then(() => {
               this.$message.success('新增成功!')
               this.$router.go(-1)
@@ -273,9 +283,9 @@ export default {
     },
     idcardChange (card) {
       if (typeof card === 'object') {
-        this.refreshCard(card)
+        //this.refreshCard(card)
       } else {
-        this.refreshCard({idcard: card})
+        //this.refreshCard({idcard: card})
       }
       this.idcards = []
     },

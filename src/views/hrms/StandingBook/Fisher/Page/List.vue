@@ -163,7 +163,10 @@ export default {
     },
     handleCrew (id) {
       this.$router.push({       
-        path: `/hrms_spa/ship_crew/${id}`,
+        path: `/hrms_spa/ship_crew/${id}`, 
+        query: { 
+          page: 0,
+        },
       })
     },
     handleOperat (id) {
