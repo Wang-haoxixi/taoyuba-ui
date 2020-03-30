@@ -27,7 +27,7 @@
               is-mutiple-selection>
         <el-table-column prop="operation" label="操作" width="140">
           <template slot-scope="scope">
-            <operation-wrapper>
+            <operation-wrapper>                       
               <!-- <iep-button size="mini" plain @click="handleEdit(scope.row.idcard)">编辑</iep-button> -->
               <!-- <iep-button size="mini" plain @click="handleDelete(scope.row.id)">删除</iep-button> -->
               <iep-button size="mini" @click="handleView(scope.row.employeeIdcard)">查看</iep-button>
@@ -52,6 +52,7 @@ import { getList } from '@/api/tmlms/newContract'
 import mixins from '@/mixins/mixins'
 import { crewColumnsMap } from '../options'
 import { getShipByShipNo } from '@/api/ships'
+import { getUserInfo } from '@/api/login'
 export default {
   mixins: [mixins],
   data () {
@@ -60,10 +61,13 @@ export default {
       searchData: 'contactName',
       message: '此渔船暂无相关网签劳务合同信息',
       getShipId:'',
+      manager:false,
+      userData:{},
     }
   },
   created () {
     this.loadPage()
+    this.isManager()
   },
   methods: {
     handleSelectionChange (val) {     
@@ -104,6 +108,14 @@ export default {
     },
     backPage () {
       this.$router.push({path: '/hrms_spa/shipCrew_list'})
+    },
+   async isManager () {
+      this.userData = await getUserInfo().then(res => {
+        return res.data.data
+      })
+      if(this.userData.roles.indexOf(111) !== -1 || this.userData.roles.indexOf(1) !== -1) {
+        this.manager = true
+      }
     },
   },
 }
