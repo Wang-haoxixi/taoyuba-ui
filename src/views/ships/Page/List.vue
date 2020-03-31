@@ -27,12 +27,12 @@
               @current-change="handleCurrentChange"
               @selection-change="handleSelectionChange"
               is-mutiple-selection>
-        <el-table-column prop="operation" label="操作" width="220">
-          <template slot-scope="scope">
-            <operation-wrapper>   
+        <el-table-column prop="operation" label="操作" width="220">           
+          <template slot-scope="scope">                                                                                 
+            <operation-wrapper>                                             
               <iep-button plain @click="handleShow(scope.row.shipId)" v-if="manager">职务船员配置</iep-button>
               <iep-button plain @click="handleEdit(scope.row.shipId)" v-if="manager">编辑</iep-button>
-              <iep-button @click="handleView(scope.row.shipId)">查看</iep-button>     
+              <iep-button @click="handleView(scope.row.shipId)">查看</iep-button>              
               <iep-button type="warning" @click="handleDelete(scope.row)" v-if="manager"><i class="el-icon-delete"></i></iep-button>
             </operation-wrapper>
           </template>

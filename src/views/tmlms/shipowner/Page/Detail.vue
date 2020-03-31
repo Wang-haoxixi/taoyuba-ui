@@ -29,12 +29,14 @@
                 <div v-else>{{ shipowner.phone }}</div>
               </el-form-item>
             </el-col>
+          </el-row>
             <!-- <el-col :span="16">                                       
               <el-form-item label="所属渔村区:" prop="villageId">                                                                                                 
                 <el-cascader v-if="!$route.query.see" :options="options" @active-item-change="handleItemChange" :props="props" v-model="shipowner.villageId" ></el-cascader>
                 <div v-else>{{ shipowner.villageId }}</div>
               </el-form-item>
             </el-col> -->
+            <el-row>
             <el-col :span="12">
               <el-form-item label="身份证头像：" prop="idcardPhoto">
                 <img v-if="shipowner.idcardPhoto" :src="shipowner.idcardPhoto">
@@ -47,6 +49,8 @@
                 <i v-else class="el-icon-picture-outline"></i>
               </el-form-item>
             </el-col>
+            </el-row>
+            <el-row>
               <el-col :span="12">     
                     <el-form-item  label="渔船所有权证书：" prop="licensesOwnerPhoto">    
                       <el-upload
@@ -100,11 +104,11 @@
                     </el-form-item>
                 </el-col>
             <el-col>
-                <iep-form-item prop="workExperience" label-name="资质证书">     
-                  <inline-form-table :table-data="shipowner.shiplist" :columns="certificateColumns" requestName="certificate" type="employee_profile" @add="setData"></inline-form-table>
+                <iep-form-item prop="workExperience" label-name="资质证书"> 
+                  <inline-form-table :table-data="shipowner.shiplist" :columns="certificateColumns" requestName="certificate" type="employee_profile" @add="setData" @changeval="setData"></inline-form-table>
                 </iep-form-item>
-            </el-col>
-          </el-row>
+            </el-col>         
+            </el-row>
         </el-form>
         <div style="text-align:center">
           <el-button @click="save" v-if="!$route.query.see">提交</el-button>
@@ -289,7 +293,7 @@ export default {
                 data.userId = this.$route.query.userId
               }
               saveShipowner(data,type).then(res=>{
-                  this.$message({
+                  this.$message({                   
                     message: res.data.msg,
                     type: 'success',
                   })
@@ -334,6 +338,7 @@ export default {
     // 获取子组件数据
     setData (val) {
       this.shipowner.shiplist = val
+      console.log(val)    
     },
     // 遍历数组
     getarr (node) {
