@@ -26,22 +26,28 @@ const columnsMap = [
   
   const crewColumnsMap = [
     {
-      prop: 'employeeName',
+      prop: 'realName',
       label: '姓名',
     },
     {
-      prop: 'employeeIdcard',
+      prop: 'idcard',
       label: '身份证号码',
     },
     {
-      prop: 'employeePhone',
+      prop: 'phone',
       label: '联系电话',
     },
     {
-      prop: 'employeePosition',
-      label: '职位',
+      prop: 'positionId',
+      label: '现任职位',     
       dictName: 'tyb_resume_position',
       type: 'dictGroup',
+    },
+    {
+      prop: 'workStatus',
+      label: '用工状态',     
+      // dictName: 'tyb_resume_position',
+      // type: 'dictGroup',
     },
   ]
 

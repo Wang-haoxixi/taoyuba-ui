@@ -184,11 +184,11 @@
   </div>
 </template>
 <script>
-import { addShipCrew, detailShipCrew } from '@/api/ships/shipcrew/index'
-import { getIdcardCheck } from '@/api/tmlms/boatMan/index'
+// import { addShipCrew, detailShipCrew } from '@/api/ships/shipcrew/index'
+import { detailShipCrew , getCrewById } from '@/api/ships/shipcrew/index'
 import debounce from 'lodash/debounce'
 import { remote } from '@/api/admin/dict'
-import { detailCrew } from '@/api/tmlms/boatMan/index'
+import { saveCrew, detailCrew, getIdcardCheck } from '@/api/tmlms/boatMan/index'
 import { getWholeInfo } from '@/api/post/admin'
 export default {
   data () {
@@ -262,7 +262,7 @@ export default {
 
         // this.form.shipId = this.$route.query.edit
         this.form.shipId=this.$route.params.shipId
-        console.log(this.$route.params.shipId)
+        console.log(this.form)
         if (valid) {
           // if (this.$route.query.edit){
           //   addShipCrew (this.form).then(() => {
@@ -270,15 +270,27 @@ export default {
           //     this.$router.go(-1)
           //   })
           // }
+          let data = this.form
+          let type = 3
           if(this.$route.params.shipId){
-            addShipCrew (this.form).then(() => {
+            saveCrew (data,type).then(()=>{
               this.$message.success('新增成功!')
               this.$router.go(-1)
             })
+            // addShipCrew (this.form).then(() => {
+            //   this.$message.success('新增成功!')
+            //   this.$router.go(-1)
+            // })
           }
         } else {
           return false
         }
+      })
+    },
+    getCrewDetail () {
+      getCrewById(this.$route.query.see).then( ({ data }) =>{
+        this.form=data
+        this.getDict('tyb_resume_position', this.form.positionId).then(res => { this.form.positionId = res })
       })
     },
     idcardChange (card) {
@@ -361,7 +373,8 @@ export default {
   },
   created () {
     if(this.$route.query.see){    
-      this.getcrewIdcard()
+      // this.getcrewIdcard()
+      this.getCrewDetail()
     }
   },
 }

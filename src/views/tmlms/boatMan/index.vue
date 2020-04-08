@@ -35,12 +35,23 @@
             :label="item.text"
             :width="item.css"
           >
+          <template slot-scope="scope">
+            <template v-if="item.type==='dictGroup'">
+            <div>{{dictJS(item, scope)}}</div>
+            </template>
+            <template v-else-if="item.type==='province'">
+            <div>{{provincesName(item,scope)}}</div>
+            </template>
+            <template v-else>
+            <iep-table-detail :value="scope.row[item.value]"></iep-table-detail>
+          </template>
+          </template>
           </el-table-column>
-          <!-- <el-table-column
+          <el-table-column
             prop="status"  
             label="审核操作"
             width="100"
-            v-if="manager"
+            v-if="manager && showSwith"
           >
           <template slot-scope="scope">
             <div>
@@ -54,7 +65,7 @@
               </el-switch>
             </div>
           </template>
-          </el-table-column> -->
+          </el-table-column>
           <!-- <el-table-column
             prop="status"  
             label="审核状态"
@@ -83,8 +94,9 @@
 <script>                                                                                                                                                      
 import { getCrew,deleteCrew,statusCrew,exportExcel } from '@/api/tmlms/boatMan'                   
 import { getUserInfo } from '@/api/login'
-import { getArea,getPosition} from '@/api/post/admin'
-
+import { getArea } from '@/api/post/admin'
+import keyBy from 'lodash/keyBy'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -129,7 +141,7 @@ export default {
           {
             text: '年龄',
             value: 'birthday',
-            css: '80',
+            css: '60',
           },
           {
             text: '联系电话',
@@ -139,24 +151,30 @@ export default {
           {
             text: '用工状态',
             value: 'workStatus',
-            css: '140',
+            css: '100',
           },
           {
             text: '当前职位',
             value: 'positionId',
-            css: '140',
+            dictName: 'tyb_resume_position',
+            type: 'dictGroup',
+            css: '100',
           },
           {
-            text: '证书',
-            value: 'remark',
+            text: '证书职位',
+            value: 'certTitle',
+            dictName: 'tyb_crew_cert_title',
+            type: 'dictGroup',
           },
           {
             text: '证书发放日期',
-            value: 'remark',
+            value: 'certDateIssue',
+            css: '120',
           },
           {
             text: '船员户籍地',
             value: 'provinceId',
+            type:'province',
           },
         ],
       },
@@ -185,10 +203,27 @@ export default {
         },
       ],
       manager: false,
+      showSwith:false,
       userData: {roles: []},
     }
   },
   methods: {
+    //省
+    provincesName (item, scope) {
+      if(scope.row[item.value]){
+      return keyBy(this.provinces, 'value')[scope.row[item.value]].label
+      }else{
+        return '暂无'
+      }
+    },
+    //字典
+    dictJS (item, scope) {
+      if(scope.row[item.value]){
+      return keyBy(this.dictGroup[item.dictName], 'value')[scope.row[item.value]].label
+      }else{
+        return '暂无'
+      }
+    },
     // 分页
     currentChange (val) {                      
       this.params.current = val
@@ -219,27 +254,15 @@ export default {
     // 获取列表数据
     getData () {
       getCrew(this.params).then(res=>{
+        // console.log('测试')
+        // console.log(res.data.data.records)
         this.shipownerList = res.data.data.records
         // this.shipownerList.map(m => { 
         //   return m.remark.substring(0, 20)
         // })
-        getPosition('tyb_resume_position').then(({ data }) =>{
-            for( let res of data.data){
-              this.shipownerList.map( item =>{
-                if(res.value==item.positionId){
-                  item.positionId=res.label
-                }
-              })
-            }
-        })
-        this.provinces.map(res=>{
-          this.shipownerList.map( item =>{
-            if(item.provinceId==res.value){
-              item.provinceId=res.label
-            }
-          })
-        })
         this.shipownerList .map(item => {
+          item.certTitle = item.certList[0].certTitle
+          item.certDateIssue = item.certList[0].certDateIssue.split(' ')[0]
           if(item.remark.length > 19) {
             item.remark = item.remark.substring(0, 20) + '....'
           }
@@ -325,6 +348,13 @@ export default {
         this.manager = true
       }
     },
+    isAdminPath () {
+       if(this.$route.path.indexOf('admin') == 1){
+        this.showSwith=true
+      }else{
+        this.showSwith=false
+      } 
+    },
     exportInfo () {                               
       exportExcel (this.exportParams).catch(err => {
         this.$message({
@@ -335,11 +365,15 @@ export default {
     },
   },
   computed: {
+    ...mapGetters([
+      'dictGroup',
+    ]),
   },
   created () {
     this.getData()
     this.isManager()
     this.getProvince()
+    this.isAdminPath()
   },
   filters: {
     typeFilter (type) {

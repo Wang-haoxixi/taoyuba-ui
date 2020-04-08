@@ -171,7 +171,11 @@ export default {
   },
   methods: {
     dictJS (item, scope) {
+      if(scope.row[item.prop]){
       return keyBy(this.dictGroup[item.dictName], 'value')[scope.row[item.prop]].label
+      }else{
+        return '暂无'
+      }
     },
     handleSizeChange (val) {
       this.$emit('size-change', val)

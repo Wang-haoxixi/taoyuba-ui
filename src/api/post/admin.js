@@ -94,4 +94,12 @@ export function getShipDetail (id) {
     method: 'get',
   })
 }
+export function addUpWork (obj,idcard,status) {
+  return request({
+    url: `${prefixUrl}/upWork?idcard=${idcard}&workStatus=${status}`,
+    method: 'post',
+    data: obj,
+  })
+}
+
 
