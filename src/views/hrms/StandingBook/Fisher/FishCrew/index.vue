@@ -164,7 +164,7 @@ export default {
       param.shipId = await getShipByShipNo(this.$route.params.shipNo).then(({data})=>{
         return data.data.shipId
       })
-      param.status = 1
+      // param.status = 1
       // let data = await this.loadTable(param, getList)
       let data = await this.loadTable(param,  getShipCrewList)
       console.log( data )
