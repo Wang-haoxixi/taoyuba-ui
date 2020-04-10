@@ -140,10 +140,10 @@
                     </iep-form-item>
                 </el-col> -->
                   <el-col :span="8">
-                      <el-form-item label="职位：" prop="positionId">
+                      <el-form-item label="现任职位：" prop="positionId">
                       <el-select
                           v-model="form.positionId"
-                          placeholder="职位">
+                          placeholder="现任职位">
                           <el-option
                           v-for="item in position"
                           :key="item.id"

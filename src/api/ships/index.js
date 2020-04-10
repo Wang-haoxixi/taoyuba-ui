@@ -86,6 +86,13 @@ export function getVillageShipList (params) {
       params: params,
   })
 }
+export function getShipCrew (params) {
+  return request({
+      url: `${prefixUrl}/page`,
+      method: 'get',
+      params: params,
+  })
+}
 export function exportExcel (params) {                                    
   return exportDownload({
     url: 'tybship/tybshipExcelExport/downShipInfo',

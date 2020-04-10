@@ -8,14 +8,19 @@ export function getShipCrewList (params) {
       params: params,
     })
 } 
-export function addShipCrew (obj) {
+export function addCrew (obj) {
     return request({
         url: `${prefixUrl}/save`,
         method: 'post',
         data: obj,
     })
 } 
-
+export function getCrewById ( idcard ) {
+    return request({
+        url: `${prefixUrl}/getByidcard/${idcard}`,
+        method: 'get',
+    })
+} 
 export function detailShipCrew (id) {
     return request({
         url: `${prefixUrl}/${id}`,
