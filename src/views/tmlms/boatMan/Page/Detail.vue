@@ -312,7 +312,7 @@
                           </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row>
+                    <el-row>    
                         <el-col :span="8">
                           <el-form-item label="证书职务：" prop="certTitle">
                             <iep-dict-select v-model="item.certTitle" dict-name="tyb_crew_cert_title"></iep-dict-select>

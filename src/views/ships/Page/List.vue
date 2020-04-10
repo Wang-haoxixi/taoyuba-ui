@@ -28,8 +28,8 @@
               @selection-change="handleSelectionChange"
               is-mutiple-selection>
         <el-table-column prop="operation" label="操作" width="400">d
-          <template slot-scope="scope">
-            <operation-wrapper>   
+          <template slot-scope="scope">                 
+            <operation-wrapper>                                   
               <iep-button size="mini" type="primary" @click="handleShow(scope.row.shipId)" v-if="manager">职务船员配置</iep-button>
               <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)" v-if="manager">船员管理</iep-button>
               <iep-button plain @click="handleEdit(scope.row.shipId)" v-if="manager">编辑</iep-button>
@@ -40,25 +40,21 @@
         </el-table-column>
       </iep-table>
     </basic-container>
-    <el-dialog title="职务船员配置情况" :visible.sync="dialogCertVisible" width="70%" append-to-body>      
-      <div  class="certDiv">
-          <p>最低配员标准:</p>
-          <p>实际配员:</p>
-          <p class="lackCert">缺少配员:</p>
-      </div>
-    </el-dialog>
+      <cert-standard  :dialog-certvisible="dialogCertVisible"  :crewcert-standard="crewcertStandard" :real-cert="realCert" :lack-cert="lackCert" @close="close"></cert-standard>
   </div>
 </template>
 <script>    
 import { getShipList, deleteShip, getMyShipList,exportExcel } from '@/api/ships'
+import { checkShipCert } from '@/api/post/cert'         
+import { getPosition} from '@/api/post/admin'
 // import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
 import { getUserInfo } from '@/api/login'
+import CertStandard from '../component'
+import groupBy from 'lodash/groupBy'
 export default {
-  // components: {
-  //   advanceSearch,
-  // },
+  components: { CertStandard },
   mixins: [mixins],
   data () {
     return {
@@ -80,6 +76,11 @@ export default {
         shipownerIdcard: '',
       },
       dialogCertVisible:false,
+      lackMap:{},
+      crewcertStandard:'',
+      realCert:'',
+      lackCert:'',
+      certTilte:[],
     }
   },
   created () {
@@ -129,13 +130,72 @@ export default {
           })
       })    
     },
-    handleShow () {     
-          this.dialogCertVisible = true
+    getnewStr (list,certTilte) {  
+      let arr = []        
+      if(list.length >0){   
+           list.forEach(item => {                       
+            //`${str}${item.certLevel === '0' ? '' :  item.certLevel + '级'}${getdictValue(certTilte,item.certTitle)}*${item.number},`
+                      let dictValue =   this.getdictValue(certTilte,item.certTitle)       
+                     // console.log(dictValue)      
+                      let str = (item.certLevel === '0' ? '' :  `${item.certLevel}级`) + dictValue  + `*${item.number}`   
+                       arr.push(str)  
+            })
+            //console.log(arr)    
+               return  arr.join(',')          
+      }
     },
+   async handleShow (shipId) {        
+     const lackMap  =  this.lackMap  =  await  checkShipCert (shipId).then(res => {
+             return res.data.data
+          }).catch(err => {
+              this.$message({
+              type: 'warning',
+              message: err,
+              })
+          })    
+          const  certTilte = this.certTilte = await  getPosition ('tyb_crew_cert_title').then(res => {
+                   return res.data.data       
+            })
+          let tybCrewCertStandardList = lackMap['tybCrewCertStandardList']
+          let certList = lackMap['certList']
+          let  lackList = lackMap['lackList']   
+          //拼接    
+         // console.log(certList)   
+          this.crewcertStandard =  this.getnewStr(tybCrewCertStandardList,certTilte)    
+          this.realCert = this.getCertMap(certList,certTilte) ||  '无证书'       
+          this.lackCert = this.getnewStr(lackList,certTilte)
+        this.dialogCertVisible = true   
+    },
+getdictValue (dictList,key) {   
+        for(var i in dictList){
+              if(dictList[i].value === key ){
+                    return dictList[i].label
+              }
+        } 
+    },
+getCertMap (certList,certTilte) {       
+    let arr = []
+      for(var key in certList){
+              let dictValue =   this.getdictValue(certTilte,key)  
+              let  certgroupList  =  certList[key]    
+              //证书分级    
+            let  certMap  = groupBy(certgroupList,'certLevel')
+            for(var level in certMap){
+                    let  levelList = certMap[level]
+                    let str  = (level === '0' ? '' :  `${level}级`) + dictValue  + `*${levelList.length}`  
+                    //console.log(str)
+                     arr.push(str)
+            }
+      }
+      return  arr.join(',')   
+  },
     handleCrew (id) {
       this.$router.push({       
         path: `/hrms_spa/ship_crew/${id}`,
       })
+    },
+    close (flag) {        
+        this.dialogCertVisible = flag
     },
   },
   watch: {
@@ -156,11 +216,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>  
-.certDiv{   
-      font-weight: bold;
-      lackCert{
-          color: red;
-      }
-}
 
 </style>

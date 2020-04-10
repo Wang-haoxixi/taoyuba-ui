@@ -81,4 +81,12 @@ export function getMyCretList (id) {
   })
 }
 
+export  function  checkShipCert (shipId) {        
+  return request({
+    url: `${prefixUrl}/certStandard/` +shipId,
+    method: 'get',
+  })
+}
+
+
 

@@ -49,7 +49,7 @@
 import { detailVillage, editVillage } from '@/api/tmlms/bvillage'
 import { getUserInfo } from '@/api/login'
 import information from '@/mixins/information'
-export default {
+export default {                  
   mixins: [information],
   data () {
       var checkPhone = (rule, value, callback) => {
