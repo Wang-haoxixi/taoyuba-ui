@@ -163,8 +163,8 @@ export default {
          // console.log(certList)   
           this.crewcertStandard =  this.getnewStr(tybCrewCertStandardList,certTilte)    
           this.realCert = this.getCertMap(certList,certTilte) ||  '无证书'       
-          this.lackCert = this.getnewStr(lackList,certTilte)
-        this.dialogCertVisible = true   
+          this.lackCert = this.getnewStr(lackList,certTilte) || '无'
+          this.dialogCertVisible = true   
     },
 getdictValue (dictList,key) {   
         for(var i in dictList){
