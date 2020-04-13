@@ -25,7 +25,7 @@
         </div>
       </div>
         <el-table
-          :data="ownerList"
+          :data="shipownerList"
           stripe
           style="width: 100%">
           <el-table-column
@@ -101,7 +101,6 @@ export default {
   data () {
     return {
       shipownerList: [],
-      ownerList:[],
       provinces:[],
       total: 10,
       // 查询数据
@@ -151,7 +150,7 @@ export default {
           {
             text: '用工状态',
             value: 'workStatus',
-            css: '100',
+            css: '140',
           },
           {
             text: '当前职位',
@@ -184,8 +183,20 @@ export default {
           value: 0,
         },
         {
-          label: '合同期中',
+          label: '上船，已签合同',
           value: 1,
+        },
+        {
+          label: '离船，未解除合同 ',
+          value: 2,
+        },
+        {
+          label: '上船，未签合同',
+          value: 3,
+        },
+        {
+          label: '离船，未签合同',
+          value: 4,
         },
       ],
       status: [
@@ -254,15 +265,12 @@ export default {
     // 获取列表数据
     getData () {
       getCrew(this.params).then(res=>{
-        // console.log('测试')
-        // console.log(res.data.data.records)
+        
         this.shipownerList = res.data.data.records
         // this.shipownerList.map(m => { 
         //   return m.remark.substring(0, 20)
         // })
-        this.shipownerList .map(item => {
-          item.certTitle = item.certList[0].certTitle
-          item.certDateIssue = item.certList[0].certDateIssue.split(' ')[0]
+        this.shipownerList.map(item => {
           if(item.remark.length > 19) {
             item.remark = item.remark.substring(0, 20) + '....'
           }
@@ -276,14 +284,22 @@ export default {
           }else{      
             item.swith = false
           }
-          if(item.workStatus==0){
-            item.workStatus='未用工'
-          }else if(item.workStatus==1){
-            item.workStatus='合同期中'
-          }
+          this.workStatus.map( data  =>{
+            if(data.value==item.workStatus){
+              item.workStatus=data.label
+            }
+          })
           if(item.salary==0){
             item.salary='面议'
           }
+          item.certTitle = ''
+          item.certDateIssue =''
+          if(item.certList){
+            item.certTitle = item.certList[0].certTitle
+            item.certDateIssue=item.certList[0].certDateIssue.split(' ')[0]
+              
+          }
+          
         })
         this.shipownerList.forEach(v => {
           if (v.swith === false && v.userId === 0) {
@@ -293,7 +309,8 @@ export default {
           }
         })
         this.total = res.data.data.total
-        this.ownerList=this.shipownerList
+        console.log('测试')
+        console.log(this.shipownerList)
       })
     },
     //搜索
