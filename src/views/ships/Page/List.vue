@@ -44,7 +44,7 @@
   </div>
 </template>
 <script>    
-import { getShipList, deleteShip, getMyShipList,exportExcel } from '@/api/ships'
+import { getShipList, deleteShip, getMyShipList,exportExcel,getShipDetail} from '@/api/ships'
 import { checkShipCert } from '@/api/post/cert'         
 import { getPosition} from '@/api/post/admin'
 // import advanceSearch from './AdvanceSearch.vue'
@@ -144,7 +144,16 @@ export default {
                return  arr.join(',')          
       }
     },
-   async handleShow (shipId) {        
+   async handleShow (shipId) {           
+     let pass = true    
+       await  getShipDetail(shipId).then(res => {
+              let  ship  = res.data.data
+              if(ship.engineTotalPower === 0.00 || ship.hullLength === 0.00){   
+                        this.$message.error('请完善渔船的船长或总功率信息!')    
+                        pass = false    
+              }
+        })    
+     if(pass){                
      const lackMap  =  this.lackMap  =  await  checkShipCert (shipId).then(res => {
              return res.data.data
           }).catch(err => {
@@ -164,7 +173,8 @@ export default {
           this.crewcertStandard =  this.getnewStr(tybCrewCertStandardList,certTilte)    
           this.realCert = this.getCertMap(certList,certTilte) ||  '无证书'       
           this.lackCert = this.getnewStr(lackList,certTilte) || '无'
-          this.dialogCertVisible = true   
+          this.dialogCertVisible = true
+      }
     },
 getdictValue (dictList,key) {   
         for(var i in dictList){
@@ -189,12 +199,12 @@ getCertMap (certList,certTilte) {
       }
       return  arr.join(',')   
   },
-    handleCrew (id) {
+handleCrew (id) {
       this.$router.push({       
         path: `/hrms_spa/ship_crew/${id}`,
       })
     },
-    close (flag) {        
+close (flag) {            
         this.dialogCertVisible = flag
     },
   },
