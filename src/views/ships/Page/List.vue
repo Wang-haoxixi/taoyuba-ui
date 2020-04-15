@@ -30,7 +30,7 @@
         <el-table-column prop="operation" label="操作" width="400">d
           <template slot-scope="scope">                 
             <operation-wrapper>                                   
-              <iep-button size="mini" type="primary" @click="handleShow(scope.row.shipId)" v-if="manager">职务船员配置</iep-button>
+              <iep-button size="mini" type="primary" @click="handleShow(scope.row.shipId)" v-if="manager">船员配置</iep-button>
               <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)" v-if="manager">船员管理</iep-button>
               <iep-button plain @click="handleEdit(scope.row.shipId)" v-if="manager">编辑</iep-button>
               <iep-button @click="handleView(scope.row.shipId)">查看</iep-button>     

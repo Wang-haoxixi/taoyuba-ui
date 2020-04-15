@@ -166,12 +166,12 @@ export default {
             type: 'dictGroup',
           },
           {
-            text: '证书发放日期',
+            text: '证书日期',
             value: 'certDateIssue',
             css: '120',
           },
           {
-            text: '船员户籍地',
+            text: '户籍',
             value: 'provinceId',
             type:'province',
           },
@@ -366,7 +366,7 @@ export default {
       }
     },
     isAdminPath () {
-       if(this.$route.path.indexOf('admin') == 1){
+      if(this.$route.path.indexOf('admin') == 1){
         this.showSwith=true
       }else{
         this.showSwith=false

@@ -17,7 +17,7 @@
                 <div v-else>{{ form.idcard }}</div>
               </el-form-item> -->
               <el-form-item label="身份证号:" prop="idcard">
-                <el-input v-model="form.idcard" placeholder="" v-if="!$route.query.see"></el-input>
+                <el-input v-model="form.idcard" placeholder="" v-if="!$route.query.see" @blur="onBlur(form.idcard)"></el-input>
                 <!-- <el-select v-if="!$route.query.see" v-model="form.idcard"
                 placeholder="请选择"
                 filterable
@@ -192,7 +192,7 @@ import { saveCrew, detailCrew, getIdcardCheck } from '@/api/tmlms/boatMan/index'
 import { getWholeInfo } from '@/api/post/admin'
 export default {
   data () {
-      this.getidcardList = debounce(this.getidcardList, 800)
+      this.getidcardList = debounce(this.getidcardList, 3000)
       var checkPhone = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入联系电话'))
@@ -274,7 +274,7 @@ export default {
           let type = 3
           if(this.$route.params.shipId){
             saveCrew (data,type).then(()=>{
-              this.$message.success('新增成功!')
+              this.$message.success('船员添加成功!')
               this.$router.go(-1)
             })
             // addShipCrew (this.form).then(() => {
@@ -293,11 +293,43 @@ export default {
         this.getDict('tyb_resume_position', this.form.positionId).then(res => { this.form.positionId = res })
       })
     },
+    onBlur (val){
+      if(this.form.idcard){
+        getCrewById(this.form.idcard).then(res=>{
+          console.log('测试')
+          console.log(res.data)
+          if(res.data){
+            this.$message.success('船员已在船上!')
+            this.$router.go(-1)
+          }else{
+        getIdcardCheck(val).then(({data}) => {
+            if (data.data !== true) {
+              this.$router.push({name: 'detailBoatMan',query:{ edit: val , shipCrew : true,shipId:this.$route.params.shipId}})
+            } else {
+              this.form.idcard = val
+            }
+          })
+          }
+        })
+        // detailCrew(this.form.idcard).then(res=>{
+        //   // this.isExist=true
+        //   this.formSecond=res.data.data
+        //   console.log('打印表单')
+        //   console.log(res)
+        // })
+      }
+    },
     idcardChange (card) {
       if (typeof card === 'object') {
-        //this.refreshCard(card)
+        this.refreshCard(card)
       } else {
-        //this.refreshCard({idcard: card})
+        this.refreshCard({idcard: card})
+        detailCrew(this.form.idcard).then(res=>{
+          // this.isExist=true
+          this.formSecond=res.data.data
+          console.log('打印表单')
+          console.log(res)
+        })
       }
       this.idcards = []
     },
@@ -373,7 +405,7 @@ export default {
   },
   created () {
     if(this.$route.query.see){    
-      // this.getcrewIdcard()
+      this.getcrewIdcard()
       this.getCrewDetail()
     }
   },

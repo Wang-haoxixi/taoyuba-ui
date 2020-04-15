@@ -7,25 +7,25 @@ const columnsMap = [
       label: '渔船名',
     },
     {
-      prop: 'shipNo',
-      label: '渔船编号',
+      prop: 'realName',
+      label: '船员姓名',
     },
     {
-      prop: 'shipowner',
-      label: '持证人',
+      prop: 'idcard',
+      label: '船员身份证',
     },
     {
-      prop: 'shipownerIdcard',
-      label: '持证人身份证',
+      prop: 'phone',
+      label: '船员联系电话',
     },
     {
-      prop: 'engineTotalPower',
-      label: '总功率(kw)',
+      prop: 'leftTime',
+      label: '离船时间',
     },
-    {
-      prop: 'hullLength',
-      label: '船长(m)',
-    },
+    // {
+    //   prop: 'hullLength',
+    //   label: '船长(m)',
+    // },
     // {
     //   prop: 'dualPower',
     //   label: '双控功率(kw)',
@@ -244,8 +244,11 @@ const columnsMap = [
 
   const initSearchForm = () => {
     return {
-      contactName: '', // 联系人
-      positionName: '', // 岗位名称
+      shipName: '', 
+      realName: '', 
+      idcard:'',
+      startDate:'',
+      endDate:'',
     }
   }
   const initDtoSearchForm = () => {

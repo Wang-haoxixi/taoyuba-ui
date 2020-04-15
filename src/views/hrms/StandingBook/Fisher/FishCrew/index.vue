@@ -28,9 +28,9 @@
         <el-table-column prop="operation" label="操作" width="300">
           <template slot-scope="scope">
             <operation-wrapper>                       
-              <!-- <iep-button size="mini" plain @click="handleEdit(scope.row.idcard)">编辑</iep-button> -->
               <!-- <iep-button size="mini" plain @click="handleDelete(scope.row.id)">删除</iep-button> -->
               <iep-button size="mini" @click="handleView(scope.row.idcard)">查看</iep-button>
+              <iep-button size="mini" plain @click="handleEdit(scope.row.idcard)">编辑</iep-button>
               <iep-button v-if="$route.query.page" size="mini" type="primary" @click="handleCrew(scope.row.idcard,scope.row.workStatus)">离船</iep-button>
             </operation-wrapper>
           </template>
@@ -150,15 +150,18 @@ export default {
       this.$router.push({path: `/hrms_spa/shipCrew_Detial/${val}`}) 
       // this.$router.push({path: `/hrms_spa/shipCrew_Detial/${val}`, query:{ add: val }}) 
     },
-    // handleEdit (val) {
-    //   this.$router.push({path: `/hrms_spa/shipCrew_Detial/${val}`,query:{ edit: val }})
-    // },
+    handleEdit (val) {
+      this.$router.push({name: 'detailBoatMan',query:{ edit: val , shipCrew : true}})
+      // this.$router.push({path: `/hrms_spa/shipCrew_Detial/${val}`,query:{ edit: val }})
+    },
     // handleDelete (row) {
     //   this._handleGlobalDeleteById(row, delShipCrew)
     // },
     handleView (val) {
       // this.$router.push({path: `/hrms_spa/shipCrew_Detial/${val}`,query:{ see: val }})
-      this.$router.push({path: `/hrms_spa/shipCrew_Detial/${val}`, query:{ see : val}})
+      // this.$router.push({name: 'detailBoatMan',query:{ edit: val }})
+      this.$router.push({name: 'detailBoatMan', query:{ see : val , shipCrew : true}})
+      // this.$router.push({path: `/hrms_spa/shipCrew_Detial/${val}`, query:{ see : val}})
     },
     async loadPage (param = this.searchForm) {
       param.shipId = await getShipByShipNo(this.$route.params.shipNo).then(({data})=>{
@@ -172,6 +175,8 @@ export default {
         item.workStatus=keyBy(this.workStatus, 'value')[item.workStatus].label
       })
       this.pagedTable = data.records
+      console.log('打出来看看')
+      console.log(this.pagedTable)
     },
     handleProtocol (contractId) {
       let urlHeade = window.location.href.split('/')[0,2]        
@@ -205,7 +210,7 @@ export default {
         let status=this.form.workStatus
         addUpWork (this.form,idcard,status).then(()=>{
           console.log(this.form)
-            this.$message.success('创建船员离船成功!')
+            this.$message.success('船员已离船!')
             this.$router.go(0)
         })
       }
@@ -214,7 +219,8 @@ export default {
       // this.dialogCrewVisible = true
     },
     backPage () {
-      this.$router.push({path: '/hrms_spa/shipCrew_list'})
+      this.$router.go(-1)
+      // this.$router.push({path: '/hrms_spa/shipCrew_list'})
     },
   async isManager () {
       this.userData = await getUserInfo().then(res => {
@@ -225,13 +231,12 @@ export default {
       }
     },
     save () {
-      console.log('shishi')
       if(this.form){
         let idcard=this.form.idcard
         let status=this.form.workStatus
         addUpWork (this.form,idcard,status).then(()=>{
           console.log(this.form)
-            this.$message.success('创建船员离船成功!')
+            this.$message.success('船员已离船!')
             this.$router.go(-1)
         })
       }

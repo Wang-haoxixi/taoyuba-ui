@@ -20,16 +20,16 @@ const columnsMap = [
     },
     {
       prop: 'engineTotalPower',
-      label: '主机总功率(kw)',
+      label: '总功率(kw)',
     },
     {
       prop: 'hullLength',
       label: '船长(m)',
     },
-    {
-      prop: 'dualPower',
-      label: '双控功率(kw)',
-    },
+    // {
+    //   prop: 'dualPower',
+    //   label: '双控功率(kw)',
+    // },
   ]
 
   const initForm = () => {      

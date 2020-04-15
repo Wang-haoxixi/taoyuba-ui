@@ -3,7 +3,7 @@
     <basic-container>
         <h1 v-if="!$route.query.userId">{{ $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }}船员信息</h1>
         <h1 v-if="$route.query.userId">完善个人信息</h1>                
-              <el-form ref="form" :model="form" :rules="rules" label-width="150px" size="small" :disabled="type === 1">
+            <el-form ref="form" :model="form" :rules="$route.query.shipCrew ? shipCrewRules:rules" label-width="150px" size="small" :disabled="type === 1">
                 <el-row>
                 <el-col :span="12">
                     <el-form-item label="个人姓名：" prop="realName">
@@ -352,8 +352,13 @@
             </el-form>
         <div style="text-align:center">
           <el-button @click="save" v-if="!$route.query.see">提交</el-button>
-          <el-button v-if="manager" @click="$router.push({name:'boatMan'})">返回</el-button>
-          <el-button v-if="!manager" @click="$router.push({ path: '/'} )">返回</el-button>
+          <template v-if="$route.query.shipCrew">
+            <el-button @click="$router.go(-1)">返回</el-button>
+          </template>
+          <template v-else>
+            <el-button v-if="manager" @click="$router.push({name:'boatMan'})">返回</el-button>
+            <el-button v-if="!manager" @click="$router.push({ path: '/'} )">返回</el-button>
+          </template>
           <el-button v-if="manager && !$route.query.see" @click="collect">数据读取</el-button>
         </div>
     </basic-container>
@@ -493,6 +498,7 @@ export default {
         //     { required: true, message: '请填写特长', trigger: 'blur' },
         // ],
       },
+      shipCrewRules:{},
       options: [],
       applyTypes: [
         {id:1, name:'以旧换新'}, {id:2, name:'普通船员'}, {id:3, name:'职务船员'}, {id:4, name:'证书换发'}, 
@@ -513,6 +519,7 @@ export default {
       idx:'',
       loading: false,
       idcards: [],
+      isShipCrew:false,
     }
   },
   methods: {
@@ -536,26 +543,42 @@ export default {
             // }
             let type = 1
             if(this.$route.query.edit){
+              //编辑
               // let data = JSON.parse(JSON.stringify(form))
               let data = form
               if(this.$route.query.userId){
                 type = 2
                 data.userId = this.$route.query.userId
               }
+              if(this.$route.query.shipCrew){
+                type = 3
+                // data.userId = this.$route.query.userId
+              }
+              if(this.$route.query.shipId){
+                type = 3
+                data.shipId=this.$route.query.shipId
+                saveCrew (data,type).then(()=>{
+                  this.$message.success('船员添加成功!')
+                  this.$router.go(-2)
+                })
+              }else{
               editCrew(data,type).then(res=>{            
                   this.$message({
                     message: res.data.msg,
                     type: 'success',
                   })
                    if(this.$route.query.userId){
-                        this.$router.go(-1) 
+                      this.$router.go(-1) 
+                   }else if(this.$route.query.shipCrew){
+                      this.$router.go(-1)
                    }else{
-                        this.$router.push({name:'boatMan'})  
+                     this.$router.push({name:'boatMan'})  
                    }
               }).catch(err=>{
                 this.$message.error(err.message)
-              })
+              })}
             }else {
+              //新增
                 let data = JSON.parse(JSON.stringify(form))
                 if(this.$route.query.userId){
                   type = 2
@@ -584,7 +607,7 @@ export default {
                       if(this.$route.query.userId){
                           this.$router.go(-1) 
                       }else{
-                          this.$router.push({name:'boatMan'})  
+                        this.$router.push({name:'boatMan'})  
                       }
                   }).catch(err=>{
                     this.$message.error(err.message)
