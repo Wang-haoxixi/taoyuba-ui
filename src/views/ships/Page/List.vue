@@ -201,7 +201,7 @@ getCertMap (certList,certTilte) {
   },
 handleCrew (id) {
       this.$router.push({       
-        path: `/hrms_spa/ship_crew/${id}`,
+        path: `/hrms_spa/myship_crew/${id}`,
       })
     },
 close (flag) {            
