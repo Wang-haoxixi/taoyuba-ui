@@ -22,6 +22,12 @@ export function getContract (id) {
         method: 'get',
     })
 }
+export function getContractByidcard (idcard) {
+    return request({
+        url: `${prefixUrl}/shipcrew/${idcard}`,
+        method: 'get',
+    })
+}
 
 export function getDict (key) {
     return request({
