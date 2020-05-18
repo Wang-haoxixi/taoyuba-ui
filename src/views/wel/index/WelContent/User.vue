@@ -119,8 +119,8 @@
     </el-dialog>
   </div>
 </template>
-<script>
-import { getIndex } from '@/api/wel/index'
+<script>    
+// import { getIndex } from '@/api/wel/index'
 import { getUserInfo } from '@/api/login'
 import { timeFix, welcome } from '@/util/text'
 import { getObj } from '@/api/admin/role'
@@ -280,12 +280,12 @@ export default {
         //   this.villageStatus = data.data.data.status
         // })
       })
-      this.pageLoading = true
-      getIndex().then(({ data }) => {
-        this.form = this.$mergeByFirst(initIndexForm(), data.data)
-        this.pageLoading = false
-        this.$emit('on-finish')
-      })
+      this.pageLoading = false
+      // getIndex().then(({ data }) => {
+      //   this.form = this.$mergeByFirst(initIndexForm(), data.data)
+      //   this.pageLoading = false
+      //   this.$emit('on-finish')
+      // })
     },
   },
 }
