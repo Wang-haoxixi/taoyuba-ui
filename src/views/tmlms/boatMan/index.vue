@@ -105,14 +105,14 @@ export default {
       total: 10,
       // 查询数据
       params: {
-        current: 1,
+        current: 1,   
         size: 10,
-        idcard: '',
-        realName: '',
-        workStatus: '',
-        phone: '',
-        remark: '',
-        timeLists: '',
+        // idcard: '',
+        // realName: '',
+        // workStatus: '',
+        // phone: '',
+        // remark: '',
+        // timeLists: '',
       },
       exportParams: {                                       
         idcard: '',
@@ -263,17 +263,17 @@ export default {
       })
     },
     // 获取列表数据
-    getData () {
-      getCrew(this.params).then(res=>{
-        
+    getData () {         
+      getCrew(this.params).then(res=>{    
+
         this.shipownerList = res.data.data.records
         // this.shipownerList.map(m => { 
         //   return m.remark.substring(0, 20)
         // })
-        this.shipownerList.map(item => {
-          if(item.remark.length > 19) {
+        this.shipownerList.map(item => {                                                         
+          if(item.remark.length > 19) {                       
             item.remark = item.remark.substring(0, 20) + '....'
-          }
+          }         
           let now = new Date()
           let year = now.getFullYear()
           item.birthday = year - item.birthday.substring(0,4)
