@@ -210,8 +210,8 @@
                     </el-col>
                   </el-form-item>
                 </el-col>  
-                <el-col :span="12">
-                  <el-form-item label="有无航海经验：" prop="employeeIsExp">
+                <el-col :span="12">             
+                  <el-form-item label="有无海上经验：" prop="employeeIsExp">
                     <el-radio-group v-model="formData.employeeIsExp">
                       <el-radio :label="1">有，<iep-dict-select v-model="formData.employeeIsExpYes" dict-name="tyb_resume_seniority" style="width:150px!important"></iep-dict-select></el-radio>
                       <el-radio :label="0">无。</el-radio> 
