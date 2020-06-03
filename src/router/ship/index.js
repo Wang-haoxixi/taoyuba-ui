@@ -26,4 +26,17 @@ export default [
       },
     ],
   },
+  {
+    path: '/ship_port',
+    component: Layout,
+    redirect: '/ship_port/detail/:type/:id',
+    children: [
+      {
+        path: '/ship_port/detail/:type/:id',
+        name: '港口详情',
+        component: () => import('@/views/ships/port/Page/Detail.vue'),
+        meta: noKeepAlive,
+      },
+    ],
+  },
 ]

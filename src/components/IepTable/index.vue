@@ -24,6 +24,9 @@
           <template v-else-if="item.type==='dictGroup'">
             <div>{{dictJS(item, scope)}}</div>
           </template>
+          <template v-else-if="item.type==='areaCode'">
+            <div>{{getAreaCode(item, scope)}}</div>
+          </template>
           <template v-else-if="item.type==='tag'">
             <iep-tag-detail :value="scope.row[item.prop]"></iep-tag-detail>
           </template>
@@ -46,6 +49,7 @@ import { pageOption } from '@/const/pageConfig'
 import treeToArray from './eval'
 import keyBy from 'lodash/keyBy'
 import { mapGetters } from 'vuex'
+import { getInfo } from '@/api/post/address'
 export default {
   name: 'IepTable',
   inheritAttrs: false,
@@ -148,6 +152,11 @@ export default {
       default: '暂无数据',
     },
   },
+  data () {
+    return{
+      area:[],
+    }
+  },
   computed: {
     ...mapGetters([
       'dictGroup',
@@ -173,6 +182,22 @@ export default {
     dictJS (item, scope) {
       if(scope.row[item.prop]){
       return keyBy(this.dictGroup[item.dictName], 'value')[scope.row[item.prop]].label
+      }else{
+        return '暂无'
+      }
+    },
+    getAreaCode (item, scope) {
+      if(scope.row[item.prop]){
+        if(scope.row[item.prop]!= 0 && scope.row[item.prop]){
+          getInfo(scope.row[item.prop]).then(res=>{
+            if(res.data.data){
+              scope.row[item.prop]=res.data.data.name
+            }else{
+              scope.row[item.prop]='暂无'
+            }
+          })
+        }
+        return scope.row[item.prop]
       }else{
         return '暂无'
       }

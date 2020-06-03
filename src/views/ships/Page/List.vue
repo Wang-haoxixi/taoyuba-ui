@@ -27,7 +27,7 @@
               @current-change="handleCurrentChange"
               @selection-change="handleSelectionChange"
               is-mutiple-selection>
-        <el-table-column prop="operation" label="操作" width="400">d
+        <el-table-column prop="operation" label="操作" width="400">
           <template slot-scope="scope">                 
             <operation-wrapper>                                   
               <iep-button size="mini" type="primary" @click="handleShow(scope.row.shipId)" v-if="manager">船员配置</iep-button>
