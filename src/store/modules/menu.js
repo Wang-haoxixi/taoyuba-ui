@@ -4,6 +4,7 @@ import website from '@/const/website'
 import { isURL } from '@/util/validate'
 import keyBy from 'lodash/keyBy'
 import { deepClone } from '@/util/util'
+import _ from 'lodash'
 
 function addPath (ele, first) {
   const propsConfig = website.menu.props
@@ -54,13 +55,16 @@ const menu = {
   },
   actions: {
     // 获取系统菜单
-    GetMenu ({ commit, state }) {
+    GetMenu ({ commit, state }) {                       
       commit('SET_MENUPATHLIST', [])
       return new Promise(resolve => {
         GetMenu().then(({ data }) => {
-          let menu = deepClone(data.data)
+          let menu = deepClone(data.data)     
+          // 过滤移动端菜单        
+          menu =  _.filter(menu,item => item.id !== 80000)      
+          console.log( menu)
           menu.forEach(ele => {
-            addPath(ele)
+            addPath(ele)                
           })
           commit('SET_MENU', menu)
           if (state.menuPathList.length === 0) {
