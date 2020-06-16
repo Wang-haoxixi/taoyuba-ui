@@ -62,7 +62,7 @@ const menu = {
           let menu = deepClone(data.data)     
           // 过滤移动端菜单        
           menu =  _.filter(menu,item => item.id !== 80000)      
-          console.log( menu)
+          // console.log( menu)   
           menu.forEach(ele => {
             addPath(ele)                
           })
