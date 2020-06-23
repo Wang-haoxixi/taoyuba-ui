@@ -14,7 +14,7 @@
         <el-input v-model="form.idcard"></el-input>
     </el-form-item>
     <el-form-item>
-      <operation-wrapper>
+      <operation-wrapper>             
         <iep-button type="primary" @click="searchPage">搜索</iep-button>
         <iep-button @click="clearSearchParam">清空</iep-button>
       </operation-wrapper>

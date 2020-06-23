@@ -211,4 +211,25 @@ export default [
       },
     ],
   },      
+  //渔船经营人
+  {
+    path: '/shiphaver',       
+    component: Layout,        
+    children: [
+      {
+        path: 'detail/:type/:id',
+        name: 'detailShiphaver',            
+        component: () => import('@/views/tmlms/shiphaver/page/Detail'),  
+        meta: noKeepAlive,
+      },
+      {
+        path: '/admin/list',
+        name: 'shiphaverList',
+        component: () => import('@/views/tmlms/shiphaver/index'),
+        meta: noKeepAlive,
+      },
+    ],
+  },     
+
+
 ]
