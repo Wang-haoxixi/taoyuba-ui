@@ -21,11 +21,16 @@
               @current-change="handleCurrentChange"
               @selection-change="handleSelectionChange"
               is-mutiple-selection>               
-          <el-table-column prop="videoSrc" label="渔船名" width="250">                          
+          <el-table-column prop="videoSrc" label="渔船名" width="200">                          
            <template slot-scope="scope">                                                
                   <span >{{scope.row.shipName}}</span>                        
             </template> 
         </el-table-column>    
+         <el-table-column prop="bindType" label="类型" width="100">                          
+           <template slot-scope="scope">                                                
+                  <span >{{scope.row.type}}</span>                        
+            </template> 
+        </el-table-column>  
           <el-table-column prop="videoSrc" label="是否绑定渔船" width="150">                               
            <template slot-scope="scope">        
              <div>                                                       
@@ -72,7 +77,7 @@
 </template>
 <script>
 import { getShiphaverPage,deleteShiphaver,getShiphaverDetail,reviewShiphaver } from '@/api/tmlms/shiphaver'      
-import { getShipDetail } from  '@/api/ships'    
+// import { getShipDetail } from  '@/api/ships'    
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
 import { getUserInfo } from '@/api/login'   
@@ -96,6 +101,7 @@ export default {
             realName: '',
             idcard: '',
             shiphaverId: '',
+            type: '',
         },
     }
   },
@@ -125,8 +131,7 @@ export default {
         path: `/shiphaver/detail/update/${id}`,   
       })
     },
-    async loadPage (param = this.searchForm) {              
-
+    async loadPage (param = this.searchForm) {                 
       const userData = await getUserInfo().then(res => {         
         return res.data.data
       })
@@ -134,24 +139,21 @@ export default {
         this.manager = true
       }
         let data = await this.loadTable(param, getShiphaverPage)          
-        data.records.forEach( async item => {         
+        data.records.forEach( async item => {     
+              //绑定类型
+              if(item.bindType === 1){
+                    this.$set(item,'type','持证人') 
+              }else if(item.bindType  === 2){
+                    this.$set(item,'type','经营人') 
+              }else if(item.bindType ===3){
+                      this.$set(item,'type','经营人家属') 
+              }
               if(item.status === 0 ||  item.status === 2) 
                    this.$set(item,'swith',false)  
               else 
                   this.$set(item,'swith',true)  
-
-              if(item.shipId) {
-                         this.$set(item,'shipStatus',true)  
-                      await   getShipDetail(item.shipId).then(res => {      
-                            this.$set(item,'shipName',res.data.data.shipName)  
-                      })
-              }else {
-                    this.$set(item,'shipName','暂无')          
-                     this.$set(item,'shipStatus',false)             
-              }
        })             
-        this.pagedTable = data.records
-     
+        this.pagedTable = data.records    
     },    
    async setStatus (swith,shiphaverId) {    
            this.tybShipowner.shiphaverId  = shiphaverId
@@ -176,6 +178,8 @@ export default {
                     type: 'success',
                     message: '审核成功!',
                   })
+                }else {     
+                   this.$message.error('审核失败')    
                 }
           })
     },
