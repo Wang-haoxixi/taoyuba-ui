@@ -31,15 +31,17 @@
                   <span >{{scope.row.type}}</span>                        
             </template> 
         </el-table-column>  
-          <el-table-column prop="videoSrc" label="是否绑定渔船" width="150">                               
+          <el-table-column prop="shipStatus" label="是否绑定渔船" width="150">                               
            <template slot-scope="scope">        
-             <div>                                                       
-                <el-switch
+             <div>                 
+                <el-button type="success"  circle  v-if="scope.row.shipId"></el-button>
+                <el-button type="danger"  circle  v-if="!scope.row.shipId"></el-button>
+                <!-- <el-switch
                 v-model="scope.row.shipStatus"
                 active-color="#13ce66"
                 inactive-color="#F00"   
                 >
-              </el-switch>
+              </el-switch> -->
              </div>     
             </template>       
         </el-table-column>    
@@ -102,6 +104,8 @@ export default {
             idcard: '',
             shiphaverId: '',
             type: '',
+            bindType: '',
+            shipId: '',
         },
     }
   },
@@ -155,22 +159,22 @@ export default {
        })             
         this.pagedTable = data.records    
     },    
-   async setStatus (swith,shiphaverId) {    
-           this.tybShipowner.shiphaverId  = shiphaverId
-          let  shiphaver  =  await   getShiphaverDetail(shiphaverId).then(res => {
-                return res.data.data
-          })
-          if(swith === true) {
-                this.tybShipowner.haverStatus = 1
-                 this.tybShipowner.orgId  = shiphaver.orgId
-                  this.tybShipowner.userId  = shiphaver.userId
+   async setStatus (swith,shiphaverId) {               
+                  this.tybShipowner.shiphaverId  = shiphaverId
+                  let  shiphaver  =  await   getShiphaverDetail(shiphaverId).then(res => {
+                        return res.data.data
+                  })
+                    this.tybShipowner.orgId  = shiphaver.orgId
+                    this.tybShipowner.userId  = shiphaver.userId
                     this.tybShipowner.realName  = shiphaver.realname
                     this.tybShipowner.idcard  = shiphaver.idcard  
-
-          }else {
-                    this.tybShipowner.haverStatus = 2
-          }
-          console.log(this.tybShipowner)            
+                    this.tybShipowner.bindType = shiphaver.bindType
+                    this.tybShipowner.shipId = shiphaver.shipId   
+          if(swith)     
+                this.tybShipowner.haverStatus = 1
+          else
+               this.tybShipowner.haverStatus = 2
+          // console.log(this.tybShipowner)            
           reviewShiphaver(this.tybShipowner).then(res => {
                 if(res.data.data === true){   
                         this.loadPage()       
@@ -181,6 +185,8 @@ export default {
                 }else {     
                    this.$message.error('审核失败')    
                 }
+          }).catch(err => {           
+                     this.$message.error(err.data.msg)    
           })
     },
 
