@@ -232,7 +232,7 @@ export default {
               this.$message.error(error.message)
             })
           } else if (this.type === 'update') {
-             this.form.areaCode = this.form.areaCode[this.form.areaCode.length-1]
+            this.form.areaCode = this.form.areaCode[this.form.areaCode.length-1]
             updatePort(this.form).then(({data}) => {
               if (data.code === 0) {
                 this.$message.success('修改成功！')

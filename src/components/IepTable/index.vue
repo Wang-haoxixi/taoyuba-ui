@@ -27,6 +27,10 @@
           <template v-else-if="item.type==='areaCode'">
             <div>{{getAreaCode(item, scope)}}</div>
           </template>
+          <template v-else-if="item.type==='shipStatus'">
+            <iep-button size="mini" :type="type" >{{getShipStatus (item, scope)}}</iep-button>
+            <!-- <div><span :class="[tableLabel,shipColor]">{{getShipStatus (item, scope)}}</span></div> -->
+          </template>
           <template v-else-if="item.type==='tag'">
             <iep-tag-detail :value="scope.row[item.prop]"></iep-tag-detail>
           </template>
@@ -155,6 +159,7 @@ export default {
   data () {
     return{
       area:[],
+      type:'danger',
     }
   },
   computed: {
@@ -186,6 +191,17 @@ export default {
         return '暂无'
       }
     },
+    getShipStatus (item, scope) {
+      if(scope.row[item.prop]==0){
+        scope.row[item.prop] = '证书已过期'
+        this.type = 'danger'
+      }else if(scope.row[item.prop]==1){
+        scope.row[item.prop] = '正常'
+        this.type = 'success'
+      }
+      return scope.row[item.prop]
+    },
+    //  getCrewCert
     getAreaCode (item, scope) {
       if(scope.row[item.prop]){
         if(scope.row[item.prop]!= 0 && scope.row[item.prop]){
@@ -270,5 +286,18 @@ span.ms-tree-space {
   cursor: pointer;
   color: #666;
   margin-left: -18px;
+}
+.table-label{
+  width:100px;
+  color:#fff;
+  padding:10px;
+}
+.red {
+  .el-button--primary{
+    background:#c7535a;
+  }
+}
+.green {
+  background:#3eaf7c;
 }
 </style>

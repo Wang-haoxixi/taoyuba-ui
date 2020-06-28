@@ -102,7 +102,7 @@ export default {
         phone: '',
       },
       exportParams: {   
-         idcard: '',
+        idcard: '',
         realName: '',
         status: '',   
         phone: '',

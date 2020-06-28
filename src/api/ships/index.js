@@ -8,7 +8,14 @@ export function getShipList (params) {
     method: 'get',
     params: params,
   })
-}     
+}
+export function getShipByShipId (shipId) {
+  return request({
+    url: `${prefixUrl}/${shipId}`,
+    method: 'get',
+    params: shipId,
+  })
+}        
 
 export function getShipDetail (id) {
   return request({

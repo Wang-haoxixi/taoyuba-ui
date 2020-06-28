@@ -412,9 +412,9 @@ export default {
       'params.phone': function (val) {
             this.exportParams.phone  = val
       },    
-       'params.timeLists': function (val) {                
+      'params.timeLists': function (val) {                
             this.exportParams.startDate  = val[0]
-             this.exportParams.endDate  = val[1]
+            this.exportParams.endDate  = val[1]
       },
       'params.remark': function (val) {                
             this.exportParams.remark  = val

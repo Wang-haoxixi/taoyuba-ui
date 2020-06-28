@@ -39,4 +39,43 @@ export default [
       },
     ],
   },
+  {
+    path: '/ship_crew',
+    component: Layout,
+    redirect: '/ship_crew/detail/:id',
+    children: [
+      {
+        path: '/ship_crew/detail/:id',
+        name: '渔船配员',
+        component: () => import('@/views/ships/outRecord/Page/shipDetail.vue'),
+        meta: noKeepAlive,
+      },
+    ],
+  },
+  {
+    path: '/ship_record',
+    component: Layout,
+    redirect: '/ship_record/detail/:id',
+    children: [
+      {
+        path: '/ship_record/detail/:id',
+        name: '出港记录详情',
+        component: () => import('@/views/ships/outRecord/Page/Detail.vue'),
+        meta: noKeepAlive,
+      },
+    ],
+  },
+  {
+    path: '/ship_inrecord',
+    component: Layout,
+    redirect: '/ship_inrecord/detail/:id',
+    children: [
+      {
+        path: '/ship_inrecord/detail/:id',
+        name: '进港记录详情',
+        component: () => import('@/views/ships/inRecord/Page/Detail.vue'),
+        meta: noKeepAlive,
+      },
+    ],
+  },
 ]

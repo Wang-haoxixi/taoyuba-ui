@@ -1,0 +1,195 @@
+<template>
+  <div>
+    <basic-container>
+      <page-header title="进港记录管理"></page-header>
+      <operation-container>
+        <template slot="left">    
+          <!-- <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain >新增</iep-button> -->
+          <el-button  type="primary" size="small" icon="el-icon-edit" @click="exportInfo">导出</el-button>      
+          <!-- v-if="manager"  -->
+        </template>
+        <!-- <span><el-input v-model="params.shipName" placeholder="请输入船名号" size="small" clearable></el-input></span> -->
+        <template slot="right">
+          <span><el-input v-model="params.shipName" placeholder="渔船名" size="small" clearable></el-input></span>
+          <!-- <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="离船时间" end-placeholder="离船时间" 
+              value-format="yyyy-MM-dd HH:mm:ss"  size="mini"></el-date-picker></span> -->
+          <!-- <span><el-input v-model="params.address" placeholder="港口地址" size="small" clearable></el-input></span> -->
+          <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
+            value-format="yyyy-MM-dd"  size="mini"></el-date-picker>
+          </span>   
+          <!-- <span><el-input v-model="params.idcard" placeholder="请输入船员身份证" size="small" clearable></el-input></span> -->
+          <el-button size="small"  @click="loadPage(params)">搜索</el-button>
+        </template>
+      </operation-container>
+      <iep-table                    
+              :isLoadTable="isLoadTable"
+              :pagination="pagination"
+              :columnsMap="columnsMap"
+              :pagedTable="pagedTable"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              @selection-change="handleSelectionChange"
+              is-mutiple-selection>
+        <el-table-column prop="boatMan" label="船员适任" width="100">
+        <template slot-scope="scope">
+          <iep-button size="mini" :type="type">{{certStandard (scope.row.shipId)}}</iep-button>             
+        </template>
+        </el-table-column>
+          <el-table-column prop="operation" label="操作" width="200">
+          <template slot-scope="scope">                 
+            <operation-wrapper>                                   
+              <iep-button size="mini" type="primary" @click="handleView(scope.row.shipId)">渔船配员</iep-button>
+              <!-- <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)" v-if="manager">船员管理</iep-button> -->
+              <!-- <iep-button plain @click="handleEdit(scope.row.id)" type="primary" >编辑</iep-button> -->
+              <iep-button @click="handleDetail(scope.row.id,scope.row.shipId)">详情</iep-button>     
+              <!-- <iep-button type="warning" @click="handleDelete(scope.row)" v-if="manager"><i class="el-icon-delete"></i></iep-button> -->
+            </operation-wrapper>
+          </template>
+        </el-table-column>
+      </iep-table>
+    </basic-container>
+  </div>
+</template>
+<script>
+import { exportExcel } from '@/api/tmlms/boatMan' 
+import { inList,getCrewCert } from '@/api/ships/inout'
+import { getArea } from '@/api/post/admin'
+// import advanceSearch from './AdvanceSearch.vue'
+import mixins from '@/mixins/mixins'
+import { columnsMap } from '../options'
+export default {
+  components: {
+    // advanceSearch,
+  },
+  mixins: [mixins],
+  data () {
+    return {
+      columnsMap,
+      searchData: 'contactName',
+      province:[],
+      city:[],
+      district:[],
+      form:{districtId:''},
+      params: {
+        current: 1,
+        size: 10,
+      },
+      exportParams: {   
+        shipName: '',
+        startDate:'',
+        endDate:'',
+      },
+      type:'danger',
+      boatMan:'',
+    }
+  },
+  created () {
+    getArea(0).then(({ data })=>{
+      console.log(data)
+      this.province=data.data
+    })
+    this.loadPage()
+    getCrewCert()
+  },
+  
+  methods: {
+    handleAdd () {
+      this.$router.push({
+        path: '/ship_port/detail/create/0',
+      })
+    },
+    certStandard (shipId) {
+      getCrewCert(parseInt(shipId)).then(res =>{
+        if(res.data.data.lackList.length){
+          this.type = 'danger'
+          this.boatMan = '未通过'
+        }else{
+          this.type = 'success'
+          this.boatMan = '正常'
+        }
+      })
+      return this.boatMan
+    },
+    exportInfo () {                               
+      exportExcel (this.exportParams).catch(err => {
+        this.$message({
+          type: 'warning',
+          message: err,
+        })
+    })
+    },
+    handleView (shipId) {
+      this.$router.push({
+        path: `/ship_crew/detail/${shipId}`,
+      })
+    },
+    handleDetail (id,shipId) {
+      this.$router.push({
+        path: `/ship_inrecord/detail/${id}`,
+        query:{shipId:shipId},
+      })
+    },
+    handleSelectionChange (val) {     
+      this.multipleSelection = val.map(m => m.id)
+    },
+    async loadPage (param = this.searchForm) {
+      //  let userId = this.$store.getters.userInfo.userId
+      // let idcard = this.$store.getters.userInfo.idCard
+      if(param.timeLists){
+        param.startDate=this.params.timeLists[0]
+        param.endDate=this.params.timeLists[1]
+      }
+      // if(this.form.districtId!=''){
+      //   param.areaCode = this.form.districtId
+      // }else if(this.form.cityId!=''){
+      //   param.areaCode = this.form.cityId
+      // }else if(this.form.provinceId!=''){
+      //   param.areaCode = this.form.provinceId
+      // }
+      this.loadTable({ ...param }, inList)
+      // this.loadTable({ ...param }, outList).then(res=>{
+      //   console.log('打出来')
+      //   this.pagedTable=res.records.filter(item=>{
+      //     if(item.inoutType==1){
+      //       return item
+      //     }
+      //   })
+      //   // return res.records
+      // })
+      // this.pagedTable = this.pagedTable.filter(item=>{
+      //   console.log('是十四')
+      //   console.log(item)
+      //   if(item.inoutType==1){
+      //     return item
+      //   }
+      // })
+      // console.log(this.loadTable({ ...param }, outList).then())
+    },
+     // 选择城市
+    // choseProvince (id) {
+    //   this.form.cityId = ''
+    //   this.form.districtId = ''
+    //   this.form.villageId = ''
+    //   this.district = []
+    //   getArea(id).then(({ data }) => {
+    //       this.city = data.data
+    //   })
+    // },
+    // 改变城市
+    // choseCity (id) {
+    //   getArea(id).then(({ data }) => {
+    //     this.district = data.data
+    //   })
+    // },
+  },
+  watch: {
+    'params.shipName': function (val) {          
+          this.exportParams.shipName  = val
+    },  
+    'params.timeLists': function (val) {                
+          this.exportParams.startDate  = val[0]
+          this.exportParams.endDate  = val[1]
+    },
+},
+}
+</script>
