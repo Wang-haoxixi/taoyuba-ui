@@ -1,5 +1,6 @@
 import request from '@/router/axios'
 const prefixUrl = '/tybship/tybshipinout'
+import {exportDownload} from '@/util/export'
 
 export function outList (params) {
     return request({
@@ -29,11 +30,11 @@ export function getInoutListByShipId (shipId) {
     params: shipId,
 })
 }
-export function getCrewCert (shipId) {
+export function getCrewCert (shipId,inoutId) {
     return request({
-    url: `tmlms/crew_cert/certStandard/${shipId}`,
+    url: `tmlms/crew_cert/shipInout?inoutId=${inoutId}&shipId=${shipId}`,
     method: 'get',
-    params:shipId,
+    params:{shipId,inoutId},
 })
 }
 export function getShipCrew (shipId) {
@@ -51,7 +52,13 @@ export function getFishByInoutId (inoutId) {
 })
 }
 
-
+export function exportExcel (params) {                                          
+    return exportDownload({
+      url: 'tybship/tybshipExcelExport/downShipInout',
+      data: params,                 
+      title: '进出港记录',
+    })
+  }
 // export function addPort (obj) {
 //     return request({
 //       url: `${prefixUrl}/save`,

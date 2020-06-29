@@ -45,9 +45,9 @@
                 <span v-else>无相关照片</span>
                 <!-- <a @click="openImage(scope.row[item.prop])">查看保单图片</a> -->
             </template>
-            <template v-else-if="item.type==='position'">
-            <div>{{getMyCret(scope.row.idcard)}}</div>
-            </template>
+            <!-- <template v-else-if="item.type==='position'">
+            <div>{{getMyCret(item,scope)}}</div>
+            </template> -->
             <template v-else>
             <iep-table-detail :value="scope.row[item.prop]"></iep-table-detail>
           </template>
@@ -58,14 +58,10 @@
         <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
       </div>          -->
       <h3 v-if="fishList.length">渔获</h3>
-      <ul v-for="item in fishList" :key="item.id">
-        <li>
-          <span>{{fishList.fishName}}:</span>
-          <span>{{fishList.fishNum}}公斤</span>
-        </li>
-        <li>
-          <span>虾类</span>
-          <span>10公斤</span>
+      <ul  class="fish-list">
+        <li v-for="item in fishList" :key="item.id">
+          <span class="fish-name">{{item.fishName}}:</span>
+          <span>{{item.fishNum}}公斤</span>
         </li>
       </ul>
       <!-- <ul>
@@ -101,10 +97,6 @@ export default {
       fishList:[],
       fishClass:{},
       certList:{},
-      status:{
-        text:'正常',
-        class:'status-bg-green',
-      },
       // imgUrl:[
       //   {src:require('@/assets/img/daiyu.png')},
       //   {src:require('@/assets/img/xiaohuangyu.png')},
@@ -119,6 +111,7 @@ export default {
     this.getBasic()
     this.getCrewList()
     this.getShipDetail()
+    this.getFish()
     this.certStandard()
     
   },
@@ -134,21 +127,27 @@ export default {
     openImage (url) {
         window.open(url, '_blank')
     },
-    getMyCret (idcard){
-        getMyCretList(idcard).then(res=>{
+    getMyCret (item,scope){
+        getMyCretList(scope.row.idcard).then(res=>{
           let item = res.data.data[0]
-          this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
+          if(item){
+            this.boatMan = ''
+            this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
               if(item.certTitle==data.value){
                   item.certTitle=data.label
               }
-          })
-          if(item.certType=='0') item.certLevel=''
-          if(item.certType=='1') item.certLevel='一级'
-          if(item.certType=='2') item.certLevel='二级'
-          if(item.certType=='3') item.certLevel='三级'
-          this.boatMan = item.certLevel+item.certTitle
+              if(item.certLevel=='0') item.certLevel=''
+              if(item.certLevel=='1') item.certLevel='一级'
+              if(item.certLevel=='2') item.certLevel='二级'
+              if(item.certLevel=='3') item.certLevel='三级'
+              scope.row[item.prop] = item.certLevel+item.certTitle
+            })
+            return scope.row[item.prop]
+          }else{
+            // this.boatMan = ''
+          }
         })
-        return this.boatMan
+        // return scope.row[item.prop]
     },
     getShipDetail (){
       getShipByShipId(this.$route.query.shipId).then(res=>{
@@ -156,28 +155,28 @@ export default {
         let date = new Date()
         console.log(date)
         console.log(date)
-        if(this.certList.licensesOwnerExpireDate<date){
+        if(this.certList.licensesOwnerExpireDate<date || !this.certList.licensesOwnerExpireDate){
           this.certList.Ownerstatus = '过期'
           this.certList.Ownerclass = 'status-bg-red'
         }else{
           this.certList.Ownerstatus = '正常'
           this.certList.Ownerclass = 'status-bg-green'
         }
-        if(this.certList.licensesNationalExpireDate<date){
+        if(this.certList.licensesNationalExpireDate<date || !this.certList.licensesNationalExpireDate){
           this.certList.Nationalstatus = '过期'
           this.certList.Nationalclass = 'status-bg-red'
         }else{
           this.certList.Nationalstatus = '正常'
           this.certList.Nationalclass = 'status-bg-green'
         }
-        if(this.certList.licensesInspectionExpireDate<date){
+        if(this.certList.licensesInspectionExpireDate<date || !this.certList.licensesInspectionExpireDate){
           this.certList.Inspectionstatus = '过期'
           this.certList.Inspectionclass = 'status-bg-red'
         }else{
           this.certList.Inspectionstatus = '正常'
           this.certList.Inspectionclass = 'status-bg-green'
         }
-        if(this.certList.licensesFishingExpireDate<date){
+        if(this.certList.licensesFishingExpireDate<date || !this.certList.licensesFishingExpireDate){
           this.certList.Fishingstatus = '过期'
           this.certList.Fishingclass = 'status-bg-red'
         }else{
@@ -189,7 +188,9 @@ export default {
     },
     getFish (){
       getFishByInoutId(this.$route.params.id).then(res=>{
-        this.fishList = res.data.data
+        this.fishList =res.data.data
+        console.log('渔获')
+        console.log(res)
       })
     },
     handleAdd () {
@@ -266,6 +267,18 @@ export default {
     text-align: center;
     border-radius: 3px;
     color: #fff;
+  }
+  .fish-list{
+    // list-style: none;
+    overflow: hidden;
+    li{
+      float: left;
+      margin-right: 40px;
+      color:#333;
+      .fish-name{
+        color:#0185d8 ;
+      }
+    }
   }
 }
 </style>
