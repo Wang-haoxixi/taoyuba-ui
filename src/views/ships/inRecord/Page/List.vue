@@ -32,13 +32,13 @@
               is-mutiple-selection>
         <el-table-column prop="boatMan" label="船员适任" width="100">
         <template slot-scope="scope">
-          <iep-button size="mini" :type="type">{{certStandard (scope.row.shipId)}}</iep-button>             
+          <iep-button size="mini" :type="type">{{certStandard (scope.row.id,scope.row.shipId)}}</iep-button>             
         </template>
         </el-table-column>
           <el-table-column prop="operation" label="操作" width="200">
           <template slot-scope="scope">                 
             <operation-wrapper>                                   
-              <iep-button size="mini" type="primary" @click="handleView(scope.row.shipId)">渔船配员</iep-button>
+              <iep-button size="mini" type="primary" @click="handleView(scope.row.id,scope.row.shipId)">渔船配员</iep-button>
               <!-- <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)" v-if="manager">船员管理</iep-button> -->
               <!-- <iep-button plain @click="handleEdit(scope.row.id)" type="primary" >编辑</iep-button> -->
               <iep-button @click="handleDetail(scope.row.id,scope.row.shipId)">详情</iep-button>     
@@ -51,8 +51,7 @@
   </div>
 </template>
 <script>
-import { exportExcel } from '@/api/tmlms/boatMan' 
-import { inList,getCrewCert } from '@/api/ships/inout'
+import { inList,getCrewCert,exportExcel } from '@/api/ships/inout'
 import { getArea } from '@/api/post/admin'
 // import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
@@ -89,7 +88,7 @@ export default {
       this.province=data.data
     })
     this.loadPage()
-    getCrewCert()
+    // getCrewCert()
   },
   
   methods: {
@@ -98,8 +97,10 @@ export default {
         path: '/ship_port/detail/create/0',
       })
     },
-    certStandard (shipId) {
-      getCrewCert(parseInt(shipId)).then(res =>{
+    certStandard (inoutId,shipId) {
+      getCrewCert(parseInt(inoutId),parseInt(shipId)).then(res =>{
+        console.log('lack')
+        console.log(res.data.data.lackList)
         if(res.data.data.lackList.length){
           this.type = 'danger'
           this.boatMan = '未通过'
@@ -118,9 +119,10 @@ export default {
         })
     })
     },
-    handleView (shipId) {
+    handleView (id,shipId) {
       this.$router.push({
-        path: `/ship_crew/detail/${shipId}`,
+        path: `/ship_crew/detail/${id}`,
+        query:{shipId:shipId},
       })
     },
     handleDetail (id,shipId) {

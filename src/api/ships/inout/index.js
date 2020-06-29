@@ -30,18 +30,18 @@ export function getInoutListByShipId (shipId) {
     params: shipId,
 })
 }
-export function getCrewCert (shipId,inoutId) {
+export function getCrewCert (inoutId,shipId) {
     return request({
     url: `tmlms/crew_cert/shipInout?inoutId=${inoutId}&shipId=${shipId}`,
     method: 'get',
-    params:{shipId,inoutId},
+    params:{inoutId,shipId},
 })
 }
-export function getShipCrew (shipId) {
+export function getShipCrew (inoutId) {
     return request({
-    url: `tybship/tybshipinoutcrew/getShipCrew/${shipId}`,
+    url: `tybship/tybshipinoutcrew/getShipCrewByinout/${inoutId}`,
     method: 'get',
-    params:shipId,
+    params:inoutId,
 })
 }
 export function getFishByInoutId (inoutId) {

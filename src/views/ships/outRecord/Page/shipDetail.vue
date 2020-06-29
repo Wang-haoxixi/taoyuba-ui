@@ -7,7 +7,7 @@
         <p ><span v-for="item in cert" :key="item.index" class="status-bg-red"><span  v-if="item.certLevel">{{item.certLevel}}</span>{{item.certTitle}}{{item.number}}名</span></p>
       </div>
       <h3>现有配员情况</h3>
-      <el-table :data="shipcrewList" stripe style="width: 100%">
+      <el-table :data="shipcrewList" style="width: 100%">
           <el-table-column
             v-for="(item,index) in columnsMapDetail"
             :key="index"
@@ -74,19 +74,28 @@ export default {
         window.open(url, '_blank')
     },
     getMyCret (idcard){
+      let item
         getMyCretList(idcard).then(res=>{
-          let item = res.data.data[0]
-          this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
+          if(res.data.data.length){
+            item = res.data.data[0]
+            this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
               if(item.certTitle==data.value){
                   item.certTitle=data.label
               }
-          })
-          if(item.certType=='0') item.certLevel=''
-          if(item.certType=='1') item.certLevel='一级'
-          if(item.certType=='2') item.certLevel='二级'
-          if(item.certType=='3') item.certLevel='三级'
-          this.boatMan = item.certLevel+item.certTitle
+            })
+            if(item.certLevel=='0') item.certLevel=''
+            if(item.certLevel=='1') item.certLevel='一级'
+            if(item.certLevel=='2') item.certLevel='二级'
+            if(item.certLevel=='3') item.certLevel='三级'
+            item = item.certLevel+ item.certTitle
+          }else{
+            item = '暂无'
+          }
+          
+        }).then(()=>{
+          this.boatMan = item
         })
+        
         return this.boatMan
     },
     handleAdd () {
@@ -95,7 +104,7 @@ export default {
       })
     },
     certStandard () {
-        getCrewCert(this.$route.params.id).then(res=>{
+        getCrewCert(this.$route.params.id,this.$route.query.shipId).then(res=>{
             // console.log(res.data.data)
             this.lack = res.data.data.lackList
             this.cert = res.data.data.tybCrewCertStandardList
@@ -118,7 +127,6 @@ export default {
         // console.log(this.$route.params.id)
         getShipCrew(this.$route.params.id).then(res=>{
             this.shipcrewList = res.data.data
-            this.total = res.data.total
             // console.log( res)
         })
         // shipCrewList

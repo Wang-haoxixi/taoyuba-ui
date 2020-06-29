@@ -10,29 +10,29 @@
       </ul>
       <h3>船舶适配情况</h3>
       <ul class="cert-detail">
-        <li v-if="certList.licensesOwnerShip">
-          <span>证书名称：{{certList.licensesOwnerShip}}</span>
-          <span>有效期：{{certList.licensesOwnerExpireDate}}</span>
-          <span :class="certList.Ownerclass">{{certList.Ownerstatus}}</span>
+        <li>
+          <span>船舶登记证：{{basicList.licensesOwnerShip}}</span>
+          <span>船舶登记证有效期：{{basicList.licensesOwnerExpireDate}}</span>
+          <span :class="basicList.Ownerclass">{{basicList.Ownerstatus}}</span>
         </li>
-        <li v-if="certList.licensesNationalNo">
+        <!-- <li v-if="certList.licensesNationalNo">
           <span>证书名称：{{certList.licensesNationalNo}}</span>
           <span>有效期：{{certList.licensesNationalExpireDate}}</span>
           <span :class="certList.Nationalclass">{{certList.Nationalstatus}}</span>
+        </li> -->
+        <li>
+          <span>检验证书：{{basicList.licensesInspectionNo}}</span>
+          <span>检验证书有效期：{{basicList.licensesInspectionExpireDate}}</span>
+          <span :class="basicList.Inspectionclass">{{basicList.Inspectionstatus}}</span>
         </li>
-        <li v-if="certList.licensesInspectionNo">
-          <span>证书名称：{{certList.licensesInspectionNo}}</span>
-          <span>有效期：{{certList.licensesInspectionExpireDate}}</span>
-          <span :class="certList.Inspectionclass">{{certList.Inspectionstatus}}</span>
-        </li>
-        <li v-if="certList.licensesFishingNo">
-          <span>证书名称：{{certList.licensesFishingNo}}</span>
-          <span>有效期：{{certList.licensesFishingExpireDate}}</span>
-          <span :class="certList.Fishingclass">{{certList.Fishingstatus}}</span>
+        <li >
+          <span>捕捞许可证：{{basicList.licensesFishingNo}}</span>
+          <span>捕捞许可证有效期：{{basicList.licensesFishingExpireDate}}</span>
+          <span :class="basicList.Fishingclass">{{basicList.Fishingstatus}}</span>
         </li>
       </ul>
-      <h3>船员适任情况</h3>
-      <el-table :data="shipcrewList" stripe style="width: 100%;margin-bottom:20px;">
+      <h3>现有配员情况</h3>
+      <el-table :data="shipcrewList" style="width: 100%">
           <el-table-column
             v-for="(item,index) in columnsMapDetail"
             :key="index"
@@ -45,9 +45,9 @@
                 <span v-else>无相关照片</span>
                 <!-- <a @click="openImage(scope.row[item.prop])">查看保单图片</a> -->
             </template>
-            <!-- <template v-else-if="item.type==='position'">
-            <div>{{getMyCret(item,scope)}}</div>
-            </template> -->
+            <template v-else-if="item.type==='position'">
+            <div>{{getMyCret(scope.row.idcard)}}</div>
+            </template>
             <template v-else>
             <iep-table-detail :value="scope.row[item.prop]"></iep-table-detail>
           </template>
@@ -73,7 +73,6 @@
 <script>
 // import { getDict } from '@/api/tmlms/contract'    
 import { getShipCrew,getCrewCert, getInoutListById, getFishByInoutId } from '@/api/ships/inout'
-import { getShipByShipId } from '@/api/ships/index'
 import { getMyCretList } from '@/api/post/cert'
 import { columnsMapDetail } from '../options'
 import { mapGetters } from 'vuex'
@@ -127,64 +126,30 @@ export default {
     openImage (url) {
         window.open(url, '_blank')
     },
-    getMyCret (item,scope){
-        getMyCretList(scope.row.idcard).then(res=>{
-          let item = res.data.data[0]
-          if(item){
-            this.boatMan = ''
+    getMyCret (idcard){
+      let item
+        getMyCretList(idcard).then(res=>{
+          if(res.data.data.length){
+            item = res.data.data[0]
             this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
               if(item.certTitle==data.value){
                   item.certTitle=data.label
               }
-              if(item.certLevel=='0') item.certLevel=''
-              if(item.certLevel=='1') item.certLevel='一级'
-              if(item.certLevel=='2') item.certLevel='二级'
-              if(item.certLevel=='3') item.certLevel='三级'
-              scope.row[item.prop] = item.certLevel+item.certTitle
             })
-            return scope.row[item.prop]
+            if(item.certLevel=='0') item.certLevel=''
+            if(item.certLevel=='1') item.certLevel='一级'
+            if(item.certLevel=='2') item.certLevel='二级'
+            if(item.certLevel=='3') item.certLevel='三级'
+            item = item.certLevel+ item.certTitle
           }else{
-            // this.boatMan = ''
+            item = '暂无'
           }
+          
+        }).then(()=>{
+          this.boatMan = item
         })
-        // return scope.row[item.prop]
-    },
-    getShipDetail (){
-      getShipByShipId(this.$route.query.shipId).then(res=>{
-        this.certList = res.data.data
-        let date = new Date()
-        console.log(date)
-        console.log(date)
-        if(this.certList.licensesOwnerExpireDate<date || !this.certList.licensesOwnerExpireDate){
-          this.certList.Ownerstatus = '过期'
-          this.certList.Ownerclass = 'status-bg-red'
-        }else{
-          this.certList.Ownerstatus = '正常'
-          this.certList.Ownerclass = 'status-bg-green'
-        }
-        if(this.certList.licensesNationalExpireDate<date || !this.certList.licensesNationalExpireDate){
-          this.certList.Nationalstatus = '过期'
-          this.certList.Nationalclass = 'status-bg-red'
-        }else{
-          this.certList.Nationalstatus = '正常'
-          this.certList.Nationalclass = 'status-bg-green'
-        }
-        if(this.certList.licensesInspectionExpireDate<date || !this.certList.licensesInspectionExpireDate){
-          this.certList.Inspectionstatus = '过期'
-          this.certList.Inspectionclass = 'status-bg-red'
-        }else{
-          this.certList.Inspectionstatus = '正常'
-          this.certList.Inspectionclass = 'status-bg-green'
-        }
-        if(this.certList.licensesFishingExpireDate<date || !this.certList.licensesFishingExpireDate){
-          this.certList.Fishingstatus = '过期'
-          this.certList.Fishingclass = 'status-bg-red'
-        }else{
-          this.certList.Fishingstatus = '正常'
-          this.certList.Fishingclass = 'status-bg-green'
-        }
-
-      })
+        
+        return this.boatMan
     },
     getFish (){
       getFishByInoutId(this.$route.params.id).then(res=>{
@@ -220,16 +185,40 @@ export default {
     },
     getCrewList () {
         // console.log(this.$route.params.id)
-        getShipCrew(this.$route.query.shipId).then(res=>{
+        getShipCrew(this.$route.params.id).then(res=>{
             this.shipcrewList = res.data.data
-            this.total = res.data.total
+            // this.total = res.data.total
             // console.log( res)
         })
         // shipCrewList
     },
     getBasic () {
-      getInoutListById(this.$route.params.id).then(res=>{
+       getInoutListById(this.$route.params.id).then(res=>{
         this.basicList = res.data.data
+        let date = new Date()
+        console.log('看看吧')
+        console.log(this.basicList.licensesOwnerExpireDate)
+        if(this.basicList.licensesOwnerExpireDate<date || !this.basicList.licensesOwnerExpireDate){
+          this.basicList.Ownerstatus = '过期'
+          this.basicList.Ownerclass = 'status-bg-red'
+        }else{
+          this.basicList.Ownerstatus = '正常'
+          this.basicList.Ownerclass = 'status-bg-green'
+        }
+        if(this.basicList.licensesInspectionExpireDate<date || !this.basicList.licensesInspectionExpireDate){
+          this.basicList.Inspectionstatus = '过期'
+          this.basicList.Inspectionclass = 'status-bg-red'
+        }else{
+          this.basicList.Inspectionstatus = '正常'
+          this.basicList.Inspectionclass = 'status-bg-green'
+        }
+        if(this.basicList.licensesFishingExpireDate<date || !this.basicList.licensesFishingExpireDate){
+          this.basicList.Fishingstatus = '过期'
+          this.basicList.Fishingclass = 'status-bg-red'
+        }else{
+          this.basicList.Fishingstatus = '正常'
+          this.basicList.Fishingclass = 'status-bg-green'
+        }
         this.shipId = this.basicList.shipId
       })
     },

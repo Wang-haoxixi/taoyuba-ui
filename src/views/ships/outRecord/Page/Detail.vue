@@ -10,29 +10,29 @@
       </ul>
       <h3>船舶适配情况</h3>
       <ul class="cert-detail">
-        <li v-if="certList.licensesOwnerShip">
-          <span>证书名称：{{certList.licensesOwnerShip}}</span>
-          <span>有效期：{{certList.licensesOwnerExpireDate}}</span>
-          <span :class="certList.Ownerclass">{{certList.Ownerstatus}}</span>
+        <li>
+          <span>船舶登记证：{{basicList.licensesOwnerShip}}</span>
+          <span>船舶登记证有效期：{{basicList.licensesOwnerExpireDate}}</span>
+          <span :class="basicList.Ownerclass">{{basicList.Ownerstatus}}</span>
         </li>
-        <li v-if="certList.licensesNationalNo">
+        <!-- <li v-if="certList.licensesNationalNo">
           <span>证书名称：{{certList.licensesNationalNo}}</span>
           <span>有效期：{{certList.licensesNationalExpireDate}}</span>
           <span :class="certList.Nationalclass">{{certList.Nationalstatus}}</span>
+        </li> -->
+        <li>
+          <span>检验证书：{{basicList.licensesInspectionNo}}</span>
+          <span>检验证书有效期：{{basicList.licensesInspectionExpireDate}}</span>
+          <span :class="basicList.Inspectionclass">{{basicList.Inspectionstatus}}</span>
         </li>
-        <li v-if="certList.licensesInspectionNo">
-          <span>证书名称：{{certList.licensesInspectionNo}}</span>
-          <span>有效期：{{certList.licensesInspectionExpireDate}}</span>
-          <span :class="certList.Inspectionclass">{{certList.Inspectionstatus}}</span>
-        </li>
-        <li v-if="certList.licensesFishingNo">
-          <span>证书名称：{{certList.licensesFishingNo}}</span>
-          <span>有效期：{{certList.licensesFishingExpireDate}}</span>
-          <span :class="certList.Fishingclass">{{certList.Fishingstatus}}</span>
+        <li >
+          <span>捕捞许可证：{{basicList.licensesFishingNo}}</span>
+          <span>捕捞许可证有效期：{{basicList.licensesFishingExpireDate}}</span>
+          <span :class="basicList.Fishingclass">{{basicList.Fishingstatus}}</span>
         </li>
       </ul>
-      <h3>船员适任情况</h3>
-      <el-table :data="shipcrewList" stripe style="width: 100%">
+      <h3>现有配员情况</h3>
+      <el-table :data="shipcrewList" style="width: 100%">
           <el-table-column
             v-for="(item,index) in columnsMapDetail"
             :key="index"
@@ -110,19 +110,28 @@ export default {
         window.open(url, '_blank')
     },
     getMyCret (idcard){
+      let item
         getMyCretList(idcard).then(res=>{
-          let item = res.data.data[0]
-          this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
+          if(res.data.data.length){
+            item = res.data.data[0]
+            this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
               if(item.certTitle==data.value){
                   item.certTitle=data.label
               }
-          })
-          if(item.certType=='0') item.certLevel=''
-          if(item.certType=='1') item.certLevel='一级'
-          if(item.certType=='2') item.certLevel='二级'
-          if(item.certType=='3') item.certLevel='三级'
-          this.boatMan = item.certLevel+item.certTitle
+            })
+            if(item.certLevel=='0') item.certLevel=''
+            if(item.certLevel=='1') item.certLevel='一级'
+            if(item.certLevel=='2') item.certLevel='二级'
+            if(item.certLevel=='3') item.certLevel='三级'
+            item = item.certLevel+ item.certTitle
+          }else{
+            item = '暂无'
+          }
+          
+        }).then(()=>{
+          this.boatMan = item
         })
+        
         return this.boatMan
     },
    getShipDetail (){
@@ -131,34 +140,7 @@ export default {
         let date = new Date()
         console.log(date)
         console.log(date)
-        if(this.certList.licensesOwnerExpireDate<date){
-          this.certList.Ownerstatus = '过期'
-          this.certList.Ownerclass = 'status-bg-red'
-        }else{
-          this.certList.Ownerstatus = '正常'
-          this.certList.Ownerclass = 'status-bg-green'
-        }
-        if(this.certList.licensesNationalExpireDate<date){
-          this.certList.Nationalstatus = '过期'
-          this.certList.Nationalclass = 'status-bg-red'
-        }else{
-          this.certList.Nationalstatus = '正常'
-          this.certList.Nationalclass = 'status-bg-green'
-        }
-        if(this.certList.licensesInspectionExpireDate<date){
-          this.certList.Inspectionstatus = '过期'
-          this.certList.Inspectionclass = 'status-bg-red'
-        }else{
-          this.certList.Inspectionstatus = '正常'
-          this.certList.Inspectionclass = 'status-bg-green'
-        }
-        if(this.certList.licensesFishingExpireDate<date){
-          this.certList.Fishingstatus = '过期'
-          this.certList.Fishingclass = 'status-bg-red'
-        }else{
-          this.certList.Fishingstatus = '正常'
-          this.certList.Fishingclass = 'status-bg-green'
-        }
+        
 
       })
     },
@@ -189,9 +171,9 @@ export default {
     },
     getCrewList () {
         // console.log(this.$route.params.id)
-        getShipCrew(this.$route.query.shipId).then(res=>{
+        getShipCrew(this.$route.params.id).then(res=>{
             this.shipcrewList = res.data.data
-            this.total = res.data.total
+            // this.total = res.data.total
             // console.log( res)
         })
         // shipCrewList
@@ -199,6 +181,30 @@ export default {
     getBasic () {
       getInoutListById(this.$route.params.id).then(res=>{
         this.basicList = res.data.data
+        let date = new Date()
+        console.log('看看吧')
+        console.log(this.basicList.licensesOwnerExpireDate)
+        if(this.basicList.licensesOwnerExpireDate<date || !this.basicList.licensesOwnerExpireDate){
+          this.basicList.Ownerstatus = '过期'
+          this.basicList.Ownerclass = 'status-bg-red'
+        }else{
+          this.basicList.Ownerstatus = '正常'
+          this.basicList.Ownerclass = 'status-bg-green'
+        }
+        if(this.basicList.licensesInspectionExpireDate<date || !this.basicList.licensesInspectionExpireDate){
+          this.basicList.Inspectionstatus = '过期'
+          this.basicList.Inspectionclass = 'status-bg-red'
+        }else{
+          this.basicList.Inspectionstatus = '正常'
+          this.basicList.Inspectionclass = 'status-bg-green'
+        }
+        if(this.basicList.licensesFishingExpireDate<date || !this.basicList.licensesFishingExpireDate){
+          this.basicList.Fishingstatus = '过期'
+          this.basicList.Fishingclass = 'status-bg-red'
+        }else{
+          this.basicList.Fishingstatus = '正常'
+          this.basicList.Fishingclass = 'status-bg-green'
+        }
         this.shipId = this.basicList.shipId
       })
     },
