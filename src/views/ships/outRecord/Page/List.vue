@@ -28,11 +28,11 @@
               :pagedTable="pagedTable"
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
-              @selection-change="handleSelectionChange"
+              @selection-change="handleSelectionChange"   
               is-mutiple-selection>
         <el-table-column prop="boatMan" label="船员适任" width="100">
-        <template slot-scope="scope">
-          <iep-button size="mini" :type="type">{{certStandard (scope.row.id,scope.row.shipId)}}</iep-button>             
+        <template slot-scope="scope">                                               
+          <iep-button size="mini" :type="scope.row.type">{{scope.row.state}}</iep-button>                 
         </template>
         </el-table-column>
           <el-table-column prop="operation" label="操作" width="200">
@@ -52,12 +52,12 @@
 </template>
 <script>
 import { outList,getCrewCert,exportExcel } from '@/api/ships/inout'
-import { getArea } from '@/api/post/admin'
+// import { getArea } from '@/api/post/admin'
 // import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
 export default {
-  components: {
+  components: {   
     // advanceSearch,
   },
   mixins: [mixins],
@@ -83,34 +83,41 @@ export default {
     }
   },
   created () {
-    getArea(0).then(({ data })=>{
-      console.log(data)
-      this.province=data.data
-    })
-    this.loadPage()
-    getCrewCert()
+    // getArea(0).then(({ data })=>{
+    //   console.log(data)
+    //   this.province=data.data
+    // })
+      this.loadPage()       
+    // getCrewCert()    
   },
-  
+  mounted () {              
+        //
+  },    
   methods: {
     handleAdd () {
       this.$router.push({
         path: '/ship_port/detail/create/0',
       })
     },
-    certStandard (inoutId,shipId) {
-      getCrewCert(parseInt(inoutId),parseInt(shipId)).then(res =>{
-        console.log('lack')
-        console.log(res.data.data.lackList)
-        if(res.data.data.lackList.length){
-          this.type = 'danger'
-          this.boatMan = '未通过'
-        }else{
-          this.type = 'success'
-          this.boatMan = '正常'
-        }
-      })
-      return this.boatMan
-    },
+  // async  certStandard (row) {                    
+  //        let boatMan 
+  //   await   getCrewCert(row.id,row.shipId).then(res =>{        
+  //       console.log('lack' + res.data.data.lackList)
+  //       let  lackdata  =  res.data.data
+  //       let  lackList  = lackdata.lackList    
+  //       // console.log(res.data.data.lackList)    
+  //       if(lackList.length){          
+  //         row.type = 'danger'
+  //         boatMan = '未通过'
+  //       }else{
+  //         row.type = 'success'
+  //         boatMan = '正常'
+  //       }
+  //         console.log('lack' + lackList)
+  //     })
+       
+  //     return boatMan
+  //   },
     exportInfo () {                               
       exportExcel (this.exportParams).catch(err => {
         this.$message({
@@ -148,7 +155,21 @@ export default {
       // }else if(this.form.provinceId!=''){
       //   param.areaCode = this.form.provinceId
       // }
-      this.loadTable({ ...param }, outList)
+       let data  =  await  this.loadTable({ ...param }, outList)
+       data.records.forEach(item => {   
+            getCrewCert(item.id,item.shipId).then(res => {
+                  let  lack  =  res.data.data.lackList
+                  if(lack.length >0){
+                       this.$set(item,'type','danger')
+                       this.$set(item,'state','未通过')
+                  }else{
+                      this.$set(item,'type','success')
+                       this.$set(item,'state','正常')
+                  }
+            })
+       })
+       this.pagedTable = data.records   
+       console.log(data.records)    
       // this.loadTable({ ...param }, outList).then(res=>{
       //   console.log('打出来')
       //   this.pagedTable=res.records.filter(item=>{
