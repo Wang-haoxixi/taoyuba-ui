@@ -31,7 +31,7 @@
           <span :class="basicList.Fishingclass">{{basicList.Fishingstatus}}</span>
         </li>
       </ul>
-      <h3>现有配员情况</h3>
+       <h3>现有配员情况</h3>
       <el-table :data="shipcrewList" style="width: 100%">
           <el-table-column
             v-for="(item,index) in columnsMapDetail"
@@ -46,7 +46,7 @@
                 <!-- <a @click="openImage(scope.row[item.prop])">查看保单图片</a> -->
             </template>
             <template v-else-if="item.type==='position'">
-            <div>{{getMyCret(scope.row.idcard)}}</div>
+            <div>{{getMyCret(item,scope)}}</div>
             </template>
             <template v-else>
             <iep-table-detail :value="scope.row[item.prop]"></iep-table-detail>
@@ -62,7 +62,6 @@
 </template>
 <script>
 import { getShipCrew,getCrewCert, getInoutListById } from '@/api/ships/inout'
-import { getMyCretList } from '@/api/post/cert'
 import { getShipByShipId } from '@/api/ships/index'
 import { columnsMapDetail } from '../options'
 import { mapGetters } from 'vuex'
@@ -109,30 +108,24 @@ export default {
     openImage (url) {
         window.open(url, '_blank')
     },
-    getMyCret (idcard){
-      let item
-        getMyCretList(idcard).then(res=>{
-          if(res.data.data.length){
-            item = res.data.data[0]
-            this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
-              if(item.certTitle==data.value){
-                  item.certTitle=data.label
-              }
-            })
-            if(item.certLevel=='0') item.certLevel=''
-            if(item.certLevel=='1') item.certLevel='一级'
-            if(item.certLevel=='2') item.certLevel='二级'
-            if(item.certLevel=='3') item.certLevel='三级'
-            item = item.certLevel+ item.certTitle
-          }else{
-            item = '暂无'
-          }
-          
-        }).then(()=>{
-          this.boatMan = item
-        })
-        
-        return this.boatMan
+    getMyCret (item,scope){
+      this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
+        if(scope.row[item.prop]==data.value){
+            scope.row[item.prop]=data.label
+        }
+      })
+      if(scope.row.certLevel=='0') scope.row.certLevel=''
+      if(scope.row.certLevel=='1') scope.row.certLevel='一级'
+      if(scope.row.certLevel=='2') scope.row.certLevel='二级'
+      if(scope.row.certLevel=='3') scope.row.certLevel='三级'
+        // console.log('职位')
+        // console.log(myitem)
+      if(scope.row[item.prop]){
+        return scope.row.certLevel+scope.row[item.prop]
+      }else{
+        return '暂无'
+      }
+      
     },
    getShipDetail (){
       getShipByShipId(this.$route.query.shipId).then(res=>{
