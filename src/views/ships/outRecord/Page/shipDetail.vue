@@ -6,6 +6,10 @@
         <h3>职务船员配备标准</h3>
         <p ><span v-for="item in cert" :key="item.index" class="status-bg-red"><span  v-if="item.certLevel">{{item.certLevel}}</span>{{item.certTitle}}{{item.number}}名</span></p>
       </div>
+      <div>
+        <h3>当前渔船缺少相关人员</h3>
+        <p ><span v-for="item in lack" :key="item.index" class="status-bg-red"><span  v-if="item.certLevel">{{item.certLevel}}</span>{{item.certTitle}}{{item.number}}名</span></p>
+      </div>
       <h3>现有配员情况</h3>
       <el-table :data="shipcrewList" style="width: 100%">
           <el-table-column
@@ -55,6 +59,7 @@ export default {
       shipcrewList:[],
       total:10,
       cert:{},
+      lack:{},
     }
   },
   created () {
@@ -100,7 +105,18 @@ export default {
     certStandard () {
         getCrewCert(this.$route.params.id,this.$route.query.shipId).then(res=>{
             // console.log(res.data.data)
-            this.lack = res.data.data.lackList
+            this.lack = res.data.data.lackList.map(item=>{
+              this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
+                    if(item.certTitle==data.value){
+                        item.certTitle=data.label
+                    }
+                })
+                if(item.certLevel=='0') item.certLevel=''
+                if(item.certLevel=='1') item.certLevel='一级'
+                if(item.certLevel=='2') item.certLevel='二级'
+                if(item.certLevel=='3') item.certLevel='三级'
+                return item
+            })
             this.cert = res.data.data.tybCrewCertStandardList
             this.cert=this.cert.map(item=>{
                 this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
