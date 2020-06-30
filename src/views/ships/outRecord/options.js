@@ -76,7 +76,7 @@ const columnsMap = [
       type:'image',
     },
     {
-      prop: 'boatMan',
+      prop: 'certTitle',
       label: '职务',
       type:'position',
     },

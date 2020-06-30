@@ -18,6 +18,7 @@ const columnsMap = [
       prop: 'seaworthStatus',
       label: '船舶适航',
       type:'shipStatus',
+      css:'success',
     },
     // {
     //   prop: 'shipId',
