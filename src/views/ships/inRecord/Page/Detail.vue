@@ -10,19 +10,19 @@
       </ul>
       <h3>船舶适配情况</h3>
       <ul class="cert-detail">
-        <li>
+        <!-- <li>
           <span>船舶登记证：{{basicList.licensesOwnerShip}}</span>
           <span>船舶登记证有效期：{{basicList.licensesOwnerExpireDate}}</span>
           <span :class="basicList.Ownerclass">{{basicList.Ownerstatus}}</span>
-        </li>
-        <!-- <li v-if="certList.licensesNationalNo">
-          <span>证书名称：{{certList.licensesNationalNo}}</span>
-          <span>有效期：{{certList.licensesNationalExpireDate}}</span>
-          <span :class="certList.Nationalclass">{{certList.Nationalstatus}}</span>
         </li> -->
         <li>
-          <span>检验证书：{{basicList.licensesInspectionNo}}</span>
-          <span>检验证书有效期：{{basicList.licensesInspectionExpireDate}}</span>
+          <span>国籍证：{{certList.licensesNationalNo}}</span>
+          <span>国籍证有效期：{{certList.licensesNationalExpireDate}}</span>
+          <span :class="certList.Nationalclass">{{certList.Nationalstatus}}</span>
+        </li>
+        <li>
+          <span>船舶检验证书：{{basicList.licensesInspectionNo}}</span>
+          <span>船舶检验证书有效期：{{basicList.licensesInspectionExpireDate}}</span>
           <span :class="basicList.Inspectionclass">{{basicList.Inspectionstatus}}</span>
         </li>
         <li >
@@ -191,12 +191,12 @@ export default {
         let date = new Date()
         console.log('看看吧')
         console.log(this.basicList.licensesOwnerExpireDate)
-        if(this.basicList.licensesOwnerExpireDate<date || !this.basicList.licensesOwnerExpireDate){
-          this.basicList.Ownerstatus = '过期'
-          this.basicList.Ownerclass = 'status-bg-red'
+        if(this.basicList.licensesNationalExpireDate<date || !this.basicList.licensesNationalExpireDate){
+          this.basicList.Nationalclass = '过期'
+          this.basicList.Nationalclass = 'status-bg-red'
         }else{
-          this.basicList.Ownerstatus = '正常'
-          this.basicList.Ownerclass = 'status-bg-green'
+          this.basicList.Nationalclass = '正常'
+          this.basicList.Nationalclass = 'status-bg-green'
         }
         if(this.basicList.licensesInspectionExpireDate<date || !this.basicList.licensesInspectionExpireDate){
           this.basicList.Inspectionstatus = '过期'
