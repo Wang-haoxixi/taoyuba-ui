@@ -405,7 +405,7 @@
           <el-aside class="sidef">
             <div class="tex">渔船所有权登记证书上传</div>
           </el-aside>
-          <el-container>
+          <el-container>                  
             <el-header class="head"></el-header>
             <el-main class="mai">
               <el-upload
@@ -416,6 +416,23 @@
                 :on-remove="handleLicensesRemove"
                 :on-success="handleLicensesSuccessFront" :headers="headers"  accept="image/*" style="margin-left:30px!important">
                 <img v-if="isLicenses" :src="licensesImage" style="width:148px;height:148px">
+                <i v-else class="el-icon-plus"></i>
+              </el-upload>
+            </el-main>
+          </el-container>
+          <el-aside class="sidef">                     
+            <div class="tex">纸质合同上传</div>         
+          </el-aside>
+          <el-container>                          
+            <el-header class="head"></el-header>        
+            <el-main class="mai">                                 
+              <el-upload                    
+                action="/api/admin/file/upload/avatar"        
+                list-type="picture-card"                               
+                :limit="1"
+                :on-remove="handleContractimageRemove"   
+                :on-success="handleContractimageSuccessFront" :headers="headers"  accept="image/*" style="margin-left:30px!important">
+                <img v-if="formData.contractImage" :src="formData.contractImage" style="width:148px;height:148px">
                 <i v-else class="el-icon-plus"></i>
               </el-upload>
             </el-main>
@@ -737,6 +754,9 @@ export default {
     handleContractSuccessFront (response) {
       this.contractImageList.push(response.data.url)
     },
+    handleContractimageSuccessFront (res) {           
+        this.formData.contractImage  =  res.data.url
+    },
     handleLicensesCardPreview (file) {
       this.formData.licensesOwnerShipImage = file.url
     },
@@ -750,6 +770,9 @@ export default {
     handleContractRemove (file, fileList) {
       console.log(222)
       console.log(file, fileList)
+    },
+    handleContractimageRemove () {    
+        this.formData.contractImage = ''
     },
     handleSubmit () {
       if (this.period) {

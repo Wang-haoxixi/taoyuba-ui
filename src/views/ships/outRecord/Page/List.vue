@@ -21,7 +21,7 @@
           <el-button size="small"  @click="loadPage(params)">搜索</el-button>
         </template>
       </operation-container>
-      <iep-table                    
+      <iep-table                                              
               :isLoadTable="isLoadTable"
               :pagination="pagination"
               :columnsMap="columnsMap"
@@ -31,12 +31,12 @@
               @selection-change="handleSelectionChange"   
               is-mutiple-selection>
         <el-table-column prop="boatMan" label="船员适任" width="100">
-        <template slot-scope="scope">                                               
+        <template slot-scope="scope">                                                                 
           <iep-button size="mini" :type="scope.row.type">{{scope.row.state}}</iep-button>                 
         </template>
         </el-table-column>
           <el-table-column prop="operation" label="操作" width="200">
-          <template slot-scope="scope">                 
+          <template slot-scope="scope">                         
             <operation-wrapper>                                   
               <iep-button size="mini" type="primary" @click="handleView(scope.row.id,scope.row.shipId)">渔船配员</iep-button>
               <!-- <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)" v-if="manager">船员管理</iep-button> -->
@@ -169,7 +169,7 @@ export default {
             })
        })
        this.pagedTable = data.records   
-       console.log(data.records)    
+      //  console.log(data.records)    
       // this.loadTable({ ...param }, outList).then(res=>{
       //   console.log('打出来')
       //   this.pagedTable=res.records.filter(item=>{
