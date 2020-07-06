@@ -513,6 +513,8 @@ export default {
         licensesOwnerShipImage: '',
         contractImage:'',
         contractImages: [],
+        contactName:'',
+        contactPhone:'',
       },
       period: [],
       licensesImage: '',
