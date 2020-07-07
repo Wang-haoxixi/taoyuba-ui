@@ -14,12 +14,12 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item label="持证人姓名：" prop="shipownerName">
-                    <el-input maxlength="6" v-model="formData.shipownerName" style="width:380px"></el-input>
+                    <el-input maxlength="6" v-model="formData.shipownerName" style="width:380px" :disabled="shipowner"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="身份证号：" prop="shipownerIdcard">
-                    <el-input maxlength="20" v-model="formData.shipownerIdcard" style="width:380px"></el-input>
+                    <el-input maxlength="20" v-model="formData.shipownerIdcard" style="width:380px" :disabled="shipowner"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -44,7 +44,7 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="船舶登记号：" prop="shipLicenses">
-                    <el-input maxlength="20" v-model="formData.shipLicenses" style="width:380px"></el-input>
+                    <el-input maxlength="20" v-model="formData.shipLicenses" style="width:380px"  :disabled="shipowner"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -138,7 +138,7 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item label="姓名：" prop="employeeName">
-                    <el-input maxlength="6" v-model="formData.employeeName" style="width:380px"></el-input>
+                    <el-input maxlength="6" v-model="formData.employeeName" style="width:380px" :disabled="employee"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -594,6 +594,8 @@ export default {
       },
       isLicenses: false,
       isContract: false,
+      shipowner:false,
+      employee:false,
     }
   },
   created () {
@@ -658,6 +660,7 @@ export default {
         this.formData.shipLicenses = licensesOwnerShip
         this.formData.shipownerPhone = mobile
         this.formData.shipownerAddr = address
+        this.shipowner = true
       } else {
         this.formData.shipName = ''
         this.formData.shipownerName = ''
@@ -665,6 +668,7 @@ export default {
         this.formData.shipLicenses = ''
         this.formData.shipownerPhone = ''
         this.formData.shipownerAddr = ''
+        this.shipowner = false
       }
     },
     getShipNameList (shipName) {
@@ -719,6 +723,7 @@ export default {
         this.formData.employeePosition = positionId
         this.formData.contactName = contactName
         this.formData.contactPhone = contactPhone
+        this.employee = true
       } else {
         this.formData.employeeName = ''
         this.formData.employeePhone = ''
@@ -726,6 +731,7 @@ export default {
         this.formData.employeePosition = ''
         this.formData.contactName = ''
         this.formData.contactPhone = ''
+        this.employee = false
       }
     },
     getidcardList (number) {
