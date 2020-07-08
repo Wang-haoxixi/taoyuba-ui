@@ -122,3 +122,15 @@ export function recallContract (id,status) {
       },
     })
   }
+
+    
+export function uploadContravt (contractId,contractImage) {        
+    return request({
+      url:`${prefixUrl}/updateImage`,
+      method: 'post',
+      params: {
+        contractId : contractId,
+        contractImage: contractImage,
+      },
+    })
+  }
