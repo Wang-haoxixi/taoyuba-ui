@@ -52,7 +52,7 @@
             </div>
           </template>
           </el-table-column> -->
-        <el-table-column label="操作">
+        <el-table-column label="操作">    
           <template slot-scope="scope">
              <el-button v-if="mlms_contract_view" type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">合同查看
             </el-button>
@@ -76,9 +76,11 @@
             </el-button>
             <el-button v-if="mlms_contract_eva && scope.row.status === '合同解除' && scope.row.isRate === 0 && scope.row.isDate === 0" type="text" icon="el-icon-edit" size="mini" @click="handleEvaluate(scope.row.contractId)">评价
             </el-button>
-          </template>
+             <el-button v-if="mlms_contract_recall && scope.row.status === '合同成立' " type="text" icon="el-icon-edit" size="mini" @click="handleCall(scope.row.contractId)">撤销
+            </el-button>     
+          </template>   
         </el-table-column>
-      </avue-tree-table>
+      </avue-tree-table>    
       <div style="text-align: center;margin: 20px 0;">
         <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
       </div>
@@ -174,7 +176,7 @@ import {
   getContractList, 
   deleteContract,
   // getContract,
-  getDict, reviewContract, cancelContract, getContractDetail } from '@/api/tmlms/newContract'
+  getDict, reviewContract, cancelContract, getContractDetail,recallContract } from '@/api/tmlms/newContract'
 import { saveRate, getRate } from '@/api/tmlms/rate'
 import { getUserInfo } from '@/api/login'
 import { mapGetters } from 'vuex'
@@ -221,6 +223,7 @@ export default {
       mlms_contract_eva: false,
       mlms_contract_rec: false,
       mlms_contract_rem: false,
+      mlms_contract_recall: false,
       shipAttrDict: [],
       employeePayTypeDict: [],
       periodTypeDict: [],
@@ -294,8 +297,8 @@ export default {
       rateType: 0,
     }
   },
-  created () {
-    this.getContractList()
+  created () {     
+    this.getContractList()      
     this.getDicts()
     this.mlms_contract_add = this.permissions['mlms_contract_add']
     this.mlms_contract_view = this.permissions['mlms_contract_view']
@@ -309,6 +312,7 @@ export default {
     this.mlms_contract_eva = this.permissions['mlms_contract_eva']
     this.mlms_contract_rec = this.permissions['mlms_contract_rec']
     this.mlms_contract_rem = this.permissions['mlms_contract_rem']
+    this.mlms_contract_recall  =  this.permissions['mlms_contract_recall']
     getUserInfo().then(res => {
       if (res.data.data.roles.indexOf(111) !== -1) {
         this.mangner = true
@@ -817,6 +821,16 @@ export default {
     },
     handleAvatarSuccess (res) {
       this.relform.image = res.data.url
+    },
+    handleCall (contractId) {         
+      //审核不通过
+        let  staus = 2
+        recallContract(contractId,staus).then(res => {
+            if(res.data.data){
+                this.$message.success('撤销成功！')
+                  this.getContractList()  
+            }
+        })
     },
   },
 }

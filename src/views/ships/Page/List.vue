@@ -53,6 +53,7 @@ import { columnsMap } from '../options'
 import { getUserInfo } from '@/api/login'
 import CertStandard from '../component'
 import groupBy from 'lodash/groupBy'
+import  { mapGetters } from  'vuex'       
 export default {
   components: { CertStandard },
   mixins: [mixins],
@@ -74,6 +75,7 @@ export default {
         shipNo: '',
         shipowner: '',
         shipownerIdcard: '',
+        userId: '',
       },
       dialogCertVisible:false,
       lackMap:{},
@@ -86,6 +88,12 @@ export default {
   created () {
     this.loadPage()
   },
+computed: {         
+    ...mapGetters([
+      'roles',
+      'userInfo',   
+    ]),
+ },
   methods: {
     handleSelectionChange (val) {     
       this.multipleSelection = val.map(m => m.id)
@@ -112,17 +120,22 @@ export default {
       this.userData = await getUserInfo().then(res => {
         return res.data.data
       })
-      if(this.userData.roles.indexOf(111) === -1 && this.userData.roles.indexOf(1) === -1){
-        let data = await this.loadTable(param, getMyShipList)
+      if(this.userData.roles.indexOf(111) === -1 && this.userData.roles.indexOf(1) === -1 &&  this.userData.roles.indexOf(112) === -1 ){    
+        let data = await this.loadTable(param, getMyShipList)     
         this.pagedTable = data.records
         this.manager = false
       } else {
-        let data = await this.loadTable(param, getShipList)
+        let  data
+        if(this.userData.roles.indexOf(112) !== -1 )    
+             data = await this.loadTable(param, getMyShipList)  
+        else
+             data = await this.loadTable(param, getShipList)
         this.pagedTable = data.records
         this.manager = true
       }
     },
-    exportInfo () {   
+    exportInfo () {       
+      if(this.roles.indexOf(112) !== -1) this.exportParams.userId = this.userInfo.userId
       exportExcel (this.exportParams).catch(err => {    
           this.$message({
             type: 'warning',

@@ -110,3 +110,15 @@ export function refuseContract (id) {
       },
     })
   }
+
+  
+export function recallContract (id,status) {        
+    return request({
+      url:`${prefixUrl}/recall`,
+      method: 'post',
+      params: {
+        contractId : id,
+        status: status,
+      },
+    })
+  }
