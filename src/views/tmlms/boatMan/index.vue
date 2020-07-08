@@ -7,12 +7,18 @@
         <div style="float:right">                             
           <span style="width:120px"><el-input v-model="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
           <span style="width:120px"><el-input v-model="params.idcard" placeholder="身份证" size="small" clearable></el-input></span>
-          <span style="width:120px"><el-input v-model="params.phone" placeholder="联系电话" size="small" clearable></el-input></span>
-          <span style="width:120px"><el-input v-model="params.remark" placeholder="备注信息" size="small" clearable></el-input></span>
-          <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
-            value-format="yyyy-MM-dd"  size="mini"></el-date-picker>
-          </span>                               
-          <span style="width:120px"><el-select v-model="params.workStatus" placeholder="请选择状态" size="small">                                                        
+          <span style="width:120px"><el-input v-model="params.phone" placeholder="联系电话" size="small" clearable></el-input></span>         
+          <span style="width:150px"><el-select v-model="params.certLevel" placeholder="请选择证书等级" size="small">                                                                              
+              <el-option
+                v-for="item in certGrade"    
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>    
+          </span>       
+           <span style="width:150px"><iep-dict-select placeholder="请选择证书职位" v-model="params.certTitle" dict-name="tyb_crew_cert_title"></iep-dict-select></span>      
+          <span style="width:150px"><el-select v-model="params.workStatus" placeholder="请选择用工状态" size="small">                                                               
               <el-option
                 v-for="item in workStatus"    
                 :key="item.value"
@@ -33,7 +39,7 @@
             :key="index"
             :prop="item.value"  
             :label="item.text"
-            :width="item.css"
+            :width="item.css" 
           >
           <template slot-scope="scope">
             <template v-if="item.type==='dictGroup'">
@@ -104,14 +110,15 @@ export default {
       provinces:[],
       total: 10,
       // 查询数据
-      params: {
+      params: {       
         current: 1,   
         size: 10,
-        // idcard: '',
-        // realName: '',
-        // workStatus: '',
-        // phone: '',
-        // remark: '',
+        idcard: '',
+        realName: '',
+        workStatus: '',
+        phone: '',
+        certLevel: '',
+        certTitle: '',
         // timeLists: '',
       },
       exportParams: {                                       
@@ -213,6 +220,24 @@ export default {
           value: 3,
         },
       ],
+      certGrade: [      
+        {
+          label: '--',
+          value: '0',
+        },
+        {
+          label: '一级',
+          value: '1',
+        },
+        {
+          label: '二级',
+          value: '2',
+        },
+        {
+          label: '三级',
+          value: '3',
+        },
+      ],
       manager: false,
       showSwith:false,
       userData: {roles: []},
@@ -309,16 +334,16 @@ export default {
           }
         })
         this.total = res.data.data.total
-        console.log('测试')
-        console.log(this.shipownerList)
+        // console.log('测试')
+        // console.log(this.shipownerList)
       })
     },
     //搜索
-    getParamData () {
-      if (this.params.timeLists) {
-        this.params.startDate = this.params.timeLists[0]
-        this.params.endDate = this.params.timeLists[1]
-      }
+    getParamData () {   
+      // if (this.params.timeLists) {
+      //   this.params.startDate = this.params.timeLists[0]
+      //   this.params.endDate = this.params.timeLists[1]
+      // }
       this.params.current = 1
       this.getData()
     },
@@ -412,10 +437,6 @@ export default {
       'params.phone': function (val) {
             this.exportParams.phone  = val
       },    
-      'params.timeLists': function (val) {                
-            this.exportParams.startDate  = val[0]
-            this.exportParams.endDate  = val[1]
-      },
       'params.remark': function (val) {                
             this.exportParams.remark  = val
       },
