@@ -473,9 +473,12 @@
 <script>
 import debounce from 'lodash/debounce'
 import store from '@/store'
-import { findMyship } from '@/api/ships/index'
-import { getShipManagerList } from '@/api/ships/shipoperat/index'
+import { findorgShip} from '@/api/ships/index'
+// import { findMyship } from '@/api/ships/index'
+import { getUserInfo } from '@/api/login'
+import { getOperatorList } from '@/api/ships/shipoperat/index'
 import { detailCrew } from '@/api/tmlms/boatMan/index'
+import { getShipownerByidcard } from '@/api/tmlms/shipowner/index'
 import { addContract, updateContract, getContractDetail, isCheckIdcard } from '@/api/tmlms/newContract'
 export default {
   props: {
@@ -534,6 +537,7 @@ export default {
         contactPhone:'',
       },
       period: [],
+      orgId:'',
       licensesImage: '',
       contractImageList: [],
       rules: {
@@ -673,17 +677,23 @@ export default {
     },
     getShipNameList (shipName) {
       this.loading = true
-      if (shipName !== '') {
-        findMyship(shipName).then(({data}) => {
-          if (data.data !== false) {
+      getUserInfo().then(res =>{
+        this.orgId = res.data.data.sysUser.orgId
+        // console.log(orgId)
+      }).then(()=>{
+        if (shipName !== '') {
+        findorgShip(this.orgId,shipName).then(({data})=>{
+          console.log(data.data)
+          if(data.data!==false){
             this.shipNames.push(data.data)
-          } else {
+          }else{
             this.$message.error(data.msg)
           }
         })
       } else {
         this.shipNames = []
       }
+      })
       this.loading = false
     },
     employerPropChange (val) {
@@ -693,11 +703,22 @@ export default {
         this.formData.employerPhone = this.formData.shipownerPhone
         this.formData.employerAddr = this.formData.shipownerAddr
       } else if (val === 2) {
-        getShipManagerList (this.formData.shipName).then(data => {
-          this.formData.employerName = data.data.data.records[0].realName
-          this.formData.employerIdcard = data.data.data.records[0].idcard
-          this.formData.employerPhone = data.data.data.records[0].phone
-          this.formData.employerAddr = data.data.data.records[0].address
+        this.formData.employerName = ''
+        this.formData.employerIdcard = ''
+        this.formData.employerPhone = ''
+        this.formData.employerAddr = ''
+        getOperatorList (this.formData.shipName.shipName).then(data => {
+          if(data.data.data){
+            this.formData.employerName = data.data.data.realname
+            this.formData.employerIdcard = data.data.data.idcard
+          }
+        }).then(()=>{
+          getShipownerByidcard(this.formData.employerIdcard).then(res=>{
+            if(res.data.data){
+              this.formData.employerPhone = res.data.data.phone
+              this.formData.employerAddr = res.data.data.address
+            }
+          })
         })
       } else if (val === 3) {
           this.formData.employerName = ''

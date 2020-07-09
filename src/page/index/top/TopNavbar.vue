@@ -15,22 +15,22 @@
         <el-menu-item>
           <span class="sub-menu" @click="open(name='index')">首页</span>
         </el-menu-item>
-        <el-menu-item>
+        <el-menu-item v-if="roles.indexOf(111) !== -1 || roles.indexOf(112) !== -1 || roles.indexOf(1) !== -1">
           <span class="sub-menu" @click="open(name='ship')">渔船</span>
         </el-menu-item>
-        <el-menu-item>
+        <el-menu-item  v-if="roles.indexOf(111) !== -1 || roles.indexOf(112) !== -1 || roles.indexOf(1) !== -1">
           <span class="sub-menu" @click="open(name='crew')">船员</span>
         </el-menu-item>
-        <el-menu-item>
+        <el-menu-item  v-if="roles.indexOf(111) !== -1 || roles.indexOf(112) !== -1 || roles.indexOf(1) !== -1">
           <span class="sub-menu" @click="open(name='fish')">船东</span>
         </el-menu-item>
-        <el-menu-item>
+        <el-menu-item v-if="roles.indexOf(111) !== -1 || roles.indexOf(112) !== -1 || roles.indexOf(1) !== -1">
           <span class="sub-menu" @click="open(name='standing')">一船一档</span>
         </el-menu-item>
-        <el-menu-item>
+        <el-menu-item v-if="roles.indexOf(111) !== -1 || roles.indexOf(112) !== -1 || roles.indexOf(1) !== -1 || roles.indexOf(109) !== -1">
           <span class="sub-menu" @click="open(name='htgl')">合同</span>
         </el-menu-item>
-        <el-menu-item>
+        <el-menu-item v-if="roles.indexOf(111) !== -1 || roles.indexOf(108) !== -1 || roles.indexOf(1) !== -1">
           <span class="sub-menu" @click="open(name='recruit')">招聘</span>
         </el-menu-item>
       </el-menu>
@@ -48,6 +48,7 @@
 <script>
 // import TopSearch from './TopSearch'
 import displayMixins from '@/mixins/displayMixins'
+import { mapGetters } from 'vuex'
 // import ResourceCon from './ResourceCon'
 import { navList, navPathList } from '@/router/app/navList.js'
 export default {
@@ -104,6 +105,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(['roles']),
     activeIndex () {
       const matchedPath = this.$route.matched[1].path
       if (navPathList.includes(matchedPath)) {

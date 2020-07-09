@@ -142,6 +142,7 @@ export default {
     },
     // 查看
     handleView (val) {
+
       this.$router.push({name: 'detailBvillage',query:{ see: val }})
     },
     // 编辑

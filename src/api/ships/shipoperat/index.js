@@ -8,7 +8,12 @@ export function getShipManagerList (params) {
     params: params,
   })
 }
-
+export function getOperatorList (shipName) {
+  return request({
+    url:`/tmlms/tybshiphaver/getShiphaver?shipName=${shipName}`,
+    method: 'get',
+  })
+}
 export function creatShipManager (data) {
   return request({
     url: `${prefixUrl}/save`,

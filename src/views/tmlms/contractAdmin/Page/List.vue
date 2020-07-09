@@ -3,8 +3,9 @@
     <basic-container>
       <page-header title="网签合同"></page-header>
             <operation-container>
-        <template slot="left">
-          <iep-button v-if="mlms_contract_add" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+        <template slot="left">    
+          <!-- <iep-button  @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button> -->
+           <iep-button v-if="mlms_contract_add" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
         <template slot="right">
           <span><el-input v-model="params.shipName" placeholder="船名号" size="small" style="width:120px"></el-input></span>
@@ -203,7 +204,8 @@ export default {
         shipownerName: '',
         employerName: '',
         employeeName: '',
-        timeLists:'', 
+        timeLists:'',
+        orgId:'' ,
         status: '',
         current: 1,
         size: 10,
@@ -428,6 +430,7 @@ export default {
       this.getContractList()
     },
     handleAdd () {
+      // console.log('bbbb')
       this.$emit('onAdd')
     },
     handleRecord (contractId) {
@@ -572,9 +575,7 @@ export default {
         this.relform.contractId = this.rd
         if(this.relform.content === '') {
           this.$message.error('请输入解除理由！')
-        } else if (this.relform.image === '') {
-          this.$message.error('请上传图片证明！')
-        } else {
+        }else {
           if (this.contStatus === 1) {
             cancelContract(this.relform).then(() => {
               this.relDialog = false
