@@ -14,7 +14,7 @@
           <span><el-input v-model="params.employeeName" placeholder="乙方姓名" size="small" style="width:120px"></el-input></span>
           <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
             value-format="yyyy-MM-dd"  size="mini"></el-date-picker>
-          </span>
+          </span>                               
           <span style="width:120px"><el-select v-model="conStatus" placeholder="请选择合同状态" size="small">
               <el-option
                 v-for="item in statusDict"
@@ -53,7 +53,7 @@
             </div>
           </template>
           </el-table-column> -->
-        <el-table-column label="操作">
+        <el-table-column label="操作">    
           <template slot-scope="scope">
              <el-button v-if="mlms_contract_view" type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">合同查看
             </el-button>
@@ -77,9 +77,15 @@
             </el-button>
             <el-button v-if="mlms_contract_eva && scope.row.status === '合同解除' && scope.row.isRate === 0 && scope.row.isDate === 0" type="text" icon="el-icon-edit" size="mini" @click="handleEvaluate(scope.row.contractId)">评价
             </el-button>
-          </template>
+             <el-button v-if="mlms_contract_recall && scope.row.status === '合同成立' " type="text" icon="el-icon-edit" size="mini" @click="handleCall(scope.row.contractId)">撤销
+            </el-button>    
+             <el-button v-if="mlms_contract_upload && (scope.row.status === '合同成立'  &&  !scope.row.contractImage)" type="text" icon="el-icon-edit" size="mini" @click="handleUpload(scope.row.contractId)">上传纸质合同
+            </el-button> 
+               <el-button v-if="mlms_contract_upload && (scope.row.status === '合同成立'  &&  scope.row.contractImage)" type="text" icon="el-icon-edit" size="mini" @click="lookImage(scope.row.contractId)">查看纸质合同
+            </el-button>     
+          </template>   
         </el-table-column>
-      </avue-tree-table>
+      </avue-tree-table>    
       <div style="text-align: center;margin: 20px 0;">
         <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
       </div>
@@ -165,6 +171,19 @@
           <el-button @click="ownClose">取 消</el-button>
           <el-button type="primary" @click="ownSave">确 定</el-button>
         </span>
+      </el-dialog>       
+      <el-dialog :title="uploadTitle" :visible.sync="paperVisible" width="30%" :before-close="paperClose">
+               <el-upload       
+                  class="upload-demo"
+                  drag
+                  action="/api/admin/file/upload/avatar"
+                  :headers="headers"
+                  :on-success="handlePaperSuccess"    
+                  multiple>
+                  <img v-if="contractImage" :src="contractImage" class="avatarUpload">
+                  <i class="el-icon-upload"></i>    
+                  <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                </el-upload>
       </el-dialog>
     </basic-container>
   </div>
@@ -175,7 +194,7 @@ import {
   getContractList, 
   deleteContract,
   // getContract,
-  getDict, reviewContract, cancelContract, getContractDetail } from '@/api/tmlms/newContract'
+  getDict, reviewContract, cancelContract, getContractDetail,recallContract,uploadContravt } from '@/api/tmlms/newContract'
 import { saveRate, getRate } from '@/api/tmlms/rate'
 import { getUserInfo } from '@/api/login'
 import { mapGetters } from 'vuex'
@@ -223,6 +242,8 @@ export default {
       mlms_contract_eva: false,
       mlms_contract_rec: false,
       mlms_contract_rem: false,
+      mlms_contract_recall: false,
+      mlms_contract_upload:false,
       shipAttrDict: [],
       employeePayTypeDict: [],
       periodTypeDict: [],
@@ -266,6 +287,7 @@ export default {
       seaDialog: false,
       ownDialog: false,
       relDialog: false,
+      paperVisible:false,
       cd: '',
       content: '',
       rateList: {
@@ -294,10 +316,13 @@ export default {
         Authorization: 'Bearer ' + store.getters.access_token,
       },
       rateType: 0,
+      nowContractId: '',
+      contractImage: '',
+      uploadTitle: '',
     }
   },
-  created () {
-    this.getContractList()
+  created () {        
+    this.getContractList()      
     this.getDicts()
     this.mlms_contract_add = this.permissions['mlms_contract_add']
     this.mlms_contract_view = this.permissions['mlms_contract_view']
@@ -311,6 +336,8 @@ export default {
     this.mlms_contract_eva = this.permissions['mlms_contract_eva']
     this.mlms_contract_rec = this.permissions['mlms_contract_rec']
     this.mlms_contract_rem = this.permissions['mlms_contract_rem']
+    this.mlms_contract_recall  =  this.permissions['mlms_contract_recall']
+    this.mlms_contract_upload = this.permissions['mlms_contract_upload']
     getUserInfo().then(res => {
       if (res.data.data.roles.indexOf(111) !== -1) {
         this.mangner = true
@@ -562,6 +589,14 @@ export default {
     handleRelieve (contractId) {
       this.relDialog = true
       this.rd = contractId
+    },
+    handleUpload (contractId) {          
+        this.uploadTitle = '上传纸质合同'     
+        this.paperVisible = true
+        this.nowContractId  = contractId
+    },
+    paperClose () {   
+        this.paperVisible = false 
     },
     async agreeRelieve () {
       this.contStatus = await getContractDetail(this.rd).then(res => {
@@ -819,6 +854,34 @@ export default {
     handleAvatarSuccess (res) {
       this.relform.image = res.data.url
     },
+    handlePaperSuccess (res) {      
+      //  this.contractImage = res.data.url        
+        uploadContravt(this.nowContractId,res.data.url).then(res =>{
+              if(res.data.data) {
+                    this.contractImage = res.data.url
+                    this.$message.success('上传成功!')
+                    this.paperVisible = false
+              }
+        })
+    },
+    lookImage (contaractId) {             
+      this.uploadTitle = '纸质合同'
+      getContractDetail(contaractId).then(res => {
+              let  contaract  =  res.data.data
+              this.contractImage  = contaract.contractImage
+              this.paperVisible = true
+        })   
+    },
+    handleCall (contractId) {         
+      //审核不通过
+        let  staus = 2
+        recallContract(contractId,staus).then(res => {
+            if(res.data.data){
+                this.$message.success('撤销成功！')
+                  this.getContractList()  
+            }
+        })
+    },
   },
 }
 </script>
@@ -880,5 +943,12 @@ export default {
     width: 178px;
     height: 178px;
     display: block;
+  }
+  .avatarUpload {   
+   width: 360px;
+    height: 180px;
+  }
+  .el-upload-list__item-name {
+     display: none;
   }
 </style>

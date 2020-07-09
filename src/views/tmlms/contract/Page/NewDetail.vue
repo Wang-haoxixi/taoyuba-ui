@@ -420,8 +420,8 @@
               </el-upload>
             </el-main>
           </el-container>
-          <el-aside class="sidef">                     
-            <div class="tex">纸质合同上传</div>         
+          <!-- <el-aside class="sidef">                     
+            <div class="tex">纸质合同上传</div>             
           </el-aside>
           <el-container>                          
             <el-header class="head"></el-header>        
@@ -436,7 +436,7 @@
                 <i v-else class="el-icon-plus"></i>
               </el-upload>
             </el-main>
-          </el-container>
+          </el-container> -->
         </el-container>
         <!-- <el-container>
           <el-aside class="sidef">

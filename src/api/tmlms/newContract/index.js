@@ -110,3 +110,27 @@ export function refuseContract (id) {
       },
     })
   }
+
+  
+export function recallContract (id,status) {        
+    return request({
+      url:`${prefixUrl}/recall`,
+      method: 'post',
+      params: {
+        contractId : id,
+        status: status,
+      },
+    })
+  }
+
+    
+export function uploadContravt (contractId,contractImage) {        
+    return request({
+      url:`${prefixUrl}/updateImage`,
+      method: 'post',
+      params: {
+        contractId : contractId,
+        contractImage: contractImage,
+      },
+    })
+  }
