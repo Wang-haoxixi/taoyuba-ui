@@ -34,7 +34,8 @@
           </el-table-column>
           <el-table-column
             prop="status"  
-            label="审核操作"
+            label="审核操作"      
+            v-if="smdj"
           >
           <!-- <template slot-scope="scope">
             <div>
@@ -62,6 +63,7 @@
           <el-table-column
             prop="status"  
             label="审核状态"
+            v-if="smdj"
           >
           <template slot-scope="scope">
             {{ scope.row.status | typeFilter}}
@@ -242,9 +244,14 @@ export default {
        })
     },
   },
-  computed: {
+  computed: {   
+      //区分实名登记和会员管理页面
+      smdj () {
+            return  this.$route.path.indexOf('//') > 5
+      },
   },
-  created () {
+  created () {            
+    // console.log(this.smdj) 
     this.getData()
     this.isManager()
   },
