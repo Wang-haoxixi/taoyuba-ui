@@ -183,12 +183,12 @@
                       <!-- <div style="font-size:10px">紧急联系人：{{formData.employeeName}}</div>
                       <div style="font-size:10px">联系电话：{{formData.employeePhone}}</div> -->
                       <el-col>
-                        <el-form-item label="紧急联系人：">
+                        <el-form-item label="紧急联系人：" prop="contactName">
                           <el-input maxlength="20" v-model="formData.contactName" style="width:150px" size="mini"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col>
-                        <el-form-item label="联系电话：">
+                        <el-form-item label="联系电话：" prop="contactPhone">
                           <el-input maxlength="11" v-model="formData.contactPhone" style="width:150px" size="mini"></el-input>
                         </el-form-item>
                       </el-col>
@@ -588,6 +588,12 @@ export default {
         }],
         employeeAddr: [{ 
           required: true, message: '请输入乙方（雇主)地址', trigger: 'blur',
+        }],
+        contactName: [{ 
+          required: true, message: '请输入紧急联系人姓名', trigger: 'blur',
+        }],
+        contactPhone: [{ 
+          required: true, message: '请输入紧急联系人电话', trigger: 'blur',
         }],
       },
       shipNames: [],
