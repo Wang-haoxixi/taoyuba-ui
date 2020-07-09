@@ -75,7 +75,12 @@ export  function  findMyship (name) {
     method: 'get',
   })
 }
-
+export  function  findorgShip (orgId,shipName) {
+  return request({
+    url: `${prefixUrl}/findorgShip?orgId=${orgId}&&shipName=${shipName}`,
+    method: 'get',
+  })
+}
 export function getShipByShipNo (shipNo) {
   return request({
     url: `${prefixUrl}/searchByshipNo`,

@@ -183,12 +183,12 @@
                       <!-- <div style="font-size:10px">紧急联系人：{{formData.employeeName}}</div>
                       <div style="font-size:10px">联系电话：{{formData.employeePhone}}</div> -->
                       <el-col>
-                        <el-form-item label="紧急联系人：">
+                        <el-form-item label="紧急联系人：" prop="contactName">
                           <el-input maxlength="20" v-model="formData.contactName" style="width:150px" size="mini"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col>
-                        <el-form-item label="联系电话：">
+                        <el-form-item label="联系电话：" prop="contactPhone">
                           <el-input maxlength="11" v-model="formData.contactPhone" style="width:150px" size="mini"></el-input>
                         </el-form-item>
                       </el-col>
@@ -473,9 +473,12 @@
 <script>
 import debounce from 'lodash/debounce'
 import store from '@/store'
-import { findMyship } from '@/api/ships/index'
-import { getShipManagerList } from '@/api/ships/shipoperat/index'
+import { findorgShip} from '@/api/ships/index'
+// import { findMyship } from '@/api/ships/index'
+import { getUserInfo } from '@/api/login'
+import { getOperatorList } from '@/api/ships/shipoperat/index'
 import { detailCrew } from '@/api/tmlms/boatMan/index'
+import { getShipownerByidcard } from '@/api/tmlms/shipowner/index'
 import { addContract, updateContract, getContractDetail, isCheckIdcard } from '@/api/tmlms/newContract'
 export default {
   props: {
@@ -534,6 +537,7 @@ export default {
         contactPhone:'',
       },
       period: [],
+      orgId:'',
       licensesImage: '',
       contractImageList: [],
       rules: {
@@ -584,6 +588,12 @@ export default {
         }],
         employeeAddr: [{ 
           required: true, message: '请输入乙方（雇主)地址', trigger: 'blur',
+        }],
+        contactName: [{ 
+          required: true, message: '请输入紧急联系人姓名', trigger: 'blur',
+        }],
+        contactPhone: [{ 
+          required: true, message: '请输入紧急联系人电话', trigger: 'blur',
         }],
       },
       shipNames: [],
@@ -673,17 +683,23 @@ export default {
     },
     getShipNameList (shipName) {
       this.loading = true
-      if (shipName !== '') {
-        findMyship(shipName).then(({data}) => {
-          if (data.data !== false) {
+      getUserInfo().then(res =>{
+        this.orgId = res.data.data.sysUser.orgId
+        // console.log(orgId)
+      }).then(()=>{
+        if (shipName !== '') {
+        findorgShip(this.orgId,shipName).then(({data})=>{
+          console.log(data.data)
+          if(data.data!==false){
             this.shipNames.push(data.data)
-          } else {
+          }else{
             this.$message.error(data.msg)
           }
         })
       } else {
         this.shipNames = []
       }
+      })
       this.loading = false
     },
     employerPropChange (val) {
@@ -693,11 +709,22 @@ export default {
         this.formData.employerPhone = this.formData.shipownerPhone
         this.formData.employerAddr = this.formData.shipownerAddr
       } else if (val === 2) {
-        getShipManagerList (this.formData.shipName).then(data => {
-          this.formData.employerName = data.data.data.records[0].realName
-          this.formData.employerIdcard = data.data.data.records[0].idcard
-          this.formData.employerPhone = data.data.data.records[0].phone
-          this.formData.employerAddr = data.data.data.records[0].address
+        this.formData.employerName = ''
+        this.formData.employerIdcard = ''
+        this.formData.employerPhone = ''
+        this.formData.employerAddr = ''
+        getOperatorList (this.formData.shipName.shipName).then(data => {
+          if(data.data.data){
+            this.formData.employerName = data.data.data.realname
+            this.formData.employerIdcard = data.data.data.idcard
+          }
+        }).then(()=>{
+          getShipownerByidcard(this.formData.employerIdcard).then(res=>{
+            if(res.data.data){
+              this.formData.employerPhone = res.data.data.phone
+              this.formData.employerAddr = res.data.data.address
+            }
+          })
         })
       } else if (val === 3) {
           this.formData.employerName = ''

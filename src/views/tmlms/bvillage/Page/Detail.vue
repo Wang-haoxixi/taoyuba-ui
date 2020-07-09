@@ -72,7 +72,7 @@
 </template>
 <script>
 import { saveVillage,detailVillage,editVillage } from '@/api/tmlms/bvillage'
-import { getAllArea, getAllAreaName } from '@/api/tmlms/shipowner'
+// import { getAllArea, getAllAreaName } from '@/api/tmlms/shipowner'
 import { lazyAMapApiLoaderInstance } from 'vue-amap'
 import { getArea } from '@/api/post/address.js'
 // import { addUserRole } from '@/api/admin/user'
@@ -291,26 +291,32 @@ export default {
     this.getInformation('bvillage',['phone','contactName'])
     // 获取编辑数据
     async function getAll () {
+      console.log('看看')
+      console.log(this.$route.query.edit)
       // 异步获取ID
       let data = await detailVillage(this.$route.query.edit || this.$route.query.see).then( res=>{
         return res.data.data
       })
+      this.bvillage = data
+      // console.log(data)
       // 拿到ID 同步获取地址和选中的地址
-      getAllArea(data.villageId).then( res=>{
-        this.options = res.data.data
-      })
-      getAllAreaName(data.villageId).then( res=>{
-        // 处理后端数据变成我要用的数据
-          this.getarr(res.data.data,this.arr)
-          data.villageId = this.arr
-          this.bvillage = data
-          // document.getElementsByClassName(
-          //         'bvillage'
-          // )[0].childNodes[0].childNodes[0].value = this.bvillage.address
-          this.mapCenter = [this.bvillage.lng,this.bvillage.lat]
-          this.marker = [this.bvillage.lng,this.bvillage.lat]
-          console.log(this.bvillage)
-      })
+      // getAllArea(data.villageId).then( res=>{
+      //   this.options = res.data.data
+      // })
+      // getAllAreaName(data.villageId).then( res=>{
+      //   // 处理后端数据变成我要用的数据
+      //     this.getarr(res.data.data,this.arr)
+      //     data.villageId = this.arr
+      //     this.bvillage = data
+      //     // document.getElementsByClassName(
+      //     //         'bvillage'
+      //     // )[0].childNodes[0].childNodes[0].value = this.bvillage.address
+      //     this.mapCenter = [this.bvillage.lng,this.bvillage.lat]
+      //     this.marker = [this.bvillage.lng,this.bvillage.lat]
+      //     // console.log(this.bvillage)
+      // })
+      console.log('数据再这里')
+      console.log(this.bvillage)
     }
   },
 }
