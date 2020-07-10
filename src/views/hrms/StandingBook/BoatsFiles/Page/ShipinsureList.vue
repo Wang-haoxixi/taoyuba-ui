@@ -1,7 +1,7 @@
 <template>
   <div>
     <basic-container>
-      <page-header :title="`${$route.params.shipName}渔船保单`"></page-header>
+      <page-header :title="`${$route.params.shipName}渔船`"></page-header>
       <operation-container>
         <template slot="left">
           <iep-button v-if="manager" @click="handleAdd($route.params.shipName)" type="primary" icon="el-icon-plus" plain>新增</iep-button>

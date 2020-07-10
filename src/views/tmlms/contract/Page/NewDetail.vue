@@ -336,7 +336,7 @@
                       <el-col :span="4"  style="margin-top: 10px!important">
                         <el-radio :label="1">定期支付</el-radio>
                       </el-col>
-                      <el-col :span="10">
+                      <el-col :span="10">             
                         <el-form-item label="工资产生后次月" prop="payTypeValue">  
                           <el-input :disabled="formData.payType === 2 || formData.payType === 3" maxlength="4" v-model="formData.payTypeValue" style="width:50px" size="mini"></el-input>日前支付
                         </el-form-item>
