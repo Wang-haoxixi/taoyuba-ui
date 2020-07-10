@@ -40,7 +40,7 @@
         <el-table-column prop="operation" label="操作" width="140">
           <template slot-scope="scope">
             <operation-wrapper>
-              <iep-button  v-if="manager" size="mini" plain @click="handleEdit(scope.row.shipId)">编辑</iep-button>
+              <iep-button  v-if="manager" size="mini" plain @click="handleEdit(scope.row.shipId)">编辑</iep-button>   
               <iep-button size="mini" @click="handleView(scope.row.shipId)">查看</iep-button>
             </operation-wrapper>
           </template>
@@ -184,7 +184,7 @@ export default {
       this.userData = await getUserInfo().then(res => {
         return res.data.data
       })
-      if(this.userData.roles.indexOf(111) !== -1 || this.userData.roles.indexOf(1) !== -1) {
+      if(this.userData.roles.indexOf(111) !== -1 || this.userData.roles.indexOf(1) !== -1 || this.userData.roles.indexOf(112) !== -1) {
         this.manager = true
       }
     },
