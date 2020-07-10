@@ -594,6 +594,7 @@ export default {
         this.uploadTitle = '上传纸质合同'     
         this.paperVisible = true
         this.nowContractId  = contractId
+        this.contractImage  = ''
     },
     paperClose () {   
         this.paperVisible = false 
@@ -854,13 +855,14 @@ export default {
     handleAvatarSuccess (res) {
       this.relform.image = res.data.url
     },
-    handlePaperSuccess (res) {      
+    handlePaperSuccess (res) {         
       //  this.contractImage = res.data.url        
         uploadContravt(this.nowContractId,res.data.url).then(res =>{
               if(res.data.data) {
                     this.contractImage = res.data.url
                     this.$message.success('上传成功!')
                     this.paperVisible = false
+                    this.getContractList()
               }
         })
     },
@@ -873,7 +875,7 @@ export default {
         })   
     },
     handleCall (contractId) {       
-      //审核不通过      
+      //审核不通过    
       let staus = 2
        this.$confirm('此操作将撤销该合同, 是否继续?', '提示', {
         confirmButtonText: '确定',
