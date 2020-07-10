@@ -872,15 +872,25 @@ export default {
               this.paperVisible = true
         })   
     },
-    handleCall (contractId) {         
-      //审核不通过
-        let  staus = 2
-        recallContract(contractId,staus).then(res => {
-            if(res.data.data){
-                this.$message.success('撤销成功！')
-                  this.getContractList()  
-            }
+    handleCall (contractId) {       
+      //审核不通过      
+      let staus = 2
+       this.$confirm('此操作将撤销该合同, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        recallContract(contractId,staus), (error) => {
+          this.$message.error(error.message)
+        }
+        this.$message.success('撤销成功！')
+        this.getContractList()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消撤销',
         })
+      }) 
     },
   },
 }
