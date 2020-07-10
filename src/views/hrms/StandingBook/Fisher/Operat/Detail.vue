@@ -6,8 +6,8 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="姓名:" prop="realName">
-                <el-input v-model="operator.realName" placeholder="" v-if="!$route.query.see"></el-input>
-                <div v-else>{{ operator.realName }}</div>
+                <el-input v-model="operator.realname" placeholder="" v-if="!$route.query.see"></el-input>
+                <div v-else>{{ operator.realname }}</div>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -40,12 +40,12 @@
                 <div v-else>{{ operator.shipName }}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <!-- <el-col :span="12">
               <el-form-item label="船舶登记号:" prop="shipLicenses">
                 <el-input v-model="operator.shipLicenses" placeholder="" v-if="!$route.query.see" disabled></el-input>
                 <div v-else>{{ operator.shipLicenses }}</div>
               </el-form-item>
-            </el-col>
+            </el-col> -->
           </el-row>
         </el-form>
         <div style="text-align:center">
@@ -57,7 +57,8 @@
 </template>
 <script>
 import { getShipByShipNo } from '@/api/ships/index'
-import { creatShipManager, getShipManagerByShipNo, updateShipManager } from '@/api/ships/shipoperat/index'
+import { getOperatorList, creatShipManager,  updateShipManager } from '@/api/ships/shipoperat/index'
+import { getShipownerByidcard } from '@/api/tmlms/shipowner/index'
 export default {
   data () {
     // 验证
@@ -87,7 +88,7 @@ export default {
         shipNo: '',
         shipName: '',
         shipLicenses: '',
-        realName:'',
+        realname:'',
         idcard: '',
         phone: '',
         address: '',
@@ -119,13 +120,25 @@ export default {
           this.operator.shipLicenses =res.data.data.licensesOwnerShip
         })
       } else if (this.$route.query.edit) {
-        getShipManagerByShipNo (this.$route.query.edit).then(res => {
+        getOperatorList(this.$route.query.see).then(res=>{
           this.operator = res.data.data
         })
       } else if (this.$route.query.see) {
-        getShipManagerByShipNo (this.$route.query.see).then(res => {
+        getOperatorList(this.$route.params.shipName).then(res=>{
           this.operator = res.data.data
+          this.operator.shipName = this.$route.params.shipName
+          this.operator.shipNo = this.$route.query.see
+        }).then(()=>{
+          getShipownerByidcard(this.operator.idcard).then(res=>{
+            if(res.data.data){
+              this.operator.phone = res.data.data.phone
+              this.operator.address = res.data.data.address
+            }
+          })
         })
+        // getShipManagerByShipNo (this.$route.query.see).then(res => {
+        //   this.operator = res.data.data
+        // })
       } 
     },
     // 提交表单

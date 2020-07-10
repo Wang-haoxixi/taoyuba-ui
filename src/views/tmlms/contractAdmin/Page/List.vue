@@ -2,6 +2,14 @@
   <div class="contract-box">
     <basic-container>
       <page-header title="网签合同"></page-header>
+       <div class="tips">
+        <dl>
+          <dt> 合同如有以下情况：</dt>
+          <dd>1、合同信息填写错误，需重新编辑。</dd>
+          <dd>2、合同非正常解除，需解除合同。</dd>
+          <dd>请前往衢山船员服务中心。联系人：李岳雷，电话：15924014846</dd>
+        </dl>
+      </div>
             <operation-container>
         <template slot="left">    
           <!-- <iep-button  @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button> -->
@@ -28,6 +36,7 @@
           <el-button size="small"  @click="getParamData">搜索</el-button> 
         </template>
       </operation-container>
+     
       <avue-tree-table :option="options" style="margin-top: 20px;">
         <!-- <el-table-column label="是否审核" prop="status">
           <template slot-scope="scope">
@@ -893,6 +902,11 @@ export default {
 </style>
 
 <style scoped>
+.tips {
+  background: #ecf5ff;
+  padding:10px 10px 4px 10px;
+  margin-bottom: 30px;
+}
 .input-wrapper {
   display: flex;
   max-width: 350px;

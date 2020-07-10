@@ -76,16 +76,8 @@ const columnsMap = [
       label: '船名号',
     },
     {
-      prop: 'shipNo',
-      label: '渔船编号',
-    },
-    {
-      prop: 'realName',
+      prop: 'realname',
       label: '姓名',
-    },
-    {
-      prop: 'phone',
-      label: '联系电话',
     },
   ]
 

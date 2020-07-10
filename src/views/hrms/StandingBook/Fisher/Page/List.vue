@@ -50,7 +50,7 @@
             <operation-wrapper>
               <iep-button size="mini" type="primary" @click="handleIntoinsure(scope.row.shipName)">保单</iep-button>
               <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">船员</iep-button>
-              <iep-button size="mini" type="primary" @click="handleOperat(scope.row.shipName)">经营人</iep-button>
+              <iep-button size="mini" type="primary" @click="handleOperat(scope.row.shipId,scope.row.shipNo)">经营人</iep-button>
             </operation-wrapper>
           </template>
         </el-table-column>
@@ -170,9 +170,10 @@ export default {
         path: `/hrms_spa/ship_crew/${id}`, 
       })
     },
-    handleOperat (name) {
+    handleOperat (id,No) {
       this.$router.push({       
-        path: `/hrms_spa/ship_operat/${name}`,
+        path: `/hrms_spa/ship_operat/${id}`,
+        query:{shipNo:No},
       })
     },
     //搜索

@@ -771,7 +771,7 @@ export default {
           if (number !== '') {
             detailCrew(number).then(({data}) => {
               if (Object.keys(data.data).length !== 0) {
-                // this.idcards.push(data.data)
+                this.idcards.push(data.data)
               }
             })
           } else {

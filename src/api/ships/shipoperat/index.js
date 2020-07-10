@@ -8,6 +8,13 @@ export function getShipManagerList (params) {
     params: params,
   })
 }
+export function getOperatorPage (params) {
+  return request({
+    url:'/tmlms/tybshiphaver/otherpage',
+    method: 'get',
+    params:params,
+  })
+}
 export function getOperatorList (shipName) {
   return request({
     url:`/tmlms/tybshiphaver/getShiphaver?shipName=${shipName}`,

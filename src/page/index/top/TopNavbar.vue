@@ -21,7 +21,7 @@
         <el-menu-item  v-if="roles.indexOf(111) !== -1 || roles.indexOf(112) !== -1 || roles.indexOf(1) !== -1">
           <span class="sub-menu" @click="open(name='crew')">船员</span>
         </el-menu-item>
-        <el-menu-item  v-if="roles.indexOf(111) !== -1 || roles.indexOf(112) !== -1 || roles.indexOf(1) !== -1">
+        <el-menu-item  v-if="roles.indexOf(111) !== -1 || roles.indexOf(1) !== -1">
           <span class="sub-menu" @click="open(name='fish')">船东</span>
         </el-menu-item>
         <el-menu-item v-if="roles.indexOf(111) !== -1 || roles.indexOf(112) !== -1 || roles.indexOf(1) !== -1">
