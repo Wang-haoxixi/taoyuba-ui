@@ -835,13 +835,23 @@ export default {
       }
       this.$refs['form'].validate(valid => {
         if (valid) {
-          if (this.type === 'add') {
-            addContract(this.formData).then(() =>{
-              this.$message.success('新增成功！')
-              this.$emit('onGoBack')
-            }).catch(() => {
-              this.$message.error('新增失败！')
-            })
+          if (this.type === 'add') {      
+                this.$confirm('请确认当前合同信息是否正确，提交后将无法修改, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                  }).then(() => {
+                     addContract(this.formData), () => {    
+                      this.$message.error('新增失败!')
+                    }
+                    this.$message.success('保存成功！')
+                      this.$emit('onGoBack')
+                  }).catch(() => {
+                    this.$message({
+                      type: 'info',
+                      message: '已取消保存',
+                    })
+                  })      
           } else if (this.type === 'edit') {
             updateContract(this.formData).then(() =>{
               this.$message.success('修改成功！')
