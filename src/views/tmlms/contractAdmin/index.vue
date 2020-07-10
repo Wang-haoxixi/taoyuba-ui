@@ -1,5 +1,5 @@
 <template>
-  <component @onAdd="handleAdd" @onDetail="handleDetail" @onEdit="handleEdit" @onGoBack="handleGoBack" :record="record" :type="type" :is="currentComponet" @onRecord="handleRecord" @onRemove="handleRmove"></component>
+  <component @on-add="handleAdd" @onDetail="handleDetail" @onEdit="handleEdit" @onGoBack="handleGoBack" :record="record" :type="type" :is="currentComponet" @on-record="handleRecord" @on-remove="handleRmove"></component>
 </template>
 <script>
 import List from './Page/List'
@@ -20,6 +20,7 @@ export default {
   },
   methods: {
     handleAdd () {
+      console.log('aaaaa')
       this.record = null
       this.type = 'add'
       this.currentComponet = 'Detail'
