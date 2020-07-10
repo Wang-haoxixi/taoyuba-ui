@@ -16,7 +16,7 @@
           </el-col>
           <el-col :span="20">
             <div class="right">
-              <div class="user-poster">
+              <div class="user-poster">   
                 <span class="say">{{timeFix}}，{{userInfo.sysUser.username}}
                   <iep-identity-mark icon="iep2-iconchengyuan" title="成员"></iep-identity-mark>
                   <span class="welcome-text">
@@ -264,7 +264,9 @@ export default {
           this.isIdCard = false
         }
         this.$set(this.userInfo,'roleName',[])
-        this.userInfo.roles.forEach(item=>{
+        //过滤组织成员    
+       const  roles =  this.userInfo.roles.filter(item => item !==3)
+        roles.forEach(item=>{   
           this.getRole(item)
         })
         // getCrewByUserId(this.userInfo.sysUser.userId).then((data) => {

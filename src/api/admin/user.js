@@ -9,6 +9,13 @@ export function fetchList (query) {
     params: query,
   })
 }
+export function getUserName (userId) {
+  return request({
+    url: `/admin/user/${userId}`,
+    method: 'get',
+    params: userId,
+  })
+}
 
 export function resetPassByUserId (id) {
   return request({

@@ -6,6 +6,12 @@ export default [
     component: Layout,
     children: [
       {
+        path: 'contract_add',
+        name: '新增合同',
+        component: () => import('@/views/tmlms/contract/Page/NewDetail'),
+        meta: noKeepAlive,
+      },
+      {
         path: 'contract_list',
         name: '查看淘渔吧合同',
         component: () => import('@/views/tmlms/contractAdmin/Page/List'),
