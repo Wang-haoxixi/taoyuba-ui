@@ -2,7 +2,7 @@
   <div class="contract-box">
     <basic-container>
       <page-header title="网签合同"></page-header>
-       <div class="tips">
+      <div class="tips" v-if="roles.indexOf(109) !== -1 || roles.indexOf(112) !== -1">
         <dl>
           <dt> 合同如有以下情况：</dt>
           <dd>1、合同信息填写错误，需重新编辑。</dd>
@@ -12,8 +12,7 @@
       </div>
             <operation-container>
         <template slot="left">    
-          <!-- <iep-button  @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button> -->
-           <iep-button v-if="mlms_contract_add" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+          <iep-button v-if="mlms_contract_add" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
         <template slot="right">
           <span><el-input v-model="params.shipName" placeholder="船名号" size="small" style="width:120px"></el-input></span>
@@ -207,6 +206,7 @@ import {
 import { saveRate, getRate } from '@/api/tmlms/rate'
 import { getUserInfo } from '@/api/login'
 import { mapGetters } from 'vuex'
+import { getUserName } from '@/api/admin/user'
 // import contractPrint from '../../contract/Page/ContractPrint.vue'
 // import Vue from 'vue'
 import store from '@/store'
@@ -328,6 +328,7 @@ export default {
       nowContractId: '',
       contractImage: '',
       uploadTitle: '',
+      userName:'',
     }
   },
   created () {        
@@ -360,6 +361,7 @@ export default {
   computed: {
     ...mapGetters([
       'permissions',
+      'roles',
     ]),
     options () {
       return {
@@ -388,6 +390,10 @@ export default {
           {
             text: '合同状态',
             value: 'status',
+          },
+          {
+            text: '合同发布者',
+            value: 'userId',
           },
         ],
         data: this.contractList,
@@ -431,6 +437,10 @@ export default {
                 this.$set(v, 'isRate', 0)
               }
             })
+            getUserName(v.userId).then(res=>{
+               this.$set(v, 'userId', res.data.data.realName)
+            })
+          
 
           })
           // this.contractList.forEach( item=>{
@@ -467,13 +477,14 @@ export default {
     },
     handleAdd () {
       // console.log('bbbb')
-      this.$emit('onAdd')
+      this.$router.push({path: '/tmlms_spa/contract_add',query:{add:'add'}})
+      // this.$emit('on-add')
     },
     handleRecord (contractId) {
-      this.$emit('onRecord', contractId)
+      this.$emit('on-record', contractId)
     },
     handleRemove (contractId) {
-      this.$emit('onRemove', contractId)
+      this.$emit('on-remove', contractId)
     },
     handleView (contractId) {
       // this.$emit('onDetail', contractId)
