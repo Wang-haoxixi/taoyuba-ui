@@ -737,7 +737,7 @@ export default {
       if (typeof card === 'object') {
         this.refreshCard(card)
       } else {
-        this.refreshCard({idcard: card})
+        // this.refreshCard({idcard: card})
       }
       this.idcards = []
     },
@@ -771,7 +771,7 @@ export default {
           if (number !== '') {
             detailCrew(number).then(({data}) => {
               if (Object.keys(data.data).length !== 0) {
-                this.idcards.push(data.data)
+                // this.idcards.push(data.data)
               }
             })
           } else {
