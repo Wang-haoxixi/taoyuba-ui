@@ -6,21 +6,21 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="渔船名：" prop="shipName">
-              <!-- <el-input maxlength="20" v-model="form.shipName"></el-input> -->
-              <el-select v-model="form.shipName" placeholder="请选择渔船名" :disabled="type === 2" @change="shipNameChange">
+              <el-input maxlength="20" placeholder="请选择渔船名" v-model="form.shipName"></el-input>
+              <!-- <el-select v-model="form.shipName" placeholder="请选择渔船名" :disabled="type === 2" @change="shipNameChange">
                 <el-option
                   v-for="item in shipNameList"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value">
                 </el-option>
-              </el-select>
+              </el-select> -->
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="渔船编号：" prop="shipNo">
               <template v-if='form.shipNo'>
-              <el-input maxlength="50"  v-model="form.shipNo" :disabled="manager"></el-input>
+              <el-input maxlength="50"  v-model="form.shipNo" ></el-input>
               </template>
               <template v-else>
               <el-input maxlength="50"  v-model="form.shipNo" ></el-input>
@@ -31,13 +31,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="持证人：" prop="shipowner">
-              <el-input maxlength="20" v-model="form.shipowner" :disabled="manager"></el-input>
+              <el-input maxlength="20" v-model="form.shipowner" ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="持证人身份证号码：" prop="shipownerIdcard">
               <template v-if="form.shipownerIdcard">
-              <el-input maxlength="18" v-model="form.shipownerIdcard" :disabled="manager"></el-input>
+              <el-input maxlength="18" v-model="form.shipownerIdcard"></el-input>
               </template>
               <template v-else>
                 <el-input maxlength="18" v-model="form.shipownerIdcard"></el-input>
