@@ -4,7 +4,7 @@
       <page-header title="渔船管理"></page-header>
       <operation-container>
         <template slot="left">
-          <!-- <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button> -->
+          <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
         <template slot="right">
           <!-- <operation-search @search-page="searchPage" advance-search :prop="searchData">

@@ -20,7 +20,6 @@ export default {
   },
   methods: {
     handleAdd () {
-      console.log('aaaaa')
       this.record = null
       this.type = 'add'
       this.currentComponet = 'Detail'
