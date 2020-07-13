@@ -477,8 +477,8 @@ export default {
     },
     handleAdd () {
       // console.log('bbbb')
-      this.$router.push({path: '/tmlms_spa/contract_add',query:{add:'add'}})
-      // this.$emit('on-add')
+      // this.$router.push({path: '/tmlms_spa/contract_add',query:{add:'add'}})
+      this.$emit('on-add')
     },
     handleRecord (contractId) {
       this.$emit('on-record', contractId)

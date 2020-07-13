@@ -2,9 +2,7 @@
   <div class="contract">
     <basic-container id="pdfDom">
       <page-header :title="getTitle"></page-header>
-      <!-- <el-form :disabled="type !== 'add' && type !== 'edit'" :model="formData" size="small" ref="form" label-width="120px"
-        :rules="rules" class="form" > -->
-          <el-form :disabled="this.$route.query.add !== 'add'" :model="formData" size="small" ref="form" label-width="120px"
+      <el-form :disabled="type !== 'add' && type !== 'edit'" :model="formData" size="small" ref="form" label-width="120px"
         :rules="rules" class="form" >
         <el-container>
           <el-aside class="side">
@@ -465,7 +463,7 @@
         </el-container> -->
       </el-form>
       <div style="text-align: center;padding: 20px 0;">                   
-        <iep-button style="margin-right: 20px;" :disabeld="false" v-show="this.$route.query.add === 'add' || this.$route.query.edit === 'edit'" type="primary" @click="handleSubmit">保存</iep-button>
+        <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add' || type === 'edit'" type="primary" @click="handleSubmit">保存</iep-button>
         <iep-button :disabeld="false" @click="handleBack">返回</iep-button>            
       </div>
     </basic-container>
@@ -617,9 +615,9 @@ export default {
   },
   computed: {
     getTitle () {
-      if (this.$route.query.add === 'add') {
+      if (this.type === 'add') {
         return '合同新增'
-      } else if (this.$route.query.edit === 'edit') {
+      } else if (this.type === 'edit') {
         return '合同编辑'
       } else {
         return '合同查看'

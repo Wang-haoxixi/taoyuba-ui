@@ -1,5 +1,5 @@
 <template>
-  <component @onadd="handleAdd" @onDetail="handleDetail" @onEdit="handleEdit" @onGoBack="handleGoBack" @onPdf="handleToCopy"  :record="record" :type="type" :is="currentComponet"></component>
+  <component @on-add="handleAdd" @onDetail="handleDetail" @onEdit="handleEdit" @onGoBack="handleGoBack" @onPdf="handleToCopy"  :record="record" :type="type" :is="currentComponet"></component>
 </template>
 <script>
 import List from './Page/List'
