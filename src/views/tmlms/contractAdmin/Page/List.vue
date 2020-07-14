@@ -958,7 +958,7 @@ export default {
           this.fileChange(fileList)
       },
       //设置photo   
-   fileChange (fileList,type) {       
+   fileChange (fileList,type) {           
      console.log(fileList)
         let temp_str = ''
         if(fileList.length > 0){
@@ -979,7 +979,6 @@ export default {
                   temp_str += ',' + fileList[i].url
             }
           }
-        }
         this.addPhoto = temp_str    
         uploadImages(this.nowContractId,this.addPhoto).then(res => {
               if(res.data.data){
@@ -989,7 +988,14 @@ export default {
                      this.$message.success('上传成功!')
               }
         })
-      },
+   }else{   
+        uploadImages(this.nowContractId,'').then(res => {   
+              if(res.data.data){
+                      this.$message.success('删除成功!')
+              }
+        })
+    }
+    },
       //删除照片    
     handlePaperRemove (file,fileList) {
         this.fileChange(fileList,'del')
