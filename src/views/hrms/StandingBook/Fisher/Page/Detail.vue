@@ -481,7 +481,6 @@ export default {
       getUserInfo().then(data => {
         this.userId = data.data.data.sysUser.userId
         if(data.data.data.roles.includes(112)){
-          console.log('基层')
           this.form.villageId = this.userId
         }
         if (data.data.data.roles.includes(111)) {

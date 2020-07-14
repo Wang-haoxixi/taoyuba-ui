@@ -13,6 +13,7 @@
             <operation-container>
         <template slot="left">    
           <iep-button v-if="mlms_contract_add" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+          <iep-button @click="handleFresh" type="primary" >刷新</iep-button>
         </template>
         <template slot="right">
           <span><el-input v-model="params.shipName" placeholder="船名号" size="small" style="width:120px"></el-input></span>
@@ -474,6 +475,9 @@ export default {
     currentChange (current) {
       this.params.current = current
       this.getContractList()
+    },
+    handleFresh () {
+      this.getContractList() 
     },
     handleAdd () {
       // console.log('bbbb')
