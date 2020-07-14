@@ -28,7 +28,7 @@
                   <!-- <el-form-item label="船名：" prop="shipName">
                     <el-input maxlength="20" v-model="formData.shipName"></el-input>
                   </el-form-item> -->
-                  <el-form-item label="船名：:" prop="shipName">
+                  <el-form-item label="船名：" prop="shipName">
                     <el-select v-model="formData.shipName"
                               placeholder="请选择"
                               filterable
@@ -312,10 +312,34 @@
             <el-header class="head"></el-header>
             <el-main class="mai">
               <el-row>
-                <el-col :span="10">
-                  <el-form-item label="按渔业生产周期：" prop="period">
-                    <el-date-picker v-model="period" type="daterange" range-separator="至"
-                      tart-placeholder="开始" end-placeholder="结束"  value-format="yyyy-MM-dd" style="margin-top: 15px!important"></el-date-picker>
+                <el-col :span="6">
+                  <!-- (this.formData.workDateStart -->
+                  <el-form-item label="按渔业生产周期：" prop="workDateStart">
+                    <el-date-picker
+                    v-model="formData.workDateStart"
+                    type="date"
+                    format="yyyy-MM-dd"
+                    value-format="yyyy-MM-dd"
+                    placeholder="选择开始日期">
+                  </el-date-picker>
+                  </el-form-item>
+                  <!-- <el-form-item label="至" prop="workDateEnd">
+                    <el-date-picker
+                    v-model="formData.workDateEnd"
+                    type="date"
+                    placeholder="选择结束日期">
+                  </el-date-picker>
+                  </el-form-item> -->
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item label='至' prop="workDateEnd">
+                    <el-date-picker
+                    v-model="formData.workDateEnd"
+                    type="date"
+                    format="yyyy-MM"
+                    value-format="yyyy-MM-dd"
+                    placeholder="选择结束日期">
+                  </el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="10">
@@ -629,10 +653,10 @@ export default {
       getContractDetail (this.record).then(data =>{
         this.formData = data.data.data
         console.log(this.formData)
-        if (this.formData.workDateStart && this.formData.workDateEnd) {
-          this.period.push(this.formData.workDateStart)
-          this.period.push(this.formData.workDateEnd)
-        }
+        // if (this.formData.workDateStart && this.formData.workDateEnd) {
+        //   this.period.push(this.formData.workDateStart)
+        //   this.period.push(this.formData.workDateEnd)
+        // }
         if (this.formData.licensesOwnerShipImage) {
           this.licensesImage = this.formData.licensesOwnerShipImage
           this.isLicenses = true
@@ -810,10 +834,10 @@ export default {
         this.formData.contractImage = ''
     },
     handleSubmit () {
-      if (this.period) {
-        this.formData.workDateStart = this.period[0]
-        this.formData.workDateEnd = this.period[1]       
-      }    
+      // if (this.period) {
+      //   this.formData.workDateStart = this.period[0]
+      //   this.formData.workDateEnd = this.period[1]       
+      // }  
       this.formData.shipJointNo = this.formData.employerName
       if (this.formData.shipName.shipName) {
         this.formData.shipName = this.formData.shipName.shipName

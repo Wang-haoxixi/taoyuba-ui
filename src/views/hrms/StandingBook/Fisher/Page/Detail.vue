@@ -6,21 +6,21 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="渔船名：" prop="shipName">
-              <!-- <el-input maxlength="20" v-model="form.shipName"></el-input> -->
-              <el-select v-model="form.shipName" placeholder="请选择渔船名" :disabled="type === 2" @change="shipNameChange">
+              <el-input maxlength="20" placeholder="请输入渔船名" v-model="form.shipName"></el-input>
+              <!-- <el-select v-model="form.shipName" placeholder="请选择渔船名" :disabled="type === 2" @change="shipNameChange">
                 <el-option
                   v-for="item in shipNameList"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value">
                 </el-option>
-              </el-select>
+              </el-select> -->
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="渔船编号：" prop="shipNo">
               <template v-if='form.shipNo'>
-              <el-input maxlength="50"  v-model="form.shipNo" :disabled="manager"></el-input>
+              <el-input maxlength="50"  v-model="form.shipNo" ></el-input>
               </template>
               <template v-else>
               <el-input maxlength="50"  v-model="form.shipNo" ></el-input>
@@ -31,35 +31,17 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="持证人：" prop="shipowner">
-              <el-input maxlength="20" v-model="form.shipowner" :disabled="manager"></el-input>
+              <el-input maxlength="20" v-model="form.shipowner" ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="持证人身份证号码：" prop="shipownerIdcard">
               <template v-if="form.shipownerIdcard">
-              <el-input maxlength="18" v-model="form.shipownerIdcard" :disabled="manager"></el-input>
+              <el-input maxlength="18" v-model="form.shipownerIdcard"></el-input>
               </template>
               <template v-else>
                 <el-input maxlength="18" v-model="form.shipownerIdcard"></el-input>
               </template>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="渔船股份性质：" prop="shipShare">
-              <el-select v-model="form.shipShare">
-                <el-option
-                        v-for="item in $store.getters.dictGroup.tyb_contract_ship_attr"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="所属行政村：" prop="regionId">
-              <el-cascader v-model="form.regionId" :options="options" @active-item-change="handleItemChange" :props="props"></el-cascader>
             </el-form-item>
           </el-col>
         </el-row>
@@ -82,33 +64,39 @@
             </el-form-item>
           </el-col> 
           <el-col :span="12">
+            <el-form-item label="渔船股份性质：" prop="shipShare">
+              <el-select v-model="form.shipShare">
+                <el-option
+                        v-for="item in $store.getters.dictGroup.tyb_contract_ship_attr"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
             <el-form-item label="渔船所有权登记证书：" prop="licensesOwnerShip">
               <el-input maxlength="30" v-model="form.licensesOwnerShip"></el-input>
             </el-form-item>
-          </el-col>         
-        </el-row>
-        <el-row>
+          </el-col>  
           <el-col :span="12">
             <el-form-item label="捕捞许可证编号：" prop="licensesFishingNo">
               <el-input maxlength="50" v-model="form.licensesFishingNo"></el-input>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="国籍证书编号：" prop="licensesNationalNo">
               <el-input maxlength="50" v-model="form.licensesNationalNo"></el-input>
             </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>   
+          </el-col>   
           <el-col :span="12">
             <el-form-item label="船舶检验证书编号：" prop="licensesInspectionNo">
               <el-input maxlength="50" v-model="form.licensesInspectionNo"></el-input>
             </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <iep-form-item class="form-half" prop="licensesDateExpire" label-name="证书有效期">
-              <iep-date-picker v-model="form.licensesDateExpire" type="date" placeholder="选择日期"></iep-date-picker>
-            </iep-form-item>
           </el-col>
         </el-row>
         <el-row>
@@ -249,6 +237,16 @@
               <el-input maxlength="3" v-model="form.netTonnage"></el-input>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+              <iep-form-item class="form-half" prop="licensesDateExpire" label-name="证书有效期">
+                <iep-date-picker v-model="form.licensesDateExpire" type="date" placeholder="选择日期"></iep-date-picker>
+              </iep-form-item>
+            </el-col>
+          <!-- <el-col :span="12">
+            <el-form-item label="所属行政村：" prop="regionId">
+              <el-cascader v-model="form.regionId" :options="options" @active-item-change="handleItemChange" :props="props"></el-cascader>
+            </el-form-item>
+          </el-col> -->
         </el-row>
         <el-form-item label="" v-if="type !== 1">
           <operation-wrapper>
@@ -260,13 +258,16 @@
   </div>
 </template>
 <script>        
-import { getShipDetail, createShip, updateShip, 
+import {  createShip, updateShip, getShipDetail,
 // getRogionList, 
 findMyship } from '@/api/ships/index'
 import { initForm , rules } from '../options'
 import { getVillageshipinfoByuser, getVillageshipinfoById } from '@/api/tmlms/bvillage/villageship'
 import { getUserInfo } from '@/api/login'
-import { getArea, getAllArea, getAllAreaName } from '@/api/post/address'
+import { getArea, 
+// getAllArea, 
+// getAllAreaName 
+} from '@/api/post/address'
 export default {
   data () {
     return {                  
@@ -380,35 +381,36 @@ export default {
     // },                                      
     getShipDetail () {                                      
       getShipDetail(this.shipId).then(({data}) => {
-        if (data.code === 0) {
-          // this.regionChosen.province = data.data.province
-          // this.regionChosen.city = data.data.city
-          // this.regionChosen.district = data.data.district
-          // this.regionChosen.town = data.data.town
-          // this.regionChosen.village = data.data.villageId
-          if(data.data.regionId !== 0){
-            getAllArea(data.data.regionId).then( res=>{
-              this.options = res.data.data
-            })
-          }
-          if(data.data.regionId === 0){
-            this.form = data.data  
-            getArea(330000000000).then(res=>{
-              this.options = res.data.data
-              this.options.forEach(item=>{
-                this.$set(item,'childList',[])
-              })
-            })
-            this.form.regionId = this.options        
-          }else {
-            getAllAreaName(data.data.regionId).then( res=>{
-              // 处理后端数据变成我要用的数据
-              this.getarr(res.data.data,this.arr)
-              data.data.regionId = this.arr
-              this.form = data.data
-            })
-          }
-        }
+        this.form = data.data
+        // if (data.code === 0) {
+        //   // this.regionChosen.province = data.data.province
+        //   // this.regionChosen.city = data.data.city
+        //   // this.regionChosen.district = data.data.district
+        //   // this.regionChosen.town = data.data.town
+        //   // this.regionChosen.village = data.data.villageId
+        //   if(data.data.regionId !== 0){
+        //     getAllArea(data.data.regionId).then( res=>{
+        //       this.options = res.data.data
+        //     })
+        //   }
+        //   if(data.data.regionId === 0){
+        //     this.form = data.data  
+        //     getArea(330000000000).then(res=>{
+        //       this.options = res.data.data
+        //       this.options.forEach(item=>{
+        //         this.$set(item,'childList',[])
+        //       })
+        //     })
+        //     this.form.regionId = this.options        
+        //   }else {
+        //     getAllAreaName(data.data.regionId).then( res=>{
+        //       // 处理后端数据变成我要用的数据
+        //       this.getarr(res.data.data,this.arr)
+        //       data.data.regionId = this.arr
+        //       this.form = data.data
+        //     })
+        //   }
+        // }
       }, (error) => {
         this.$message.error(error.message)
       })
@@ -448,9 +450,9 @@ export default {
     },
     handleSubmit () {
       this.$refs.form.validate(valid => {
-        this.form.regionId = this.form.regionId[this.form.regionId.length - 1]
+        // this.form.regionId = this.form.regionId[this.form.regionId.length - 1]
         if (valid) {
-          if (this.isState === false) {
+          if (this.$route.query.add) {
             createShip(this.form).then(({data}) => {
               if (data.code === 0) {
                 this.$message.success('添加成功！')
@@ -459,7 +461,7 @@ export default {
             }, (error) => {
               this.$message.error(error.message)
             })
-          } else if (this.isState === true) {
+          } else if (this.$route.query.edit) {
             updateShip(this.form).then(({data}) => {
               if (data.code === 0) {
                 this.$message.success('修改成功！')
@@ -478,6 +480,9 @@ export default {
     getshipNameList () {
       getUserInfo().then(data => {
         this.userId = data.data.data.sysUser.userId
+        if(data.data.data.roles.includes(112)){
+          this.form.villageId = this.userId
+        }
         if (data.data.data.roles.includes(111)) {
           this.manager = false
         } else {
