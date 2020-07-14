@@ -131,6 +131,7 @@ export default {
     handleAdd () {
       this.$router.push({
         path: '/hrms_spa/village_ship_detail',
+        query:{ add: 'add' },
       })  
     },
     handleView (val) {
