@@ -43,7 +43,7 @@
             <operation-wrapper>
               <iep-button  v-if="manager" size="mini" plain @click="handleEdit(scope.row.shipId)">编辑</iep-button>   
               <iep-button size="mini" @click="handleView(scope.row.shipId)">查看</iep-button>
-              <iep-button size="mini"  @click="handleChange(scope.row.shipId)">变更</iep-button>
+              <iep-button v-if="manager" size="mini"  @click="handleChange(scope.row.shipId)">变更</iep-button>   
             </operation-wrapper>
           </template>
         </el-table-column>
