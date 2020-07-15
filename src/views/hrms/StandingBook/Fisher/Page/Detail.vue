@@ -87,6 +87,18 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row  v-if="this.$route.query.see">
+          <el-col :span="12">
+            <el-form-item label="所属基层：" prop="villageName">
+                <el-input maxlength="50" v-model="form.villageName"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+              <iep-form-item class="form-half" prop="licensesDateExpire" label-name="证书有效期">
+                <iep-date-picker v-model="form.licensesDateExpire" type="date" placeholder="选择日期"></iep-date-picker>
+              </iep-form-item>
+          </el-col>
+        </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item label="国籍证书编号：" prop="licensesNationalNo">
@@ -237,11 +249,11 @@
               <el-input maxlength="3" v-model="form.netTonnage"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="12" v-if="!this.$route.query.see">
               <iep-form-item class="form-half" prop="licensesDateExpire" label-name="证书有效期">
                 <iep-date-picker v-model="form.licensesDateExpire" type="date" placeholder="选择日期"></iep-date-picker>
               </iep-form-item>
-            </el-col>
+          </el-col>
           <!-- <el-col :span="12">
             <el-form-item label="所属行政村：" prop="regionId">
               <el-cascader v-model="form.regionId" :options="options" @active-item-change="handleItemChange" :props="props"></el-cascader>
@@ -263,6 +275,7 @@ import {  createShip, updateShip, getShipDetail,
 findMyship } from '@/api/ships/index'
 import { initForm , rules } from '../options'
 import { getVillageshipinfoByuser, getVillageshipinfoById } from '@/api/tmlms/bvillage/villageship'
+import { detailVillage } from '@/api/tmlms/bvillage/index'
 import { getUserInfo } from '@/api/login'
 import { getArea, 
 // getAllArea, 
@@ -480,6 +493,9 @@ export default {
     getshipNameList () {
       getUserInfo().then(data => {
         this.userId = data.data.data.sysUser.userId
+        detailVillage(this.userId).then(res=>{
+          this.form.villageName = res.data.data.villageName
+        })
         if(data.data.data.roles.includes(112)){
           this.form.villageId = this.userId
         }
