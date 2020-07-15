@@ -87,8 +87,8 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col>
+        <el-row  v-if="this.$route.query.see">
+          <el-col :span="12">
             <el-form-item label="所属基层：" prop="villageName">
                 <el-input maxlength="50" v-model="form.villageName"></el-input>
             </el-form-item>
@@ -248,6 +248,11 @@
             <el-form-item label="净吨位：" prop="netTonnage">
               <el-input maxlength="3" v-model="form.netTonnage"></el-input>
             </el-form-item>
+          </el-col>
+          <el-col :span="12" v-if="!this.$route.query.see">
+              <iep-form-item class="form-half" prop="licensesDateExpire" label-name="证书有效期">
+                <iep-date-picker v-model="form.licensesDateExpire" type="date" placeholder="选择日期"></iep-date-picker>
+              </iep-form-item>
           </el-col>
           <!-- <el-col :span="12">
             <el-form-item label="所属行政村：" prop="regionId">
