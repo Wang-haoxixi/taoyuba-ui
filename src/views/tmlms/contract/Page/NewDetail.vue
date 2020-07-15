@@ -336,7 +336,7 @@
                     <el-date-picker
                     v-model="formData.workDateEnd"
                     type="date"
-                    format="yyyy-MM"
+                    format="yyyy-MM-dd"
                     value-format="yyyy-MM-dd"
                     placeholder="选择结束日期">
                   </el-date-picker>

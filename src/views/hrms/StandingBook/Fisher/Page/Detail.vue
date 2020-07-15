@@ -318,6 +318,7 @@ export default {
       },
       arr:[],
       manager: false,
+      villageName:'',
     }                               
   },
   computed: {                                                                                                                                                               
@@ -343,7 +344,8 @@ export default {
     },
   },
   created () {                                    
-    // this.getRogionList(0, 'province')                         
+    // this.getRogionList(0, 'province')   
+    this.getshipNameList() 
     if ((this.$route.query.see || this.$route.query.edit)&& this.shipId) {                              
       this.getShipDetail()
     } else {       
@@ -354,7 +356,6 @@ export default {
         })
       })
     } 
-    this.getshipNameList()
   },
   mounted () {                    
   },
@@ -394,7 +395,18 @@ export default {
     // },                                      
     getShipDetail () {                                      
       getShipDetail(this.shipId).then(({data}) => {
-        this.form = data.data
+        if(this.userId){
+          detailVillage(this.userId).then(res=>{
+          console.log('打印渔船信息')
+          // console.log(res.data.data)
+          this.villageName = res.data.data.villageName
+          }).then(()=>{
+            this.form = data.data
+            this.form.villageName = this.villageName
+            console.log(this.form)
+          })
+        }
+        
         // if (data.code === 0) {
         //   // this.regionChosen.province = data.data.province
         //   // this.regionChosen.city = data.data.city
@@ -493,9 +505,6 @@ export default {
     getshipNameList () {
       getUserInfo().then(data => {
         this.userId = data.data.data.sysUser.userId
-        detailVillage(this.userId).then(res=>{
-          this.form.villageName = res.data.data.villageName
-        })
         if(data.data.data.roles.includes(112)){
           this.form.villageId = this.userId
         }
