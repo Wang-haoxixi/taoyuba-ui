@@ -7,3 +7,14 @@ export function getImageById (id) {
         method: 'get',
     })
 }
+
+export function getImages (relId,type) {
+    return request({
+      url: `${prefixUrl}/getImages`,
+      method: 'get',
+      params: {
+        relId: relId,
+        type: type,
+      },
+    })
+}

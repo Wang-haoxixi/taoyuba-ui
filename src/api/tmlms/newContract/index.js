@@ -134,3 +134,14 @@ export function uploadContravt (contractId,contractImage) {
       },
     })
   }
+
+  export function uploadImages (contractId,addPhoto) {        
+    return request({
+      url:`${prefixUrl}/createImages`,
+      method: 'post',
+      params: {
+        contractId : contractId,
+        addPhoto: addPhoto,
+      },
+    })
+  }  

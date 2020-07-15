@@ -88,10 +88,8 @@
             </el-button>
              <el-button v-if="mlms_contract_recall && scope.row.status === '合同成立' " type="text" icon="el-icon-edit" size="mini" @click="handleCall(scope.row.contractId)">撤销
             </el-button>    
-             <el-button v-if="mlms_contract_upload && (scope.row.status === '合同成立'  &&  !scope.row.contractImage)" type="text" icon="el-icon-edit" size="mini" @click="handleUpload(scope.row.contractId)">上传纸质合同
+             <el-button v-if="mlms_contract_upload && scope.row.status === '合同成立' " type="text" icon="el-icon-edit" size="mini" @click="handleUpload(scope.row.contractId)">上传纸质合同
             </el-button> 
-               <el-button v-if="mlms_contract_upload && (scope.row.status === '合同成立'  &&  scope.row.contractImage)" type="text" icon="el-icon-edit" size="mini" @click="lookImage(scope.row.contractId)">查看纸质合同
-            </el-button>     
           </template>   
         </el-table-column>
       </avue-tree-table>    
@@ -181,8 +179,8 @@
           <el-button type="primary" @click="ownSave">确 定</el-button>
         </span>
       </el-dialog>       
-      <el-dialog :title="uploadTitle" :visible.sync="paperVisible" width="30%" :before-close="paperClose">
-               <el-upload       
+      <el-dialog :title="uploadTitle" :visible.sync="paperVisible" width="30%" :before-close="paperClose">    
+               <!-- <el-upload       
                   class="upload-demo"
                   drag
                   action="/api/admin/file/upload/avatar"
@@ -192,7 +190,23 @@
                   <img v-if="contractImage" :src="contractImage" class="avatarUpload">
                   <i class="el-icon-upload"></i>    
                   <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                </el-upload>
+                </el-upload> -->
+             <el-upload
+                action="/api/admin/file/upload/avatar"
+                multiple
+                list-type="picture-card"
+                :limit="5"
+                 :headers="headers"
+                :on-remove="handlePaperRemove"
+                :on-success="uploadSuccess" 
+                :on-preview="handlePictureCardPreview"
+                 :file-list="contractFiles"
+                 accept="image/*" style="margin-left:30px!important">
+                <i  class="el-icon-plus"></i>
+            </el-upload>
+              <el-dialog class="preview-modal" :visible.sync="imgVisible" append-to-body>
+                <img style="width:148px;height:148px" :src="dialogImageUrl" alt="photo">
+              </el-dialog>
       </el-dialog>
     </basic-container>
   </div>
@@ -203,8 +217,9 @@ import {
   getContractList, 
   deleteContract,
   // getContract,
-  getDict, reviewContract, cancelContract, getContractDetail,recallContract,uploadContravt } from '@/api/tmlms/newContract'
-import { saveRate, getRate } from '@/api/tmlms/rate'
+  getDict, reviewContract, cancelContract, getContractDetail,recallContract,uploadContravt,uploadImages } from '@/api/tmlms/newContract'
+import { saveRate, getRate } from '@/api/tmlms/rate'  
+import {getImages} from '@/api/tmlms/multiimage'
 import { getUserInfo } from '@/api/login'
 import { mapGetters } from 'vuex'
 import { getUserName } from '@/api/admin/user'
@@ -330,6 +345,9 @@ export default {
       contractImage: '',
       uploadTitle: '',
       userName:'',
+      imgVisible: false,
+      addPhoto:'',
+      contractFiles: [],
     }
   },
   created () {        
@@ -614,11 +632,23 @@ export default {
       this.relDialog = true
       this.rd = contractId
     },
-    handleUpload (contractId) {          
+    //上传纸质合同
+    handleUpload (contractId) {             
+       this.contractFiles = []
         this.uploadTitle = '上传纸质合同'     
         this.paperVisible = true
         this.nowContractId  = contractId
-        this.contractImage  = ''
+        setTimeout(() => {
+               getImages(contractId,'contract').then(res => {
+            if(res.data.data.length >0){
+                  let  images  = res.data.data
+                  for(let t=0; t<images.length; t++){
+                         this.contractFiles.push({name: 'image' + images[t].id, url: images[t].image})
+                  }
+              // this.imgVisible = true
+            }
+        })
+        },100)    
     },
     paperClose () {   
         this.paperVisible = false 
@@ -918,6 +948,59 @@ export default {
         })
       }) 
     },
+    //图片预览
+   handlePictureCardPreview (file) {
+        this.dialogImageUrl = file.url
+        this.imgVisible = true
+      },
+    //上传成功
+    uploadSuccess (res,file,fileList ) {        
+          this.fileChange(fileList)
+      },
+      //设置photo   
+   fileChange (fileList,type) {           
+     console.log(fileList)
+        let temp_str = ''
+        if(fileList.length > 0){
+          for(let i=0; i<fileList.length; i++){
+            if(fileList[i].response){
+              if(fileList[i].response.code === 0){
+                if(i===0){
+                  temp_str += fileList[i].response.data.url
+                } else {
+                  // 最终photo的格式是所有已上传的图片的url拼接的字符串（逗号隔开）
+                  temp_str += ',' + fileList[i].response.data.url
+                }
+              }
+            }else{
+                if(i ===0)
+                     temp_str += fileList[i].url
+                else
+                  temp_str += ',' + fileList[i].url
+            }
+          }
+        this.addPhoto = temp_str    
+        uploadImages(this.nowContractId,this.addPhoto).then(res => {
+              if(res.data.data){
+                  if(type === 'del')
+                      this.$message.success('删除成功!')
+                  else
+                     this.$message.success('上传成功!')
+              }
+        })
+   }else{   
+        uploadImages(this.nowContractId,'').then(res => {   
+              if(res.data.data){
+                      this.$message.success('删除成功!')
+              }
+        })
+    }
+    },
+      //删除照片    
+    handlePaperRemove (file,fileList) {
+        this.fileChange(fileList,'del')
+    },
+
   },
 }
 </script>
