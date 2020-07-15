@@ -9,6 +9,13 @@ export function getShipList (params) {
     params: params,
   })
 }
+export function changeShip (shipId,villageId) {
+  return request({
+    url: `${prefixUrl}/updateVillage?shipId=${shipId}&&villageId=${villageId}`,
+    method: 'post',
+    // params: params,
+  })
+}
 export function getShipByShipId (shipId) {
   return request({
     url: `${prefixUrl}/${shipId}`,

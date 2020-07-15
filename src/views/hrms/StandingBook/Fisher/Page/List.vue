@@ -5,6 +5,7 @@
       <operation-container>
         <template slot="left">
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+          <!-- <iep-button @click="handleChange()" type="primary" >变更</iep-button> -->
         </template>
         <template slot="right">
           <!-- <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -37,11 +38,12 @@
           :label="item.text"
         >
           </el-table-column>
-        <el-table-column prop="operation" label="操作" width="140">
+        <el-table-column prop="operation" label="操作" width="200">
           <template slot-scope="scope">
             <operation-wrapper>
               <iep-button  v-if="manager" size="mini" plain @click="handleEdit(scope.row.shipId)">编辑</iep-button>   
               <iep-button size="mini" @click="handleView(scope.row.shipId)">查看</iep-button>
+              <iep-button size="mini"  @click="handleChange(scope.row.shipId)">变更</iep-button>
             </operation-wrapper>
           </template>
         </el-table-column>
@@ -55,6 +57,36 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-dialog title="基层组织变更" :visible.sync="dialogVisible" >
+        <el-form  ref="form" >
+          <el-form-item label="请选择基层组织" :label-width="formLabelWidth">
+            <el-select v-model="chooseOrg" placeholder="请选择" width="150">
+              <el-option v-for="item in orgList" :key="item.index" :label="item.villageName" :value="item.userId"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="save">确 定</el-button>
+        </div>
+      </el-dialog>
+      <!-- <el-dialog title="基层组织变更" :visible.sync="dialogVisible" width="70%" append-to-body> 
+      <el-form ref="form" label-width="150px" >
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="请选择基层组织:" prop="reason">
+                <el-select v-model="chooseOrg"  placeholder="请选择" reasons>
+                  <el-option v-for="item in orgList" :key="item.index" :label="item.villageName" :value="item.userId"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>     
+        <div style="text-align:center">
+          <el-button @click="save" >提交</el-button>
+          <el-button @click="dialogVisible = false">取消</el-button>
+        </div>
+    </el-dialog> -->
       <div style="text-align: center;margin: 20px 0;">
         <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
       </div>
@@ -62,12 +94,14 @@
   </div>
 </template>
 <script>
-// import { getVillageShipList } from '@/api/tmlms/bvillage/index'
-import { getVillageShipList } from '@/api/ships'
+import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
+import { getVillageShipList,changeShip } from '@/api/ships'
+// import { getVillageShipList } from '@/api/ships'
 // import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
 import { getUserInfo } from '@/api/login'
+import { mapGetters } from 'vuex'
 export default {
   // components: {
   //   advanceSearch,
@@ -114,13 +148,40 @@ export default {
       },
       manager:false,
       userData:{},
+      dialogVisible:false,
+      orgList:[],
+      chooseOrg:'',
+      formLabelWidth: '120px',
+      shipId:'',
+      villageId:'',
     }
   },
   created () {
     this.getData()
     this.isManager()
+    this.getVillageOrg()
+  },
+  computed: {
+    ...mapGetters(['userInfo']),
   },
   methods: {
+    save () {
+      if(this.userInfo.userId && this.shipId){
+        let shipId =this.shipId
+        changeShip(shipId,this.chooseOrg).then(res=>{
+          if(res.data.data){
+            this.$message.success('变更成功')
+            this.dialogVisible = false
+          }
+        })
+      }
+      // console.log(this.userInfo.userId)
+    },
+    getVillageOrg () {
+      getVillageByOrg().then(res=>{
+        this.orgList = res.data.data
+      })
+    },
     handleSelectionChange (val) {     
       this.multipleSelection = val.map(m => m.id)
     },
@@ -133,6 +194,11 @@ export default {
         path: '/hrms_spa/village_ship_detail',
         query:{ add: 'add' },
       })  
+    },
+    handleChange (shipId){
+      this.shipId = shipId
+      this.dialogVisible = true
+      console.log(shipId)
     },
     handleView (val) {
       this.$router.push({path: '/hrms_spa/village_ship_detail', query:{ see: val }})

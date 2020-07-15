@@ -8,6 +8,13 @@ export function getVillage (query) {
         params: query,
     })
 }
+export function getVillageByOrg () {
+    return request({
+        url: `${prefixUrl}/getVillageByOrg`,
+        method: 'get',
+        // params: query,
+    })
+}
 export function saveVillage (data,type) {
     return request({
         url: `${prefixUrl}/create?type=${type}`,

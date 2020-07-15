@@ -395,9 +395,8 @@ export default {
     // },                                      
     getShipDetail () {                                      
       getShipDetail(this.shipId).then(({data}) => {
-        if(this.userId){
-          detailVillage(this.userId).then(res=>{
-          console.log('打印渔船信息')
+        if(data.data.villageId){
+          detailVillage(data.data.villageId).then(res=>{
           // console.log(res.data.data)
           this.villageName = res.data.data.villageName
           }).then(()=>{
