@@ -205,7 +205,7 @@
                 <i  class="el-icon-plus"></i>
             </el-upload>
               <el-dialog class="preview-modal" :visible.sync="imgVisible" append-to-body>
-                <img style="width:148px;height:148px" :src="dialogImageUrl" alt="photo">
+                <img style="width:100%" :src="dialogImageUrl" alt="photo">
               </el-dialog>
       </el-dialog>
     </basic-container>
