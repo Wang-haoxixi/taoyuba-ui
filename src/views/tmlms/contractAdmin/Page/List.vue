@@ -633,7 +633,7 @@ export default {
       this.rd = contractId
     },
     //上传纸质合同
-    handleUpload (contractId) {             
+    handleUpload (contractId) {                 
        this.contractFiles = []
         this.uploadTitle = '上传纸质合同'     
         this.paperVisible = true
@@ -650,8 +650,9 @@ export default {
         })
         },100)    
     },
-    paperClose () {   
+    paperClose () {       
         this.paperVisible = false 
+        this.contractFiles = []
     },
     async agreeRelieve () {
       this.contStatus = await getContractDetail(this.rd).then(res => {
@@ -958,8 +959,8 @@ export default {
           this.fileChange(fileList)
       },
       //设置photo   
-   fileChange (fileList,type) {           
-     console.log(fileList)
+   fileChange (fileList,type) {              
+    //  console.log(fileList)
         let temp_str = ''
         if(fileList.length > 0){
           for(let i=0; i<fileList.length; i++){
