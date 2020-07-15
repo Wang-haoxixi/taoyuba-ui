@@ -1,7 +1,7 @@
 <template>
   <div class="iep-page-form">
     <basic-container>
-      <page-header :title="getTitle" :backOption="backOption"></page-header>
+      <page-header :title="getTitle" :backOption="backOption"></page-header><span v-if="this.$route.query.see">{{form.villageName}}</span>
       <el-form :disabled="type === 1" ref="form" :model="form" :rules="rules" label-width="150px" size="small">
         <el-row>
           <el-col :span="12">
@@ -85,18 +85,6 @@
             <el-form-item label="捕捞许可证编号：" prop="licensesFishingNo">
               <el-input maxlength="50" v-model="form.licensesFishingNo"></el-input>
             </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row  v-if="this.$route.query.see">
-          <el-col :span="12">
-            <el-form-item label="所属基层：" prop="villageName">
-                <el-input maxlength="50" v-model="form.villageName"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-              <iep-form-item class="form-half" prop="licensesDateExpire" label-name="证书有效期">
-                <iep-date-picker v-model="form.licensesDateExpire" type="date" placeholder="选择日期"></iep-date-picker>
-              </iep-form-item>
           </el-col>
         </el-row>
         <el-row>
@@ -249,7 +237,7 @@
               <el-input maxlength="3" v-model="form.netTonnage"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12" v-if="!this.$route.query.see">
+          <el-col :span="12" >
               <iep-form-item class="form-half" prop="licensesDateExpire" label-name="证书有效期">
                 <iep-date-picker v-model="form.licensesDateExpire" type="date" placeholder="选择日期"></iep-date-picker>
               </iep-form-item>
@@ -399,12 +387,11 @@ export default {
           detailVillage(data.data.villageId).then(res=>{
           // console.log(res.data.data)
           this.villageName = res.data.data.villageName
-          }).then(()=>{
-            this.form = data.data
-            this.form.villageName = this.villageName
-            console.log(this.form)
           })
         }
+        console.log(this.form)
+        this.form = data.data
+        this.form.villageName = this.villageName
         
         // if (data.code === 0) {
         //   // this.regionChosen.province = data.data.province
