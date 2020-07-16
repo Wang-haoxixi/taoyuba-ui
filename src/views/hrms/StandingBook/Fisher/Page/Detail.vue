@@ -1,7 +1,7 @@
 <template>
   <div class="iep-page-form">
     <basic-container>
-      <page-header :title="getTitle" :backOption="backOption"></page-header><span v-if="this.$route.query.see">{{form.villageName}}</span>
+      <page-header :title="getTitle" :backOption="backOption"></page-header>
       <el-form :disabled="type === 1" ref="form" :model="form" :rules="rules" label-width="150px" size="small">
         <el-row>
           <el-col :span="12">
@@ -15,6 +15,11 @@
                   :value="item.value">
                 </el-option>
               </el-select> -->
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="基层：" prop="villageName">
+              <el-input maxlength="20" placeholder="" v-model="form.villageName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -307,6 +312,7 @@ export default {
       arr:[],
       manager: false,
       villageName:'',
+      showTitle:false,
     }                               
   },
   computed: {                                                                                                                                                               
@@ -327,8 +333,12 @@ export default {
       }
       return 0
     },
-    getTitle () {                                                                    
-      return `${ this.$route.query.see ? '查看' : this.$route.query.edit ? '编辑' :'新增' }渔船信息`
+    getTitle () {    
+      let villageName=''     
+      if(this.$route.query.see && this.showTitle){
+        villageName = '-'+this.form.villageName
+      }                                                      
+      return `${ this.$route.query.see ? '查看' : this.$route.query.edit ? '编辑' :'新增' }渔船信息${villageName}`
     },
   },
   created () {                                    
@@ -383,16 +393,25 @@ export default {
     // },                                      
     getShipDetail () {                                      
       getShipDetail(this.shipId).then(({data}) => {
+        console.log('villageId')
+        console.log(data.data.villageId)
+        // this.form = data.data
         if(data.data.villageId){
           detailVillage(data.data.villageId).then(res=>{
           // console.log(res.data.data)
           this.villageName = res.data.data.villageName
+          }).then(()=>{
+            this.form = data.data
+            this.form.villageName = this.villageName
+            // console.log('打出来看看')
+            // console.log(this.form)
           })
+        }else{
+          this.form = data.data
         }
-        console.log(this.form)
-        this.form = data.data
-        this.form.villageName = this.villageName
-        
+        // this.form = data.data
+        // console.log('打出来看看')
+        // console.log(this.form)
         // if (data.code === 0) {
         //   // this.regionChosen.province = data.data.province
         //   // this.regionChosen.city = data.data.city
@@ -493,6 +512,7 @@ export default {
         this.userId = data.data.data.sysUser.userId
         if(data.data.data.roles.includes(112)){
           this.form.villageId = this.userId
+          this.showTitle = true
         }
         if (data.data.data.roles.includes(111)) {
           this.manager = false
