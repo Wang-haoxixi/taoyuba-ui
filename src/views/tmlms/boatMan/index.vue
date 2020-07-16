@@ -82,7 +82,7 @@
           </el-table-column> -->
           <el-table-column label="操作" width="180">                        
             <template slot-scope="scope">                      
-              <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.idcard)">查看   
+              <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.idcard)">查看
               </el-button>
               <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.idcard)"  v-if="manager">编辑
               </el-button>
@@ -386,7 +386,7 @@ export default {
       this.userData = await getUserInfo().then(res => {
         return res.data.data
       })
-      if(this.userData.roles.indexOf(111) !== -1 || this.userData.roles.indexOf(1) !== -1) {
+      if(this.userData.roles.indexOf(111) !== -1 || this.userData.roles.indexOf(1) !== -1 || this.userData.roles.indexOf(112) !== -1) { 
         this.manager = true
       }
     },
