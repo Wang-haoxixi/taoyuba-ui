@@ -549,7 +549,7 @@ export default {
         workDateEnd: '',
         paySalaryType: 1,
         paySalaryTypeValue: '',
-        payType: 1,
+        payType: 3,
         payTypeValue: '',
         otherContent: '',
         employerBreakValue: '',
