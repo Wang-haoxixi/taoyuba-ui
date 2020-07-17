@@ -356,8 +356,8 @@
             <el-button @click="$router.go(-1)">返回</el-button>
           </template>
           <template v-else>
-            <el-button v-if="manager" @click="$router.push({name:'boatMan'})">返回</el-button>
-            <el-button v-if="!manager" @click="$router.push({ path: '/'} )">返回</el-button>
+            <el-button v-if="manager" @click="$router.push({name:'boatMan'})">返回</el-button>    
+            <el-button v-if="!manager" @click="$router.push({name:'boatMan'})">返回</el-button>
           </template>
           <el-button v-if="manager && !$route.query.see" @click="collect">数据读取</el-button>
         </div>
@@ -531,7 +531,7 @@ export default {
       if (this.form.facePhoto.length > 200) {
         await this.getFaceFile()
       }
-      console.log(this.form)
+      // console.log(this.form)   
       this.$refs['form'].validate((valid) => {
           if (valid) {
             // let form = JSON.parse(JSON.stringify(this.form))
