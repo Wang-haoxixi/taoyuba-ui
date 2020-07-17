@@ -73,12 +73,12 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item label="姓名：" prop="employerName">
-                    <el-input maxlength="6" v-model="formData.employerName" style="width:380px"></el-input>
+                    <el-input maxlength="6" v-model="formData.employerName" style="width:380px" :disabled="employer"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="身份证号：" prop="employerIdcard">
-                    <el-input maxlength="20" v-model="formData.employerIdcard" style="width:380px"></el-input>
+                    <el-input maxlength="20" v-model="formData.employerIdcard" style="width:380px" :disabled="employer"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -106,7 +106,7 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item label="联系电话：" prop="employerPhone">
-                    <el-input maxlength="20" v-model="formData.employerPhone" style="width:380px">></el-input>
+                    <el-input maxlength="20" v-model="formData.employerPhone" style="width:380px" :disabled="employer"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -121,7 +121,7 @@
               <el-row>
                 <el-col :span="12">  
                   <el-form-item label="地址：" prop="employerAddr">
-                    <el-input maxlength="20" v-model="formData.employerAddr" style="width:380px">></el-input>
+                    <el-input maxlength="20" v-model="formData.employerAddr" style="width:380px" :disabled="employer"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -312,9 +312,9 @@
             <el-header class="head"></el-header>
             <el-main class="mai">
               <el-row>
-                <el-col :span="6">
+                <el-col :span="7">
                   <!-- (this.formData.workDateStart -->
-                  <el-form-item label="按渔业生产周期：" prop="workDateStart">
+                  <el-form-item label="按渔业生产周期：" prop="workDateStart" label-width="150px">
                     <el-date-picker
                     v-model="formData.workDateStart"
                     type="date"
@@ -331,8 +331,8 @@
                   </el-date-picker>
                   </el-form-item> -->
                 </el-col>
-                <el-col :span="6">
-                  <el-form-item label='至' prop="workDateEnd">
+                <el-col :span="5">
+                  <el-form-item label='至' prop="workDateEnd" label-width="60px">
                     <el-date-picker
                     v-model="formData.workDateEnd"
                     type="date"
@@ -630,6 +630,8 @@ export default {
       isContract: false,
       shipowner:false,
       employee:false,
+      checkEmployeeIdcard:false,
+      employer:false,
     }
   },
   created () {
@@ -732,6 +734,7 @@ export default {
         this.formData.employerIdcard = this.formData.shipownerIdcard
         this.formData.employerPhone = this.formData.shipownerPhone
         this.formData.employerAddr = this.formData.shipownerAddr
+        this.employer =true
       } else if (val === 2) {
         this.formData.employerName = ''
         this.formData.employerIdcard = ''
@@ -750,11 +753,13 @@ export default {
             }
           })
         })
+        this.employer =false
       } else if (val === 3) {
           this.formData.employerName = ''
           this.formData.employerIdcard = ''
           this.formData.employerPhone = ''
           this.formData.employerAddr = ''
+          this.employer =false
       }
     },
     idcardChange (card) {
@@ -788,6 +793,7 @@ export default {
     getidcardList (number) {
       isCheckIdcard(number).then(res => {
         if (res.data.data === false) {
+          this.checkEmployeeIdcard = true
           this.formData.employeeIdcard = ''
           this.idcards = []
           this.$message.error('该船员已签订合同!')
@@ -838,7 +844,7 @@ export default {
       //   this.formData.workDateStart = this.period[0]
       //   this.formData.workDateEnd = this.period[1]       
       // }  
-      this.formData.shipJointNo = this.formData.shipownerName
+      this.formData.shipJointNo = this.formData.employerName
       if (this.formData.shipName.shipName) {
         this.formData.shipName = this.formData.shipName.shipName
       }
@@ -859,13 +865,17 @@ export default {
       }
       this.$refs['form'].validate(valid => {
         if (valid) {
-          if (this.type === 'add') {      
+          if (this.type === 'add') {
+                if(this.checkEmployeeIdcard) {
+                  this.$message.error('乙方船员已签订合同!请重新输入身份证号')
+                  this.formData.employeeIdcard = ''
+                }else{   
                 this.$confirm('请确认当前合同信息是否正确，提交后将无法修改, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning',
                   }).then(() => {
-                     addContract(this.formData), () => {    
+                    addContract(this.formData), () => {    
                       this.$message.error('新增失败!')
                     }
                     this.$message.success('保存成功！')
@@ -875,7 +885,8 @@ export default {
                       type: 'info',
                       message: '已取消保存',
                     })
-                  })      
+                  })  
+                }    
           } else if (this.type === 'edit') {
             updateContract(this.formData).then(() =>{
               this.$message.success('修改成功！')
