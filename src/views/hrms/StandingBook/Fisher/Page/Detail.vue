@@ -18,18 +18,14 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="基层：" prop="villageName">
-              <el-input maxlength="20" placeholder="" v-model="form.villageName"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
             <el-form-item label="渔船编号：" prop="shipNo">
-              <template v-if='form.shipNo'>
-              <el-input maxlength="50"  v-model="form.shipNo" ></el-input>
+              <el-input maxlength="50"  v-model="form.shipNo" @blur="cheackNo"></el-input>
+              <!-- <template v-if='form.shipNo'>
+              <el-input maxlength="50"  v-model="form.shipNo"></el-input>
               </template>
               <template v-else>
               <el-input maxlength="50"  v-model="form.shipNo" ></el-input>
-              </template>
+              </template> -->
             </el-form-item>
           </el-col>
         </el-row>
@@ -40,6 +36,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+
             <el-form-item label="持证人身份证号码：" prop="shipownerIdcard">
               <template v-if="form.shipownerIdcard">
               <el-input maxlength="18" v-model="form.shipownerIdcard"></el-input>
@@ -82,14 +79,26 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="渔船所有权登记证书：" prop="licensesOwnerShip">
+            <el-form-item label="渔船所有权登记证：" prop="licensesOwnerShip">
               <el-input maxlength="30" v-model="form.licensesOwnerShip"></el-input>
             </el-form-item>
-          </el-col>  
+          </el-col>
+          <el-col :span="12" >
+              <iep-form-item class="form-half" prop="licensesOwnerExpireDate" label-name="所有权证书有效期">
+                <el-date-picker v-model="form.licensesOwnerExpireDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期"></el-date-picker>
+              </iep-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="捕捞许可证编号：" prop="licensesFishingNo">
               <el-input maxlength="50" v-model="form.licensesFishingNo"></el-input>
             </el-form-item>
+          </el-col>
+          <el-col :span="12" >
+              <iep-form-item class="form-half" prop="licensesFishingExpireDate" label-name="捕捞许可证有效期">
+                <el-date-picker v-model="form.licensesFishingExpireDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期"></el-date-picker>
+              </iep-form-item>
           </el-col>
         </el-row>
         <el-row>
@@ -97,12 +106,24 @@
             <el-form-item label="国籍证书编号：" prop="licensesNationalNo">
               <el-input maxlength="50" v-model="form.licensesNationalNo"></el-input>
             </el-form-item>
-          </el-col>   
+          </el-col>  
+          <el-col :span="12" >
+              <iep-form-item class="form-half" prop="licensesNationalExpireDate" label-name="国籍证有效期">
+                <el-date-picker v-model="form.licensesNationalExpireDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期"></el-date-picker>
+              </iep-form-item>
+          </el-col> 
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="船舶检验证书编号：" prop="licensesInspectionNo">
               <el-input maxlength="50" v-model="form.licensesInspectionNo"></el-input>
             </el-form-item>
           </el-col>
+          <el-col :span="12" >
+              <iep-form-item class="form-half" prop="licensesInspectionExpireDate" label-name="船舶检验证有效期">
+                <iep-date-picker v-model="form.licensesInspectionExpireDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期"></iep-date-picker>
+              </iep-form-item>
+          </el-col> 
         </el-row>
         <el-row>
           <el-col :span="12">
@@ -242,11 +263,11 @@
               <el-input maxlength="3" v-model="form.netTonnage"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12" >
+          <!-- <el-col :span="12" >
               <iep-form-item class="form-half" prop="licensesDateExpire" label-name="证书有效期">
                 <iep-date-picker v-model="form.licensesDateExpire" type="date" placeholder="选择日期"></iep-date-picker>
               </iep-form-item>
-          </el-col>
+          </el-col> -->
           <!-- <el-col :span="12">
             <el-form-item label="所属行政村：" prop="regionId">
               <el-cascader v-model="form.regionId" :options="options" @active-item-change="handleItemChange" :props="props"></el-cascader>
@@ -265,7 +286,7 @@
 <script>        
 import {  createShip, updateShip, getShipDetail,
 // getRogionList, 
-findMyship } from '@/api/ships/index'
+findMyship, getShipByShipNo} from '@/api/ships/index'
 import { initForm , rules } from '../options'
 import { getVillageshipinfoByuser, getVillageshipinfoById } from '@/api/tmlms/bvillage/villageship'
 import { detailVillage } from '@/api/tmlms/bvillage/index'
@@ -312,7 +333,6 @@ export default {
       arr:[],
       manager: false,
       villageName:'',
-      showTitle:false,
     }                               
   },
   computed: {                                                                                                                                                               
@@ -335,8 +355,8 @@ export default {
     },
     getTitle () {    
       let villageName=''     
-      if(this.$route.query.see && this.showTitle){
-        villageName = '-'+this.form.villageName
+      if(this.$route.query.see && this.form.villageName){
+        villageName = '-所属基层：'+this.form.villageName
       }                                                      
       return `${ this.$route.query.see ? '查看' : this.$route.query.edit ? '编辑' :'新增' }渔船信息${villageName}`
     },
@@ -358,6 +378,18 @@ export default {
   mounted () {                    
   },
   methods: {
+    cheackNo () {
+      console.log('aaaaa')
+      if(this.form.shipNo){
+        getShipByShipNo(this.form.shipNo).then(res=>{
+          if(res.data.data){
+            this.form.shipNo = ''
+            this.$message.error('渔船编号已存在')
+            
+          }
+        })
+      }
+    },
     handleItemChange (val) {
       getArea(val[val.length-1]).then(res=>{
         let data = res.data.data
@@ -393,8 +425,6 @@ export default {
     // },                                      
     getShipDetail () {                                      
       getShipDetail(this.shipId).then(({data}) => {
-        console.log('villageId')
-        console.log(data.data.villageId)
         // this.form = data.data
         if(data.data.villageId){
           detailVillage(data.data.villageId).then(res=>{
@@ -480,9 +510,14 @@ export default {
     },
     handleSubmit () {
       this.$refs.form.validate(valid => {
+        // this.form.licensesFishingExpireDate = this.form.licensesFishingExpireDate.toString()
+        // this.form.licensesInspectionExpireDate = this.form.licensesInspectionExpireDate.toString()
+        // this.form.licensesNationalExpireDate = this.form.licensesNationalExpireDate.toString()
+        // this.form.licensesOwnerExpireDate = this.form.licensesOwnerExpireDate.toString()
         // this.form.regionId = this.form.regionId[this.form.regionId.length - 1]
         if (valid) {
           if (this.$route.query.add) {
+            console.log(this.form.licensesOwnerExpireDate)
             createShip(this.form).then(({data}) => {
               if (data.code === 0) {
                 this.$message.success('添加成功！')
@@ -512,7 +547,6 @@ export default {
         this.userId = data.data.data.sysUser.userId
         if(data.data.data.roles.includes(112)){
           this.form.villageId = this.userId
-          this.showTitle = true
         }
         if (data.data.data.roles.includes(111)) {
           this.manager = false
