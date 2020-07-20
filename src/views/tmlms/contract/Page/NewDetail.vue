@@ -306,7 +306,7 @@
         </el-container>
         <el-container>
           <el-aside class="sided">
-            <div class="tex">合同期限、工资标准及支付方式</div>
+            <div class="tex">合同期限、劳务报酬标准及支付方式</div>
           </el-aside>
           <el-container>
             <el-header class="head"></el-header>
