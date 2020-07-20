@@ -206,7 +206,7 @@
                       </el-radio-group>
                     </el-col>
                     <el-col>
-                      <div>（不适宜从事航海的疾病）</div>
+                      <div>（不适宜从事航海或海上作业的疾病）</div>
                     </el-col>
                   </el-form-item>
                 </el-col>  
@@ -265,7 +265,7 @@
         </el-container>
         <el-container>
           <el-aside class="sidec">
-            <div class="tex">岗位及试用</div>
+            <div class="tex">劳务内容及试用</div>
           </el-aside>
           <el-container>
             <el-header class="head"></el-header>
@@ -361,8 +361,8 @@
                         <el-radio :label="1">定期支付</el-radio>
                       </el-col>
                       <el-col :span="10">             
-                        <el-form-item label="工资产生后次月" prop="payTypeValue">  
-                          <el-input :disabled="formData.payType === 2 || formData.payType === 3" maxlength="4" v-model="formData.payTypeValue" style="width:50px" size="mini"></el-input>日前支付
+                        <el-form-item label="劳务产生后次月" prop="payTypeValue">  
+                          <el-input :disabled="formData.payType === 2 || formData.payType === 3" maxlength="4" v-model="formData.payTypeValue" style="width:50px" size="mini"></el-input>日前支付报酬
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -372,7 +372,7 @@
                       </el-col>
                       <el-col :span="10">
                         <el-form-item label="期限结束、航次结束后的" prop="payTypeValue" class="spe">  
-                          <el-input :disabled="formData.payType === 1 || formData.payType === 3" maxlength="4" v-model="formData.payTypeValue" style="width:50px" size="mini"></el-input>日内支付
+                          <el-input :disabled="formData.payType === 1 || formData.payType === 3" maxlength="4" v-model="formData.payTypeValue" style="width:50px" size="mini"></el-input>日内支付报酬
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -863,6 +863,8 @@ export default {
       if (this.formData.contactPhone) {
         this.formData.employeeLinkPhone = this.formData.contactPhone
       }
+      console.log('表单打出来看看')
+      console.log(this.formData)
       this.$refs['form'].validate(valid => {
         if (valid) {
           if (this.type === 'add') {
