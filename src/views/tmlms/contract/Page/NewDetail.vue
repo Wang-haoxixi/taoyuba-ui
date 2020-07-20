@@ -844,7 +844,7 @@ export default {
       //   this.formData.workDateStart = this.period[0]
       //   this.formData.workDateEnd = this.period[1]       
       // }  
-      this.formData.shipJointNo = this.formData.employerName
+      this.formData.shipJointNo = this.formData.shipownerName
       if (this.formData.shipName.shipName) {
         this.formData.shipName = this.formData.shipName.shipName
       }
