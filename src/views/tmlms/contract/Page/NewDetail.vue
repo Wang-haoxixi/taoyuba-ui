@@ -221,7 +221,7 @@
               </el-row>
               <el-row>
                 <el-row>
-                  <el-form-item label="工资账户：" prop="employeePayType">
+                  <el-form-item label="劳务报酬账户：" prop="employeePayType">
                     <el-radio-group v-model="formData.employeePayType">
                       <el-radio :label="1">现金</el-radio>
                       <el-radio :label="2">银行转账</el-radio>
