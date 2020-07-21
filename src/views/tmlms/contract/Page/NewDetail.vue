@@ -502,7 +502,7 @@ import { findorgShip} from '@/api/ships/index'
 import { getUserInfo } from '@/api/login'
 import { getOperatorList } from '@/api/ships/shipoperat/index'
 import { detailCrew } from '@/api/tmlms/boatMan/index'
-import { getShipownerByidcard } from '@/api/tmlms/shipowner/index'
+// import { getShipownerByidcard } from '@/api/tmlms/shipowner/index'
 import { 
   addContract, 
   updateContract, getContractDetail, isCheckIdcard } from '@/api/tmlms/newContract'
@@ -752,16 +752,9 @@ export default {
           if(data.data.data){
             this.formData.employerName = data.data.data.realname
             this.formData.employerIdcard = data.data.data.idcard
+            this.formData.employerPhone = data.data.data.phone
+            this.formData.employerAddr = data.data.data.address
           }
-        }).then(()=>{
-          console.log(this.formData.employerIdcard)
-          getShipownerByidcard(this.formData.employerIdcard).then(res=>{
-            console.log(res)
-            if(res.data.data){
-              this.formData.employerPhone = res.data.data.phone
-              this.formData.employerAddr = res.data.data.address
-            }
-          })
         })
         this.employer =false
       } else if (val === 3) {
