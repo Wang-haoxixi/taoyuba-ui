@@ -503,7 +503,9 @@ import { getUserInfo } from '@/api/login'
 import { getOperatorList } from '@/api/ships/shipoperat/index'
 import { detailCrew } from '@/api/tmlms/boatMan/index'
 import { getShipownerByidcard } from '@/api/tmlms/shipowner/index'
-import { addContract, updateContract, getContractDetail, isCheckIdcard } from '@/api/tmlms/newContract'
+import { 
+  addContract, 
+  updateContract, getContractDetail, isCheckIdcard } from '@/api/tmlms/newContract'
 export default {
   props: {
     record: {},
@@ -602,16 +604,16 @@ export default {
           required: true, message: '请输入乙方（雇员)姓名', trigger: 'blur',
         }],
         employeeIdcard: [{ 
-          required: true, message: '请输入乙方（雇主)身份证号', trigger: 'blur',
+          required: true, message: '请输入乙方（雇员)身份证号', trigger: 'blur',
         }],
         employeePhone: [{ 
-          required: true, message: '请输入乙方（雇主)联系电话', trigger: 'blur',
+          required: true, message: '请输入乙方（雇员)联系电话', trigger: 'blur',
         }],
         employeePosition: [{ 
           required: true, message: '请输入现有资格证书', trigger: 'blur',
         }],
         employeeAddr: [{ 
-          required: true, message: '请输入乙方（雇主)地址', trigger: 'blur',
+          required: true, message: '请输入乙方（雇员)地址', trigger: 'blur',
         }],
         contactName: [{ 
           required: true, message: '请输入紧急联系人姓名', trigger: 'blur',
@@ -651,6 +653,12 @@ export default {
     },
   },
   methods: {
+    // checkShipName () {
+    // if(!this.formData.shipName) {
+    //     this.$message.error('渔船名称不能为空,请选择相关渔船')
+    //     return  false
+    // }
+    // },
     getList () {
       getContractDetail (this.record).then(data =>{
         this.formData = data.data.data
@@ -746,7 +754,9 @@ export default {
             this.formData.employerIdcard = data.data.data.idcard
           }
         }).then(()=>{
+          console.log(this.formData.employerIdcard)
           getShipownerByidcard(this.formData.employerIdcard).then(res=>{
+            console.log(res)
             if(res.data.data){
               this.formData.employerPhone = res.data.data.phone
               this.formData.employerAddr = res.data.data.address
@@ -772,11 +782,15 @@ export default {
     },
     refreshCard (card) {
       if(card !== null) {
-        let { realName = '', phone = '', address = '', positionId = '', contactName = '', contactPhone = ''} = card
+        let { realName = '', phone = '', address = '', contactName = '', contactPhone = ''} = card
+        if(card.positionId!=='0'){
+          this.formData.employeePosition = card.positionId
+        }else{
+          this.formData.employeePosition = ''
+        }
         this.formData.employeeName = realName
         this.formData.employeePhone = phone
         this.formData.employeeAddr = address
-        this.formData.employeePosition = positionId
         this.formData.contactName = contactName
         this.formData.contactPhone = contactPhone
         this.employee = true
@@ -863,8 +877,6 @@ export default {
       if (this.formData.contactPhone) {
         this.formData.employeeLinkPhone = this.formData.contactPhone
       }
-      console.log('表单打出来看看')
-      console.log(this.formData)
       this.$refs['form'].validate(valid => {
         if (valid) {
           if (this.type === 'add') {
@@ -897,6 +909,9 @@ export default {
               this.$message.error('修改失败！')
             })
           }      
+        }else{
+          this.$message.error('请确认已经填写了所有必填信息！')
+          // this.$message.error(valid)
         }
       })
     },
