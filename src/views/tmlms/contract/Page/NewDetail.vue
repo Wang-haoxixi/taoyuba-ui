@@ -621,6 +621,12 @@ export default {
         contactPhone: [{ 
           required: true, message: '请输入紧急联系人电话', trigger: 'blur',
         }],
+        workDateStart: [{ 
+          required: true, message: '请选择生产周期开始日期', trigger: 'blur',
+        }],
+        workDateEnd: [{ 
+          required: true, message: '请选择生产周期结束日期', trigger: 'blur',
+        }],
       },
       shipNames: [],
       loading: false,
