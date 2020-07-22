@@ -280,6 +280,10 @@ export default {
       timeList: [],
       statusDict: [
         {
+          lable: '',
+          value: '全部',
+        },
+        {
           lable: 0,
           value: '未审核',
         },
