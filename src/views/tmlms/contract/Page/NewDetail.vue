@@ -667,7 +667,11 @@ export default {
     // },
     getList () {
       getContractDetail (this.record).then(data =>{
-        this.formData = data.data.data
+        if(data.data.data.employeePosition=='0'){
+          data.data.data.employeePosition=''
+          this.formData = data.data.data
+        }
+        console.log('this.formData')
         console.log(this.formData)
         // if (this.formData.workDateStart && this.formData.workDateEnd) {
         //   this.period.push(this.formData.workDateStart)
@@ -755,6 +759,8 @@ export default {
         this.formData.employerPhone = ''
         this.formData.employerAddr = ''
         getOperatorList (this.formData.shipName.shipName).then(data => {
+          console.log('lll')
+          console.log(data.data.data)
           if(data.data.data){
             this.formData.employerName = data.data.data.realname
             this.formData.employerIdcard = data.data.data.idcard
@@ -901,12 +907,12 @@ export default {
                   })  
                 }    
           } else if (this.type === 'edit') {
-            updateContract(this.formData).then(() =>{
+              updateContract(this.formData).then(() =>{
               this.$message.success('修改成功！')
               this.$emit('onGoBack')
-            }).catch(() => {
-              this.$message.error('修改失败！')
-            })
+              }).catch(() => {
+                this.$message.error('修改失败！')
+              })
           }      
         }else{
           this.$message.error('请确认已经填写了所有必填信息！')
