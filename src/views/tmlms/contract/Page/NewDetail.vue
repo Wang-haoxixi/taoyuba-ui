@@ -221,7 +221,7 @@
               </el-row>
               <el-row>
                 <el-row>
-                  <el-form-item label="工资账户：" prop="employeePayType">
+                  <el-form-item label="劳务报酬账户：" prop="employeePayType">
                     <el-radio-group v-model="formData.employeePayType">
                       <el-radio :label="1">现金</el-radio>
                       <el-radio :label="2">银行转账</el-radio>
@@ -306,7 +306,7 @@
         </el-container>
         <el-container>
           <el-aside class="sided">
-            <div class="tex">合同期限、工资标准及支付方式</div>
+            <div class="tex">合同期限、劳务报酬标准及支付方式</div>
           </el-aside>
           <el-container>
             <el-header class="head"></el-header>
@@ -502,8 +502,10 @@ import { findorgShip} from '@/api/ships/index'
 import { getUserInfo } from '@/api/login'
 import { getOperatorList } from '@/api/ships/shipoperat/index'
 import { detailCrew } from '@/api/tmlms/boatMan/index'
-import { getShipownerByidcard } from '@/api/tmlms/shipowner/index'
-import { addContract, updateContract, getContractDetail, isCheckIdcard } from '@/api/tmlms/newContract'
+// import { getShipownerByidcard } from '@/api/tmlms/shipowner/index'
+import { 
+  addContract, 
+  updateContract, getContractDetail, isCheckIdcard } from '@/api/tmlms/newContract'
 export default {
   props: {
     record: {},
@@ -602,22 +604,28 @@ export default {
           required: true, message: '请输入乙方（雇员)姓名', trigger: 'blur',
         }],
         employeeIdcard: [{ 
-          required: true, message: '请输入乙方（雇主)身份证号', trigger: 'blur',
+          required: true, message: '请输入乙方（雇员)身份证号', trigger: 'blur',
         }],
         employeePhone: [{ 
-          required: true, message: '请输入乙方（雇主)联系电话', trigger: 'blur',
+          required: true, message: '请输入乙方（雇员)联系电话', trigger: 'blur',
         }],
         employeePosition: [{ 
           required: true, message: '请输入现有资格证书', trigger: 'blur',
         }],
         employeeAddr: [{ 
-          required: true, message: '请输入乙方（雇主)地址', trigger: 'blur',
+          required: true, message: '请输入乙方（雇员)地址', trigger: 'blur',
         }],
         contactName: [{ 
           required: true, message: '请输入紧急联系人姓名', trigger: 'blur',
         }],
         contactPhone: [{ 
           required: true, message: '请输入紧急联系人电话', trigger: 'blur',
+        }],
+        workDateStart: [{ 
+          required: true, message: '请选择生产周期开始日期', trigger: 'blur',
+        }],
+        workDateEnd: [{ 
+          required: true, message: '请选择生产周期结束日期', trigger: 'blur',
         }],
       },
       shipNames: [],
@@ -651,9 +659,19 @@ export default {
     },
   },
   methods: {
+    // checkShipName () {
+    // if(!this.formData.shipName) {
+    //     this.$message.error('渔船名称不能为空,请选择相关渔船')
+    //     return  false
+    // }
+    // },
     getList () {
       getContractDetail (this.record).then(data =>{
-        this.formData = data.data.data
+        if(data.data.data.employeePosition=='0'){
+          data.data.data.employeePosition=''
+          this.formData = data.data.data
+        }
+        console.log('this.formData')
         console.log(this.formData)
         // if (this.formData.workDateStart && this.formData.workDateEnd) {
         //   this.period.push(this.formData.workDateStart)
@@ -741,17 +759,14 @@ export default {
         this.formData.employerPhone = ''
         this.formData.employerAddr = ''
         getOperatorList (this.formData.shipName.shipName).then(data => {
+          console.log('lll')
+          console.log(data.data.data)
           if(data.data.data){
             this.formData.employerName = data.data.data.realname
             this.formData.employerIdcard = data.data.data.idcard
+            this.formData.employerPhone = data.data.data.phone
+            this.formData.employerAddr = data.data.data.address
           }
-        }).then(()=>{
-          getShipownerByidcard(this.formData.employerIdcard).then(res=>{
-            if(res.data.data){
-              this.formData.employerPhone = res.data.data.phone
-              this.formData.employerAddr = res.data.data.address
-            }
-          })
         })
         this.employer =false
       } else if (val === 3) {
@@ -772,11 +787,15 @@ export default {
     },
     refreshCard (card) {
       if(card !== null) {
-        let { realName = '', phone = '', address = '', positionId = '', contactName = '', contactPhone = ''} = card
+        let { realName = '', phone = '', address = '', contactName = '', contactPhone = ''} = card
+        if(card.positionId!=='0'){
+          this.formData.employeePosition = card.positionId
+        }else{
+          this.formData.employeePosition = ''
+        }
         this.formData.employeeName = realName
         this.formData.employeePhone = phone
         this.formData.employeeAddr = address
-        this.formData.employeePosition = positionId
         this.formData.contactName = contactName
         this.formData.contactPhone = contactPhone
         this.employee = true
@@ -844,7 +863,7 @@ export default {
       //   this.formData.workDateStart = this.period[0]
       //   this.formData.workDateEnd = this.period[1]       
       // }  
-      this.formData.shipJointNo = this.formData.employerName
+      this.formData.shipJointNo = this.formData.shipownerName
       if (this.formData.shipName.shipName) {
         this.formData.shipName = this.formData.shipName.shipName
       }
@@ -863,8 +882,6 @@ export default {
       if (this.formData.contactPhone) {
         this.formData.employeeLinkPhone = this.formData.contactPhone
       }
-      console.log('表单打出来看看')
-      console.log(this.formData)
       this.$refs['form'].validate(valid => {
         if (valid) {
           if (this.type === 'add') {
@@ -890,13 +907,16 @@ export default {
                   })  
                 }    
           } else if (this.type === 'edit') {
-            updateContract(this.formData).then(() =>{
+              updateContract(this.formData).then(() =>{
               this.$message.success('修改成功！')
               this.$emit('onGoBack')
-            }).catch(() => {
-              this.$message.error('修改失败！')
-            })
+              }).catch(() => {
+                this.$message.error('修改失败！')
+              })
           }      
+        }else{
+          this.$message.error('请确认已经填写了所有必填信息！')
+          // this.$message.error(valid)
         }
       })
     },

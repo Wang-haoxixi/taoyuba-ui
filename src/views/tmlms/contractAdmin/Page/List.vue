@@ -16,6 +16,16 @@
           <iep-button @click="handleFresh" type="primary" >刷新</iep-button>
         </template>
         <template slot="right">
+          <span style="width:150px" v-if="!roles.includes(112)"><el-select v-model="chooseOrg" placeholder="请选择基层组织" size="small">
+              <el-option
+                v-for="item in orgList"
+                :key="item.index"
+                :label="item.villageName"
+                :value="item.userId"
+                >
+              </el-option>
+            </el-select>
+          </span>
           <span><el-input v-model="params.shipName" placeholder="船名号" size="small" style="width:120px"></el-input></span>
           <span><el-input v-model="params.shipownerName" placeholder="持证人姓名" size="small" style="width:120px"></el-input></span>
           <span><el-input v-model="params.employerName" placeholder="甲方姓名" size="small" style="width:120px"></el-input></span>
@@ -155,7 +165,7 @@
           <el-button type="primary" @click="seaSave">确 定</el-button>
         </span>
       </el-dialog>
-      <el-dialog :title="bName" :visible.sync="ownDialog" width="30%" :before-close="ownClose">
+      <!-- <el-dialog :title="bName" :visible.sync="ownDialog" width="30%" :before-close="ownClose">
         <el-row>
           <el-col :span="6">
             <span>作业技能：</span>
@@ -180,7 +190,7 @@
           <el-button @click="ownClose">取 消</el-button>
           <el-button type="primary" @click="ownSave">确 定</el-button>
         </span>
-      </el-dialog>       
+      </el-dialog>        -->
       <el-dialog :title="uploadTitle" :visible.sync="paperVisible" width="30%" :before-close="paperClose">    
                <!-- <el-upload       
                   class="upload-demo"
@@ -225,6 +235,7 @@ import {getImages} from '@/api/tmlms/multiimage'
 import { getUserInfo } from '@/api/login'
 import { mapGetters } from 'vuex'
 import { getUserName } from '@/api/admin/user'
+import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
 // import contractPrint from '../../contract/Page/ContractPrint.vue'
 // import Vue from 'vue'
 import store from '@/store'
@@ -282,6 +293,10 @@ export default {
       timeList: [],
       statusDict: [
         {
+          lable: '',
+          value: '全部',
+        },
+        {
           lable: 0,
           value: '未审核',
         },
@@ -310,6 +325,7 @@ export default {
       contractAddr: '',
       mangner: false,
       conStatus: '',
+      chooseOrg:'',
       revDialog: false,
       seaDialog: false,
       ownDialog: false,
@@ -350,10 +366,12 @@ export default {
       imgVisible: false,
       addPhoto:'',
       contractFiles: [],
+      orgList:[],
     }
   },
-  created () {        
-    this.getContractList()      
+  created () {
+    this.getVillageOrg()      
+    this.getContractList()     
     this.getDicts()
     this.mlms_contract_add = this.permissions['mlms_contract_add']
     this.mlms_contract_view = this.permissions['mlms_contract_view']
@@ -378,6 +396,7 @@ export default {
       this.idCardVal = res.data.data.sysUser.idCard
       this.nameVal = res.data.data.sysUser.realName
     })
+    
   },
   computed: {
     ...mapGetters([
@@ -422,6 +441,15 @@ export default {
     },
   },
   methods: {
+    //获取基层组织
+  getVillageOrg () {
+    getVillageByOrg().then(res=>{
+      this.orgList = res.data.data
+      this.orgList.unshift({userId:' ',villageName:'全部'})
+      console.log('res.data.data')
+      console.log(res.data.data)
+    })
+  },
     async getContractList () {
       this.rateType = await getUserInfo().then(res => {
         if (res.data.data.roles.indexOf(105) !== -1) {
@@ -489,6 +517,12 @@ export default {
           }
         })
       }
+      if (this.chooseOrg) {
+        this.params.userId = this.chooseOrg
+      }else{
+        this.params.userId=''
+      }
+      console.log(this.params)
       this.params.current = 1
       this.getContractList()
     },
@@ -842,33 +876,33 @@ export default {
       this.relform.content = ''
       this.relform.image = ''
     },
-    handleEvaluate (val) {
-      this.rateList.contractId = val
-      getContractDetail(val).then(data => {
-        this.obj = data.data.data
-        if (this.obj.employerIdcard === this.idCardVal) {
-          this.rateList.type = 1
-          this.rateList.employerName = this.nameVal
-          this.rateList.employerIdcard = this.idCardVal
-          this.rateList.employeeName = this.obj.employeeName
-          this.rateList.employeeIdcard = this.obj.employeeIdcard
-          this.ownDialog = true 
-          this.bName = '对' + this.obj.employeeName + '评价：'
-        } else if (this.obj.employeeIdcard === this.idCardVal) {
-          this.rateList.type = 2
-          this.rateList.employeeName = this.nameVal
-          this.rateList.employeeIdcard = this.idCardVal
-          this.rateList.employerName = this.obj.employerName
-          this.rateList.employerIdcard = this.obj.employerIdcard
-          this.seaDialog = true
-          this.aName = '对' + this.obj.employerName + '评价：'
-        }
-      })
-    },
-    ownClose () {
-      this.ownDialog = false
-      this.rateList = {}
-    },
+    // handleEvaluate (val) {
+    //   this.rateList.contractId = val
+    //   getContractDetail(val).then(data => {
+    //     this.obj = data.data.data
+    //     if (this.obj.employerIdcard === this.idCardVal) {
+    //       this.rateList.type = 1
+    //       this.rateList.employerName = this.nameVal
+    //       this.rateList.employerIdcard = this.idCardVal
+    //       this.rateList.employeeName = this.obj.employeeName
+    //       this.rateList.employeeIdcard = this.obj.employeeIdcard
+    //       this.ownDialog = true 
+    //       this.bName = '对' + this.obj.employeeName + '评价：'
+    //     } else if (this.obj.employeeIdcard === this.idCardVal) {
+    //       this.rateList.type = 2
+    //       this.rateList.employeeName = this.nameVal
+    //       this.rateList.employeeIdcard = this.idCardVal
+    //       this.rateList.employerName = this.obj.employerName
+    //       this.rateList.employerIdcard = this.obj.employerIdcard
+    //       this.seaDialog = true
+    //       this.aName = '对' + this.obj.employerName + '评价：'
+    //     }
+    //   })
+    // },
+    // ownClose () {
+    //   this.ownDialog = false
+    //   this.rateList = {}
+    // },
     seaClose () {
       this.seaDialog = false
       this.rateList = {}
