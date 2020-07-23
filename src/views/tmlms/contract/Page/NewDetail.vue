@@ -667,12 +667,12 @@ export default {
     // },
     getList () {
       getContractDetail (this.record).then(data =>{
-        if(data.data.data.employeePosition=='0'){
-          data.data.data.employeePosition=''
-          this.formData = data.data.data
+        this.formData = data.data.data
+        if(data.data.data.employeePosition === '0'){       
+          this.formData.employeePosition=''
         }
-        console.log('this.formData')
-        console.log(this.formData)
+        // console.log('this.formData')
+        // console.log(this.formData)
         // if (this.formData.workDateStart && this.formData.workDateEnd) {
         //   this.period.push(this.formData.workDateStart)
         //   this.period.push(this.formData.workDateEnd)

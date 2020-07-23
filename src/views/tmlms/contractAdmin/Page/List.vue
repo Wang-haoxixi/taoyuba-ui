@@ -98,7 +98,9 @@
             </el-button>
              <el-button v-if="mlms_contract_recall && scope.row.status === '合同成立' " type="text" icon="el-icon-edit" size="mini" @click="handleCall(scope.row.contractId)">撤销
             </el-button>    
-             <el-button v-if="mlms_contract_upload && scope.row.status === '合同成立' " type="text" icon="el-icon-edit" size="mini" @click="handleUpload(scope.row.contractId)">上传纸质合同
+             <el-button v-if="mlms_contract_upload && scope.row.status === '合同成立'  && scope.row.contractImage !== '1' " type="text" icon="el-icon-edit" size="mini" @click="handleUpload(scope.row.contractId)">上传纸质合同
+            </el-button> 
+              <el-button v-if="mlms_contract_upload && scope.row.status === '合同成立'  && scope.row.contractImage === '1' " type="text" icon="el-icon-edit" size="mini" @click="handleUpload(scope.row.contractId)">查看纸质合同
             </el-button> 
           </template>   
         </el-table-column>
@@ -667,7 +669,7 @@ export default {
       this.rd = contractId
     },
     //上传纸质合同
-    handleUpload (contractId) {                 
+    handleUpload (contractId) {                       
        this.contractFiles = []
         this.uploadTitle = '上传纸质合同'     
         this.paperVisible = true
@@ -682,7 +684,7 @@ export default {
               // this.imgVisible = true
             }
         })
-        },100)    
+        },100)        
     },
     paperClose () {       
         this.paperVisible = false 
@@ -963,7 +965,7 @@ export default {
               this.paperVisible = true
         })   
     },
-    handleCall (contractId) {       
+    handleCall (contractId) {                    
       //审核不通过    
       let staus = 2
        this.$confirm('此操作将撤销该合同, 是否继续?', '提示', {
@@ -989,8 +991,9 @@ export default {
         this.imgVisible = true
       },
     //上传成功
-    uploadSuccess (res,file,fileList ) {        
-          this.fileChange(fileList)
+    async uploadSuccess (res,file,fileList ) {          
+         await  this.fileChange(fileList)
+           this.getContractList()
       },
       //设置photo   
    fileChange (fileList,type) {              
@@ -1032,8 +1035,9 @@ export default {
     }
     },
       //删除照片    
-    handlePaperRemove (file,fileList) {
-        this.fileChange(fileList,'del')
+async    handlePaperRemove (file,fileList) {    
+     await   this.fileChange(fileList,'del')
+         this.getContractList()
     },
 
   },

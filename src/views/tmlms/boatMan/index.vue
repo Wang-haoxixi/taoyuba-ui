@@ -253,8 +253,9 @@ export default {
       }
     },
     //字典
-    dictJS (item, scope) {
+    dictJS (item, scope) {                           
       if(scope.row[item.value]){
+          if(scope.row[item.value] === '0')  return '暂无'
       return keyBy(this.dictGroup[item.dictName], 'value')[scope.row[item.value]].label
       }else{
         return '暂无'
