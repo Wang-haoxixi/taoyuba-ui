@@ -10,6 +10,16 @@
           <!-- <operation-search @search-page="searchPage" advance-search :prop="searchData">
             <advance-search @search-page="searchPage"></advance-search>
           </operation-search> -->
+          <span style="width:150px" v-if="!roles.includes(112)"><el-select v-model="searchOrg" placeholder="请选择基层组织" size="small">
+              <el-option
+                v-for="item in orgSearchList"
+                :key="item.index"
+                :label="item.villageName"
+                :value="item.userId"
+                >
+              </el-option>
+            </el-select>
+          </span>
           <span><el-input v-model="params.shipName" placeholder="请输入船名号" size="small" clearable></el-input></span>
           <span><el-input v-model="params.shipNo" placeholder="请输入渔船编号" size="small" clearable></el-input></span>
           <span><el-input v-model="params.shipowner" placeholder="请输入持证人姓名" size="small" clearable></el-input></span>
@@ -149,7 +159,9 @@ export default {
       userData:{},
       dialogVisible:false,
       orgList:[],
+      orgSearchList:[],
       chooseOrg:'',
+      searchOrg:'',
       formLabelWidth: '120px',
       shipId:'',
       villageId:'',
@@ -179,6 +191,10 @@ export default {
     getVillageOrg () {
       getVillageByOrg().then(res=>{
         this.orgList = res.data.data
+        this.orgSearchList = this.orgList.slice()
+        this.orgSearchList.unshift({userId:' ',villageName:'全部'})
+        // this.orgSearchList.unshift({userId:' ',villageName:'全部'})
+        // this.orgSearchList.push(res.data.data)
       })
     },
     handleSelectionChange (val) {     
@@ -197,7 +213,6 @@ export default {
     handleChange (shipId){
       this.shipId = shipId
       this.dialogVisible = true
-      console.log(shipId)
     },
     handleView (val) {
       this.$router.push({path: '/hrms_spa/village_ship_detail', query:{ see: val }})
@@ -244,6 +259,7 @@ export default {
     },
     //搜索
     getParamData () {
+      this.params.userId = this.searchOrg
       this.params.current = 1
       this.getData()
     },

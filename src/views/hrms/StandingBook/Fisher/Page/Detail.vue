@@ -79,9 +79,9 @@
         </el-row>
         <el-row v-if="isPartnerSearch">
           <el-col :span="12">
-              <el-form-item label="合伙人姓名查询：" prop="shipName">
+              <el-form-item label="股东检索：" prop="crewName">
                 <el-select v-model="crewName"
-                          placeholder="请选择"
+                          placeholder="请输入股东姓名查询"
                           filterable
                           remote
                           maxlength="20"
@@ -96,12 +96,12 @@
         </el-row>
         <el-row v-for="item in partnerList" :key="item.index">
           <el-col :span="11">
-            <el-form-item label="合伙人姓名：" prop="licensesOwnerShip">
+            <el-form-item label="股东姓名：" prop="shareName">
               <el-input maxlength="30" v-model="item.realName" :disabled='true'></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="11">
-            <el-form-item label="合伙人身份证：" prop="licensesOwnerShip">
+            <el-form-item label="股东身份证：" prop="shareId">
               <el-input maxlength="30" v-model="item.idcard" :disabled='true'></el-input>
             </el-form-item>
           </el-col>
@@ -374,14 +374,14 @@ export default {
       isPartner:false,
       isPartnerSearch:false,
       myPartner:[],
-      shareholder:{
-        address:'',
-        idcard:'',
-        phone: '',
-        positionId:'',
-        realName:'',
-        shipId: '',
-      },
+      // shareholder:{
+      //   address:'',
+      //   idcard:'',
+      //   phone: '',
+      //   positionId:'',
+      //   realName:'',
+      //   shipId: '',
+      // },
       editShareholder:{
         shipId:'',
         tybShipShareholderList:'',
@@ -470,17 +470,19 @@ export default {
           })
         }
         if(!flag){
-          this.shareholder.address = obj.address
-          this.shareholder.idcard = obj.idcard
-          this.shareholder.phone = obj.phone
-          this.shareholder.positionId = obj.positionId
-          this.shareholder.realName = obj.realName
+          let shareholder ={}
+          shareholder.address = obj.address
+          shareholder.idcard = obj.idcard
+          shareholder.phone = obj.phone
+          shareholder.positionId = obj.positionId
+          shareholder.realName = obj.realName
           if(this.$route.query.edit || this.$route.query.see){
-            this.shareholder.shipId = this.$route.query.edit
+            shareholder.shipId = this.$route.query.edit
           }else{
-            this.shareholder.shipId = ''
+            shareholder.shipId = ''
           }
-          this.partnerList.push(this.shareholder)
+          // obj=this.shareholder
+          this.partnerList.push(shareholder)
         }
       }
       // if(obj){
@@ -643,7 +645,10 @@ export default {
         // this.form.regionId = this.form.regionId[this.form.regionId.length - 1]
         if (valid) {
           if (this.$route.query.add) {
-            let parentShip
+            if(this.form.shipShare==1 && this.partnerList.length==0){
+              this.$message.error('请至少添加一个股东信息')
+            }else{
+              let parentShip
             createShip(this.form).then(({data}) => {
               parentShip = data.data.shipId
               if (data.code === 0) {
@@ -658,13 +663,18 @@ export default {
                 })
                 addShareholder(this.partnerList).then(res=>{
                 if(!res.data.data){
-                  this.$message.error('合伙人信息添加失败')
+                  this.$message.error('股东信息添加失败')
                 }
                 })
               }
               this.onGoBack()
             })
+            }
+            
           } else if (this.$route.query.edit) {
+            if(this.form.shipShare==1 && this.partnerList.length==0){
+              this.$message.error('请至少添加一个股东信息')
+            }else{
             updateShip(this.form).then(({data}) => {
               if (data.code === 0) {
                 this.$message.success('修改成功！')
@@ -683,12 +693,13 @@ export default {
               this.editShareholder.tybShipShareholderList=shareList
               updateShareholder(this.editShareholder).then(res=>{
                 if(!res.data.data){
-                  this.$message.error('合伙人信息修改失败')
+                  this.$message.error('股东信息修改失败')
                 }
               })
             })
           }
         }
+      }
       })
     },
     onGoBack () {
