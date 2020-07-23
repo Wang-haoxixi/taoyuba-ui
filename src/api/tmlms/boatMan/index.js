@@ -9,6 +9,13 @@ export function getCrew (query) {
         params: query,
     })
 }
+export function getCrewByName (name) {
+    return request({
+        url: `${prefixUrl}/findByCrewname?realName=${name}`,
+        method: 'get',
+        params: name,
+    })
+}
 export function saveCrew (data,type) {
     return request({
         url: `${prefixUrl}/create?type=${type}`,

@@ -55,7 +55,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="手机号码：" prop="mobile">
-              <el-input maxlength="13" v-model="form.mobile"></el-input>
+              <el-input maxlength="11" v-model="form.mobile"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -67,7 +67,7 @@
           </el-col> 
           <el-col :span="12">
             <el-form-item label="渔船股份性质：" prop="shipShare">
-              <el-select v-model="form.shipShare">
+              <el-select v-model="form.shipShare"  @change="shipShareChange">
                 <el-option
                         v-for="item in $store.getters.dictGroup.tyb_contract_ship_attr"
                         :key="item.value"
@@ -75,6 +75,38 @@
                         :value="item.value"></el-option>
               </el-select>
             </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row v-if="isPartnerSearch">
+          <el-col :span="12">
+              <el-form-item label="合伙人姓名查询：" prop="shipName">
+                <el-select v-model="crewName"
+                          placeholder="请选择"
+                          filterable
+                          remote
+                          maxlength="20"
+                          :loading="loading"
+                          clearable
+                          @change="crewNameChange"
+                          :remote-method="getCrewNameList" style="width:380px!important">
+                  <el-option v-for="item in crewNames" :key="item.index" :label="item.realName+' '+item.idcard" :value="item"></el-option>
+                </el-select>
+              </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row v-for="item in partnerList" :key="item.index">
+          <el-col :span="11">
+            <el-form-item label="合伙人姓名：" prop="licensesOwnerShip">
+              <el-input maxlength="30" v-model="item.realName" :disabled='true'></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="合伙人身份证：" prop="licensesOwnerShip">
+              <el-input maxlength="30" v-model="item.idcard" :disabled='true'></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="1">
+            <el-button  size="mini" plain @click="handleDel(item.idcard)">删除</el-button>  
           </el-col>
         </el-row>
         <el-row>
@@ -295,6 +327,8 @@ import { getArea,
 // getAllArea, 
 // getAllAreaName 
 } from '@/api/post/address'
+import { getCrewByName } from '@/api/tmlms/boatMan/index'
+import { addShareholder,updateShareholder,getHoldersByShip } from '@/api/tmlms/shipshareholder/index'
 export default {
   data () {
     return {                  
@@ -333,6 +367,25 @@ export default {
       arr:[],
       manager: false,
       villageName:'',
+      crewName:'',
+      crewNames: [],
+      partnerList:[],
+      loading:false,
+      isPartner:false,
+      isPartnerSearch:false,
+      myPartner:[],
+      shareholder:{
+        address:'',
+        idcard:'',
+        phone: '',
+        positionId:'',
+        realName:'',
+        shipId: '',
+      },
+      editShareholder:{
+        shipId:'',
+        tybShipShareholderList:'',
+      },
     }                               
   },
   computed: {                                                                                                                                                               
@@ -379,7 +432,6 @@ export default {
   },
   methods: {
     cheackNo () {
-      console.log('aaaaa')
       if(this.form.shipNo){
         getShipByShipNo(this.form.shipNo).then(res=>{
           if(res.data.data){
@@ -388,6 +440,73 @@ export default {
             
           }
         })
+      }
+    },
+    getCrewNameList (crewName){
+      this.loading = true
+      if (crewName !== ''&& crewName.length>1) {
+        getCrewByName(crewName).then(res=>{
+        if(res.data.data){
+          this.crewNames=res.data.data
+        }else{
+          this.$message.error(res.data.msg)
+        }
+      })
+      } else {
+        this.crewNames = []
+      }
+      this.loading = false
+    },
+    crewNameChange (obj) {
+      let flag= false
+      if(obj){
+        this.crewName = obj.realName
+        if(this.partnerList.length){
+          this.partnerList.forEach(item=>{
+          if(obj.idcard==item.idcard){
+            flag= true
+            return
+          }
+          })
+        }
+        if(!flag){
+          this.shareholder.address = obj.address
+          this.shareholder.idcard = obj.idcard
+          this.shareholder.phone = obj.phone
+          this.shareholder.positionId = obj.positionId
+          this.shareholder.realName = obj.realName
+          if(this.$route.query.edit || this.$route.query.see){
+            this.shareholder.shipId = this.$route.query.edit
+          }else{
+            this.shareholder.shipId = ''
+          }
+          this.partnerList.push(this.shareholder)
+        }
+      }
+      // if(obj){
+      //   this.form.crewName = obj.realName
+      //   this.myPartner.push(obj)
+      //   this.partnerList = [...new Set(this.myPartner)]
+      //   console.log(this.myPartner)
+      // } 
+      // console.log('测试')
+      // console.log(this.partnerList)
+    },
+    handleDel (idcard){
+      this.partnerList=this.partnerList.filter(m => {
+        if(m.idcard!==idcard){
+          return m
+        }
+      })
+    },
+    shipShareChange (shipShare){
+      if(shipShare==1){
+        this.isPartner = true
+        this.isPartnerSearch = true
+      }else{
+        this.isPartner = false
+        this.isPartnerSearch =false
+        this.partnerList = []
       }
     },
     handleItemChange (val) {
@@ -423,21 +542,28 @@ export default {
     //     this.$message.error(error.message)
     //   })                                                                                                                                              
     // },                                      
-    getShipDetail () {                                      
+    getShipDetail () {  
+      if(this.$route.query.see){
+        this.isPartner = true  
+      }
+      
+      getHoldersByShip(this.shipId).then(({data})=>{
+        this.partnerList = data.data
+      })                              
       getShipDetail(this.shipId).then(({data}) => {
-        // this.form = data.data
         if(data.data.villageId){
           detailVillage(data.data.villageId).then(res=>{
-          // console.log(res.data.data)
           this.villageName = res.data.data.villageName
           }).then(()=>{
             this.form = data.data
             this.form.villageName = this.villageName
-            // console.log('打出来看看')
-            // console.log(this.form)
           })
         }else{
           this.form = data.data
+        }
+        if(this.$route.query.edit && this.form.shipShare==1){
+        this.isPartner = true  
+        this.isPartnerSearch = true 
         }
         // this.form = data.data
         // console.log('打出来看看')
@@ -517,14 +643,26 @@ export default {
         // this.form.regionId = this.form.regionId[this.form.regionId.length - 1]
         if (valid) {
           if (this.$route.query.add) {
-            console.log(this.form.licensesOwnerExpireDate)
+            let parentShip
             createShip(this.form).then(({data}) => {
+              parentShip = data.data.shipId
               if (data.code === 0) {
                 this.$message.success('添加成功！')
-                this.onGoBack()
               }
             }, (error) => {
               this.$message.error(error.message)
+            }).then(()=>{
+              if(this.partnerList && parentShip){
+                this.partnerLis = this.partnerList.map(item=>{
+                item.shipId = parentShip
+                })
+                addShareholder(this.partnerList).then(res=>{
+                if(!res.data.data){
+                  this.$message.error('合伙人信息添加失败')
+                }
+                })
+              }
+              this.onGoBack()
             })
           } else if (this.$route.query.edit) {
             updateShip(this.form).then(({data}) => {
@@ -534,6 +672,20 @@ export default {
               }
             }, (error) => {
               this.$message.error(error.message)
+            }).then(()=>{
+              this.editShareholder.shipId = this.$route.query.edit
+              let shareList = this.partnerList.map(m=>{
+                if(m.id!==''){
+                  m.id=''
+                }
+                return m
+              })
+              this.editShareholder.tybShipShareholderList=shareList
+              updateShareholder(this.editShareholder).then(res=>{
+                if(!res.data.data){
+                  this.$message.error('合伙人信息修改失败')
+                }
+              })
             })
           }
         }
@@ -636,3 +788,9 @@ export default {
   },
 }
 </script>
+<style scoped>
+.el-button--mini{
+  margin-left: 10px;
+  margin-top: 3px;
+}
+</style>
