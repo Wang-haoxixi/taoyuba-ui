@@ -20,6 +20,16 @@
               </el-option>
             </el-select>
           </span>
+          <span style="width:150px" v-if="!roles.includes(112)"><el-select v-model="params.status" placeholder="请选择合同状态" size="small">
+              <el-option
+                v-for="item in contractList"
+                :key="item.index"
+                :label="item.label"
+                :value="item.value"
+                >
+              </el-option>
+            </el-select>
+          </span>
           <span><el-input v-model="params.shipName" placeholder="请输入船名号" size="small" clearable></el-input></span>
           <span><el-input v-model="params.shipNo" placeholder="请输入渔船编号" size="small" clearable></el-input></span>
           <span><el-input v-model="params.shipowner" placeholder="请输入持证人姓名" size="small" clearable></el-input></span>
@@ -129,6 +139,7 @@ export default {
         shipNo: '',
         shipowner: '',
         shipownerIdcard: '',
+        status: '',
       },
       options: {
         expandAll: false,
@@ -165,6 +176,18 @@ export default {
       formLabelWidth: '120px',
       shipId:'',
       villageId:'',
+      contractList: [
+          {
+            value: ' ',
+            label: '全部',
+          },
+          {
+            value: 1,
+            label:  '已签合同',
+          },
+
+      ],
+      contractStatus: '',
     }
   },
   created () {
@@ -258,7 +281,7 @@ export default {
       })
     },
     //搜索
-    getParamData () {
+    getParamData () {       
       this.params.userId = this.searchOrg
       this.params.current = 1
       this.getData()

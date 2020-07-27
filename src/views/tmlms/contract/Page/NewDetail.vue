@@ -677,7 +677,7 @@ export default {
         //   this.period.push(this.formData.workDateStart)
         //   this.period.push(this.formData.workDateEnd)
         // }
-        if (this.formData.licensesOwnerShipImage) {
+        if (this.formData.licensesOwnerShipImage) {         
           this.licensesImage = this.formData.licensesOwnerShipImage
           this.isLicenses = true
         }
