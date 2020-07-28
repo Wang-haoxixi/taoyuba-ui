@@ -1,5 +1,5 @@
 import Layout from '@/page/index/index'
-import { noKeepAlive } from '../config'
+import { noKeepAlive} from '../config'
 export default [
   {
     path: '/hrms_spa',
@@ -139,7 +139,7 @@ export default [
         meta: noKeepAlive,
       },
       {
-        path: 'village_ship_detail',                  
+        path: 'village_ship_detail',               
         name: '渔村下渔船详情页',                     
         component: () => import('@/views/hrms/StandingBook/Fisher/Page/Detail.vue'),
         meta: noKeepAlive,
@@ -169,10 +169,13 @@ export default [
         meta: noKeepAlive,
       },
       {   
-        path: 'shipCrew_list/',                        
+        path: 'shipCrew_list/',                   
         name: '渔船下船员列表页',                                   
         component: () => import('@/views/hrms/StandingBook/Fisher/index.vue'),        
-        meta: noKeepAlive,
+        meta: {
+          KeepAlive:true,
+          isBack: true,
+        },
       },
       {          
         path: 'shipCrew_Detial/:shipId',                        

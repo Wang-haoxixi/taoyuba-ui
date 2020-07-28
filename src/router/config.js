@@ -3,3 +3,8 @@ export const noKeepAlive = {
   // isTab: false,
   // isAuth: false,
 }
+export const KeepAlive = {
+  keepAlive: true,
+  // isTab: false,
+  // isAuth: false,
+}

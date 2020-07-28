@@ -752,6 +752,16 @@ export default {
       })
     },
   },
+  // beforeRouteLeave (to, from, next) {
+  //   console.log(from)
+  //   console.log(to)
+  //   if(to.path=='/account/standing'){
+  //     to.meta.keepAlive = true
+  //   }else{
+  //     to.meta.keepAlive = false
+  //   }
+  // next()
+  // },
   watch: {
     // 'regionChosen.province': function (val) {
     //   if (this.init) {

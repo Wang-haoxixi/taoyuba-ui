@@ -3,29 +3,30 @@
     <basic-container>
       <page-header title="渔船管理"></page-header>
       <operation-container>
-        <template slot="left">
-          <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
-        </template>
-        <template slot="right">
-          <!-- <operation-search @search-page="searchPage" advance-search :prop="searchData">
-            <advance-search @search-page="searchPage"></advance-search>
-          </operation-search> -->
-          <span style="width:150px" v-if="!roles.includes(112)"><el-select v-model="searchOrg" placeholder="请选择基层组织" size="small">
-              <el-option
-                v-for="item in orgSearchList"
-                :key="item.index"
-                :label="item.villageName"
-                :value="item.userId"
-                >
-              </el-option>
-            </el-select>
-          </span>
-          <span><el-input v-model="params.shipName" placeholder="请输入船名号" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.shipNo" placeholder="请输入渔船编号" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.shipowner" placeholder="请输入持证人姓名" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.shipownerIdcard" placeholder="请输入持证人身份证" size="small" clearable></el-input></span>
-          <el-button size="small"  @click="getParamData">搜索</el-button>
-        </template>
+          <template slot="left">
+            <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+          </template>
+          <template slot="right">
+            <!-- <operation-search @search-page="searchPage" advance-search :prop="searchData">
+              <advance-search @search-page="searchPage"></advance-search>
+            </operation-search> -->
+            <span style="width:150px" v-if="!roles.includes(112)">
+              <el-select v-model="searchOrg" placeholder="请选择基层组织" size="small">
+                <el-option
+                  v-for="item in orgSearchList"
+                  :key="item.index"
+                  :label="item.villageName"
+                  :value="item.userId"
+                  >
+                </el-option>
+              </el-select>
+            </span>
+            <span><el-input v-model="params.shipName" placeholder="请输入船名号" size="small" clearable></el-input></span>
+            <span><el-input v-model="params.shipNo" placeholder="请输入渔船编号" size="small" clearable></el-input></span>
+            <span><el-input v-model="params.shipowner" placeholder="请输入持证人姓名" size="small" clearable></el-input></span>
+            <span><el-input v-model="params.shipownerIdcard" placeholder="请输入持证人身份证" size="small" clearable></el-input></span>
+            <el-button size="small"  @click="getParamData">搜索</el-button>
+          </template>
       </operation-container>
       <!-- <iep-table                    
               :isLoadTable="isLoadTable"
@@ -168,9 +169,12 @@ export default {
     }
   },
   created () {
-    this.getData()
-    this.isManager()
-    this.getVillageOrg()
+    if (!this.$route.meta.keepAlive) {
+      this.getData()
+      this.isManager()
+      this.getVillageOrg()
+    }
+    
   },
   computed: {
     ...mapGetters(['userInfo', 'roles']),
@@ -271,6 +275,15 @@ export default {
         this.manager = true
       }
     },
+  },
+ activated () {
+      let pageIndex = parseInt(this.history.getItem('pageIndex')) || 1
+      this.searchData(pageIndex) // 这是我们获取数据的函数
+  },
+  beforeRouteLeave (to, from, next) {
+    from.meta.keepAlive = false
+    this.history.setItem('pageIndex', this.queryForPage.pageIndex)
+    next()
   },
 }
 </script>

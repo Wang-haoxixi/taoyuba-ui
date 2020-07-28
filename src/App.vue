@@ -1,7 +1,11 @@
 <template>
   <a-locale-provider :locale="locale">
     <div id="app">
-      <router-view />
+      <keep-alive>
+        <router-view v-if="$route.meta.keepAlive" />
+      </keep-alive>
+      <router-view v-if="!$route.meta.keepAlive" />
+      <!-- <router-view /> -->
     </div>
   </a-locale-provider>
 </template>

@@ -19,7 +19,7 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="身份证号：" prop="shipownerIdcard">
-                    <el-input maxlength="20" v-model="formData.shipownerIdcard" style="width:380px" :disabled="shipowner"></el-input>
+                    <el-input maxlength="18" v-model="formData.shipownerIdcard" style="width:380px" :disabled="shipowner"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -78,7 +78,7 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="身份证号：" prop="employerIdcard">
-                    <el-input maxlength="20" v-model="formData.employerIdcard" style="width:380px" :disabled="employer"></el-input>
+                    <el-input maxlength="18" v-model="formData.employerIdcard" style="width:380px" :disabled="employer"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -112,7 +112,7 @@
                 <el-col :span="12">
                   <el-form-item label="船舶是否共有：" prop="shipJoint">
                     <el-radio-group v-model="formData.shipJoint">
-                      <el-radio :label="1">是，<el-input v-model="formData.shipJointYes" placeholder="人数（数字）" size="mini" style="width:100px"></el-input>共有（权证附后）</el-radio>
+                      <el-radio :label="1">是，<el-input v-model="formData.shipJointYes" placeholder="人数（数字）" size="mini" type='number' style="width:100px"></el-input>共有（权证附后）</el-radio>
                       <el-radio :label="0">否，{{formData.shipownerName}} 独有</el-radio>
                     </el-radio-group>
                   </el-form-item>
@@ -148,7 +148,7 @@
                               placeholder="请选择"
                               filterable
                               remote
-                              maxlength="20"
+                              maxlength="18"
                               :loading="loading"
                               allow-create
                               clearable
@@ -289,7 +289,7 @@
                 <el-col :span="8">
                   <el-form-item label="。试用期" prop="workProbationTypeValue"> 
                     <el-col :span="6">
-                      <el-input type="number" min="0" v-model="formData.workProbationTypeValue" style="width:60px"></el-input>
+                      <el-input type="number" min="0" v-model="formData.workProbationTypeValue"  style="width:80px"></el-input>
                     </el-col> 
                     <el-col :span="12">
                       <el-radio-group v-model="formData.workProbationType" style="margin-left: 15px; margin-right: auto;width:300px">
@@ -349,20 +349,20 @@
                       <el-radio :label="2">月薪</el-radio>
                       <el-radio :label="3">年薪</el-radio> 
                     </el-radio-group>
-                    <el-input maxlength="10" v-model="formData.paySalaryTypeValue" size="mini" style="width:70px; margin:10px"></el-input><span>元</span>
+                    <el-input maxlength="10" v-model="formData.paySalaryTypeValue" size="mini" type="number" style="width:100px; margin:10px"></el-input><span>元</span>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-form-item label="支付方式：" prop="payType">
-                  <el-radio-group v-model="formData.payType" style="width:800px;margin-top: 20px!important">
+                  <el-radio-group v-model="formData.payType" @change="payTypeChange" style="width:800px;margin-top: 20px!important">
                     <el-row>
                       <el-col :span="4"  style="margin-top: 10px!important">
                         <el-radio :label="1">定期支付</el-radio>
                       </el-col>
                       <el-col :span="10">             
                         <el-form-item label="劳务产生后次月" prop="payTypeValue">  
-                          <el-input :disabled="formData.payType === 2 || formData.payType === 3" maxlength="4" v-model="formData.payTypeValue" style="width:50px" size="mini"></el-input>日前支付报酬
+                          <el-input :disabled="formData.payType === 2 || formData.payType === 3" maxlength="4" v-model="payValueLong" type="number" style="width:100px" size="mini"></el-input>日前支付报酬
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -372,7 +372,7 @@
                       </el-col>
                       <el-col :span="10">
                         <el-form-item label="期限结束、航次结束后的" prop="payTypeValue" class="spe">  
-                          <el-input :disabled="formData.payType === 1 || formData.payType === 3" maxlength="4" v-model="formData.payTypeValue" style="width:50px" size="mini"></el-input>日内支付报酬
+                          <el-input :disabled="formData.payType === 1 || formData.payType === 3" maxlength="4" v-model="payValueOnce" type="number" style="width:100px" size="mini"></el-input>日内支付报酬
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -413,12 +413,12 @@
               <el-row>
                 <el-col>
                   <el-form-item label="甲方如违约，支付" prop="employerBreakValue" class="spe">  
-                    <el-input maxlength="4" v-model="formData.employerBreakValue" style="width:50px" size="mini"></el-input>日工资。
+                    <el-input maxlength="4" v-model="formData.employerBreakValue" type='number' style="width:100px" size="mini"></el-input>日工资。
                   </el-form-item>
                 </el-col>
                 <el-col>
                   <el-form-item label="乙方如违约，支付" prop="employeeBreakValue" class="spe">  
-                    <el-input maxlength="4" v-model="formData.employeeBreakValue" style="width:50px" size="mini"></el-input>日工资。
+                    <el-input maxlength="4" v-model="formData.employeeBreakValue" type='number' style="width:100px" size="mini"></el-input>日工资。
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -640,6 +640,8 @@ export default {
       employee:false,
       checkEmployeeIdcard:false,
       employer:false,
+      payValueLong:'',
+      payValueOnce:'',
     }
   },
   created () {
@@ -665,6 +667,18 @@ export default {
     //     return  false
     // }
     // },
+    payTypeChange (paytype){
+      if(paytype==1){
+        this.formData.payTypeValue = this.payValueLong
+        this.payValueOnce = ''
+      }else if(paytype==2){
+        this.formData.payTypeValue = this.payValueOnce
+        this.payValueLong = ''
+      }else{
+        this.payValueLong = ''
+        this.payValueOnce = ''
+      }
+    },
     getList () {
       getContractDetail (this.record).then(data =>{
         this.formData = data.data.data
@@ -778,6 +792,7 @@ export default {
       }
     },
     idcardChange (card) {
+
       if (typeof card === 'object') {
         this.refreshCard(card)
       } else {
@@ -812,14 +827,15 @@ export default {
     getidcardList (number) {
       isCheckIdcard(number).then(res => {
         if (res.data.data === false) {
+          this.$message.error('该船员已签订合同!')
           this.checkEmployeeIdcard = true
           this.formData.employeeIdcard = ''
           this.idcards = []
-          this.$message.error('该船员已签订合同!')
         } else {
           if (number !== '') {
             detailCrew(number).then(({data}) => {
               if (Object.keys(data.data).length !== 0) {
+                this.idcards = []
                 this.idcards.push(data.data)
               }
             })
@@ -881,6 +897,11 @@ export default {
       }
       if (this.formData.contactPhone) {
         this.formData.employeeLinkPhone = this.formData.contactPhone
+      }
+      if(this.formData.payType==1){
+        this.formData.payTypeValue = this.payValueLong
+      }else if(this.formData.payType==2){
+        this.formData.payTypeValue =  this.payValueOnce
       }
       this.$refs['form'].validate(valid => {
         if (valid) {
