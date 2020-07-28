@@ -20,7 +20,7 @@
               </el-option>
             </el-select>
           </span>
-          <span style="width:150px" ><el-select v-model="params.status" placeholder="请选择合同状态" size="small">
+          <span style="width:150px" v-if="!roles.includes(112)"><el-select v-model="params.status" placeholder="请选择合同状态" size="small">
               <el-option
                 v-for="item in contractList"
                 :key="item.index"
