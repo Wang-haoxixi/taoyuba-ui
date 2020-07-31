@@ -153,7 +153,7 @@
           </el-col>
           <el-col :span="12" >
               <iep-form-item class="form-half" prop="licensesInspectionExpireDate" label-name="船舶检验证有效期">
-                <iep-date-picker v-model="form.licensesInspectionExpireDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期"></iep-date-picker>
+                <el-date-picker v-model="form.licensesInspectionExpireDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期"></el-date-picker>
               </iep-form-item>
           </el-col> 
         </el-row>
@@ -231,7 +231,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="建造完工日期：" prop="buildDate">
-              <iep-date-picker v-model="form.buildDate" type="date" placeholder="选择日期"></iep-date-picker>
+              <iep-date-picker v-model="form.buildDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期"></iep-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
