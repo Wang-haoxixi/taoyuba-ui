@@ -238,19 +238,11 @@
                 <el-row>
                   <el-col :span="12">
                     <el-form-item  label="身份证正面照片：" prop="photoFront">
-                      <!-- <el-upload
-                        class="avatar-uploader"
-                        action="/api/admin/file/upload/avatar"
-                        :show-file-list="false"
-                        :on-success="handleSuccessFront" 
-                        :headers="headers"  accept="image/*">
-                        <img v-if="form.photoFront" :src="form.photoFront" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                      </el-upload> -->
                       <el-upload
                         class="avatar-uploader"
                         action="/api/admin/file/upload/avatar"
                         :show-file-list="false"
+                        :on-success="handleAvatarSuccessFront" 
                         :headers="headers"  accept="image/*">
                         <img v-if="form.photoFront" :src="form.photoFront" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -708,7 +700,7 @@ export default {
     },
     handleAvatarSuccessCert (response) {
         this.form.certPhoto = response.data.url
-        console.log(this.form.certPhoto)
+        // console.log(this.form.certPhoto)
     },
     async getIdcardFile () {
       let idcardFile = this.dataURLtoFile(this.form.idcardPhoto)
@@ -923,19 +915,23 @@ export default {
           var data = eval('('+result1+')')
           // 将数据录入
           let cardMsg = {}
-          cardMsg.realName = data.name
-          cardMsg.birthday = data.born.slice(0,4)+'-'+data.born.slice(4,6)+'-'+data.born.slice(6)
-          cardMsg.idcard = data.cardno
-          cardMsg.address = data.address
-          cardMsg.nation = data.nation
-          cardMsg.gender = data.sex=='男' ? 1 : 2
-          cardMsg.nationality  = '中国'
+          this.form.realName = data.name
+          this.form.birthday = data.born.slice(0,4)+'-'+data.born.slice(4,6)+'-'+data.born.slice(6)
+          this.form.idcard = data.cardno
+          this.form.address = data.address
+          this.form.nation = data.nation
+          this.form.gender = data.sex=='男' ? 1 : 2
+          this.form.nationality  = '中国'
           cardMsg.provinceId = parseInt(data.cardno.substring(0,2)+'0000000000')
           cardMsg.cityId = parseInt(data.cardno.substring(0,4)+'00000000')
           cardMsg.districtId = parseInt(data.cardno.substring(0,6)+'000000')
           this.choseProvince(cardMsg.provinceId)
           this.choseCity(cardMsg.cityId)
-          this.form = cardMsg
+          this.form.provinceId = cardMsg.provinceId
+          this.form.cityId = cardMsg.cityId
+          this.form.districtId = cardMsg.districtId
+          // this.form.idcardPhoto = ''
+          // this.form.facePhoto = ''
           console.log(this.form)
         })
             //格式化拿到的數據
