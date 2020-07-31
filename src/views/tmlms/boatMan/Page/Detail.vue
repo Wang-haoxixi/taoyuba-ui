@@ -238,11 +238,20 @@
                 <el-row>
                   <el-col :span="12">
                     <el-form-item  label="身份证正面照片：" prop="photoFront">
+                      <!-- <el-upload
+                        class="avatar-uploader"
+                        action="/api/admin/file/upload/avatar"
+                        :show-file-list="false"
+                        :on-success="handleSuccessFront" 
+                        :headers="headers"  accept="image/*">
+                        <img v-if="form.photoFront" :src="form.photoFront" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                      </el-upload> -->
                       <el-upload
                         class="avatar-uploader"
                         action="/api/admin/file/upload/avatar"
                         :show-file-list="false"
-                        :on-success="handleSuccessFront" :headers="headers"  accept="image/*">
+                        :headers="headers"  accept="image/*">
                         <img v-if="form.photoFront" :src="form.photoFront" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                       </el-upload>
@@ -380,7 +389,7 @@ import store from '@/store'
 import debounce from 'lodash/debounce'
 import { mapState } from 'vuex'   
 Vue.use(new VueSocketio({
-    debug: false,
+    debug: true,
     connection: 'http://localhost:5000', //地址+端口，由后端提供
 }))
 export default {
@@ -869,7 +878,9 @@ export default {
       let data = await detailCrew(this.$route.query.edit || this.$route.query.see || this.$route.query.idcard).then( res=>{
         return res.data.data
       })
-      // 拿到ID 同步获取地址和选中的地址
+      // console.log('船员信息')
+      // console.log(data)
+      // // 拿到ID 同步获取地址和选中的地址
       let a = await this.choseProvince(data.provinceId)
       let b = await this.choseCity(data.cityId) 
       console.log(a)
@@ -881,6 +892,8 @@ export default {
           id ++
         })
       }
+      console.log('编辑数据')
+      console.log(data)
       this.form = data
     }
     getUserInfo().then(res => {
@@ -903,19 +916,27 @@ export default {
             //添加socket事件监听
         this.$socket.emit('connect')
         this.$socket.emit('startRead')
-        this.sockets.subscribe('card message', (msg) => {
+        this.sockets.listener.subscribe('card message', (msg) => {
           var base = new Base64()  			  
-          //2.解密后是json字符串
+          //2.解密后是json字符串mou
           var result1 = base.decode(msg)
           var data = eval('('+result1+')')
           // 将数据录入
-          this.form.realName = data.name
-          this.form.birthday = data.born.slice(0,4)+'-'+data.born.slice(4,6)+'-'+data.born.slice(6)
-          this.form.idcard = data.cardno
-          this.form.address = data.address
-          this.form.nation = data.nation
-          this.form.gender = data.sex=='男' ? 1 : 2
-          this.form.nationality  = '中国'
+          let cardMsg = {}
+          cardMsg.realName = data.name
+          cardMsg.birthday = data.born.slice(0,4)+'-'+data.born.slice(4,6)+'-'+data.born.slice(6)
+          cardMsg.idcard = data.cardno
+          cardMsg.address = data.address
+          cardMsg.nation = data.nation
+          cardMsg.gender = data.sex=='男' ? 1 : 2
+          cardMsg.nationality  = '中国'
+          cardMsg.provinceId = parseInt(data.cardno.substring(0,2)+'0000000000')
+          cardMsg.cityId = parseInt(data.cardno.substring(0,4)+'00000000')
+          cardMsg.districtId = parseInt(data.cardno.substring(0,6)+'000000')
+          this.choseProvince(cardMsg.provinceId)
+          this.choseCity(cardMsg.cityId)
+          this.form = cardMsg
+          console.log(this.form)
         })
             //格式化拿到的數據
     function Base64 () { 
