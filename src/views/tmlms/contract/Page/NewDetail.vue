@@ -19,7 +19,7 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="身份证号：" prop="shipownerIdcard">
-                    <el-input maxlength="20" v-model="formData.shipownerIdcard" style="width:380px" :disabled="shipowner"></el-input>
+                    <el-input maxlength="18" v-model="formData.shipownerIdcard" style="width:380px" :disabled="shipowner"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -78,7 +78,7 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="身份证号：" prop="employerIdcard">
-                    <el-input maxlength="20" v-model="formData.employerIdcard" style="width:380px" :disabled="employer"></el-input>
+                    <el-input maxlength="18" v-model="formData.employerIdcard" style="width:380px" :disabled="employer"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -112,7 +112,7 @@
                 <el-col :span="12">
                   <el-form-item label="船舶是否共有：" prop="shipJoint">
                     <el-radio-group v-model="formData.shipJoint">
-                      <el-radio :label="1">是，<el-input v-model="formData.shipJointYes" placeholder="人数（数字）" size="mini" style="width:100px"></el-input>共有（权证附后）</el-radio>
+                      <el-radio :label="1">是，<el-input v-model="formData.shipJointYes" placeholder="人数（数字）" size="mini" type='number' style="width:100px"></el-input>共有（权证附后）</el-radio>
                       <el-radio :label="0">否，{{formData.shipownerName}} 独有</el-radio>
                     </el-radio-group>
                   </el-form-item>
@@ -148,7 +148,7 @@
                               placeholder="请选择"
                               filterable
                               remote
-                              maxlength="20"
+                              maxlength="18"
                               :loading="loading"
                               allow-create
                               clearable
@@ -289,7 +289,7 @@
                 <el-col :span="8">
                   <el-form-item label="。试用期" prop="workProbationTypeValue"> 
                     <el-col :span="6">
-                      <el-input type="number" min="0" v-model="formData.workProbationTypeValue" style="width:60px"></el-input>
+                      <el-input type="number" min="0" v-model="formData.workProbationTypeValue"  style="width:80px"></el-input>
                     </el-col> 
                     <el-col :span="12">
                       <el-radio-group v-model="formData.workProbationType" style="margin-left: 15px; margin-right: auto;width:300px">
@@ -349,20 +349,20 @@
                       <el-radio :label="2">月薪</el-radio>
                       <el-radio :label="3">年薪</el-radio> 
                     </el-radio-group>
-                    <el-input maxlength="10" v-model="formData.paySalaryTypeValue" size="mini" style="width:70px; margin:10px"></el-input><span>元</span>
+                    <el-input maxlength="10" v-model="formData.paySalaryTypeValue" size="mini" type="number" style="width:100px; margin:10px"></el-input><span>元</span>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-form-item label="支付方式：" prop="payType">
-                  <el-radio-group v-model="formData.payType" style="width:800px;margin-top: 20px!important">
+                  <el-radio-group v-model="formData.payType" @change="payTypeChange" style="width:800px;margin-top: 20px!important">
                     <el-row>
                       <el-col :span="4"  style="margin-top: 10px!important">
                         <el-radio :label="1">定期支付</el-radio>
                       </el-col>
                       <el-col :span="10">             
                         <el-form-item label="劳务产生后次月" prop="payTypeValue">  
-                          <el-input :disabled="formData.payType === 2 || formData.payType === 3" maxlength="4" v-model="formData.payTypeValue" style="width:50px" size="mini"></el-input>日前支付报酬
+                          <el-input :disabled="formData.payType === 2 || formData.payType === 3" maxlength="4" v-model="payValueLong" type="number" style="width:100px" size="mini"></el-input>日前支付报酬
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -372,7 +372,7 @@
                       </el-col>
                       <el-col :span="10">
                         <el-form-item label="期限结束、航次结束后的" prop="payTypeValue" class="spe">  
-                          <el-input :disabled="formData.payType === 1 || formData.payType === 3" maxlength="4" v-model="formData.payTypeValue" style="width:50px" size="mini"></el-input>日内支付报酬
+                          <el-input :disabled="formData.payType === 1 || formData.payType === 3" maxlength="4" v-model="payValueOnce" type="number" style="width:100px" size="mini"></el-input>日内支付报酬
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -413,12 +413,12 @@
               <el-row>
                 <el-col>
                   <el-form-item label="甲方如违约，支付" prop="employerBreakValue" class="spe">  
-                    <el-input maxlength="4" v-model="formData.employerBreakValue" style="width:50px" size="mini"></el-input>日工资。
+                    <el-input maxlength="4" v-model="formData.employerBreakValue" type='number' style="width:100px" size="mini"></el-input>日工资。
                   </el-form-item>
                 </el-col>
                 <el-col>
                   <el-form-item label="乙方如违约，支付" prop="employeeBreakValue" class="spe">  
-                    <el-input maxlength="4" v-model="formData.employeeBreakValue" style="width:50px" size="mini"></el-input>日工资。
+                    <el-input maxlength="4" v-model="formData.employeeBreakValue" type='number' style="width:100px" size="mini"></el-input>日工资。
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -503,6 +503,12 @@ import { getUserInfo } from '@/api/login'
 import { getOperatorList } from '@/api/ships/shipoperat/index'
 import { detailCrew } from '@/api/tmlms/boatMan/index'
 // import { getShipownerByidcard } from '@/api/tmlms/shipowner/index'
+import VueSocketio from 'vue-socket.io'
+import Vue from 'vue'
+Vue.use(new VueSocketio({
+    debug: true,
+    connection: 'http://localhost:5000', //地址+端口，由后端提供
+}))
 import { 
   addContract, 
   updateContract, getContractDetail, isCheckIdcard } from '@/api/tmlms/newContract'
@@ -640,12 +646,104 @@ export default {
       employee:false,
       checkEmployeeIdcard:false,
       employer:false,
+      payValueLong:'',
+      payValueOnce:'',
     }
   },
   created () {
     if (this.record) {
       this.getList()
     }
+  },
+  mounted () {
+            //添加socket事件监听
+        this.$socket.emit('connect')
+        this.$socket.emit('startRead')
+        this.sockets.listener.subscribe('card message', (msg) => {
+          var base = new Base64()  			
+          //2.解密后是json字符串
+          var result1 = base.decode(msg)
+          var data = eval('('+result1+')')
+          // 将数据录入
+          detailCrew(data.cardno).then(res=>{
+            if(res.data.data){
+              this.formData.employeeName = res.data.data.realName
+              this.formData.employeeIdcard = res.data.data.idcard
+              this.formData.employeeAddr = res.data.data.address
+              this.formData.provinceId = res.data.data.provinceId
+              this.formData.cityId = res.data.data.cityId
+              this.formData.districtId = res.data.data.districtId
+              this.formData.employeePhone = res.data.data.phone
+              this.formData.employeePosition = res.data.data.positionId
+              this.formData.contactName = res.data.data.contactName
+              this.formData.contactPhone = res.data.data.contactPhone
+            }
+          }).catch(()=>{
+              this.formData.employeeName = data.name
+              this.formData.employeeIdcard = data.cardno
+              this.formData.employeeAddr = data.address
+              this.formData.provinceId = parseInt(data.cardno.substring(0,2)+'0000000000')
+              this.formData.cityId = parseInt(data.cardno.substring(0,4)+'00000000')
+              this.formData.districtId = parseInt(data.cardno.substring(0,6)+'000000')
+          })
+        })
+            //格式化拿到的數據
+    function Base64 () { 
+      // private property 
+      var _keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
+      // public method for decoding 
+      this.decode = function (input) { 
+          var output = ''
+          var chr1, chr2, chr3 
+          var enc1, enc2, enc3, enc4 
+          var i = 0 
+          input = input.replace(/[^A-Za-z0-9+/=]/g, '') 
+          while (i < input.length) { 
+              enc1 = _keyStr.indexOf(input.charAt(i++)) 
+              enc2 = _keyStr.indexOf(input.charAt(i++)) 
+              enc3 = _keyStr.indexOf(input.charAt(i++)) 
+              enc4 = _keyStr.indexOf(input.charAt(i++)) 
+              chr1 = (enc1 << 2) | (enc2 >> 4) 
+              chr2 = ((enc2 & 15) << 4) | (enc3 >> 2) 
+              chr3 = ((enc3 & 3) << 6) | enc4 
+              output = output + String.fromCharCode(chr1) 
+              if (enc3 != 64) { 
+                  output = output + String.fromCharCode(chr2) 
+              } 
+              if (enc4 != 64) { 
+                  output = output + String.fromCharCode(chr3) 
+              } 
+          } 
+          output = _utf8_decode(output) 
+          return output 
+      }  
+      
+      // private method for UTF-8 decoding 
+      var _utf8_decode = function (utftext) { 
+          var string = '' 
+          var i = 0 
+          var c = 0
+          var c2 = 0 
+          var c3 = 0 
+          while ( i < utftext.length ) { 
+              c = utftext.charCodeAt(i) 
+              if (c < 128) { 
+                  string += String.fromCharCode(c) 
+                  i++ 
+              } else if((c > 191) && (c < 224)) { 
+                  c2 = utftext.charCodeAt(i+1) 
+                  string += String.fromCharCode(((c & 31) << 6) | (c2 & 63)) 
+                  i += 2 
+              } else { 
+                  c2 = utftext.charCodeAt(i+1) 
+                  c3 = utftext.charCodeAt(i+2) 
+                  string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63)) 
+                  i += 3 
+              } 
+          } 
+          return string 
+      } 
+   }
   },
   computed: {
     getTitle () {
@@ -665,6 +763,18 @@ export default {
     //     return  false
     // }
     // },
+    payTypeChange (paytype){
+      if(paytype==1){
+        this.formData.payTypeValue = this.payValueLong
+        this.payValueOnce = ''
+      }else if(paytype==2){
+        this.formData.payTypeValue = this.payValueOnce
+        this.payValueLong = ''
+      }else{
+        this.payValueLong = ''
+        this.payValueOnce = ''
+      }
+    },
     getList () {
       getContractDetail (this.record).then(data =>{
         this.formData = data.data.data
@@ -733,7 +843,7 @@ export default {
       }).then(()=>{
         if (shipName !== '') {
         findorgShip(this.orgId,shipName).then(({data})=>{
-          console.log(data.data)
+          // console.log(data.data)
           if(data.data!==false){
             this.shipNames.push(data.data)
           }else{
@@ -759,8 +869,8 @@ export default {
         this.formData.employerPhone = ''
         this.formData.employerAddr = ''
         getOperatorList (this.formData.shipName.shipName).then(data => {
-          console.log('lll')
-          console.log(data.data.data)
+          // console.log('lll')
+          // console.log(data.data.data)
           if(data.data.data){
             this.formData.employerName = data.data.data.realname
             this.formData.employerIdcard = data.data.data.idcard
@@ -778,6 +888,7 @@ export default {
       }
     },
     idcardChange (card) {
+
       if (typeof card === 'object') {
         this.refreshCard(card)
       } else {
@@ -812,20 +923,22 @@ export default {
     getidcardList (number) {
       isCheckIdcard(number).then(res => {
         if (res.data.data === false) {
+          this.$message.error('该船员已签订合同!')
           this.checkEmployeeIdcard = true
           this.formData.employeeIdcard = ''
           this.idcards = []
-          this.$message.error('该船员已签订合同!')
         } else {
           if (number !== '') {
             detailCrew(number).then(({data}) => {
               if (Object.keys(data.data).length !== 0) {
+                this.idcards = []
                 this.idcards.push(data.data)
               }
             })
           } else {
             this.idcards = []
           }
+          this.checkEmployeeIdcard = false
         }  
         this.loading = false
       })
@@ -881,6 +994,11 @@ export default {
       }
       if (this.formData.contactPhone) {
         this.formData.employeeLinkPhone = this.formData.contactPhone
+      }
+      if(this.formData.payType==1){
+        this.formData.payTypeValue = this.payValueLong
+      }else if(this.formData.payType==2){
+        this.formData.payTypeValue =  this.payValueOnce
       }
       this.$refs['form'].validate(valid => {
         if (valid) {

@@ -242,7 +242,12 @@
                         class="avatar-uploader"
                         action="/api/admin/file/upload/avatar"
                         :show-file-list="false"
+<<<<<<< .merge_file_a21976
                         :on-success="handleAvatarSuccessFront" :headers="headers"  accept="image/*">
+=======
+                        :on-success="handleAvatarSuccessFront" 
+                        :headers="headers"  accept="image/*">
+>>>>>>> .merge_file_a19500
                         <img v-if="form.photoFront" :src="form.photoFront" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                       </el-upload>
@@ -380,7 +385,7 @@ import store from '@/store'
 import debounce from 'lodash/debounce'
 import { mapState } from 'vuex'   
 Vue.use(new VueSocketio({
-    debug: false,
+    debug: true,
     connection: 'http://localhost:5000', //地址+端口，由后端提供
 }))
 export default {
@@ -699,7 +704,7 @@ export default {
     },
     handleAvatarSuccessCert (response) {
         this.form.certPhoto = response.data.url
-        console.log(this.form.certPhoto)
+        // console.log(this.form.certPhoto)
     },
     async getIdcardFile () {
       let idcardFile = this.dataURLtoFile(this.form.idcardPhoto)
@@ -869,7 +874,9 @@ export default {
       let data = await detailCrew(this.$route.query.edit || this.$route.query.see || this.$route.query.idcard).then( res=>{
         return res.data.data
       })
-      // 拿到ID 同步获取地址和选中的地址
+      // console.log('船员信息')
+      // console.log(data)
+      // // 拿到ID 同步获取地址和选中的地址
       let a = await this.choseProvince(data.provinceId)
       let b = await this.choseCity(data.cityId) 
       console.log(a)
@@ -881,6 +888,8 @@ export default {
           id ++
         })
       }
+      console.log('编辑数据')
+      console.log(data)
       this.form = data
     }
     getUserInfo().then(res => {
@@ -903,19 +912,55 @@ export default {
             //添加socket事件监听
         this.$socket.emit('connect')
         this.$socket.emit('startRead')
-        this.sockets.subscribe('card message', (msg) => {
+        this.sockets.listener.subscribe('card message', (msg) => {
           var base = new Base64()  			  
-          //2.解密后是json字符串
+          //2.解密后是json字符串mou
           var result1 = base.decode(msg)
           var data = eval('('+result1+')')
           // 将数据录入
-          this.form.realName = data.name
-          this.form.birthday = data.born.slice(0,4)+'-'+data.born.slice(4,6)+'-'+data.born.slice(6)
-          this.form.idcard = data.cardno
-          this.form.address = data.address
-          this.form.nation = data.nation
-          this.form.gender = data.sex=='男' ? 1 : 2
-          this.form.nationality  = '中国'
+          getCrewData(data.cardno).then(res=>{
+            if (res.data.data !== true) {
+              this.choseProvince(res.data.data.provinceId)
+              this.choseCity(res.data.data.cityId)
+              this.form = res.data.data
+              // this.form.certList = []
+              this.$set(this.form, 'certList',[])
+              this.isIdcard = true
+              getMyCretList(data.cardno).then(val => {
+                // this.form.certList = val.data.data.map(v => v)
+                val.data.data.forEach(item =>{
+                  this.form.certList.push(item)
+                    if(this.form.certList) {
+                      let id = 0
+                      this.form.certList.forEach(item => {
+                        item.id = id
+                        id ++
+                      })
+                    }
+                  // this.form.certList.forEach(item => {
+                  //   item.annex = item.certFile
+                  // })
+                })   
+              })
+          } else {
+              let cardMsg = {}
+              this.form.realName = data.name
+              this.form.birthday = data.born.slice(0,4)+'-'+data.born.slice(4,6)+'-'+data.born.slice(6)
+              this.form.idcard = data.cardno
+              this.form.address = data.address
+              this.form.nation = data.nation
+              this.form.gender = data.sex=='男' ? 1 : 2
+              this.form.nationality  = '中国'
+              cardMsg.provinceId = parseInt(data.cardno.substring(0,2)+'0000000000')
+              cardMsg.cityId = parseInt(data.cardno.substring(0,4)+'00000000')
+              cardMsg.districtId = parseInt(data.cardno.substring(0,6)+'000000')
+              this.choseProvince(cardMsg.provinceId)
+              this.choseCity(cardMsg.cityId)
+              this.form.provinceId = cardMsg.provinceId
+              this.form.cityId = cardMsg.cityId
+              this.form.districtId = cardMsg.districtId
+            }
+          })
         })
             //格式化拿到的數據
     function Base64 () { 

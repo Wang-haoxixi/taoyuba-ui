@@ -233,7 +233,11 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="建造完工日期：" prop="buildDate">
+<<<<<<< .merge_file_a15104
               <iep-date-picker v-model="form.buildDate" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期"></iep-date-picker>
+=======
+              <iep-date-picker v-model="form.buildDate" format="yyyy-MM-dd" value-format="yyyy-MM-dd" type="date" placeholder="选择日期"></iep-date-picker>
+>>>>>>> .merge_file_a21784
             </el-form-item>
           </el-col>
         </el-row>
@@ -639,7 +643,11 @@ export default {
       }
     },
     handleSubmit () {
+<<<<<<< .merge_file_a15104
       // this.partnerList = []
+=======
+      console.log(this.form)
+>>>>>>> .merge_file_a21784
       this.$refs.form.validate(valid => {
         // this.form.licensesFishingExpireDate = this.form.licensesFishingExpireDate.toString()
         // this.form.licensesInspectionExpireDate = this.form.licensesInspectionExpireDate.toString()
@@ -761,6 +769,16 @@ export default {
       })
     },
   },
+  // beforeRouteLeave (to, from, next) {
+  //   console.log(from)
+  //   console.log(to)
+  //   if(to.path=='/account/standing'){
+  //     to.meta.keepAlive = true
+  //   }else{
+  //     to.meta.keepAlive = false
+  //   }
+  // next()
+  // },
   watch: {
     // 'regionChosen.province': function (val) {
     //   if (this.init) {
