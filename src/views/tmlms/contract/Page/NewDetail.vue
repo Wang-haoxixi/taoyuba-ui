@@ -665,12 +665,27 @@ export default {
           var result1 = base.decode(msg)
           var data = eval('('+result1+')')
           // 将数据录入
-          this.formData.employeeName = data.name
-          this.formData.employeeIdcard = data.cardno
-          this.formData.employeeAddr = data.address
-          this.formData.provinceId = parseInt(data.cardno.substring(0,2)+'0000000000')
-          this.formData.cityId = parseInt(data.cardno.substring(0,4)+'00000000')
-          this.formData.districtId = parseInt(data.cardno.substring(0,6)+'000000')
+          detailCrew(data.cardno).then(res=>{
+            if(res.data.data){
+              this.formData.employeeName = res.data.data.realName
+              this.formData.employeeIdcard = res.data.data.idcard
+              this.formData.employeeAddr = res.data.data.address
+              this.formData.provinceId = res.data.data.provinceId
+              this.formData.cityId = res.data.data.cityId
+              this.formData.districtId = res.data.data.districtId
+              this.formData.employeePhone = res.data.data.phone
+              this.formData.employeePosition = res.data.data.positionId
+              this.formData.contactName = res.data.data.contactName
+              this.formData.contactPhone = res.data.data.contactPhone
+            }else{
+              this.formData.employeeName = data.name
+              this.formData.employeeIdcard = data.cardno
+              this.formData.employeeAddr = data.address
+              this.formData.provinceId = parseInt(data.cardno.substring(0,2)+'0000000000')
+              this.formData.cityId = parseInt(data.cardno.substring(0,4)+'00000000')
+              this.formData.districtId = parseInt(data.cardno.substring(0,6)+'000000')
+            }
+          })
         })
             //格式化拿到的數據
     function Base64 () { 
@@ -828,7 +843,7 @@ export default {
       }).then(()=>{
         if (shipName !== '') {
         findorgShip(this.orgId,shipName).then(({data})=>{
-          console.log(data.data)
+          // console.log(data.data)
           if(data.data!==false){
             this.shipNames.push(data.data)
           }else{
@@ -854,8 +869,8 @@ export default {
         this.formData.employerPhone = ''
         this.formData.employerAddr = ''
         getOperatorList (this.formData.shipName.shipName).then(data => {
-          console.log('lll')
-          console.log(data.data.data)
+          // console.log('lll')
+          // console.log(data.data.data)
           if(data.data.data){
             this.formData.employerName = data.data.data.realname
             this.formData.employerIdcard = data.data.data.idcard

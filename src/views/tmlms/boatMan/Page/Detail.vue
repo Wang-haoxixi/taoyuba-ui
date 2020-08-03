@@ -914,25 +914,49 @@ export default {
           var result1 = base.decode(msg)
           var data = eval('('+result1+')')
           // 将数据录入
-          let cardMsg = {}
-          this.form.realName = data.name
-          this.form.birthday = data.born.slice(0,4)+'-'+data.born.slice(4,6)+'-'+data.born.slice(6)
-          this.form.idcard = data.cardno
-          this.form.address = data.address
-          this.form.nation = data.nation
-          this.form.gender = data.sex=='男' ? 1 : 2
-          this.form.nationality  = '中国'
-          cardMsg.provinceId = parseInt(data.cardno.substring(0,2)+'0000000000')
-          cardMsg.cityId = parseInt(data.cardno.substring(0,4)+'00000000')
-          cardMsg.districtId = parseInt(data.cardno.substring(0,6)+'000000')
-          this.choseProvince(cardMsg.provinceId)
-          this.choseCity(cardMsg.cityId)
-          this.form.provinceId = cardMsg.provinceId
-          this.form.cityId = cardMsg.cityId
-          this.form.districtId = cardMsg.districtId
-          // this.form.idcardPhoto = ''
-          // this.form.facePhoto = ''
-          console.log(this.form)
+          getCrewData(data.cardno).then(res=>{
+            if (res.data.data !== true) {
+              this.choseProvince(res.data.data.provinceId)
+              this.choseCity(res.data.data.cityId)
+              this.form = res.data.data
+              // this.form.certList = []
+              this.$set(this.form, 'certList',[])
+              this.isIdcard = true
+              getMyCretList(data.cardno).then(val => {
+                // this.form.certList = val.data.data.map(v => v)
+                val.data.data.forEach(item =>{
+                  this.form.certList.push(item)
+                    if(this.form.certList) {
+                      let id = 0
+                      this.form.certList.forEach(item => {
+                        item.id = id
+                        id ++
+                      })
+                    }
+                  // this.form.certList.forEach(item => {
+                  //   item.annex = item.certFile
+                  // })
+                })   
+              })
+          } else {
+              let cardMsg = {}
+              this.form.realName = data.name
+              this.form.birthday = data.born.slice(0,4)+'-'+data.born.slice(4,6)+'-'+data.born.slice(6)
+              this.form.idcard = data.cardno
+              this.form.address = data.address
+              this.form.nation = data.nation
+              this.form.gender = data.sex=='男' ? 1 : 2
+              this.form.nationality  = '中国'
+              cardMsg.provinceId = parseInt(data.cardno.substring(0,2)+'0000000000')
+              cardMsg.cityId = parseInt(data.cardno.substring(0,4)+'00000000')
+              cardMsg.districtId = parseInt(data.cardno.substring(0,6)+'000000')
+              this.choseProvince(cardMsg.provinceId)
+              this.choseCity(cardMsg.cityId)
+              this.form.provinceId = cardMsg.provinceId
+              this.form.cityId = cardMsg.cityId
+              this.form.districtId = cardMsg.districtId
+            }
+          })
         })
             //格式化拿到的數據
     function Base64 () { 
