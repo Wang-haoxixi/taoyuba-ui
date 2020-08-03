@@ -94,6 +94,7 @@
               </el-form-item>
           </el-col>
         </el-row>
+        <div v-if='isPartner'>
         <el-row v-for="item in partnerList" :key="item.index">
           <el-col :span="11">
             <el-form-item label="股东姓名：" prop="shareName">
@@ -109,6 +110,7 @@
             <el-button  size="mini" plain @click="handleDel(item.idcard)">删除</el-button>  
           </el-col>
         </el-row>
+        </div>
         <el-row>
           <el-col :span="12">
             <el-form-item label="渔船所有权登记证：" prop="licensesOwnerShip">
@@ -508,7 +510,7 @@ export default {
       }else{
         this.isPartner = false
         this.isPartnerSearch =false
-        this.partnerList = []
+        // this.partnerList = []
       }
     },
     handleItemChange (val) {
@@ -559,14 +561,14 @@ export default {
           }).then(()=>{
             this.form = data.data
             this.form.villageName = this.villageName
+            if(this.$route.query.edit && this.form.shipShare==1){
+            this.isPartner = true  
+            this.isPartnerSearch = true 
+            }
           })
         }else{
           this.form = data.data
-        }
-        if(this.$route.query.edit && this.form.shipShare==1){
-        this.isPartner = true  
-        this.isPartnerSearch = true 
-        }
+        }  
         // this.form = data.data
         // console.log('打出来看看')
         // console.log(this.form)
@@ -637,6 +639,7 @@ export default {
       }
     },
     handleSubmit () {
+      // this.partnerList = []
       this.$refs.form.validate(valid => {
         // this.form.licensesFishingExpireDate = this.form.licensesFishingExpireDate.toString()
         // this.form.licensesInspectionExpireDate = this.form.licensesInspectionExpireDate.toString()
@@ -657,7 +660,10 @@ export default {
             }, (error) => {
               this.$message.error(error.message)
             }).then(()=>{
-              if(this.partnerList && parentShip){
+              if(this.form.shipShare==2){
+                this.partnerList = []
+              }
+                if(this.partnerList && parentShip){
                 this.partnerLis = this.partnerList.map(item=>{
                 item.shipId = parentShip
                 })
@@ -683,6 +689,9 @@ export default {
             }, (error) => {
               this.$message.error(error.message)
             }).then(()=>{
+              if(this.form.shipShare==2){
+                this.partnerList = []
+              }
               this.editShareholder.shipId = this.$route.query.edit
               let shareList = this.partnerList.map(m=>{
                 if(m.id!==''){
