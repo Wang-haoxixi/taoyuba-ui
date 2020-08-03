@@ -677,14 +677,14 @@ export default {
               this.formData.employeePosition = res.data.data.positionId
               this.formData.contactName = res.data.data.contactName
               this.formData.contactPhone = res.data.data.contactPhone
-            }else{
+            }
+          }).catch(()=>{
               this.formData.employeeName = data.name
               this.formData.employeeIdcard = data.cardno
               this.formData.employeeAddr = data.address
               this.formData.provinceId = parseInt(data.cardno.substring(0,2)+'0000000000')
               this.formData.cityId = parseInt(data.cardno.substring(0,4)+'00000000')
               this.formData.districtId = parseInt(data.cardno.substring(0,6)+'000000')
-            }
           })
         })
             //格式化拿到的數據
@@ -938,6 +938,7 @@ export default {
           } else {
             this.idcards = []
           }
+          this.checkEmployeeIdcard = false
         }  
         this.loading = false
       })
