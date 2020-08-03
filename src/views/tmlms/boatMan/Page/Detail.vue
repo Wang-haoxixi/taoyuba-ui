@@ -242,12 +242,8 @@
                         class="avatar-uploader"
                         action="/api/admin/file/upload/avatar"
                         :show-file-list="false"
-<<<<<<< .merge_file_a21976
-                        :on-success="handleAvatarSuccessFront" :headers="headers"  accept="image/*">
-=======
                         :on-success="handleAvatarSuccessFront" 
                         :headers="headers"  accept="image/*">
->>>>>>> .merge_file_a19500
                         <img v-if="form.photoFront" :src="form.photoFront" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                       </el-upload>
