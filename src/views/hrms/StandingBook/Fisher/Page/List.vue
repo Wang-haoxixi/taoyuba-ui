@@ -72,7 +72,7 @@
               <!-- <iep-button size="mini" type="primary" @click="handleIntoinsure(scope.row.shipName)">保单</iep-button> -->
               <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">船员</iep-button>
               <iep-button size="mini" type="primary" @click="handleOperat(scope.row.shipId,scope.row.shipNo)">经营人</iep-button>
-              <iep-button size="mini" type="primary" @click="exportInfo(scope.row.shipId)">导出</iep-button>
+              <iep-button size="mini" type="primary" @click="exportInfo(scope.row.shipId,scope.row.shipName)">导出</iep-button>
             </operation-wrapper>
           </template>
         </el-table-column>
@@ -218,8 +218,9 @@ export default {
       }
       // console.log(this.userInfo.userId)
     },
-    exportInfo (shipId) {   
-      this.exportParams.shipId = shipId                            
+    exportInfo (shipId,shipName) {   
+      this.exportParams.shipId = shipId
+      this.exportParams.shipName = shipName                         
       exportShipExcel (this.exportParams).catch(err => {
         this.$message({
           type: 'warning',
@@ -329,5 +330,4 @@ export default {
 .width180{
   width:180px;
 }
-
 </style>

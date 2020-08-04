@@ -119,11 +119,11 @@ export function exportExcel (params) {
     title: '渔船信息',
   })
 }
-export function exportShipExcel (shipId) {                                    
+export function exportShipExcel (params) {                                    
   return exportDownload({
     url: 'tmlms/tybmlmsExcelExport/downShipCrew',
-    data: shipId,                             
-    title: '一船一档',
+    data: params,                             
+    title: params.shipName,
   })
 }
 
