@@ -659,6 +659,7 @@ export default {
             //添加socket事件监听
         this.$socket.emit('connect')
         this.$socket.emit('startRead')
+        console.log(this.sockets)
         this.sockets.listener.subscribe('card message', (msg) => {
           var base = new Base64()  			
           //2.解密后是json字符串
