@@ -10,7 +10,7 @@
           <!-- <operation-search @search-page="searchPage" advance-search :prop="searchData">
             <advance-search @search-page="searchPage"></advance-search>
           </operation-search> -->
-          <span style="width:150px" v-if="!roles.includes(112)"><el-select v-model="searchOrg" placeholder="请选择基层组织" size="small">
+          <span style="width:185px" v-if="!roles.includes(112)"><el-select v-model="searchOrg" placeholder="基层组织" size="small">
               <el-option
                 v-for="item in orgSearchList"
                 :key="item.index"
@@ -20,7 +20,7 @@
               </el-option>
             </el-select>
           </span>
-          <span style="width:150px" ><el-select v-model="params.status" placeholder="请选择合同状态" size="small">
+          <span style="width:110px" ><el-select v-model="params.status" placeholder="合同状态" size="small">
               <el-option
                 v-for="item in contractList"
                 :key="item.index"
@@ -30,10 +30,10 @@
               </el-option>
             </el-select>
           </span>
-          <span><el-input v-model="params.shipName" placeholder="请输入船名号" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.shipNo" placeholder="请输入渔船编号" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.shipowner" placeholder="请输入持证人姓名" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.shipownerIdcard" placeholder="请输入持证人身份证" size="small" clearable></el-input></span>
+          <span class="width130"><el-input v-model="params.shipName" placeholder="船名号" size="small" clearable></el-input></span>
+          <span class="width130"><el-input v-model="params.shipNo" placeholder="渔船编号" size="small" clearable></el-input></span>
+          <span class="width130"><el-input v-model="params.shipowner" placeholder="持证人姓名" size="small" clearable></el-input></span>
+          <span class="width180"><el-input v-model="params.shipownerIdcard" placeholder="持证人身份证" size="small" clearable></el-input></span>
           <el-button size="small"  @click="getParamData">搜索</el-button>
         </template>
       </operation-container>
@@ -322,3 +322,12 @@ export default {
   },
 }
 </script>
+<style lang="scss" scoped>
+.width130{
+  width:130px;
+}
+.width180{
+  width:180px;
+}
+
+</style>
