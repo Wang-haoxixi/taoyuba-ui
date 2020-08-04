@@ -69,9 +69,10 @@
         <el-table-column prop="particular" label="详情" width="220">
           <template slot-scope="scope">
             <operation-wrapper>
-              <iep-button size="mini" type="primary" @click="handleIntoinsure(scope.row.shipName)">保单</iep-button>
+              <!-- <iep-button size="mini" type="primary" @click="handleIntoinsure(scope.row.shipName)">保单</iep-button> -->
               <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">船员</iep-button>
               <iep-button size="mini" type="primary" @click="handleOperat(scope.row.shipId,scope.row.shipNo)">经营人</iep-button>
+              <iep-button size="mini" type="primary" @click="exportInfo(scope.row.shipId)">导出</iep-button>
             </operation-wrapper>
           </template>
         </el-table-column>
@@ -114,7 +115,7 @@
 </template>
 <script>
 import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
-import { getVillageShipList,changeShip } from '@/api/ships'
+import { getVillageShipList,changeShip,exportShipExcel } from '@/api/ships'
 // import { getVillageShipList } from '@/api/ships'
 // import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
@@ -188,6 +189,9 @@ export default {
 
       ],
       contractStatus: '',
+      exportParams: {
+        shipId: '',
+      },
     }
   },
   created () {
@@ -213,6 +217,15 @@ export default {
         })
       }
       // console.log(this.userInfo.userId)
+    },
+    exportInfo (shipId) {   
+      this.exportParams.shipId = shipId                            
+      exportShipExcel (this.exportParams).catch(err => {
+        this.$message({
+          type: 'warning',
+          message: err,
+        })
+    })
     },
     getVillageOrg () {
       getVillageByOrg().then(res=>{
