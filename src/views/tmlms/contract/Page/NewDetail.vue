@@ -153,7 +153,8 @@
                               allow-create
                               clearable
                               @change="idcardChange"
-                              :remote-method="getidcardList" style="width:380px!important">
+                              @keyup.native='selectMax'
+                              :remote-method="getidcardList" style="width:380px!important" type='number' ref='searchSelect'>
                       <el-option v-for="item in idcards" :key="item.id" :label="item.idcard" :value="item"></el-option>
                     </el-select>
                   </el-form-item>
@@ -349,7 +350,7 @@
                       <el-radio :label="2">月薪</el-radio>
                       <el-radio :label="3">年薪</el-radio> 
                     </el-radio-group>
-                    <el-input maxlength="10" v-model="formData.paySalaryTypeValue" size="mini" type="number" style="width:100px; margin:10px"></el-input><span>元</span>
+                    <el-input maxlength="10" oninput="if(value.length>10)value=value.slice(0,10)" v-model="formData.paySalaryTypeValue" size="mini" type="number" style="width:100px; margin:10px"></el-input><span>元</span>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -362,7 +363,7 @@
                       </el-col>
                       <el-col :span="10">             
                         <el-form-item label="劳务产生后次月" prop="payTypeValue">  
-                          <el-input :disabled="formData.payType === 2 || formData.payType === 3" maxlength="4" v-model="payValueLong" type="number" style="width:100px" size="mini"></el-input>日前支付报酬
+                          <el-input :disabled="formData.payType === 2 || formData.payType === 3" maxlength="4" oninput="if(value.length>4)value=value.slice(0,4)" v-model="payValueLong" type="number" style="width:100px" size="mini"></el-input>日前支付报酬
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -372,7 +373,7 @@
                       </el-col>
                       <el-col :span="10">
                         <el-form-item label="期限结束、航次结束后的" prop="payTypeValue" class="spe">  
-                          <el-input :disabled="formData.payType === 1 || formData.payType === 3" maxlength="4" v-model="payValueOnce" type="number" style="width:100px" size="mini"></el-input>日内支付报酬
+                          <el-input :disabled="formData.payType === 1 || formData.payType === 3" maxlength="4" oninput="if(value.length>4)value=value.slice(0,4)" v-model="payValueOnce" type="number" style="width:100px" size="mini"></el-input>日内支付报酬
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -413,12 +414,12 @@
               <el-row>
                 <el-col>
                   <el-form-item label="甲方如违约，支付" prop="employerBreakValue" class="spe">  
-                    <el-input maxlength="4" v-model="formData.employerBreakValue" type='number' style="width:100px" size="mini"></el-input>日工资。
+                    <el-input maxlength="4" oninput="if(value.length>4)value=value.slice(0,4)" v-model="formData.employerBreakValue" type='number' style="width:100px" size="mini"></el-input>日工资。
                   </el-form-item>
                 </el-col>
                 <el-col>
                   <el-form-item label="乙方如违约，支付" prop="employeeBreakValue" class="spe">  
-                    <el-input maxlength="4" v-model="formData.employeeBreakValue" type='number' style="width:100px" size="mini"></el-input>日工资。
+                    <el-input maxlength="4" oninput="if(value.length>4)value=value.slice(0,4)" v-model="formData.employeeBreakValue" type='number' style="width:100px" size="mini"></el-input>日工资。
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -777,6 +778,11 @@ export default {
     //     return  false
     // }
     // },
+    selectMax () {
+      let input = this.$refs.searchSelect.$children[0].$refs.input
+      input.setAttribute('maxlength',18)
+      console.log(input)
+    },
     payTypeChange (paytype){
       if(paytype==1){
         this.formData.payTypeValue = this.payValueLong
@@ -934,7 +940,6 @@ export default {
       }
     },
     getidcardList (number) {
-      // if(number.length==18){
         isCheckIdcard(number).then(res => {
         if (res.data.data === false) {
           this.$message.error('该船员已签订合同!')
@@ -956,9 +961,6 @@ export default {
         }  
         this.loading = false
         })
-      // }else{
-      //   this.$message.error('请输入18位身份证号!')
-      // }
       // isCheckIdcard(number).then(res => {
       //   if (res.data.data === false) {
       //     this.$message.error('该船员已签订合同!')
