@@ -660,8 +660,8 @@ export default {
         this.$socket.emit('connect')
         this.$socket.emit('startRead')
         console.log(this.sockets)
-        this.sockets.listener.subscribe('card message', (msg) => {
-        // this.sockets.subscribe('card message', (msg) => {
+        // this.sockets.listener.subscribe('card message', (msg) => {
+        this.sockets.subscribe('card message', (msg) => {
           var base = new Base64()  			
           //2.解密后是json字符串
           var result1 = base.decode(msg)
@@ -902,7 +902,6 @@ export default {
       }
     },
     idcardChange (card) {
-
       if (typeof card === 'object') {
         this.refreshCard(card)
       } else {
@@ -935,7 +934,8 @@ export default {
       }
     },
     getidcardList (number) {
-      isCheckIdcard(number).then(res => {
+      // if(number.length==18){
+        isCheckIdcard(number).then(res => {
         if (res.data.data === false) {
           this.$message.error('该船员已签订合同!')
           this.checkEmployeeIdcard = true
@@ -955,7 +955,31 @@ export default {
           this.checkEmployeeIdcard = false
         }  
         this.loading = false
-      })
+        })
+      // }else{
+      //   this.$message.error('请输入18位身份证号!')
+      // }
+      // isCheckIdcard(number).then(res => {
+      //   if (res.data.data === false) {
+      //     this.$message.error('该船员已签订合同!')
+      //     this.checkEmployeeIdcard = true
+      //     this.formData.employeeIdcard = ''
+      //     this.idcards = []
+      //   } else {
+      //     if (number !== '') {
+      //       detailCrew(number).then(({data}) => {
+      //         if (Object.keys(data.data).length !== 0) {
+      //           this.idcards = []
+      //           this.idcards.push(data.data)
+      //         }
+      //       })
+      //     } else {
+      //       this.idcards = []
+      //     }
+      //     this.checkEmployeeIdcard = false
+      //   }  
+      //   this.loading = false
+      // })
     },
     handleLicensesSuccessFront (response) {
       this.licensesImage = ''
