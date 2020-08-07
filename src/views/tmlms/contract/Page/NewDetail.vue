@@ -660,34 +660,46 @@ export default {
         this.$socket.emit('connect')
         this.$socket.emit('startRead')
         console.log(this.sockets)
-        // this.sockets.listener.subscribe('card message', (msg) => {
-        this.sockets.subscribe('card message', (msg) => {
+        this.sockets.listener.subscribe('card message', (msg) => {
+        // this.sockets.subscribe('card message', (msg) => {
           var base = new Base64()  			
           //2.解密后是json字符串
           var result1 = base.decode(msg)
           var data = eval('('+result1+')')
-          // 将数据录入
-          detailCrew(data.cardno).then(res=>{
-            if(res.data.data){
-              this.formData.employeeName = res.data.data.realName
-              this.formData.employeeIdcard = res.data.data.idcard
-              this.formData.employeeAddr = res.data.data.address
-              this.formData.provinceId = res.data.data.provinceId
-              this.formData.cityId = res.data.data.cityId
-              this.formData.districtId = res.data.data.districtId
-              this.formData.employeePhone = res.data.data.phone
-              this.formData.employeePosition = res.data.data.positionId
-              this.formData.contactName = res.data.data.contactName
-              this.formData.contactPhone = res.data.data.contactPhone
+          isCheckIdcard(data.cardno).then(res => {
+            if (res.data.data === false) {
+              this.$message.error('该船员已签订合同!')
+              this.checkEmployeeIdcard = true
+              // this.formData.employeeIdcard = ''
+              // this.idcards = []
             }
-          }).catch(()=>{
-              this.formData.employeeName = data.name
-              this.formData.employeeIdcard = data.cardno
-              this.formData.employeeAddr = data.address
-              this.formData.provinceId = parseInt(data.cardno.substring(0,2)+'0000000000')
-              this.formData.cityId = parseInt(data.cardno.substring(0,4)+'00000000')
-              this.formData.districtId = parseInt(data.cardno.substring(0,6)+'000000')
+          }).then(()=>{
+            if(!this.checkEmployeeIdcard) {
+              // 将数据录入
+              detailCrew(data.cardno).then(res=>{
+                  if(res.data.data){
+                    this.formData.employeeName = res.data.data.realName
+                    this.formData.employeeIdcard = res.data.data.idcard
+                    this.formData.employeeAddr = res.data.data.address
+                    this.formData.provinceId = res.data.data.provinceId
+                    this.formData.cityId = res.data.data.cityId
+                    this.formData.districtId = res.data.data.districtId
+                    this.formData.employeePhone = res.data.data.phone
+                    this.formData.employeePosition = res.data.data.positionId
+                    this.formData.contactName = res.data.data.contactName
+                    this.formData.contactPhone = res.data.data.contactPhone
+                  }
+                }).catch(()=>{
+                    this.formData.employeeName = data.name
+                    this.formData.employeeIdcard = data.cardno
+                    this.formData.employeeAddr = data.address
+                    this.formData.provinceId = parseInt(data.cardno.substring(0,2)+'0000000000')
+                    this.formData.cityId = parseInt(data.cardno.substring(0,4)+'00000000')
+                    this.formData.districtId = parseInt(data.cardno.substring(0,6)+'000000')
+                })
+            }
           })
+          
         })
             //格式化拿到的數據
     function Base64 () { 
@@ -1014,6 +1026,10 @@ export default {
                     cancelButtonText: '取消',
                     type: 'warning',
                   }).then(() => {
+                    // addContract(this.formData).then(()=>{
+                    //   this.$message.success('保存成功！')
+                    // })
+                    // this.$emit('onGoBack')
                     addContract(this.formData), () => {    
                       this.$message.error('新增失败!')
                     }
