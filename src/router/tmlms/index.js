@@ -216,26 +216,72 @@ export default [
         meta: noKeepAlive,
       },
     ],
-  },      
-  //渔船经营人
+  },
+  //  // 船员
+  // {
+  //   path: '/boatMan',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'detail',
+  //       name: 'detailBoatMan',
+  //       component: () => import('@/views/tmlms/boatMan/Page/Detail'),
+  //       meta: noKeepAlive,
+  //     },
+  //     {
+  //       path: '/admin/bostMan',
+  //       name: 'boatMan',
+  //       component: () => import('@/views/tmlms/boatMan/index'),
+  //       meta: {   
+  //         keepAlive: true,
+  //       },
+  //     },
+  //     {
+  //       path: 'apply_detail',
+  //         name: 'applyDetailBoatMan',
+  //         component: () => import('@/views/tmlms/boatMan/Page/Apply_Detail'),
+  //         meta: noKeepAlive,
+  //     },
+  //   ],
+  // },
+  //上船人员登记
   {
-    path: '/shiphaver',       
+    path: '/crewRegister',       
     component: Layout,        
     children: [
       {
-        path: 'detail/:type/:id',
-        name: 'detailShiphaver',            
-        component: () => import('@/views/tmlms/shiphaver/page/Detail'),  
+        path: 'detail/:id',
+        name: 'detailCrewregister',            
+        component: () => import('@/views/tmlms/crewRegister/Page/Detail'),  
         meta: noKeepAlive,
       },
       {
-        path: '/admin/list',
-        name: 'shiphaverList',
-        component: () => import('@/views/tmlms/shiphaver/index'),
+        path: '/admin/crewRegister',
+        name: 'listCrewregister',
+        component: () => import('@/views/tmlms/crewRegister/index'),
         meta: noKeepAlive,
       },
     ],
-  },     
+  },
+  // //上船人员登记
+  // {
+  //   path: '/crewregister',       
+  //   component: Layout,        
+  //   children: [
+  //     {
+  //       path: '/detail/:idcard',
+  //       name: 'crewregister_detail',
+  //       component: () => import('@/views/tmlms/crewRegister/Page/Detail'),
+  //       meta: noKeepAlive,
+  //     },
+  //     {
+  //       path: '/admin/crewregister',
+  //       name: '上船登记人员列表',
+  //       component: () => import('@/views/tmlms/crewRegister/index'),
+  //       meta: noKeepAlive,
+  //     },
+  //   ],
+  // },         
 
 
 ]
