@@ -908,7 +908,8 @@ export default {
             //添加socket事件监听
         this.$socket.emit('connect')
         this.$socket.emit('startRead')
-        this.sockets.listener.subscribe('card message', (msg) => {
+        // this.sockets.listener.subscribe('card message', (msg) => {
+          this.sockets.subscribe('card message', (msg) => {
           var base = new Base64()  			  
           //2.解密后是json字符串mou
           var result1 = base.decode(msg)
