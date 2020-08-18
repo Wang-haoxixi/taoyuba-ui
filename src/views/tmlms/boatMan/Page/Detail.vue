@@ -153,21 +153,30 @@
                       </el-select>
                       </el-form-item>
                   </el-col>
-                  <el-col :span="8">
+                  <el-col :span="12">
+                      <el-form-item label="用工状态：" prop="workStatus">
+                      <el-radio-group v-model="form.workStatus">
+                          <el-radio  :label="9">待求职</el-radio>
+                          <el-radio  :label="0">未用工</el-radio>
+                          <el-radio  :label="1">合同期中</el-radio>
+                      </el-radio-group>
+                      </el-form-item>
+                    </el-col>
+                  <!-- <el-col :span="8">
                       <el-form-item label="是否需要培训" prop="isTrain">
                       <el-radio-group v-model="form.isTrain">
                           <el-radio  :label="0">否</el-radio>
                           <el-radio  :label="1">是</el-radio>
                       </el-radio-group>
                       </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
+                  </el-col> -->
+                  <!-- <el-col :span="8">
                       <el-form-item label="申请类别" prop="applyType">
                       <el-select v-model="form.applyType" placeholder="请输入申请类别">
                           <el-option v-for="item in applyTypes" :key="item.id" :label="item.name" :value="item.id"></el-option>
                       </el-select>
                       </el-form-item> 
-                  </el-col>
+                  </el-col> -->
                 <!-- <el-col :span="8">
                     <el-form-item label="所属渔村区域" prop="villageId">
                     <span v-for="(region, key) in regions" :key="key">
@@ -182,27 +191,20 @@
                 </el-col> -->
                 </el-row>
                 <el-row>
-                    <el-col :span="8">
-                      <el-form-item label="用工状态：" prop="workStatus">
-                      <el-radio-group v-model="form.workStatus">
-                          <el-radio  :label="0">未用工</el-radio>
-                          <el-radio  :label="1">合同期中</el-radio>
-                      </el-radio-group>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
+                   
+                    <!-- <el-col :span="8">
                       <el-form-item label="婚姻状态：" prop="maritalStatus">
                       <el-radio-group v-model="form.maritalStatus">
                           <el-radio  :label="0">未婚</el-radio>
                           <el-radio  :label="1">已婚</el-radio>
                       </el-radio-group>
                       </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
+                    </el-col> -->
+                    <!-- <el-col :span="8">
                       <el-form-item label="期望薪资：" prop="salary">
                         <el-input v-model="form.salary"></el-input>
                       </el-form-item>
-                    </el-col>
+                    </el-col> -->
                 </el-row>
                 <el-row>
                   <el-col :span="12">
@@ -422,7 +424,7 @@ export default {
           phone: '',
           applyType: '',
           certList: [],
-          workStatus:0,
+          workStatus:9,
           maritalStatus:0,    
           salary:'',
           preAddress:'',
