@@ -186,6 +186,10 @@ export default {
       },
       workStatus:[
         {
+          label: '待求职',
+          value: 9,
+        },
+        {
           label: '未用工',
           value: 0,
         },
@@ -193,18 +197,18 @@ export default {
           label: '上船，已签合同',
           value: 1,
         },
-        {
-          label: '离船，未解除合同 ',
-          value: 2,
-        },
+        // {
+        //   label: '离船，未解除合同 ',
+        //   value: 2,
+        // },
         {
           label: '上船，未签合同',
           value: 3,
         },
-        {
-          label: '离船，未签合同',
-          value: 4,
-        },
+        // {
+        //   label: '离船，未签合同',
+        //   value: 4,
+        // },
       ],
       status: [
         {
