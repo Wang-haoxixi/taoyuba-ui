@@ -66,13 +66,17 @@
             </operation-wrapper>
           </template>
         </el-table-column>
-        <el-table-column prop="particular" label="详情" width="220">
+        <el-table-column prop="particular" label="详情" width="230">
           <template slot-scope="scope">
             <operation-wrapper>
               <!-- <iep-button size="mini" type="primary" @click="handleIntoinsure(scope.row.shipName)">保单</iep-button> -->
+              <!-- <iep-button size="mini" type="primary" @click="handleTmp(scope.row.shipName)">生成模板</iep-button>
+              <iep-button size="mini" type="primary" @click="handlePrint(scope.row.shipNo)">打印</iep-button>
+              <iep-button size="mini" type="primary" @click="handleAllCrew(scope.row.shipId)">船员</iep-button>
+              <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">船员合同</iep-button> -->
               <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">船员</iep-button>
-              <iep-button size="mini" type="primary" @click="handleOperat(scope.row.shipId,scope.row.shipNo)">经营人</iep-button>
               <iep-button size="mini" type="primary" @click="exportInfo(scope.row.shipId,scope.row.shipName)">导出</iep-button>
+              <iep-button size="mini" type="primary" @click="handleOperat(scope.row.shipId,scope.row.shipNo)">经营人</iep-button>
             </operation-wrapper>
           </template>
         </el-table-column>
@@ -145,6 +149,10 @@ export default {
       options: {
         expandAll: false,
         columns: [
+          {
+            value: 'villageId',
+            text: '基层组织',
+          },
           {
             value: 'shipName',
             text: '渔船名',
@@ -260,10 +268,24 @@ export default {
     handleEdit (val) {
       this.$router.push({path: '/hrms_spa/village_ship_detail', query:{ edit: val }})
     },
+    handleTmp (val) {
+      this.$router.push({name:'contract_tmp',params: {shipName:val}})
+    },
     getData () {
       getVillageShipList(this.params).then(data => {
         this.pagedTable = data.data.data.records
         this.pagedTable.forEach(v => {
+          if (v.villageId == 0) {
+            v.villageId = '--'
+          }else{
+            getVillageByOrg().then(res=>{
+              res.data.data.map(item=>{
+                if(item.userId == v.villageId){
+                  v.villageId = item.villageName
+                }
+              })
+            })
+          }
           if (v.shipNo === '0') {
             v.shipNo = '请完善'
           }
@@ -289,6 +311,11 @@ export default {
     handleCrew (id) {
       this.$router.push({       
         path: `/hrms_spa/ship_crew/${id}`, 
+      })
+    },
+    handleAllCrew (shipId) {
+      this.$router.push({       
+        path: `/hrms_spa/ship_allcrew/${shipId}`, 
       })
     },
     handleOperat (id,No) {
