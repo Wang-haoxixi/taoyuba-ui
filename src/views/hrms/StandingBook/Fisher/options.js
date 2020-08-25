@@ -65,6 +65,10 @@ const columnsMap = [
       // dictName: 'tyb_resume_position',
       // type: 'dictGroup',
     },
+    {
+      prop: 'phone',
+      label: '手机号码',     
+    },
   ]
   const addcrewColumnsMap = [
     {

@@ -2,10 +2,12 @@ const navList = [
   {
     id: '/',
     name: '首页',
-  }, {
-    id: '/ships/manage',
-    name: '渔船',
-  }, {
+  },
+  //  {
+  //   id: '/ships/manage',
+  //   name: '渔船',
+  // }, 
+  {
     id: '/admin/bostMan',
     name: '船员',
     show: 'show',
