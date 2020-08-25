@@ -169,6 +169,18 @@ export default [
         meta: noKeepAlive,
       },
       {   
+        path: 'ship_allcrew/:shipId',                        
+        name: '渔船下所有船员',                                   
+        component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/allShipcrew.vue'),        
+        meta: noKeepAlive,
+      },
+      {   
+        path: 'ship_allcrew_add/:shipId',                        
+        name: '船员登记',                                   
+        component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/addCrew.vue'),        
+        meta: noKeepAlive,
+      },
+      {   
         path: 'shipCrew_list/',                        
         name: '渔船下船员列表页',                                   
         component: () => import('@/views/hrms/StandingBook/Fisher/index.vue'),        

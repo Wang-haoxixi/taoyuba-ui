@@ -19,7 +19,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="渔船编号：" prop="shipNo">
-              <el-input maxlength="50"  v-model="form.shipNo" @blur="cheackNo"></el-input>
+              <el-input maxlength="16"  v-model="form.shipNo" @blur="cheackNo"></el-input>
               <!-- <template v-if='form.shipNo'>
               <el-input maxlength="50"  v-model="form.shipNo"></el-input>
               </template>

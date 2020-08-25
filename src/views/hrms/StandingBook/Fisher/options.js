@@ -50,6 +50,38 @@ const columnsMap = [
       // type: 'dictGroup',
     },
   ]
+  const allcrewColumnsMap = [
+    {
+      prop: 'realName',
+      label: '姓名',
+    },
+    {
+      prop: 'idcard',
+      label: '身份证号码',
+    },
+    {
+      prop: 'workStatus',
+      label: '用工状态',     
+      // dictName: 'tyb_resume_position',
+      // type: 'dictGroup',
+    },
+  ]
+  const addcrewColumnsMap = [
+    {
+      prop: 'realName',
+      label: '姓名',
+    },
+    {
+      prop: 'idcard',
+      label: '身份证号码',
+    },
+    {
+      prop: 'address',
+      label: '地址',     
+      // dictName: 'tyb_resume_position',
+      // type: 'dictGroup',
+    },
+  ]
   const shipColumnsMap = [
     {
       prop: 'employeeName',
@@ -375,4 +407,4 @@ const columnsMap = [
     return newForm
   }
 
-export{columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm, crewColumnsMap, operatColumnsMap ,shipColumnsMap}
+export{columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm, crewColumnsMap,allcrewColumnsMap,addcrewColumnsMap, operatColumnsMap ,shipColumnsMap}

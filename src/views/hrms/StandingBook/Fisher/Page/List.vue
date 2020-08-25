@@ -1,7 +1,7 @@
 <template>
   <div>
     <basic-container>
-      <page-header title="渔船管理"></page-header>
+      <page-header title="一船一档"></page-header>
       <operation-container>
         <template slot="left">
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
@@ -57,26 +57,27 @@
           :label="item.text"
         >
           </el-table-column>
-        <el-table-column prop="operation" label="操作" width="200">
+        <el-table-column prop="operation" label="操作" width="180">
           <template slot-scope="scope">
             <operation-wrapper>
               <iep-button  v-if="manager" size="mini" plain @click="handleEdit(scope.row.shipId)">编辑</iep-button>   
-              <iep-button size="mini" @click="handleView(scope.row.shipId)">查看</iep-button>
+              <!-- <iep-button size="mini" @click="handleView(scope.row.shipId)">查看</iep-button> -->
               <iep-button size="mini"  @click="handleChange(scope.row.shipId)" v-if="!roles.includes(112)">变更</iep-button>
             </operation-wrapper>
           </template>
         </el-table-column>
-        <el-table-column prop="particular" label="详情" width="230">
+        <el-table-column prop="particular" label="详情" width="320">
           <template slot-scope="scope">
             <operation-wrapper>
+              <!-- v-if="isExistContract(scope.row.shipName)" -->
               <!-- <iep-button size="mini" type="primary" @click="handleIntoinsure(scope.row.shipName)">保单</iep-button> -->
-              <!-- <iep-button size="mini" type="primary" @click="handleTmp(scope.row.shipName)">生成模板</iep-button>
-              <iep-button size="mini" type="primary" @click="handlePrint(scope.row.shipNo)">打印</iep-button>
-              <iep-button size="mini" type="primary" @click="handleAllCrew(scope.row.shipId)">船员</iep-button>
-              <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">船员合同</iep-button> -->
-              <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">船员</iep-button>
+              <iep-button size="mini" type="primary"  @click="handleTmp(scope.row.shipName,scope.row.contractModelStatus)">模板</iep-button>
+              <iep-button size="mini" type="primary" v-if="scope.row.contractModelStatus" @click="handlePrint(scope.row.shipName)">下载</iep-button>
+              <iep-button size="mini" type="primary" @click="handleAllCrew(scope.row.shipId,scope.row.shipName)">船员</iep-button>
+              <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">合同</iep-button>
+              <!-- <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">船员</iep-button> -->
               <iep-button size="mini" type="primary" @click="exportInfo(scope.row.shipId,scope.row.shipName)">导出</iep-button>
-              <iep-button size="mini" type="primary" @click="handleOperat(scope.row.shipId,scope.row.shipNo)">经营人</iep-button>
+              <!-- <iep-button size="mini" type="primary" @click="handleOperat(scope.row.shipId,scope.row.shipNo)">经营人</iep-button> -->
             </operation-wrapper>
           </template>
         </el-table-column>
@@ -119,12 +120,13 @@
 </template>
 <script>
 import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
-import { getVillageShipList,changeShip,exportShipExcel } from '@/api/ships'
+import { getVillageShipList,changeShip,exportShipExcel,exportContractModel } from '@/api/ships'
 // import { getVillageShipList } from '@/api/ships'
 // import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
 import { getUserInfo } from '@/api/login'
+// import { checkIsExist } from '@/api/tmlms/contractModel'
 import { mapGetters } from 'vuex'
 export default {
   // components: {
@@ -200,6 +202,10 @@ export default {
       exportParams: {
         shipId: '',
       },
+      exist:'',
+      modelParams:{
+        shipName:'',
+      },
     }
   },
   created () {
@@ -268,8 +274,23 @@ export default {
     handleEdit (val) {
       this.$router.push({path: '/hrms_spa/village_ship_detail', query:{ edit: val }})
     },
-    handleTmp (val) {
-      this.$router.push({name:'contract_tmp',params: {shipName:val}})
+    handleTmp (name,model) {
+      let operate
+      if(model){
+        operate = 'edit'
+      }else{
+        operate = 'add'
+      }
+      this.$router.push({path:`/tmlms_spa/contract_tmp/${name}`,query: {operate:`${operate}`}})
+    },
+    handlePrint (val) {
+      this.modelParams.shipName = val
+      exportContractModel(this.modelParams).catch(err => {
+        this.$message({
+          type: 'warning',
+          message: err,
+        })
+      })
     },
     getData () {
       getVillageShipList(this.params).then(data => {
@@ -298,10 +319,10 @@ export default {
           if (v.hullLength === 0) {
             v.hullLength = '请完善'
           }
-        })
+          })
         this.total = data.data.data.total
       })
-     
+      console.log(this.pagedTable)
     },
     handleIntoinsure (shipName) {
       this.$router.push({       
@@ -313,9 +334,10 @@ export default {
         path: `/hrms_spa/ship_crew/${id}`, 
       })
     },
-    handleAllCrew (shipId) {
+    handleAllCrew (shipId,shipName) {
       this.$router.push({       
         path: `/hrms_spa/ship_allcrew/${shipId}`, 
+        query:{shipName:`${shipName}`},
       })
     },
     handleOperat (id,No) {

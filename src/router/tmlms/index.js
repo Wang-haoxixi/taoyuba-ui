@@ -12,6 +12,12 @@ export default [
       //   meta: noKeepAlive,
       // },
       {
+        path: 'contract_tmp/:shipName',
+        name: 'contract_tmp',
+        component: () => import('@/views/tmlms/contract/Page/contractTemplate'),
+        meta: noKeepAlive,
+      },
+      {
         path: 'contract_list',
         name: '查看淘渔吧合同',
         component: () => import('@/views/tmlms/contractAdmin/index'),

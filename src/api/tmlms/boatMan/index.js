@@ -9,6 +9,13 @@ export function getCrew (query) {
         params: query,
     })
 }
+export function getCrewByShipId (shipId) {
+    return request({
+        url: `${prefixUrl}/findByShipId?shipId=${shipId}`,
+        method: 'get',
+        params: shipId,
+    })
+}
 export function getCrewByName (name) {
     return request({
         url: `${prefixUrl}/findByCrewname?realName=${name}`,
@@ -23,9 +30,22 @@ export function saveCrew (data,type) {
         data: data,
     })
 }
+export function saveCrewBatch (data,type) {
+    return request({
+        url: `${prefixUrl}/batchCreate?type=${type}`,
+        method: 'post',
+        data: data,
+    })
+}
 export function deleteCrew (id) {
     return request({
         url: `${prefixUrl}/delete?idcard=${id}`,
+        method: 'post',
+    })
+}
+export function deleteCrewRelation (idcard,shipId) {
+    return request({
+        url: `${prefixUrl}/deleteRelation?idcard=${idcard}&&shipId=${shipId}`,
         method: 'post',
     })
 }

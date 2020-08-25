@@ -126,6 +126,14 @@ export function exportShipExcel (params) {
     title: params.shipName,
   })
 }
+export function exportContractModel (params) {                                    
+  return exportDownload({
+    url: 'tmlms/tybmlmsExcelExport/downContractModel',
+    data: params,                             
+    title: params.shipName,
+  })
+}
+
 
 
 
