@@ -69,6 +69,10 @@ const columnsMap = [
       prop: 'phone',
       label: '手机号码',     
     },
+    {
+      prop: 'flag',
+      label: '来源',     
+    },
   ]
   const addcrewColumnsMap = [
     {

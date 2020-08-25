@@ -51,12 +51,12 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item label="联系电话：" prop="shipownerPhone">
-                    <el-input maxlength="11" v-model="formData.shipownerPhone" style="width:380px"></el-input>
+                    <el-input maxlength="11" v-model="formData.shipownerPhone" style="width:380px" @blur='changeInfor'></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="家庭地址：" prop="shipownerAddr">
-                    <el-input maxlength="20" v-model="formData.shipownerAddr" style="width:380px"></el-input>
+                    <el-input maxlength="20" v-model="formData.shipownerAddr" style="width:380px" @blur='changeInfor'></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -228,6 +228,12 @@ export default {
     this.getTitle()
   },
   methods: {
+    changeInfor (){
+      if(this.formData.employerProp==1){
+        this.formData.employerPhone = this.formData.shipownerPhone
+        this.formData.employerAddr = this.formData.shipownerAddr
+      }
+    },
     getTitle (){
       this.title = this.$route.params.shipName+'渔船生成合同模板'
     },

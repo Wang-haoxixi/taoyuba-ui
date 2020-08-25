@@ -531,6 +531,7 @@ export default {
               this.form.cityId = cardMsg.cityId
               this.form.districtId = cardMsg.districtId
               this.form.shipId = this.$route.params.shipId
+              this.form.flag = 1
               crew = JSON.parse(JSON.stringify(this.form))
               if(this.crewList.length){
                 this.crewList.forEach(item=>{

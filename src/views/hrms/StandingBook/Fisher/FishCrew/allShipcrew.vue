@@ -130,6 +130,16 @@ export default {
           value: 4,
         },
       ],
+      flag:[
+        {
+          label: '设备',
+          value: 1,
+        },
+        {
+          label: '微信',
+          value: 2,
+        },
+      ],
       rules:{
         reason:[{required: true, message: '该选项必填！', trigger: 'blur'}],
       },
@@ -183,6 +193,7 @@ export default {
       console.log(data.data.data)
       data.data.data.map(item =>{
         item.workStatus=keyBy(this.workStatus, 'value')[item.workStatus].label
+        item.flag=keyBy(this.flag, 'value')[item.flag].label
       })
       this.pagedTable = data.data.data
     },
