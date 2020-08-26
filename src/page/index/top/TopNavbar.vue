@@ -15,9 +15,9 @@
         <el-menu-item>
           <span class="sub-menu" @click="open(name='index')">首页</span>
         </el-menu-item>
-        <el-menu-item v-if="roles.indexOf(111) !== -1 || roles.indexOf(112) !== -1 || roles.indexOf(1) !== -1">
+        <!-- <el-menu-item v-if="roles.indexOf(111) !== -1 || roles.indexOf(112) !== -1 || roles.indexOf(1) !== -1">
           <span class="sub-menu" @click="open(name='ship')">渔船</span>
-        </el-menu-item>
+        </el-menu-item> -->
         <el-menu-item  v-if="roles.indexOf(111) !== -1 || roles.indexOf(112) !== -1 || roles.indexOf(1) !== -1">
           <span class="sub-menu" @click="open(name='crew')">船员</span>
         </el-menu-item>

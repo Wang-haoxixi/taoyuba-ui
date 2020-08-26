@@ -4,7 +4,7 @@
       <page-header :title='shipTitle'></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+          <iep-button @click="handleAdd" type="primary" icon="el-icon-plus" plain>上船登记</iep-button>
         </template>
         <!-- <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -27,7 +27,7 @@
         <el-table-column prop="operation" label="操作" width="300">
           <template slot-scope="scope">
             <operation-wrapper>
-              <!-- <iep-button size="mini" plain @click="handleSign(scope.row.idcard)">签合同</iep-button>                        -->
+              <iep-button size="mini" plain v-if="scope.row.sign" @click="handleSign(scope.row.idcard)">合同</iep-button>                       
               <iep-button size="mini" plain @click="handleDelete(scope.row.idcard)">删除</iep-button>
               <!-- <iep-button size="mini" @click="handleView(scope.row.idcard)">查看</iep-button>
               <iep-button size="mini" plain v-if="scope.row.workStatus!='上船，已签合同'" @click="handleEdit(scope.row.idcard)">编辑</iep-button>
@@ -165,6 +165,11 @@ export default {
       this.$router.push({path: `/hrms_spa/ship_allcrew_add/${this.$route.params.shipId}`,query:{shipName:this.$route.query.shipName}}) 
       // this.$router.push({path: `/hrms_spa/shipCrew_Detial/${val}`, query:{ add: val }}) 
     },
+    handleSign (val){
+      this.$router.push({path: '/tmlms_spa/contract_add',query:{see:'see',idcard:val}}) 
+      console.log(val)
+      // this.$emit('on-add')
+    },
     handleEdit (val) {
       this.$router.push({name: 'detailBoatMan',query:{ edit: val , shipCrew : true}})
       // this.$router.push({path: `/hrms_spa/shipCrew_Detial/${val}`,query:{ edit: val }})
@@ -192,8 +197,12 @@ export default {
       let data = await getCrewByShipId(this.$route.params.shipId)
       console.log(data.data.data)
       data.data.data.map(item =>{
+        if(item.workStatus==1){
+          item.sign = 1
+        }
         item.workStatus=keyBy(this.workStatus, 'value')[item.workStatus].label
         item.flag=keyBy(this.flag, 'value')[item.flag].label
+
       })
       this.pagedTable = data.data.data
     },

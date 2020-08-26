@@ -404,7 +404,7 @@
             </el-main>
           </el-container>
         </el-container>
-        <el-container>
+        <!-- <el-container>
           <el-aside class="sidef">
             <div class="tex">补充</div>
           </el-aside>
@@ -425,7 +425,7 @@
               </el-row>
             </el-main>
           </el-container>
-        </el-container>
+        </el-container> -->
         <el-container>
           <el-aside class="sidef">
             <div class="tex">渔船所有权登记证书上传</div>
@@ -489,7 +489,8 @@
       </el-form>
       <div style="text-align: center;padding: 20px 0;">                   
         <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add' || type === 'edit'" type="primary" @click="handleSubmit">保存</iep-button>
-        <iep-button :disabeld="false" @click="handleBack">返回</iep-button>            
+        <iep-button v-if="!$route.query.see" :disabeld="false" @click="handleBack">返回</iep-button>  
+        <iep-button v-else :disabeld="false" @click="handleGo">返回</iep-button>           
       </div>
     </basic-container>
   </div>
@@ -512,7 +513,7 @@ Vue.use(new VueSocketio({
 }))
 import { 
   addContract, 
-  updateContract, getContractDetail, isCheckIdcard } from '@/api/tmlms/newContract'
+  updateContract, getContractDetail, isCheckIdcard,getContractByidcard} from '@/api/tmlms/newContract'
 export default {
   props: {
     record: {},
@@ -654,6 +655,13 @@ export default {
   created () {
     if (this.record) {
       this.getList()
+    }else if(this.$route.query.idcard){
+      if(this.$route.query.see){
+        this.type = 'see'
+      }
+      this.getListByidcard()
+      console.log('type')
+      console.log(this.type)
     }
   },
   mounted () {
@@ -825,8 +833,35 @@ export default {
         }
       })
     },
+    getListByidcard () {
+      getContractByidcard (this.$route.query.idcard).then(data =>{
+        this.formData = data.data.data
+        if(data.data.data.employeePosition === '0'){       
+          this.formData.employeePosition=''
+        }
+        if (this.formData.licensesOwnerShipImage) {         
+          this.licensesImage = this.formData.licensesOwnerShipImage
+          this.isLicenses = true
+        }
+        if (this.formData.contractImages) {
+          this.contractImageList = this.formData.contractImages
+          this.isContract = true
+        } else {
+          this.isContract = false
+        }
+        if (this.formData.employeeLinkMan) {
+          this.formData.contactName = this.formData.employeeLinkMan
+        }
+        if (this.formData.employeeLinkPhone) {
+          this.formData.contactPhone= this.formData.employeeLinkPhone
+        }
+      })
+    },
     handleBack () {
       this.$emit('onGoBack')
+    },
+    handleGo () {
+      this.$router.go(-1)
     },
     shipNameChange (name) {                             
       if (typeof name === 'object') {      

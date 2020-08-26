@@ -78,11 +78,11 @@
                     </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <!-- <el-col :span="6">
                     <el-form-item label="国籍" prop="nationality">
                     <el-input v-model="form.nationality"></el-input>
                     </el-form-item>
-                </el-col>
+                </el-col> -->
                 <el-col :span="6">
                     <el-form-item label="民族" prop="nation">
                     <el-select v-model="form.nation" placeholder="请输入民族">

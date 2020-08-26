@@ -295,7 +295,6 @@ export default {
     // 获取列表数据
     getData () {         
       getCrew(this.params).then(res=>{    
-
         this.shipownerList = res.data.data.records
         // this.shipownerList.map(m => { 
         //   return m.remark.substring(0, 20)
@@ -322,13 +321,17 @@ export default {
           if(item.salary==0){
             item.salary='面议'
           }
-          item.certTitle = ''
-          item.certDateIssue =''
-          if(item.certList){
-            item.certTitle = item.certList[0].certTitle
-            item.certDateIssue=item.certList[0].certDateIssue.split(' ')[0]
-              
-          }
+          item.certList.forEach(v=>{
+            if(v.certTitle==item.certTitle){
+              item.certDateIssue = v.certDateIssue.split(' ')[0]
+            }
+          })
+          // item.certTitle = ''
+          // item.certDateIssue =''
+          // if(item.certList){
+          //   item.certTitle = item.certList[0].certTitle
+          //   item.certDateIssue=item.certList[0].certDateIssue.split(' ')[0]
+          // }
           
         })
         this.shipownerList.forEach(v => {
@@ -339,8 +342,8 @@ export default {
           }
         })
         this.total = res.data.data.total
-        // console.log('测试')
-        // console.log(this.shipownerList)
+        console.log('测试')
+        console.log(this.shipownerList)
       })
     },
     //搜索

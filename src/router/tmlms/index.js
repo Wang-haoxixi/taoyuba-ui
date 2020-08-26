@@ -5,12 +5,12 @@ export default [
     path: '/tmlms_spa',
     component: Layout,
     children: [
-      // {
-      //   path: 'contract_add',
-      //   name: '新增合同',
-      //   component: () => import('@/views/tmlms/contract/Page/NewDetail'),
-      //   meta: noKeepAlive,
-      // },
+      {
+        path: 'contract_add',
+        name: '新增合同',
+        component: () => import('@/views/tmlms/contract/Page/NewDetail'),
+        meta: noKeepAlive,
+      },
       {
         path: 'contract_tmp/:shipName',
         name: 'contract_tmp',

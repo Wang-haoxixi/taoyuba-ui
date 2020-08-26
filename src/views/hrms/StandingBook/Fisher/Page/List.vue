@@ -230,7 +230,6 @@ export default {
           }
         })
       }
-      // console.log(this.userInfo.userId)
     },
     exportInfo (shipId,shipName) {   
       this.exportParams.shipId = shipId
@@ -247,8 +246,6 @@ export default {
         this.orgList = res.data.data
         this.orgSearchList = this.orgList.slice()
         this.orgSearchList.unshift({userId:' ',villageName:'全部'})
-        // this.orgSearchList.unshift({userId:' ',villageName:'全部'})
-        // this.orgSearchList.push(res.data.data)
       })
     },
     handleSelectionChange (val) {     
@@ -322,7 +319,6 @@ export default {
           })
         this.total = data.data.data.total
       })
-      console.log(this.pagedTable)
     },
     handleIntoinsure (shipName) {
       this.$router.push({       
