@@ -324,8 +324,13 @@ export default {
           // item.certTitle = ''
           // item.certDateIssue =''
           if(item.certList){
+            item.certList.forEach(v=>{
+              if(v.certTitle==item.certTitle){
+                item.certDateIssue=v.certDateIssue.split(' ')[0]
+              }
+            })
             // item.certTitle = item.certList[0].certTitle
-            item.certDateIssue=item.certList[0].certDateIssue.split(' ')[0]
+            // item.certDateIssue=item.certList[0].certDateIssue.split(' ')[0]
           }
           
         })
