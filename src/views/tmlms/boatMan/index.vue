@@ -321,17 +321,12 @@ export default {
           if(item.salary==0){
             item.salary='面议'
           }
-          item.certList.forEach(v=>{
-            if(v.certTitle==item.certTitle){
-              item.certDateIssue = v.certDateIssue.split(' ')[0]
-            }
-          })
           // item.certTitle = ''
           // item.certDateIssue =''
-          // if(item.certList){
-          //   item.certTitle = item.certList[0].certTitle
-          //   item.certDateIssue=item.certList[0].certDateIssue.split(' ')[0]
-          // }
+          if(item.certList){
+            // item.certTitle = item.certList[0].certTitle
+            item.certDateIssue=item.certList[0].certDateIssue.split(' ')[0]
+          }
           
         })
         this.shipownerList.forEach(v => {
