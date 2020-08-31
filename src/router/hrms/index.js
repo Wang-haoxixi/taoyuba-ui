@@ -211,6 +211,12 @@ export default [
         meta: noKeepAlive,
       },
       {   
+        path: 'shipShareHolder/:shipId',                        
+        name: '渔船股东',                                   
+        component: () => import('@/views/hrms/StandingBook/Fisher/ShareHolder/index.vue'),        
+        meta: noKeepAlive,
+      },
+      {   
         path: 'shipChange_Detial/:id',                        
         name: '渔船变更详情页',                                   
         component: () => import('@/views/hrms/StandingBook/ShipChange/Page/Detail.vue'),        

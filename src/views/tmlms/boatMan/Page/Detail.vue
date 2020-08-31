@@ -212,7 +212,7 @@
                         <el-input v-model="form.preAddress"></el-input>
                       </el-form-item>
                   </el-col>
-                   <el-col :span="12">
+                  <el-col :span="12">
                       <el-form-item label="作业方式：" prop="workRequire">
                         <iep-dict-select v-model="form.workRequire" dict-name="tyb_resume_worktype"></iep-dict-select>
                       </el-form-item>
@@ -574,6 +574,8 @@ export default {
                       this.$router.go(-1) 
                    }else if(this.$route.query.shipCrew){
                       this.$router.go(-1)
+                   }else if(this.$route.query.idcard){
+                     this.$router.go(-1)
                    }else{
                      this.$router.push({name:'boatMan'})  
                    }

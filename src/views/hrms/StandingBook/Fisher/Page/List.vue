@@ -71,6 +71,7 @@
             <operation-wrapper>
               <!-- v-if="isExistContract(scope.row.shipName)" -->
               <!-- <iep-button size="mini" type="primary" @click="handleIntoinsure(scope.row.shipName)">保单</iep-button> -->
+              <iep-button size="mini" type="primary"  @click="handleHodler(scope.row.shipId,scope.row.shipName)">股东</iep-button>
               <iep-button size="mini" type="primary"  @click="handleTmp(scope.row.shipName,scope.row.contractModelStatus)">模板</iep-button>
               <iep-button size="mini" type="primary" v-if="scope.row.contractModelStatus" @click="handlePrint(scope.row.shipName)">下载</iep-button>
               <iep-button size="mini" type="primary" @click="handleAllCrew(scope.row.shipId,scope.row.shipName)">船员</iep-button>
@@ -260,6 +261,10 @@ export default {
         path: '/hrms_spa/village_ship_detail',
         query:{ add: 'add' },
       })  
+    },
+    handleHodler (shipId,shipName){
+      console.log(shipId)
+      this.$router.push({path: `/hrms_spa/shipShareHolder/${shipId}`,query:{shipName:shipName}})
     },
     handleChange (shipId){
       this.shipId = shipId

@@ -120,6 +120,30 @@ const columnsMap = [
       label: '姓名',
     },
   ]
+  const shareHolderColumnsMap = [
+    {
+      prop: 'realName',
+      label: '姓名',
+    },
+    {
+      prop: 'idcard',
+      label: '身份证',
+    },
+    {
+      prop: 'positionId',
+      label: '职位',
+      dictName: 'tyb_resume_position',
+      type: 'dictGroup',
+    },
+    {
+      prop: 'phone',
+      label: '电话',
+    },
+    {
+      prop: 'address',
+      label: '地址',
+    },
+  ]
 
   // const insureColumnsMap = [
   //   {
@@ -415,4 +439,4 @@ const columnsMap = [
     return newForm
   }
 
-export{columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm, crewColumnsMap,allcrewColumnsMap,addcrewColumnsMap, operatColumnsMap ,shipColumnsMap}
+export{columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm, crewColumnsMap,allcrewColumnsMap,addcrewColumnsMap, operatColumnsMap ,shipColumnsMap,shareHolderColumnsMap}
