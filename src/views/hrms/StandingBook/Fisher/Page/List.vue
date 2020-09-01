@@ -71,10 +71,10 @@
             <operation-wrapper>
               <!-- v-if="isExistContract(scope.row.shipName)" -->
               <!-- <iep-button size="mini" type="primary" @click="handleIntoinsure(scope.row.shipName)">保单</iep-button> -->
-              <iep-button size="mini" type="primary"  @click="handleHodler(scope.row.shipId,scope.row.shipName)">股东</iep-button>
               <iep-button size="mini" type="primary"  @click="handleTmp(scope.row.shipName,scope.row.contractModelStatus)">模板</iep-button>
               <iep-button size="mini" type="primary" v-if="scope.row.contractModelStatus" @click="handlePrint(scope.row.shipName)">下载</iep-button>
               <iep-button size="mini" type="primary" @click="handleAllCrew(scope.row.shipId,scope.row.shipName)">船员</iep-button>
+              <iep-button size="mini" type="primary"  @click="handleHodler(scope.row.shipId,scope.row.shipName)">股东</iep-button>
               <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">合同</iep-button>
               <!-- <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">船员</iep-button> -->
               <iep-button size="mini" type="primary" @click="exportInfo(scope.row.shipId,scope.row.shipName)">导出</iep-button>
