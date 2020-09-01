@@ -195,7 +195,6 @@ export default {
     },
     async getTableData (){
       let data = await getCrewByShipId(this.$route.params.shipId)
-      console.log(data.data.data)
       data.data.data.map(item =>{
         if(item.workStatus==1){
           item.sign = 1

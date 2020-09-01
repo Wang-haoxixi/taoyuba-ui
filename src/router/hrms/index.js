@@ -217,6 +217,12 @@ export default [
         meta: noKeepAlive,
       },
       {   
+        path: 'CrewRegiste',                        
+        name: '上船人员登记',                                   
+        component: () => import('@/views/hrms/StandingBook/Fisher/CrewRegiste/index.vue'),        
+        meta: noKeepAlive,
+      },
+      {   
         path: 'shipChange_Detial/:id',                        
         name: '渔船变更详情页',                                   
         component: () => import('@/views/hrms/StandingBook/ShipChange/Page/Detail.vue'),        

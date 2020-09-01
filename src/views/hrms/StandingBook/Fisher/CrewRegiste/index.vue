@@ -3,16 +3,31 @@
     <basic-container>
       <page-header :title="title"></page-header>
       <operation-container>
-        <template slot="left">    
-          <!-- <iep-button v-if="manager" @click="handleAdd($route.params.shipNo)" type="primary" icon="el-icon-plus" plain>新增</iep-button> -->
+        <template slot="left">
+          <!-- <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain v-if="manager">新增</iep-button> -->
         </template>
         <template slot="right">
+          <span><el-input v-model="params.realName" placeholder="请输入姓名" size="small" clearable></el-input></span>
+          <span><el-input v-model="params.idcard" placeholder="请输入身份证号" size="small" clearable></el-input></span>
+          <el-button size="small"  @click="loadPage(params)">搜索</el-button>   
+          <!-- <el-button @click="backPage">返回</el-button> -->
+        </template>   
+      </operation-container>
+      <!-- <operation-container>
+        <template slot="left">     -->
+          <!-- <iep-button v-if="manager" @click="handleAdd($route.params.shipNo)" type="primary" icon="el-icon-plus" plain>新增</iep-button> -->
+        <!-- </template>
+        <template slot="right">
+          <span><el-input v-model="params.realname" placeholder="请输入姓名" size="small" clearable></el-input></span>
+          <span><el-input v-model="params.idcard" placeholder="请输入身份证号" size="small" clearable></el-input></span>
+          <el-button size="small"  @click="loadPage(params)">搜索</el-button>   
           <el-button @click="backPage">返回</el-button>
         </template>
-      </operation-container>
-      <iep-table                    
+      </operation-container> -->
+      <iep-table
+              :isLoadTable = "isLoadTable"                    
               :pagination="pagination"
-              :columnsMap="shareHolderColumnsMap"
+              :columnsMap="CrewRegisteColumnsMap"
               :pagedTable="pagedTable"
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
@@ -36,22 +51,29 @@
 // //deleteShipManager 
 // } from '@/api/ships/shipoperat/index'
 // import { getShipownerByidcard } from '@/api/tmlms/shipowner/index'
-import { getHoldersByShip } from '@/api/tmlms/shipshareholder/index'
-import { getShipByShipId } from '@/api/ships/index'
+// import { getHoldersByShip } from '@/api/tmlms/shipshareholder/index'
+// import { getShipByShipId } from '@/api/ships/index'
+import { getCrewRegiste } from '@/api/tmlms/boatMan'
 import mixins from '@/mixins/mixins'
-import { shareHolderColumnsMap } from '../options'
+import { CrewRegisteColumnsMap } from '../options'
 import { getUserInfo } from '@/api/login'
 export default {
   mixins: [mixins],
   data () {
     return {
-      shareHolderColumnsMap,
+      CrewRegisteColumnsMap,
       searchData: 'contactName',
       manager:false,
       userData:{},
       phone:'',
       title:'',
       owner:{},
+      params:{
+        current: 1,
+        size: 10,
+        realName: '',
+        idcard: '',
+      },
     }
   },
   created () {
@@ -61,7 +83,7 @@ export default {
   },
   methods: {
       getTitle (){
-          this.title = this.$route.query.shipName+'股东'
+          this.title = '上船人员登记'
       },
     handleSelectionChange (val) {     
       this.multipleSelection = val.map(m => m.id)
@@ -89,23 +111,11 @@ export default {
     // getShipNo (){
     //   return this.$route.query.shipNo
     // },
-    async loadPage () { 
-      let shipId = this.$route.params.shipId
-      let shipowner = await getShipByShipId(this.$route.params.shipId)
-      this.owner.address = shipowner.data.data.address
-      this.owner.phone = shipowner.data.data.mobile
-      this.owner.idcard = shipowner.data.data.shipownerIdcard
-      this.owner.positionId = ''
-      this.owner.realName = shipowner.data.data.shipowner
-      this.owner.shipId = shipId
-      getHoldersByShip(shipId).then(res=>{
-        let alldata = [this.owner,...res.data.data]
-        this.pagedTable = alldata
-        console.log(this.pagedTable)
-      })
-    //   let data = await this.loadTable(shipId, getHoldersByShip)
-    //   console.log(data)
-    //   this.pagedTable = data.records
+    async loadPage (param = this.searchForm) { 
+      // param.shipNo = this.$route.params.shipNo
+      // param.status = 1
+      let data = await this.loadTable(param, getCrewRegiste)
+      this.pagedTable = data.records
     },
     backPage () {
       this.$router.push({path: '/hrms_spa/shipCrew_list'})
