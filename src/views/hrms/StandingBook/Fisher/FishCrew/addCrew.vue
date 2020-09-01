@@ -72,7 +72,7 @@
 <script>
 // import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable'
 import { getArea,getPosition} from '@/api/post/admin'
-import { saveCrewBatch, detailCrew,  uploadPic, getCrewData } from '@/api/tmlms/boatMan'
+import { saveCrewBatch, detailCrew,  uploadPic, getCrewData,checkCrewRelation } from '@/api/tmlms/boatMan'
 import { getLastData } from '@/api/hrms/databuspayload'
 import { certificateColumns } from '@/views/hrms/ComponentsNew/options'
 import { getUserInfo } from '@/api/login'
@@ -211,10 +211,17 @@ export default {
         cancelButtonText: '取消',
         type: 'warning',
         }).then(()=>{
-          saveCrewBatch(this.crewList,type).then(res=>{
-            console.log(res)
-            this.$message.success('船员批量添加成功!')
-            this.$router.go(-1)
+          checkCrewRelation(this.crewList).then(res=>{
+            console.log('三艘船')
+            if(res.data.data){
+              saveCrewBatch(this.crewList,type).then(res=>{
+              console.log(res)
+              this.$message.success('船员批量添加成功!')
+              this.$router.go(-1)
+              })
+            }
+          }).catch(err=>{
+            this.$message.error(err.message)
           })
         })
       }
@@ -505,8 +512,8 @@ export default {
             //添加socket事件监听
         this.$socket.emit('connect')
         this.$socket.emit('startRead')
-        // this.sockets.listener.subscribe('card message', (msg) => {
-          this.sockets.subscribe('card message', (msg) => {
+        this.sockets.listener.subscribe('card message', (msg) => {
+          // this.sockets.subscribe('card message', (msg) => {
           var base = new Base64()  			  
           //2.解密后是json字符串mou
           var result1 = base.decode(msg)

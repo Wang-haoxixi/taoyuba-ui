@@ -16,6 +16,14 @@ export function getCrewByShipId (shipId) {
         params: shipId,
     })
 }
+export function checkCrewRelation (list) {
+    return request({
+        url: `${prefixUrl}/checkMoreRelations`,
+        method: 'post',
+        data: list,
+    })
+}
+
 export function getCrewByName (name) {
     return request({
         url: `${prefixUrl}/findByCrewname?realName=${name}`,
