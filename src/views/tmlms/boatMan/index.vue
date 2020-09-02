@@ -17,7 +17,7 @@
               </el-option>
             </el-select>    
           </span>       
-           <span style="width:150px"><iep-dict-select placeholder="请选择证书职位" v-model="params.certTitle" dict-name="tyb_crew_cert_title"></iep-dict-select></span>      
+          <span style="width:150px"><iep-dict-select placeholder="请选择证书职位" v-model="params.certTitle" dict-name="tyb_crew_cert_title"></iep-dict-select></span>      
           <span style="width:150px"><el-select v-model="params.workStatus" placeholder="请选择用工状态" size="small">                                                               
               <el-option
                 v-for="item in workStatus"    
@@ -92,7 +92,7 @@
           </el-table-column>
         </el-table>
       <div style="text-align: center;margin: 20px 0;">            
-        <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
+        <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" :current-page.sync="params.current" @current-change="currentChange"></el-pagination>
       </div>                
     </basic-container>        
   </div>          
@@ -280,7 +280,7 @@ export default {
     },
     // 编辑
     handleEdit (val) {
-      this.$router.push({name: 'detailBoatMan',query:{ edit: val }})
+      this.$router.push({path: '/boatMan/detail',query:{ edit: val }})
     },
     getProvince () {
       getArea(0).then(({ data }) => {
@@ -293,7 +293,7 @@ export default {
       })
     },
     // 获取列表数据
-    getData () {         
+    getData () {      
       getCrew(this.params).then(res=>{    
         this.shipownerList = res.data.data.records
         // this.shipownerList.map(m => { 
@@ -342,8 +342,6 @@ export default {
           }
         })
         this.total = res.data.data.total
-        console.log('测试')
-        console.log(this.shipownerList)
       })
     },
     //搜索
@@ -420,6 +418,25 @@ export default {
     ]),
   },
   created () {
+    console.log('打印session')
+    console.log(sessionStorage.getItem('query'))
+    if (sessionStorage.getItem('query')) {
+      var query = sessionStorage.getItem('query')
+      this.params = JSON.parse(query)
+      console.log('aaaa')
+    } else {
+      console.log('bbbb')
+      this.params = {
+        current: 1,   
+        size: 10,
+        idcard: '',
+        realName: '',
+        workStatus: '',
+        phone: '',
+        certLevel: '',
+        certTitle: '',
+      }
+    }
     this.getData()
     this.isManager()
     this.getProvince()
@@ -451,7 +468,22 @@ export default {
       'params.workStatus': function (val) {                          
             this.exportParams.workStatus  = val
       },
+      params () {
+      sessionStorage.setItem('query', JSON.stringify(this.params))
+      },
   },
+ beforeUpdate () {
+    sessionStorage.setItem('query', JSON.stringify(this.params))
+  },
+  beforeRouteLeave (to, from, next) { 
+    if (to.path!=='/boatMan/detail') {
+    sessionStorage.removeItem('query')
+    }
+  // 设置下一个路由的 meta
+  
+  next()
+  },
+ 
 }
 </script>
 <style lang="scss" scoped>

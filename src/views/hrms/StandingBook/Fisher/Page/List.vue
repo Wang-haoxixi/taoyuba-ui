@@ -114,7 +114,7 @@
         </div>
     </el-dialog> -->
       <div style="text-align: center;margin: 20px 0;">
-        <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" :current-page.sync="params.curPage" @current-change="currentChange"></el-pagination>
+        <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" :current-page.sync="params.current" @current-change="currentChange"></el-pagination>
       </div>
     </basic-container>
   </div>

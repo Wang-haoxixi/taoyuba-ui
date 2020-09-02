@@ -723,7 +723,6 @@ export default {
       })
     },
     dataURLtoFile (dataurl, filename = 'img') {
-      console.log(dataurl)
       let arr = dataurl.split(',')
       let mime = arr[0].match(/:(.*?);/)[1]
       let suffix = mime.split('/')[1]
@@ -888,8 +887,6 @@ export default {
           id ++
         })
       }
-      console.log('编辑数据')
-      console.log(data)
       this.form = data
     }
     getUserInfo().then(res => {
