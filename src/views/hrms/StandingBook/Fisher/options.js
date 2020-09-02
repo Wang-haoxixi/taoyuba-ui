@@ -175,6 +175,42 @@ const columnsMap = [
     //   label: '地址',
     // },
   ]
+  const CrewRecordColumnsMap = [
+    {
+      prop: 'realName',
+      label: '姓名',
+    },
+    {
+      prop: 'idcard',
+      label: '身份证',
+    },
+    {
+      prop: 'shipId',
+      label: '船名',
+    },
+    {
+      prop: 'flag',
+      label: '上下船类型',
+    },
+    {
+      prop: 'sourceType',
+      label: '来源',
+    },
+    // {
+    //   prop: 'positionId',
+    //   label: '职位',
+    //   dictName: 'tyb_resume_position',
+    //   type: 'dictGroup',
+    // },
+    {
+      prop: 'leftTime',
+      label: '最近上船时间',
+    },
+    // {
+    //   prop: 'address',
+    //   label: '地址',
+    // },
+  ]
   // const insureColumnsMap = [
   //   {
   //     prop: 'certNo',
@@ -469,4 +505,4 @@ const columnsMap = [
     return newForm
   }
 
-export{columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm, crewColumnsMap,allcrewColumnsMap,addcrewColumnsMap, operatColumnsMap ,shipColumnsMap,shareHolderColumnsMap,CrewRegisteColumnsMap}
+export{columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm, crewColumnsMap,allcrewColumnsMap,addcrewColumnsMap, operatColumnsMap ,shipColumnsMap,shareHolderColumnsMap,CrewRegisteColumnsMap,CrewRecordColumnsMap}

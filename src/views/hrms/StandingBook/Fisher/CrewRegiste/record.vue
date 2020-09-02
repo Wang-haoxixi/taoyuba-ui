@@ -6,11 +6,11 @@
         <template slot="left">
           <!-- <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain v-if="manager">新增</iep-button> -->
         </template>
-        <template slot="right">
-          <span><el-input v-model="params.realName" placeholder="请输入姓名" size="small" clearable></el-input></span>
+       <template slot="right">
+          <!-- <span><el-input v-model="params.realName" placeholder="请输入姓名" size="small" clearable></el-input></span>
           <span><el-input v-model="params.idcard" placeholder="请输入身份证号" size="small" clearable></el-input></span>
-          <el-button size="small"  @click="loadPage(params)">搜索</el-button>   
-          <!-- <el-button @click="backPage">返回</el-button> -->
+          <el-button size="small"  @click="loadPage(params)">搜索</el-button> -->
+          <el-button @click="backPage">返回</el-button>
         </template>   
       </operation-container>
       <!-- <operation-container>
@@ -27,22 +27,22 @@
       <iep-table
               :isLoadTable = "isLoadTable"                    
               :pagination="pagination"
-              :columnsMap="CrewRegisteColumnsMap"
+              :columnsMap="CrewRecordColumnsMap"
               :pagedTable="pagedTable"
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               @selection-change="handleSelectionChange"
               is-mutiple-selection>
-        <el-table-column prop="operation" label="操作" width="200">
+        <!-- <el-table-column prop="operation" label="操作" width="200">
           <template slot-scope="scope">
             <operation-wrapper>
-              <iep-button size="mini" plain @click="handleRecord(scope.row.idcard)">上下船记录</iep-button>
+              <iep-button size="mini" plain @click="handleRecord(scope.row.idcard)">上下船记录</iep-button> -->
               <!-- <iep-button size="mini" plain @click="handleEdit(scope.row.idcard)">编辑</iep-button> -->
               <!-- <iep-button size="mini" plain @click="handleView(scope.row.shipName)">查看</iep-button> -->
               <!-- <iep-button size="mini" plain @click="handleDelete(scope.row.id)">删除</iep-button>     -->
-            </operation-wrapper>
+            <!-- </operation-wrapper>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </iep-table>
     </basic-container>
   </div>
@@ -54,15 +54,16 @@
 // import { getShipownerByidcard } from '@/api/tmlms/shipowner/index'
 // import { getHoldersByShip } from '@/api/tmlms/shipshareholder/index'
 // import { getShipByShipId } from '@/api/ships/index'
-import { getCrewRegiste} from '@/api/tmlms/boatMan'
+import { getshipLogPage } from '@/api/tmlms/boatMan'
+import { getShipByShipId } from '@/api/ships'
 import mixins from '@/mixins/mixins'
-import { CrewRegisteColumnsMap } from '../options'
+import { CrewRecordColumnsMap } from '../options'
 import { getUserInfo } from '@/api/login'
 export default {
   mixins: [mixins],
   data () {
     return {
-      CrewRegisteColumnsMap,
+      CrewRecordColumnsMap,
       searchData: 'contactName',
       manager:false,
       userData:{},
@@ -84,13 +85,10 @@ export default {
   },
   methods: {
       getTitle (){
-          this.title = '上船人员登记'
+          this.title = '上下船记录'
       },
     handleSelectionChange (val) {     
       this.multipleSelection = val.map(m => m.id)
-    },
-    handleRecord (idcard) {
-      this.$router.push({path: `/hrms_spa/CrewRegiste/record/${idcard}`})
     },
     // handleEdit (val) {
     // this.$router.push({name: 'detailBoatMan',query:{ edit: val,idcard:'idcard' }})
@@ -117,12 +115,22 @@ export default {
     // },
     async loadPage (param = this.searchForm) { 
       // param.shipNo = this.$route.params.shipNo
-      // param.status = 1
-      let data = await this.loadTable(param, getCrewRegiste)
+      param.idcard = this.$route.params.idcard
+      let data = await this.loadTable(param, getshipLogPage)
+      if(data.records) {
+        data.records.forEach(v=>{
+            v.flag = (v.flag==1)?'上船':'下船'
+            v.sourceType = (v.sourceType==1)?'合同':'登记'
+            getShipByShipId(v.shipId).then(res=>{
+                v.shipId = res.data.data.shipName
+            })
+        })
+      }
       this.pagedTable = data.records
     },
     backPage () {
-      this.$router.push({path: '/hrms_spa/shipCrew_list'})
+      this.$router.go(-1)
+    //   this.$router.push({path: '/hrms_spa/shipCrew_list'})
     },
     async isManager () {
       this.userData = await getUserInfo().then(res => {

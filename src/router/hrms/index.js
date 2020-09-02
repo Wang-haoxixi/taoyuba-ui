@@ -223,6 +223,12 @@ export default [
         meta: noKeepAlive,
       },
       {   
+        path: 'CrewRegiste/record/:idcard',                        
+        name: '上船人员上下船记录',                                   
+        component: () => import('@/views/hrms/StandingBook/Fisher/CrewRegiste/record.vue'),        
+        meta: noKeepAlive,
+      },
+      {   
         path: 'shipChange_Detial/:id',                        
         name: '渔船变更详情页',                                   
         component: () => import('@/views/hrms/StandingBook/ShipChange/Page/Detail.vue'),        

@@ -23,6 +23,13 @@ export function getCrewRegiste (param) {
         params: param,
     })
 }
+export function getshipLogPage (param) {
+    return request({
+        url: `${prefixUrl}/shipLogPage`,
+        method: 'get',
+        params: param,
+    })
+}
 export function checkCrewRelation (list) {
     return request({
         url: `${prefixUrl}/checkMoreRelations`,
@@ -30,7 +37,6 @@ export function checkCrewRelation (list) {
         data: list,
     })
 }
-
 export function getCrewByName (name) {
     return request({
         url: `${prefixUrl}/findByCrewname?realName=${name}`,
