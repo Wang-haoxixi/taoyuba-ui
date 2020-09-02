@@ -114,7 +114,7 @@
         </div>
     </el-dialog> -->
       <div style="text-align: center;margin: 20px 0;">
-        <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
+        <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" :current-page.sync="params.curPage" @current-change="currentChange"></el-pagination>
       </div>
     </basic-container>
   </div>
@@ -210,11 +210,23 @@ export default {
     }
   },
   created () {
-    if (!this.$route.meta.keepAlive) {
+    if (sessionStorage.getItem('query')) {
+      var query = sessionStorage.getItem('query')
+      this.params = JSON.parse(query)
+    } else {
+      this.params = {
+        current: 1,
+        size: 10,
+        shipName: '',
+        shipNo: '',
+        shipowner: '',
+        shipownerIdcard: '',
+        status: '',
+      }
+    }
       this.getData()
       this.isManager()
       this.getVillageOrg()
-    }
     
   },
   computed: {
@@ -366,10 +378,13 @@ export default {
       let pageIndex = parseInt(this.history.getItem('pageIndex')) || 1
       this.searchData(pageIndex) // 这是我们获取数据的函数
   },
-  beforeRouteLeave (to, from, next) {
-    from.meta.keepAlive = false
-    this.history.setItem('pageIndex', this.queryForPage.pageIndex)
-    next()
+  watch: {
+    params () {
+      sessionStorage.setItem('query', JSON.stringify(this.params))
+    },
+  },
+  beforeUpdate () {
+    sessionStorage.setItem('query', JSON.stringify(this.params))
   },
 }
 </script>
