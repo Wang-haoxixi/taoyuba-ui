@@ -16,6 +16,20 @@ export function changeShip (shipId,villageId) {
     // params: params,
   })
 }
+export function getFixOrgIds (shipId,orgId ) {
+  return request({
+    url: `${prefixUrl}/getFixOrgIds?shipId=${shipId}&&orgId=${orgId}`,
+    method: 'get',
+    // params: params,
+  })
+}
+export function changeOrgIds (shipId,orgId ) {
+  return request({
+    url: `${prefixUrl}/updateOrgId?shipId=${shipId}&&orgId=${orgId}`,
+    method: 'post',
+    // params: params,
+  })
+}
 export function getShipByShipId (shipId) {
   return request({
     url: `${prefixUrl}/${shipId}`,
@@ -97,7 +111,6 @@ export function getShipByShipNo (shipNo) {
     },
   })    
 } 
-
 export function getVillageShipList (params) {
   return request({
       url: `${prefixUrl}/newpage`,

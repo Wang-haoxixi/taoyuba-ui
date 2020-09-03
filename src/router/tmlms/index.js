@@ -172,6 +172,14 @@ export default [
             },
           },
           {
+            path: '/crew/smdj/boatMan',
+            name: 'crewboatMan',
+            component: () => import('@/views/tmlms/boatMan/index'),
+            meta: {   
+              keepAlive: true,
+            },
+          },
+          {
             path: 'apply_detail',
               name: 'applyDetailBoatMan',
               component: () => import('@/views/tmlms/boatMan/Page/Apply_Detail'),

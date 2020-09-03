@@ -359,8 +359,8 @@
             <el-button @click="$router.go(-1)">返回</el-button>
           </template>
           <template v-else>
-            <el-button v-if="manager" @click="$router.push({name:'boatMan'})">返回</el-button>    
-            <el-button v-if="!manager" @click="$router.push({name:'boatMan'})">返回</el-button>
+            <el-button v-if="manager" @click="$router.push({name:'crewboatMan'})">返回</el-button>    
+            <el-button v-if="!manager" @click="$router.push({name:'crewboatMan'})">返回</el-button>
           </template>
           <el-button v-if="manager && !$route.query.see" @click="collect">数据读取</el-button>
         </div>
@@ -741,7 +741,7 @@ export default {
         this.$set(this.form, 'certList',[])
       }
       const length = this.form.certList.length
-      if (length < 2) {
+      if (length < 2 && this.form.certList) {
         this.form.certList.push({
           id: length ? (parseInt(this.form.certList[length - 1].id) + 1).toString() : '0',
         })

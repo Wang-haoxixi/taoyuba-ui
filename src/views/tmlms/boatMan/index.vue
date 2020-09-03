@@ -397,6 +397,7 @@ export default {
       }
     },
     isAdminPath () {
+      console.log(this.$route.path.indexOf('admin'))
       if(this.$route.path.indexOf('admin') == 1){
         this.showSwith=true
       }else{

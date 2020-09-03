@@ -18,15 +18,15 @@
               @current-change="handleCurrentChange"
               @selection-change="handleSelectionChange"
               is-mutiple-selection>
-        <!-- <el-table-column prop="operation" label="操作" width="200">
+        <el-table-column prop="operation" label="操作" width="200">
           <template slot-scope="scope">
-            <operation-wrapper> -->
-              <!-- <iep-button size="mini" plain @click="handleEdit(scope.row.idcard)">编辑</iep-button> -->
+            <operation-wrapper>
+              <iep-button size="mini" plain v-if="!(scope.row.showbtn==1)" @click="handleEdit(scope.row.idcard)">编辑</iep-button>
               <!-- <iep-button size="mini" plain @click="handleView(scope.row.shipName)">查看</iep-button> -->
               <!-- <iep-button size="mini" plain @click="handleDelete(scope.row.id)">删除</iep-button>     -->
-            <!-- </operation-wrapper>
+            </operation-wrapper>
           </template>
-        </el-table-column> -->
+        </el-table-column>
       </iep-table>
     </basic-container>
   </div>
@@ -98,6 +98,7 @@ export default {
       this.owner.positionId = ''
       this.owner.realName = shipowner.data.data.shipowner
       this.owner.shipId = shipId
+      this.owner.showbtn = 1
       getHoldersByShip(shipId).then(res=>{
         let alldata = [this.owner,...res.data.data]
         this.pagedTable = alldata

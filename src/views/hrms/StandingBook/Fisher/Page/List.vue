@@ -63,6 +63,7 @@
               <iep-button  v-if="manager" size="mini" plain @click="handleEdit(scope.row.shipId)">编辑</iep-button>   
               <!-- <iep-button size="mini" @click="handleView(scope.row.shipId)">查看</iep-button> -->
               <iep-button size="mini"  @click="handleChange(scope.row.shipId)" v-if="!roles.includes(112)">变更</iep-button>
+              <iep-button size="mini"  @click="handleChangeArea(scope.row.shipId,scope.row.orgId)" v-if="!roles.includes(112)">区域</iep-button>
             </operation-wrapper>
           </template>
         </el-table-column>
@@ -74,7 +75,7 @@
               <iep-button size="mini" type="primary"  @click="handleTmp(scope.row.shipName,scope.row.contractModelStatus)">模板</iep-button>
               <iep-button size="mini" type="primary" v-if="scope.row.contractModelStatus" @click="handlePrint(scope.row.shipName)">下载</iep-button>
               <iep-button size="mini" type="primary" @click="handleAllCrew(scope.row.shipId,scope.row.shipName)">船员</iep-button>
-              <iep-button size="mini" type="primary"  @click="handleHodler(scope.row.shipId,scope.row.shipName)">股东</iep-button>
+              <iep-button size="mini" type="primary" v-if="scope.row.shipShare==1" @click="handleHodler(scope.row.shipId,scope.row.shipName)">股东</iep-button>
               <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">合同</iep-button>
               <!-- <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">船员</iep-button> -->
               <iep-button size="mini" type="primary" @click="exportInfo(scope.row.shipId,scope.row.shipName)">导出</iep-button>
@@ -94,6 +95,19 @@
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="save">确 定</el-button>
+        </div>
+      </el-dialog>
+      <el-dialog title="区域组织变更" :visible.sync="areadialogVisible" >
+        <el-form  ref="form" >
+          <el-form-item label="请选择区域组织" :label-width="formLabelWidth">
+            <el-select v-model="areachooseOrg" placeholder="请选择" width="150">
+              <el-option v-for="item in areaorgList" :key="item.index" :label="item.name" :value="item.orgId"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="areadialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="savearea">确 定</el-button>
         </div>
       </el-dialog>
       <!-- <el-dialog title="基层组织变更" :visible.sync="dialogVisible" width="70%" append-to-body> 
@@ -121,7 +135,7 @@
 </template>
 <script>
 import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
-import { getVillageShipList,changeShip,exportShipExcel,exportContractModel } from '@/api/ships'
+import { getVillageShipList,changeShip,exportShipExcel,exportContractModel,getFixOrgIds,changeOrgIds } from '@/api/ships'
 // import { getVillageShipList } from '@/api/ships'
 // import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
@@ -181,12 +195,16 @@ export default {
       manager:false,
       userData:{},
       dialogVisible:false,
+      areadialogVisible:false,
       orgList:[],
+      areaorgList:[],
       orgSearchList:[],
       chooseOrg:'',
+      areachooseOrg:'',
       searchOrg:'',
       formLabelWidth: '120px',
       shipId:'',
+      areaShipId:'',
       villageId:'',
       contractList: [
           {
@@ -233,6 +251,16 @@ export default {
     ...mapGetters(['userInfo', 'roles']),
   },
   methods: {
+    savearea () {
+      changeOrgIds(this.areaShipId,this.areachooseOrg).then(res=>{
+        console.log('变更')
+        console.log(res.data.data)
+        if(res.data.data){
+            this.$message.success('区域组织变更成功')
+            this.areadialogVisible = false
+          }
+      })
+    },
     save () {
       if(this.userInfo.userId && this.shipId){
         let shipId =this.shipId
@@ -282,6 +310,16 @@ export default {
       this.shipId = shipId
       this.dialogVisible = true
     },
+    handleChangeArea (shipId,orgId){
+      orgId = 0
+      this.areaShipId = shipId
+      getFixOrgIds(shipId,orgId).then(res=>{
+        this.areaorgList = res.data.data
+      })  
+      // console.log(villageId)
+      // this.shipId = shipId
+      this.areadialogVisible = true
+    },
     handleView (val) {
       this.$router.push({path: '/hrms_spa/village_ship_detail', query:{ see: val }})
     },
@@ -308,10 +346,11 @@ export default {
     },
     getData () {
       getVillageShipList(this.params).then(data => {
-        this.pagedTable = data.data.data.records
+        this.pagedTable =  JSON.parse(JSON.stringify(data.data.data.records))
         this.pagedTable.forEach(v => {
           if (v.villageId == 0) {
             v.villageId = '--'
+            // v.villageId = '--'
           }else{
             getVillageByOrg().then(res=>{
               res.data.data.map(item=>{
