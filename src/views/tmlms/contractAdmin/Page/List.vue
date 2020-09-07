@@ -210,6 +210,7 @@
                 :limit="5"
                  :headers="headers"
                 :on-remove="handlePaperRemove"
+                :before-remove="beforeRemove"
                 :on-success="uploadSuccess" 
                 :on-preview="handlePictureCardPreview"
                  :file-list="contractFiles"
@@ -446,8 +447,6 @@ export default {
     getVillageByOrg().then(res=>{
       this.orgList = res.data.data
       this.orgList.unshift({userId:' ',villageName:'全部'})
-      console.log('res.data.data')
-      console.log(res.data.data)
     })
   },
     async getContractList () {
@@ -670,16 +669,16 @@ export default {
     },
     //上传纸质合同
     handleUpload (contractId) {                       
-       this.contractFiles = []
+        this.contractFiles = []
         this.uploadTitle = '上传纸质合同'     
         this.paperVisible = true
         this.nowContractId  = contractId
         setTimeout(() => {
-               getImages(contractId,'contract').then(res => {
+        getImages(contractId,'contract').then(res => {
             if(res.data.data.length >0){
                   let  images  = res.data.data
                   for(let t=0; t<images.length; t++){
-                         this.contractFiles.push({name: 'image' + images[t].id, url: images[t].image})
+                  this.contractFiles.push({name: 'image' + images[t].id, url: images[t].image})
                   }
               // this.imgVisible = true
             }
@@ -968,7 +967,7 @@ export default {
     handleCall (contractId) {                    
       //审核不通过    
       let staus = 2
-       this.$confirm('此操作将撤销该合同, 是否继续?', '提示', {
+        this.$confirm('此操作将撤销该合同, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
@@ -986,17 +985,19 @@ export default {
       }) 
     },
     //图片预览
-   handlePictureCardPreview (file) {
+  handlePictureCardPreview (file) {
         this.dialogImageUrl = file.url
         this.imgVisible = true
       },
     //上传成功
     async uploadSuccess (res,file,fileList ) {          
-         await  this.fileChange(fileList)
-           this.getContractList()
+        await  this.fileChange(fileList)
+        this.getContractList()
       },
       //设置photo   
-   fileChange (fileList,type) {              
+  fileChange (fileList,type) { 
+    console.log(fileList) 
+    console.log(type)            
     //  console.log(fileList)
         let temp_str = ''
         if(fileList.length > 0){
@@ -1012,21 +1013,40 @@ export default {
               }
             }else{
                 if(i ===0)
-                     temp_str += fileList[i].url
+                  temp_str += fileList[i].url
                 else
                   temp_str += ',' + fileList[i].url
             }
           }
-        this.addPhoto = temp_str    
+        this.addPhoto = temp_str
+        // if(type === 'del'){
+        //   this.$confirm('测试111, 是否继续?', '提示', {
+        //     confirmButtonText: '确定',
+        //     cancelButtonText: '取消',
+        //     type: 'warning',
+        //   }).then(() =>{
+        //     uploadImages(this.nowContractId,this.addPhoto).then(res => {
+        //       if(res.data.data){
+        //         this.$message.success('删除成功!')
+        //       }
+        //     })
+        //   })
+        // }else{
+        //   uploadImages(this.nowContractId,this.addPhoto).then(res => {
+        //       if(res.data.data){
+        //         this.$message.success('上传成功!')
+        //       }
+        //   })
+        // }
         uploadImages(this.nowContractId,this.addPhoto).then(res => {
               if(res.data.data){
                   if(type === 'del')
                       this.$message.success('删除成功!')
                   else
-                     this.$message.success('上传成功!')
+                    this.$message.success('上传成功!')
               }
         })
-   }else{   
+  }else{   
         uploadImages(this.nowContractId,'').then(res => {   
               if(res.data.data){
                       this.$message.success('删除成功!')
@@ -1035,9 +1055,19 @@ export default {
     }
     },
       //删除照片    
-async    handlePaperRemove (file,fileList) {    
-     await   this.fileChange(fileList,'del')
-         this.getContractList()
+    async handlePaperRemove (file,fileList) {
+      await this.fileChange(fileList,'del')
+      this.getContractList()
+      // async  
+      // await  this.fileChange(fileList,'del')
+      //     this.getContractList()
+    },
+    beforeRemove () {
+      return this.$confirm('确定移除该纸质合同图片吗？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+      })
     },
 
   },

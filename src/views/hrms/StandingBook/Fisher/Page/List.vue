@@ -5,6 +5,7 @@
       <operation-container>
         <template slot="left">
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+          <iep-button @click="handleFresh" type="primary" >刷新</iep-button>
         </template>
         <template slot="right">
           <!-- <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -251,6 +252,9 @@ export default {
     ...mapGetters(['userInfo', 'roles']),
   },
   methods: {
+    handleFresh () {
+      this.getData()
+    },
     savearea () {
       changeOrgIds(this.areaShipId,this.areachooseOrg).then(res=>{
         console.log('变更')

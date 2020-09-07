@@ -3,7 +3,8 @@
     <basic-container>
       <div class="shipowner_title">
         <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner" v-if="manager">新增</el-button>                                    
-        <el-button v-if="manager"  type="primary" size="small" icon="el-icon-edit" @click="exportInfo">导出信息</el-button>             
+        <el-button v-if="manager"  type="primary" size="small" icon="el-icon-edit" @click="exportInfo">导出信息</el-button> 
+        <el-button @click="handleFresh" type="primary" size="small">刷新</el-button>            
         <div style="float:right">                             
           <span style="width:120px"><el-input v-model="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
           <span style="width:120px"><el-input v-model="params.idcard" placeholder="身份证" size="small" clearable></el-input></span>
@@ -248,6 +249,12 @@ export default {
     }
   },
   methods: {
+    handleFresh () {
+      this.getData()
+      this.isManager()
+      this.getProvince()
+      this.isAdminPath()
+    },
     //省
     provincesName (item, scope) {
       if(scope.row[item.value]){
@@ -419,8 +426,6 @@ export default {
     ]),
   },
   created () {
-    console.log('打印session')
-    console.log(sessionStorage.getItem('query'))
     if (sessionStorage.getItem('query')) {
       var query = sessionStorage.getItem('query')
       this.params = JSON.parse(query)

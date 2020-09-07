@@ -143,8 +143,8 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="身份证号：" prop="employeeIdcard">
-                    <!-- <el-input maxlength="20" v-model="formData.employeeIdcard"></el-input> -->
-                    <el-select v-model="formData.employeeIdcard"
+                    <el-input maxlength="18" v-model="formData.employeeIdcard" style="width:380px" @blur="getEmployee"></el-input>
+                    <!-- <el-select v-model="formData.employeeIdcard"
                               placeholder="请选择"
                               filterable
                               remote
@@ -156,7 +156,7 @@
                               @keyup.native='selectMax'
                               :remote-method="getidcardList" style="width:380px!important" type='number' ref='searchSelect'>
                       <el-option v-for="item in idcards" :key="item.id" :label="item.idcard" :value="item"></el-option>
-                    </el-select>
+                    </el-select> -->
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -499,9 +499,11 @@
 <script>
 import debounce from 'lodash/debounce'
 import store from '@/store'
-import { findorgShip} from '@/api/ships/index'
+import { 
+  //findorgShip,
+  getShipNames} from '@/api/ships/index'
 // import { findMyship } from '@/api/ships/index'
-import { getUserInfo } from '@/api/login'
+// import { getUserInfo } from '@/api/login'
 import { getOperatorList } from '@/api/ships/shipoperat/index'
 import { detailCrew } from '@/api/tmlms/boatMan/index'
 // import { getShipownerByidcard } from '@/api/tmlms/shipowner/index'
@@ -557,7 +559,7 @@ export default {
         workProbationType: 1,
         workDateStart: '',
         workDateEnd: '',
-        paySalaryType: 1,
+        paySalaryType: 2,
         paySalaryTypeValue: '',
         payType: 3,
         payTypeValue: '',
@@ -786,6 +788,38 @@ export default {
     //     return  false
     // }
     // },
+    getEmployee () {
+      if(this.formData.employeeIdcard.length==18) {
+        isCheckIdcard(this.formData.employeeIdcard).then(res => {
+        if (res.data.data === false) {
+          this.$message.error('该船员已签订合同!')
+          this.checkEmployeeIdcard = true
+          this.formData.employeeIdcard = ''
+          this.idcards = []
+        } else {
+          if (this.formData.employeeIdcard !== '') {
+            detailCrew(this.formData.employeeIdcard).then(({data}) => {
+              let employee = data.data
+              if(employee.positionId!=='0'){
+                this.formData.employeePosition = employee.positionId
+              }else{
+                this.formData.employeePosition = ''
+              }
+              this.formData.employeeName = employee.realName
+              this.formData.employeePhone = employee.phone
+              this.formData.employeeAddr = employee.address
+              this.formData.contactName = employee.contactName
+              this.formData.contactPhone = employee.contactPhone
+              this.employee = true
+            })
+          }
+          this.checkEmployeeIdcard = false
+        }  
+      })
+      }else{
+        this.$message.error('请输入乙方18位身份证!')
+      } 
+    },
     selectMax () {
       let input = this.$refs.searchSelect.$children[0].$refs.input
       input.setAttribute('maxlength',18)
@@ -892,23 +926,46 @@ export default {
     },
     getShipNameList (shipName) {
       this.loading = true
-      getUserInfo().then(res =>{
-        this.orgId = res.data.data.sysUser.orgId
-        // console.log(orgId)
-      }).then(()=>{
-        if (shipName !== '') {
-        findorgShip(this.orgId,shipName).then(({data})=>{
-          // console.log(data.data)
-          if(data.data!==false){
-            this.shipNames.push(data.data)
+      if (shipName !== '' && shipName.length==5) {
+          getShipNames(shipName).then(({data})=>{
+          console.log('获取渔船信息')
+          console.log(data.data)
+          if(data.data.length){
+            data.data.forEach(v => {
+              this.shipNames.push(v)
+            })
           }else{
             this.$message.error(data.msg)
           }
-        })
+          // console.log(data.data)
+          // if(data.data!==false){
+          //   this.shipNames.push(data.data.shipName)
+          // }else{
+          //   this.$message.error(data.msg)
+          // }
+          })
+        
       } else {
+        this.$message.error('请输入5位数字船名号')
         this.shipNames = []
       }
-      })
+      // getUserInfo().then(res =>{
+      //   this.orgId = res.data.data.sysUser.orgId
+      //   // console.log(orgId)
+      // }).then(()=>{
+      //   if (shipName !== '') {
+      //   findorgShip(this.orgId,shipName).then(({data})=>{
+      //     // console.log(data.data)
+      //     if(data.data!==false){
+      //       this.shipNames.push(data.data)
+      //     }else{
+      //       this.$message.error(data.msg)
+      //     }
+      //   })
+      // } else {
+      //   this.shipNames = []
+      // }
+      // })
       this.loading = false
     },
     employerPropChange (val) {
