@@ -679,7 +679,7 @@ export default {
           var data = eval('('+result1+')')
           isCheckIdcard(data.cardno).then(res => {
             if (res.data.data === false) {
-              this.$message.error('该船员已签订合同!')
+              this.$message.error(res.data.msg)
               this.checkEmployeeIdcard = true
               // this.formData.employeeIdcard = ''
               // this.idcards = []
@@ -791,8 +791,9 @@ export default {
     getEmployee () {
       if(this.formData.employeeIdcard.length==18) {
         isCheckIdcard(this.formData.employeeIdcard).then(res => {
+        // console.log(res.data. msg)
         if (res.data.data === false) {
-          this.$message.error('该船员已签订合同!')
+          this.$message.error(res.data.msg)
           this.checkEmployeeIdcard = true
           this.formData.employeeIdcard = ''
           this.idcards = []
@@ -843,8 +844,6 @@ export default {
         if(data.data.data.employeePosition === '0'){       
           this.formData.employeePosition=''
         }
-        // console.log('this.formData')
-        // console.log(this.formData)
         // if (this.formData.workDateStart && this.formData.workDateEnd) {
         //   this.period.push(this.formData.workDateStart)
         //   this.period.push(this.formData.workDateEnd)
@@ -907,12 +906,15 @@ export default {
     },
     refreshShipName (name) {
       if (name !== null) {
-        let {shipowner = '', shipownerIdcard = '', licensesOwnerShip = '', mobile = '', address = '' } = name
+        let {shipowner = '', shipownerIdcard = '', licensesOwnerShip = '', mobile = '', address = '',shipJointYes = ''} = name
         this.formData.shipownerName = shipowner
         this.formData.shipownerIdcard = shipownerIdcard
         this.formData.shipLicenses = licensesOwnerShip
         this.formData.shipownerPhone = mobile
         this.formData.shipownerAddr = address
+        // if(this.formData.shipJoint==1){
+          this.formData.shipholder = shipJointYes
+        // }
         this.shipowner = true
       } else {
         this.formData.shipName = ''
@@ -974,8 +976,15 @@ export default {
         this.formData.employerIdcard = this.formData.shipownerIdcard
         this.formData.employerPhone = this.formData.shipownerPhone
         this.formData.employerAddr = this.formData.shipownerAddr
+        console.log(this.formData.shipholder)
+        if(this.formData.shipholder){
+          this.formData.shipJoint = 1
+          this.formData.shipJointYes = this.formData.shipholder+1
+          
+        }
         this.employer =true
       } else if (val === 2) {
+        this.formData.shipJointYes = ''
         this.formData.employerName = ''
         this.formData.employerIdcard = ''
         this.formData.employerPhone = ''
@@ -992,6 +1001,7 @@ export default {
         })
         this.employer =false
       } else if (val === 3) {
+          this.formData.shipJointYes = ''
           this.formData.employerName = ''
           this.formData.employerIdcard = ''
           this.formData.employerPhone = ''
