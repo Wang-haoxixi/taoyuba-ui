@@ -453,11 +453,13 @@ export default {
     },
     getCrewNameList (idcard){
       this.loading = true
+      this.crewNames = []
       if(idcard.length==18) {
         detailCrew(idcard).then(res=>{
           if(res.data.data){
             this.crewNames.push(res.data.data)
           }else{
+            this.crewNames = []
             this.$message.error(res.data.msg)
           }
         })
