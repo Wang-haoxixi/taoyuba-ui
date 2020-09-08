@@ -81,14 +81,15 @@
           <el-col :span="12">
               <el-form-item label="股东检索：" prop="crewName">
                 <el-select v-model="crewName"
-                          placeholder="请输入股东姓名查询"
+                          placeholder="请输入股东身份证号"
                           filterable
                           remote
                           maxlength="20"
                           :loading="loading"
                           clearable
                           @change="crewNameChange"
-                          :remote-method="getCrewNameList" style="width:380px!important">
+                          @keyup.native='selectMax'
+                          :remote-method="getCrewNameList" style="width:380px!important" ref='searchSelect'>
                   <el-option v-for="item in crewNames" :key="item.index" :label="item.realName+' '+item.idcard" :value="item"></el-option>
                 </el-select>
               </el-form-item>
@@ -329,7 +330,9 @@ import { getArea,
 // getAllArea, 
 // getAllAreaName 
 } from '@/api/post/address'
-import { getCrewByName } from '@/api/tmlms/boatMan/index'
+import { 
+  //getCrewByName,
+  detailCrew } from '@/api/tmlms/boatMan/index'
 import { addShareholder,updateShareholder,getHoldersByShip } from '@/api/tmlms/shipshareholder/index'
 export default {
   data () {
@@ -433,6 +436,10 @@ export default {
   mounted () {                    
   },
   methods: {
+    selectMax () {
+      let input = this.$refs.searchSelect.$children[0].$refs.input
+      input.setAttribute('maxlength',18)
+    },
     cheackNo () {
       if(this.form.shipNo){
         getShipByShipNo(this.form.shipNo).then(res=>{
@@ -444,25 +451,36 @@ export default {
         })
       }
     },
-    getCrewNameList (crewName){
+    getCrewNameList (idcard){
       this.loading = true
-      if (crewName !== ''&& crewName.length>1) {
-        getCrewByName(crewName).then(res=>{
-        if(res.data.data){
-          this.crewNames=res.data.data
-        }else{
-          this.$message.error(res.data.msg)
-        }
-      })
-      } else {
+      if(idcard.length==18) {
+        detailCrew(idcard).then(res=>{
+          if(res.data.data){
+            this.crewNames.push(res.data.data)
+          }else{
+            this.$message.error(res.data.msg)
+          }
+        })
+      }else{
         this.crewNames = []
       }
+      // if (idcard !== ''&& idcard.length>1) {
+      //   detailCrew(idcard).then(res=>{
+      //   if(res.data.data){
+      //     this.crewNames=res.data.data
+      //   }else{
+      //     this.$message.error(res.data.msg)
+      //   }
+      // })
+      // } else {
+      //   this.crewNames = []
+      // }
       this.loading = false
     },
     crewNameChange (obj) {
       let flag= false
       if(obj){
-        this.crewName = obj.realName
+        this.crewName = obj.idcard
         if(this.partnerList.length){
           this.partnerList.forEach(item=>{
           if(obj.idcard==item.idcard){

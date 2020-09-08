@@ -906,15 +906,16 @@ export default {
     },
     refreshShipName (name) {
       if (name !== null) {
-        let {shipowner = '', shipownerIdcard = '', licensesOwnerShip = '', mobile = '', address = '',shipJointYes = ''} = name
+        let {shipowner = '', shipownerIdcard = '', licensesOwnerShip = '', mobile = '', address = '',shipJointYes = '',shipShare = ''} = name
         this.formData.shipownerName = shipowner
         this.formData.shipownerIdcard = shipownerIdcard
         this.formData.shipLicenses = licensesOwnerShip
         this.formData.shipownerPhone = mobile
         this.formData.shipownerAddr = address
-        // if(this.formData.shipJoint==1){
-          this.formData.shipholder = shipJointYes
-        // }
+        if(shipShare==1){
+          this.formData.shipJoint = 1
+          this.formData.shipJointYes = shipJointYes+1
+        }
         this.shipowner = true
       } else {
         this.formData.shipName = ''
@@ -977,14 +978,11 @@ export default {
         this.formData.employerPhone = this.formData.shipownerPhone
         this.formData.employerAddr = this.formData.shipownerAddr
         console.log(this.formData.shipholder)
-        if(this.formData.shipholder){
+        if(this.formData.shipJointYes){
           this.formData.shipJoint = 1
-          this.formData.shipJointYes = this.formData.shipholder+1
-          
         }
         this.employer =true
       } else if (val === 2) {
-        this.formData.shipJointYes = ''
         this.formData.employerName = ''
         this.formData.employerIdcard = ''
         this.formData.employerPhone = ''
@@ -1001,7 +999,6 @@ export default {
         })
         this.employer =false
       } else if (val === 3) {
-          this.formData.shipJointYes = ''
           this.formData.employerName = ''
           this.formData.employerIdcard = ''
           this.formData.employerPhone = ''
