@@ -56,7 +56,7 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="家庭地址：" prop="shipownerAddr">
-                    <el-input maxlength="20" v-model="formData.shipownerAddr" style="width:380px"></el-input>
+                    <el-input maxlength="100" v-model="formData.shipownerAddr" style="width:380px"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
