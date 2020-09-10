@@ -87,7 +87,7 @@
               </el-button>
               <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.idcard)"  v-if="manager">编辑
               </el-button>
-              <el-button v-if="manager" type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.idcard)">删除
+              <el-button v-if="onlyManager" type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.idcard)" >删除
               </el-button>
             </template>
           </el-table-column>
@@ -244,6 +244,7 @@ export default {
         },
       ],
       manager: false,
+      onlyManager:false,
       showSwith:false,
       userData: {roles: []},
     }
@@ -401,6 +402,9 @@ export default {
       })
       if(this.userData.roles.indexOf(111) !== -1 || this.userData.roles.indexOf(1) !== -1 || this.userData.roles.indexOf(112) !== -1) { 
         this.manager = true
+      }
+      if(this.userData.roles.indexOf(111) !== -1 || this.userData.roles.indexOf(1) !== -1){
+        this.onlyManager = true
       }
     },
     isAdminPath () {

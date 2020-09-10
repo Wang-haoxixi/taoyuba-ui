@@ -241,26 +241,50 @@
                   <el-col :span="12">
                     <el-form-item  label="身份证正面照片：" prop="photoFront">
                       <el-upload
-                        class="avatar-uploader"
                         action="/api/admin/file/upload/avatar"
-                        :show-file-list="false"
+                        :class="{disabled:hideUpload}"
+                        list-type="picture-card"
+                        :headers="headers"
+                        :on-change="uploadChangeFront"
+                        :before-remove="beforeCardfrontRemove"
                         :on-success="handleAvatarSuccessFront" 
-                        :headers="headers"  accept="image/*">
-                        <img v-if="form.photoFront" :src="form.photoFront" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                        :file-list="frontList"
+                        :on-preview="previewFront"
+                        :on-remove="handleAvatarDelFront">
+                        <i class="el-icon-plus"></i>
                       </el-upload>
+                      <el-dialog :visible.sync="imgVisible" append-to-body>
+                        <img width="100%" :src="dialogImageUrl" alt="">
+                      </el-dialog>
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
                     <el-form-item  label="身份证反面照片：" prop="photoReverse">
                       <el-upload
+                        action="/api/admin/file/upload/avatar"
+                        :class="{disabled:hideUploadReverse}"
+                        list-type="picture-card"
+                        :headers="headers"
+                        :on-change="uploadChangeReverse"
+                        :before-remove="beforeCardreverseRemove"
+                        :on-success="handleAvatarSuccessReverse" 
+                        :file-list="reverseList"
+                        :on-preview="previewReverse"
+                        :on-remove="handleAvatarDelReverse">
+                        <i class="el-icon-plus"></i>
+                      </el-upload>
+                      <el-dialog :visible.sync="imgVisibleReverse" append-to-body>
+                        <img width="100%" :src="dialogImageUrlReverse" alt="">
+                      </el-dialog>
+                      
+                      <!-- <el-upload
                         class="avatar-uploader"
                         action="/api/admin/file/upload/avatar"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccessReverse" :headers="headers"  accept="image/*">
                         <img v-if="form.photoReverse" :src="form.photoReverse" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                      </el-upload>
+                      </el-upload> -->
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -280,15 +304,23 @@
                 </el-row>      
                 <el-row>                                  
                   <el-col :span="12">   
-                    <el-form-item  label="证件照：" prop="certPhoto">   
+                    <el-form-item  label="证件照：" prop="certPhoto">
                       <el-upload
-                        class="avatar-uploader"
                         action="/api/admin/file/upload/avatar"
-                        :show-file-list="false"           
-                        :on-success="handleAvatarSuccessCert" :headers="headers"  accept="image/*">
-                        <img v-if="form.certPhoto" :src="form.certPhoto" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                        :class="{disabled:hideUploadCert}"
+                        list-type="picture-card"
+                        :headers="headers"
+                        :on-change="uploadChangeCert"
+                        :before-remove="beforeCertRemove"
+                        :on-success="handleAvatarSuccessCert" 
+                        :file-list="CertList"
+                        :on-preview="previewCert"
+                        :on-remove="handleAvatarDelCert">
+                        <i class="el-icon-plus"></i>
                       </el-upload>
+                      <el-dialog :visible.sync="imgVisibleCert" append-to-body>
+                        <img width="100%" :src="dialogImageUrlCert" alt="">
+                      </el-dialog>
                     </el-form-item>
                   </el-col>
                 </el-row>      
@@ -401,6 +433,18 @@ export default {
       }
     return {        
       certificateColumns,
+      imgVisible:false,
+      dialogImageUrl:'',
+      imgVisibleReverse:false,
+      dialogImageUrlReverse:'',
+      imgVisibleCert:false,
+      dialogImageUrlCert:'',
+      frontList:[],
+      reverseList:[],
+      hideUpload: false,
+      hideUploadReverse:false,
+      hideUploadCert:false,
+      limitCount:1,  
       form: {
           address: '',
           idcard: '',
@@ -696,15 +740,75 @@ export default {
         this.$message.error(err.message)
       })    
     },
-    handleAvatarSuccessFront (response) {
-      this.form.photoFront = response.data.url
+    //身份证正面
+    handleAvatarSuccessFront (file,fileList) {
+      console.log(file.data.url)
+      console.log(fileList)
+      this.form.photoFront = file.data.url
     },
-    handleAvatarSuccessReverse (response) {   
-      this.form.photoReverse = response.data.url
+    handleAvatarDelFront (file,fileList) {
+      this.form.photoFront = ''
+      this.hideUpload = fileList.length >= this.limitCount
     },
-    handleAvatarSuccessCert (response) {
-        this.form.certPhoto = response.data.url
-        // console.log(this.form.certPhoto)
+    beforeCardfrontRemove () {
+      return this.$confirm('确定删除身份证正面照片吗？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+      })
+    },
+    uploadChangeFront (file,fileList) {
+      this.hideUpload = fileList.length >= this.limitCount
+    },
+    previewFront (url) {
+        this.dialogImageUrl = url.response.data.url
+        this.imgVisible = true
+    },
+    //身份证反面
+    handleAvatarSuccessReverse (file,fileList) {
+      console.log(fileList)
+      this.form.photoReverse = file.data.url
+    },
+    handleAvatarDelReverse (file,fileList) {
+      this.form.photoReverse = ''
+      this.hideUploadReverse = fileList.length >= this.limitCount
+    },
+    beforeCardreverseRemove () {
+      return this.$confirm('确定删除身份证反面照片吗？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+      })
+    },
+    uploadChangeReverse (file,fileList) {
+      this.hideUploadReverse = fileList.length >= this.limitCount
+    },
+    previewReverse (url) {
+        this.dialogImageUrlReverse = url.response.data.url
+        this.imgVisibleReverse = true
+    },
+    //证件照
+    handleAvatarSuccessCert (file,fileList) {
+      console.log(fileList)
+      this.form.certPhoto = file.data.url
+    },
+    handleAvatarDelCert (file,fileList) {
+      this.form.certPhoto = ''
+      this.hideUploadCert = fileList.length >= this.limitCount
+    },
+    beforeCertRemove () {
+      return this.$confirm('确定删除证件照片吗？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+      })
+    },
+    uploadChangeCert (file,fileList) {
+      this.hideUploadCert = fileList.length >= this.limitCount
+    },
+    previewCert (url) {
+        this.dialogImageUrlCert = url.response.data.url
+        this.imgVisibleCert = true
     },
     async getIdcardFile () {
       let idcardFile = this.dataURLtoFile(this.form.idcardPhoto)
@@ -1019,6 +1123,10 @@ export default {
    }
   },
   computed: {
+    uploadDisabled:function () {
+      console.log(this.imagelist.length)
+        return this.imagelist.length >0
+    },
     type () {
       if (this.$route.query.see) {
         return 1
@@ -1070,10 +1178,30 @@ export default {
     height: 178px;
     display: block;
   }
+  .pic-edit {
+    width: 356px;
+    height: 178px;
+    background:#333;
+    position:absolute;
+    top:0px;
+    border-radius: 6px;
+    opacity:0.5;
+    text-align:center;
+    line-height:178px;
+    i{
+      color:#fff;
+      padding:0px 10px;
+      cursor:pointer;
+      font-size:20px;
+    }
+  }
   .certAvatar {
     width: 80px;
     height: 30px;
     display: block;
   }
+}
+.disabled .el-upload--picture-card {
+    display: none;
 }
 </style>

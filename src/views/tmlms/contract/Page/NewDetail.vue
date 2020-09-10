@@ -391,7 +391,7 @@
             <div class="tex">其他约定</div>
           </el-aside>
           <el-container>
-            <el-header class="head"></el-header>
+            <!-- <el-header class="head"></el-header> -->
             <el-main class="mai">
               <el-row>
                 <el-col>
@@ -399,6 +399,11 @@
                 </el-col>
                 <el-col>
                   <el-input type="textarea" placeholder="请输入内容" v-model="formData.otherContent" show-word-limit style="width:720px;margin:10px 0 0 40px"></el-input>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col>
+                  <el-checkbox v-model="checked" class="con-checkbox">确认在岗，无纸质合同</el-checkbox>
                 </el-col>
               </el-row>
             </el-main>
@@ -571,7 +576,9 @@ export default {
         contractImages: [],
         contactName:'',
         contactPhone:'',
+        status:'',
       },
+      checked:false,
       period: [],
       orgId:'',
       licensesImage: '',
@@ -1114,7 +1121,10 @@ export default {
       // if (this.period) {
       //   this.formData.workDateStart = this.period[0]
       //   this.formData.workDateEnd = this.period[1]       
-      // }  
+      // }
+      if(this.checked) {
+        this.formData.status = 6
+      }
       this.formData.shipJointNo = this.formData.shipownerName
       if (this.formData.shipName.shipName) {
         this.formData.shipName = this.formData.shipName.shipName
@@ -1242,5 +1252,9 @@ export default {
   .tex {
     font-size: 16px;
     text-align: center;
+  }
+  .con-checkbox {
+    margin-left:40px;
+    margin-top:20px;
   }
 </style>
