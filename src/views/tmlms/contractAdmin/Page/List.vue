@@ -86,21 +86,21 @@
             </iep-button>
             <iep-button v-if="mlms_contract_rem && (scope.row.status === '合同解除' || scope.row.status === '合同纠纷')" type="text" icon="el-icon-edit" size="mini" @click="handleRemove(scope.row.contractId)">解除记录
             </iep-button>
-            <el-button v-if="mlms_contract_pri && scope.row.status === '合同成立'" type="text" icon="el-icon-delete" size="mini" @click="handlePrint(scope.row.contractId)">打印
+            <el-button v-if="mlms_contract_pri && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')" type="text" icon="el-icon-delete" size="mini" @click="handlePrint(scope.row.contractId)">打印
             </el-button>
-            <el-button v-if="mlms_contract_rel && scope.row.status === '合同成立'" type="text" icon="el-icon-edit" size="mini" @click="handleRelieve(scope.row.contractId)">解除
+            <el-button v-if="mlms_contract_rel && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')" type="text" icon="el-icon-edit" size="mini" @click="handleRelieve(scope.row.contractId)">解除
             </el-button>
-            <el-button v-if="mlms_relieve_rel && (scope.row.status === '合同成立' || scope.row.status === '合同纠纷')" type="text" icon="el-icon-edit" size="mini" @click="goTo(scope.row.contractId)">申请解除
+            <el-button v-if="mlms_relieve_rel && (scope.row.status === '合同成立' || scope.row.status === '未签纸质合同' || scope.row.status === '合同纠纷')" type="text" icon="el-icon-edit" size="mini" @click="goTo(scope.row.contractId)">申请解除
             </el-button>
             <el-button v-if="mlms_contract_com && scope.row.status === '合同纠纷'" type="text" icon="el-icon-edit" size="mini" @click="go(scope.row.contractId)">投诉管理
             </el-button>
             <el-button v-if="mlms_contract_eva && scope.row.status === '合同解除' && scope.row.isRate === 0 && scope.row.isDate === 0" type="text" icon="el-icon-edit" size="mini" @click="handleEvaluate(scope.row.contractId)">评价
             </el-button>
-             <el-button v-if="mlms_contract_recall && scope.row.status === '合同成立' " type="text" icon="el-icon-edit" size="mini" @click="handleCall(scope.row.contractId)">撤销
+             <el-button v-if="mlms_contract_recall && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同') " type="text" icon="el-icon-edit" size="mini" @click="handleCall(scope.row.contractId)">撤销
             </el-button>    
-             <el-button v-if="mlms_contract_upload && scope.row.status === '合同成立'  && scope.row.contractImage !== '1' " type="text" icon="el-icon-edit" size="mini" @click="handleUpload(scope.row.contractId)">上传纸质合同
+             <el-button v-if="mlms_contract_upload && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')  && scope.row.contractImage !== '1' " type="text" icon="el-icon-edit" size="mini" @click="handleUpload(scope.row.contractId)">上传纸质合同
             </el-button> 
-              <el-button v-if="mlms_contract_upload && scope.row.status === '合同成立'  && scope.row.contractImage === '1' " type="text" icon="el-icon-edit" size="mini" @click="handleUpload(scope.row.contractId)">查看纸质合同
+              <el-button v-if="mlms_contract_upload && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')  && scope.row.contractImage === '1' " type="text" icon="el-icon-edit" size="mini" @click="handleUpload(scope.row.contractId)">查看纸质合同
             </el-button> 
           </template>   
         </el-table-column>
@@ -320,6 +320,10 @@ export default {
         {
           lable: 5,
           value: '合同过期',
+        },
+        {
+          lable: 6,
+          value: '未签纸质合同',
         },
       ],
       contStatus: '',

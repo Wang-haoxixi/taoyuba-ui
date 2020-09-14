@@ -441,7 +441,7 @@ export default {
       input.setAttribute('maxlength',18)
     },
     cheackNo () {
-      if(this.form.shipNo){
+      if(this.form.shipNo.length==16) {
         getShipByShipNo(this.form.shipNo).then(res=>{
           if(res.data.data){
             this.form.shipNo = ''
@@ -449,6 +449,8 @@ export default {
             
           }
         })
+      }else{
+        this.$message.error('请输入16位渔船编号!')
       }
     },
     getCrewNameList (idcard){
@@ -670,37 +672,42 @@ export default {
             if(this.form.shipShare==1 && this.partnerList.length==0){
               this.$message.error('请至少添加一个股东信息')
             }else{
-              let parentShip
-            createShip(this.form).then(({data}) => {
-              parentShip = data.data.shipId
-              if (data.code === 0) {
-                this.$message.success('添加成功！')
+              if(this.form.shipNo.length==16){
+                  let parentShip
+                  createShip(this.form).then(({data}) => {
+                    parentShip = data.data.shipId
+                    if (data.code === 0) {
+                      this.$message.success('添加成功！')
+                    }
+                  }, (error) => {
+                    this.$message.error(error.message)
+                  }).then(()=>{
+                    if(this.form.shipShare==2){
+                      this.partnerList = []
+                    }
+                      if(this.partnerList && parentShip){
+                      this.partnerLis = this.partnerList.map(item=>{
+                      item.shipId = parentShip
+                      })
+                      addShareholder(this.partnerList).then(res=>{
+                      if(!res.data.data){
+                        this.$message.error('股东信息添加失败')
+                      }
+                      })
+                    }
+                    this.onGoBack()
+                  })
+              }else{
+                this.$message.error('请输入16位渔船编号！')
               }
-            }, (error) => {
-              this.$message.error(error.message)
-            }).then(()=>{
-              if(this.form.shipShare==2){
-                this.partnerList = []
-              }
-                if(this.partnerList && parentShip){
-                this.partnerLis = this.partnerList.map(item=>{
-                item.shipId = parentShip
-                })
-                addShareholder(this.partnerList).then(res=>{
-                if(!res.data.data){
-                  this.$message.error('股东信息添加失败')
-                }
-                })
-              }
-              this.onGoBack()
-            })
             }
             
           } else if (this.$route.query.edit) {
             if(this.form.shipShare==1 && this.partnerList.length==0){
               this.$message.error('请至少添加一个股东信息')
             }else{
-            updateShip(this.form).then(({data}) => {
+              if(this.form.shipNo.length==16){
+                updateShip(this.form).then(({data}) => {
               if (data.code === 0) {
                 this.$message.success('修改成功！')
                 this.onGoBack()
@@ -725,6 +732,10 @@ export default {
                 }
               })
             })
+              }else{
+                this.$message.error('请输入16位渔船编号！')
+              }
+            
           }
         }
       }

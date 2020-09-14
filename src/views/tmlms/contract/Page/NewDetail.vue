@@ -184,13 +184,13 @@
                       <!-- <div style="font-size:10px">紧急联系人：{{formData.employeeName}}</div>
                       <div style="font-size:10px">联系电话：{{formData.employeePhone}}</div> -->
                       <el-col>
-                        <el-form-item label="紧急联系人：" prop="contactName">
-                          <el-input maxlength="20" v-model="formData.contactName" style="width:150px" size="mini"></el-input>
+                        <el-form-item label="紧急联系人：" prop="employeeLinkMan">
+                          <el-input maxlength="20" v-model="formData.employeeLinkMan" style="width:150px" size="mini"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col>
-                        <el-form-item label="联系电话：" prop="contactPhone">
-                          <el-input maxlength="11" v-model="formData.contactPhone" style="width:150px" size="mini"></el-input>
+                        <el-form-item label="联系电话：" prop="employeeLinkPhone">
+                          <el-input maxlength="11" v-model="formData.employeeLinkPhone" style="width:150px" size="mini"></el-input>
                         </el-form-item>
                       </el-col>
                     </div>
@@ -391,7 +391,7 @@
             <div class="tex">其他约定</div>
           </el-aside>
           <el-container>
-            <!-- <el-header class="head"></el-header> -->
+            <el-header class="head headno"></el-header>
             <el-main class="mai">
               <el-row>
                 <el-col>
@@ -574,7 +574,7 @@ export default {
         licensesOwnerShipImage: '',
         contractImage:'',
         contractImages: [],
-        contactName:'',
+        // contactName:'',
         contactPhone:'',
         status:'',
       },
@@ -865,12 +865,12 @@ export default {
         } else {
           this.isContract = false
         }
-        if (this.formData.employeeLinkMan) {
-          this.formData.contactName = this.formData.employeeLinkMan
-        }
-        if (this.formData.employeeLinkPhone) {
-          this.formData.contactPhone= this.formData.employeeLinkPhone
-        }
+        // if (this.formData.employeeLinkMan) {
+        //   this.formData.contactName = this.formData.employeeLinkMan
+        // }
+        // if (this.formData.employeeLinkPhone) {
+        //   this.formData.contactPhone= this.formData.employeeLinkPhone
+        // }
       })
     },
     getListByidcard () {
@@ -1138,12 +1138,12 @@ export default {
       if (this.licensesImage) {
         this.formData.licensesOwnerShipImage = this.licensesImage
       }
-      if (this.formData.contactName) {
-        this.formData.employeeLinkMan = this.formData.contactName
-      }
-      if (this.formData.contactPhone) {
-        this.formData.employeeLinkPhone = this.formData.contactPhone
-      }
+      // if (this.formData.contactName) {
+      //   this.formData.employeeLinkMan = this.formData.contactName
+      // }
+      // if (this.formData.contactPhone) {
+      //   this.formData.employeeLinkPhone = this.formData.contactPhone
+      // }
       if(this.formData.payType==1){
         this.formData.payTypeValue = this.payValueLong
       }else if(this.formData.payType==2){
@@ -1246,6 +1246,9 @@ export default {
   .head {
     height: 30px!important;
   }
+  .headno {
+    height: 0px!important;
+  }
   .mai {
     flex-basis: 0!important;
   }
@@ -1254,7 +1257,6 @@ export default {
     text-align: center;
   }
   .con-checkbox {
-    margin-left:40px;
-    margin-top:20px;
+    margin:20px 0px 40px 40px;
   }
 </style>

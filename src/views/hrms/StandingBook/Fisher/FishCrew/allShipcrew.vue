@@ -165,9 +165,15 @@ export default {
       this.$router.push({path: `/hrms_spa/ship_allcrew_add/${this.$route.params.shipId}`,query:{shipName:this.$route.query.shipName}}) 
       // this.$router.push({path: `/hrms_spa/shipCrew_Detial/${val}`, query:{ add: val }}) 
     },
-    handleSign (val){
-      this.$router.push({path: '/tmlms_spa/contract_add',query:{see:'see',idcard:val}}) 
-      console.log(val)
+    async handleSign (idcard){
+      let urlHeade = window.location.href.split('/')[0,2]
+      let  dataMap  = '%7B%7D'
+      let contractId = await getContractByidcard(idcard).then(res=>{
+        return res.data.data.contractId
+      })
+      this.$openPage(`//${urlHeade}/api/tmlms/downLoad/intoContractHtml?contractId=${contractId}&dataMap=${dataMap}`,'url')
+      // this.$router.push({path: '/tmlms_spa/contract_add',query:{see:'see',idcard:val}}) 
+      // console.log(val)
       // this.$emit('on-add')
     },
     handleEdit (val) {

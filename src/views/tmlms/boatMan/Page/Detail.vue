@@ -441,6 +441,7 @@ export default {
       dialogImageUrlCert:'',
       frontList:[],
       reverseList:[],
+      CertList:[],
       hideUpload: false,
       hideUploadReverse:false,
       hideUploadCert:false,
@@ -977,8 +978,25 @@ export default {
       let data = await detailCrew(this.$route.query.edit || this.$route.query.see || this.$route.query.idcard).then( res=>{
         return res.data.data
       })
-      // console.log('船员信息')
-      // console.log(data)
+      console.log('船员信息')
+      console.log(data.photoFront)
+      if(data.photoFront){
+      this.frontList.push({name: 'photoFront' + data.id, url: data.photoFront})
+      this.hideUpload = this.frontList.length >= this.limitCount
+      }
+      if(data.photoReverse){
+      this.reverseList.push({name: 'photoReverse' + data.id, url: data.photoReverse})
+      this.hideUploadReverse = this.reverseList.length >= this.limitCount
+      }
+      if(data.certPhoto){
+        this.CertList.push({name: 'certPhoto' + data.id, url: data.certPhoto})
+        this.hideUploadCert = this.CertList.length >= this.limitCount
+      }
+      
+      // this.frontList.push(JSON.parse(data.photoFront))
+      // this.reverseList.push(data.photoReverse)
+      // this.CertList.push(data.certPhoto)
+      // console.log(this.frontList)
       // // 拿到ID 同步获取地址和选中的地址
       let a = await this.choseProvince(data.provinceId)
       let b = await this.choseCity(data.cityId) 

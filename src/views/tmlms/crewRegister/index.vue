@@ -213,7 +213,7 @@ export default {
         this.crewregisterList = res.data.data.records
         this.crewregisterList.map(item => {
           if(item.status == 1){
-            item.status == '已签约'
+            item.status = '已签约'
           }
         })
       })
