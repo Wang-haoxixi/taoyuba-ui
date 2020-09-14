@@ -350,7 +350,7 @@
                       <el-radio :label="2">月薪</el-radio>
                       <el-radio :label="3">年薪</el-radio> 
                     </el-radio-group>
-                    <el-input maxlength="10" oninput="if(value.length>10)value=value.slice(0,10)" v-model="formData.paySalaryTypeValue" size="mini" type="number" style="width:100px; margin:10px"></el-input><span>元</span>
+                    <el-input maxlength="6" oninput="if(value.length>6)value=value.slice(0,6)" v-model="formData.paySalaryTypeValue" size="mini" type="number" style="width:100px; margin:10px"></el-input><span>元</span>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -1165,11 +1165,18 @@ export default {
                     //   this.$message.success('保存成功！')
                     // })
                     // this.$emit('onGoBack')
-                    addContract(this.formData), () => {    
-                      this.$message.error('新增失败!')
-                    }
-                    this.$message.success('保存成功！')
+                    addContract(this.formData).then(()=>{
+                      this.$message.success('保存成功！')
                       this.$emit('onGoBack')
+                    }).catch(err=>{
+                      console.log(err)
+                      this.$message.error('新增失败,请联系管理员!')
+                    })
+                    // addContract(this.formData), () => {    
+                    //   this.$message.error('新增失败!')
+                    // }
+                    // this.$message.success('保存成功！')
+                      
                   }).catch(() => {
                     this.$message({
                       type: 'info',
