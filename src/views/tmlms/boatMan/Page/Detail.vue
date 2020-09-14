@@ -743,8 +743,9 @@ export default {
     },
     //身份证正面
     handleAvatarSuccessFront (file,fileList) {
-      console.log(file.data.url)
       console.log(fileList)
+      console.log('frontList')
+      console.log(this.frontList)
       this.form.photoFront = file.data.url
     },
     handleAvatarDelFront (file,fileList) {
@@ -762,7 +763,7 @@ export default {
       this.hideUpload = fileList.length >= this.limitCount
     },
     previewFront (url) {
-        this.dialogImageUrl = url.response.data.url
+        this.dialogImageUrl = url.url
         this.imgVisible = true
     },
     //身份证反面
@@ -785,7 +786,7 @@ export default {
       this.hideUploadReverse = fileList.length >= this.limitCount
     },
     previewReverse (url) {
-        this.dialogImageUrlReverse = url.response.data.url
+        this.dialogImageUrlReverse = url.url
         this.imgVisibleReverse = true
     },
     //证件照
@@ -808,7 +809,7 @@ export default {
       this.hideUploadCert = fileList.length >= this.limitCount
     },
     previewCert (url) {
-        this.dialogImageUrlCert = url.response.data.url
+        this.dialogImageUrlCert = url.url
         this.imgVisibleCert = true
     },
     async getIdcardFile () {
@@ -981,15 +982,15 @@ export default {
       console.log('船员信息')
       console.log(data.photoFront)
       if(data.photoFront){
-      this.frontList.push({name: 'photoFront' + data.id, url: data.photoFront})
+      this.frontList.push({name: 'photoFront', url: data.photoFront})
       this.hideUpload = this.frontList.length >= this.limitCount
       }
       if(data.photoReverse){
-      this.reverseList.push({name: 'photoReverse' + data.id, url: data.photoReverse})
+      this.reverseList.push({name: 'photoReverse', url: data.photoReverse})
       this.hideUploadReverse = this.reverseList.length >= this.limitCount
       }
       if(data.certPhoto){
-        this.CertList.push({name: 'certPhoto' + data.id, url: data.certPhoto})
+        this.CertList.push({name: 'certPhoto', url: data.certPhoto})
         this.hideUploadCert = this.CertList.length >= this.limitCount
       }
       
