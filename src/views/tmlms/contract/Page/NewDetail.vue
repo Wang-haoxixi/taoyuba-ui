@@ -290,7 +290,7 @@
                 <el-col :span="8">
                   <el-form-item label="。试用期" prop="workProbationTypeValue"> 
                     <el-col :span="6">
-                      <el-input type="number" min="0" v-model="formData.workProbationTypeValue"  style="width:80px"></el-input>
+                      <el-input type="number" min="0"  oninput="if(value.length>3)value=value.slice(0,3)" v-model="formData.workProbationTypeValue"  style="width:80px"></el-input>
                     </el-col> 
                     <el-col :span="12">
                       <el-radio-group v-model="formData.workProbationType" style="margin-left: 15px; margin-right: auto;width:300px">
