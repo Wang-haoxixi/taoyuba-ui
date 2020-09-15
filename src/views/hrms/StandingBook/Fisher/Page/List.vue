@@ -61,10 +61,10 @@
         <el-table-column prop="operation" label="操作" width="180">
           <template slot-scope="scope">
             <operation-wrapper>
-              <iep-button  v-if="manager" size="mini" plain @click="handleEdit(scope.row.shipId)">编辑</iep-button>   
+              <iep-button  v-if="manager && mlms_ship_edit" size="mini" plain  @click="handleEdit(scope.row.shipId)">编辑</iep-button>   
               <!-- <iep-button size="mini" @click="handleView(scope.row.shipId)">查看</iep-button> -->
-              <iep-button size="mini"  @click="handleChange(scope.row.shipId)" v-if="!roles.includes(112)">变更</iep-button>
-              <iep-button size="mini"  @click="handleChangeArea(scope.row.shipId,scope.row.orgId)" v-if="!roles.includes(112)">区域</iep-button>
+              <iep-button size="mini"  @click="handleChange(scope.row.shipId)" v-if="mlms_ship_change && !roles.includes(112)">变更</iep-button>
+              <iep-button size="mini"  @click="handleChangeArea(scope.row.shipId,scope.row.orgId)" v-if="mlms_ship_area && !roles.includes(112)">区域</iep-button>
             </operation-wrapper>
           </template>
         </el-table-column>
@@ -73,13 +73,13 @@
             <operation-wrapper>
               <!-- v-if="isExistContract(scope.row.shipName)" -->
               <!-- <iep-button size="mini" type="primary" @click="handleIntoinsure(scope.row.shipName)">保单</iep-button> -->
-              <iep-button size="mini" type="primary"  @click="handleTmp(scope.row.shipName,scope.row.contractModelStatus)">模板</iep-button>
-              <iep-button size="mini" type="primary" v-if="scope.row.contractModelStatus" @click="handlePrint(scope.row.shipName)">下载</iep-button>
-              <iep-button size="mini" type="primary" @click="handleAllCrew(scope.row.shipId,scope.row.shipName)">船员</iep-button>
-              <iep-button size="mini" type="primary" v-if="scope.row.shipShare==1" @click="handleHodler(scope.row.shipId,scope.row.shipName)">股东</iep-button>
-              <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">合同</iep-button>
+              <iep-button size="mini" type="primary"  v-if="mlms_ship_template" @click="handleTmp(scope.row.shipName,scope.row.contractModelStatus)">模板</iep-button>
+              <iep-button size="mini" type="primary" v-if="mlms_ship_download && scope.row.contractModelStatus" @click="handlePrint(scope.row.shipName)">下载</iep-button>
+              <iep-button size="mini" type="primary" v-if="mlms_ship_crew" @click="handleAllCrew(scope.row.shipId,scope.row.shipName)">船员</iep-button>
+              <iep-button size="mini" type="primary" v-if="mlms_ship_shareholder && scope.row.shipShare==1" @click="handleHodler(scope.row.shipId,scope.row.shipName)">股东</iep-button>
+              <iep-button size="mini" type="primary" v-if="mlms_ship_contract" @click="handleCrew(scope.row.shipNo)">合同</iep-button>
               <!-- <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">船员</iep-button> -->
-              <iep-button size="mini" type="primary" @click="exportInfo(scope.row.shipId,scope.row.shipName)">导出</iep-button>
+              <iep-button size="mini" type="primary" v-if="mlms_ship_export" @click="exportInfo(scope.row.shipId,scope.row.shipName)">导出</iep-button>
               <!-- <iep-button size="mini" type="primary" @click="handleOperat(scope.row.shipId,scope.row.shipNo)">经营人</iep-button> -->
             </operation-wrapper>
           </template>
@@ -226,6 +226,16 @@ export default {
       modelParams:{
         shipName:'',
       },
+      mlms_ship_add: false,
+      mlms_ship_edit: false,
+      mlms_ship_change: false,
+      mlms_ship_area: false,
+      mlms_ship_template: false,
+      mlms_ship_crew: false,
+      mlms_ship_contract: false,
+      mlms_ship_shareholder: false,
+      mlms_ship_download: false,
+      mlms_ship_export: false,
     }
   },
   created () {
@@ -246,10 +256,19 @@ export default {
       this.getData()
       this.isManager()
       this.getVillageOrg()
-    
+      this.mlms_ship_add = this.permissions['mlms_ship_add']
+      this.mlms_ship_edit = this.permissions['mlms_ship_edit']
+      this.mlms_ship_change = this.permissions['mlms_ship_change']
+      this.mlms_ship_area = this.permissions['mlms_ship_area']
+      this.mlms_ship_template = this.permissions['mlms_ship_template']
+      this.mlms_ship_crew = this.permissions['mlms_ship_crew']
+      this.mlms_ship_contract = this.permissions['mlms_ship_contract']
+      this.mlms_ship_shareholder = this.permissions['mlms_ship_shareholder']
+      this.mlms_ship_download = this.permissions['mlms_ship_download']
+      this.mmlms_ship_export = this.permissions['mlms_ship_export']
   },
   computed: {
-    ...mapGetters(['userInfo', 'roles']),
+    ...mapGetters(['userInfo', 'roles','permissions']),
   },
   methods: {
     handleFresh () {
