@@ -15,9 +15,9 @@ export function getOperatorPage (params) {
     params:params,
   })
 }
-export function getOperatorList (shipName) {
+export function getOperatorList (shipName,bindType) {
   return request({
-    url:`/tmlms/tybshiphaver/getShiphaver?shipName=${shipName}`,
+    url:`/tmlms/tybshiphaver/getShiphaver?shipName=${shipName}&bindType=${bindType}`,
     method: 'get',
   })
 }

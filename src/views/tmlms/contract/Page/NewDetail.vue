@@ -51,7 +51,7 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item label="联系电话：" prop="shipownerPhone">
-                    <el-input maxlength="20" v-model="formData.shipownerPhone" style="width:380px"></el-input>
+                    <el-input maxlength="11" v-model="formData.shipownerPhone" style="width:380px"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -538,7 +538,7 @@ export default {
         shipownerAddr: '',
         employerName: '',
         employerIdcard: '',
-        employerProp: 3,
+        employerProp: 1,
         employerPhone: '',
         shipJoint: 0,
         shipJointYes: '',
@@ -919,6 +919,12 @@ export default {
         this.formData.shipLicenses = licensesOwnerShip
         this.formData.shipownerPhone = mobile
         this.formData.shipownerAddr = address
+        this.formData.employerName = shipowner
+        this.formData.employerIdcard = shipownerIdcard
+        this.formData.employerPhone = mobile
+        this.formData.employerAddr = address
+        this.formData.employerProp = 1
+        this.employer =true
         if(shipShare==1){
           this.formData.shipJoint = 1
           this.formData.shipJointYes = shipJointYes+1
@@ -938,8 +944,8 @@ export default {
       this.loading = true
       if (shipName !== '' && shipName.length==5) {
           getShipNames(shipName).then(({data})=>{
-          console.log('获取渔船信息')
-          console.log(data.data)
+          // console.log('获取渔船信息')
+          // console.log(data.data)
           if(data.data.length){
             data.data.forEach(v => {
               this.shipNames.push(v)
@@ -984,7 +990,6 @@ export default {
         this.formData.employerIdcard = this.formData.shipownerIdcard
         this.formData.employerPhone = this.formData.shipownerPhone
         this.formData.employerAddr = this.formData.shipownerAddr
-        console.log(this.formData.shipholder)
         if(this.formData.shipJointYes){
           this.formData.shipJoint = 1
         }
@@ -994,7 +999,7 @@ export default {
         this.formData.employerIdcard = ''
         this.formData.employerPhone = ''
         this.formData.employerAddr = ''
-        getOperatorList (this.formData.shipName.shipName).then(data => {
+        getOperatorList (this.formData.shipName.shipName,2).then(data => {
           // console.log('lll')
           // console.log(data.data.data)
           if(data.data.data){
@@ -1010,6 +1015,14 @@ export default {
           this.formData.employerIdcard = ''
           this.formData.employerPhone = ''
           this.formData.employerAddr = ''
+          getOperatorList (this.formData.shipName.shipName,3).then(data => {
+          if(data.data.data){
+            this.formData.employerName = data.data.data.realname
+            this.formData.employerIdcard = data.data.data.idcard
+            this.formData.employerPhone = data.data.data.phone
+            this.formData.employerAddr = data.data.data.address
+          }
+        })
           this.employer =false
       }
     },
