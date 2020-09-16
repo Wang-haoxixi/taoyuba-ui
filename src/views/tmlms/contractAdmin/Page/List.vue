@@ -706,7 +706,7 @@ export default {
         if(this.relform.content === '') {
           this.$message.error('请输入解除理由！')
         }else {
-          if (this.contStatus === 1) {
+          if (this.contStatus === 1 || this.contStatus === 6) {
             cancelContract(this.relform).then(() => {
               this.relDialog = false
               this.$message.success('解除成功！')
