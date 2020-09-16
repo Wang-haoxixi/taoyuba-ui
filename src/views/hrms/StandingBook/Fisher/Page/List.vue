@@ -265,7 +265,11 @@ export default {
       this.mlms_ship_contract = this.permissions['mlms_ship_contract']
       this.mlms_ship_shareholder = this.permissions['mlms_ship_shareholder']
       this.mlms_ship_download = this.permissions['mlms_ship_download']
-      this.mmlms_ship_export = this.permissions['mlms_ship_export']
+      this.mlms_ship_export = this.permissions['mlms_ship_export']
+      
+      console.log('this.mlms_ship_export')
+      console.log(this.mlms_ship_export)
+       console.log(this.mlms_ship_edit)
   },
   computed: {
     ...mapGetters(['userInfo', 'roles','permissions']),
@@ -276,8 +280,6 @@ export default {
     },
     savearea () {
       changeOrgIds(this.areaShipId,this.areachooseOrg).then(res=>{
-        console.log('变更')
-        console.log(res.data.data)
         if(res.data.data){
             this.$message.success('区域组织变更成功')
             this.areadialogVisible = false
