@@ -27,7 +27,7 @@
             </el-select>
           </span>
           <span><el-input v-model="params.shipName" placeholder="船名号" size="small" style="width:120px"></el-input></span>
-          <span><el-input v-model="params.shipownerName" placeholder="持证人姓名" size="small" style="width:120px"></el-input></span>
+          <!-- <span><el-input v-model="params.shipownerName" placeholder="持证人姓名" size="small" style="width:120px"></el-input></span> -->
           <span><el-input v-model="params.employerName" placeholder="甲方姓名" size="small" style="width:120px"></el-input></span>
           <span><el-input v-model="params.employeeName" placeholder="乙方姓名" size="small" style="width:120px"></el-input></span>
           <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 

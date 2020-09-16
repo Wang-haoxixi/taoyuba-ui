@@ -816,8 +816,8 @@ export default {
               this.formData.employeeName = employee.realName
               this.formData.employeePhone = employee.phone
               this.formData.employeeAddr = employee.address
-              this.formData.contactName = employee.contactName
-              this.formData.contactPhone = employee.contactPhone
+              this.formData.employeeLinkMan = employee.contactName
+              this.formData.employeeLinkPhone = employee.contactPhone
               this.employee = true
             })
           }
