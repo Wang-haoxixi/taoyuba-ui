@@ -1249,11 +1249,11 @@ export default {
   }
   .sided {
     width: 120px!important;
-    height: 300px!important;
+    height: 320px!important;
   }
   .sidee {
     width: 120px!important;
-    height: 150px!important;
+    height: 180px!important;
   }
   .sidef {
     width: 120px!important;
