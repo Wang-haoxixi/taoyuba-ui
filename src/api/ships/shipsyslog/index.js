@@ -8,6 +8,22 @@ export function getCrewSyslog (params) {
     params: params,
   })
 }
+//上船记录
+export function getCrewAllSyslog (params) {
+  return request({
+    url:`${prefixUrl}/newPage`,
+    method: 'get',
+    params: params,
+  })
+}
+export function getSyslogByidcard (idcard) {
+  return request({
+    url:`${prefixUrl}/getByidcard/${idcard}`,
+    method: 'get',
+    params: idcard,
+  })
+}
+
 
 // export function creatShipManager (data) {
 //   return request({

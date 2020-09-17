@@ -200,6 +200,18 @@ export default [
           },
         ],
       },
+      {
+        path: '/dataStatistics',
+        component: Layout,
+        children: [
+          {
+            path: 'dataStatistics',
+            name: 'dataStatistics',
+            component: () => import('@/views/tmlms/dataStatistics/index'),
+            meta: noKeepAlive,
+          },
+        ],
+      },
       // {
       //   path: '/tmlms_spa',
       //   component: Layout,
@@ -273,6 +285,25 @@ export default [
         path: '/admin/crewRegister',
         name: 'listCrewregister',
         component: () => import('@/views/tmlms/crewRegister/index'),
+        meta: noKeepAlive,
+      },
+    ],
+  },
+  //上下船记录
+  {
+    path: '/crewSyslog',       
+    component: Layout,        
+    children: [
+      {
+        path: '/admin/crewSyslog',
+        name: 'listcrewSyslog',
+        component: () => import('@/views/tmlms/crewSyslog/index'),
+        meta: noKeepAlive,
+      },
+      {
+        path: 'detail',
+        name: 'detailcrewSyslog',            
+        component: () => import('@/views/tmlms/crewSyslog/Page/Detail'),  
         meta: noKeepAlive,
       },
     ],

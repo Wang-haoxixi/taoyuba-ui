@@ -9,6 +9,13 @@ export function getCrew (query) {
         params: query,
     })
 }
+export function countCrew (shipId) {
+    return request({
+        url: `${prefixUrl}/countWithShip?shipId=${shipId}`,
+        method: 'get',
+        params: shipId,
+    })
+}
 export function getCrewByShipId (shipId) {
     return request({
         url: `${prefixUrl}/findByShipId?shipId=${shipId}`,

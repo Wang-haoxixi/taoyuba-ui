@@ -58,7 +58,7 @@
           :label="item.text"
         >
           </el-table-column>
-        <el-table-column prop="operation" label="操作" width="180">
+          <el-table-column prop="operation" label="操作" width="180">
           <template slot-scope="scope">
             <operation-wrapper>
               <iep-button  v-if="manager && mlms_ship_edit" size="mini" plain  @click="handleEdit(scope.row.shipId)">编辑</iep-button>   
@@ -136,6 +136,7 @@
 </template>
 <script>
 import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
+import { countCrew } from '@/api/tmlms/boatMan/index'
 import { getVillageShipList,changeShip,exportShipExcel,exportContractModel,getFixOrgIds,changeOrgIds } from '@/api/ships'
 // import { getVillageShipList } from '@/api/ships'
 // import advanceSearch from './AdvanceSearch.vue'
@@ -190,6 +191,10 @@ export default {
           {
             value: 'licensesOwnerShip',
             text: '所有权登记证',
+          },
+          {
+            value: 'countCrews',
+            text: '上船人员人数',
           },
         ],
       },
@@ -253,23 +258,19 @@ export default {
         status: '',
       }
     }
-      this.getData()
-      this.isManager()
-      this.getVillageOrg()
-      this.mlms_ship_add = this.permissions['mlms_ship_add']
-      this.mlms_ship_edit = this.permissions['mlms_ship_edit']
-      this.mlms_ship_change = this.permissions['mlms_ship_change']
-      this.mlms_ship_area = this.permissions['mlms_ship_area']
-      this.mlms_ship_template = this.permissions['mlms_ship_template']
-      this.mlms_ship_crew = this.permissions['mlms_ship_crew']
-      this.mlms_ship_contract = this.permissions['mlms_ship_contract']
-      this.mlms_ship_shareholder = this.permissions['mlms_ship_shareholder']
-      this.mlms_ship_download = this.permissions['mlms_ship_download']
-      this.mlms_ship_export = this.permissions['mlms_ship_export']
-      
-      console.log('this.mlms_ship_export')
-      console.log(this.mlms_ship_export)
-       console.log(this.mlms_ship_edit)
+    this.getData()
+    this.isManager()
+    this.getVillageOrg()
+    this.mlms_ship_add = this.permissions['mlms_ship_add']
+    this.mlms_ship_edit = this.permissions['mlms_ship_edit']
+    this.mlms_ship_change = this.permissions['mlms_ship_change']
+    this.mlms_ship_area = this.permissions['mlms_ship_area']
+    this.mlms_ship_template = this.permissions['mlms_ship_template']
+    this.mlms_ship_crew = this.permissions['mlms_ship_crew']
+    this.mlms_ship_contract = this.permissions['mlms_ship_contract']
+    this.mlms_ship_shareholder = this.permissions['mlms_ship_shareholder']
+    this.mlms_ship_download = this.permissions['mlms_ship_download']
+    this.mlms_ship_export = this.permissions['mlms_ship_export']
   },
   computed: {
     ...mapGetters(['userInfo', 'roles','permissions']),
@@ -372,7 +373,8 @@ export default {
     getData () {
       getVillageShipList(this.params).then(data => {
         this.pagedTable =  JSON.parse(JSON.stringify(data.data.data.records))
-        this.pagedTable.forEach(v => {
+        this.pagedTable.forEach(async (v) => {
+          // v.countCrews = ''
           if (v.villageId == 0) {
             v.villageId = '--'
             // v.villageId = '--'
@@ -385,6 +387,10 @@ export default {
               })
             })
           }
+          
+          v.countCrews = await countCrew(v.shipId).then(res=>{
+            return res.data.data
+          })
           if (v.shipNo === '0') {
             v.shipNo = '请完善'
           }
@@ -400,6 +406,7 @@ export default {
           })
         this.total = data.data.data.total
       })
+      
     },
     handleIntoinsure (shipName) {
       this.$router.push({       
