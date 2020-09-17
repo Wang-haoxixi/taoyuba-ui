@@ -509,6 +509,9 @@ export default {
       })
     },
     getParamData () {
+      this.params.shipName = this.params.shipName.replace(/\s*/g,'')
+      this.params.employerName = this.params.employerName.replace(/\s*/g,'')
+      this.params.employeeName = this.params.employeeName.replace(/\s*/g,'')
       if (this.params.timeLists) {
         this.params.timeStart = this.params.timeLists[0]
         this.params.timeEnd = this.params.timeLists[1]

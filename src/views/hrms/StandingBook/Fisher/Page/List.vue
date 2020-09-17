@@ -433,6 +433,10 @@ export default {
     //搜索
     getParamData () {       
       this.params.userId = this.searchOrg
+      this.params.shipName = this.params.shipName.replace(/\s*/g,'')
+      this.params.shipNo = this.params.shipNo.replace(/\s*/g,'')
+      this.params.shipowner = this.params.shipowner.replace(/\s*/g,'')
+      this.params.shipownerIdcard = this.params.shipownerIdcard.replace(/\s*/g,'')
       this.params.current = 1
       this.getData()
     },

@@ -796,6 +796,7 @@ export default {
     // }
     // },
     getEmployee () {
+      this.formData.employeeIdcard = this.formData.employeeIdcard.replace(/\s*/g,'')
       if(this.formData.employeeIdcard.length==18) {
         isCheckIdcard(this.formData.employeeIdcard).then(res => {
         // console.log(res.data. msg)
