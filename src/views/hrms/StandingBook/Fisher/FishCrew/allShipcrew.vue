@@ -129,6 +129,10 @@ export default {
           label: '离船，未签合同',
           value: 4,
         },
+        {
+          label: '待求职',
+          value: 9,
+        },
       ],
       flag:[
         {
