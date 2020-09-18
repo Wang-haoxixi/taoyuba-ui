@@ -201,18 +201,18 @@ export default [
         ],
       },
       //数据统计
-      {
-        path: '/dataStatistics',
-        component: Layout,
-        children: [
-          {
-            path: 'dataStatistics',
-            name: 'dataStatistics',
-            component: () => import('@/views/tmlms/dataStatistics/index'),
-            meta: noKeepAlive,
-          },
-        ],
-      },
+      // {
+      //   path: '/dataStatistics',
+      //   component: Layout,
+      //   children: [
+      //     {
+      //       path: 'dataStatistics',
+      //       name: 'dataStatistics',
+      //       component: () => import('@/views/tmlms/dataStatistics/index'),
+      //       meta: noKeepAlive,
+      //     },
+      //   ],
+      // },
       // {
       //   path: '/tmlms_spa',
       //   component: Layout,
