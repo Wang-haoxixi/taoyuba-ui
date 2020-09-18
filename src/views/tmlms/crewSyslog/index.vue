@@ -102,7 +102,7 @@ export default {
     return {
       crewregisterList: [],
       provinces:[],
-      total: 10,
+      total: 0,
       // 查询数据
       params: {       
         current: 1,   
@@ -211,6 +211,8 @@ export default {
     getData () {      
       getCrewAllSyslog(this.params).then(res=>{
         this.crewregisterList = res.data.data.records
+        this.total = res.data.data.total
+        console.log(res)
         this.crewregisterList.map(item => {
           if(item.status == 1){
             item.status = '已签约'
