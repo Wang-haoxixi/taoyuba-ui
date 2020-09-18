@@ -200,6 +200,7 @@ export default [
           },
         ],
       },
+      //数据统计
       {
         path: '/dataStatistics',
         component: Layout,
@@ -304,6 +305,25 @@ export default [
         path: 'detail',
         name: 'detailcrewSyslog',            
         component: () => import('@/views/tmlms/crewSyslog/Page/Detail'),  
+        meta: noKeepAlive,
+      },
+    ],
+  },
+  //浏览记录
+  {
+    path: '/History',       
+    component: Layout,        
+    children: [
+      {
+        path: '/admin/History',
+        name: 'listHistory',
+        component: () => import('@/views/tmlms/History/index'),
+        meta: noKeepAlive,
+      },
+      {
+        path: 'detail',
+        name: 'detailHistory',            
+        component: () => import('@/views/tmlms/History/Page/Detail'),  
         meta: noKeepAlive,
       },
     ],
