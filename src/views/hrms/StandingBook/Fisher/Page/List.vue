@@ -194,7 +194,7 @@ export default {
           },
           {
             value: 'countCrews',
-            text: '上船人员人数',
+            text: '人数',
           },
         ],
       },

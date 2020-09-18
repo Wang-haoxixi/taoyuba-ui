@@ -158,7 +158,7 @@
                       <el-radio-group v-model="form.workStatus">
                           <el-radio  :label="9">待求职</el-radio>
                           <el-radio  :label="0">未用工</el-radio>
-                          <el-radio  :label="1">合同期中</el-radio>
+                          <el-radio  :label="3">上船，未签合同</el-radio>
                       </el-radio-group>
                       </el-form-item>
                     </el-col>

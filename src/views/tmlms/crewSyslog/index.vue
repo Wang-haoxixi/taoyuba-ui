@@ -92,7 +92,8 @@
 import { 
   //getCrew,
   deleteCrew,statusCrew,exportExcel } from '@/api/tmlms/boatMan'
-import { getCrewAllSyslog } from '@/api/ships/shipsyslog'   
+import { getCrewAllSyslog } from '@/api/ships/shipsyslog'  
+import { getShipByShipId } from '@/api/ships'
 import { getUserInfo } from '@/api/login'
 import { getArea } from '@/api/post/admin'
 import keyBy from 'lodash/keyBy'
@@ -213,9 +214,14 @@ export default {
         this.crewregisterList = res.data.data.records
         this.total = res.data.data.total
         console.log(res)
-        this.crewregisterList.map(item => {
+        this.crewregisterList.map(async (item) => {
           if(item.status == 1){
             item.status = '已签约'
+          }
+          if(!item.shipName){
+            item.shipName = await getShipByShipId(item.shipId).then(res=>{
+              return res.data.data.shipName
+            })
           }
         })
       })

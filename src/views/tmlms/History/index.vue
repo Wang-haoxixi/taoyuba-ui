@@ -5,7 +5,10 @@
       <div class="shipowner_title">
         <!-- <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button> -->
         <div style="float:right">
-          <span><el-input v-model="params.realName" placeholder="请输入姓名" size="small"></el-input></span>
+          <span><el-input v-model="params.realName" placeholder="请输入用户名" size="small"></el-input></span>
+          <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
+            value-format="yyyy-MM-dd"  size="mini"></el-date-picker>
+          </span> 
           <!-- <span><el-input v-model="params.idcard" placeholder="请输入身份证" size="small"></el-input></span>
           <span><el-input v-model="params.phone" placeholder="请输入电话" size="small"></el-input></span> -->
           <!-- <span><el-select v-model="params.status" placeholder="请选择状态" size="small">
@@ -48,12 +51,14 @@
 </template>
 <script>
 import { getVisitRecordList } from '@/api/tmlms/History'
+import { mapGetters } from 'vuex'
 // import { getUserInfo } from '@/api/login'
 export default {
   data () {
     return {
       historyList: [],
-      total: 10,
+      timeLists:[],
+      total: 0,
       // 查询数据
       params: {
         current: 1,
@@ -95,6 +100,7 @@ export default {
       villageId: '',
     }
   },
+  
   methods: {
     // 分页
     currentChange (val) {
@@ -131,14 +137,20 @@ export default {
       //   // })
       // })
       this.params.realName = this.params.realName.replace(/\s*/g,'')
+      if (this.params.timeLists) {
+        this.params.timeStart = this.params.timeLists[0]
+        this.params.timeEnd = this.params.timeLists[1]
+      }
+      this.params.orgId = this.userInfo.orgId
       getVisitRecordList(this.params).then(res=>{
         this.historyList = res.data.data.records
         this.total = res.data.data.total
       }) 
     },
   },
-  computed: {
-  },
+computed: {
+    ...mapGetters(['userInfo']),
+},
   created () {
     this.getData()
   },
