@@ -142,8 +142,13 @@ export default {
             // css: '60',
           },
           {
-            text: '合同状态',
-            value: 'status',
+            text: '来源',
+            value: 'sourceType',
+            // css: '140',
+          },
+          {
+            text: '登记时间',
+            value: 'leftTime',
             // css: '140',
           },
         ],
@@ -213,10 +218,11 @@ export default {
       getCrewAllSyslog(this.params).then(res=>{
         this.crewregisterList = res.data.data.records
         this.total = res.data.data.total
-        console.log(res)
         this.crewregisterList.map(async (item) => {
-          if(item.status == 1){
-            item.status = '已签约'
+          if(item.sourceType == 1){
+            item.sourceType = '合同'
+          }else if(item.sourceType == 2){
+            item.sourceType = '非合同'
           }
           if(!item.shipName){
             item.shipName = await getShipByShipId(item.shipId).then(res=>{
