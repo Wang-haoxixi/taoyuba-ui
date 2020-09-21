@@ -9,7 +9,7 @@
           <span style="width:120px"><el-input v-model="params.shipName" placeholder="船名号" size="small" clearable></el-input></span>
           <span style="width:120px"><el-input v-model="params.idcard" placeholder="身份证号" size="small" clearable></el-input></span>
           <span style="width:120px"><el-input v-model="params.realName" placeholder="姓名" size="small" clearable></el-input></span>              
-          <span style="width:150px"><el-select v-model="params.status" placeholder="请选择合同状态" size="small">                                                               
+          <!-- <span style="width:150px"><el-select v-model="params.status" placeholder="请选择合同状态" size="small">                                                               
               <el-option
                 v-for="item in status"    
                 :key="item.value"
@@ -17,7 +17,7 @@
                 :value="item.value">
               </el-option>
             </el-select>
-          </span>                                                                                                               
+          </span>                                                                                                                -->
           <el-button size="small"  @click="getParamData">搜索</el-button>                          
         </div>
       </div>
@@ -142,6 +142,11 @@ export default {
             // css: '60',
           },
           {
+            text: '上下船',
+            value: 'flag',
+            // css: '140',
+          },
+          {
             text: '来源',
             value: 'sourceType',
             // css: '140',
@@ -224,6 +229,7 @@ export default {
           }else if(item.sourceType == 2){
             item.sourceType = '非合同'
           }
+          (item.flag == 1) ? item.flag='上船':item.flag='下船'
           if(!item.shipName){
             item.shipName = await getShipByShipId(item.shipId).then(res=>{
               return res.data.data.shipName
