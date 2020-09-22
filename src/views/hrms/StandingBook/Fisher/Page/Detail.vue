@@ -443,7 +443,7 @@ export default {
     cheackNo () {
       if(this.form.shipNo.length==16) {
         getShipByShipNo(this.form.shipNo).then(res=>{
-          if(res.data.data){
+          if(res.data.data && (res.data.data.shipId!=this.$route.query.edit)){
             this.form.shipNo = ''
             this.$message.error('渔船编号已存在')
             
