@@ -119,7 +119,17 @@ export default {
       // param.shipNo = this.$route.params.shipNo
       // param.status = 1
       let data = await this.loadTable(param, getCrewRegiste)
-      this.pagedTable = data.records
+      this.pagedTable = data.records.map(item=>{
+        item.certs.forEach(v=>{
+          this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
+          if(v.certTitle==data.value){
+              item.certNames=item.certNames+data.label
+          }
+          })
+        })
+        return item 
+      })
+      console.log(this.pagedTable)
     },
     backPage () {
       this.$router.push({path: '/hrms_spa/shipCrew_list'})

@@ -162,6 +162,10 @@ const columnsMap = [
     //   type: 'dictGroup',
     // },
     {
+      prop: 'certNames',
+      label: '职务证书',
+    },
+    {
       prop: 'shipNames',
       label: '已登记的渔船',
     },

@@ -147,6 +147,11 @@ export default {
             // css: '140',
           },
           {
+            text: '职务证书',
+            value: 'certNames',
+            // css: '140',
+          },
+          {
             text: '来源',
             value: 'sourceType',
             // css: '140',
@@ -219,11 +224,18 @@ export default {
       })
     },
     // 获取列表数据
-    getData () {      
+    getData () {
       getCrewAllSyslog(this.params).then(res=>{
         this.crewregisterList = res.data.data.records
         this.total = res.data.data.total
         this.crewregisterList.map(async (item) => {
+          item.certs.forEach(v=>{
+            this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
+            if(v.certTitle==data.value){
+                item.certNames=item.certNames+data.label
+            }
+            })
+          }) 
           if(item.sourceType == 1){
             item.sourceType = '合同'
           }else if(item.sourceType == 2){
@@ -305,6 +317,7 @@ export default {
   computed: {
     ...mapGetters([
       'dictGroup',
+      'userInfo',
     ]),
   },
   created () {

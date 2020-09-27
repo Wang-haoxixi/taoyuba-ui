@@ -194,7 +194,7 @@ export default {
           },
           {
             value: 'countCrews',
-            text: '人数',
+            text: '人数/合同',
           },
         ],
       },
@@ -329,7 +329,7 @@ export default {
       })  
     },
     handleHodler (shipId,shipName){
-      console.log(shipId)
+      // console.log(shipId)
       this.$router.push({path: `/hrms_spa/shipShareHolder/${shipId}`,query:{shipName:shipName}})
     },
     handleChange (shipId){
@@ -389,7 +389,7 @@ export default {
           }
           
           v.countCrews = await countCrew(v.shipId).then(res=>{
-            return res.data.data
+            return res.data.data.crew+'/'+res.data.data. contract
           })
           if (v.shipNo === '0') {
             v.shipNo = '请完善'
