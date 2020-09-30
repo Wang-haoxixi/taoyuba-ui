@@ -194,7 +194,7 @@ export default {
           },
           {
             value: 'countCrews',
-            text: '人数/合同',
+            text: '合同/人数',
           },
         ],
       },
@@ -389,7 +389,7 @@ export default {
           }
           
           v.countCrews = await countCrew(v.shipId).then(res=>{
-            return res.data.data.crew+'/'+res.data.data. contract
+            return res.data.data. contract+'/'+res.data.data.crew
           })
           if (v.shipNo === '0') {
             v.shipNo = '请完善'

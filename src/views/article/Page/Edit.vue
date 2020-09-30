@@ -10,8 +10,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">         
-            <el-form-item label="分类：" prop="type">       
-              <iep-dict-select v-model="form.type" dict-name="tyb_article_type"></iep-dict-select>
+            <el-form-item label="分类：" prop="type">
+              <iep-dict-select v-model="form.type" dict-name="tyb_article_type" @change = 'changType'></iep-dict-select>
             </el-form-item>
           </el-col>
         </el-row>   
@@ -63,14 +63,23 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row v-if="isTrain">
+          <el-col :span="24">
+            <el-form-item label="代办机构：" prop="train">
+              <el-radio-group v-model="form.train">      
+                <el-radio v-for="(item,i) in trainList" :key="i" :label="item.userId">{{item.deptName}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <!-- <iep-form-item class="form-half" prop="articleContent" label-name="资讯内容">
           <iep-input-area v-model="form.articleContent"></iep-input-area>
         </iep-form-item> -->
-
+        <el-row>
         <el-form-item label="资讯内容：" prop="articleContent" v-show="isArticle">
           <iep-froala-editor v-model="form.articleContent"></iep-froala-editor>
         </el-form-item>
-
+        </el-row>
         <el-form-item label="">         
           <operation-wrapper> 
             <iep-button type="primary" @click="handleSubmit">保存</iep-button>
@@ -81,7 +90,8 @@
   </div>
 </template>             
 <script>                  
-import { getArticleDetail, createArticle, updateArticle  } from '@/api/article/index'                          
+import { getArticleDetail, createArticle, updateArticle  } from '@/api/article/index'
+import { getTraining } from '@/api/tmlms/Training'
 import { initForm,rules, dictsMap, formToDto } from '../options'
 import store from '@/store'
 export default {         
@@ -102,6 +112,8 @@ export default {
       isShow:false,
       isArticle:true,
       methodName:'',
+      trainList:'',
+      isTrain:false,
     }
   },
   computed: {                                                                                    
@@ -122,13 +134,19 @@ export default {
         if(this.form.httpSrc) this.form.httpSrc = this.form.httpSrc.substring(7)
       })
     }
+    getTraining().then(res=>{
+      this.trainList = res.data.data.records
+    })
   },    
   methods: {
+    changType (type){
+      this.isTrain = type==8 ? true:false
+    },
     handleSubmit (isPublish) {    
       const submitFunction = this.articleId == 0 ? createArticle : updateArticle
       this.$refs['form'].validate((valid) => {
         if (valid) {
-           this.form.httpSrc = 'http://'  + this.form.httpSrc
+          this.form.httpSrc = 'http://'  + this.form.httpSrc
           const publish = isPublish === true ? true : false
           submitFunction(formToDto(this.form), publish).then(({ data }) => {
             if (data.data) {

@@ -28,7 +28,7 @@
           <template slot-scope="scope">
             <operation-wrapper>
               <iep-button size="mini" plain v-if="scope.row.sign" @click="handleSign(scope.row.idcard)">合同</iep-button>                       
-              <iep-button size="mini" plain @click="handleDelete(scope.row.idcard)">删除</iep-button>
+              <iep-button size="mini" plain v-if="!roles.includes(115)" @click="handleDelete(scope.row.idcard)">删除</iep-button>
               <!-- <iep-button size="mini" @click="handleView(scope.row.idcard)">查看</iep-button>
               <iep-button size="mini" plain v-if="scope.row.workStatus!='上船，已签合同'" @click="handleEdit(scope.row.idcard)">编辑</iep-button>
               <iep-button size="mini" type="primary" @click="handleCrew(scope.row.idcard,scope.row.workStatus)">离船</iep-button> -->
@@ -77,7 +77,7 @@ import { allcrewColumnsMap } from '../options'
 // import { getShipByShipNo } from '@/api/ships'
 import { getUserInfo } from '@/api/login'
 import keyBy from 'lodash/keyBy'
-
+import { mapGetters } from 'vuex'
 export default {
   mixins: [mixins],
   data () {
@@ -156,6 +156,9 @@ export default {
     this.getTableData()
     this.isManager()
     this.getTitle()
+  },
+  computed: {
+    ...mapGetters(['roles']),
   },
   methods: {
     getTitle (){

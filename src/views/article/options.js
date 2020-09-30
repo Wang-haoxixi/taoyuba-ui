@@ -50,8 +50,9 @@ const initDtoForm = () => {
     createTime: initNow(), 
     updateTime: initNow(), 
     articleContent:'', //资讯内容
-    isDispatch:'',
+    isDispatch:0,
     httpSrc:'',
+    train:'',
   }
 }
 
@@ -84,11 +85,11 @@ const initForm = () => {
     source:'', //来源
     image:'', //图片
     description:'', //描述
-    isRcmd:'', //是否推荐
+    isRcmd:0, //是否推荐
     createTime: initNow(), 
     updateTime: initNow(), 
     articleContent:'', //资讯内容
-    isDispatch:'',
+    isDispatch:0,
     httpSrc:'',    
   }
 }
