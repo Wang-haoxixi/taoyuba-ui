@@ -4,7 +4,7 @@
       <page-header title="一船一档"></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+          <iep-button v-if="mlms_ship_add" @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
           <iep-button @click="handleFresh" type="primary" >刷新</iep-button>
         </template>
         <template slot="right">
@@ -58,7 +58,7 @@
           :label="item.text"
         >
           </el-table-column>
-          <el-table-column prop="operation" label="操作" width="180">
+          <el-table-column prop="operation" label="操作" width="180" v-if="!roles.includes(115)">
           <template slot-scope="scope">
             <operation-wrapper>
               <iep-button  v-if="manager && mlms_ship_edit" size="mini" plain  @click="handleEdit(scope.row.shipId)">编辑</iep-button>   
