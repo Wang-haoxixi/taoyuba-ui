@@ -153,7 +153,7 @@
                       </el-select>
                       </el-form-item>
                   </el-col>
-                  <el-col :span="12">
+                  <el-col :span="12"  v-if="!$route.query.edit || (userInfo.orgId!=32)">
                       <el-form-item label="用工状态：" prop="workStatus">
                       <el-radio-group v-model="form.workStatus">
                           <el-radio  :label="9">待求职</el-radio>
@@ -413,7 +413,8 @@ import VueSocketio from 'vue-socket.io'
 import Vue from 'vue'
 import store from '@/store'
 import debounce from 'lodash/debounce'
-import { mapState } from 'vuex'   
+import { mapState } from 'vuex' 
+import { mapGetters } from 'vuex'  
 Vue.use(new VueSocketio({
     debug: true,
     connection: 'http://localhost:5000', //地址+端口，由后端提供
@@ -1142,6 +1143,7 @@ export default {
    }
   },
   computed: {
+    ...mapGetters(['userInfo']),
     uploadDisabled:function () {
       console.log(this.imagelist.length)
         return this.imagelist.length >0
