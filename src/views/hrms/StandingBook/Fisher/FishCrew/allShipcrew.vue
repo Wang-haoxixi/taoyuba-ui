@@ -214,7 +214,14 @@ export default {
         }
         item.workStatus=keyBy(this.workStatus, 'value')[item.workStatus].label
         item.flag=keyBy(this.flag, 'value')[item.flag].label
-
+        item.certName = ''
+        item.certList.forEach(v=>{
+          this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
+          if(v.certTitle==data.value){
+              item.certName=item.certName+' '+data.label
+          }
+          })
+        })
       })
       this.pagedTable = data.data.data
     },

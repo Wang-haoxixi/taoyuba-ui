@@ -70,6 +70,10 @@ const columnsMap = [
       label: '手机号码',     
     },
     {
+      prop: 'certName',
+      label: '职务证书',     
+    },
+    {
       prop: 'flag',
       label: '来源',     
     },
