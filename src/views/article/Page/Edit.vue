@@ -64,11 +64,19 @@
           </el-col>
         </el-row>
         <el-row v-if="isTrain">
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="代办机构：" prop="train">
-              <el-radio-group v-model="form.train">      
+                <el-select v-model="form.train" placeholder="请选择">
+                <el-option
+                  v-for="item in trainList"
+                  :key="item.value"
+                  :label="item.deptName"
+                  :value="item.userId">
+                </el-option>
+              </el-select>
+              <!-- <el-radio-group v-model="form.train">      
                 <el-radio v-for="(item,i) in trainList" :key="i" :label="item.userId">{{item.deptName}}</el-radio>
-              </el-radio-group>
+              </el-radio-group> -->
             </el-form-item>
           </el-col>
         </el-row>
