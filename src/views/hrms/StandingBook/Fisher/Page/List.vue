@@ -372,8 +372,8 @@ export default {
     },
     getData () {
       getVillageShipList(this.params).then(data => {
-        this.pagedTable =  JSON.parse(JSON.stringify(data.data.data.records))
-        this.pagedTable.forEach(async (v) => {
+        // this.pagedTable =  JSON.parse(JSON.stringify(data.data.data.records))
+        data.data.data.records.forEach(async (v) => {
           // v.countCrews = ''
           if (v.villageId == 0) {
             v.villageId = '--'
@@ -387,7 +387,7 @@ export default {
               })
             })
           }
-          
+          v.countCrews = ''
           v.countCrews = await countCrew(v.shipId).then(res=>{
             return res.data.data. contract+'/'+res.data.data.crew
           })
@@ -404,6 +404,9 @@ export default {
             v.hullLength = '请完善'
           }
           })
+        this.$nextTick(()=>{
+          this.pagedTable = data.data.data.records
+        })
         this.total = data.data.data.total
       })
       
