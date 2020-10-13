@@ -17,8 +17,23 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>            
-              <el-col :span="12">
+        <el-row>
+          <el-col :span="12">
+              <el-form-item  label="视频分类：" prop="source">
+                <el-select v-model="form.type">
+                  <el-option v-for="item in videoType" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+              </el-form-item>
+          </el-col>         
+          <el-col :span="12">
+              <el-form-item  label="视频来源：" prop="source">
+              <el-input maxlength="100" v-model="form.source"> 
+              </el-input>
+              </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
               <el-form-item  label="视频照片：" prop="videoImg">
                 <el-upload
                   class="avatar-uploader"
@@ -28,12 +43,6 @@
                   <img v-if="form.videoImg" :src="form.videoImg" class="avatar">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
-              </el-form-item>
-          </el-col>
-           <el-col :span="12">
-              <el-form-item  label="视频来源：" prop="source">
-             <el-input maxlength="100" v-model="form.source"> 
-              </el-input>
               </el-form-item>
           </el-col>
         </el-row>
@@ -72,6 +81,16 @@ export default {
       headers: {
         Authorization: 'Bearer ' + store.getters.access_token,
       },
+      videoType:[
+        {
+          label:'安全教育',
+          value:'1',
+        },
+        {
+          label:'课程培训',
+          value:'2',
+        },
+      ],
     }                               
   },
   computed: {                                                                                                                                                               
@@ -103,7 +122,7 @@ export default {
     handleSubmit () {   
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.form.videoSrc  = 'http://' + this.form.videoSrc
+          // this.form.videoSrc  = 'http://' + this.form.videoSrc
           if (this.type === 'create') {
             createVideo(this.form).then(({data}) => {
               if (data.code === 0) {
