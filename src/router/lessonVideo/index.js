@@ -15,7 +15,7 @@ export default [
       {
         path: '/lessonVideo_spa/video_list',  
         name: '视频列表页',
-        component: () => import('@/views/textbook/index.vue'),
+        component: () => import('@/views/lessonVideo/index.vue'),
         meta: noKeepAlive,
       },
     ],

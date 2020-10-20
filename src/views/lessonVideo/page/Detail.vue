@@ -11,8 +11,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="视频上传路径：" prop="videoSrc">
-              <el-input maxlength="80" v-model="form.videoSrc">
-                <template slot="prepend">http://</template>     
+              <el-input maxlength="80" v-model="form.videoSrc"> 
               </el-input>
             </el-form-item>
           </el-col>
@@ -21,7 +20,7 @@
           <el-col :span="12">
               <el-form-item  label="视频分类：" prop="source">
                 <el-select v-model="form.type">
-                  <el-option v-for="item in videoType" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                  <el-option v-for="item in videoType" :key="item.index" :label="item.label" :value="item.value"></el-option>
                 </el-select>
               </el-form-item>
           </el-col>         
@@ -84,11 +83,11 @@ export default {
       videoType:[
         {
           label:'安全教育',
-          value:'1',
+          value:1,
         },
         {
           label:'课程培训',
-          value:'2',
+          value:2,
         },
       ],
     }                               
@@ -148,7 +147,7 @@ export default {
       })
     },
     onGoBack () {
-      this.$router.history.go(-1)       
+      this.$router.push({path:'/lessonVideo_spa/video_list'})       
     },
   handleAvatarSuccessFront (response) {
       this.form.videoImg = response.data.url
