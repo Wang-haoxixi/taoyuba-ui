@@ -24,7 +24,7 @@
               </el-option>
             </el-select>
           </span>
-          <span style="width:110px" ><el-select v-model="params.level" placeholder="试题难度" size="small">
+          <span style="width:110px" ><el-select v-model="params.level" placeholder="职务等级" size="small">
               <el-option
                 v-for="item in levelList"
                 :key="item.index"
@@ -87,20 +87,6 @@ export default {
     }
   },
   created () {
-    if (sessionStorage.getItem('query')) {
-      console.log('aaaaa')
-      // alert('aaaa')
-      // var query = sessionStorage.getItem('query')
-      // this.params = JSON.parse(query)
-    } else {
-      // this.params = {
-      //   current: 1,
-      //   size: 10,
-      //   title: '',
-      //   kind: '',
-      //   level: '',
-      // }
-    }
     this.getKindLevel()
     this.loadPage()
     this.setPermission()
@@ -128,18 +114,8 @@ export default {
     handleSelectionChange (val) {
       this.multipleSelection = val.map(m => m.id)
     },
-    
-    /**
-     * 判断当前用户是不是考试创建者
-     */
-    // isCreator (row) {
-    //   return row.creatorId === this.userInfo.userId
-    // },
+
     loadPage (param = this.params) {
-      // console.log('param')
-      // console.log(param)
-      // console.log((JSON.parse(sessionStorage.getItem('query')))!='')
-      // console.log(JSON.parse(sessionStorage.getItem('query')))
       this.pagedTable=this.loadTable(param, getTestList)
     },
     getParamData () {
@@ -147,27 +123,10 @@ export default {
       this.loadPage()
     },
     /**
-     * 选择试题
-     */
-    // selectionChange (val) {
-    //   if (val.map(item => item.id).length > 0) {
-    //     this.selectValue = true
-    //     this.selectionValue = val.map(item => item.id)
-    //   }
-    //   else
-    //     this.selectValue = false
-    //   return
-    // },
-    /**
      * 新增考试
      */
     handleAdd () {
       this.$router.push({path:'/test/test_add'})
-      // this.$emit('onEdit', {
-      //   methodName: '创建',
-      //   id: '',
-      //   current: 0,
-      // })
     },
     handleEdit (id) {
       this.$router.push({path:'/test/test_add',query:{edit:id}})
@@ -191,17 +150,6 @@ export default {
       }).catch(()=>{})
       
     },
-  },
-  watch: {
-    params () {
-      this.params.current = this.pagination.current
-      sessionStorage.setItem('query', JSON.stringify(this.params))
-    },
-  },
-  beforeUpdate () {
-    // console.log(this.params)
-    this.params.current = this.pagination.current
-    sessionStorage.setItem('query', JSON.stringify(this.params))
   },
 }
 </script>

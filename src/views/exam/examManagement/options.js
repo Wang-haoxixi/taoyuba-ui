@@ -7,10 +7,10 @@ export const  columnsMap = [
     label:'考试分类',
     prop:'kind',
   },
-  // {
-  //   label:'题目难度',
-  //   prop:'level',
-  // },
+  {
+    label:'职务等级',
+    prop:'level',
+  },
   {
     label:'考试人数',
     prop:'testNumber',
@@ -73,14 +73,21 @@ export const rules = {
   //   { required: true, message: '必填', trigger: 'blur' },
   // ],
   answerTime: [
-    { required: true, message: '必填', trigger: 'change' },
+    { type: 'number',min: 0,message: '答题时间不能小于0',trigger: 'blur',required: true},
   ],
   passScore: [
-    { required: true, message: '必填', trigger: 'change' },
+    { type: 'number',min: 0,message: '及格分数不能小于0',trigger: 'blur',required: true},
   ],
   goodScore: [
-    { required: true, message: '必填', trigger: 'change' },
+    { type: 'number',min: 0,message: '优秀分数不能小于0',trigger: 'blur',required: true},
   ],
+  score: [
+    { type: 'number',min: 0,message: '试卷总分不能小于0',trigger: 'blur',required: true},
+  ],
+  choiceNum: [
+    { type: 'number',min: 0,message: '试题总数不能小于0',trigger: 'blur',required: true},
+  ],
+
   // tagKeyWords: [
   //   { required: true, message: '必填', trigger: 'change' },
   // ],

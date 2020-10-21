@@ -13,7 +13,7 @@ export const  columnsMap = [
   //   prop:'level',
   // },
   {
-    label:'试题难度',
+    label:'职务等级',
     prop:'level',
   },
   // {
@@ -67,7 +67,7 @@ export const rules = {
     { required: true, message: '必填', trigger: 'blur' },
   ],
   kind: [
-    { required: true, message: '必填', trigger: 'blur' },
+    { required: true, message: '必填'},
   ],
   type: [
     { required: true, message: '必填', trigger: 'blur' },

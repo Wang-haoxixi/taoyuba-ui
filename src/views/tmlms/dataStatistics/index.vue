@@ -467,9 +467,9 @@ export default {
               x: 'left',  
               y: 'bottom',  
               splitList: [   
-                  // {start: 500, end:600},{start: 400, end: 500},  
-                  {start: 30000},{start: 20000, end: 30000},  
-                  {start: 1000, end: 20000},{start: 0, end: 10000},  
+                  {start: 1000},{start: 500, end: 999},  
+                  {start: 200,end:499},{start: 100, end: 199},  
+                  {start: 50, end: 99},{start: 0, end: 49},  
               ],  
               color: ['#5475f5', '#9feaa5', '#85daef','#74e2ca', '#e6ac53', '#9fb5ea'],
           },
@@ -1063,6 +1063,8 @@ export default {
 </script>
 <style lang='scss' scoped>
   #statisrics{
+    overflow-y:auto;
+    height: 100%;
     background-color: #06164A;
     .chart-title{
       color:#fff;

@@ -27,7 +27,7 @@
             </el-form-item>
           </el-col>       
           <el-col :span="12">
-            <el-form-item label="考试难度" prop="level">
+            <el-form-item label="职务等级" prop="level">
                 <el-select v-model="form.level" placeholder="请选择">
                 <el-option
                   v-for="item in levelList"
@@ -48,7 +48,7 @@
         </el-row>   
         <el-row>                                                                                                                                                
           <el-col :span="8">                                                                       
-            <el-form-item label="答卷时长" prop="answerTime">                                                                                                            
+            <el-form-item label="答卷时长" prop="answerTime">                                                                                                      
               <el-input v-model="form.answerTime" type='number' oninput="if(value.length>3)value=value.slice(0,3)">
                 <template slot="append">分钟</template>
                 </el-input>
@@ -56,7 +56,7 @@
           </el-col>
           <el-col :span="8">                                                                       
             <el-form-item label="及格分数" prop="passScore">                                                                                                            
-              <el-input v-model="form.passScore" type='number' oninput="if(value.length>3)value=value.slice(0,3)">
+              <el-input  type='number'  v-model.number="form.passScore" oninput="if(value.length>3)value=value.slice(0,3)">
                 <template slot="append">分</template>
               </el-input>
             </el-form-item>
@@ -65,6 +65,29 @@
             <el-form-item label="优秀分数" prop="goodScore">                                                                                                            
               <el-input v-model="form.goodScore" type='number' oninput="if(value.length>3)value=value.slice(0,3)">
                 <template slot="append">分</template>
+              </el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>                                                                                                                                                
+          <el-col :span="8">                                                                       
+            <el-form-item label="试卷总分" prop="score">                                                                                                      
+              <el-input v-model="form.score" type='number' oninput="if(value.length>3)value=value.slice(0,3)">
+                <template slot="append">分</template>
+                </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">                                                                       
+            <el-form-item label="试题总数" prop="choiceNum">                                                                                                            
+              <el-input  type='number'  v-model.number="form.choiceNum" oninput="if(value.length>3)value=value.slice(0,3)">
+                <template slot="append">题</template>
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">                                                                       
+            <el-form-item label="判断题数量" prop="testNumber">                                                                                                            
+              <el-input v-model="form.testNumber" type='number' oninput="if(value.length>3)value=value.slice(0,3)">
+                <template slot="append">题</template>
               </el-input>
             </el-form-item>
           </el-col>
@@ -110,6 +133,9 @@ export default {
         testPaperId:0,
         chargeStatus:'1',
         rewardStatus:'1',
+        choiceNum:'',//题目总数
+        score:'',//总分
+        testNumber:0,//判断题数量
       },             
       init: false,
       // headers: {
@@ -144,6 +170,7 @@ export default {
     },
     getDetail (){
       getExamById(this.$route.query.edit).then(item=>{
+        this.getLevel(item.data.data.kind)
         this.form = item.data.data
       })
     },
@@ -157,6 +184,9 @@ export default {
       this.form.answerTime= parseInt(this.form.answerTime)
       this.form.passScore= parseInt(this.form.passScore)
       this.form.goodScore= parseInt(this.form.goodScore)
+      this.form.choiceNum= parseInt(this.form.choiceNum)
+      this.form.score= parseInt(this.form.score)
+      this.form.testNumber= parseInt(this.form.testNumber)
       // parseInt()
       this.$refs[formName].validate(valid=>{
         console.log(this.form)
@@ -194,8 +224,11 @@ export default {
             }
             })
           }
-          console.log('aaa')
         }else{
+          this.$message({
+              message: '请确认已经填写了所有必填项',
+              type: 'error',
+          })
           return false
         }
       })

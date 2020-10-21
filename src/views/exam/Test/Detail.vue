@@ -36,7 +36,7 @@
                 </el-form-item>
               </el-col>       
               <el-col :span="12">
-                <el-form-item label="考试难度" prop="level">
+                <el-form-item label="职务等级" prop="level">
                     <el-select v-model="form.level" placeholder="请选择" size="medium">
                     <el-option
                       v-for="item in levelList"
@@ -282,6 +282,7 @@ export default {
     },
     getDetail (){
       getTestById(this.$route.query.edit).then(item=>{
+        this.getLevel(item.data.data.kind)
         this.form = item.data.data
         this.testOptions = JSON.parse(this.form.options)
       })
