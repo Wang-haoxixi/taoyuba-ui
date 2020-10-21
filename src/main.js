@@ -11,6 +11,8 @@ import './plugins/element'
 import './plugins/ant-design'
 
 import './core/use'
+import echarts from 'echarts'
+import 'echarts/map/js/china'
 // import VueSocketio from 'vue-socket.io'
 // Vue.use(new VueSocketio({
 //     debug: true,
@@ -18,18 +20,19 @@ import './core/use'
 // }))
 
 import VueAMap from 'vue-amap'
+Vue.prototype.$echarts = echarts
 VueAMap.initAMapApiLoader({
   key: 'f317c5ad96bcde419b16dfc4b022d69f',
   plugin: [
-	  	'AMap.Autocomplete',
-		'AMap.PlaceSearch',
-		'AMap.Scale',
-		'AMap.OverView', 
-		'AMap.ToolBar', 
-		'AMap.MapType', 
-		'AMap.PolyEditor', 
-		'AMap.CircleEditor',
-		'AMap.Geolocation',
+	'AMap.Autocomplete',
+	'AMap.PlaceSearch',
+	'AMap.Scale',
+	'AMap.OverView', 
+	'AMap.ToolBar', 
+	'AMap.MapType', 
+	'AMap.PolyEditor', 
+	'AMap.CircleEditor',
+	'AMap.Geolocation',
 	],
   v: '1.4.4',
 })

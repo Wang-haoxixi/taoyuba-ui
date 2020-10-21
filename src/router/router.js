@@ -14,6 +14,7 @@ import famsRouter from './fams/'
 import shipRouter from './ship'
 import emptyRouter from './empty'
 import tmlmsRouter from './tmlms'
+import examRouter from './exam'
 import exceptionRouter from './exception/'
 import certRouter from './cert/'
 import textBookRouter from './textbook'
@@ -64,5 +65,6 @@ Router.addRoutes([
   ...videoRouter,
   ...certRouter,
   ...articleRouter,
+  ...examRouter,
 ])
 export default Router

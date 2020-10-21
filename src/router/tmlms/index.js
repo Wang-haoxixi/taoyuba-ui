@@ -203,16 +203,28 @@ export default [
       //数据统计
       // {
       //   path: '/dataStatistics',
-      //   component: Layout,
-      //   children: [
-      //     {
-      //       path: 'dataStatistics',
-      //       name: 'dataStatistics',
-      //       component: () => import('@/views/tmlms/dataStatistics/index'),
-      //       meta: noKeepAlive,
-      //     },
-      //   ],
+      //   name: 'dataStatistics',
+      //   component: () => import('@/views/tmlms/dataStatistics/index'),
+      //   meta: noKeepAlive,
       // },
+      {
+        path: '/statistics',
+        component: Layout,
+        children: [
+          {
+            path: 'dataStatistics',
+            name: 'dataStatistics',
+            component: () => import('@/views/tmlms/dataStatistics/index'),
+            meta: noKeepAlive,
+          },
+          {
+            path: 'positionList',
+            name: 'positionList',
+            component: () => import('@/views/tmlms/dataStatistics/positionList'),
+            meta: noKeepAlive,
+          },
+        ],
+      },
       // {
       //   path: '/tmlms_spa',
       //   component: Layout,
