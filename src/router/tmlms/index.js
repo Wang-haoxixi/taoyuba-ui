@@ -201,22 +201,22 @@ export default [
         ],
       },
       //数据统计
-      // {
-      //   path: '/dataStatistics',
-      //   name: 'dataStatistics',
-      //   component: () => import('@/views/tmlms/dataStatistics/index'),
-      //   meta: noKeepAlive,
-      // },
+      {
+        path: '/dataStatistics',
+        name: 'dataStatistics',
+        component: () => import('@/views/tmlms/dataStatistics/index'),
+        meta: noKeepAlive,
+      },
       {
         path: '/statistics',
         component: Layout,
         children: [
-          {
-            path: 'dataStatistics',
-            name: 'dataStatistics',
-            component: () => import('@/views/tmlms/dataStatistics/index'),
-            meta: noKeepAlive,
-          },
+          // {
+          //   path: 'dataStatistics',
+          //   name: 'dataStatistics',
+          //   component: () => import('@/views/tmlms/dataStatistics/index'),
+          //   meta: noKeepAlive,
+          // },
           {
             path: 'positionList',
             name: 'positionList',
