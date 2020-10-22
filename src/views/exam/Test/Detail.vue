@@ -312,6 +312,11 @@ export default {
                 })
               }
               
+            }).catch((error)=>{
+              this.$message({
+                message: error,
+                type: 'error',
+              })
             })
           }else{
             this.testFrom.examQuestionList = []

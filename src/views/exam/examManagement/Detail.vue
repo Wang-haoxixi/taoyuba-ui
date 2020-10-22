@@ -85,8 +85,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">                                                                       
-            <el-form-item label="判断题数量" prop="testNumber">                                                                                                            
-              <el-input v-model="form.testNumber" type='number' oninput="if(value.length>3)value=value.slice(0,3)">
+            <el-form-item label="判断题数量" prop="consume">                                                                                                            
+              <el-input v-model="form.consume" type='number' oninput="if(value.length>3)value=value.slice(0,3)">
                 <template slot="append">题</template>
               </el-input>
             </el-form-item>
@@ -135,7 +135,7 @@ export default {
         rewardStatus:'1',
         choiceNum:'',//题目总数
         score:'',//总分
-        testNumber:0,//判断题数量
+        consume:0,//判断题数量
       },             
       init: false,
       // headers: {

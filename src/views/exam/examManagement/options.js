@@ -11,10 +11,10 @@ export const  columnsMap = [
     label:'职务等级',
     prop:'level',
   },
-  {
-    label:'考试人数',
-    prop:'testNumber',
-  },
+  // {
+  //   label:'考试人数',
+  //   prop:'testNumber',
+  // },
   // {
   //   label:'及格分数',
   //   prop:'passScore',

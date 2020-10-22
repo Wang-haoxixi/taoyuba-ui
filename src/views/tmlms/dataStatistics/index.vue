@@ -1,7 +1,15 @@
 <template>
   <div id="statisrics">
     <el-row>
-      <el-col :span="24"><h1 class="chart-title">衢山渔业船员大数据统计墙</h1></el-col>
+      <el-col :span="24">
+        <h1 class="chart-title">衢山渔业船员大数据统计墙</h1>
+        <div class="select-wrap">
+          <el-select v-model="orgId" @change="changeOrg">
+            <el-option v-for="item in orgList" :key="item.orgId" :label="item.name" :value="item.orgId">
+            </el-option>
+          </el-select>
+        </div>
+      </el-col>
     </el-row>
     <el-row>
       <el-col :span="7">
@@ -24,8 +32,8 @@
       <el-col :span="10" class="all-crew">
         <div class="chart-bg panel font-height">
           <el-row>
-            <el-col :span="12" class="font-yellow">188666</el-col>
-            <el-col :span="12" class="font-yellow">18923</el-col>
+            <el-col :span="12" class="font-yellow">{{totalCrew}}</el-col>
+            <el-col :span="12" class="font-yellow">{{contractCrew}}</el-col>
           </el-row>
           <el-row>
             <el-col :span="12" class="font-text">已上船登记船员</el-col>
@@ -61,13 +69,15 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { getCrewByOrg } from '@/api/tmlms/dataStatistics'
+import { getCrewByOrg,getCountCrew } from '@/api/tmlms/dataStatistics'
 import { getAllAreaName } from '@/api/post/address'
+import { mapState } from 'vuex'
 import 'echarts/map/js/china'
 
 export default {
   data () {
     return {
+      orgId:21,
       chartData:[],
       certTitle:[],
       certTitleName:[],
@@ -76,9 +86,9 @@ export default {
       getProvince:[],
       localProvince:[],
       salary:[],
-      salaryName:[],
+      salaryName:['10K以下','10~12','12~15','15~20','20以上'],
       salaryValue:[],
-      shipName:[],
+      shipName:['0~5年','6~10年','11~15年','16~20年','20年以上'],
       shipValue:[],
       age:[],
       contract:[],
@@ -91,8 +101,6 @@ export default {
       contractToal:'',
       mapChina:'',
       shipAge:'',
-      screenWidth: document.documentElement.clientWidth,//屏幕宽度
-      screenHeight: document.documentElement.clientHeight,//屏幕高度
       statusDict: [
         {
           lable: '',
@@ -127,64 +135,52 @@ export default {
           value: '未签纸质合同',
         },
       ],
+      totalCrew:0,
+      contractCrew:0,
     }
   },
   computed:{
     ...mapGetters(['dictGroup']),
+    ...mapState({
+      orgList: state => state.user.orgs,
+    }),
   },
   mounted (){
     this.drawLine()
   },
   created (){
-    // this.getCertNum()
     this.getPosition()
+    this.getTotalNum()
   },
   methods: {
-    // getCertNum (){
-    //   getCertTitleNum().then(res=>{
-    //     this.certTitle = res.data.data
-    //     this.certTitle = this.certTitle.map(item=>{
-    //       this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
-    //         if(item.cert_title==data.value){
-    //           item.cert_title=data.label
-    //         }
-    //       })
-    //       // return item
-    //       return {
-    //         value:item.number,
-    //         name:item.cert_title,
-    //       }
-    //     })
-    //     this.certTitleName =  this.certTitle.map( v=>{
-    //       return v.name
-    //     })
-    //     this.certTitleNum =  this.certTitle.map( v=>{
-    //       return v.value
-    //     })
-    //     this.certTotal.setOption({
-    //       xAxis: [
-    //         {
-    //           data: this.certTitleName,
-    //         },
-    //       ],
-    //       series: [{
-    //         // 根据名字对应到相应的系列
-    //         name: '证件人数',
-    //         data:  this.certTitleNum,
-    //       }],
-    //     })
-    //   })
-    // },
+    changeOrg (){
+      this.getPosition()
+      this.getTotalNum()
+      this.totalCrew = 0
+      this.contractCrew = 0
+    },
+    getTotalNum (){
+      getCountCrew(this.orgId).then(data=>{
+        let dataNum
+        dataNum = data.data.data
+        Object.keys(dataNum).forEach(item=>{
+          let num = parseInt(dataNum[item])
+          this.totalCrew = this.totalCrew+num
+          if(item=='1') this.contractCrew = num
+        })
+      })
+    },
     getPosition () {
+      this.age = []
+      this.province = []
       //数据获取
-      let orgId = 21
-      getCrewByOrg(orgId).then(res=>{
+      getCrewByOrg(this.orgId).then(res=>{
 
         // console.log(res.data.data)
         //数据格式统一
         //职务船员数量
         this.certTitle = res.data.data.crew.filter(item=>{
-          if(item.position_id !== '0') return item
+          if(item.position_id && item.position_id !=='0') return item
         })
         this.certTitle = this.certTitle.map(item=>{
           this.$store.getters.dictGroup.tyb_resume_position.map(data=>{
@@ -220,107 +216,84 @@ export default {
         Object.keys(res.data.data.age).forEach(key => {
           let age = {}
           switch(key){
-            case '31to40':
-              age.value = res.data.data.age['31to40']
+            case '0':
+              age.value = res.data.data.age['0']
+              age.name = '30及以下'
+              break
+            case '1':
+              age.value = res.data.data.age['1']
               age.name = '31~40'
               break
-            case '41to50':
-              age.value = res.data.data.age['41to50']
+            case '2':
+              age.value = res.data.data.age['2']
               age.name = '41~50'
               break
-            case '51to60':
-              age.value = res.data.data.age['51to60']
+            case '3':
+              age.value = res.data.data.age['3']
               age.name = '51~60'
               break
-            case 'moreThan60':
-              age.value = res.data.data.age['moreThan60']
+            case '4':
+              age.value = res.data.data.age['4']
               age.name = '60及以上'
-              break
-            case 'lessThan30':
-              age.value = res.data.data.age['lessThan30']
-              age.name = '30及以下'
               break
             default:break
           }
           this.age.push(age)
         })
+         //年龄统计
+          this.ageTotal.setOption({
+            legend: {
+                data: this.age.name,
+            },
+              series: [{
+                // 根据名字对应到相应的系列
+                name: '年龄分布',
+                data: this.age,
+              }],
+          })
         //薪资
-        Object.keys(res.data.data.salary).forEach(key => {
-          // let salary = {}
-          switch(key){
-            case '10to12':
-              this.salaryName.push('10~12')
-              this.salaryValue.push(res.data.data.salary['10to12'])
-              // salary.value = res.data.data.salary['10to12']
-              // salary.name = '10~12'
-              break
-            case '12to15':
-              this.salaryName.push('12~15')
-              this.salaryValue.push(res.data.data.salary['12to15'])
-              // salary.value = res.data.data.salary['12to15']
-              // salary.name = '12~15'
-              break
-            case '15to20':
-              this.salaryName.push('15~20')
-              this.salaryValue.push(res.data.data.salary['15to20'])
-              // salary.value = res.data.data.salary['15to20']
-              // salary.name = '15~20'
-              break
-            case 'lessThan10':
-              this.salaryName.push('10K以下')
-              this.salaryValue.push(res.data.data.salary['lessThan10'])
-              // salary.value = res.data.data.salary['lessThan10']
-              // salary.name = '10K以下'
-              break
-            case 'moreThan20':
-              this.salaryName.push('20K以上')
-              this.salaryValue.push(res.data.data.salary['moreThan20'])
-              // salary.value = res.data.data.salary['moreThan20']
-              // salary.name = '20K以上'
-              break
-            default:break
-          }
-          // this.salary.push(salary)
-          
-        }) // [a,b]
+        this.salaryValue = res.data.data.salary
         //船龄
-        Object.keys(res.data.data.ship).forEach(key => {
-          console.log(res.data.data.ship['31to40'])
-          // let salary = {}
-          switch(key){
-            case 'lessThan10':
-              this.shipName.push('10年以下')
-              this.shipValue.push(res.data.data.ship['lessThan10'])
-              // salary.value = res.data.data.salary['10to12']
-              // salary.name = '10~12'
-              break
-            case '31to40':
-              this.shipName.push('30~40年')
-              this.shipValue.push(res.data.data.ship['31to40'])
-              // salary.value = res.data.data.salary['12to15']
-              // salary.name = '12~15'
-              break
-            case 'moreThan40':
-              this.shipName.push('40年以上')
-              this.shipValue.push(res.data.data.ship['moreThan40'])
-              // salary.value = res.data.data.salary['15to20']
-              // salary.name = '15~20'
-              break
-            case '21to30':
-              this.shipName.push('20~30年')
-              this.shipValue.push(res.data.data.ship['21to30'])
-              // salary.value = res.data.data.salary['lessThan10']
-              // salary.name = '10K以下'
-              break
-            case '11to20':
-              this.shipName.push('11~20年')
-              this.shipValue.push(res.data.data.ship['11to20'])
-              // salary.value = res.data.data.salary['moreThan20']
-              // salary.name = '20K以上'
-              break
-            default:break
-          }
-        }) // [a,b]
+        this.shipValue = res.data.data.ship
+         //工资
+        // console.log(this.salary.name)
+        this.salaryTotal.setOption({
+          xAxis: {
+              data:this.salaryName,
+          },
+          series: [{
+              data: this.salaryValue,
+          }],
+        })
+      //   Object.keys(res.data.data.ship).forEach(key => {
+      //     console.log(key)
+      //     // let salary = {}
+      //     switch(key){
+      //       case 'lessThan10':
+      //         this.shipName.push('0~5年')
+      //         this.shipValue.push(res.data.data.ship['lessThan10'])
+      //         break
+      //       case '11to20':
+      //         this.shipName.push('6~10年')
+      //         this.shipValue.push(res.data.data.ship['11to20'])
+      //         break
+      //       case '21to30':
+      //         this.shipName.push('11~15年')
+      //         this.shipValue.push(res.data.data.ship['21to30'])
+      //         break
+      //       case 'moreThan40':
+      //         this.shipName.push('20年以上')
+      //         this.shipValue.push(res.data.data.ship['moreThan40'])
+      //         break
+      //       case '31to40':
+      //         this.shipName.push('16~20年')
+      //         this.shipValue.push(res.data.data.ship['31to40'])
+      //         break
+      //       default:break
+      //     }
+      //   }) // [a,b]
+      // console.log(this.shipName)
+      // console.log(this.shipValue)
         //船龄
         this.shipAge.setOption({
           xAxis: [
@@ -367,19 +340,45 @@ export default {
             name:item.province_id,
           }
         })
-      }).then(()=>{ 
-        let getPr = this.getProvince.map(async (item)=>{
-          item.name = await getAllAreaName(item.name).then(v=>{
-            if(v.data.data.name){
-              return v.data.data.name
-            }
+        if(this.getProvince.length){
+          let getPr = this.getProvince.map(async (item)=>{
+            item.name = await getAllAreaName(item.name).then(v=>{
+              if(v.data.data.name){
+                return v.data.data.name
+              }
+            })
+            return item
           })
-          return item
-        })
-        getPr.map(res=>{
-          res.then(pr=>{
-            this.province.push(pr)
-          }).then(()=>{
+          getPr.map(res=>{
+            res.then(pr=>{
+              this.province.push(pr)
+            }).then(()=>{
+              //籍贯统计
+              this.provinceTotal.setOption({
+                legend: {
+                    data: this.province.name,
+                },
+                  series: [{
+                    // 根据名字对应到相应的系列
+                    name: '籍贯分布',
+                    data: this.province,
+                  }],
+              })
+              //地图数据
+              this.mapProvice = JSON.parse(JSON.stringify(this.province))
+              let reg = /省|市/g
+              let reg1 = /自治区/
+              this.mapProvice = this.mapProvice.map(tt=>{
+                tt.name = tt.name.replace(reg,'')
+                if(reg1.test(tt.name)){
+                  tt.name = tt.name.substring(0,2)
+                }
+                return tt
+              })
+              this.chinaMap(this.mapProvice)
+            })
+          })
+          }else{
             //籍贯统计
             this.provinceTotal.setOption({
               legend: {
@@ -391,63 +390,19 @@ export default {
                   data: this.province,
                 }],
             })
-            //地图数据
-            this.mapProvice = JSON.parse(JSON.stringify(this.province))
-            let reg = /省|自治区|市/g
-            this.mapProvice = this.mapProvice.map(tt=>{
-              tt.name = tt.name.replace(reg,'')
-              return tt
-            })
-
-            this.chinaMap(this.mapProvice)
-              // this.mapChina.setOption({
-              //   series: [{
-              //       // 根据名字对应到相应的系列
-              //       name: '籍贯分布',
-              //       data: this.province,
-              //   }],
-              // })
-          })
-          
-        })
-        
-        //年龄统计
-          this.ageTotal.setOption({
-            legend: {
-                data: this.age.name,
-            },
-              series: [{
-                // 根据名字对应到相应的系列
-                name: '年龄分布',
-                data: this.age,
-              }],
-          })
-        //工资
-        // console.log(this.salary.name)
-        this.salaryTotal.setOption({
-          xAxis: {
-              data:this.salaryName,
-          },
-          series: [{
-              data: this.salaryValue,
-          }],
-        })
-      })
+              //地图数据
+              this.mapProvice = JSON.parse(JSON.stringify(this.province))
+              let reg = /省|自治区|市/g
+              this.mapProvice = this.mapProvice.map(tt=>{
+                tt.name = tt.name.replace(reg,'')
+                return tt
+              })
+              this.chinaMap(this.mapProvice)
+          }
+    })
     },
     chinaMap ( data ) {
-      // let reg = /省/g
-      // data = data.map(v=>{
-      //   console.log(v)
-      // })
-      // proviceData.forEach(v=>{
-        
-      //   console.log('vsddddddddddd') 
-      //   console.log(v)
-      //   v = v.replace(reg, '')
-      //   // v=v.replace(/(^省)|(省$)/g,'')
-      // })
-      // console.log('proviceData')
-      // console.log(proviceData)
+
       this.mapChina = this.$echarts.init(document.getElementById('mapChina'))
       let option = {
         tooltip : {
@@ -469,7 +424,7 @@ export default {
               splitList: [   
                   {start: 1000},{start: 500, end: 999},  
                   {start: 200,end:499},{start: 100, end: 199},  
-                  {start: 50, end: 99},{start: 0, end: 49},  
+                  {start: 50, end: 99},{start: 1, end: 49},  
               ],  
               color: ['#5475f5', '#9feaa5', '#85daef','#74e2ca', '#e6ac53', '#9fb5ea'],
           },
@@ -506,70 +461,7 @@ export default {
           ],
       }
       this.mapChina.setOption(option)
-      // this.mapChina.setOption({
-          // geo: {
-          //       map: 'china',
-          //       roam: false,
-          //       zoom:1.25,
-          //       label: {
-          //           normal: {
-          //               show: true,
-          //               fontSize:'10',
-          //               color: 'rgba(255,255,255)',
-          //           },
-          //       },
-          //       itemStyle: {
-          //           normal: {
-          //             areaColor: 'rgba(43, 196, 243, 0.42)',
-          //             borderColor: 'rgba(43, 196, 243, 1)',
-          //             borderWidth: 1,
-          //           },
-          //           emphasis:{
-          //               areaColor: '#F3B329',
-          //               shadowOffsetX: 0,
-          //               shadowOffsetY: 0,
-          //               shadowBlur: 20,
-          //               borderWidth: 0,
-          //               shadowColor: 'rgba(0, 0, 0, 0.5)',
-          //           },
-          //       },
-          //   },
-          // legend: {
-          //     orient: 'vertical',
-          //     x:'left',
-          //     data:['iphoneX'],
-          // },
-          // dataRange: {
-          //     min: 0,
-          //     max: 2500,
-          //     x: 'left',
-          //     y: 'bottom',
-          //     // text:['高','低'],           
-          //     // calculable : true,
-          // },
-          // toolbox: {
-          //     show: true,
-          //     orient : 'vertical',
-          //     x: 'right',
-          //     y: 'center',
-          //     feature : {
-          //         mark : {show: true},
-          //         dataView : {show: true, readOnly: false},
-          //         restore : {show: true},
-          //         saveAsImage : {show: true},
-          //     },
-          // },
-          // roamController: {
-          //     show: true,
-          //     x: 'right',
-          //     mapTypeControl: {
-          //         'china': true,
-          //     },
-          // },
-        // })
-      // let option = {
-
-      // }
+    
     },
     drawLine (){
         // 基于准备好的dom，初始化echarts实例
@@ -588,6 +480,7 @@ export default {
               lineStyle: {
                 color: '#dddc6b',
               },
+              
             },
           },
           legend: {
@@ -613,6 +506,8 @@ export default {
                     color: 'rgba(255,255,255,.6)',
                     fontSize: 12,
                   },
+                  interval:0,
+                  rotate:45,
                 },
                 axisLine: {
                   lineStyle: {
@@ -695,9 +590,6 @@ export default {
             ],
         })
         //合同
-        // var data = [90, 80, 75, 65, 65]
-        // var titlename = ['javascript', 'VUE', 'jQuery', 'HTML5', 'CSS3']
-        // // var valdata = ['精通', '熟练', '熟练', '掌握', '掌握']
         var myColor = ['#1089E7', '#F57474', '#56D0E3', '#F8B448', '#8B78F6']
         this.contractToal.setOption({
           // color:['#1089E7', '#F57474', '#56D0E3', '#F8B448', '#8B78F6'],
@@ -744,12 +636,6 @@ export default {
                 show: false,
                 inverse: true,
                 data: [],
-                // axisLabel: {
-                //   textStyle: {
-                //     fontSize: 12,
-                //     color: '#fff',
-                //   },
-                // },
               },
             ],
             series: [
@@ -857,16 +743,7 @@ export default {
           tooltip: {
             // 通过坐标轴来触发
             trigger: 'axis',
-          },
-          // grid: {
-          //   top: '10%',
-          //   left: '3%',
-          //   right: '4%',
-          //   bottom: '3%',
-          //   show: true,
-          //   borderColor: '#012f4a',
-          //   containLabel: true,
-          // },  
+          }, 
           xAxis: {
               type: 'category',
               data: [],
@@ -935,15 +812,12 @@ export default {
               center: ['50%', '42%'],
               radius: ['40%', '60%'],
               color: [
-                '#065aab',
-                '#066eab',
-                '#0682ab',
-                '#0696ab',
-                '#06a0ab',
-                '#06b4ab',
-                '#06c8a',
-                '#06dcab',
-                '#06f0ab',
+                '#85daef',
+                '#74e2ca',
+                '#5475f5',
+                '#9feaa5',
+                '#e6ac53',
+                '#9fb5ea',
               ],
               label: { show: false },
               labelLine: { show: false },
@@ -953,17 +827,6 @@ export default {
         })
         //籍贯
         this.provinceTotal.setOption({
-          // title: {
-          //     text: '职务船员籍贯分布',
-          //     left: 'center',
-          //     textStyle:{
-          //       color:'#ffffff',
-          //       fontStyle:'normal',
-          //       fontWeight:'normal',
-          //       fontSize:'16',
-          //       lineHeight:'50',
-          //     },
-          // },
           color: [
             '#006cff',
             '#60cda0',
@@ -990,19 +853,6 @@ export default {
               itemHeight:5,
               data: [],
           },
-          // toolbox: {
-          //     show: true,
-          //     feature: {
-          //         mark: {show: true},
-          //         dataView: {show: true, readOnly: false},
-          //         magicType: {
-          //             show: true,
-          //             type: ['pie', 'funnel'],
-          //         },
-          //         restore: {show: true},
-          //         saveAsImage: {show: true},
-          //     },
-          // },
           series: [{
               name: '籍贯分布',
               type: 'pie',
@@ -1023,50 +873,29 @@ export default {
                 // 连接到文字的线长度
                 length2: 10,
               },
-              // label: {
-              //     color: 'rgba(255, 255, 255, 0.3)',
-              // },
-              // labelLine: {
-              //     lineStyle: {
-              //         color: 'rgba(255, 255, 255, 0.3)',
-              //     },
-              //     smooth: 0.2,
-              //     length: 10,
-              //     length2: 20,
-              // },
-              // itemStyle: {
-              //     color: '#c23531',
-              //     shadowBlur: 200,
-              //     shadowColor: 'rgba(0, 0, 0, 0.5)',
-              // },
-
-              // animationType: 'scale',
-              // animationEasing: 'elasticOut',
-              // animationDelay: function (idx) {
-              //   console.log(idx)
-              //     return Math.random() * 200
-              // },
           }],
         })
     },
   },
   watch:{
-      'screenWidth':function (){ //监听屏幕宽度变化
-        this.certTotal.resize()
 
-      },
-      'screenHeight':function (){ //监听屏幕高度变化
-        // this.drawLine()
-      },
   },
 }
 </script>
 <style lang='scss' scoped>
   #statisrics{
+    position: relative;
     overflow-y:auto;
     height: 100%;
     background-color: #06164A;
+    .select-wrap{
+      position:absolute;
+      top:40px;
+      right: 30px;
+    }
     .chart-title{
+      padding-top:30px;
+      font-size:30px;
       color:#fff;
       text-align: center;
     }

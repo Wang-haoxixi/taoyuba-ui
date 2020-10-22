@@ -22,3 +22,10 @@ export function getCrewByOrg (orgId) {
         params: orgId,
     })
 }
+export function getCountCrew (orgId) {
+    return request({
+        url: `${prefixUrl}/countCrew?orgId=${orgId}`,
+        method: 'get',
+        params: orgId,
+    })
+}

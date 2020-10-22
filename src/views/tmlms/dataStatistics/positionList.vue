@@ -94,7 +94,7 @@ export default {
       getProvince:[],
       localProvince:[],
       salary:[],
-      salaryName:[],
+      salaryName:['10K以下','10~12','12~15','15~20','20以上'],
       salaryValue:[],
       shipName:[],
       shipValue:[],
@@ -201,165 +201,61 @@ export default {
     // },
     getPosition (positonId) {
       this.age = []
-      this.salaryName = []
-      this.salaryValue = []
+      this.province = []
       //数据获取
       // let orgId = 21
       getPositionInfor(positonId).then(res=>{
-        console.log(res.data.data)
-        //数据格式统一
-        //职务船员数量
-        // this.certTitle = res.data.data.crew.filter(item=>{
-        //   if(item.position_id !== '0') return item
-        // })
-        // this.certTitle = this.certTitle.map(item=>{
-        //   this.$store.getters.dictGroup.tyb_resume_position.map(data=>{
-        //     if(item.position_id==data.value){
-        //       item.position_id=data.label
-        //     }
-        //   })
-        //   // return item
-        //   return {
-        //     value:item.number,
-        //     name:item.position_id,
-        //   }
-        // })
-        // this.certTitleName =  this.certTitle.map( v=>{
-        //   return v.name
-        // })
-        // this.certTitleNum =  this.certTitle.map( v=>{
-        //   return v.value
-        // })
-        // this.certTotal.setOption({
-        //   xAxis: [
-        //     {
-        //       data: this.certTitleName,
-        //     },
-        //   ],
-        //   series: [{
-        //     // 根据名字对应到相应的系列
-        //     name: '职务船员',
-        //     data:  this.certTitleNum,
-        //   }],
-        // })
         //年龄
         Object.keys(res.data.data.age).forEach(key => {
           let age = {}
           switch(key){
-            case '31to40':
-              age.value = res.data.data.age['31to40']
+            case '0':
+              age.value = res.data.data.age['0']
+              age.name = '30及以下'
+              break
+            case '1':
+              age.value = res.data.data.age['1']
               age.name = '31~40'
               break
-            case '41to50':
-              age.value = res.data.data.age['41to50']
+            case '2':
+              age.value = res.data.data.age['2']
               age.name = '41~50'
               break
-            case '51to60':
-              age.value = res.data.data.age['51to60']
+            case '3':
+              age.value = res.data.data.age['3']
               age.name = '51~60'
               break
-            case 'moreThan60':
-              age.value = res.data.data.age['moreThan60']
+            case '4':
+              age.value = res.data.data.age['4']
               age.name = '60及以上'
-              break
-            case 'lessThan30':
-              age.value = res.data.data.age['lessThan30']
-              age.name = '30及以下'
               break
             default:break
           }
           this.age.push(age)
         })
+        //年龄统计
+          this.ageTotal.setOption({
+            legend: {
+                data: this.age.name,
+            },
+              series: [{
+                // 根据名字对应到相应的系列
+                name: '年龄分布',
+                data: this.age,
+              }],
+          })
         //薪资
-        Object.keys(res.data.data.salary).forEach(key => {
-          // let salary = {}
-          switch(key){
-            case '10to12':
-              this.salaryName.push('10~12')
-              this.salaryValue.push(res.data.data.salary['10to12'])
-              // salary.value = res.data.data.salary['10to12']
-              // salary.name = '10~12'
-              break
-            case '12to15':
-              this.salaryName.push('12~15')
-              this.salaryValue.push(res.data.data.salary['12to15'])
-              // salary.value = res.data.data.salary['12to15']
-              // salary.name = '12~15'
-              break
-            case '15to20':
-              this.salaryName.push('15~20')
-              this.salaryValue.push(res.data.data.salary['15to20'])
-              // salary.value = res.data.data.salary['15to20']
-              // salary.name = '15~20'
-              break
-            case 'lessThan10':
-              this.salaryName.push('10K以下')
-              this.salaryValue.push(res.data.data.salary['lessThan10'])
-              // salary.value = res.data.data.salary['lessThan10']
-              // salary.name = '10K以下'
-              break
-            case 'moreThan20':
-              this.salaryName.push('20K以上')
-              this.salaryValue.push(res.data.data.salary['moreThan20'])
-              // salary.value = res.data.data.salary['moreThan20']
-              // salary.name = '20K以上'
-              break
-            default:break
-          }
-          // this.salary.push(salary)
-          
-        }) // [a,b]
-        //船龄
-        // Object.keys(res.data.data.ship).forEach(key => {
-        //   console.log(res.data.data.ship['31to40'])
-        //   // let salary = {}
-        //   switch(key){
-        //     case 'lessThan10':
-        //       this.shipName.push('10年以下')
-        //       this.shipValue.push(res.data.data.ship['lessThan10'])
-        //       // salary.value = res.data.data.salary['10to12']
-        //       // salary.name = '10~12'
-        //       break
-        //     case '31to40':
-        //       this.shipName.push('30~40年')
-        //       this.shipValue.push(res.data.data.ship['31to40'])
-        //       // salary.value = res.data.data.salary['12to15']
-        //       // salary.name = '12~15'
-        //       break
-        //     case 'moreThan40':
-        //       this.shipName.push('40年以上')
-        //       this.shipValue.push(res.data.data.ship['moreThan40'])
-        //       // salary.value = res.data.data.salary['15to20']
-        //       // salary.name = '15~20'
-        //       break
-        //     case '21to30':
-        //       this.shipName.push('20~30年')
-        //       this.shipValue.push(res.data.data.ship['21to30'])
-        //       // salary.value = res.data.data.salary['lessThan10']
-        //       // salary.name = '10K以下'
-        //       break
-        //     case '11to20':
-        //       this.shipName.push('11~20年')
-        //       this.shipValue.push(res.data.data.ship['11to20'])
-        //       // salary.value = res.data.data.salary['moreThan20']
-        //       // salary.name = '20K以上'
-        //       break
-        //     default:break
-        //   }
-        // }) // [a,b]
-        //船龄
-        // this.shipAge.setOption({
-        //   xAxis: [
-        //       {
-        //         data: this.shipName,
-        //       },
-        //     ],
-        //     series: [
-        //     {
-        //       data: this.shipValue,
-        //     },
-        //   ],
-        // })
+        this.salaryValue = res.data.data.salary
+        //工资
+        // console.log(this.salary.name)
+        this.salaryTotal.setOption({
+          xAxis: {
+              data:this.salaryName,
+          },
+          series: [{
+              data: this.salaryValue,
+          }],
+        })
         //合同
         this.contract = res.data.data.contract
         this.contractStatus = res.data.data.contract.map(item=>{
@@ -386,26 +282,52 @@ export default {
             },
           ],
         })
-        //籍贯
+      //籍贯
         this.getProvince = res.data.data.province.map(item=>{
           return {
             value:item.number,
             name:item.province_id,
           }
         })
-      }).then(()=>{ 
-        let getPr = this.getProvince.map(async (item)=>{
-          item.name = await getAllAreaName(item.name).then(v=>{
-            if(v.data.data.name){
-              return v.data.data.name
-            }
+        if(this.getProvince.length){
+          let getPr = this.getProvince.map(async (item)=>{
+            item.name = await getAllAreaName(item.name).then(v=>{
+              if(v.data.data.name){
+                return v.data.data.name
+              }
+            })
+            return item
           })
-          return item
-        })
-        getPr.map(res=>{
-          res.then(pr=>{
-            this.province.push(pr)
-          }).then(()=>{
+          getPr.map(res=>{
+            res.then(pr=>{
+              this.province.push(pr)
+            }).then(()=>{
+              //籍贯统计
+              this.provinceTotal.setOption({
+                legend: {
+                    data: this.province.name,
+                },
+                  series: [{
+                    // 根据名字对应到相应的系列
+                    name: '籍贯分布',
+                    data: this.province,
+                  }],
+              })
+              //地图数据
+              this.mapProvice = JSON.parse(JSON.stringify(this.province))
+              let reg = /省|市/g
+              let reg1 = /自治区/
+              this.mapProvice = this.mapProvice.map(tt=>{
+                tt.name = tt.name.replace(reg,'')
+                if(reg1.test(tt.name)){
+                  tt.name = tt.name.substring(0,2)
+                }
+                return tt
+              })
+              this.chinaMap(this.mapProvice)
+            })
+          })
+          }else{
             //籍贯统计
             this.provinceTotal.setOption({
               legend: {
@@ -417,48 +339,16 @@ export default {
                   data: this.province,
                 }],
             })
-            //地图数据
-            // this.mapProvice = JSON.parse(JSON.stringify(this.province))
-            // let reg = /省|自治区|市/g
-            // this.mapProvice = this.mapProvice.map(tt=>{
-            //   tt.name = tt.name.replace(reg,'')
-            //   return tt
-            // })
-
-            // this.chinaMap(this.mapProvice)
-              // this.mapChina.setOption({
-              //   series: [{
-              //       // 根据名字对应到相应的系列
-              //       name: '籍贯分布',
-              //       data: this.province,
-              //   }],
-              // })
-          })
-          
-        })
-        
-        //年龄统计
-          this.ageTotal.setOption({
-            legend: {
-                data: this.age.name,
-            },
-              series: [{
-                // 根据名字对应到相应的系列
-                name: '年龄分布',
-                data: this.age,
-              }],
-          })
-        //工资
-        // console.log(this.salary.name)
-        this.salaryTotal.setOption({
-          xAxis: {
-              data:this.salaryName,
-          },
-          series: [{
-              data: this.salaryValue,
-          }],
-        })
-      })
+              //地图数据
+              this.mapProvice = JSON.parse(JSON.stringify(this.province))
+              let reg = /省|自治区|市/g
+              this.mapProvice = this.mapProvice.map(tt=>{
+                tt.name = tt.name.replace(reg,'')
+                return tt
+              })
+              this.chinaMap(this.mapProvice)
+          }
+    })
     },
     chinaMap ( data ) {
       // let reg = /省/g
@@ -961,15 +851,12 @@ export default {
               center: ['50%', '42%'],
               radius: ['40%', '60%'],
               color: [
-                '#065aab',
-                '#066eab',
-                '#0682ab',
-                '#0696ab',
-                '#06a0ab',
-                '#06b4ab',
-                '#06c8a',
-                '#06dcab',
-                '#06f0ab',
+                '#85daef',
+                '#74e2ca',
+                '#5475f5',
+                '#9feaa5',
+                '#e6ac53',
+                '#9fb5ea',
               ],
               label: { show: false },
               labelLine: { show: false },
