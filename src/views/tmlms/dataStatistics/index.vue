@@ -2,7 +2,7 @@
   <div id="statisrics">
     <el-row>
       <el-col :span="24">
-        <h1 class="chart-title">衢山渔业船员大数据统计墙</h1>
+        <h1 class="chart-title">{{orgTitle}}渔业船员大数据统计墙</h1>
         <div class="select-wrap">
           <el-select v-model="orgId" @change="changeOrg">
             <el-option v-for="item in orgList" :key="item.orgId" :label="item.name" :value="item.orgId">
@@ -78,6 +78,7 @@ export default {
   data () {
     return {
       orgId:21,
+      orgTitle:'衢山',
       chartData:[],
       certTitle:[],
       certTitleName:[],
@@ -149,11 +150,18 @@ export default {
     this.drawLine()
   },
   created (){
-    this.getPosition()
-    this.getTotalNum()
+    this.changeOrg(21)
   },
   methods: {
-    changeOrg (){
+    changeOrg (item){
+      console.log('item')
+      console.log(item)
+      this.orgList.forEach(v=>{
+        if(v.orgId == item){
+          this.orgTitle = v.name
+        }
+      })
+      // console.log(this.orgTitle)
       this.getPosition()
       this.getTotalNum()
       this.totalCrew = 0
@@ -323,6 +331,9 @@ export default {
         })
         this.contractToal.setOption({
           yAxis: [
+              {
+                data: this.contractStatus,
+              },
               {
                 data: this.contractStatus,
               },

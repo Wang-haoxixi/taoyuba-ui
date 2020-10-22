@@ -85,7 +85,7 @@ import 'echarts/map/js/china'
 export default {
   data () {
     return {
-      positionId:'',
+      positionId:'1',
       chartData:[],
       certTitle:[],
       certTitleName:[],
@@ -275,6 +275,9 @@ export default {
               {
                 data: this.contractStatus,
               },
+              {
+                data: this.contractStatus,
+              },
             ],
             series: [
             {
@@ -351,19 +354,7 @@ export default {
     })
     },
     chinaMap ( data ) {
-      // let reg = /省/g
-      // data = data.map(v=>{
-      //   console.log(v)
-      // })
-      // proviceData.forEach(v=>{
-        
-      //   console.log('vsddddddddddd') 
-      //   console.log(v)
-      //   v = v.replace(reg, '')
-      //   // v=v.replace(/(^省)|(省$)/g,'')
-      // })
-      // console.log('proviceData')
-      // console.log(proviceData)
+
       this.mapChina = this.$echarts.init(document.getElementById('mapChina'))
       let option = {
         tooltip : {
@@ -962,15 +953,6 @@ export default {
           }],
         })
     },
-  },
-  watch:{
-      'screenWidth':function (){ //监听屏幕宽度变化
-        this.certTotal.resize()
-
-      },
-      'screenHeight':function (){ //监听屏幕高度变化
-        // this.drawLine()
-      },
   },
 }
 </script>
