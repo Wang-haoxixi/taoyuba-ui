@@ -125,16 +125,16 @@ export default {
         examName:'',
         kind:'',//类型
         level:'',//等级
-        answerTime:'',
-        passScore:'',
-        goodScore:'',
+        answerTime:60,
+        passScore:80,
+        goodScore:90,
         examExplain:'',
         openScope:'1',
         testPaperId:0,
         chargeStatus:'1',
         rewardStatus:'1',
-        choiceNum:'',//题目总数
-        score:'',//总分
+        choiceNum:50,//题目总数
+        score:100,//总分
         consume:0,//判断题数量
       },             
       init: false,
