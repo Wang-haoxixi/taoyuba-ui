@@ -268,6 +268,9 @@ export default {
           return item.status
         })
         this.contractNum = res.data.data.contract.map(item=>{
+          let conTotal = 0
+          conTotal =conTotal+ parseInt(item.number)
+          item.number = item.number/conTotal
           return item.number
         })
         this.contractToal.setOption({

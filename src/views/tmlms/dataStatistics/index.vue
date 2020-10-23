@@ -37,7 +37,7 @@
           </el-row>
           <el-row>
             <el-col :span="12" class="font-text">已上船登记船员</el-col>
-            <el-col :span="12" class="font-text">已签订劳动合同船员</el-col>
+            <el-col :span="12" class="font-text">已签订劳务协议船员</el-col>
           </el-row>
         </div>
         <div id="mapChina" :style="{width: '100%', height: '600px'}"></div>
@@ -154,8 +154,6 @@ export default {
   },
   methods: {
     changeOrg (item){
-      console.log('item')
-      console.log(item)
       this.orgList.forEach(v=>{
         if(v.orgId == item){
           this.orgTitle = v.name
@@ -327,6 +325,9 @@ export default {
           return item.status
         })
         this.contractNum = res.data.data.contract.map(item=>{
+          let conTotal = 0
+          conTotal =conTotal+ parseInt(item.number)
+          item.number = item.number/conTotal
           return item.number
         })
         this.contractToal.setOption({
@@ -601,7 +602,7 @@ export default {
             ],
         })
         //合同
-        var myColor = ['#1089E7', '#F57474', '#56D0E3', '#F8B448', '#8B78F6']
+        var myColor = ['#1089E7', '#F57474', '#56D0E3', '#F8B448', '#8B78F6','#1089E7']
         this.contractToal.setOption({
           // color:['#1089E7', '#F57474', '#56D0E3', '#F8B448', '#8B78F6'],
             //图标位置
