@@ -321,13 +321,14 @@ export default {
               item.status = v.value
             }
           })
-          
           return item.status
         })
-        this.contractNum = res.data.data.contract.map(item=>{
-          let conTotal = 0
+        let conTotal = 0
+        res.data.data.contract.forEach(item=>{
           conTotal =conTotal+ parseInt(item.number)
-          item.number = item.number/conTotal
+        })
+        this.contractNum = res.data.data.contract.map(item=>{
+          item.number = Number((item.number/conTotal)*100).toFixed(0)
           return item.number
         })
         this.contractToal.setOption({
