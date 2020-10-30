@@ -222,6 +222,9 @@ export default {
     addUserInfo () {
       this.$refs.userInfoForm.validate((valid) => {
           if (valid) {
+            this.form.idcard = ''
+            this.form.address = ''
+            this.form.nation = ''
             this.form.nationality  = '中国'
             this.form.gender = 1
             this.form.shipId = this.$route.params.shipId
