@@ -4,7 +4,7 @@
         <h1 v-if="!$route.query.userId">
             <!-- {{ $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }} -->
             {{$route.query.shipName}}上船登记</h1>           
-            <el-form :model="form" disabled="true" label-width="150px" size="small" >
+            <el-form :model="form" :rules="userRule" ref="userInfoForm" :disabled="false" label-width="150px" size="small" >
                 <el-row>
                 <el-col :span="12">
                     <el-form-item label="个人姓名：" prop="realName">
@@ -41,9 +41,13 @@
                     <el-input v-model="form.address"></el-input>
                     </el-form-item>
                 </el-col>
+                  <el-col :span="12" style="text-align: right;">
+                    <el-button type="primary" size="small" @click="addUserInfo">添加</el-button>
+                  </el-col>
                 </el-row>                   
-            </el-form>
 
+            </el-form>
+            
               <el-table
               :data="crewList"
               >
@@ -175,6 +179,17 @@ export default {
         {id:1, name:'以旧换新'}, {id:2, name:'普通船员'}, {id:3, name:'职务船员'}, {id:4, name:'证书换发'}, 
         {id:5, name:'证书补发'}, {id:6, name:'其他'}, 
       ],
+      userRule: {
+        realName: [
+          { required: true, message: '请填写个人姓名', trigger: 'blur' },
+        ],
+        idcard: [
+            { required: true, message: '请填写身份证信息', trigger: 'blur' },
+        ],
+        address:[
+            { required: true, message: '请填写地址', trigger: 'blur' },
+        ],
+      },
       // userRole: {
       //   userId: '',
       //   roleId: 105,
@@ -194,6 +209,19 @@ export default {
     }
   },
   methods: {
+    addUserInfo () {
+      this.$refs.userInfoForm.validate((valid) => {
+          if (valid) {
+            this.crewList.push(Object.assign({}, this.form))
+            console.log('this.crewList', this.crewList)
+            this.form.realName = ''
+            this.form.idcard = ''
+            this.form.address = ''
+          } else {
+            return false
+          }
+        })
+    },
     handleDelete (idcard){
       this.crewList=this.crewList.filter(m => {
         if(m.idcard!==idcard){

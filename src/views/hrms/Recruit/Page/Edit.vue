@@ -4,6 +4,11 @@
       <page-header :title="`${methodName}招聘`" :backOption="backOption"></page-header>
       <el-form ref="form" :model="form" :rules="rules" label-width="140px" size="small">
         <el-row>
+          <el-col :span="12" v-if="manager">
+            <el-form-item label="船名：" prop="shipName">
+              <el-input v-model.trim="form.shipName" :disabled="haveInfo.shipName" @blur="onBlurShipName"></el-input>
+            </el-form-item>
+          </el-col>
           <el-col :span="12">
             <el-form-item label="联系人：" prop="contactName">
               <el-input v-model="form.contactName" :disabled="haveInfo.realName"></el-input>
@@ -14,8 +19,6 @@
               <iep-dict-select v-model="form.positionId" dict-name="tyb_resume_position"></iep-dict-select>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="联系电话：" prop="contactPhone">
               <el-input v-model="form.contactPhone" :disabled="haveInfo.phone"></el-input>
@@ -25,23 +28,22 @@
             <el-form-item label="招聘人数：" prop="recruitNo">
               <el-input v-model="form.recruitNo"></el-input>
             </el-form-item>
-          </el-col>         
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="月薪：" prop="salary">
-              <el-input v-model="form.salary"></el-input>
-            </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="月薪：" prop="salary">
+              <el-select v-model="form.salaryCurrency" placeholder="请选择">
+                <el-option v-for="item in salaryList" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+              <!-- <el-input v-model="form.salary"></el-input> -->
+            </el-form-item>
+          </el-col>
+          <!-- <el-col :span="12">
             <el-form-item label="货币种类：" prop="salaryCurrency">
               <el-select v-model="form.salaryCurrency" placeholder="请选择">
                 <el-option v-for="item in salaryCurrencys" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
+          </el-col> -->
           <el-col :span="12">
             <el-form-item label="证书职务：" prop="certTitle">        
               <iep-dict-select v-model="form.certTitle" dict-name="tyb_crew_cert_title"></iep-dict-select>
@@ -54,14 +56,12 @@
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="作业方式：" prop="workMode">
               <iep-dict-select v-model="form.workMode" dict-name="tyb_resume_worktype">></iep-dict-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <el-form-item label="上船地点：">
               <el-select v-model="form.province" placeholder="请选择" style="width: 33%!important" @change="getCity">
                 <el-option v-for="item in provinces" prop='province' :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -73,9 +73,7 @@
                 <el-option v-for="item in citys" prop='city' :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select> 
             </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
+          </el-col> -->
           <el-col :span="12">
             <el-form-item type="number" label="船长（m）：" prop="hullLength">
               <el-input v-model="form.hullLength"></el-input>
@@ -86,20 +84,16 @@
               <el-input v-model="form.totalPower"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="年龄要求：" prop="ageRequire">
               <iep-dict-select v-model="form.ageRequire" dict-name="tyb_position_agerequirement">></iep-dict-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">       
+          <!-- <el-col :span="12">
             <el-form-item label="船名：" prop="shipName" v-if="manager">
               <el-input v-model="form.shipName" ></el-input>
             </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
+          </el-col> -->
            <el-col :span="12">                       
            <el-form-item label="工作经验：" prop="workExprience">               
                 <iep-dict-select v-model="form.workExprience" dict-name="tyb_work_exprience">></iep-dict-select>    
@@ -121,7 +115,7 @@
   </div>
 </template>
 <script>
-import { getRecruitById, addRecruit, putRecruit} from '@/api/post/recruit'
+import { getRecruitById, addRecruit, putRecruit, getInfoByShipName} from '@/api/post/recruit'
 import { getArea } from '@/api/post/address'
 import { initForm, formToDto, rules, dictsMap } from '../options'
 import information from '@/mixins/information'
@@ -168,6 +162,14 @@ export default {
       ],
       manager: false,
       userId: '',
+      salaryList: [
+        { label: '面议', value: '1' },
+        { label: '4K以下', value: '2' },
+        { label: '4-6K', value: '3' },
+        { label: '6-8K', value: '4' },
+        { label: '8K-10K', value: '5' },
+        { label: '10K及以上', value: '6' },
+      ],
     }
   },
   computed: {
@@ -207,12 +209,28 @@ export default {
     this.getInformation('form',['contactPhone','contactName'])
   },
   methods: {
+    // 通过渔船名查找信息
+    onBlurShipName (e) {
+      let value = e.target.value
+      if (value) {
+        getInfoByShipName(value).then(({ data }) => {
+          if (data.code === 0) {
+            let result = data.data
+            this.form.contactName = result.shipowner // 联系人
+            this.form.contactPhone = result.mobile // 联系电话
+            this.form.hullLength = result.hullLength // 船长
+            // this.form.totalPower = result. // 主机总功率
+          }
+        })
+      }
+     
+    },
     getProvince () {
       getArea(0).then(({ data }) => {
         this.provinces = data.data.map(item=>{
           return {
             label: item.name,
-            value: item.areaCode,  
+            value: item.areaCode,
           }
         })
       })
@@ -273,6 +291,7 @@ export default {
           if (this.form.salary === '面议') {
             this.form.salary = 0
           }
+          this.form.salaryCurrency = '1'
           submitFunction(formToDto(this.form), publish).then(({ data }) => {
             if (data.data) {
               this.$message({

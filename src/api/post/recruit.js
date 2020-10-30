@@ -61,3 +61,10 @@ export function exportExcel (ids) {
     title: '招聘信息',
   })
 }
+// 通过渔船名查找相关信息
+export function getInfoByShipName (shipName) {
+  return request ({
+    url:`/tybship/tybship/findmyship/${shipName}`,
+    method: 'get',
+  })
+}
