@@ -219,7 +219,7 @@ export default {
             this.form.contactName = result.shipowner // 联系人
             this.form.contactPhone = result.mobile // 联系电话
             this.form.hullLength = result.hullLength // 船长
-            // this.form.totalPower = result. // 主机总功率
+            this.form.totalPower = result.engineTotalPower // 主机总功率
           }
         })
       }
