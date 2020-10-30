@@ -105,6 +105,15 @@ export default {
             callback()
         }
       }
+    let checIdCard = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请填写身份证信息'))
+      } else if (!value.match(/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/)) {
+        callback(new Error('身份证号码不正确'))
+      } else {
+        callback()
+      }
+    }
     return {        
       certificateColumns,
       form: {
@@ -185,6 +194,7 @@ export default {
         ],
         idcard: [
             { required: true, message: '请填写身份证信息', trigger: 'blur' },
+            { validator: checIdCard, trigger: 'blur' },
         ],
         address:[
             { required: true, message: '请填写地址', trigger: 'blur' },
@@ -212,11 +222,19 @@ export default {
     addUserInfo () {
       this.$refs.userInfoForm.validate((valid) => {
           if (valid) {
+            this.form.nationality  = '中国'
+            this.form.gender = 1
+            this.form.shipId = this.$route.params.shipId
+            this.form.flag = 1
+            this.form.birthday = this.form.idcard.slice(6, 10)+'-'+this.form.idcard.slice(10, 12)+'-'+this.form.idcard.slice(12, 14)
             this.crewList.push(Object.assign({}, this.form))
-            console.log('this.crewList', this.crewList)
+            // console.log('this.crewList', this.crewList)
             this.form.realName = ''
             this.form.idcard = ''
             this.form.address = ''
+            this.form.nationality = ''
+            this.form.gender = ''
+            this.form.birthday = ''
           } else {
             return false
           }
