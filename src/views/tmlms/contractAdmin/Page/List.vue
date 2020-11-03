@@ -47,7 +47,7 @@
         </template>
       </operation-container>
      
-      <avue-tree-table :option="options" style="margin-top: 20px;">
+      <avue-tree-table :option="options" style="margin-top: 20px;" :row-class-name="rowClassName">
         <!-- <el-table-column label="是否审核" prop="status">
           <template slot-scope="scope">
             <el-switch v-model="scope.row.status" active-color="#13ce66" inactive-color="#ff4949"
@@ -446,6 +446,14 @@ export default {
     },
   },
   methods: {
+    rowClassName ({row}) {
+      // 合同解除
+      if (row.status === '合同解除') {
+        return 'outer-grey'
+      } else if (row.status === '合同过期') {
+        return 'outer-grey'
+      }
+    },
     //获取基层组织
   getVillageOrg () {
     getVillageByOrg().then(res=>{
@@ -1085,9 +1093,11 @@ export default {
 .contract-box {
   padding: 20px;
 }
+
 </style>
 
 <style scoped>
+
 .tips {
   background: #ecf5ff;
   padding:10px 10px 4px 10px;
@@ -1151,4 +1161,8 @@ export default {
   .el-upload-list__item-name {
      display: none;
   }
+  .outer-grey {
+    color: #ccc !important;
+  }
+
 </style>
