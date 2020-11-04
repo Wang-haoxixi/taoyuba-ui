@@ -102,6 +102,7 @@
             </el-button> 
               <el-button v-if="mlms_contract_upload && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')  && scope.row.contractImage === '1' " type="text" icon="el-icon-edit" size="mini" @click="handleUpload(scope.row.contractId)">查看纸质合同
             </el-button> 
+            <el-button v-if="mlms_contract_employee" icon="el-icon-edit" size="mini" type="text" @click="onToEmployee(scope.row.employeeIdcard)">船员编辑</el-button>
           </template>   
         </el-table-column>
       </avue-tree-table>    
@@ -283,6 +284,7 @@ export default {
       mlms_contract_rem: false,
       mlms_contract_recall: false,
       mlms_contract_upload:false,
+      mlms_contract_employee: false,
       shipAttrDict: [],
       employeePayTypeDict: [],
       periodTypeDict: [],
@@ -378,6 +380,7 @@ export default {
     this.getVillageOrg()      
     this.getContractList()     
     this.getDicts()
+    this.mlms_contract_employee = this.permissions['mlms_contract_employee']
     this.mlms_contract_add = this.permissions['mlms_contract_add']
     this.mlms_contract_view = this.permissions['mlms_contract_view']
     this.mlms_contract_edit = this.permissions['mlms_contract_edit']
@@ -446,6 +449,9 @@ export default {
     },
   },
   methods: {
+    onToEmployee (idcard) {
+      this.$router.push(`/boatMan/detail?edit=${idcard}`)
+    },
     rowClassName ({row}) {
       // 合同解除
       if (row.status === '合同解除') {
