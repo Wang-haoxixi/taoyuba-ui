@@ -3,7 +3,7 @@ const prefixUrl = '/tmlms/dispute'
 
 export function getPage (params) {
     return request({
-        url: `${prefixUrl}/page`,
+        url: `${prefixUrl}/getPage`,
         method: 'get',
         params: params,
     })

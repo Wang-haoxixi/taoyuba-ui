@@ -20,7 +20,6 @@
                            remote
                            maxlength="20"
                            :loading="loading"
-                           allow-create
                            clearable
                            @change="shipNameChange"
                            :remote-method="getShipNameList">

@@ -359,6 +359,18 @@ export default [
   //     },
   //   ],
   // },         
-
+  // 劳务纠纷
+  {
+    path: '/laborDisputes',
+    component: Layout,
+    children: [
+      {
+        path: 'form',
+        name: 'laborDisputesForm',
+        component: () => import('@/views/tmlms/laborDisputes/form'),
+        meta: noKeepAlive,
+      },
+    ],
+  },
 
 ]
