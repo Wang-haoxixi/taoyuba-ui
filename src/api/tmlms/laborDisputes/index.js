@@ -19,7 +19,7 @@ export function createPage (params) {
 
 export function editPage (params) {
   return request({
-      url: `${prefixUrl}/edit`,
+      url: `${prefixUrl}/edit?type=${params.type}`,
       method: 'post',
       data: params,
   })

@@ -302,6 +302,7 @@ export default {
     },
     // 获取列表数据
     getData () {      
+      this.params.status = 2
       getCrew(this.params).then(res=>{    
         this.shipownerList = res.data.data.records
         // this.shipownerList.map(m => { 

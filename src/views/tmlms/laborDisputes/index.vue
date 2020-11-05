@@ -3,12 +3,12 @@
     <page-header title="劳资纠纷管理"></page-header>
     <operation-container>
       <template slot="left">
-        <iep-button @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
+        <iep-button @click="handleAdd" type="primary" icon="el-icon-plus" plain v-if="labor_disputes_add">新增</iep-button>
       </template>
       <template slot="right">
-        <span class="width180"><el-input v-model="params.shipowner" placeholder="船东" size="small" clearable></el-input></span>
-        <span class="width180"><el-input v-model="params.crewRealName" placeholder="船员" size="small" clearable></el-input></span>
-        <span class="width180"><el-input v-model="params.shipName" placeholder="渔船名" size="small" clearable></el-input></span>
+        <span class="width180"><el-input v-model.trim="params.shipowner" placeholder="船东" size="small" clearable></el-input></span>
+        <span class="width180"><el-input v-model.trim="params.crewRealName" placeholder="船员" size="small" clearable></el-input></span>
+        <span class="width180"><el-input v-model.trim="params.shipName" placeholder="渔船名" size="small" clearable></el-input></span>
         <el-button size="small"  @click="getList">搜索</el-button>
       </template>
     </operation-container>
@@ -61,11 +61,15 @@
           <el-button
             size="mini"
             type="text"
-            @click="handleEdit(scope.row)">编辑</el-button>
+            @click="handleEdit(scope.row)" v-if="labor_disputes_scroe">打分</el-button>
+            <el-button
+            size="mini"
+            type="text"
+            @click="handleEdit2(scope.row)" v-if="labor_disputes_edit">编辑</el-button>
           <el-button
             size="mini"
             type="text"
-            @click="handleDelete(scope.row)">删除</el-button>
+            @click="handleDelete(scope.row)" v-if="labor_disputes_delete">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -77,6 +81,7 @@
 <script>
 import { getPage, removePage } from '@/api/tmlms/laborDisputes/index'
 import maps from './maps'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -89,14 +94,33 @@ export default {
       status: 'create',
       total: 10,
       pagedTable: [],
+      labor_disputes_add: false,
+      labor_disputes_edit: false,
+      labor_disputes_delete: false,
+      labor_disputes_scroe: false,
     }
   },
   mounted () {
     this.getList()
+    this.labor_disputes_add = this.permissions['labor_disputes_add']
+    this.labor_disputes_edit = this.permissions['labor_disputes_edit']
+    this.labor_disputes_delete = this.permissions['labor_disputes_delete']
+    this.labor_disputes_scroe = this.permissions['labor_disputes_scroe']
+  },
+  computed: {
+     ...mapGetters([
+      'permissions',
+    ]),
   },
   methods: {
     getList () {
-      getPage(this.params).then(({ data }) => {
+      let params = {}
+      for(let key in this.params) {
+        if (this.params[key]) {
+          params[key] = this.params[key]
+        }
+      }
+      getPage(params).then(({ data }) => {
         if (data.code === 0) {
           this.pagedTable = data.data.records
           this.total = data.data.total
@@ -112,7 +136,6 @@ export default {
       })
     },
     handleEdit (row) {
-      console.log('this.roles', this.roles)
       this.$router.push({
         path: '/laborDisputes/form',
         query: {

@@ -1,7 +1,7 @@
 <template>
  <basic-container>
    <page-header :title="title" :backOption="backOption"></page-header>
-    <el-form :model="form" :rules="rules" ref="ruleForm" label-width="100px" :disabled="status === 'detail'">
+    <el-form :model="form" :rules="rules" ref="ruleForm" label-width="150px" :disabled="status === 'detail'">
       <div class="title">船东信息</div>
       <el-row :gutter="20">
         <el-col :span="12">
@@ -21,12 +21,12 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="持证人姓名" prop="shipowner">
+          <el-form-item label="持证人/公司名称" prop="shipowner">
             <el-input v-model.trim="form.shipowner"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="身份证号" prop="shipownerIdcard">
+          <el-form-item label="身份证/企业代码" prop="shipownerIdcard">
             <el-input v-model.trim="form.shipownerIdcard"></el-input>
           </el-form-item>
         </el-col>
@@ -65,7 +65,7 @@
         </el-col>
         <el-col :span="24">
           <el-form-item label="纠纷描述" prop="disputeContent">
-            <iep-froala-editor v-model="form.disputeContent"></iep-froala-editor>
+            <iep-froala-editor v-model="form.disputeContent" :disabled="status === 'detail'"></iep-froala-editor>
             <!-- <el-input v-model.trim="form.disputeContent" type="textarea"></el-input> -->
           </el-form-item>
         </el-col>
@@ -76,25 +76,27 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-show="statusShow">
+        <el-col :span="12" v-show="statusShow" v-if="type == 1">
           <el-form-item label="处理结果" prop="result">
             <el-input v-model.trim="form.result" type="textarea"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-show="statusShow">
+        <el-col :span="12" v-show="statusShow" v-if="type == 1">
           <el-form-item label="船东分" prop="shipownerScore">
-            <el-input-number v-model="form.shipownerScore" :min="1" :max="10" :step="1" step-strictly></el-input-number>
+            <el-rate v-model="form.shipownerScore" :max="10" show-score style="margin-top: 10px;" text-color="#ff9900"></el-rate>
+            <!-- <el-input-number v-model="form.shipownerScore" :min="1" :max="10" :step="1" step-strictly></el-input-number> -->
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-show="statusShow">
+        <el-col :span="12" v-show="statusShow" v-if="type == 1">
           <el-form-item label="船员分" prop="crewScore">
-            <el-input-number v-model="form.crewScore" :min="1" :max="10" :step="1" step-strictly></el-input-number>
+            <el-rate v-model="form.crewScore" :max="10" show-score style="margin-top: 10px;" text-color="#ff9900"></el-rate>
+            <!-- <el-input-number v-model="form.crewScore" :min="1" :max="10" :step="1" step-strictly></el-input-number> -->
           </el-form-item>
         </el-col>
       </el-row>
     </el-form>
     <operation-wrapper v-if="status !== 'detail'">
-      <iep-button type="primary" @click="handleSubmit" style="margin-left: 100px;">保存</iep-button>
+      <iep-button type="primary" @click="handleSubmit" style="margin-left: 150px;">保存</iep-button>
     </operation-wrapper>
 </basic-container>
 </template>
@@ -159,11 +161,11 @@ export default {
           { required: true, message: '请输入渔船名', trigger: 'change' },
         ],
         shipowner: [
-          { required: true, message: '请输入持证人姓名', trigger: 'blur, change' },
+          { required: true, message: '请输入持证人/公司名称', trigger: 'blur, change' },
         ],
         shipownerIdcard: [
-          { required: true, message: '请输入身份证号', trigger: 'blur' },
-          { validator: validateIdCard, trigger: 'blur' },
+          { required: true, message: '请输入身份证/企业代码', min: 18, max: 18, trigger: 'blur' },
+          // { validator: validateIdCard, trigger: 'blur' },
         ],
         shipownerMobile: [
           { required: true, message: '请输入联系号码', trigger: 'blur' },
@@ -212,7 +214,7 @@ export default {
       this.status = query.status
     }
     if (query.type) {
-      this.type = query.type
+      this.type = +query.type
     }
     if (query.id) {
       this.getList(query.id)

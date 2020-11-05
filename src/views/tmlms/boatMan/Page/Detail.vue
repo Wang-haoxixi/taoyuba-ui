@@ -623,7 +623,7 @@ export default {
                    }else if(this.$route.query.idcard){
                      this.$router.go(-1)
                    }else{
-                     this.$router.push({name:'boatMan'})  
+                     this.$router.push({name:'crewboatMan'})  
                    }
               }).catch(err=>{
                 this.$message.error(err.message)
@@ -644,7 +644,7 @@ export default {
                       if(this.$route.query.userId){
                             this.$router.go(-1) 
                       }else{
-                            this.$router.push({name:'boatMan'})  
+                            this.$router.push({name:'crewboatMan'})  
                       }
                   }).catch(err=>{
                     this.$message.error(err.message)
@@ -658,7 +658,7 @@ export default {
                       if(this.$route.query.userId){
                           this.$router.go(-1) 
                       }else{
-                        this.$router.push({name:'boatMan'})  
+                        this.$router.push({name:'crewboatMan'})  
                       }
                   }).catch(err=>{
                     this.$message.error(err.message)
