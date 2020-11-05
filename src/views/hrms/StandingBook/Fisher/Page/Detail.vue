@@ -31,13 +31,13 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="持证人：" prop="shipowner">
+            <el-form-item label="持证人/公司名称  ：" prop="shipowner">
               <el-input maxlength="20" v-model="form.shipowner" ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
 
-            <el-form-item label="持证人身份证号码：" prop="shipownerIdcard">
+            <el-form-item label="身份证/企业代码：" prop="shipownerIdcard">
               <template v-if="form.shipownerIdcard">
               <el-input maxlength="18" v-model="form.shipownerIdcard"></el-input>
               </template>

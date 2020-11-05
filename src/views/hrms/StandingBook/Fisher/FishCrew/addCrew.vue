@@ -222,9 +222,9 @@ export default {
     addUserInfo () {
       this.$refs.userInfoForm.validate((valid) => {
           if (valid) {
-            this.form.idcard = ''
-            this.form.address = ''
-            this.form.nation = ''
+            // this.form.idcard = ''
+            // this.form.address = ''
+            // this.form.nation = ''
             this.form.nationality  = '中国'
             this.form.gender = 1
             this.form.shipId = this.$route.params.shipId
@@ -268,6 +268,11 @@ export default {
               this.$message.success('船员批量添加成功!')
               this.$router.go(-1)
               })
+            } else {
+              this.$message({
+                  message: res.data.msg || '船员批量添加失败!',
+                  type: 'warning',
+                })
             }
           }).catch(err=>{
             this.$message.error(err.message)

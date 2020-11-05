@@ -52,7 +52,7 @@
         label="日期"
         width="180">
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" fixed="right">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -76,7 +76,6 @@
 </template>
 <script>
 import { getPage, removePage } from '@/api/tmlms/laborDisputes/index'
-import { mapGetters } from 'vuex'
 import maps from './maps'
 export default {
   data () {
@@ -94,11 +93,6 @@ export default {
   },
   mounted () {
     this.getList()
-  },
-  computed: {
-    ...mapGetters([
-      'roles',
-    ]),
   },
   methods: {
     getList () {
@@ -124,7 +118,17 @@ export default {
         query: {
           status: 'update',
           id: row.id,
-          type: this.roles[1] === 1 ? 1 : 2,
+          type: 1,
+        },
+      })
+    },
+    handleEdit2 (row) {
+      this.$router.push({
+        path: '/laborDisputes/form',
+        query: {
+          status: 'update',
+          id: row.id,
+          type: 2,
         },
       })
     },

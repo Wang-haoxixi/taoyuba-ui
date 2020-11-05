@@ -345,21 +345,21 @@ const columnsMap = [
     return reg.test(value) || reg1.test(value)
   }
 
-  function isIdCard (value) {
-    let idCard = /^\d{0,18}$/
-    let idCard1 = /^\d{17}X$/
-    return idCard.test(value) || idCard1.test(value)
-  }
+  // function isIdCard (value) {
+  //   let idCard = /^\d{0,18}$/
+  //   let idCard1 = /^\d{17}X$/
+  //   return idCard.test(value) || idCard1.test(value)
+  // }
 
-  function idCardValidate (rule, value, callback) {
-    if (value === '') {
-      callback(new Error())
-    }else  if (!isIdCard(value)){
-      callback(new Error())
-    }else {
-      callback()
-    }
-  }
+  // function idCardValidate (rule, value, callback) {
+  //   if (value === '') {
+  //     callback(new Error())
+  //   }else  if (!isIdCard(value)){
+  //     callback(new Error())
+  //   }else {
+  //     callback()
+  //   }
+  // }
 
   function numberValidate (rule, value, callback) {
     if (value === '') {
@@ -469,7 +469,7 @@ const columnsMap = [
       {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
     shipownerIdcard: [
-      {required: true, validator: idCardValidate, trigger: 'blur', length: 3, decimal: 0, message: '请输入正确的身份证号码！'},
+      {required: true, trigger: 'blur', max: 18, min: 18, decimal: 0, message: '请输入正确的身份证/企业代码！'},
     ],
     updateTime: [
       {required: true, message: '该选项必填！', trigger: 'blur'},
