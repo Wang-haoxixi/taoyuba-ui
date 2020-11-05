@@ -58,10 +58,10 @@
             size="mini"
             type="text"
             @click="handleDetail(scope.row)">查看</el-button>
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
-            @click="handleEdit(scope.row)" v-if="labor_disputes_scroe">打分</el-button>
+            @click="handleEdit(scope.row)" v-if="labor_disputes_scroe">打分</el-button> -->
             <el-button
             size="mini"
             type="text"

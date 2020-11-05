@@ -76,7 +76,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-show="statusShow" v-if="type == 1">
+        <el-col :span="12" v-if="statusShow">
           <el-form-item label="处理结果" prop="result">
             <el-input v-model.trim="form.result" type="textarea"></el-input>
           </el-form-item>
@@ -106,6 +106,7 @@ import { getShipNames } from '@/api/ships/index'
 import { detailCrew } from '@/api/tmlms/boatMan/index'
 import debounce from 'lodash/debounce'
 import maps from './maps'
+import { mapGetters } from 'vuex'
 
 function initForm () {
   return {
@@ -188,6 +189,9 @@ export default {
         disputeContent: [
           { required: true, message: '请输入纠纷描述', trigger: 'blur' },
         ],
+        result: [
+          { required: true, message: '请输入处理结果', trigger: 'blur' },
+        ],
       },
       backOption: {
         isBack: true,
@@ -203,6 +207,7 @@ export default {
         if (!this.statusShow) {
           this.form.shipownerScore = ''
           this.form.crewScore = ''
+          this.form.result = ''
         }
       },
       deep: true,
@@ -213,12 +218,20 @@ export default {
     if (query.status) {
       this.status = query.status
     }
-    if (query.type) {
-      this.type = +query.type
-    }
     if (query.id) {
       this.getList(query.id)
     }
+
+
+    this.type = ''
+    let statusArr = [111, 112]
+    for (let i = 0, len = this.roles.length; i < len; i++) {
+      if (statusArr.includes(this.roles[i])) {
+        this.type = 1
+        return
+      }
+    }
+    this.type = 2
   },
   computed: {
     title () {
@@ -229,6 +242,9 @@ export default {
       }
       return '劳资纠纷管理'
     },
+    ...mapGetters([
+      'roles',
+    ]),
   },
   methods: {
     getEmployee () {
