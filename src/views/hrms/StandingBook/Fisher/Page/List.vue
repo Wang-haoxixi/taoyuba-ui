@@ -85,7 +85,7 @@
                 </el-button>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item v-if="mlms_ship_export"><span @click="exportInfo(scope.row.shipId,scope.row.shipName)">船员登记表</span></el-dropdown-item>
-                  <el-dropdown-item v-if="mlms_shipname_export"><span @click="exportShipInfo(scope.row.shipId,scope.row.shipName)">船名登记表</span></el-dropdown-item>
+                  <el-dropdown-item v-if="mlms_shipname_export"><span @click="exportShipInfo(scope.row.shipId,scope.row.shipName)">开航登记表</span></el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
               <!-- <iep-button size="mini" type="primary" v-if="mlms_ship_export" @click="exportInfo(scope.row.shipId,scope.row.shipName)">导出</iep-button> -->
