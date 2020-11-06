@@ -139,6 +139,13 @@ export function exportShipExcel (params) {
     title: params.shipName,
   })
 }
+export function exportShipNameExcel (params) {                                    
+  return exportDownload({
+    url: 'tmlms/tybmlmsExcelExport/downShipCrewTwo ',
+    data: params,                             
+    title: params.shipName,
+  })
+}
 export function exportContractModel (params) {                                    
   return exportDownload({
     url: 'tmlms/tybmlmsExcelExport/downContractModel',

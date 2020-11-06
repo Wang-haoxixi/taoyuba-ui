@@ -79,7 +79,16 @@
               <iep-button size="mini" type="primary" v-if="mlms_ship_shareholder && scope.row.shipShare==1" @click="handleHodler(scope.row.shipId,scope.row.shipName)">股东</iep-button>
               <iep-button size="mini" type="primary" v-if="mlms_ship_contract" @click="handleCrew(scope.row.shipNo)">合同</iep-button>
               <!-- <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">船员</iep-button> -->
-              <iep-button size="mini" type="primary" v-if="mlms_ship_export" @click="exportInfo(scope.row.shipId,scope.row.shipName)">导出</iep-button>
+              <el-dropdown v-if="mlms_ship_export || mlms_shipname_export">
+                <el-button type="primary" size="mini">
+                  导出<i class="el-icon-arrow-down el-icon--right"></i>
+                </el-button>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-if="mlms_ship_export"><span @click="exportInfo(scope.row.shipId,scope.row.shipName)">船员登记表</span></el-dropdown-item>
+                  <el-dropdown-item v-if="mlms_shipname_export"><span @click="exportShipInfo(scope.row.shipId,scope.row.shipName)">船名登记表</span></el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+              <!-- <iep-button size="mini" type="primary" v-if="mlms_ship_export" @click="exportInfo(scope.row.shipId,scope.row.shipName)">导出</iep-button> -->
               <!-- <iep-button size="mini" type="primary" @click="handleOperat(scope.row.shipId,scope.row.shipNo)">经营人</iep-button> -->
             </operation-wrapper>
           </template>
@@ -137,7 +146,7 @@
 <script>
 import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
 import { countCrew } from '@/api/tmlms/boatMan/index'
-import { getVillageShipList,changeShip,exportShipExcel,exportContractModel,getFixOrgIds,changeOrgIds } from '@/api/ships'
+import { getVillageShipList,changeShip,exportShipExcel, exportShipNameExcel,exportContractModel,getFixOrgIds,changeOrgIds } from '@/api/ships'
 // import { getVillageShipList } from '@/api/ships'
 // import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
@@ -241,6 +250,7 @@ export default {
       mlms_ship_shareholder: false,
       mlms_ship_download: false,
       mlms_ship_export: false,
+      mlms_shipname_export: false,
     }
   },
   created () {
@@ -271,6 +281,7 @@ export default {
     this.mlms_ship_shareholder = this.permissions['mlms_ship_shareholder']
     this.mlms_ship_download = this.permissions['mlms_ship_download']
     this.mlms_ship_export = this.permissions['mlms_ship_export']
+    this.mlms_shipname_export = this.permissions['mlms_shipname_export']
   },
   computed: {
     ...mapGetters(['userInfo', 'roles','permissions']),
@@ -302,6 +313,16 @@ export default {
       this.exportParams.shipId = shipId
       this.exportParams.shipName = shipName                         
       exportShipExcel (this.exportParams).catch(err => {
+        this.$message({
+          type: 'warning',
+          message: err,
+        })
+    })
+    },
+    exportShipInfo (shipId,shipName) {   
+      this.exportParams.shipId = shipId
+      this.exportParams.shipName = shipName                         
+      exportShipNameExcel (this.exportParams).catch(err => {
         this.$message({
           type: 'warning',
           message: err,
