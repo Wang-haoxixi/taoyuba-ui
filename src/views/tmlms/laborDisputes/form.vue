@@ -236,11 +236,11 @@ export default {
   computed: {
     title () {
       if (this.status === 'create') {
-        return '新增劳资纠纷管理'
+        return '新增劳务纠纷管理'
       } else if (this.status === 'update') {
-        return '编辑劳资纠纷管理'
+        return '编辑劳务纠纷管理'
       }
-      return '劳资纠纷管理'
+      return '劳务纠纷管理'
     },
     ...mapGetters([
       'roles',

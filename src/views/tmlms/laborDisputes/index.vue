@@ -1,6 +1,6 @@
 <template>
   <basic-container>
-    <page-header title="劳资纠纷管理"></page-header>
+    <page-header title="劳务纠纷管理"></page-header>
     <operation-container>
       <template slot="left">
         <iep-button @click="handleAdd" type="primary" icon="el-icon-plus" plain v-if="labor_disputes_add">新增</iep-button>
