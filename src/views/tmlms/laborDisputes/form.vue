@@ -76,7 +76,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12" v-if="statusShow">
+        <el-col :span="24" v-if="statusShow">
           <el-form-item label="处理结果" prop="result">
             <el-input v-model.trim="form.result" type="textarea"></el-input>
           </el-form-item>
@@ -224,7 +224,7 @@ export default {
 
 
     this.type = ''
-    let statusArr = [111, 112]
+    let statusArr = [111]
     for (let i = 0, len = this.roles.length; i < len; i++) {
       if (statusArr.includes(this.roles[i])) {
         this.type = 1

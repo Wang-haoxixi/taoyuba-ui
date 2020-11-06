@@ -65,11 +65,11 @@
             <el-button
             size="mini"
             type="text"
-            @click="handleEdit2(scope.row)" v-if="labor_disputes_edit">编辑</el-button>
+            @click="handleEdit2(scope.row)" v-if="labor_disputes_edit && scope.row.status !== 1">编辑</el-button>
           <el-button
             size="mini"
             type="text"
-            @click="handleDelete(scope.row)" v-if="labor_disputes_delete">删除</el-button>
+            @click="handleDelete(scope.row)" v-if="labor_disputes_delete && scope.row.status !== 1">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
