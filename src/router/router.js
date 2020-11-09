@@ -21,6 +21,7 @@ import textBookRouter from './textbook'
 import  videoRouter from './lessonVideo'
 import articleRouter from './article'
 import AvueRouter from './avue-router'
+import adminRouter from './admin'
 import Store from '../store/'
 
 const Router = new VueRouter({
@@ -66,5 +67,6 @@ Router.addRoutes([
   ...certRouter,
   ...articleRouter,
   ...examRouter,
+  ...adminRouter,
 ])
 export default Router
