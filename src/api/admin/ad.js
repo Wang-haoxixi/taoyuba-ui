@@ -38,34 +38,34 @@ export function removePosPage (id) {
 
 export function getPicList (query) {
   return request({
-    url: 'admin/pageAndSort/page',
+    url: 'admin/tybad/pageAndSort',
     method: 'get',
     params: query,
   })
 }
 export function createPicPage (query) {
   return request({
-    url: 'admin/pageAndSort/add',
+    url: 'admin/tybad/add',
     method: 'post',
     data: query,
   })
 }
 export function updatePicPage (query) {
   return request({
-    url: 'admin/pageAndSort/update',
+    url: 'admin/tybad/update',
     method: 'post',
     data: query,
   })
 }
 export function getPicById (id) {
   return request({
-    url: `admin/pageAndSort/${id}`,
+    url: `admin/tybad/${id}`,
     method: 'get',
   })
 }
 export function removePicPage (id) {
   return request({
-    url: `admin/pageAndSort/delete/${id}`,
+    url: `admin/tybad/delete/${id}`,
     method: 'post',
   })
 }

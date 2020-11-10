@@ -4,7 +4,7 @@
     <el-form :model="form" :rules="rules" ref="ruleForm" label-width="150px" :disabled="status === 'createAd'">
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="广告名称" prop="title">
+          <el-form-item label="广告位置" prop="title">
             <el-input v-model.trim="form.title"></el-input>
           </el-form-item>
         </el-col>
@@ -27,7 +27,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <ad-table ref="adTable" v-if="status === 'createAd'" :id="posId"></ad-table>
+    <ad-table ref="adTable" v-if="status === 'createAd'" :id="posId" :width="form.width" :height="form.height"></ad-table>
     <operation-wrapper v-if="status !== 'createAd'">
       <iep-button type="primary" @click="handleSubmit" style="margin-left: 150px;">保存</iep-button>
     </operation-wrapper>
@@ -77,7 +77,10 @@ export default {
     } else if (id && this.status === 'createAd') {
       this.getList(id)
       this.posId = id
-      this.$refs.adTable.getList()
+      this.$nextTick(() => {
+        console.log('ref', this.$refs.adTable)
+        this.$refs.adTable.getList()
+      })
     }
   },
   methods: {

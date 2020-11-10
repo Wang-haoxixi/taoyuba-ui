@@ -13,6 +13,10 @@
             prop="title"
             label="广告名称">
           </el-table-column>
+          <el-table-column
+            prop="url"
+            label="广告链接">
+          </el-table-column>
           <el-table-column label="操作" fixed="right" label-width="150">
             <template slot-scope="scope">
               <el-button
@@ -28,7 +32,7 @@
         </el-table>
       </el-col>
     </el-row>
-    <ad-dialog ref="adDialog" :status="status" @end="getList"></ad-dialog>
+    <ad-dialog ref="adDialog" :status="status" @end="getList" :width="+width" :height="+height"></ad-dialog>
   </div>
 </template>
 <script>
@@ -38,6 +42,8 @@ export default {
   components: {adDialog},
   props: {
     id: String,
+    width: [Number, String],
+    height: [Number, String],
   },
   data () {
     return {
@@ -78,7 +84,6 @@ export default {
                 message: '删除成功',
                 type: 'success',
               })
-              this.params.current = 1
               this.getList()
             }
           })

@@ -12,7 +12,7 @@
       style="width: 100%">
       <el-table-column
         prop="title"
-        label="广告名称">
+        label="广告位置">
       </el-table-column>
       <el-table-column
         prop="client"
@@ -105,11 +105,12 @@ export default {
           })
         })
     },
-    handleAddAd () {
+    handleAddAd (row) {
       this.$router.push({
         path: '/admin/posForm',
         query: {
           status: 'createAd',
+          id: row.id,
         },
       })
     },
