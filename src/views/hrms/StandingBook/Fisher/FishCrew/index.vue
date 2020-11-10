@@ -82,7 +82,7 @@ export default {
     },
     async loadPage (param = this.searchForm) {
       param.shipNo = this.$route.params.shipNo
-      param.status = 1
+      param.status = 9
       let data = await this.loadTable(param, getList)
       console.log('打印表单')
       console.log(data.records)
