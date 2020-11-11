@@ -12,6 +12,9 @@
       <el-form-item label="广告链接" prop="title">
         <el-input v-model.trim="form.url"></el-input>
       </el-form-item>
+      <el-form-item label="排序" prop="sort">
+        <el-input v-model.trim="form.sort" :maxlength="3"></el-input>
+      </el-form-item>
       <el-form-item label="图片上传" prop="fileList">
         <el-upload
           class="upload-demo"
@@ -24,7 +27,7 @@
           :headers="headers"
           list-type="picture">
           <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过1M</div>
+          <div slot="tip" class="el-upload__tip">{{`只能上传jpg/png文件，且不超过2M，图片宽度${width},高度${height}`}}</div>
         </el-upload>
       </el-form-item>
     </el-form>
@@ -54,11 +57,21 @@ export default {
     height: Number,
   },
   data () {
+    let validateIsNumber = (rule, value, callback) => {
+      let reg = /^[+]{0,1}(\d+)$/
+      if (value === '') {
+        callback()
+      } else if (!reg.test(value)) {
+        callback(new Error('请输入正整数'))
+      }
+      callback()
+    }
     return {
       rules: {
         fileList: [{ required: true, message: '请上传图片', trigger: 'change' }],
         title: [{ required: true, message: '请输入广告名', trigger: 'blur' }],
         url: [{ required: true, message: '请输入广告链接', trigger: 'blur' }],
+        sort: [{ validator: validateIsNumber, trigger: 'blur' }],
       },
       // fileList: [],
       form: initForm(),
