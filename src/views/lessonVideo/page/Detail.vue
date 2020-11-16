@@ -89,6 +89,10 @@ export default {
           label:'课程培训',
           value:2,
         },
+        {
+          label:'渔业知识',
+          value:3,
+        },
       ],
     }                               
   },
