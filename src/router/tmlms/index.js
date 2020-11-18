@@ -372,5 +372,16 @@ export default [
       },
     ],
   },
-
+  {
+    path: '/notification',
+    component: Layout,
+    children: [
+      {
+        path: 'form',
+        name: 'notificationForm',
+        component: () => import('@/views/tmlms/message/notification/form'),
+        meta: noKeepAlive,
+      },
+    ],
+  },
 ]

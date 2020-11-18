@@ -17,14 +17,14 @@ export function getPositionInfor (positionId) {
 }
 export function getCrewByOrg (orgId) {
     return request({
-        url: `${prefixUrl}/crewByOrg?orgId=${orgId}`,
+        url: `${prefixUrl}/crewOrgRelation?orgRelationId=${orgId}`,
         method: 'get',
         params: orgId,
     })
 }
 export function getCountCrew (orgId) {
     return request({
-        url: `${prefixUrl}/countCrew?orgId=${orgId}`,
+        url: `${prefixUrl}/countOrgRelationCrew?orgRelationId=${orgId}`,
         method: 'get',
         params: orgId,
     })

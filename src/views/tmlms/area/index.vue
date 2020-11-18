@@ -7,7 +7,14 @@
         <iep-button @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
       </template>
     </operation-container>
-    <avue-tree-table :option="option">
+    <el-table
+      :data="pagedTable"
+      border
+      row-key="id">
+      <el-table-column
+        prop="orgRelationName"
+        label="区域名称">
+      </el-table-column>
       <el-table-column
         prop="orgIds"
         label="包含区域">
@@ -25,7 +32,7 @@
           </el-button>
         </template>
       </el-table-column>
-    </avue-tree-table>
+    </el-table>
     <div style="text-align: center;margin: 20px 0;">
       <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" :current-page.sync="params.current" @current-change="currentChange"></el-pagination>
     </div>
@@ -96,15 +103,6 @@ export default {
       }
       return '详情'
     },
-    option () {
-      return {
-        expandAll: false,
-        data: this.pagedTable,
-        columns: [
-          { text: '区域名称', value: 'orgRelationName' },
-        ],
-      }
-    },
   },
   mounted () {
     this.getList()
@@ -114,17 +112,26 @@ export default {
       getPage(this.params).then(({ data }) => {
         if (data.code === 0) {
           let result = data.data.records
-          result.forEach(item => {
-            let arr = []
-            if (item.orgIds) {
-              arr = item.orgIds.split(',')
-            }
-            item.ids = arr
-          })
+          this.setOrgIds(result)
+          // this.option.data = result
           this.pagedTable = result
+          console.log('this.pagedTable', this.pagedTable)
           this.total = data.data.total
         }
       })
+    },
+    setOrgIds (data) {
+      for (let i = 0, len = data.length; i < len; i++) {
+        let arr = []
+        if (data[i].orgIds) {
+          arr = data[i].orgIds.split(',')
+        }
+        data[i].ids = arr
+        let children = data[i].children
+        if (children && children.length > 0) {
+          this.setOrgIds(children)
+        }
+      }
     },
     getOrgIdsLabel (ids = '') {
       let orgIds = ids.split(',')
