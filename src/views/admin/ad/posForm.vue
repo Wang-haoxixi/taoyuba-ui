@@ -5,7 +5,7 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="广告位置" prop="title">
-            <el-input v-model.trim="form.title"></el-input>
+            <el-input v-model.trim="form.title" :disabled="status !== 'create'"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -17,12 +17,12 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="广告宽度">
-            <el-input v-model.trim="form.width" type="number"></el-input>
+            <el-input v-model.trim="form.width" type="number" :disabled="status !== 'create'"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="广告长度">
-            <el-input v-model.trim="form.height" type="number"></el-input>
+            <el-input v-model.trim="form.height" type="number" :disabled="status !== 'create'"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -107,7 +107,7 @@ export default {
                 this.onGoBack()
               } else {
                 this.$notify({
-                  message: this.status === 'create' ? '新增失败' : '编辑失败',
+                  message: data.msg || this.status === 'create' ? '新增失败' : '编辑失败',
                   type: 'warning',
                 })
               }

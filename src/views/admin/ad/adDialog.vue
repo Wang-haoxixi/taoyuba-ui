@@ -9,10 +9,10 @@
       <el-form-item label="广告名称" prop="title">
         <el-input v-model.trim="form.title"></el-input>
       </el-form-item>
-      <el-form-item label="广告链接" prop="title">
+      <el-form-item label="广告链接">
         <el-input v-model.trim="form.url"></el-input>
       </el-form-item>
-      <el-form-item label="排序" prop="sort">
+      <el-form-item label="排序">
         <el-input v-model.trim="form.sort" :maxlength="3"></el-input>
       </el-form-item>
       <el-form-item label="图片上传" prop="fileList">
@@ -27,7 +27,7 @@
           :headers="headers"
           list-type="picture">
           <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip">{{`只能上传jpg/png文件，且不超过2M，图片宽度${width},高度${height}`}}</div>
+          <div slot="tip" class="el-upload__tip">{{`只能上传图片文件，且不超过2M，图片宽度为${width},高度为${height}`}}</div>
         </el-upload>
       </el-form-item>
     </el-form>
@@ -114,12 +114,12 @@ export default {
     },
     handleBeforeUpload (file) {
       //图片格式
-      const isJPG = file.type === 'image/jpg' || file.type === 'image/png'
+      // const isJPG = file.type === 'image/jpg' || file.type === 'image/png'
         //图片大小
       const isLt2M = file.size / 1024 / 1024 < 2
-      if (!isJPG) {
-        this.$message.error('上传图片只能为jpg或png格式')
-      }
+      // if (!isJPG) {
+      //   this.$message.error('上传图片只能为jpg或png格式')
+      // }
       if (!isLt2M) {
         this.$message.error('上传图片大小不能超过2MB')
       }
@@ -141,7 +141,7 @@ export default {
           return Promise.reject(new Error('error'))
         }
       )
-      return isJPG && isLt2M && isSize
+      return isLt2M && isSize
     },
     handleSuccess (response, file, fileList) {
       console.log(response, file, fileList)
