@@ -239,7 +239,9 @@ export default {
           if(item.sourceType == 1){
             item.sourceType = '合同'
           }else if(item.sourceType == 2){
-            item.sourceType = '非合同'
+            item.sourceType = '设备'
+          } else if (item.sourceType ==3) {
+            item.sourceType = '微信'
           }
           (item.flag == 1) ? item.flag='上船':item.flag='下船'
           if(!item.shipName){

@@ -638,13 +638,6 @@ export default {
           type: 'warning',
         })
         return false
-      } else if (!data.certFile) {
-        this.$message({
-          showClose: true,
-          message: '扫描件不能为空',
-          type: 'warning',
-        })
-        return false
       }
       return true
     },
