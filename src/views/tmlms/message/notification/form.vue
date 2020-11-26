@@ -39,7 +39,7 @@ function initForm () {
     content: '',
   }
 }
-import { getShipNames } from '@/api/ships/index'
+import { getShipNamesWithOutOrg } from '@/api/ships/index'
 import { createPosPage, getPageById } from '@/api/tmlms/message/notification'
 export default {
   data () {
@@ -90,7 +90,7 @@ export default {
     },
     getShipNameList (name) {
       if (name !== '') {
-        getShipNames(name).then(({data}) => {
+        getShipNamesWithOutOrg(name).then(({data}) => {
           if (data.code === 0) {
             let arr = this.oldShipNames.concat(data.data || [])
             this.shipNames = Array.from(new Set(arr))

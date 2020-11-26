@@ -89,6 +89,12 @@ export function getShipNames (name) {
     method: 'get',
   })
 } 
+export function getShipNamesWithOutOrg (name) {
+  return request({
+    url: `${prefixUrl}/findshipWithOutOrg/${name}`,
+    method: 'get',
+  })
+} 
 
 export  function  findMyship (name) {
   return request({

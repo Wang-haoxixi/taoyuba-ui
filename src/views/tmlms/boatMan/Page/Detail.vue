@@ -333,7 +333,7 @@
                     <el-row>
                         <el-col :span="9">
                           <el-form-item label="证书编码：" prop="certNo">
-                            <el-input v-model="item.certNo"></el-input>
+                            <el-input v-model.trim="item.certNo"></el-input>
                           </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -376,11 +376,12 @@
                           </el-form-item>
                         </el-col>
                         <el-col :span="4" style="text-align:center">
-                          <el-button v-if="manager || !$route.query.edit" type="primary" size="small" plain @click="remove(index)">删除</el-button>
+                          <!-- manager || !$route.query.edit -->
+                          <el-button v-if="isShowDeleteBtn(item)" type="primary" size="small" plain @click="remove(index)">删除</el-button>
                         </el-col>
                     </el-row>
                   </el-form>
-                </div>               
+                </div>
                 <div style="text-align:center">
                   <iep-button style="width: 86%; margin-top: 5px; margin-bottom: 8px" icon="el-icon-plus" plain @click="newMember">新增</iep-button>
                 </div>
@@ -572,6 +573,73 @@ export default {
     }
   },
   methods: {
+    isShowDeleteBtn (data) {
+      if (this.$route.query.edit) {
+        let status = true
+        let arr = ['certNo', 'certType', 'certLevel', 'certTitle', 'certDateIssue', 'certDateExpire', 'certFile']
+        for (let key in data) {
+          if (arr.includes(key) && data[key]) {
+            status = false
+          }
+        }
+        return this.manager || status
+      } else {
+        return this.manager || !this.$route.query.edit
+      }
+    },
+    validateCertificate (data) {
+      if (!data.certNo) {
+         this.$message({
+          showClose: true,
+          message: '证书编码不能为空',
+          type: 'warning',
+        })
+        return false
+      } else if (!data.certType) {
+        this.$message({
+          showClose: true,
+          message: '证书类型不能为空',
+          type: 'warning',
+        })
+        return false
+      } else if (!data.certLevel) {
+        this.$message({
+          showClose: true,
+          message: '证书等级不能为空',
+          type: 'warning',
+        })
+        return false
+      } else if (!data.certTitle) {
+        this.$message({
+          showClose: true,
+          message: '证书职务不能为空',
+          type: 'warning',
+        })
+        return false
+      } else if (!data.certDateIssue) {
+        this.$message({
+          showClose: true,
+          message: '证书起始日期不能为空',
+          type: 'warning',
+        })
+        return false
+      } else if (!data.certDateExpire) {
+        this.$message({
+          showClose: true,
+          message: '证书结束日期不能为空',
+          type: 'warning',
+        })
+        return false
+      } else if (!data.certFile) {
+        this.$message({
+          showClose: true,
+          message: '扫描件不能为空',
+          type: 'warning',
+        })
+        return false
+      }
+      return true
+    },
     // 提交表单
     async save () {
       if (this.form.idcardPhoto.length > 200) {
@@ -584,6 +652,11 @@ export default {
       this.$refs['form'].validate((valid) => {
           if (valid) {
             // let form = JSON.parse(JSON.stringify(this.form))
+            for (let i = 0, len = this.form.certList.length; i < len; i++) {
+              if (!this.validateCertificate(this.form.certList[i])) {
+                return false
+              }
+            }
             let form = this.form
             // if (form.certList) {
             //   form.certList.forEach(item=>{
