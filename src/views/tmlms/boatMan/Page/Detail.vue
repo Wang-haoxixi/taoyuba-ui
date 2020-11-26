@@ -21,7 +21,7 @@
                 <el-col :span="12">
                   <el-form-item label="身份证号码：" prop="idcard">
                     <!-- <el-input v-model="form.idcard" :disabled="haveInfo.idcard"></el-input> -->
-                    <el-select :disabled="$route.query.edit" v-model="form.idcard"
+                    <el-select :disabled="!!$route.query.edit" v-model="form.idcard"
                               placeholder="请选择"
                               filterable
                               remote
@@ -37,7 +37,7 @@
                 </el-col>
                 <el-col :span="12">
                     <iep-form-item class="form-half" prop="birthday" label-name="出生日期">
-                    <iep-date-picker v-model="form.birthday" type="date" placeholder="选择日期"></iep-date-picker>
+                    <iep-date-picker format="yyyy-MM-dd" v-model="form.birthday" type="date" placeholder="选择日期"></iep-date-picker>
                     </iep-form-item>
                 </el-col>
                 </el-row>
@@ -573,6 +573,12 @@ export default {
     }
   },
   methods: {
+    setBirthTimeFormat (time) {
+      return time + ' 00:00:00'
+    },
+    removeBirthTimeFormat (time) {
+      return time.split(' ')[0]
+    },
     isShowDeleteBtn (data) {
       if (this.$route.query.edit) {
         let status = true
@@ -583,6 +589,8 @@ export default {
           }
         }
         return this.manager || status
+      } else if (this.$route.query.see) {
+        return false
       } else {
         return this.manager || !this.$route.query.edit
       }
@@ -664,6 +672,7 @@ export default {
             //   })
             // }
             let type = 1
+            this.form.birthday = this.removeBirthTimeFormat(this.form.birthday)
             if(this.$route.query.edit){
               //编辑
               // let data = JSON.parse(JSON.stringify(form))
@@ -963,6 +972,7 @@ export default {
       this.idx = index
     },
     idcardChange (card) {
+      console.log('idcardChange')
       if (typeof card === 'object') {
         this.refreshCard(card)
       } else {
@@ -979,6 +989,7 @@ export default {
       }
     },
     getidcardList (number) {
+      console.log('getidcardList')
       this.loading = false
       if (number !== '') {
         getCrewData(number).then(res => {           
@@ -995,6 +1006,7 @@ export default {
             this.form = res.data.data
             this.$set(this.form, 'certList',[])
             this.isIdcard = true
+            this.form.birthday = this.setBirthTimeFormat(this.form.birthday)
             getMyCretList(number).then(val => {
               val.data.data.forEach(item =>{
                 this.form.certList.push(item)
@@ -1053,6 +1065,7 @@ export default {
       let data = await detailCrew(this.$route.query.edit || this.$route.query.see || this.$route.query.idcard).then( res=>{
         return res.data.data
       })
+      data.birthday = this.setBirthTimeFormat(data.birthday)
       console.log('船员信息')
       console.log(data.photoFront)
       if(data.photoFront){
@@ -1140,7 +1153,7 @@ export default {
           } else {
               let cardMsg = {}
               this.form.realName = data.name
-              this.form.birthday = data.born.slice(0,4)+'-'+data.born.slice(4,6)+'-'+data.born.slice(6)
+              this.form.birthday = this.setBirthTimeFormat(data.born.slice(0,4)+'-'+data.born.slice(4,6)+'-'+data.born.slice(6))
               this.form.idcard = data.cardno
               this.form.address = data.address
               this.form.nation = data.nation
@@ -1232,15 +1245,15 @@ export default {
     }),
   },
   watch: {
-    'form.idcard': {
-      handler: function (val) {
-        if ( val !== undefined && val.length === 18) {
-          var bri = val.substr(6,8).replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3')
-          this.form.birthday = bri
-        }
-      },
-      deep: true,
-    },
+    // 'form.idcard': {
+    //   handler: function (val) {
+    //     if ( val !== undefined && val.length === 18) {
+    //       var bri = val.substr(6,8).replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3')
+    //       this.form.birthday = this.setBirthTimeFormat(bri)
+    //     }
+    //   },
+    //   deep: true,
+    // },
   },
 }
 </script>
