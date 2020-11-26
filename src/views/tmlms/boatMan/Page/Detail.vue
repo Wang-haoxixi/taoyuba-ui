@@ -327,7 +327,7 @@
                 <iep-form-item class="form-half" prop="remark" label-name="备注信息" tip="请输入备注信息" v-if="!$route.query.userId">
                   <iep-input-area v-model="form.remark"></iep-input-area>
                 </iep-form-item>
-                <h1 style="font-size: 18px;">资质证书: </h1> 
+                <h1 style="font-size: 18px;">船员职务证书: </h1> 
                 <div v-for="(item, index) in form.certList" :key="index">
                   <el-form label-width="150px" size="small" :disabled="type === 1">
                     <el-row>
