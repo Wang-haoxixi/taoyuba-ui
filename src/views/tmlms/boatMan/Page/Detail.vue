@@ -21,11 +21,11 @@
                 <el-col :span="12">
                   <el-form-item label="身份证号码：" prop="idcard">
                     <!-- <el-input v-model="form.idcard" :disabled="haveInfo.idcard"></el-input> -->
-                    <el-select :disabled="!!$route.query.edit" v-model="form.idcard"
+                    <el-select :disabled="!!$route.query.edit" v-model.trim="form.idcard"
                               placeholder="请选择"
                               filterable
                               remote
-                              maxlength="20"
+                              maxlength="18"
                               :loading="loading"
                               allow-create
                               clearable
@@ -433,6 +433,15 @@ export default {
             callback()
         }
       }
+      // const checkidCard = (rule, value, callback) => {
+      //   if (value === '') {
+      //     callback(new Error('请输入身份证号码'))
+      //   } else if (!value.test(/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/)) {
+      //     callback(new Error('请输入正确的身份证号码!'))
+      //   } else {
+      //       callback()
+      //   }
+      // }
     return {        
       certificateColumns,
       imgVisible:false,
@@ -512,6 +521,7 @@ export default {
         ],
         idcard: [
             { required: true, message: '请填写身份证信息', trigger: 'blur' },
+            // { validator: checkidCard, trigger: 'blur' },
         ],
         birthday: [
             { required: true, message: '请填写生日信息', trigger: 'blur' },
@@ -653,11 +663,21 @@ export default {
       this.$refs['form'].validate((valid) => {
           if (valid) {
             // let form = JSON.parse(JSON.stringify(this.form))
-            for (let i = 0, len = this.form.certList.length; i < len; i++) {
-              if (!this.validateCertificate(this.form.certList[i])) {
-                return false
+            if (!/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(this.form.idcard)) {
+              this.$message({
+                message: '身份证号码不正确',
+                type: 'warning',
+              })
+              return
+           }
+            if (this.form.certList && this.form.certList.length > 0) {
+              for (let i = 0, len = this.form.certList.length; i < len; i++) {
+                if (!this.validateCertificate(this.form.certList[i])) {
+                  return false
+                }
               }
             }
+            
             let form = this.form
             // if (form.certList) {
             //   form.certList.forEach(item=>{
@@ -974,6 +994,7 @@ export default {
       this.idcards = []
     },
     refreshCard (card) {
+      // console.log('card', card)
       if(card !== null) {
         let { idcard = ''} = card
         this.form.idcard = idcard
@@ -983,6 +1004,20 @@ export default {
     },
     getidcardList (number) {
       console.log('getidcardList')
+      if (number) {
+        number = number.trim()
+      }
+      if (number.length !== 18) {
+        return
+      }
+      if (!/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(number)) {
+        this.$message({
+          message: '身份证号码不正确',
+          type: 'warning',
+        })
+        this.form.idcard = ''
+        return
+      }
       this.loading = false
       if (number !== '') {
         getCrewData(number).then(res => {           
@@ -1015,7 +1050,7 @@ export default {
           } else {
             this.form.realName = ''
             this.form.positionId = ''
-            this.form.birthday = ''
+            this.form.birthday = this.form.birthday = this.setBirthTimeFormat(number.slice(6, 10) + '-' + number.slice(10, 12) + '-' + number.slice(12, 14))
             this.form.provinceId = ''
             this.form.cityId = ''
             this.form.districtId = ''
@@ -1239,13 +1274,17 @@ export default {
   },
   watch: {
     // 'form.idcard': {
-    //   handler: function (val) {
-    //     if ( val !== undefined && val.length === 18) {
-    //       var bri = val.substr(6,8).replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3')
-    //       this.form.birthday = this.setBirthTimeFormat(bri)
-    //     }
-    //   },
-    //   deep: true,
+      // handler: function (val) {
+        // if (val.length > 18) {
+        //   this.form.idcard = val.slice(18)
+        //   console.log('this.form.idcard', this.form.idcard)
+        // }
+        // if ( val !== undefined && val.length === 18) {
+        //   var bri = val.substr(6,8).replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3')
+        //   this.form.birthday = this.setBirthTimeFormat(bri)
+        // }
+      // },
+      // deep: true,
     // },
   },
 }
