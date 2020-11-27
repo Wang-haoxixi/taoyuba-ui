@@ -392,8 +392,9 @@
             <el-button @click="$router.go(-1)">返回</el-button>
           </template>
           <template v-else>
-            <el-button v-if="manager" @click="$router.push({name:'crewboatMan'})">返回</el-button>    
-            <el-button v-if="!manager" @click="$router.push({name:'crewboatMan'})">返回</el-button>
+            <el-button @click="$router.go(-1)">返回</el-button>
+            <!-- <el-button v-if="manager" @click="$router.push({name:'crewboatMan'})">返回</el-button>     -->
+            <!-- <el-button v-if="!manager" @click="$router.push({name:'crewboatMan'})">返回</el-button> -->
           </template>
           <el-button v-if="manager && !$route.query.see" @click="collect">数据读取</el-button>
         </div>
