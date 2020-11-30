@@ -1,5 +1,5 @@
 <template>
-  <el-popover popper-class="msg-popover" placement="bottom" width="336" v-model="visible" trigger="click">
+  <!-- <el-popover popper-class="msg-popover" placement="bottom" width="336" v-model="visible" trigger="click">
     <a-spin :spinning="pageLoading">
       <el-tabs class="msg-tabs" v-model="activeName">
         <el-tab-pane :label="`公告 (${announcementNum})`" name="first">
@@ -13,29 +13,25 @@
         </el-tab-pane>
       </el-tabs>
     </a-spin>
-    <!-- <div class="list-clear">清空 通知</div> -->
+    <div class="list-clear">清空 通知</div>
     <el-badge :hidden="!totalNum" :value="totalNum" slot="reference" class="item">
       <iep-button><i class="el-icon-bell"></i></iep-button>
     </el-badge>
-  </el-popover>
+  </el-popover> -->
+  <el-badge class="item" :is-dot="isDot">
+    <iep-button @click="onTo"><i class="el-icon-bell"></i></iep-button>
+  </el-badge>
 </template>
 <script>
-import { getImsWel } from '@/api/ims/email'
-import IepTopMessageBox from './Components/MessageBox'
+// import { getImsWel } from '@/api/ims/email'
+// import IepTopMessageBox from './Components/MessageBox'
+import { getCount } from '@/api/tmlms/message/information'
 export default {
-  components: { IepTopMessageBox },
+  // components: { IepTopMessageBox },
   data () {
     return {
       pageLoading: true,
-      visible: false,
-      activeName: 'first',
-      announcementList: [],
-      announcementNum: 0,
-      systemMessageList: [],
-      systemMessageNum: 0,
-      emailList: [],
-      emailNum: 0,
-      totalNum: 0,
+      isDot: false,
     }
   },
   created () {
@@ -44,23 +40,26 @@ export default {
   methods: {
     loadPage () {
       this.pageLoading = true
-      getImsWel().then(({ data }) => {
-        this.totalNum = data.totalNum
-        this.announcementList = data.announcementList
-        this.announcementNum = data.announcementNum
-        this.emailList = data.emailList
-        this.emailNum = data.emailNum
-        this.systemMessageList = data.systemMessageList
-        this.systemMessageNum = data.systemMessageNum
+      getCount().then(({ data }) => {
+        if (data.code === 0) {
+          this.isDot = !!data.data
+        }
         this.pageLoading = false
       })
+      // getImsWel().then(({ data }) => {
+      //   this.totalNum = data.totalNum
+      //   this.announcementList = data.announcementList
+      //   this.announcementNum = data.announcementNum
+      //   this.emailList = data.emailList
+      //   this.emailNum = data.emailNum
+      //   this.systemMessageList = data.systemMessageList
+      //   this.systemMessageNum = data.systemMessageNum
+      //   this.pageLoading = false
+      // })
     },
-  },
-  watch: {
-    visible (n) {
-      if (n) {
-        this.loadPage()
-      }
+    onTo () {
+      this.isDot = false
+      this.$router.push('/wel/message/information')
     },
   },
 }
