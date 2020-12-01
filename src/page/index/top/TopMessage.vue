@@ -45,6 +45,8 @@ export default {
           this.isDot = !!data.data
         }
         this.pageLoading = false
+      }).catch(() => {
+        this.pageLoading = false
       })
       // getImsWel().then(({ data }) => {
       //   this.totalNum = data.totalNum

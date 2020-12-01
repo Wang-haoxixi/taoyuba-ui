@@ -24,17 +24,17 @@
       <el-col :span="7">
         <div class="chart-bg panel">
           <h2>职务船员数量统计</h2>
-          <div id="certTotal"  :style="{width: '100%', height: '200px'}"></div>
+          <div id="certTotal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
           <div class="panel-footer"></div>
         </div>
         <div class="chart-bg panel">
           <h2>职务船员工资统计</h2>
-          <div id="salaryTotal"  :style="{width: '100%', height: '200px'}"></div>
+          <div id="salaryTotal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
           <div class="panel-footer"></div>
         </div>
         <div class="chart-bg panel">
           <h2>职务船员年龄分布</h2>
-          <div id="ageTotal"  :style="{width: '100%', height: '200px'}"></div>
+          <div id="ageTotal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
           <div class="panel-footer"></div>
         </div>
       </el-col>
@@ -50,21 +50,27 @@
           </el-row>
         </div>
         <div id="mapChina" :style="{width: '100%', height: '600px'}"></div>
+        <div class="panel-footer"></div>
+        <div class="chart-bg panel">
+          <h2>多船多人统计</h2>
+          <div id="peopleTotal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
+          <div class="panel-footer"></div>
+        </div>
       </el-col>
       <el-col :span="7">
         <div class="chart-bg panel">
           <h2>劳动合同状态统计</h2>
-          <div id="contractToal"  :style="{width: '100%', height: '200px'}"></div>
+          <div id="contractToal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
           <div class="panel-footer"></div>
         </div>
         <div class="chart-bg panel">
           <h2>渔船船龄分布</h2>
-          <div  id="shipAge" :style="{width: '100%', height: '200px'}"></div>
+          <div  id="shipAge" :style="{width: '100%', height: echartHeight + 'px'}"></div>
           <div class="panel-footer"></div>
         </div>
         <div class="chart-bg panel">
           <h2>职务船员籍贯分布</h2>
-          <div id="provinceTotal"  :style="{width: '100%', height: '200px'}"></div>
+          <div id="provinceTotal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
           <div class="panel-footer"></div>
         </div>
       </el-col>
@@ -92,6 +98,7 @@ export default {
         label: 'orgRelationName',
         children: 'children',
       },
+      echartHeight: '282',
       disabled: false,
       areaValue: [],
       orgList: [],
@@ -118,6 +125,7 @@ export default {
       ageTotal:'',
       salaryTotal:'',
       contractToal:'',
+      peopleTotal: '',
       mapChina:'',
       shipAge:'',
       statusDict: [
@@ -312,6 +320,26 @@ export default {
           },
           series: [{
               data: this.salaryValue,
+          }],
+        })
+        // 一船多人
+        let shipHaver = res.data.data.shipHaver
+        let peopleShipName = shipHaver.map((item) => {
+          return item.number + '艘渔船'
+        })
+        let peopleShioNum =  shipHaver.map((item) => {
+          return item.havers
+        })
+        this.peopleTotal.setOption({
+          xAxis: [
+            {
+              data: peopleShipName,
+            },
+          ],
+          series: [{
+            // 根据名字对应到相应的系列
+            name: '船东数量',
+            data:  peopleShioNum,
           }],
         })
       //   Object.keys(res.data.data.ship).forEach(key => {
@@ -525,6 +553,7 @@ export default {
         this.provinceTotal = this.$echarts.init(document.getElementById('provinceTotal'))
         this.ageTotal = this.$echarts.init(document.getElementById('ageTotal'))
         this.salaryTotal = this.$echarts.init(document.getElementById('salaryTotal'))
+        this.peopleTotal = this.$echarts.init(document.getElementById('peopleTotal'))
         this.contractToal =  this.$echarts.init(document.getElementById('contractToal'))
         this.shipAge = this.$echarts.init(document.getElementById('shipAge'))
         // 绘制图表
@@ -785,6 +814,62 @@ export default {
           },
           series: [{
             name: '职务船员数量',
+            barWidth: '35%',
+            data: [],
+            type: 'bar',
+            itemStyle: {
+              barBorderRadius: 5,
+            },
+          }],
+        })
+        // 一人多船
+        this.peopleTotal.setOption({
+          color: ['#2f89cf'],
+            tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              // 坐标轴指示器，坐标轴触发有效
+              type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
+            },
+          },
+          xAxis: {
+              type: 'category',
+              data: [],
+              axisLabel: {
+              color: 'rgba(255,255,255,.7)',
+              interval:0,
+              rotate:45,
+              },
+              axisTick: {
+                alignWithLabel: true,
+              },
+              axisLine: {
+                show: false,
+              },
+          },
+          yAxis: {
+              type: 'value',
+              axisLabel: {
+                textStyle: {
+                  color: 'rgba(255,255,255,.6)',
+                  fontSize: '12',
+                },
+              },
+              axisLine: {
+              lineStyle: {
+                color: 'rgba(255,255,255,.1)',
+                // width: 1,
+                // type: "solid"
+              },
+            },
+            splitLine: {
+              lineStyle: {
+                color: 'rgba(255,255,255,.1)',
+              },
+            },
+          },
+          series: [{
+            name: '多船多人统计',
             barWidth: '35%',
             data: [],
             type: 'bar',
