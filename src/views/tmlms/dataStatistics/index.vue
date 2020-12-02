@@ -52,7 +52,7 @@
         <div id="mapChina" :style="{width: '100%', height: '600px'}"></div>
         <div class="panel-footer"></div>
         <div class="chart-bg panel">
-          <h2>多船多人统计</h2>
+          <h2>船东统计</h2>
           <div id="peopleTotal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
           <div class="panel-footer"></div>
         </div>
@@ -869,7 +869,7 @@ export default {
             },
           },
           series: [{
-            name: '多船多人统计',
+            name: '船东统计',
             barWidth: '35%',
             data: [],
             type: 'bar',

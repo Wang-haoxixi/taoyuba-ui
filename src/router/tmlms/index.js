@@ -390,8 +390,20 @@ export default [
     children: [
       {
         path: 'form',
-        name: 'notificationForm',
+        name: 'informationForm',
         component: () => import('@/views/tmlms/message/information/form'),
+        meta: noKeepAlive,
+      },
+    ],
+  },
+  {
+    path: '/relation_ship',
+    component: Layout,
+    children: [
+      {
+        path: 'form',
+        name: 'relationForm',
+        component: () => import('@/views/tmlms/relation/form'),
         meta: noKeepAlive,
       },
     ],
