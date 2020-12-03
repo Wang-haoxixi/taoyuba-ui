@@ -31,20 +31,19 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="联系号码" prop="relationshipNumber">
+      <el-form-item label="联系号码" prop="relationshipNumber" v-if="form.relationshipType === 3">
         <el-input v-model.trim="form.relationshipNumber"></el-input>
       </el-form-item>
       <el-form-item label="联系事由" prop="relationshipReason">
         <el-select v-model="form.relationshipReason" placeholder="">
           <el-option
-            v-for="item in map.relationshipReason"
+            v-for="item in dictGroup.tyb_contact_information"
             :key="item.value"
             :label="item.label"
             :value="item.value">
           </el-option>
         </el-select>
       </el-form-item>
-      form.relationshipTime:{{form.relationshipTime}}
       <el-form-item label="联系时间" prop="relationshipTime">
         <el-date-picker
           value-format="yyyy-MM-dd HH:mm:ss"
@@ -64,6 +63,7 @@
 <script>
 import { getPageById, updatePage, createPage, getPageLast } from '@/api/tmlms/relation'
 import { getShipNamesWithOutOrg } from '@/api/ships/index'
+import { mapGetters } from 'vuex'
 import map from './map'
 // const checkPhone = (rule, value, callback) => {
 //   if (!value) {
@@ -95,25 +95,7 @@ export default {
           },
         }],
       },
-    }
-  },
-  computed: {
-    rules () {
-      if (this.form.relationshipType !== 3) {
-        return {
-          shipName: [{ required: true, message: '请输入渔船名', trigger: 'change' }],
-          shipownerName: [{ required: true, message: '请输入持证人', trigger: 'blur' }],
-          shipownerPhone: [
-            { required: true, message: '请输入手机号', trigger: 'blur' },
-            // { validator: checkPhone, trigger: ['change'] },
-          ],
-          relationshipType: [{ required: true, message: '请选择联系设备', trigger: 'change' }],
-          relationshipNumber: [{ required: true, message: '请输入联系号码', trigger: 'blur' }],
-          relationshipReason: [{ required: true, message: '请选择联系事由', trigger: 'change' }],
-          relationshipTime: [{ required: true, message: '请选择联系时间', trigger: 'change' }],
-        }
-      }
-      return {
+      rules:{
         shipName: [{ required: true, message: '请输入渔船名', trigger: 'change' }],
         shipownerName: [{ required: true, message: '请输入持证人', trigger: 'blur' }],
         shipownerPhone: [
@@ -121,18 +103,51 @@ export default {
           // { validator: checkPhone, trigger: ['change'] },
         ],
         relationshipType: [{ required: true, message: '请选择联系设备', trigger: 'change' }],
-        // this.form.relationshipType !== 3
-        relationshipNumber: [{ required: false, message: '请输入联系号码', trigger: 'blur' }],
+        relationshipNumber: [{ required: true, message: '请输入联系号码', trigger: 'blur' }],
         relationshipReason: [{ required: true, message: '请选择联系事由', trigger: 'change' }],
         relationshipTime: [{ required: true, message: '请选择联系时间', trigger: 'change' }],
-      }
-    },
+      },
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'dictGroup',
+    ]),
+    // rules () {
+    //   if (this.form.relationshipType !== 3) {
+    //     return {
+    //       shipName: [{ required: true, message: '请输入渔船名', trigger: 'change' }],
+    //       shipownerName: [{ required: true, message: '请输入持证人', trigger: 'blur' }],
+    //       shipownerPhone: [
+    //         { required: true, message: '请输入手机号', trigger: 'blur' },
+    //         // { validator: checkPhone, trigger: ['change'] },
+    //       ],
+    //       relationshipType: [{ required: true, message: '请选择联系设备', trigger: 'change' }],
+    //       relationshipNumber: [{ required: true, message: '请输入联系号码', trigger: 'blur' }],
+    //       relationshipReason: [{ required: true, message: '请选择联系事由', trigger: 'change' }],
+    //       relationshipTime: [{ required: true, message: '请选择联系时间', trigger: 'change' }],
+    //     }
+    //   }
+    //   return {
+    //     shipName: [{ required: true, message: '请输入渔船名', trigger: 'change' }],
+    //     shipownerName: [{ required: true, message: '请输入持证人', trigger: 'blur' }],
+    //     shipownerPhone: [
+    //       { required: true, message: '请输入手机号', trigger: 'blur' },
+    //       // { validator: checkPhone, trigger: ['change'] },
+    //     ],
+    //     relationshipType: [{ required: true, message: '请选择联系设备', trigger: 'change' }],
+    //     // this.form.relationshipType !== 3
+    //     relationshipNumber: [{ required: false, message: '请输入联系号码', trigger: 'blur' }],
+    //     relationshipReason: [{ required: true, message: '请选择联系事由', trigger: 'change' }],
+    //     relationshipTime: [{ required: true, message: '请选择联系时间', trigger: 'change' }],
+    //   }
+    // },
     title () {
       if (this.status === 'add') {
         return '新增联系记录'
       } else if (this.status === 'detail') {
         return '联系记录详情'
-      } else if (this.status === 'edit') {
+      } else if (this.status === 'update') {
         return '编辑联系记录'
       }
       return '联系记录'
@@ -142,13 +157,16 @@ export default {
     let id = this.$route.query.id
     this.status = this.$route.query.status
     if (id) {
-      this.getList()
+      this.getList(id)
     }
   },
   watch: {
     'form.relationshipType': {
-      handler () {
+      handler (newVal) {
         this.getShipNameLastInfo()
+        if (newVal === 3) {
+          this.form.relationshipNumber = ''
+        }
       },
     },
     'form.shipName': {
@@ -159,10 +177,12 @@ export default {
   },
   methods: {
     getShipNameLastInfo () {
-      if (this.form.shipName && this.form.relationshipType) {
+      if (this.form.shipName && this.form.relationshipType && this.status !== 'detail') {
         getPageLast({shipName: this.form.shipName, relationshipType: this.form.relationshipType}).then(({ data }) => {
           if (data.code === 0) {
-            console.log('data', data)
+            if (data.data && this.form.relationshipType === data.data.relationshipType) {
+              this.$set(this.form, 'relationshipNumber', data.data.relationshipNumber)
+            }
           }
         })
       }
@@ -177,13 +197,12 @@ export default {
       }
     },
     onChange (shipName) {
-      console.log('ship', shipName)
       let data = this.shipNames.filter((item) => {
         return item.shipName === shipName
       })
       if (data && data.length > 0) {
-        this.form.shipownerName = data[0].shipowner
-        this.form.shipownerPhone = data[0].mobile
+        this.$set(this.form, 'shipownerName', data[0].shipowner)
+        this.$set(this.form, 'shipownerPhone', data[0].mobile)
       } else {
         this.form.shipownerName = ''
         this.form.shipownerPhone = ''

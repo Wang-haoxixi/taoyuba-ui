@@ -17,10 +17,11 @@ export function getPageById (id) {
   })
 }
 
-export function removePage (id) {
+export function removePage (query) {
   return request({
-    url: `${prefixUrl}/${id}`,
+    url: `${prefixUrl}/remove`,
     method: 'post',
+    params: query,
   })
 }
 

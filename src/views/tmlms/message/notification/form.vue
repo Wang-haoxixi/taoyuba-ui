@@ -5,7 +5,7 @@
         <el-form-item label="通报主题" prop="bulletinTitle">
           <el-input v-model.trim="form.bulletinTitle"></el-input>
         </el-form-item>
-        <el-form-item label="通报船只" prop="ids">
+        <el-form-item label="通报船只">
           <el-input v-model="form.shipNames" v-if="status === 'detail'" style="width: 100%;"></el-input>
           <el-select
             v-else
@@ -26,7 +26,7 @@
         </el-form-item>
     </el-form>
     <operation-wrapper v-if="status !== 'detail'">
-      <iep-button type="primary" @click="handleSubmit" style="margin-left: 150px;">保存</iep-button>
+      <iep-button type="primary" @click="handleSubmit" style="margin-left: 150px;">发送</iep-button>
     </operation-wrapper>
   </basic-container>
 </template>
@@ -89,13 +89,15 @@ export default {
       })
     },
     getShipNameList (name) {
-      if (name !== '') {
+      if (name.length === 5) {
         getShipNamesWithOutOrg(name).then(({data}) => {
           if (data.code === 0) {
             let arr = this.oldShipNames.concat(data.data || [])
             this.shipNames = Array.from(new Set(arr))
           }
         })
+      } else {
+        this.shipNames = this.oldShipNames
       }
     },
     onChange (value) {
@@ -103,7 +105,7 @@ export default {
       this.oldShipNames = this.shipNames.filter((item) => {
         return value.includes(item.shipId)
       })
-      console.log('onChange', this.oldShipNames)
+      // console.log('onChange', this.oldShipNames)
     },
     onGoBack () {
       this.$router.history.go(-1)
@@ -116,7 +118,7 @@ export default {
             createPosPage(this.form).then(({ data }) => {
               if (data.code === 0) {
                 this.$notify({
-                  message: '新增成功',
+                  message: '发布成功',
                   type: 'success',
                 })
                 this.onGoBack()

@@ -1,8 +1,8 @@
 export default {
   // 联系事由
   relationshipReason: [
-    {label: 'A', value: 1},
-    {label: 'B', value: 2},
+    {label: 'A', value: '1'},
+    {label: 'B', value: '2'},
   ],
   // 联系设备
   relationshipType: [

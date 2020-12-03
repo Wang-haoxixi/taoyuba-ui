@@ -3,7 +3,8 @@
     <page-header title="联系记录"></page-header>
     <operation-container>
       <template slot="left">
-        <iep-button @click="handleAdd" type="primary" icon="el-icon-plus" plain v-if="relation_ship_add">新增</iep-button>
+        <!-- roles.indexOf(112) !== -1" -->
+        <iep-button @click="handleAdd" type="primary" icon="el-icon-plus" plain v-if="relation_ship_add && roles.indexOf(112) !== -1">新增</iep-button>
       </template>
     </operation-container>
     <el-table
@@ -11,6 +12,7 @@
       stripe
       style="width: 100%">
       <el-table-column
+        v-if="roles.indexOf(111) !== -1 || roles.indexOf(1) !== -1"
         prop="villageName"
         label="基层名">
       </el-table-column>
@@ -21,10 +23,16 @@
       <el-table-column
         prop="relationshipType"
         label="联系设备">
+        <template slot-scope="scope">
+          <span>{{getLabel(map.relationshipType, scope.row.relationshipType)}}</span>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="relationshipContent"
+        prop="relationshipReason"
         label="联系事由">
+        <template slot-scope="scope">
+          <span>{{getLabel(map.relationshipReason, scope.row.relationshipReason)}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="relationshipTime"
@@ -36,17 +44,13 @@
             size="mini"
             type="text"
             @click="handleDetail(scope.row)">详情</el-button>
-        </template>
-        <template slot-scope="scope">
           <el-button
-            v-if="relation_ship_edit"
+            v-if="relation_ship_edit && roles.indexOf(112) !== -1"
             size="mini"
             type="text"
             @click="handleEdit(scope.row)">编辑</el-button>
-        </template>
-        <template slot-scope="scope">
           <el-button
-            v-if="relation_ship_delete"
+            v-if="relation_ship_delete && roles.indexOf(112) !== -1"
             size="mini"
             type="text"
             @click="handleDelete(scope.row)">删除</el-button>
@@ -77,6 +81,7 @@ export default {
   computed: {
     ...mapGetters([
       'permissions',
+      'roles',
     ]),
   },
   created () {
@@ -86,6 +91,16 @@ export default {
     this.relation_ship_delete = this.permissions['relation_ship_delete']
   },
   methods: {
+    getLabel (data, value) {
+      let label = ''
+      data.forEach((item) => {
+        if (item.value === value) {
+          label = item.label
+          return false
+        }
+      })
+      return label
+    },
     getList () {
       getPage(this.params).then(({ data }) => {
         if (data.code === 0) {
@@ -117,7 +132,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning',
       }).then(() => {
-        removePage(row.id).then(({ data }) => {
+        removePage({id: row.id}).then(({ data }) => {
           if (data.code === 0) {
             this.params.current = 1
             this.getList()
