@@ -31,7 +31,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="联系号码" prop="relationshipNumber" v-if="form.relationshipType === 3">
+      <el-form-item label="联系号码" prop="relationshipNumber" v-if="form.relationshipType !== 3">
         <el-input v-model.trim="form.relationshipNumber"></el-input>
       </el-form-item>
       <el-form-item label="联系事由" prop="relationshipReason">
@@ -62,9 +62,10 @@
 </template>
 <script>
 import { getPageById, updatePage, createPage, getPageLast } from '@/api/tmlms/relation'
-import { getShipNamesWithOutOrg } from '@/api/ships/index'
+import { getShipNames } from '@/api/ships/index'
 import { mapGetters } from 'vuex'
 import map from './map'
+import { initNow } from '@/util/date'
 // const checkPhone = (rule, value, callback) => {
 //   if (!value) {
 //     return callback(new Error('联系号码不能为空'))
@@ -159,6 +160,10 @@ export default {
     if (id) {
       this.getList(id)
     }
+    if (this.status === 'add') {
+      this.$set(this.form, 'relationshipTime', initNow())
+      console.log('add', this.form)
+    }
   },
   watch: {
     'form.relationshipType': {
@@ -188,8 +193,8 @@ export default {
       }
     },
     getShipNameList (name) {
-      if (name !== '') {
-        getShipNamesWithOutOrg(name).then(({data}) => {
+      if (name.length === 5) {
+        getShipNames(name).then(({data}) => {
           if (data.code === 0) {
             this.shipNames = data.data
           }

@@ -24,7 +24,9 @@
         prop="relationshipType"
         label="联系设备">
         <template slot-scope="scope">
-          <span>{{getLabel(map.relationshipType, scope.row.relationshipType)}}</span>
+          <span>
+            {{scope.row.relationshipType === 3 ? getLabel(map.relationshipType, scope.row.relationshipType) : getLabel(map.relationshipType, scope.row.relationshipType) + '(' + scope.row.relationshipNumber + ')'}}
+          </span>
         </template>
       </el-table-column>
       <el-table-column
