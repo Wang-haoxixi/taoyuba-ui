@@ -263,6 +263,10 @@ export default {
           checkCrewRelation(this.crewList).then(res=>{
             console.log('三艘船')
             if(res.data.data){
+              // this.crewList[0].sourceType = 2
+              this.crewList.forEach((item) => {
+                item.sourceType = 2
+              })
               saveCrewBatch(this.crewList,type).then(res=>{
               console.log(res)
               this.$message.success('船员批量添加成功!')
