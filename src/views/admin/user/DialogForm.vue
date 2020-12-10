@@ -9,7 +9,13 @@
       </el-form-item>
       <el-form-item label="配置角色：" prop="role">
         <el-select v-model="form.roleList" multiple placeholder="请选择">
-          <el-option v-for="item in roleList" :key="item.value" :label="item.label" :value="item.value" :disabled="item.disabled">
+          <el-option v-for="item in roleList" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="配置区域：" v-if="roles.indexOf(1) > -1">
+        <el-select v-model="form.orgList" multiple placeholder="请选择">
+          <el-option v-for="item in orgList" :key="item.orgId" :label="item.name" :value="item.orgId">
           </el-option>
         </el-select>
       </el-form-item>
@@ -25,7 +31,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import { initMemberForm } from './options'
-import { getRoleOrgList } from '@/api/admin/org'
+import { fetchList as getOrgPage } from '@/api/admin/org'
+import { fetchList as getRolePage } from '@/api/admin/role'
 export default {
   props: {
     loadImage: {
@@ -42,11 +49,13 @@ export default {
       orgNames: [],
       rolesOptions: [],
       roleList: [],
+      orgList: [],
     }
   },
   computed: {
     ...mapGetters([
       'userInfo',
+      'roles',
     ]),
   },
   methods: {
@@ -58,19 +67,54 @@ export default {
       console.log(row.id)
     },
     load () {
-      getRoleOrgList().then(({ data }) => {
-        const roleList = data.data.map(m => {
-          return {
-            label: m.roleName,
-            value: m.roleId,
+      // getRoleOrgList().then(({ data }) => {
+      //   const roleList = data.data.map(m => {
+      //     return {
+      //       label: m.roleName,
+      //       value: m.roleId,
+      //     }
+      //   })
+      //   this.roleList = [
+      //     { value: 1, label: '超级管理员', disabled: true },
+      //     { value: 2, label: '游客权限', disabled: true },
+      //     { value: 3, label: '组织成员', disabled: true },
+      //     ...roleList,
+      //   ]
+      // })
+      this.getRoleList()
+      this.getOrgList()
+    },
+    getOrgList () {
+      getOrgPage({
+        current: 1,
+        size: 100,
+      }).then(({ data }) => {
+        if (data.code === 0) {
+          this.orgList = data.data.records
+        }
+      })
+    },
+    getRoleList () {
+      getRolePage({
+        current: 1,
+        size: 100,
+      }).then(({ data }) => {
+        if (data.code === 0) {
+          let arr = data.data.records
+          if (arr && arr.length > 0) {
+            let result = []
+            arr.forEach((item) => {
+              if (!(item.roleId === 114 || item.roleId === 3 || item.roleId === 1)) {
+                let obj = {
+                  label: item.roleName,
+                  value: item.roleId,
+                }
+                result.push(obj)
+              }
+            })
+            this.roleList = result
           }
-        })
-        this.roleList = [
-          { value: 1, label: '超级管理员', disabled: true },
-          { value: 2, label: '游客权限', disabled: true },
-          { value: 3, label: '组织成员', disabled: true },
-          ...roleList,
-        ]
+        }
       })
     },
     loadPage () {
@@ -82,6 +126,7 @@ export default {
       this.formRequestFn({
         userId: this.form.userId,
         role: this.form.roleList,
+        orgIds: this.roles.indexOf(1) > -1 ? this.form.orgList : [],
       }).then(({ data }) => {
         if (data.data) {
           this.$message.success('修改成功')

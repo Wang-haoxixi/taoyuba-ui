@@ -40,7 +40,7 @@ export default {
   methods: {
     loadPage () {
       this.pageLoading = true
-      getCount().then(({ data }) => {
+      getCount({unread: 0}).then(({ data }) => {
         if (data.code === 0) {
           this.isDot = !!data.data
         }

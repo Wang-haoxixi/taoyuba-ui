@@ -33,6 +33,9 @@
         <el-menu-item v-if="roles.indexOf(111) !== -1 || roles.indexOf(108) !== -1 || roles.indexOf(1) !== -1">
           <span class="sub-menu" @click="open(name='recruit')">招聘</span>
         </el-menu-item>
+        <el-menu-item v-if="roles.indexOf(1) > -1 || roles.indexOf(111) > -1">
+          <span class="sub-menu" @click="$router.push('/datastatistics')">大数据墙</span>
+        </el-menu-item>
       </el-menu>
       <!-- <div class="search-con">
         <top-search class="search-con-input" :style="{top: isTop}" :class="{inactive:!isShow }">

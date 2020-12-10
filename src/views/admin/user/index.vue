@@ -58,6 +58,7 @@ export default {
   methods: {                                      
     handleEdit (row) {                                                                                                                                                                 
       this.$refs['DialogForm'].form = this.$mergeByFirst(initMemberForm(), row)           
+      this.$refs['DialogForm'].form.orgList = this.$refs['DialogForm'].form.orgNames.map(m => m.id)
       this.$refs['DialogForm'].form.roleList = this.$refs['DialogForm'].form.roleList.map(m => m.id)          
       this.$refs['DialogForm'].methodName = '编辑'        
       this.$refs['DialogForm'].formRequestFn = putUser        

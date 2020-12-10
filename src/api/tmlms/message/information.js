@@ -17,10 +17,11 @@ export function getPageById (id) {
   })
 }
 
-export function getCount () {
+export function getCount (query) {
   return request({
     url: `${prefixUrl}/count`,
     method: 'get',
+    params: query,
   })
 }
 
