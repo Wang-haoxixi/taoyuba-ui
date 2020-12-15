@@ -3,7 +3,7 @@
     <el-container style="height: 100vh;">
       <el-header style="height: 60px;padding: 0;z-index: 500;">
         <!-- 顶部导航栏 -->
-        <top />
+        <top @tabList="addList"/>
       </el-header>
       <el-container>
         <el-aside :width="asideWidth">
@@ -188,6 +188,7 @@ export default {
         name: val.id.toString(),
         path: val.path,
       }
+      console.log(tabObj)
       if (this.editableTabs.length === 0) {
         this.editableTabs.push(tabObj)
         this.editableTabsValue = tabObj.name

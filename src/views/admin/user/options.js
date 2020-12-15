@@ -33,6 +33,7 @@ const initMemberForm = () => {
     orgNames: [],
     assetOrgId: '',
     avatar: '',
+    orgIds: [],
   }
 }
 

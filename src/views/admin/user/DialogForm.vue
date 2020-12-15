@@ -14,7 +14,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="配置区域：" v-if="roles.indexOf(1) > -1">
-        <el-select v-model="form.orgList" multiple placeholder="请选择">
+        <el-select v-model="form.orgIds" multiple placeholder="请选择">
           <el-option v-for="item in orgList" :key="item.orgId" :label="item.name" :value="item.orgId">
           </el-option>
         </el-select>
@@ -126,7 +126,7 @@ export default {
       this.formRequestFn({
         userId: this.form.userId,
         role: this.form.roleList,
-        orgIds: this.roles.indexOf(1) > -1 ? this.form.orgList : [],
+        orgIds: this.roles.indexOf(1) > -1 ? this.form.orgIds : [],
       }).then(({ data }) => {
         if (data.data) {
           this.$message.success('修改成功')

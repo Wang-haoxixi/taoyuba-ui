@@ -36,7 +36,7 @@ import mixins from '@/mixins/mixins'
 import DialogForm from './DialogForm'
 import { dictsMap, columnsMap, initMemberForm } from './options'
 import { fetchList, putUser, resetPassByUserId } from '@/api/admin/user'
-export default {            
+export default {
   components: {
     DialogForm,
   },
@@ -47,7 +47,7 @@ export default {
       dictsMap,
     }
   },
-  computed: {                                                                                  
+  computed: {
     ...mapState({
       userInfo: state => state.user.userInfo,
     }),
@@ -55,21 +55,21 @@ export default {
   created () {
     this.loadPage()
   },
-  methods: {                                      
-    handleEdit (row) {                                                                                                                                                                 
-      this.$refs['DialogForm'].form = this.$mergeByFirst(initMemberForm(), row)           
-      this.$refs['DialogForm'].form.orgList = this.$refs['DialogForm'].form.orgNames.map(m => m.id)
-      this.$refs['DialogForm'].form.roleList = this.$refs['DialogForm'].form.roleList.map(m => m.id)          
-      this.$refs['DialogForm'].methodName = '编辑'        
-      this.$refs['DialogForm'].formRequestFn = putUser        
-      this.$refs['DialogForm'].disabled = false         
-      this.$refs['DialogForm'].dialogShow = true                                                                                            
-    },        
-    handleResetPass (row) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-      this._handleComfirm(row.userId, resetPassByUserId, '重置密码')                                   
+  methods: {
+    handleEdit (row) {
+      this.$refs['DialogForm'].form = this.$mergeByFirst(initMemberForm(), row)
+      this.$refs['DialogForm'].form.orgIds = this.$refs['DialogForm'].form.orgNames.map(m => m.id)
+      this.$refs['DialogForm'].form.roleList = this.$refs['DialogForm'].form.roleList.map(m => m.id)
+      this.$refs['DialogForm'].methodName = '编辑'
+      this.$refs['DialogForm'].formRequestFn = putUser
+      this.$refs['DialogForm'].disabled = false
+      this.$refs['DialogForm'].dialogShow = true
     },
-    handleSelectionChange (val) {                                                                                                                 
-      this.multipleSelection = val.map(m => m.userId)                             
+    handleResetPass (row) {
+      this._handleComfirm(row.userId, resetPassByUserId, '重置密码')
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val.map(m => m.userId)
     },
     async loadPage (param = this.searchForm) {
       await this.loadTable(param, fetchList)

@@ -61,6 +61,13 @@ export default {
     },
     onTo () {
       this.isDot = false
+      let tabObj = {
+        label: '我的消息',
+        id: 4630,
+        path: '/wel/message/information',
+      }
+      this.$emit('tabList', tabObj)
+      // this.isDot = false
       this.$router.push('/wel/message/information')
     },
   },

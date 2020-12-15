@@ -25,7 +25,7 @@
       <!-- <top-search-icon></top-search-icon> -->
       <top-code></top-code>
       <top-guide></top-guide>
-      <top-message></top-message>
+      <top-message @tabList="addList"></top-message>
       <top-user></top-user>
     </div>
   </div>
@@ -52,6 +52,11 @@ export default {
     return {
       collectWebsite: website.collectWebsite,
     }
+  },
+  methods: {
+    addList (val) {
+      this.$emit('tabList', val)
+    },
   },
 }
 </script>
