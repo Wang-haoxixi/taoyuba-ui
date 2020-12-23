@@ -121,11 +121,14 @@ export default {
       let data = await this.loadTable(param, getCrewRegiste)
       this.pagedTable = data.records.map(item=>{
         item.certs.forEach(v=>{
+          let arr = []
           this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
           if(v.certTitle==data.value){
-              item.certNames=item.certNames+data.label
+            arr.push(data.label)
+              // item.certNames=item.certNames+data.label
           }
           })
+          item.certNames = arr.join(',')
         })
         return item 
       })
