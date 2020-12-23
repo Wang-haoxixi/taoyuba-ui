@@ -384,7 +384,7 @@ export default {
       //  if (key === 'status') {
       //    this.conStatus = +query.status
       //  }
-      if (key === 'timeLists' && query[key] !== '') {
+      if (key === 'timeLists' && query[key] !== '' && query[key] != null) {
         this.params[key] = query[key].split(',')
         this.params.timeStart = this.params[key][0]
         this.params.timeEnd = this.params[key][1]
