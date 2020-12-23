@@ -33,7 +33,8 @@
         prop="relationshipReason"
         label="联系事由">
         <template slot-scope="scope">
-          <span>{{getLabel(map.relationshipReason, scope.row.relationshipReason)}}</span>
+          <span>{{scope.row.relationshipReason}}</span>
+          <!-- <span>{{getLabel(map.relationshipReason, scope.row.relationshipReason)}}</span> -->
         </template>
       </el-table-column>
       <el-table-column
@@ -59,7 +60,10 @@
         </template>
       </el-table-column>
     </el-table>
-  </basic-container>
+    <div style="text-align: center;margin: 20px 0;">
+      <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" :current-page.sync="params.current" @current-change="currentChange"></el-pagination>
+    </div>
+</basic-container>
 </template>
 <script>
 import { mapGetters } from 'vuex'

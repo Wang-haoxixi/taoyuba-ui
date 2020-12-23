@@ -428,7 +428,7 @@ export default {
       var checkPhone = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入联系电话'))
-        } else if (!value.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[0-9]|18[0-9]|14[0-9]|19[0-9]|16[0-9])[0-9]{8}$/)) {
+        } else if (!/(^1[3456789]d{9}$)|(^((\d{2,4})|(\d{2,4}-))?\d{7,8}$)/.test(value)) {
           callback(new Error('请输入正确的手机号码!'))
         } else {
             callback()
@@ -538,6 +538,7 @@ export default {
         // ],
         contactPhone: [
             { required: true, message: '请填写联系电话', trigger: 'blur' },
+            { validator: checkPhone, trigger: 'blur' },
         ],
         positionId: [
             { required: true, message: '请填写职位', trigger: 'blur' },
@@ -712,6 +713,19 @@ export default {
                     message: res.data.msg,
                     type: 'success',
                   })
+                  let from = this.$route.query.from
+                  if (from) {
+                    let to = from + '?'
+                    let query = this.$route.query
+                    for (let key in query) {
+                      if (key !== 'from') {
+                        to += `${key}=${query[key]}&`
+                      }
+                    }
+                    console.log('to', to)
+                    this.$router.push(to)
+                    return
+                  }
                    if(this.$route.query.userId){
                       this.$router.go(-1) 
                    }else if(this.$route.query.shipCrew){
@@ -719,7 +733,8 @@ export default {
                    }else if(this.$route.query.idcard){
                      this.$router.go(-1)
                    }else{
-                     this.$router.push({name:'crewboatMan'})  
+                     this.$router.go(-1)
+                    //  this.$router.push({name:'crewboatMan'})  
                    }
               }).catch(err=>{
                 this.$message.error(err.message)

@@ -5,6 +5,7 @@
       <operation-container>
         <template slot="left">
           <iep-button @click="handleAdd" type="primary" icon="el-icon-plus" plain>上船登记</iep-button>
+          <iep-button v-if="relation_ship_add" @click="handleAddRelation" type="primary" icon="el-icon-plus" plain>新增联系记录</iep-button>
         </template>
         <!-- <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -62,6 +63,7 @@
           <el-button @click="$router.go(-1)">取消</el-button>
         </div>
     </el-dialog> -->
+    <dialog-form-relation ref="dialogFormRelation" :status="relationStatus" v-model="formRelation"></dialog-form-relation>
   </div>
 </template>
 <script>
@@ -78,10 +80,15 @@ import { allcrewColumnsMap } from '../options'
 import { getUserInfo } from '@/api/login'
 import keyBy from 'lodash/keyBy'
 import { mapGetters } from 'vuex'
+import dialogFormRelation from '@/views/tmlms/relation/dialogForm'
 export default {
   mixins: [mixins],
+  components: {
+    dialogFormRelation,
+  },
   data () {
     return {
+      relationStatus: '',
       form:{
         idcard:'',
         workStatus:'',
@@ -149,6 +156,8 @@ export default {
       },
       conCrew:[],
       shipTitle:'',
+      formRelation: {},
+      relation_ship_add: false,
     }
   },
   created () {
@@ -156,11 +165,19 @@ export default {
     this.getTableData()
     this.isManager()
     this.getTitle()
+    this.formRelation.shipName = this.$route.query.shipName
+    this.formRelation.shipownerName = this.$route.query.shipowner
+    this.formRelation.shipownerPhone = this.$route.query.mobile
+    this.relation_ship_add = this.permissions['relation_ship_add']
   },
   computed: {
-    ...mapGetters(['roles']),
+    ...mapGetters(['roles', 'permissions']),
   },
   methods: {
+    handleAddRelation () {
+      this.relationStatus = 'add'
+      this.$refs.dialogFormRelation.open()
+    },
     getTitle (){
       this.shipTitle = this.$route.query.shipName+'渔船船员'
     },
@@ -216,13 +233,16 @@ export default {
         item.flag=keyBy(this.flag, 'value')[item.flag].label
         // item.certName = ''
         if(item.certList){
+          let certName = []
           item.certName = ''
           item.certList.forEach(v=>{
           this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
           if(v.certTitle==data.value){
-              item.certName=item.certName+' '+data.label
+            certName.push(data.label)
+              // item.certName=item.certName+' '+data.label
           }
           })
+          item.certName = certName.join('，')
         })
         }
       })

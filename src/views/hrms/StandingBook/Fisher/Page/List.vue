@@ -75,7 +75,7 @@
               <!-- <iep-button size="mini" type="primary" @click="handleIntoinsure(scope.row.shipName)">保单</iep-button> -->
               <iep-button size="mini" type="primary"  v-if="mlms_ship_template" @click="handleTmp(scope.row.shipName,scope.row.contractModelStatus)">模板</iep-button>
               <iep-button size="mini" type="primary" v-if="mlms_ship_download && scope.row.contractModelStatus" @click="handlePrint(scope.row.shipName)">下载</iep-button>
-              <iep-button size="mini" type="primary" v-if="mlms_ship_crew" @click="handleAllCrew(scope.row.shipId,scope.row.shipName)">船员</iep-button>
+              <iep-button size="mini" type="primary" v-if="mlms_ship_crew" @click="handleAllCrew(scope.row.shipId,scope.row.shipName, scope.row)">船员</iep-button>
               <iep-button size="mini" type="primary" v-if="mlms_ship_shareholder && scope.row.shipShare==1" @click="handleHodler(scope.row.shipId,scope.row.shipName)">股东</iep-button>
               <iep-button size="mini" type="primary" v-if="mlms_ship_contract" @click="handleCrew(scope.row.shipNo)">合同</iep-button>
               <!-- <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">船员</iep-button> -->
@@ -442,10 +442,14 @@ export default {
         path: `/hrms_spa/ship_crew/${id}`, 
       })
     },
-    handleAllCrew (shipId,shipName) {
+    handleAllCrew (shipId,shipName, row) {
       this.$router.push({       
         path: `/hrms_spa/ship_allcrew/${shipId}`, 
-        query:{shipName:`${shipName}`},
+        query:{
+          shipName:`${shipName}`,
+          shipowner: row.shipowner,
+          mobile: row.mobile,
+        },
       })
     },
     handleOperat (id,No) {

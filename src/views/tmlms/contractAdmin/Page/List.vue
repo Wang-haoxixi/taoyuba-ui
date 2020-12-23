@@ -2,21 +2,21 @@
   <div class="contract-box">
     <basic-container>
       <page-header title="网签合同"></page-header>
-      <div class="tips" v-if="roles.indexOf(109) !== -1 || roles.indexOf(112) !== -1">
+      <!-- <div class="tips" v-if="roles.indexOf(109) !== -1 || roles.indexOf(112) !== -1">
         <dl>
           <dt> 合同如有以下情况：</dt>
           <dd>1、合同信息填写错误，需重新编辑。</dd>
           <dd>2、合同非正常解除，需解除合同。</dd>
           <dd>请前往衢山船员服务中心。联系人：李岳雷，电话：15924014846</dd>
         </dl>
-      </div>
+      </div> -->
             <operation-container>
         <template slot="left">    
           <iep-button v-if="mlms_contract_add" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
           <iep-button @click="handleFresh" type="primary" >刷新</iep-button>
         </template>
         <template slot="right">
-          <span style="width:150px" v-if="!roles.includes(112)"><el-select v-model="chooseOrg" placeholder="请选择基层组织" size="small">
+          <span style="width:150px" v-if="!roles.includes(112)"><el-select v-model="chooseOrg" placeholder="基层组织" size="small">
               <el-option
                 v-for="item in orgList"
                 :key="item.index"
@@ -33,7 +33,8 @@
           <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
             value-format="yyyy-MM-dd"  size="mini"></el-date-picker>
           </span>                               
-          <span style="width:120px"><el-select v-model="conStatus" placeholder="请选择合同状态" size="small">
+          <span style="width:120px">
+            <el-select v-model="conStatus" placeholder="合同状态" size="small">
               <el-option
                 v-for="item in statusDict"
                 :key="item.value"
@@ -377,6 +378,18 @@ export default {
     }
   },
   created () {
+    let query = this.$route.query
+    for (let key in this.params) {
+       this.params[key] = query[key]
+      //  if (key === 'status') {
+      //    this.conStatus = +query.status
+      //  }
+      if (key === 'timeLists' && query[key] !== '') {
+        this.params[key] = query[key].split(',')
+        this.params.timeStart = this.params[key][0]
+        this.params.timeEnd = this.params[key][1]
+      }
+    }
     this.getVillageOrg()      
     this.getContractList()     
     this.getDicts()
@@ -450,7 +463,13 @@ export default {
   },
   methods: {
     onToEmployee (idcard) {
-      this.$router.push(`/boatMan/detail?edit=${idcard}`)
+      let from = '/crew/htgl/contract_admin'
+      for (let key in this.params) {
+        if (this.params[key]) {
+          from += `&${key}=${this.params[key]}`
+        }
+      }
+      this.$router.push(`/boatMan/detail?edit=${idcard}&from=${from}`)
     },
     rowClassName ({row}) {
       // 合同解除
@@ -523,9 +542,9 @@ export default {
       })
     },
     getParamData () {
-      this.params.shipName = this.params.shipName.replace(/\s*/g,'')
-      this.params.employerName = this.params.employerName.replace(/\s*/g,'')
-      this.params.employeeName = this.params.employeeName.replace(/\s*/g,'')
+      this.params.shipName = (this.params.shipName || '').replace(/\s*/g,'')
+      this.params.employerName = (this.params.employerName || '').replace(/\s*/g,'')
+      this.params.employeeName = (this.params.employeeName || '').replace(/\s*/g,'')
       if (this.params.timeLists) {
         this.params.timeStart = this.params.timeLists[0]
         this.params.timeEnd = this.params.timeLists[1]

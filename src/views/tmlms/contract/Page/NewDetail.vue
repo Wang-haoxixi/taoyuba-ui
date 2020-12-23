@@ -121,7 +121,7 @@
               <el-row>
                 <el-col :span="12">  
                   <el-form-item label="地址：" prop="employerAddr">
-                    <el-input maxlength="20" v-model="formData.employerAddr" style="width:380px" :disabled="employer"></el-input>
+                    <el-input maxlength="40" v-model="formData.employerAddr" style="width:380px" :disabled="employer"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -175,7 +175,7 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item label="地址：" prop="employeeAddr">
-                    <el-input maxlength="20" v-model="formData.employeeAddr" style="width:380px"></el-input>
+                    <el-input maxlength="40" v-model="formData.employeeAddr" style="width:380px"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">

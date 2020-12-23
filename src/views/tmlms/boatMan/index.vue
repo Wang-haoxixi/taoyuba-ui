@@ -9,7 +9,7 @@
           <span style="width:120px"><el-input v-model="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
           <span style="width:120px"><el-input v-model="params.idcard" placeholder="身份证" size="small" clearable></el-input></span>
           <span style="width:120px"><el-input v-model="params.phone" placeholder="联系电话" size="small" clearable></el-input></span>         
-          <span style="width:150px"><el-select v-model="params.certLevel" placeholder="请选择证书等级" size="small">                                                                              
+          <span style="width:10s0px"><el-select v-model="params.certLevel" placeholder="证书等级" size="small">                                                                              
               <el-option
                 v-for="item in certGrade"    
                 :key="item.value"
@@ -18,8 +18,8 @@
               </el-option>
             </el-select>    
           </span>       
-          <span style="width:150px"><iep-dict-select placeholder="请选择证书职位" v-model="params.certTitle" dict-name="tyb_crew_cert_title"></iep-dict-select></span>      
-          <span style="width:150px"><el-select v-model="params.workStatus" placeholder="请选择用工状态" size="small">                                                               
+          <span style="width:120px"><iep-dict-select placeholder="证书职位" v-model="params.certTitle" dict-name="tyb_crew_cert_title"></iep-dict-select></span>      
+          <span style="width:120px"><el-select v-model="params.workStatus" style="width:120px" placeholder="用工状态" size="small">                                                               
               <el-option
                 v-for="item in workStatus"    
                 :key="item.value"
@@ -27,7 +27,16 @@
                 :value="item.value">
               </el-option>
             </el-select>
-          </span>                                                                                                               
+          </span>
+          <span style="width:120px"><el-select v-model="params.provinceId" style="width:120px" placeholder="户籍" size="small">                                                               
+              <el-option
+                v-for="item in rogionList"    
+                :key="item.areaCode"
+                :label="item.name"
+                :value="item.areaCode">
+              </el-option>
+            </el-select>
+          </span>
           <el-button size="small"  @click="getParamData">搜索</el-button>                          
         </div>
       </div>
@@ -101,12 +110,13 @@
 <script>                                                                                                                                                      
 import { getCrew,deleteCrew,statusCrew,exportExcel } from '@/api/tmlms/boatMan'                   
 import { getUserInfo } from '@/api/login'
-import { getArea } from '@/api/post/admin'
+import { getArea, getRogionList } from '@/api/post/admin'
 import keyBy from 'lodash/keyBy'
 import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
+      rogionList: [],
       shipownerList: [],
       provinces:[],
       total: 10,
@@ -250,6 +260,13 @@ export default {
     }
   },
   methods: {
+    getRogionList () {
+      getRogionList(0).then(({ data }) => {
+        if (data.code === 0) {
+          this.rogionList = data.data
+        }
+      })
+    },
     handleFresh () {
       this.getData()
       this.isManager()
@@ -454,6 +471,7 @@ export default {
     this.isManager()
     this.getProvince()
     this.isAdminPath()
+    this.getRogionList()
   },
   filters: {
     typeFilter (type) {

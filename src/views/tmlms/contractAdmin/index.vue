@@ -38,6 +38,7 @@ export default {
       this.record = ''
       this.type = ''
       this.currentComponet = 'List'
+      console.log('handleGoBack')
     },
     handleRecord (id) {
       this.record = id
