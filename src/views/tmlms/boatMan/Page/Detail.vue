@@ -391,6 +391,9 @@
           <template v-if="$route.query.shipCrew">
             <el-button @click="$router.go(-1)">返回</el-button>
           </template>
+          <template v-else-if="$route.query.from">
+            <el-button @click="onBackByFrom()">返回</el-button>
+          </template>
           <template v-else>
             <el-button @click="$router.go(-1)">返回</el-button>
             <!-- <el-button v-if="manager" @click="$router.push({name:'crewboatMan'})">返回</el-button>     -->
@@ -585,6 +588,20 @@ export default {
     }
   },
   methods: {
+    onBackByFrom () {
+      let from = this.$route.query.from
+      if (from) {
+        let to = from + '?'
+        let query = this.$route.query
+        for (let key in query) {
+          if (key !== 'from') {
+            to += `${key}=${query[key]}&`
+          }
+        }
+        // console.log('to', to)
+        this.$router.push(to)
+      }
+    },
     setBirthTimeFormat (time) {
       return time + ' 00:00:00'
     },
