@@ -7,6 +7,7 @@
             placeholder=""
             filterable
             remote
+            :disabled="shipNameDisabled"
             maxlength="20"
             @change="onChange"
             :remote-method="getShipNameList">
@@ -60,7 +61,7 @@
           :on-success="handleSuccess"
           :on-remove="handleRemove"
           :before-upload="handleBeforeUpload"
-          :file-list="form.fileList"
+          :file-list="fileList"
           multiple
           :headers="headers"
           list-type="picture">
@@ -74,19 +75,32 @@
 import { getPageById, updatePage, createPage, getPageLast } from '@/api/tmlms/relation'
 import { getShipNames } from '@/api/ships/index'
 import { mapGetters } from 'vuex'
+import cloneDeep from 'lodash/cloneDeep'
 import map from './map'
 export default {
   props: {
     status: String,
-    value: Object,
+    value: {
+      type: Object,
+      default: () => {
+        return {
+          shipName: '',
+        }
+      },
+    },
+    shipNameDisabled: {
+      type: Boolean,
+      dafault: false,
+    },
   },
   data () {
     return {
       map,
       form: {
         relationshipType: '',
-        fileList:[],
+        files:[],
       },
+      fileList: [],
       shipNames: [],
       pickerOptions: {
         shortcuts: [{
@@ -137,9 +151,9 @@ export default {
     },
     value: {
       handler (newVal) {
-        this.form.shipName = newVal.shipName
-        this.form.shipownerName = newVal.shipownerName
-        this.form.shipownerPhone = newVal.shipownerPhone
+        this.form.shipName = newVal.shipName || ''
+        this.form.shipownerName = newVal.shipownerName || ''
+        this.form.shipownerPhone = newVal.shipownerPhone || ''
         this.getShipNameLastInfo()
       },
       deep: true,
@@ -147,25 +161,32 @@ export default {
     },
   },
   methods: {
-    handleSuccess (response, file) {
+    handleSuccess (response, file, fileList) {
       // console.log('handleSuccess', response, file, fileList)
-      let obj = {
-        name: '',
-        url: file.response.data.url,
+      let arr = cloneDeep(this.form.files)
+      if (!Array.isArray(this.form.files)) {
+        this.form.files = []
       }
-      if (!Array.isArray(this.form.fileList)) {
-        this.form.fileList = []
-      }
-      this.form.fileList.push(obj)
-      console.log(this.form.fileList)
+      fileList.forEach((item) => {
+        let obj = {
+          name: '',
+          url: item.response ? item.response.data.url : '',
+        }
+        if (obj.url !== '' && arr.findIndex(item => item.url === obj.url) === -1) {
+          arr.push(obj)
+        }
+      })
+      this.form.files = arr
+      // console.log('this.form.files', this.form.files)
     },
     handleRemove (file) {
-      let url = file.response.data.url
-      let index = this.form.fileList.findIndex((item) => {
+      // console.log('handleRemove', file)
+      let url = file.url
+      let index = this.form.files.findIndex((item) => {
         return item.url === url
       })
       if (index > -1) {
-        this.form.fileList.splice(index, 1)
+        this.form.files.splice(index, 1)
       }
       // console.log('handleRemove', this.form.fileList)
     },
@@ -229,7 +250,8 @@ export default {
             }
             arr.push(obj)
           })
-          result.fileList = arr
+          this.fileList = arr
+          result.files = arr
           this.form = result
           console.log('result', result)
         }
@@ -240,7 +262,7 @@ export default {
         if (valid) {
           let api = this.status === 'add' ? createPage : (this.status === 'update' ? updatePage : null)
           if (api) {
-            this.form.relationshipImages = this.form.fileList.map(item => item.url) || []
+            this.form.relationshipImages = this.form.files.map(item => item.url) || []
             api(this.form).then(({ data }) => {
               if (data.code === 0) {
                 this.$notify({
