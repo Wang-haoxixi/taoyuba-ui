@@ -62,13 +62,19 @@
           :on-remove="handleRemove"
           :before-upload="handleBeforeUpload"
           :file-list="fileList"
+          :on-preview="handlePictureCardPreview"
           multiple
           :headers="headers"
-          list-type="picture">
+          list-type="picture-card">
           <el-button size="small" type="primary">点击上传</el-button>
           <div slot="tip" class="el-upload__tip">{{`只能上传图片文件，且不超过4M`}}</div>
         </el-upload>
       </el-form-item>
+      <el-dialog :visible.sync="dialogVisible" append-to-body width="820px">
+        <div style="text-align: center;">
+          <img style="max-width: 780px;" :src="dialogImageUrl" alt="">
+        </div>
+      </el-dialog>
     </el-form>
 </template>
 <script>
@@ -95,6 +101,8 @@ export default {
   },
   data () {
     return {
+      dialogImageUrl: '',
+      dialogVisible: false,
       map,
       form: {
         relationshipType: '',
@@ -161,6 +169,11 @@ export default {
     },
   },
   methods: {
+    handlePictureCardPreview (file) {
+      console.log('file', file)
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
+    },
     handleSuccess (response, file, fileList) {
       // console.log('handleSuccess', response, file, fileList)
       let arr = cloneDeep(this.form.files)
