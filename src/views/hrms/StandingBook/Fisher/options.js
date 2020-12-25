@@ -77,6 +77,10 @@ const columnsMap = [
       prop: 'flag',
       label: '来源',     
     },
+    {
+      prop: 'provinceIdName',
+      label: '籍贯',
+    },
   ]
   const addcrewColumnsMap = [
     {
@@ -112,6 +116,10 @@ const columnsMap = [
       label: '职位',
       dictName: 'tyb_resume_position',
       type: 'dictGroup',
+    },
+    {
+      prop: 'provinceIdName',
+      label: '籍贯',
     },
   ]
   const operatColumnsMap = [

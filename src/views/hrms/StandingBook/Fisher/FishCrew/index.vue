@@ -1,7 +1,7 @@
 <template>
   <div>
     <basic-container>
-      <page-header title="渔船船员"></page-header>
+      <page-header :title="`${$route.query.shipName || ''}渔船船员`"></page-header>
       <operation-container>
         <!-- <template slot="left">
           <iep-button @click="handleAdd($route.params.shipId)" type="primary" icon="el-icon-plus" plain>新增</iep-button>
@@ -51,8 +51,9 @@
 import { getList } from '@/api/tmlms/newContract'
 import mixins from '@/mixins/mixins'
 import { shipColumnsMap } from '../options'
+import rogionMixin from '../rogionMixin'
 export default {
-  mixins: [mixins],
+  mixins: [mixins, rogionMixin],
   data () {
     return {
       shipColumnsMap,
@@ -61,7 +62,11 @@ export default {
     }
   },
   created () {
-    this.loadPage()
+    this.getRogionList().then(() => {
+      this.loadPage()
+    }).catch(() => {
+      this.loadPage()
+    })
   },
   methods: {
     handleSelectionChange (val) {     

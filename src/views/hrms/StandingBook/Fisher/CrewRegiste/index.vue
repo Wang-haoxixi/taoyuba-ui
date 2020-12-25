@@ -75,6 +75,12 @@ export default {
         realName: '',
         idcard: '',
       },
+      certLevel: [
+        { value: '0', label: '' },
+        { value: '1', label: '一级' },
+        { value: '2', label: '二级' },
+        { value: '3', label: '三级' },
+      ],
     }
   },
   created () {
@@ -120,16 +126,25 @@ export default {
       // param.status = 1
       let data = await this.loadTable(param, getCrewRegiste)
       this.pagedTable = data.records.map(item=>{
+        let arr = []
         item.certs.forEach(v=>{
-          let arr = []
+          let name = ''
+          this.certLevel.map(data=>{
+            if (v.certLevel === data.value) {
+              name = data.label
+            }
+          })
           this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
           if(v.certTitle==data.value){
-            arr.push(data.label)
+            name += data.label
               // item.certNames=item.certNames+data.label
-          }
+            }
           })
-          item.certNames = arr.join(',')
+          if (name) {
+            arr.push(name)
+          }
         })
+        item.certNames = arr.join(',')
         return item 
       })
       console.log(this.pagedTable)

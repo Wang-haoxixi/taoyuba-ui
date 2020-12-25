@@ -81,8 +81,9 @@ import { getUserInfo } from '@/api/login'
 import keyBy from 'lodash/keyBy'
 import { mapGetters } from 'vuex'
 import dialogFormRelation from '@/views/tmlms/relation/dialogForm'
+import rogionMixin from '../rogionMixin'
 export default {
-  mixins: [mixins],
+  mixins: [mixins, rogionMixin],
   components: {
     dialogFormRelation,
   },
@@ -162,7 +163,11 @@ export default {
   },
   created () {
     // this.loadPage()
-    this.getTableData()
+    this.getRogionList().then(() => {
+      this.getTableData()
+    }).catch(() => {
+      this.getTableData()
+    })
     this.isManager()
     this.getTitle()
     this.formRelation.shipName = this.$route.query.shipName
@@ -244,6 +249,12 @@ export default {
           })
           item.certName = certName.join('，')
         })
+        }
+      })
+      let result = data.data.data
+      result.forEach((item) => {
+        if (item.provinceId) {
+          item.provinceIdName = this.getProvinceIdName(item.provinceId)
         }
       })
       this.pagedTable = data.data.data

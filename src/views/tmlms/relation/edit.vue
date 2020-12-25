@@ -1,7 +1,9 @@
 <template>
   <el-form :model="form" :rules="rules" ref="ruleForm" label-width="150px" :disabled="status === 'detail'">
-      <el-form-item label="渔船名" prop="shipName">
-        <el-select
+    <el-row>
+      <el-col span="24">
+        <el-form-item label="渔船名" prop="shipName">
+          <el-select
             v-model="form.shipName"
             style="width: 100%;"
             placeholder=""
@@ -13,63 +15,79 @@
             :remote-method="getShipNameList">
             <el-option v-for="item in shipNames" :key="item.shipId" :label="item.shipName" :value="item.shipName"></el-option>
           </el-select>
-      </el-form-item>
-      <el-form-item label="联系人" prop="shipownerName">
-        <el-input v-model.trim="form.shipownerName"></el-input>
-      </el-form-item>
-      <el-form-item label="手机号" prop="shipownerPhone">
-        <el-input v-model.trim="form.shipownerPhone" type="number"></el-input>
-      </el-form-item>
-      <el-form-item label="联系设备" prop="relationshipType">
-        <el-select v-model="form.relationshipType" placeholder="">
-          <el-option
-            v-for="item in map.relationshipType"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="联系号码" prop="relationshipNumber" v-if="form.relationshipType !== 3">
-        <el-input v-model.trim="form.relationshipNumber"></el-input>
-      </el-form-item>
-      <el-form-item label="联系事由" prop="relationshipReason">
-        <el-input v-model.trim="form.relationshipReason" maxlength="50"></el-input>
-        <!-- <el-select v-model="form.relationshipReason" placeholder="">
-          <el-option
-            v-for="item in dictGroup.tyb_contact_information"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select> -->
-      </el-form-item>
-      <el-form-item label="联系时间" prop="relationshipTime">
-        <el-date-picker
-          value-format="yyyy-MM-dd HH:mm:ss"
-          format="yyyy-MM-dd HH:mm:ss"
-          v-model="form.relationshipTime"
-          type="datetime"
-          placeholder=""
-          align="right">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="附件">
-        <el-upload
-          class="upload-demo"
-          action="/api/admin/file/upload/avatar"
-          :on-success="handleSuccess"
-          :on-remove="handleRemove"
-          :before-upload="handleBeforeUpload"
-          :file-list="fileList"
-          :on-preview="handlePictureCardPreview"
-          multiple
-          :headers="headers"
-          list-type="picture-card">
-          <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip">{{`只能上传图片文件，且不超过4M`}}</div>
-        </el-upload>
-      </el-form-item>
+        </el-form-item>
+      </el-col>
+      <el-col :span="span">
+        <el-form-item label="联系人" prop="shipownerName">
+          <el-input v-model.trim="form.shipownerName"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="span">
+        <el-form-item label="手机号" prop="shipownerPhone">
+          <el-input v-model.trim="form.shipownerPhone" type="number"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="span">
+        <el-form-item label="联系设备" prop="relationshipType">
+          <el-select v-model="form.relationshipType" placeholder="">
+            <el-option
+              v-for="item in map.relationshipType"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>
+      <el-col :span="span">
+        <el-form-item label="联系号码" prop="relationshipNumber" v-if="form.relationshipType !== 3">
+          <el-input v-model.trim="form.relationshipNumber"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="span">
+        <el-form-item label="联系事由" prop="relationshipReason">
+          <el-input v-model.trim="form.relationshipReason" maxlength="50"></el-input>
+          <!-- <el-select v-model="form.relationshipReason" placeholder="">
+            <el-option
+              v-for="item in dictGroup.tyb_contact_information"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select> -->
+        </el-form-item>
+      </el-col>
+      <el-col :span="span">
+        <el-form-item label="联系时间" prop="relationshipTime">
+          <el-date-picker
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            v-model="form.relationshipTime"
+            type="datetime"
+            placeholder=""
+            align="right">
+          </el-date-picker>
+        </el-form-item>
+      </el-col>
+      <el-col :span="24">
+        <el-form-item label="附件">
+          <el-upload
+            class="upload-demo"
+            action="/api/admin/file/upload/avatar"
+            :on-success="handleSuccess"
+            :on-remove="handleRemove"
+            :before-upload="handleBeforeUpload"
+            :file-list="fileList"
+            :on-preview="handlePictureCardPreview"
+            multiple
+            :headers="headers"
+            list-type="picture-card">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">{{`只能上传图片文件，且不超过4M`}}</div>
+          </el-upload>
+        </el-form-item>
+      </el-col>
+    </el-row>
       <el-dialog :visible.sync="dialogVisible" append-to-body width="820px">
         <div style="text-align: center;">
           <img style="max-width: 780px;" :src="dialogImageUrl" alt="">
@@ -93,6 +111,10 @@ export default {
           shipName: '',
         }
       },
+    },
+    span: {
+      type: String,
+      dafault: '24',
     },
     shipNameDisabled: {
       type: Boolean,

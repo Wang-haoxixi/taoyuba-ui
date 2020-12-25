@@ -144,3 +144,18 @@ export function exportExcel (params) {
       title: '船员信息',
     })
   }
+
+export function getPageByBad (params) {
+    return request({
+        url: `${prefixUrl}/badPage`,
+        method: 'get',
+        params: params,
+    })
+}
+export function updatePageBatchByBad (params) {
+    return request({
+        url: `${prefixUrl}/badUpdateBatch`,
+        method: 'post',
+        data: params,
+    })
+}

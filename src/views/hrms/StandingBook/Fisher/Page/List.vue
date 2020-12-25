@@ -73,11 +73,20 @@
             <operation-wrapper>
               <!-- v-if="isExistContract(scope.row.shipName)" -->
               <!-- <iep-button size="mini" type="primary" @click="handleIntoinsure(scope.row.shipName)">保单</iep-button> -->
-              <iep-button size="mini" type="primary"  v-if="mlms_ship_template" @click="handleTmp(scope.row.shipName,scope.row.contractModelStatus)">模板</iep-button>
-              <iep-button size="mini" type="primary" v-if="mlms_ship_download && scope.row.contractModelStatus" @click="handlePrint(scope.row.shipName)">下载</iep-button>
+              <el-dropdown v-if="mlms_ship_template || (mlms_ship_download && scope.row.contractModelStatus)">
+                <el-button type="primary" size="mini">
+                  模板<i class="el-icon-arrow-down el-icon--right"></i>
+                </el-button>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-if="mlms_ship_template"><span @click="handleTmp(scope.row.shipName,scope.row.contractModelStatus)">生成</span></el-dropdown-item>
+                  <el-dropdown-item v-if="mlms_ship_download && scope.row.contractModelStatus"><span @click="handlePrint(scope.row.shipName)">下载</span></el-dropdown-item>
+                  <!-- <iep-button size="mini" type="primary"  v-if="mlms_ship_template" @click="handleTmp(scope.row.shipName,scope.row.contractModelStatus)">生成</iep-button> -->
+                  <!-- <iep-button size="mini" type="primary" v-if="mlms_ship_download && scope.row.contractModelStatus" @click="handlePrint(scope.row.shipName)">下载</iep-button> -->
+                </el-dropdown-menu>
+              </el-dropdown>
               <iep-button size="mini" type="primary" v-if="mlms_ship_crew" @click="handleAllCrew(scope.row.shipId,scope.row.shipName, scope.row)">船员</iep-button>
               <iep-button size="mini" type="primary" v-if="mlms_ship_shareholder && scope.row.shipShare==1" @click="handleHodler(scope.row.shipId,scope.row.shipName)">股东</iep-button>
-              <iep-button size="mini" type="primary" v-if="mlms_ship_contract" @click="handleCrew(scope.row.shipNo)">合同</iep-button>
+              <iep-button size="mini" type="primary" v-if="mlms_ship_contract" @click="handleCrew(scope.row)">合同</iep-button>
               <!-- <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">船员</iep-button> -->
               <el-dropdown v-if="mlms_ship_export || mlms_shipname_export">
                 <el-button type="primary" size="mini">
@@ -437,9 +446,12 @@ export default {
         path: `/hrms_spa/ship_insure_list/${shipName}`,
       })
     },
-    handleCrew (id) {
+    handleCrew (row) {
       this.$router.push({       
-        path: `/hrms_spa/ship_crew/${id}`, 
+        path: `/hrms_spa/ship_crew/${row.shipNo}`,
+        query: {
+          shipName: row.shipName,
+        },
       })
     },
     handleAllCrew (shipId,shipName, row) {
