@@ -18,7 +18,7 @@
       <iep-button><i class="el-icon-bell"></i></iep-button>
     </el-badge>
   </el-popover> -->
-  <el-badge class="item" :is-dot="isDot">
+  <el-badge class="item" :is-dot="isDot" v-show="isShow">
     <iep-button @click="onTo"><i class="el-icon-bell"></i></iep-button>
   </el-badge>
 </template>
@@ -26,6 +26,7 @@
 // import { getImsWel } from '@/api/ims/email'
 // import IepTopMessageBox from './Components/MessageBox'
 import { getCount } from '@/api/tmlms/message/information'
+import { mapGetters } from 'vuex'
 export default {
   // components: { IepTopMessageBox },
   data () {
@@ -37,7 +38,35 @@ export default {
   created () {
     this.loadPage()
   },
+  computed: {
+    ...mapGetters([
+      'menu',
+    ]),
+    isShow () {
+      // console.log('menu', this.menu)
+      let result = this.findNotice(this.menu || [])
+      // console.log('result', result)
+      return result
+    },
+  },
   methods: {
+    findNotice (data) {
+      for (let i = 0, len = data.length; i < len; i++) {
+        // console.log('id', data[i].id)
+        if (data[i].id === 4630) {
+          // console.log('notice id', data[i].id)
+          return true
+        }
+        let children = data[i].children
+        // console.log(children.length > 0)
+        if (children && children.length > 0) {
+          let result = this.findNotice(children)
+          if (result) {
+            return result
+          }
+        }
+      }
+    },
     loadPage () {
       this.pageLoading = true
       getCount({unread: 0}).then(({ data }) => {

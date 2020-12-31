@@ -91,6 +91,10 @@ export default {
       let data = await this.loadTable(param, getList)
       console.log('打印表单')
       console.log(data.records)
+      data.records.forEach(item => {
+        item.provinceIdName = this.getProvinceIdName(item.provinceId)
+      })
+      
       this.pagedTable = data.records
     },
     handleProtocol (contractId) {

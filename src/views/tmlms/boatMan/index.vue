@@ -375,9 +375,9 @@ export default {
       //   this.params.startDate = this.params.timeLists[0]
       //   this.params.endDate = this.params.timeLists[1]
       // }
-      this.params.realName = this.params.realName.replace(/\s*/g,'')
-      this.params.idcard = this.params.idcard.replace(/\s*/g,'')
-      this.params.phone = this.params.phone.replace(/\s*/g,'')
+      this.params.realName = (this.params.realName || '').replace(/\s*/g,'')
+      this.params.idcard = (this.params.idcard || '').replace(/\s*/g,'')
+      this.params.phone = (this.params.phone || '').replace(/\s*/g,'')
       this.params.current = 1
       this.getData()
     },

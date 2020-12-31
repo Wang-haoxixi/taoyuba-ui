@@ -8,6 +8,7 @@
       </template>
       <template slot="right">
         <el-date-picker
+          size="small"
           value-format="yyyy-MM-dd"
           v-model="params.birthday"
           type="date"

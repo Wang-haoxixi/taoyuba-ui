@@ -6,6 +6,33 @@
         <!-- roles.indexOf(112) !== -1" -->
         <iep-button @click="handleAdd" type="primary" icon="el-icon-plus" plain v-if="relation_ship_add && roles.indexOf(112) !== -1">新增</iep-button>
       </template>
+      <!-- <template slot="right">
+        <el-form :inline="true" :model="params" size="small">
+          <el-form-item>
+            <el-input v-model="params.shipName" placeholder="船名号"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input v-model="params.shipownerName" placeholder="联系人"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-select v-model="params.relationshipType" placeholder="联系设备" clearable>
+              <el-option :label="item.label" :value="item.value" v-for="item in map.relationshipType" :key="item.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-date-picker
+              v-model="params.rangeTime"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="getList">搜索</el-button>
+          </el-form-item>
+        </el-form>
+      </template> -->
     </operation-container>
     <el-table
       :data="pagedTable"
@@ -77,6 +104,10 @@ export default {
       params: {
         current: 1,
         size: 10,
+        // shipName: '',
+        // shipownerName: '',
+        // relationshipType: '',
+        // rangeTime: [],
       },
       total: 0,
       relation_ship_add: false,
