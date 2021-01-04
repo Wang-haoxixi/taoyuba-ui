@@ -6,13 +6,13 @@
         <!-- roles.indexOf(112) !== -1" -->
         <iep-button @click="handleAdd" type="primary" icon="el-icon-plus" plain v-if="relation_ship_add && roles.indexOf(112) !== -1">新增</iep-button>
       </template>
-      <!-- <template slot="right">
+      <template slot="right">
         <el-form :inline="true" :model="params" size="small">
           <el-form-item>
-            <el-input v-model="params.shipName" placeholder="船名号"></el-input>
+            <el-input v-model.trim="params.shipName" placeholder="船名号" clearable></el-input>
           </el-form-item>
           <el-form-item>
-            <el-input v-model="params.shipownerName" placeholder="联系人"></el-input>
+            <el-input v-model.trim="params.shipownerName" placeholder="联系人" clearable></el-input>
           </el-form-item>
           <el-form-item>
             <el-select v-model="params.relationshipType" placeholder="联系设备" clearable>
@@ -21,6 +21,7 @@
           </el-form-item>
           <el-form-item>
             <el-date-picker
+              value-format="yyyy-MM-dd"
               v-model="params.rangeTime"
               type="daterange"
               range-separator="至"
@@ -32,7 +33,7 @@
             <el-button type="primary" @click="getList">搜索</el-button>
           </el-form-item>
         </el-form>
-      </template> -->
+      </template>
     </operation-container>
     <el-table
       :data="pagedTable"
@@ -139,7 +140,13 @@ export default {
       return label
     },
     getList () {
-      getPage(this.params).then(({ data }) => {
+      let params = Object.assign({}, this.params)
+      if (Array.isArray(params.rangeTime) && params.rangeTime.length > 0) {
+        params.startDate = params.rangeTime[0]
+        params.endDate = params.rangeTime[1]
+      }
+      delete params.rangeTime
+      getPage(params).then(({ data }) => {
         if (data.code === 0) {
           this.pagedTable = data.data.records
           this.total = data.data.total
