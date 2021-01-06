@@ -4,7 +4,7 @@
       <page-header title="用户管理"></page-header>
       <operation-container>
         <template slot="left">    
-          <!-- <iep-button type="primary" @click="handleAddUsers()" icon="el-icon-plus" plain>添加用户</iep-button> -->
+          <iep-button type="primary" v-if="sys_user_add" @click="handleAddUsers()" icon="el-icon-plus" plain>添加用户</iep-button>
         </template>
         <template slot="right">
           <operation-search @search-page="searchPage" prop="username">
@@ -31,11 +31,11 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import mixins from '@/mixins/mixins'
 import DialogForm from './DialogForm'
 import { dictsMap, columnsMap, initMemberForm } from './options'
-import { fetchList, putUser, resetPassByUserId } from '@/api/admin/user'
+import { fetchList, putUser, resetPassByUserId, addObj } from '@/api/admin/user'
 export default {
   components: {
     DialogForm,
@@ -45,17 +45,27 @@ export default {
     return {
       columnsMap,
       dictsMap,
+      sys_user_add: false,
     }
   },
   computed: {
     ...mapState({
       userInfo: state => state.user.userInfo,
     }),
+    ...mapGetters(['permissions']),
   },
   created () {
     this.loadPage()
+    this.sys_user_add = this.permissions['sys_user_add']
   },
   methods: {
+    handleAddUsers () {
+      this.$refs['DialogForm'].methodName = '新增'
+      this.$refs['DialogForm'].formRequestFn = addObj
+      this.$refs['DialogForm'].disabled = false
+      this.$refs['DialogForm'].dialogShow = true
+      this.$refs['DialogForm'].status = 'create'
+    },
     handleEdit (row) {
       this.$refs['DialogForm'].form = this.$mergeByFirst(initMemberForm(), row)
       this.$refs['DialogForm'].form.orgIds = this.$refs['DialogForm'].form.orgNames.map(m => m.id)
@@ -64,6 +74,7 @@ export default {
       this.$refs['DialogForm'].formRequestFn = putUser
       this.$refs['DialogForm'].disabled = false
       this.$refs['DialogForm'].dialogShow = true
+      this.$refs['DialogForm'].status = 'update'
     },
     handleResetPass (row) {
       this._handleComfirm(row.userId, resetPassByUserId, '重置密码')

@@ -67,7 +67,7 @@
           </el-table-column>
             </el-table>
         <div style="text-align:center;margin-top:40px;">
-            <el-button @click="save" >提交</el-button>
+            <el-button @click="save" :loading="saveBtnLoading">提交</el-button>
             <el-button @click="$router.go(-1)">返回</el-button>
         </div>
     </basic-container>
@@ -116,6 +116,7 @@ export default {
     }
     return {        
       certificateColumns,
+      saveBtnLoading: false,
       form: {
           address: '',
           idcard: '',
@@ -260,6 +261,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning',
         }).then(()=>{
+          this.saveBtnLoading = true
           checkCrewRelation(this.crewList).then(res=>{
             console.log('三艘船')
             if(res.data.data){
@@ -268,18 +270,23 @@ export default {
                 item.sourceType = 2
               })
               saveCrewBatch(this.crewList,type).then(res=>{
-              console.log(res)
-              this.$message.success('船员批量添加成功!')
-              this.$router.go(-1)
+                console.log(res)
+                this.$message.success('船员批量添加成功!')
+                this.$router.go(-1)
+                this.saveBtnLoading = false
+              }).catch(() => {
+                this.saveBtnLoading = false
               })
             } else {
               this.$message({
                   message: res.data.msg || '船员批量添加失败!',
                   type: 'warning',
                 })
+              this.saveBtnLoading = false
             }
           }).catch(err=>{
             this.$message.error(err.message)
+            this.saveBtnLoading = false
           })
         })
       }

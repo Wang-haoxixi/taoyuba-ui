@@ -53,6 +53,7 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
+          :current-page.sync="params.current"
           :page-sizes="[10, 20, 50, 100]"
           :page-size="10"
           layout="sizes, prev, pager, next"
@@ -119,13 +120,13 @@ export default {
         }).then(() => {
           this.loading = true
           updatePageBatchByBad(this.selectedData).then(({data}) => {
-            console.log('data', data)
-            if (data.data) {
+            if (data && data.data) {
               this.$notify({
                 title: '成功',
                 message: '数据更新成功',
                 type: 'success',
               })
+              this.params.current = 1
               this.getList()
             } else {
               this.$notify({

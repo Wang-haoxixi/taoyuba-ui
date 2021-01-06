@@ -8,14 +8,25 @@
       </template>
       <template slot="right">
         <el-form :inline="true" :model="params" size="small">
-          <el-form-item>
-            <el-input v-model.trim="params.shipName" placeholder="船名号" clearable></el-input>
+          <el-form-item v-if="roles.includes(1)">
+            <el-select clearable style="width: 150px !important;" v-model="params.villageId" placeholder="基层组织" size="small">
+              <el-option
+                v-for="item in orgSearchList"
+                :key="item.index"
+                :label="item.villageName"
+                :value="item.userId"
+                >
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item>
-            <el-input v-model.trim="params.shipownerName" placeholder="联系人" clearable></el-input>
+            <el-input style="width: 150px !important;" v-model.trim="params.shipName" placeholder="船名号" clearable></el-input>
           </el-form-item>
           <el-form-item>
-            <el-select v-model="params.relationshipType" placeholder="联系设备" clearable>
+            <el-input style="width: 150px !important;" v-model.trim="params.shipownerName" placeholder="联系人" clearable></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-select style="width: 150px !important;" v-model="params.relationshipType" placeholder="联系设备" clearable>
               <el-option :label="item.label" :value="item.value" v-for="item in map.relationshipType" :key="item.value"></el-option>
             </el-select>
           </el-form-item>
@@ -96,10 +107,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getPage, removePage } from '@/api/tmlms/relation'
+import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
 import map from './map'
 export default {
   data () {
     return {
+      orgSearchList: [],
       map,
       pagedTable: [],
       params: {
@@ -124,11 +137,19 @@ export default {
   },
   created () {
     this.getList()
+    this.getVillageOrg()
     this.relation_ship_add = this.permissions['relation_ship_add']
     this.relation_ship_edit = this.permissions['relation_ship_edit']
     this.relation_ship_delete = this.permissions['relation_ship_delete']
   },
   methods: {
+    getVillageOrg () {
+      getVillageByOrg().then(res=>{
+        this.orgList = res.data.data
+        this.orgSearchList = this.orgList.slice()
+        this.orgSearchList.unshift({userId:'',villageName:'全部'})
+      })
+    },
     getLabel (data, value) {
       let label = ''
       data.forEach((item) => {
@@ -148,6 +169,7 @@ export default {
       delete params.rangeTime
       getPage(params).then(({ data }) => {
         if (data.code === 0) {
+          console.log('data', data)
           this.pagedTable = data.data.records
           this.total = data.data.total
         }

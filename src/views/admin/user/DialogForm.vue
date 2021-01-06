@@ -1,11 +1,14 @@
 <template>
   <iep-dialog :dialog-show="dialogShow" :title="`${methodName}信息`" width="500px" @close="loadPage" @slot-mounted="load">
-    <el-form :model="form" ref="form" size="small" label-width="100px" :disabled="disabled">
+    <el-form :model="form" ref="form" size="small" label-width="100px" :disabled="disabled" :rules="rules">
       <el-form-item label="用户名：" prop="username">
-        <el-input v-model="form.username" disabled></el-input>
+        <el-input v-model="form.username" :disabled="status !== 'create'"></el-input>
       </el-form-item>
       <el-form-item label="真实姓名：" prop="realName">
-        <el-input v-model="form.realName" disabled></el-input>
+        <el-input v-model="form.realName" :disabled="status !== 'create'"></el-input>
+      </el-form-item>
+      <el-form-item label="手机号：" prop="phone" v-if="status === 'create'">
+        <el-input v-model="form.phone"></el-input>
       </el-form-item>
       <el-form-item label="配置角色：" prop="role">
         <el-select v-model="form.roleList" multiple placeholder="请选择">
@@ -13,7 +16,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="配置区域：" v-if="roles.indexOf(1) > -1">
+      <el-form-item label="配置区域：" v-if="roles.indexOf(1) > -1" prop="orgIds">
         <el-select v-model="form.orgIds" multiple placeholder="请选择">
           <el-option v-for="item in orgList" :key="item.orgId" :label="item.name" :value="item.orgId">
           </el-option>
@@ -40,6 +43,15 @@ export default {
     },
   },
   data () {
+    const validatePhone = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入手机号'))
+      } else if (!/^1[3456789]d{9}$/.test(value)) {
+        callback(new Error('手机号不正确'))
+      } else {
+        callback()
+      }
+    }
     return {
       dialogShow: false,
       disabled: false,
@@ -50,6 +62,15 @@ export default {
       rolesOptions: [],
       roleList: [],
       orgList: [],
+      status: 'update',
+      rules: {
+        username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+        orgIds: [{ required: true, message: '请选择活动区域', trigger: 'change' }],
+        phone: [
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+          { validator: validatePhone, trigger: 'blur' },
+        ],
+      },
     }
   },
   computed: {
@@ -123,16 +144,24 @@ export default {
       this.$emit('load-page')
     },
     updateForm () {
-      this.formRequestFn({
-        userId: this.form.userId,
-        role: this.form.roleList,
-        orgIds: this.roles.indexOf(1) > -1 ? this.form.orgIds : [],
-      }).then(({ data }) => {
-        if (data.data) {
-          this.$message.success('修改成功')
-          this.loadPage()
-        } else {
-          this.$message(data.msg)
+       this.$refs['form'].validate((valid) => {
+        if (valid) {
+          this.formRequestFn({
+            phone: this.status === 'create' ? this.form.phone : undefined,
+            username: this.status === 'create' ? this.form.username : undefined,
+            realName: this.status === 'create' ? this.form.realName : undefined,
+            userId: this.status === 'create' ? undefined : this.form.userId,
+            role: this.form.roleList,
+            password: this.status === 'create' ? '123456' : undefined,
+            orgIds: this.roles.indexOf(1) > -1 ? this.form.orgIds : [],
+          }).then(({ data }) => {
+            if (data.data) {
+              this.$message.success('修改成功')
+              this.loadPage()
+            } else {
+              this.$message(data.msg)
+            }
+          })
         }
       })
     },
