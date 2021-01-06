@@ -46,7 +46,7 @@ export default {
     const validatePhone = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入手机号'))
-      } else if (!/^1[3456789]d{9}$/.test(value)) {
+      } else if (!/^1[3456789]\d{9}$/.test(value)) {
         callback(new Error('手机号不正确'))
       } else {
         callback()
