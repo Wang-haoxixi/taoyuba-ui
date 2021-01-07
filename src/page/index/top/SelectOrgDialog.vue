@@ -51,8 +51,8 @@ export default {
             background: 'rgba(0, 0, 0, 0.7)',
           })
           setTimeout(async () => {                                                                                                                                                                                                                                                                                                                                                                                                                                                       
-            const data = await this.GetMenu()                   
-            this.$router.$avueRouter.formatRoutes(data, true)
+            // const data = await this.GetMenu()                   
+            // this.$router.$avueRouter.formatRoutes(data, true)
             loading.close()   
             this.$message({       
               message: '组织切换成功!',

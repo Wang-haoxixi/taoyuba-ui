@@ -5,6 +5,7 @@
       <template slot="left">
         <!-- roles.indexOf(112) !== -1" -->
         <iep-button @click="handleAdd" type="primary" icon="el-icon-plus" plain v-if="relation_ship_add && roles.indexOf(112) !== -1">新增</iep-button>
+        <iep-button @click="handleExport" v-if="relation_ship_export && roles.indexOf(112) !== -1" :loading="exportBtnLoading" type="default" plain>导出</iep-button>
       </template>
       <template slot="right">
         <el-form :inline="true" :model="params" size="small">
@@ -106,12 +107,13 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { getPage, removePage } from '@/api/tmlms/relation'
+import { getPage, removePage, exportPage } from '@/api/tmlms/relation'
 import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
 import map from './map'
 export default {
   data () {
     return {
+      exportBtnLoading: false,
       orgSearchList: [],
       map,
       pagedTable: [],
@@ -127,6 +129,7 @@ export default {
       relation_ship_add: false,
       relation_ship_edit: false,
       relation_ship_delete: false,
+      relation_ship_export: false,
     }
   },
   computed: {
@@ -141,8 +144,17 @@ export default {
     this.relation_ship_add = this.permissions['relation_ship_add']
     this.relation_ship_edit = this.permissions['relation_ship_edit']
     this.relation_ship_delete = this.permissions['relation_ship_delete']
+    this.relation_ship_export = this.permissions['relation_ship_export']
   },
   methods: {
+    handleExport () {
+      this.exportBtnLoading = true
+      exportPage().then(() => {
+        this.exportBtnLoading = false
+      }).catch(() => {
+        this.exportBtnLoading = false
+      })
+    },
     getVillageOrg () {
       getVillageByOrg().then(res=>{
         this.orgList = res.data.data
@@ -224,4 +236,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.el-form-item {
+  margin-bottom:0 !important;
+}
 </style>

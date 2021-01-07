@@ -64,9 +64,13 @@ export default {
       if(param.timeLists){
         param.startDate=this.params.timeLists[0]
         param.endDate=this.params.timeLists[1]
+      } else {
+        param.startDate= undefined
+        param.endDate= undefined
       }
       this.loadTable({ ...param }, getCrewSyslog)
     },
+    handleSelectionChange () {},
   },
 }
 </script>

@@ -48,3 +48,27 @@ export function getPageLast (query) {
     params: query,
   })
 }
+
+export function exportPage () {
+  return new Promise((resolve, reject) => {
+    request({
+      url: '',
+      method: 'post',
+      responseType: 'arraybuffer',
+    }).then(response => {
+      let filename = response.headers['content-disposition'].split(';')[1]
+      filename = decodeURIComponent(filename.split('=')[1])
+      // filename = decodeURIComponent(filename.split('"')[1])
+      const blob = new Blob([response.data])
+      const link = document.createElement('a')
+      link.href = window.URL.createObjectURL(blob)
+      link.download = filename
+      document.body.appendChild(link)
+      link.style.display = 'none'
+      link.click()
+      resolve()
+    }).catch(() => {
+      reject()
+    })
+  })
+}
