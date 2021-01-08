@@ -2,7 +2,7 @@
   <component :record="record" :is="currentComponet"></component>
 </template>
 <script>
-import List from './page/List'    
+import List from './page/List'
 
 export default {
   name: 'TableListWrapper',

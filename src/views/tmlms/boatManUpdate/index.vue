@@ -3,7 +3,7 @@
     <page-header title="船员数据更新"></page-header>
     <operation-container>
       <template slot="left">
-        <el-button type="primary" size="small" icon="el-icon-edit" @click="batchUpdate" :loading="loading">批量更新</el-button>
+        <el-button type="primary" size="small" @click="batchUpdate" :loading="loading">批量更新</el-button>
         <el-checkbox v-model="proIdStatus">户籍为空</el-checkbox>
       </template>
       <template slot="right">
@@ -12,6 +12,7 @@
           value-format="yyyy-MM-dd"
           v-model="params.birthday"
           type="date"
+          clearable
           placeholder="选择日期">
         </el-date-picker>
         <el-button size="small"  @click="getList()">搜索</el-button>
@@ -51,12 +52,13 @@
       </el-table>
       <div style="text-align: center;margin: 20px 0;">
         <el-pagination
+          background
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page.sync="params.current"
           :page-sizes="[10, 20, 50, 100]"
           :page-size="10"
-          layout="sizes, prev, pager, next"
+          layout="total, prev, pager, next, jumper"
           :total="total">
         </el-pagination>
       </div>

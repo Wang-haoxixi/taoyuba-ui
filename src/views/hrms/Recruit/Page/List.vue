@@ -4,8 +4,8 @@
       <page-header title="招聘岗位"></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
-          <iep-button @click="exportExcel()" type="primary" plain>导出</iep-button>
+          <iep-button @click="handleAdd()" type="primary">新增</iep-button>
+          <iep-button @click="exportExcel()" type="default">导出</iep-button>
         </template>
         <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">

@@ -18,7 +18,7 @@
           <el-table-column
             v-for="(item,index) in options.columns"
             :key="index"
-            :prop="item.value"  
+            :prop="item.value"
             :label="item.text"
           >
           </el-table-column>
@@ -37,7 +37,13 @@
           </el-table-column>
         </el-table>
       <div style="text-align: center;margin: 20px 0;">
-        <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
+        <el-pagination
+          background
+          layout="total, prev, pager, next, jumper"
+          :total="total"
+          :page-size="params.size"
+          @current-change="currentChange">
+        </el-pagination>
       </div>
     </basic-container>
   </div>

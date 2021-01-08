@@ -2,33 +2,33 @@
   <div class="contract-box">
     <basic-container>
       <div class="shipowner_title">
-        <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner" v-if="manager">新增</el-button>                                    
-        <el-button v-if="manager"  type="primary" size="small" icon="el-icon-edit" @click="exportInfo">导出信息</el-button> 
-        <el-button @click="handleFresh" type="primary" size="small">刷新</el-button>            
-        <div style="float:right">                             
+        <el-button type="primary" size="small" @click="addShipowner" v-if="manager">新增</el-button>
+        <el-button v-if="manager"  type="default" size="small" @click="exportInfo">导出信息</el-button>
+        <el-button @click="handleFresh" type="default" size="small">刷新</el-button>
+        <div style="float:right">
           <span style="width:120px"><el-input v-model="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
           <span style="width:120px"><el-input v-model="params.idcard" placeholder="身份证" size="small" clearable></el-input></span>
-          <span style="width:120px"><el-input v-model="params.phone" placeholder="联系电话" size="small" clearable></el-input></span>         
-          <span style="width:150px"><el-select v-model="params.certLevel" placeholder="请选择证书等级" size="small">                                                                              
+          <span style="width:120px"><el-input v-model="params.phone" placeholder="联系电话" size="small" clearable></el-input></span>
+          <span style="width:150px"><el-select v-model="params.certLevel" placeholder="请选择证书等级" size="small">
               <el-option
-                v-for="item in certGrade"    
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>    
-          </span>       
-          <span style="width:150px"><iep-dict-select placeholder="请选择证书职位" v-model="params.certTitle" dict-name="tyb_crew_cert_title"></iep-dict-select></span>      
-          <span style="width:150px"><el-select v-model="params.workStatus" placeholder="请选择用工状态" size="small">                                                               
-              <el-option
-                v-for="item in workStatus"    
+                v-for="item in certGrade"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
               </el-option>
             </el-select>
-          </span>                                                                                                               
-          <el-button size="small"  @click="getParamData">搜索</el-button>                          
+          </span>
+          <span style="width:150px"><iep-dict-select placeholder="请选择证书职位" v-model="params.certTitle" size="small" dict-name="tyb_crew_cert_title"></iep-dict-select></span>
+          <span style="width:150px"><el-select v-model="params.workStatus" placeholder="请选择用工状态" size="small">
+              <el-option
+                v-for="item in workStatus"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </span>
+          <el-button size="small"  @click="getParamData">搜索</el-button>
         </div>
       </div>
         <el-table
@@ -38,9 +38,9 @@
           <el-table-column
             v-for="(item,index) in options.columns"
             :key="index"
-            :prop="item.value"  
+            :prop="item.value"
             :label="item.text"
-            :width="item.css" 
+            :width="item.css"
           >
           <template slot-scope="scope">
             <template v-if="item.type==='dictGroup'">
@@ -55,7 +55,7 @@
           </template>
           </el-table-column>
           <el-table-column
-            prop="status"  
+            prop="status"
             label="审核操作"
             width="100"
             v-if="manager && showSwith"
@@ -74,15 +74,15 @@
           </template>
           </el-table-column>
           <!-- <el-table-column
-            prop="status"  
+            prop="status"
             label="审核状态"
           >
           <template slot-scope="scope">
             {{ scope.row.status | typeFilter}}
           </template>
           </el-table-column> -->
-          <el-table-column label="操作" width="180">                        
-            <template slot-scope="scope">                      
+          <el-table-column label="操作" width="180">
+            <template slot-scope="scope">
               <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.idcard)">查看
               </el-button>
               <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.idcard)"  v-if="manager">编辑
@@ -92,14 +92,20 @@
             </template>
           </el-table-column>
         </el-table>
-      <div style="text-align: center;margin: 20px 0;">            
-        <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" :current-page.sync="params.current" @current-change="currentChange"></el-pagination>
-      </div>                
-    </basic-container>        
-  </div>          
-</template>                                                           
-<script>                                                                                                                                                      
-import { getCrew,deleteCrew,statusCrew,exportExcel } from '@/api/tmlms/boatMan'                   
+      <div style="text-align: center;margin: 20px 0;">
+        <el-pagination
+          background layout="total, prev, pager, next, jumper"
+          :total="total"
+          :page-size="params.size"
+          :current-page.sync="params.current"
+          @current-change="currentChange">
+        </el-pagination>
+      </div>
+    </basic-container>
+  </div>
+</template>
+<script>
+import { getCrew,deleteCrew,statusCrew,exportExcel } from '@/api/tmlms/boatMan'
 import { getUserInfo } from '@/api/login'
 import { getArea } from '@/api/post/admin'
 import keyBy from 'lodash/keyBy'
@@ -111,8 +117,8 @@ export default {
       provinces:[],
       total: 10,
       // 查询数据
-      params: {       
-        current: 1,   
+      params: {
+        current: 1,
         size: 10,
         idcard: '',
         realName: '',
@@ -122,7 +128,7 @@ export default {
         certTitle: '',
         // timeLists: '',
       },
-      exportParams: {                                       
+      exportParams: {
         idcard: '',
         realName: '',
         status: '',
@@ -225,7 +231,7 @@ export default {
           value: 3,
         },
       ],
-      certGrade: [      
+      certGrade: [
         {
           label: '--',
           value: '0',
@@ -265,7 +271,7 @@ export default {
       }
     },
     //字典
-    dictJS (item, scope) {                           
+    dictJS (item, scope) {
       if(scope.row[item.value]){
           if(scope.row[item.value] === '0')  return '暂无'
       return keyBy(this.dictGroup[item.dictName], 'value')[scope.row[item.value]].label
@@ -274,7 +280,7 @@ export default {
       }
     },
     // 分页
-    currentChange (val) {                      
+    currentChange (val) {
       this.params.current = val
       this.getData()
     },
@@ -295,31 +301,31 @@ export default {
         this.provinces = data.data.map(item=>{
           return {
             label: item.name,
-            value: item.areaCode,  
+            value: item.areaCode,
           }
         })
       })
     },
     // 获取列表数据
-    getData () {      
+    getData () {
       this.params.status = 2
-      getCrew(this.params).then(res=>{    
+      getCrew(this.params).then(res=>{
         this.shipownerList = res.data.data.records
-        // this.shipownerList.map(m => { 
+        // this.shipownerList.map(m => {
         //   return m.remark.substring(0, 20)
         // })
-        this.shipownerList.map(item => {                                                         
-          if(item.remark.length > 19) {                       
+        this.shipownerList.map(item => {
+          if(item.remark.length > 19) {
             item.remark = item.remark.substring(0, 20) + '....'
-          }         
+          }
           let now = new Date()
           let year = now.getFullYear()
           item.birthday = year - item.birthday.substring(0,4)
         })
         this.shipownerList.forEach( item=>{
           if(item.status === 2 && item.userId !== 0){
-            item.swith = true  
-          }else{      
+            item.swith = true
+          }else{
             item.swith = false
           }
           this.workStatus.map( data  =>{
@@ -341,7 +347,6 @@ export default {
             // item.certTitle = item.certList[0].certTitle
             // item.certDateIssue=item.certList[0].certDateIssue.split(' ')[0]
           }
-          
         })
         this.shipownerList.forEach(v => {
           if (v.swith === false && v.userId === 0) {
@@ -354,7 +359,7 @@ export default {
       })
     },
     //搜索
-    getParamData () {   
+    getParamData () {
       // if (this.params.timeLists) {
       //   this.params.startDate = this.params.timeLists[0]
       //   this.params.endDate = this.params.timeLists[1]
@@ -366,8 +371,8 @@ export default {
       this.getData()
     },
     // 删除
-    handleDel (id) {                                                                            
-        this.$confirm('此操作将永久删除该船员, 是否继续?', '提示', {                                            
+    handleDel (id) {
+        this.$confirm('此操作将永久删除该船员, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
@@ -381,7 +386,7 @@ export default {
           }).catch(err=>{
             this.$message.error(err.data.msg)
           })
-        }).catch(() => {         
+        }).catch(() => {
         })
     },
     // 审核
@@ -417,9 +422,9 @@ export default {
         this.showSwith=true
       }else{
         this.showSwith=false
-      } 
+      }
     },
-    exportInfo () {                               
+    exportInfo () {
       exportExcel (this.exportParams).catch(err => {
         this.$message({
           type: 'warning',
@@ -441,7 +446,7 @@ export default {
     } else {
       console.log('bbbb')
       this.params = {
-        current: 1,   
+        current: 1,
         size: 10,
         idcard: '',
         realName: '',
@@ -467,7 +472,7 @@ export default {
     },
   },
   watch: {
-      'params.idcard': function (val) {          
+      'params.idcard': function (val) {
             this.exportParams.idcard  = val
       },
       'params.realName': function (val) {
@@ -475,11 +480,11 @@ export default {
       },
       'params.phone': function (val) {
             this.exportParams.phone  = val
-      },    
-      'params.remark': function (val) {                
+      },
+      'params.remark': function (val) {
             this.exportParams.remark  = val
       },
-      'params.workStatus': function (val) {                          
+      'params.workStatus': function (val) {
             this.exportParams.workStatus  = val
       },
       params () {
@@ -489,15 +494,13 @@ export default {
  beforeUpdate () {
     sessionStorage.setItem('query', JSON.stringify(this.params))
   },
-  beforeRouteLeave (to, from, next) { 
+  beforeRouteLeave (to, from, next) {
     if (to.path!=='/boatMan/detail') {
     sessionStorage.removeItem('query')
     }
   // 设置下一个路由的 meta
-  
   next()
   },
- 
 }
 </script>
 <style lang="scss" scoped>

@@ -3,29 +3,29 @@
     <basic-container>
       <page-header title="离船管理"></page-header>
       <operation-container>
-        <!-- <template slot="left">    
+        <!-- <template slot="left">
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain v-if="manager">新增</iep-button>
           <el-button v-if="manager"  type="primary" size="small" icon="el-icon-edit" @click="exportInfo">导出信息</el-button>      
         </template> -->
         <!-- <span><el-input v-model="params.shipName" placeholder="请输入船名号" size="small" clearable></el-input></span> -->
         <template slot="right">
-          <span><el-input v-model="params.shipName" placeholder="请输入渔船名" size="small" clearable></el-input></span>
+          <span><el-input v-model.trim="params.shipName" placeholder="请输入渔船名" size="small" clearable></el-input></span>
           <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="离船时间" end-placeholder="离船时间" 
-              value-format="yyyy-MM-dd HH:mm:ss"  size="mini"></el-date-picker></span>
-          <span><el-input v-model="params.realName" placeholder="请输入船员姓名" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.idcard" placeholder="请输入船员身份证" size="small" clearable></el-input></span>
-          <el-button size="small"  @click="loadPage(params)">搜索</el-button>
+              value-format="yyyy-MM-dd HH:mm:ss"  size="small"></el-date-picker></span>
+          <span><el-input v-model.trim="params.realName" placeholder="请输入船员姓名" size="small" clearable></el-input></span>
+          <span><el-input v-model.trim="params.idcard" placeholder="请输入船员身份证" size="small" clearable></el-input></span>
+          <el-button size="small" @click="loadPage(params)">搜索</el-button>
         </template>
       </operation-container>
-      <iep-table                    
-              :isLoadTable="isLoadTable"
-              :pagination="pagination"
-              :columnsMap="columnsMap"
-              :pagedTable="pagedTable"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              @selection-change="handleSelectionChange"
-              is-mutiple-selection>
+      <iep-table
+        :isLoadTable="isLoadTable"
+        :pagination="pagination"
+        :columnsMap="columnsMap"
+        :pagedTable="pagedTable"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        @selection-change="handleSelectionChange"
+        is-mutiple-selection>
       </iep-table>
     </basic-container>
   </div>

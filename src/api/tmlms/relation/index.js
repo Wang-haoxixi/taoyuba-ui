@@ -49,11 +49,12 @@ export function getPageLast (query) {
   })
 }
 
-export function exportPage () {
+export function exportPage (data) {
   return new Promise((resolve, reject) => {
     request({
       url: '',
       method: 'post',
+      data,
       responseType: 'arraybuffer',
     }).then(response => {
       let filename = response.headers['content-disposition'].split(';')[1]

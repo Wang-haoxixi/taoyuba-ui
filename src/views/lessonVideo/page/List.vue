@@ -4,48 +4,48 @@
       <page-header title="在线视频"></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain v-if="manager">新增</iep-button>
+          <iep-button @click="handleAdd()" type="primary" v-if="manager">新增</iep-button>
         </template>
         <template slot="right">
           <span><el-input v-model="params.vedioName" placeholder="请输入视频标题" size="small" clearable></el-input></span>
           <el-button size="small"  @click="loadPage(params)">搜索</el-button>
         </template>
       </operation-container>
-      <iep-table                    
-              :isLoadTable="isLoadTable"
-              :pagination="pagination"
-              :columnsMap="columnsMap"
-              :pagedTable="pagedTable"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              @selection-change="handleSelectionChange"
-              is-mutiple-selection>               
-          <el-table-column prop="videoSrc" label="视频图片" width="300">          
-           <template slot-scope="scope">                                
+      <iep-table
+        :isLoadTable="isLoadTable"
+        :pagination="pagination"
+        :columnsMap="columnsMap"
+        :pagedTable="pagedTable"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        @selection-change="handleSelectionChange"
+        is-mutiple-selection>
+          <el-table-column prop="videoSrc" label="视频图片" width="300">
+           <template slot-scope="scope">
                   <span ><img  :src="scope.row.videoImg" :on-error="errorImg" style="width:250px;height:50px;"/></span>
-            </template> 
-        </el-table-column>        
-        <el-table-column prop="operation" label="操作" width="200">           
+            </template>
+        </el-table-column>
+        <el-table-column prop="operation" label="操作" width="200">
           <template slot-scope="scope">
             <operation-wrapper>
               <iep-button plain @click="handleEdit(scope.row.vedioId)" v-if="manager">编辑</iep-button>
-              <iep-button @click="handleView(scope.row.vedioId)">查看</iep-button>    
+              <iep-button @click="handleView(scope.row.vedioId)">查看</iep-button>
               <iep-button type="warning" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
             </operation-wrapper>
           </template>
         </el-table-column>
-            <el-table-column label="排序" style="width:40px;" prop="sort">       
-              <template slot-scope="scope">                             
-              <el-input-number                                                                              
+            <el-table-column label="排序" style="width:40px;" prop="sort">
+              <template slot-scope="scope">
+              <el-input-number
                 v-model="scope.row.sort"
-                 controls-position="right"  
-                 @change="handleChange(scope.row)"    
-                 @blur="handleChange(scope.row)"            
+                 controls-position="right"
+                 @change="handleChange(scope.row)"
+                 @blur="handleChange(scope.row)"
                   :min="1"
-                 :max="100" 
+                 :max="100"
                  size="mini">
               </el-input-number>
-               </template>    
+               </template>
           </el-table-column>
       </iep-table>
     </basic-container>

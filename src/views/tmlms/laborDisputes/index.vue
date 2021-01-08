@@ -3,7 +3,7 @@
     <page-header title="劳务纠纷管理"></page-header>
     <operation-container>
       <template slot="left">
-        <iep-button @click="handleAdd" type="primary" icon="el-icon-plus" plain v-if="labor_disputes_add">新增</iep-button>
+        <iep-button @click="handleAdd" type="primary" v-if="labor_disputes_add">新增</iep-button>
       </template>
       <template slot="right">
         <span class="width180"><el-input v-model.trim="params.shipowner" placeholder="船东" size="small" clearable></el-input></span>
@@ -74,7 +74,14 @@
       </el-table-column>
     </el-table>
     <div style="text-align: center;margin: 20px 0;">
-      <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" :current-page.sync="params.current" @current-change="currentChange"></el-pagination>
+      <el-pagination
+        background
+        layout="total, prev, pager, next, jumper"
+        :total="total"
+        :page-size="params.size"
+        :current-page.sync="params.current"
+        @current-change="currentChange">
+      </el-pagination>
     </div>
   </basic-container>
 </template>

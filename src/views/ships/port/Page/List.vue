@@ -4,7 +4,7 @@
       <page-header title="港口管理"></page-header>
       <operation-container>
         <template slot="left">    
-          <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain >新增</iep-button>
+          <iep-button @click="handleAdd()" type="primary">新增</iep-button>
           <!-- <el-button v-if="manager"  type="primary" size="small" icon="el-icon-edit" @click="exportInfo">导出信息</el-button>       -->
         </template>
         <!-- <span><el-input v-model="params.shipName" placeholder="请输入船名号" size="small" clearable></el-input></span> -->
@@ -14,11 +14,11 @@
               value-format="yyyy-MM-dd HH:mm:ss"  size="mini"></el-date-picker></span> -->
           <span><el-input v-model="params.address" placeholder="港口地址" size="small" clearable></el-input></span>
           <span>
-            <el-select 
+            <el-select
             v-model="form.provinceId"
             @change="choseProvince(form.provinceId)"
-            style="width: 33%!important" 
-            size="small" 
+            style="width: 33%!important"
+            size="small"
             placeholder="省">
               <el-option
               v-for="item in province"

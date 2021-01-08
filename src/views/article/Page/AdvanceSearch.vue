@@ -1,13 +1,13 @@
 <template>
   <el-form :model="form" label-width="120px" size="mini">
-    <el-form-item label="资讯标题：">                                              
-      <el-input v-model="form.title"></el-input>
+    <el-form-item label="资讯标题：">
+      <el-input v-model.trim="form.title" clearable></el-input>
     </el-form-item>
     <el-form-item label="来源：">
-      <el-input v-model="form.source"></el-input>
+      <el-input v-model.trim="form.source" clearable></el-input>
     </el-form-item>
-    <el-form-item>                        
-      <operation-wrapper>               
+    <el-form-item>
+      <operation-wrapper>
         <iep-button type="primary" @click="searchPage">搜索</iep-button>
         <iep-button @click="clearSearchParam">清空</iep-button>
       </operation-wrapper>

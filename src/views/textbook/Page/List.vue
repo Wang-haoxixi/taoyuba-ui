@@ -1,18 +1,18 @@
 <template>
   <div>
     <basic-container>
-      <page-header title="教材管理"></page-header>      
+      <page-header title="教材管理"></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button v-if="hrms_book_add" @click="handleAdd" type="primary" size="mini" icon="el-icon-plus" plain>新增</iep-button>
+          <iep-button v-if="hrms_book_add" @click="handleAdd" type="primary" size="small">新增</iep-button>
         </template>
         <template slot="right">
-          <span><el-input v-model="params.title" placeholder="请输入教材名称" size="mini" clearable></el-input></span>
-          <span><el-input type="number" min="0" v-model="params.price" placeholder="价格" size="mini" clearable></el-input></span>   
-          <el-button size="mini"  @click="getData">搜索</el-button>
+          <span><el-input v-model.trim="params.title" placeholder="请输入教材名称" size="small" clearable></el-input></span>
+          <span><el-input type="number" min="0" v-model.trim="params.price" placeholder="价格" size="small" clearable></el-input></span>
+          <el-button size="small"  @click="getData">搜索</el-button>
         </template>
       </operation-container>
-      <el-table     
+      <el-table
           :data="bookList"
           :header-cell-style="{background:'#eef1f6', color:'#606266'}"
           stripe
@@ -24,7 +24,7 @@
           <el-table-column
             v-for="(item,index) in options.columns"
             :key="index"
-            :prop="item.value"  
+            :prop="item.value"
             :label="item.text"
             :width="item.width"
           >
@@ -37,30 +37,30 @@
               </el-button>
             </template>
           </el-table-column>
-            <el-table-column label="排序" style="width:40px;" prop="sort">       
-              <template slot-scope="scope">                             
-              <el-input-number                                                                              
+            <el-table-column label="排序" style="width:40px;" prop="sort">
+              <template slot-scope="scope">
+              <el-input-number
                 v-model="scope.row.sort"
-                 controls-position="right"  
-                 @change="handleChange(scope.row)"    
-                 @blur="handleChange(scope.row)"            
+                 controls-position="right"
+                 @change="handleChange(scope.row)"
+                 @blur="handleChange(scope.row)"
                   :min="1"
-                 :max="100" 
-                 size="mini"    
+                 :max="100"
+                 size="mini"
                  :id="inputNum">
               </el-input-number>
-               </template>    
+               </template>
           </el-table-column>
         </el-table>
-        <div style="text-align: center;margin: 20px 0;">
+        <!-- <div style="text-align: center;margin: 20px 0;">
           <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
-      </div>
-    </basic-container>      
+      </div> -->
+    </basic-container>
   </div>
 </template>
 <script>
 import { getBookList, delBook,updateBook }  from '@/api/book'
-import { getChild } from '@/api/tmlms/contract'                                                                    
+import { getChild } from '@/api/tmlms/contract'
 import { mapGetters } from 'vuex'
 export default {
   data () {

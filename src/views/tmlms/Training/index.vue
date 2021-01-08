@@ -3,13 +3,13 @@
     <basic-container>
       <page-header title="培训机构"></page-header>
       <div class="shipowner_title">
-        <el-button type="primary" size="mini" @click="addShipowner" plain>+新增</el-button>
+        <el-button type="primary" size="small" @click="addShipowner">新增</el-button>
         <div style="float:right">
-          <span><el-input v-model="params.deptName" placeholder="请输入机构名称" size="mini" clearable></el-input></span>
-          <span><el-input v-model="params.contactName" placeholder="请输入联系人" size="mini" clearable></el-input></span>
-          <span><el-input v-model="params.phone" placeholder="请输入联系电话" size="mini" clearable></el-input></span>   
-          <span><el-input v-model="params.address" placeholder="请输入机构地址" size="mini" clearable></el-input></span>   
-          <el-button plain size="mini"  @click="getData">搜索</el-button>
+          <span><el-input v-model.trim="params.deptName" placeholder="请输入机构名称" size="small" clearable></el-input></span>
+          <span><el-input v-model.trim="params.contactName" placeholder="请输入联系人" size="small" clearable></el-input></span>
+          <span><el-input v-model.trim="params.phone" placeholder="请输入联系电话" size="small" clearable></el-input></span>   
+          <span><el-input v-model.trim="params.address" placeholder="请输入机构地址" size="small" clearable></el-input></span>   
+          <el-button plain size="small"  @click="getData">搜索</el-button>
         </div>
       </div>
         <el-table
@@ -20,7 +20,7 @@
           <el-table-column
             v-for="(item,index) in options.columns"
             :key="index"
-            :prop="item.value"  
+            :prop="item.value"
             :label="item.text"
           >
           </el-table-column>
@@ -34,22 +34,27 @@
               </el-button>
             </template>
           </el-table-column>
-             <el-table-column label="排序" style="width:40px;" prop="sort">       
-              <template slot-scope="scope">                             
-              <el-input-number                                                                              
+             <el-table-column label="排序" style="width:40px;" prop="sort">
+              <template slot-scope="scope">
+              <el-input-number
                 v-model="scope.row.sort"
-                 controls-position="right"  
-                 @change="handleChange(scope.row)"    
-                 @blur="handleChange(scope.row)"            
+                 controls-position="right"
+                 @change="handleChange(scope.row)"
+                 @blur="handleChange(scope.row)"
                   :min="1"
-                 :max="100" 
+                 :max="100"
                  size="mini">
               </el-input-number>
-               </template>    
+               </template>
           </el-table-column>
         </el-table>
       <div style="text-align: center;margin: 20px 0;">
-        <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
+        <el-pagination
+          background layout="total, prev, pager, next, jumper"
+          :total="total"
+          :page-size="params.size"
+          @current-change="currentChange">
+        </el-pagination>
       </div>
     </basic-container>
   </div>

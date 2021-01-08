@@ -5,10 +5,10 @@
       <div class="shipowner_title">
         <!-- <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button> -->
         <div style="float:right">
-          <span><el-input v-model="params.realName" placeholder="请输入用户名" size="small"></el-input></span>
-          <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
-            value-format="yyyy-MM-dd"  size="mini"></el-date-picker>
-          </span> 
+          <span><el-input v-model.trim="params.realName" placeholder="请输入用户名" size="small" clearable></el-input></span>
+          <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" clearable
+            value-format="yyyy-MM-dd" size="small"></el-date-picker>
+          </span>
           <!-- <span><el-input v-model="params.idcard" placeholder="请输入身份证" size="small"></el-input></span>
           <span><el-input v-model="params.phone" placeholder="请输入电话" size="small"></el-input></span> -->
           <!-- <span><el-select v-model="params.status" placeholder="请选择状态" size="small">
@@ -30,7 +30,7 @@
           <el-table-column
             v-for="(item,index) in options.columns"
             :key="index"
-            :prop="item.value"  
+            :prop="item.value"
             :label="item.text"
           >
           </el-table-column>
@@ -44,7 +44,13 @@
           </el-table-column> -->
         </el-table>
       <div style="text-align: center;margin: 20px 0;">
-        <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
+        <el-pagination
+          background
+          layout="total, prev, pager, next, jumper"
+          :total="total"
+          :page-size="params.size"
+          @current-change="currentChange">
+        </el-pagination>
       </div>
     </basic-container>
   </div>
@@ -100,7 +106,6 @@ export default {
       villageId: '',
     }
   },
-  
   methods: {
     // 分页
     currentChange (val) {
@@ -112,7 +117,7 @@ export default {
       // this.$router.push({path: '/hrms_spa/village_shipOwner_detail/0'})
       this.$router.push({
         path: '/hrms_spa/village_shipOwner_detail',
-      })  
+      })
     },
     // 查看
     handleView (val) {
@@ -145,7 +150,7 @@ export default {
       getVisitRecordList(this.params).then(res=>{
         this.historyList = res.data.data.records
         this.total = res.data.data.total
-      }) 
+      })
     },
   },
 computed: {

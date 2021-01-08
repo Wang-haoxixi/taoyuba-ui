@@ -11,12 +11,13 @@
         </dl>
       </div> -->
             <operation-container>
-        <template slot="left">    
-          <iep-button v-if="mlms_contract_add" @click="handleAdd" type="primary" icon="el-icon-plus" plain>新增</iep-button>
-          <iep-button @click="handleFresh" type="primary" >刷新</iep-button>
+        <template slot="left">
+          <iep-button v-if="mlms_contract_add" @click="handleAdd" type="primary">新增</iep-button>
+          <iep-button @click="handleFresh" type="default" >刷新</iep-button>
         </template>
         <template slot="right">
-          <span style="width:150px" v-if="!roles.includes(112)"><el-select v-model="chooseOrg" placeholder="基层组织" size="small">
+          <span style="width:150px" v-if="!roles.includes(112)">
+            <el-select v-model="chooseOrg" placeholder="基层组织" clearable size="small">
               <el-option
                 v-for="item in orgList"
                 :key="item.index"
@@ -26,15 +27,16 @@
               </el-option>
             </el-select>
           </span>
-          <span><el-input v-model="params.shipName" placeholder="船名号" size="small" style="width:120px"></el-input></span>
+          <span><el-input v-model.trim="params.shipName" clearable placeholder="船名号" size="small" style="width:120px"></el-input></span>
           <!-- <span><el-input v-model="params.shipownerName" placeholder="持证人姓名" size="small" style="width:120px"></el-input></span> -->
-          <span><el-input v-model="params.employerName" placeholder="甲方姓名" size="small" style="width:120px"></el-input></span>
-          <span><el-input v-model="params.employeeName" placeholder="乙方姓名" size="small" style="width:120px"></el-input></span>
-          <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
+          <span><el-input v-model.trim="params.employerName" clearable placeholder="甲方姓名" size="small" style="width:120px"></el-input></span>
+          <span><el-input v-model.trim="params.employeeName" clearable placeholder="乙方姓名" size="small" style="width:120px"></el-input></span>
+          <span style="width:240px">
+            <el-date-picker v-model="params.timeLists" type="daterange" clearable range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
             value-format="yyyy-MM-dd"  size="mini"></el-date-picker>
-          </span>                               
+          </span>
           <span style="width:120px">
-            <el-select v-model="conStatus" placeholder="合同状态" size="small">
+            <el-select v-model="conStatus" placeholder="合同状态" size="small" clearable>
               <el-option
                 v-for="item in statusDict"
                 :key="item.value"
@@ -44,10 +46,9 @@
               </el-option>
             </el-select>
           </span>
-          <el-button size="small"  @click="getParamData">搜索</el-button> 
+          <el-button size="small" @click="getParamData">搜索</el-button>
         </template>
       </operation-container>
-     
       <avue-tree-table :option="options" style="margin-top: 20px;" :row-class-name="rowClassName">
         <!-- <el-table-column label="是否审核" prop="status">
           <template slot-scope="scope">
@@ -73,7 +74,7 @@
             </div>
           </template>
           </el-table-column> -->
-        <el-table-column label="操作">    
+        <el-table-column label="操作">
           <template slot-scope="scope">
              <el-button v-if="mlms_contract_view" type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">合同查看
             </el-button>
@@ -98,17 +99,23 @@
             <el-button v-if="mlms_contract_eva && scope.row.status === '合同解除' && scope.row.isRate === 0 && scope.row.isDate === 0" type="text" icon="el-icon-edit" size="mini" @click="handleEvaluate(scope.row.contractId)">评价
             </el-button>
              <el-button v-if="mlms_contract_recall && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同') " type="text" icon="el-icon-edit" size="mini" @click="handleCall(scope.row.contractId)">撤销
-            </el-button>    
+            </el-button>
              <el-button v-if="mlms_contract_upload && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')  && scope.row.contractImage !== '1' " type="text" icon="el-icon-edit" size="mini" @click="handleUpload(scope.row.contractId)">上传纸质合同
-            </el-button> 
+            </el-button>
               <el-button v-if="mlms_contract_upload && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')  && scope.row.contractImage === '1' " type="text" icon="el-icon-edit" size="mini" @click="handleUpload(scope.row.contractId)">查看纸质合同
-            </el-button> 
+            </el-button>
             <el-button v-if="mlms_contract_employee" icon="el-icon-edit" size="mini" type="text" @click="onToEmployee(scope.row.employeeIdcard)">船员编辑</el-button>
-          </template>   
+          </template>
         </el-table-column>
-      </avue-tree-table>    
+      </avue-tree-table>
       <div style="text-align: center;margin: 20px 0;">
-        <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
+        <el-pagination
+          background
+          layout="total, prev, pager, next, jumper"
+          :total="total"
+          :page-size="params.size"
+          @current-change="currentChange">
+        </el-pagination>
       </div>
       <iframe id="iframe"
           style="visibility: hidden;"

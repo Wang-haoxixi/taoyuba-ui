@@ -30,7 +30,7 @@ export default {
   box-sizing: content-box;
 }
 .content-footer >>> .el-pagination {
-  text-align: right;
+  text-align: center;
 }
 .content-footer >>> .btn-prev {
   padding: 0 15px;

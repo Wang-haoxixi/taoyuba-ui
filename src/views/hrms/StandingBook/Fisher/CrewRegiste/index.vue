@@ -7,11 +7,11 @@
           <!-- <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain v-if="manager">新增</iep-button> -->
         </template>
         <template slot="right">
-          <span><el-input v-model="params.realName" placeholder="请输入姓名" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.idcard" placeholder="请输入身份证号" size="small" clearable></el-input></span>
-          <el-button size="small"  @click="loadPage(params)">搜索</el-button>   
+          <span><el-input v-model.trim="params.realName" placeholder="请输入姓名" size="small" clearable></el-input></span>
+          <span><el-input v-model.trim="params.idcard" placeholder="请输入身份证号" size="small" clearable></el-input></span>
+          <el-button size="small"  @click="loadPage(params)">搜索</el-button>
           <!-- <el-button @click="backPage">返回</el-button> -->
-        </template>   
+        </template>
       </operation-container>
       <!-- <operation-container>
         <template slot="left">     -->
@@ -20,19 +20,19 @@
         <template slot="right">
           <span><el-input v-model="params.realname" placeholder="请输入姓名" size="small" clearable></el-input></span>
           <span><el-input v-model="params.idcard" placeholder="请输入身份证号" size="small" clearable></el-input></span>
-          <el-button size="small"  @click="loadPage(params)">搜索</el-button>   
+          <el-button size="small"  @click="loadPage(params)">搜索</el-button>
           <el-button @click="backPage">返回</el-button>
         </template>
       </operation-container> -->
       <iep-table
-              :isLoadTable = "isLoadTable"                    
-              :pagination="pagination"
-              :columnsMap="CrewRegisteColumnsMap"
-              :pagedTable="pagedTable"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              @selection-change="handleSelectionChange"
-              is-mutiple-selection>
+        :isLoadTable = "isLoadTable"
+        :pagination="pagination"
+        :columnsMap="CrewRegisteColumnsMap"
+        :pagedTable="pagedTable"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        @selection-change="handleSelectionChange"
+        is-mutiple-selection>
         <el-table-column prop="operation" label="操作" width="200">
           <template slot-scope="scope">
             <operation-wrapper>
@@ -48,8 +48,8 @@
   </div>
 </template>
 <script>
-// import { getOperatorPage, 
-// //deleteShipManager 
+// import { getOperatorPage,
+// //deleteShipManager
 // } from '@/api/ships/shipoperat/index'
 // import { getShipownerByidcard } from '@/api/tmlms/shipowner/index'
 // import { getHoldersByShip } from '@/api/tmlms/shipshareholder/index'

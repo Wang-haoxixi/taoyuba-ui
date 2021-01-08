@@ -1,52 +1,52 @@
 <template>
   <div>
     <basic-container>
-      <page-header title="渔船经营人"></page-header>        
+      <page-header title="渔船经营人"></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain v-if="manager">新增</iep-button>
+          <iep-button @click="handleAdd()" type="primary" v-if="manager">新增</iep-button>
         </template>
         <template slot="right">
-          <span><el-input v-model="params.realname" placeholder="请输入姓名" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.idcard" placeholder="请输入身份证号" size="small" clearable></el-input></span>
-          <el-button size="small"  @click="loadPage(params)">搜索</el-button>   
-        </template>   
+          <span><el-input v-model.trim="params.realname" placeholder="请输入姓名" size="small" clearable></el-input></span>
+          <span><el-input v-model.trim="params.idcard" placeholder="请输入身份证号" size="small" clearable></el-input></span>
+          <el-button size="small"  @click="loadPage(params)">搜索</el-button>
+        </template>
       </operation-container>
-      <iep-table                                                                           
-              :isLoadTable="isLoadTable"
-              :pagination="pagination"
-              :columnsMap="columnsMap"
-              :pagedTable="pagedTable"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              @selection-change="handleSelectionChange"
-              is-mutiple-selection>               
-          <el-table-column prop="videoSrc" label="渔船名" width="200">                          
-           <template slot-scope="scope">                                                
-                  <span >{{scope.row.shipName}}</span>                        
-            </template> 
-        </el-table-column>    
-         <el-table-column prop="bindType" label="类型" width="100">                          
-           <template slot-scope="scope">                                                
-                  <span >{{scope.row.type}}</span>                        
-            </template> 
-        </el-table-column>  
-          <el-table-column prop="shipStatus" label="是否绑定渔船" width="150">                               
-           <template slot-scope="scope">        
-             <div>                 
+      <iep-table
+        :isLoadTable="isLoadTable"
+        :pagination="pagination"
+        :columnsMap="columnsMap"
+        :pagedTable="pagedTable"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        @selection-change="handleSelectionChange"
+        is-mutiple-selection>
+          <el-table-column prop="videoSrc" label="渔船名" width="200">
+           <template slot-scope="scope">
+                  <span >{{scope.row.shipName}}</span>
+            </template>
+        </el-table-column>
+         <el-table-column prop="bindType" label="类型" width="100">
+           <template slot-scope="scope">
+                  <span >{{scope.row.type}}</span>
+            </template>
+        </el-table-column>
+          <el-table-column prop="shipStatus" label="是否绑定渔船" width="150">
+           <template slot-scope="scope">
+             <div>
                 <el-button type="success"  circle  v-if="scope.row.shipId"></el-button>
                 <el-button type="danger"  circle  v-if="!scope.row.shipId"></el-button>
                 <!-- <el-switch
                 v-model="scope.row.shipStatus"
                 active-color="#13ce66"
-                inactive-color="#F00"   
+                inactive-color="#F00"
                 >
               </el-switch> -->
-             </div>     
-            </template>       
-        </el-table-column>    
+             </div>
+            </template>
+        </el-table-column>
         <el-table-column
-            prop="status"  
+            prop="status"
             label="审核操作"
             width="100"
             v-if="manager"
@@ -63,16 +63,16 @@
               </el-switch>
             </div>
           </template>
-          </el-table-column>          
-        <el-table-column prop="operation" label="操作" width="300">                       
-          <template slot-scope="scope">                                                                                  
-            <operation-wrapper>                                                             
-              <iep-button plain @click="handleEdit(scope.row.id)" v-if="manager">编辑</iep-button>    
-              <iep-button @click="handleView(scope.row.vedioId)"   v-if="!scope.row.shipId">绑定渔船</iep-button>    
+          </el-table-column>
+        <el-table-column prop="operation" label="操作" width="300">
+          <template slot-scope="scope">
+            <operation-wrapper>
+              <iep-button plain @click="handleEdit(scope.row.id)" v-if="manager">编辑</iep-button>
+              <iep-button @click="handleView(scope.row.vedioId)"   v-if="!scope.row.shipId">绑定渔船</iep-button>
               <iep-button type="warning" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
             </operation-wrapper>
           </template>
-        </el-table-column>                                                                                                      
+        </el-table-column>
       </iep-table>
     </basic-container>
   </div>

@@ -4,14 +4,15 @@
       <page-header title="一船一档"></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button v-if="mlms_ship_add" @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
-          <iep-button @click="handleFresh" type="primary" >刷新</iep-button>
+          <iep-button v-if="mlms_ship_add" @click="handleAdd()" type="primary">新增</iep-button>
+          <iep-button @click="handleFresh" type="default" >刷新</iep-button>
         </template>
         <template slot="right">
           <!-- <operation-search @search-page="searchPage" advance-search :prop="searchData">
             <advance-search @search-page="searchPage"></advance-search>
           </operation-search> -->
-          <span style="width:185px" v-if="!roles.includes(112)"><el-select v-model="searchOrg" placeholder="基层组织" size="small">
+          <span style="width:185px" v-if="!roles.includes(112)">
+            <el-select v-model="searchOrg" placeholder="基层组织" size="small" clearable>
               <el-option
                 v-for="item in orgSearchList"
                 :key="item.index"
@@ -21,7 +22,8 @@
               </el-option>
             </el-select>
           </span>
-          <span style="width:110px" ><el-select v-model="params.status" placeholder="合同状态" size="small">
+          <span style="width:110px" >
+            <el-select v-model="params.status" placeholder="合同状态" size="small" clearable>
               <el-option
                 v-for="item in contractList"
                 :key="item.index"
@@ -31,14 +33,14 @@
               </el-option>
             </el-select>
           </span>
-          <span class="width130"><el-input v-model="params.shipName" placeholder="船名号" size="small" clearable></el-input></span>
-          <span class="width130"><el-input v-model="params.shipNo" placeholder="渔船编号" size="small" clearable></el-input></span>
-          <span class="width130"><el-input v-model="params.shipowner" placeholder="持证人姓名" size="small" clearable></el-input></span>
-          <span class="width180"><el-input v-model="params.shipownerIdcard" placeholder="持证人身份证" size="small" clearable></el-input></span>
+          <span class="width130"><el-input v-model.trim="params.shipName" placeholder="船名号" size="small" clearable></el-input></span>
+          <span class="width130"><el-input v-model.trim="params.shipNo" placeholder="渔船编号" size="small" clearable></el-input></span>
+          <span class="width130"><el-input v-model.trim="params.shipowner" placeholder="持证人姓名" size="small" clearable></el-input></span>
+          <span class="width180"><el-input v-model.trim="params.shipownerIdcard" placeholder="持证人身份证" size="small" clearable></el-input></span>
           <el-button size="small"  @click="getParamData">搜索</el-button>
         </template>
       </operation-container>
-      <!-- <iep-table                    
+      <!-- <iep-table
               :isLoadTable="isLoadTable"
               :pagination="pagination"
               :columnsMap="columnsMap"
@@ -147,7 +149,15 @@
         </div>
     </el-dialog> -->
       <div style="text-align: center;margin: 20px 0;">
-        <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" :current-page.sync="params.current" @current-change="currentChange"></el-pagination>
+        <el-pagination
+          background
+          layout="total, prev, pager, next, jumper"
+          :total="total"
+          :page-size="params.size"
+          :current-page.sync="params.current"
+          @size-change="handleSizeChange"
+          @current-change="currentChange">
+        </el-pagination>
       </div>
     </basic-container>
   </div>
@@ -347,6 +357,11 @@ export default {
     },
     handleSelectionChange (val) {     
       this.multipleSelection = val.map(m => m.id)
+    },
+    handleSizeChange (val) {
+      this.params.size = val
+      this.params.current = 1
+      this.getData()
     },
     currentChange (val) {
       this.params.current = val

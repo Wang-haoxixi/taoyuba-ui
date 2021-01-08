@@ -3,45 +3,45 @@
     <basic-container>
       <page-header title="出港记录管理"></page-header>
       <operation-container>
-        <template slot="left">    
+        <template slot="left">
           <!-- <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain >新增</iep-button> -->
-          <el-button  type="primary" size="small" icon="el-icon-edit" @click="exportInfo">导出</el-button>      
+          <el-button  type="primary" size="small" @click="exportInfo">导出</el-button>
           <!-- v-if="manager"  -->
         </template>
         <!-- <span><el-input v-model="params.shipName" placeholder="请输入船名号" size="small" clearable></el-input></span> -->
         <template slot="right">
-          <span><el-input v-model="params.shipName" placeholder="渔船名" size="small" clearable></el-input></span>
+          <span><el-input v-model.trim="params.shipName" placeholder="渔船名" size="small" clearable></el-input></span>
           <!-- <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="离船时间" end-placeholder="离船时间" 
               value-format="yyyy-MM-dd HH:mm:ss"  size="mini"></el-date-picker></span> -->
           <!-- <span><el-input v-model="params.address" placeholder="港口地址" size="small" clearable></el-input></span> -->
           <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
-            value-format="yyyy-MM-dd"  size="mini"></el-date-picker>
-          </span>   
+            value-format="yyyy-MM-dd"  size="small"></el-date-picker>
+          </span>
           <!-- <span><el-input v-model="params.idcard" placeholder="请输入船员身份证" size="small" clearable></el-input></span> -->
           <el-button size="small"  @click="loadPage(params)">搜索</el-button>
         </template>
       </operation-container>
-      <iep-table                                              
-              :isLoadTable="isLoadTable"
-              :pagination="pagination"
-              :columnsMap="columnsMap"
-              :pagedTable="pagedTable"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              @selection-change="handleSelectionChange"   
-              is-mutiple-selection>
+      <iep-table
+        :isLoadTable="isLoadTable"
+        :pagination="pagination"
+        :columnsMap="columnsMap"
+        :pagedTable="pagedTable"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        @selection-change="handleSelectionChange"
+        is-mutiple-selection>
         <el-table-column prop="boatMan" label="船员适任" width="100">
-        <template slot-scope="scope">                                                                 
-          <iep-button size="mini" :type="scope.row.type">{{scope.row.state}}</iep-button>                 
+        <template slot-scope="scope">
+          <iep-button size="mini" :type="scope.row.type">{{scope.row.state}}</iep-button>
         </template>
         </el-table-column>
           <el-table-column prop="operation" label="操作" width="200">
-          <template slot-scope="scope">                         
-            <operation-wrapper>                                   
+          <template slot-scope="scope">
+            <operation-wrapper>
               <iep-button size="mini" type="primary" @click="handleView(scope.row.id,scope.row.shipId)">渔船配员</iep-button>
               <!-- <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)" v-if="manager">船员管理</iep-button> -->
               <!-- <iep-button plain @click="handleEdit(scope.row.id)" type="primary" >编辑</iep-button> -->
-              <iep-button @click="handleDetail(scope.row.id,scope.row.shipId)">详情</iep-button>     
+              <iep-button @click="handleDetail(scope.row.id,scope.row.shipId)">详情</iep-button>
               <!-- <iep-button type="warning" @click="handleDelete(scope.row)" v-if="manager"><i class="el-icon-delete"></i></iep-button> -->
             </operation-wrapper>
           </template>
@@ -57,7 +57,7 @@ import { outList,getCrewCert,exportExcel } from '@/api/ships/inout'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
 export default {
-  components: {   
+  components: {
     // advanceSearch,
   },
   mixins: [mixins],

@@ -1,15 +1,15 @@
 <template>
   <div class="contract-box">
     <basic-container>
-      <div class="shipowner_title">           
-        <el-button    v-if="manager"  type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button>                                                                                                                       
-        <el-button v-if="manager" type="primary" icon="el-icon-edit" size="small" @click="exportInfo">导出信息      
-          </el-button>            
+      <div class="shipowner_title">
+        <el-button v-if="manager" type="primary" size="small" @click="addShipowner">新增</el-button>
+        <el-button v-if="manager" type="default" size="small" @click="exportInfo">导出信息
+          </el-button>
         <div style="float:right">
-          <span><el-input v-model="params.idcard" placeholder="请输入身份证" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.realName" placeholder="请输入姓名" size="small" clearable></el-input></span>
-          <span><el-input v-model="params.phone" placeholder="请输入联系电话" size="small" clearable></el-input></span>
-          <span><el-select v-model="params.status" placeholder="请选择状态" size="small" clearable>
+          <span><el-input v-model.trim="params.idcard" placeholder="请输入身份证" size="small" clearable></el-input></span>
+          <span><el-input v-model.trim="params.realName" placeholder="请输入姓名" size="small" clearable></el-input></span>
+          <span><el-input v-model.trim="params.phone" placeholder="请输入联系电话" size="small" clearable></el-input></span>
+          <span><el-select v-model.trim="params.status" placeholder="请选择状态" size="small" clearable>
               <el-option
                 v-for="item in status"
                 :key="item.value"
@@ -28,13 +28,13 @@
           <el-table-column
             v-for="(item,index) in options.columns"
             :key="index"
-            :prop="item.value"  
+            :prop="item.value"
             :label="item.text"
           >
           </el-table-column>
           <el-table-column
-            prop="status"  
-            label="审核操作"      
+            prop="status"
+            label="审核操作"
             v-if="smdj"
           >
           <!-- <template slot-scope="scope">
@@ -61,7 +61,7 @@
           </template>
           </el-table-column>
           <el-table-column
-            prop="status"  
+            prop="status"
             label="审核状态"
             v-if="smdj"
           >
@@ -81,13 +81,19 @@
           </el-table-column>
         </el-table>
       <div style="text-align: center;margin: 20px 0;">
-        <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
+        <el-pagination
+          background
+          layout="total, prev, pager, next, jumper"
+          :total="total"
+          :page-size="params.size"
+          @current-change="currentChange">
+        </el-pagination>
       </div>
     </basic-container>
   </div>
 </template>
 <script>
-import { getShipowner,deleteShipowner,statusShipownerByidcard, exportExcel } from '@/api/tmlms/shipowner'   
+import { getShipowner,deleteShipowner,statusShipownerByidcard, exportExcel } from '@/api/tmlms/shipowner'
 import { getUserInfo } from '@/api/login'
 export default {
   data () {

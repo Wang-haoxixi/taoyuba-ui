@@ -3,22 +3,22 @@
     <basic-container>
       <page-header title="上船记录"></page-header>
       <div class="shipowner_title">
-        <!-- <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner" v-if="manager">新增</el-button>                                    
+        <!-- <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner" v-if="manager">新增</el-button>
         <el-button v-if="manager"  type="primary" size="small" icon="el-icon-edit" @click="exportInfo">导出信息</el-button>              -->
-        <div style="float:right">                             
-          <span style="width:120px"><el-input v-model="params.shipName" placeholder="船名号" size="small" clearable></el-input></span>
-          <span style="width:120px"><el-input v-model="params.idcard" placeholder="身份证号" size="small" clearable></el-input></span>
-          <span style="width:120px"><el-input v-model="params.realName" placeholder="姓名" size="small" clearable></el-input></span>              
-          <!-- <span style="width:150px"><el-select v-model="params.status" placeholder="请选择合同状态" size="small">                                                               
+        <div style="float:right">
+          <span style="width:120px"><el-input v-model.trim="params.shipName" placeholder="船名号" size="small" clearable></el-input></span>
+          <span style="width:120px"><el-input v-model.trim="params.idcard" placeholder="身份证号" size="small" clearable></el-input></span>
+          <span style="width:120px"><el-input v-model.trim="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
+          <!-- <span style="width:150px"><el-select v-model="params.status" placeholder="请选择合同状态" size="small">
               <el-option
-                v-for="item in status"    
+                v-for="item in status"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
               </el-option>
             </el-select>
           </span>                                                                                                                -->
-          <el-button size="small"  @click="getParamData">搜索</el-button>                          
+          <el-button size="small"  @click="getParamData">搜索</el-button>
         </div>
       </div>
         <el-table
@@ -28,9 +28,9 @@
           <el-table-column
             v-for="(item,index) in options.columns"
             :key="index"
-            :prop="item.value"  
+            :prop="item.value"
             :label="item.text"
-            :width="item.css" 
+            :width="item.css"
           >
           <template slot-scope="scope">
             <template v-if="item.type==='dictGroup'">
@@ -45,7 +45,7 @@
           </template>
           </el-table-column>
           <!-- <el-table-column
-            prop="status"  
+            prop="status"
             label="审核操作"
             width="100"
             v-if="manager && showSwith"
@@ -64,15 +64,15 @@
           </template>
           </el-table-column> -->
           <!-- <el-table-column
-            prop="status"  
+            prop="status"
             label="审核状态"
           >
           <template slot-scope="scope">
             {{ scope.row.status | typeFilter}}
           </template>
           </el-table-column> -->
-          <el-table-column label="操作" width="180">                        
-            <template slot-scope="scope">                      
+          <el-table-column label="操作" width="180">
+            <template slot-scope="scope">
               <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.shipName,scope.row.idcard)" v-if="manager">查看
               </el-button>
               <!-- <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.idcard)"  v-if="manager">编辑
@@ -82,14 +82,20 @@
             </template>
           </el-table-column>
         </el-table>
-      <div style="text-align: center;margin: 20px 0;">            
-        <el-pagination background layout="prev, pager, next, total" :total="total" :page-size="params.size" @current-change="currentChange"></el-pagination>
-      </div>                
-    </basic-container>        
-  </div>          
-</template>                                                           
-<script>                                                                                                                                                  
-import { 
+      <div style="text-align: center;margin: 20px 0;">
+        <el-pagination
+          background
+          layout="total, prev, pager, next, jumper"
+          :total="total"
+          :page-size="params.size"
+          @current-change="currentChange">
+        </el-pagination>
+      </div>
+    </basic-container>
+  </div>
+</template>
+<script>
+import {
   //getCrew,
   deleteCrew,statusCrew,exportExcel } from '@/api/tmlms/boatMan'
 import { getCrewAllSyslog } from '@/api/ships/shipsyslog'  
