@@ -4,8 +4,8 @@
       <page-header :title='shipTitle'></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button @click="handleAdd" type="primary" icon="el-icon-plus" plain>上船登记</iep-button>
-          <iep-button v-if="relation_ship_add" @click="handleAddRelation" type="primary" icon="el-icon-plus" plain>新增联系记录</iep-button>
+          <iep-button @click="handleAdd" type="primary">上船登记</iep-button>
+          <iep-button v-if="relation_ship_add" @click="handleAddRelation" type="default">新增联系记录</iep-button>
         </template>
         <!-- <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -13,18 +13,19 @@
           </operation-search>
         </template> -->
         <template slot="right">
-          <el-button @click="backPage">返回</el-button>
+          <el-button @click="backPage" size="small">返回</el-button>
         </template>
       </operation-container>
-      <iep-table                    
-              :pagination="pagination"
-              :columnsMap="allcrewColumnsMap"
-              :pagedTable="pagedTable"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              @selection-change="handleSelectionChange"
-              :emptyText="message"
-              is-mutiple-selection>
+      <iep-table
+        :isPagination="false"
+        :pagination="pagination"
+        :columnsMap="allcrewColumnsMap"
+        :pagedTable="pagedTable"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        @selection-change="handleSelectionChange"
+        :emptyText="message"
+        is-mutiple-selection>
         <el-table-column prop="operation" label="操作" width="300">
           <template slot-scope="scope">
             <operation-wrapper>

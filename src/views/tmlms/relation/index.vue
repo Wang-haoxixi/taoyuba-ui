@@ -85,17 +85,14 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            type="text"
             @click="handleDetail(scope.row)">详情</el-button>
           <el-button
             v-if="relation_ship_edit && roles.indexOf(112) !== -1"
             size="mini"
-            type="text"
             @click="handleEdit(scope.row)">编辑</el-button>
           <el-button
             v-if="relation_ship_delete && roles.indexOf(112) !== -1"
             size="mini"
-            type="text"
             @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>

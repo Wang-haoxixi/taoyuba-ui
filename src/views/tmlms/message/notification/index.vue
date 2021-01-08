@@ -5,7 +5,7 @@
       <!-- <iep-tabs v-model="type" :tab-list="announcementTypeList" @tab-click="changeType"></iep-tabs> -->
       <operation-container>
         <template slot="left">
-          <iep-button @click="handleAdd" type="primary" icon="el-icon-plus" plain>发布通报</iep-button>
+          <iep-button @click="handleAdd" type="primary">发布通报</iep-button>
         </template>
         <template slot="right">
           <span class="width180"><el-input v-model.trim="params.bulletinFromName" placeholder="主题" size="small" clearable></el-input></span>
@@ -28,7 +28,6 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
-              type="text"
               @click="handleDetail(scope.row)">详情</el-button>
           </template>
         </el-table-column>

@@ -54,16 +54,12 @@
             {{ scope.row.status | typeFilter}}
           </template>
           </el-table-column>
-          <el-table-column label="操作" width="180">
+          <el-table-column label="操作" width="310" fixed="right">
             <template slot-scope="scope">
-              <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.userId)">查看
-              </el-button>
-              <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.userId)">编辑
-              </el-button>
-              <el-button type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.userId)">删除
-              </el-button>
-                <el-button type="text" icon="el-icon-delete" size="mini" @click="handleShip(scope.row.userId)">渔船分配
-              </el-button>
+              <el-button size="mini" @click="handleView(scope.row.userId)">查看</el-button>
+              <el-button size="mini" @click="handleEdit(scope.row.userId)">编辑</el-button>
+              <el-button size="mini" @click="handleDel(scope.row.userId)">删除</el-button>
+              <el-button size="mini" @click="handleShip(scope.row.userId)">渔船分配</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -236,4 +232,7 @@ export default {
     margin: 0 5px;
   }
 }
+// .el-button {
+//   margin-bottom: 5px;
+// }
 </style>

@@ -12,7 +12,7 @@
           </operation-search>
         </template> -->
         <template slot="right">
-          <el-button @click="backPage">返回</el-button>
+          <el-button @click="backPage" size="small">返回</el-button>
         </template>
       </operation-container>
       <iep-table                    

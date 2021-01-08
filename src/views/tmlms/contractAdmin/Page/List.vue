@@ -74,37 +74,37 @@
             </div>
           </template>
           </el-table-column> -->
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="250" fixed="right">
           <template slot-scope="scope">
-             <el-button v-if="mlms_contract_view" type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.contractId)">合同查看
+             <el-button v-if="mlms_contract_view" size="mini" @click="handleView(scope.row.contractId)">合同查看
             </el-button>
-            <el-button v-if="(mlms_contract_edit && scope.row.status === '未审核') || (mlms_contract_edit && scope.row.status === '未通过审核')"  type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.contractId)">编辑
+            <el-button v-if="(mlms_contract_edit && scope.row.status === '未审核') || (mlms_contract_edit && scope.row.status === '未通过审核')" size="mini" @click="handleEdit(scope.row.contractId)">编辑
             </el-button>
-            <el-button v-if="mlms_contract_del && scope.row.status === '未通过审核'" type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.contractId)">删除
+            <el-button v-if="mlms_contract_del && scope.row.status === '未通过审核'" size="mini" @click="handleDel(scope.row.contractId)">删除
             </el-button>
-            <el-button v-if="mlms_contract_rev && scope.row.status === '未审核'" type="text" icon="el-icon-edit" size="mini" @click="handleReview(scope.row.contractId)">审核
+            <el-button v-if="mlms_contract_rev && scope.row.status === '未审核'" size="mini" @click="handleReview(scope.row.contractId)">审核
             </el-button>
-            <iep-button v-if="mlms_contract_rec && scope.row.status === '未通过审核'" type="text" icon="el-icon-edit" size="mini" @click="handleRecord(scope.row.contractId)">审核记录
+            <iep-button v-if="mlms_contract_rec && scope.row.status === '未通过审核'" size="mini" @click="handleRecord(scope.row.contractId)">审核记录
             </iep-button>
-            <iep-button v-if="mlms_contract_rem && (scope.row.status === '合同解除' || scope.row.status === '合同纠纷')" type="text" icon="el-icon-edit" size="mini" @click="handleRemove(scope.row.contractId)">解除记录
+            <iep-button v-if="mlms_contract_rem && (scope.row.status === '合同解除' || scope.row.status === '合同纠纷')" @click="handleRemove(scope.row.contractId)">解除记录
             </iep-button>
-            <el-button v-if="mlms_contract_pri && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')" type="text" icon="el-icon-delete" size="mini" @click="handlePrint(scope.row.contractId)">打印
+            <el-button v-if="mlms_contract_pri && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')" size="mini" @click="handlePrint(scope.row.contractId)">打印
             </el-button>
-            <el-button v-if="mlms_contract_rel && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')" type="text" icon="el-icon-edit" size="mini" @click="handleRelieve(scope.row.contractId)">解除
+            <el-button v-if="mlms_contract_rel && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')" size="mini" @click="handleRelieve(scope.row.contractId)">解除
             </el-button>
-            <el-button v-if="mlms_relieve_rel && (scope.row.status === '合同成立' || scope.row.status === '未签纸质合同' || scope.row.status === '合同纠纷')" type="text" icon="el-icon-edit" size="mini" @click="goTo(scope.row.contractId)">申请解除
+            <el-button v-if="mlms_relieve_rel && (scope.row.status === '合同成立' || scope.row.status === '未签纸质合同' || scope.row.status === '合同纠纷')" size="mini" @click="goTo(scope.row.contractId)">申请解除
             </el-button>
-            <el-button v-if="mlms_contract_com && scope.row.status === '合同纠纷'" type="text" icon="el-icon-edit" size="mini" @click="go(scope.row.contractId)">投诉管理
+            <el-button v-if="mlms_contract_com && scope.row.status === '合同纠纷'" size="mini" @click="go(scope.row.contractId)">投诉管理
             </el-button>
-            <el-button v-if="mlms_contract_eva && scope.row.status === '合同解除' && scope.row.isRate === 0 && scope.row.isDate === 0" type="text" icon="el-icon-edit" size="mini" @click="handleEvaluate(scope.row.contractId)">评价
+            <el-button v-if="mlms_contract_eva && scope.row.status === '合同解除' && scope.row.isRate === 0 && scope.row.isDate === 0" size="mini" @click="handleEvaluate(scope.row.contractId)">评价
             </el-button>
-             <el-button v-if="mlms_contract_recall && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同') " type="text" icon="el-icon-edit" size="mini" @click="handleCall(scope.row.contractId)">撤销
+             <el-button v-if="mlms_contract_recall && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同') " size="mini" @click="handleCall(scope.row.contractId)">撤销
             </el-button>
-             <el-button v-if="mlms_contract_upload && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')  && scope.row.contractImage !== '1' " type="text" icon="el-icon-edit" size="mini" @click="handleUpload(scope.row.contractId)">上传纸质合同
+             <el-button v-if="mlms_contract_upload && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')  && scope.row.contractImage !== '1' " size="mini" @click="handleUpload(scope.row.contractId)">上传纸质合同
             </el-button>
-              <el-button v-if="mlms_contract_upload && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')  && scope.row.contractImage === '1' " type="text" icon="el-icon-edit" size="mini" @click="handleUpload(scope.row.contractId)">查看纸质合同
+              <el-button v-if="mlms_contract_upload && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')  && scope.row.contractImage === '1' " size="mini" @click="handleUpload(scope.row.contractId)">查看纸质合同
             </el-button>
-            <el-button v-if="mlms_contract_employee" icon="el-icon-edit" size="mini" type="text" @click="onToEmployee(scope.row.employeeIdcard)">船员编辑</el-button>
+            <el-button v-if="mlms_contract_employee" size="mini" @click="onToEmployee(scope.row.employeeIdcard)">船员编辑</el-button>
           </template>
         </el-table-column>
       </avue-tree-table>
@@ -1125,7 +1125,9 @@ export default {
 .contract-box {
   padding: 20px;
 }
-
+.el-button {
+  margin-bottom: 5px;
+}
 </style>
 
 <style scoped>

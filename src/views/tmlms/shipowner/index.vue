@@ -69,14 +69,11 @@
             {{ scope.row.status | typeFilter}}
           </template>
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" width="220px">
             <template slot-scope="scope">
-              <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.idcard)">查看
-              </el-button>
-              <el-button  v-if="manager"  type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.idcard)">编辑
-              </el-button>
-              <el-button v-if="manager" type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.idcard)">删除
-              </el-button>
+              <el-button size="mini" @click="handleView(scope.row.idcard)">查看</el-button>
+              <el-button  v-if="manager"  size="mini" @click="handleEdit(scope.row.idcard)">编辑</el-button>
+              <el-button v-if="manager" size="mini" @click="handleDel(scope.row.idcard)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>

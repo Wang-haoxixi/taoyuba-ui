@@ -55,14 +55,11 @@
             {{ scope.row.status | typeFilter}}
           </template>
           </el-table-column>
-          <el-table-column label="操作" width="180">
+          <el-table-column label="操作" width="220" fixed="right">
             <template slot-scope="scope">
-              <el-button type="text" icon="el-icon-view" size="mini" @click="handleView(scope.row.userId)">查看
-              </el-button>
-              <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.userId)">编辑
-              </el-button>
-              <el-button type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.userId)">删除
-              </el-button>
+              <el-button size="mini" @click="handleView(scope.row.userId)">查看</el-button>
+              <el-button size="mini" @click="handleEdit(scope.row.userId)">编辑</el-button>
+              <el-button size="mini" @click="handleDel(scope.row.userId)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>

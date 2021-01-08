@@ -56,7 +56,6 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            type="text"
             @click="handleDetail(scope.row)">查看</el-button>
           <!-- <el-button
             size="mini"
@@ -64,11 +63,9 @@
             @click="handleEdit(scope.row)" v-if="labor_disputes_scroe">打分</el-button> -->
             <el-button
             size="mini"
-            type="text"
             @click="handleEdit2(scope.row)" v-if="labor_disputes_edit && scope.row.status !== 1">编辑</el-button>
           <el-button
             size="mini"
-            type="text"
             @click="handleDelete(scope.row)" v-if="labor_disputes_delete && scope.row.status !== 1">删除</el-button>
         </template>
       </el-table-column>

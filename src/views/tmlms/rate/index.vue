@@ -31,7 +31,7 @@
           <el-table-column label="评价内容" prop="content"></el-table-column>
           <el-table-column label="操作" v-if="mangner === true">
             <template slot-scope="scope">
-              <el-button type="text" icon="el-icon-delete" size="mini" @click="handleDel(scope.row.id)">删除
+              <el-button size="mini" @click="handleDel(scope.row.id)">删除
               </el-button>
             </template>
           </el-table-column>
