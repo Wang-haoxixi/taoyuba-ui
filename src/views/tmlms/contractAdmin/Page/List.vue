@@ -33,7 +33,7 @@
           <span><el-input v-model.trim="params.employeeName" clearable placeholder="乙方姓名" size="small" style="width:120px"></el-input></span>
           <span style="width:240px">
             <el-date-picker v-model="params.timeLists" type="daterange" clearable range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
-            value-format="yyyy-MM-dd"  size="mini"></el-date-picker>
+            value-format="yyyy-MM-dd"  size="small"></el-date-picker>
           </span>
           <span style="width:120px">
             <el-select v-model="conStatus" placeholder="合同状态" size="small" clearable>
@@ -263,6 +263,7 @@ export default {
   },
   data () {
     return {
+      dialogImageUrl: '',
       aName: '',
       bName: '',
       contractList: [],

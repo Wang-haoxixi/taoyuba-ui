@@ -262,7 +262,12 @@ export default {
     //省
     provincesName (item, scope) {
       if(scope.row[item.value]){
-      return keyBy(this.provinces, 'value')[scope.row[item.value]].label
+        // console.log('keyBy', keyBy(this.provinces, 'value'))
+        let val = keyBy(this.provinces, 'value')
+        if (!Object.keys(val).length) {
+          return ''
+        }
+        return keyBy(this.provinces, 'value')[scope.row[item.value]].label
       }else{
         return '暂无'
       }

@@ -17,6 +17,7 @@
         </template>
       </operation-container>
       <iep-table
+        :isLoadTable="false"
         :isPagination="false"
         :pagination="pagination"
         :columnsMap="allcrewColumnsMap"
@@ -58,7 +59,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-        </el-form>     
+        </el-form>
         <div style="text-align:center">
           <el-button @click="save" >提交</el-button>
           <el-button @click="$router.go(-1)">取消</el-button>

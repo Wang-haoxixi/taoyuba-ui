@@ -20,8 +20,8 @@
                 <el-row>
                 <el-col :span="12">
                   <el-form-item label="身份证号码：" prop="idcard">
-                    <!-- <el-input v-model="form.idcard" :disabled="haveInfo.idcard"></el-input> -->
-                    <el-select :disabled="!!$route.query.edit" v-model.trim="form.idcard"
+                    <el-input v-model.trim="form.idcard" :disabled="!!$route.query.edit" @blur="getidcardList"></el-input>
+                    <!-- <el-select :disabled="!!$route.query.edit" v-model.trim="form.idcard"
                               placeholder="请选择"
                               filterable
                               remote
@@ -32,7 +32,7 @@
                               @change="idcardChange"
                               :remote-method="getidcardList">
                       <el-option v-for="item in idcards" :key="item.id" :label="item.idcard + '(手机号：' + item.phone + ')'" :value="item"></el-option>
-                    </el-select>
+                    </el-select> -->
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -437,15 +437,15 @@ export default {
             callback()
         }
       }
-      // const checkidCard = (rule, value, callback) => {
-      //   if (value === '') {
-      //     callback(new Error('请输入身份证号码'))
-      //   } else if (!value.test(/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/)) {
-      //     callback(new Error('请输入正确的身份证号码!'))
-      //   } else {
-      //       callback()
-      //   }
-      // }
+      const checkidCard = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入身份证号码'))
+        } else if (!/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(value)) {
+          callback(new Error('请输入正确的身份证号码!'))
+        } else {
+            callback()
+        }
+      }
     return {        
       certificateColumns,
       imgVisible:false,
@@ -525,7 +525,7 @@ export default {
         ],
         idcard: [
             { required: true, message: '请填写身份证信息', trigger: 'blur' },
-            // { validator: checkidCard, trigger: 'blur' },
+            { validator: checkidCard, trigger: 'blur' },
         ],
         birthday: [
             { required: true, message: '请填写生日信息', trigger: 'blur' },
@@ -1035,11 +1035,13 @@ export default {
         this.form.idcard = ''
       }
     },
-    getidcardList (number) {
-      console.log('getidcardList')
-      if (number) {
-        number = number.trim()
-      }
+    getidcardList (e) {
+      let number = e.target.value || ''
+      // console.log('number', number, e.target.value)
+      // console.log('getidcardList')
+      // if (number) {
+      //   number = number.trim()
+      // }
       if (number.length !== 18) {
         return
       }
@@ -1053,8 +1055,8 @@ export default {
       }
       this.loading = false
       if (number !== '') {
-        getCrewData(number).then(res => {           
-          if(!(this.roles.includes(111) || this.roles.includes(1))){                        
+        getCrewData(number).then(res => {
+          if(!(this.roles.includes(111) || this.roles.includes(1))){
             if (res.data.data.userId !== 0 && res.data.data !== true ) {
               this.$message.error('该船员已存在，请重新填写！')
               this.form = {}

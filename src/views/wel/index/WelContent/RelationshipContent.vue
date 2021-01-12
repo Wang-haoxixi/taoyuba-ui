@@ -10,7 +10,7 @@
     <div class="relationship-item">
     </div> -->
     <div>
-      <el-button style="color:#666" v-for="item of nameList" :key="item" type="text">{{item.name}}</el-button>
+      <el-button style="color:#666" v-for="(item, index) of nameList" :key="index" type="text">{{item.name}}</el-button>
     </div>
   </div>
 </template>

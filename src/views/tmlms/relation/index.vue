@@ -5,7 +5,7 @@
       <template slot="left">
         <!-- roles.indexOf(112) !== -1" -->
         <iep-button @click="handleAdd" type="primary" icon="el-icon-plus" plain v-if="relation_ship_add && roles.indexOf(112) !== -1">新增</iep-button>
-        <iep-button @click="handleExport" v-if="relation_ship_export && roles.indexOf(112) !== -1" :loading="exportBtnLoading" type="default" plain>导出</iep-button>
+        <!-- <iep-button @click="handleExport" v-if="relation_ship_export && roles.indexOf(112) !== -1" :loading="exportBtnLoading" type="default" plain>导出</iep-button> -->
       </template>
       <template slot="right">
         <el-form :inline="true" :model="params" size="small">

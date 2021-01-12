@@ -5,8 +5,8 @@ export default [
     path: '/hrms_spa',
     component: Layout,
     redirect: '/hrms_spa/growth_file/:id',
-    children: [   
-      {          
+    children: [
+      {
         path: 'growth_file/:id',
         name: '成长档案',
         component: () => import('@/views/hrms/GrowthFile/index.vue'),
@@ -121,125 +121,125 @@ export default [
         meta: noKeepAlive,
       },
       {
-        path: 'village_ship_list/:villageId',                  
-        name: '渔村下渔船列表页',                     
+        path: 'village_ship_list/:villageId',
+        name: '渔村下渔船列表页',
         component: () => import('@/views/hrms/StandingBook/BoatsFiles/Page/ShipList.vue'),
         meta: noKeepAlive,
       },
-      {         
-        path: 'ship_crew_list/:shipId',                        
-        name: '渔船下船员列表页',                     
+      {
+        path: 'ship_crew_list/:shipId',
+        name: '渔船下船员列表页',
         component: () => import('@/views/hrms/StandingBook/BoatsFiles/Page/CrewList.vue'),
         meta: noKeepAlive,
       },
       {
-        path: 'village_shipOwner_detail',                  
-        name: '渔村下船东详情页',                     
+        path: 'village_shipOwner_detail',
+        name: '渔村下船东详情页',
         component: () => import('@/views/hrms/StandingBook/Owner/Page/Detail.vue'),
         meta: noKeepAlive,
       },
       {
-        path: 'village_ship_detail',                  
-        name: '渔村下渔船详情页',                     
+        path: 'village_ship_detail',
+        name: '渔村下渔船详情页',
         component: () => import('@/views/hrms/StandingBook/Fisher/Page/Detail.vue'),
         meta: noKeepAlive,
       },
-      {   
-        path: 'ship_insure_list/:shipName',                        
-        name: '渔船保单列表',                                   
-        component: () => import('@/views/hrms/StandingBook/BoatsFiles/Page/ShipinsureList.vue'),        
+      {
+        path: 'ship_insure_list/:shipName',
+        name: '渔船保单列表',
+        component: () => import('@/views/hrms/StandingBook/BoatsFiles/Page/ShipinsureList.vue'),
         meta: noKeepAlive,
       },
-      {   
-        path: 'ship_insure',                        
-        name: '渔船保单表单',                                   
-        component: () => import('@/views/hrms/StandingBook/BoatsFiles/Page/Shipinsure.vue'),        
+      {
+        path: 'ship_insure',
+        name: '渔船保单表单',
+        component: () => import('@/views/hrms/StandingBook/BoatsFiles/Page/Shipinsure.vue'),
         meta: noKeepAlive,
       },
-      {   
-        path: 'ship_crew/:shipNo',                        
-        name: '渔船船员表单',                                   
-        component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/index.vue'),        
+      {
+        path: 'ship_crew/:shipNo',
+        name: '渔船船员表单',
+        component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/index.vue'),
         meta: noKeepAlive,
       },
-      {   
-        path: 'myship_crew/:shipNo',                        
-        name: '渔船管理',                                   
-        component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/Shipcrew.vue'),        
+      {
+        path: 'myship_crew/:shipNo',
+        name: '渔船管理',
+        component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/Shipcrew.vue'),
         meta: noKeepAlive,
       },
-      {   
-        path: 'ship_allcrew/:shipId',                        
-        name: '渔船下所有船员',                                   
-        component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/allShipcrew.vue'),        
+      {
+        path: 'ship_allcrew/:shipId',
+        name: '渔船下所有船员',
+        component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/allShipcrew.vue'),
         meta: noKeepAlive,
       },
-      {   
-        path: 'ship_allcrew_add/:shipId',                        
-        name: '船员登记',                                   
-        component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/addCrew.vue'),        
+      {
+        path: 'ship_allcrew_add/:shipId',
+        name: '船员登记',
+        component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/addCrew.vue'),
         meta: noKeepAlive,
       },
-      {   
-        path: 'shipCrew_list/',                        
-        name: '渔船下船员列表页',                                   
-        component: () => import('@/views/hrms/StandingBook/Fisher/index.vue'),        
+      {
+        path: 'shipCrew_list/',
+        name: '渔船下船员列表页',
+        component: () => import('@/views/hrms/StandingBook/Fisher/index.vue'),
         meta: noKeepAlive,
       },
-      {          
-        path: 'shipCrew_Detial/:shipId',                        
-        name: '渔船下船员详情页',                                   
-        component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/Detail.vue'),        
+      {
+        path: 'shipCrew_Detial/:shipId',
+        name: '渔船下船员详情页',
+        component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/Detail.vue'),
         meta: noKeepAlive,
       },
-      {   
-        path: 'shipCrew_Insure/:idcard',                        
-        name: '渔船下船员证书列表页',                                   
-        component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/Insure.vue'),        
+      {
+        path: 'shipCrew_Insure/:idcard',
+        name: '渔船下船员证书列表页',
+        component: () => import('@/views/hrms/StandingBook/Fisher/FishCrew/Insure.vue'),
         meta: noKeepAlive,
       },
-      {   
-        path: 'ship_operat/:shipId',                        
-        name: '渔船下经营人表单',                                   
-        component: () => import('@/views/hrms/StandingBook/Fisher/Operat/index.vue'),        
+      {
+        path: 'ship_operat/:shipId',
+        name: '渔船下经营人表单',
+        component: () => import('@/views/hrms/StandingBook/Fisher/Operat/index.vue'),
         meta: noKeepAlive,
       },
-      {   
-        path: 'shipOperat_Detial/:shipName',                        
-        name: '渔船下经营人详情',                                   
-        component: () => import('@/views/hrms/StandingBook/Fisher/Operat/Detail.vue'),        
+      {
+        path: 'shipOperat_Detial/:shipName',
+        name: '渔船下经营人详情',
+        component: () => import('@/views/hrms/StandingBook/Fisher/Operat/Detail.vue'),
         meta: noKeepAlive,
       },
-      {   
-        path: 'shipShareHolder/:shipId',                        
-        name: '渔船股东',                                   
-        component: () => import('@/views/hrms/StandingBook/Fisher/ShareHolder/index.vue'),        
+      {
+        path: 'shipShareHolder/:shipId',
+        name: '渔船股东',
+        component: () => import('@/views/hrms/StandingBook/Fisher/ShareHolder/index.vue'),
         meta: noKeepAlive,
       },
-      {   
-        path: 'CrewRegiste',                        
-        name: '上船人员登记',                                   
-        component: () => import('@/views/hrms/StandingBook/Fisher/CrewRegiste/index.vue'),        
+      {
+        path: 'CrewRegiste',
+        name: '上船人员登记',
+        component: () => import('@/views/hrms/StandingBook/Fisher/CrewRegiste/index.vue'),
         meta: noKeepAlive,
       },
-      {   
-        path: 'CrewRegiste/record/:idcard',                        
-        name: '上船人员上下船记录',                                   
-        component: () => import('@/views/hrms/StandingBook/Fisher/CrewRegiste/record.vue'),        
+      {
+        path: 'CrewRegiste/record/:idcard',
+        name: '上船人员上下船记录',
+        component: () => import('@/views/hrms/StandingBook/Fisher/CrewRegiste/record.vue'),
         meta: noKeepAlive,
       },
-      {   
-        path: 'shipChange_Detial/:id',                        
-        name: '渔船变更详情页',                                   
-        component: () => import('@/views/hrms/StandingBook/ShipChange/Page/Detail.vue'),        
+      {
+        path: 'shipChange_Detial/:id',
+        name: '渔船变更详情页',
+        component: () => import('@/views/hrms/StandingBook/ShipChange/Page/Detail.vue'),
         meta: noKeepAlive,
       },
-      {   
-        path: 'shipChange__list/',                        
-        name: '渔船变更列表页',                                   
-        component: () => import('@/views/hrms/StandingBook/ShipChange/index.vue'),        
+      {
+        path: 'shipChange__list/',
+        name: '渔船变更列表页',
+        component: () => import('@/views/hrms/StandingBook/ShipChange/index.vue'),
         meta: noKeepAlive,
-      },  
+      },
     ],
   },
   {
