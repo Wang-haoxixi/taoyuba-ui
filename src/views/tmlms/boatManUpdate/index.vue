@@ -58,7 +58,7 @@
           :current-page.sync="params.current"
           :page-sizes="[10, 20, 50, 100]"
           :page-size="10"
-          layout="total, prev, pager, next, jumper"
+          layout="total, sizes, prev, pager, next, jumper"
           :total="total">
         </el-pagination>
       </div>
@@ -119,9 +119,10 @@ export default {
          this.$confirm('此操作将更新文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-        }).then(() => {
+        }).then(async () => {
           this.loading = true
-          updatePageBatchByBad(this.selectedData).then(({data}) => {
+          try {
+            let { data } = await updatePageBatchByBad(this.selectedData)
             if (data && data.data) {
               this.$notify({
                 title: '成功',
@@ -138,10 +139,36 @@ export default {
               })
             }
             this.loading = false
-          })
-        }).catch(() => {
-          this.loading = false
+          } catch(e) {
+            this.$notify({
+              title: '警告',
+              message: '数据更新失败',
+              type: 'warning',
+            })
+            this.loading = false
+          }
         })
+        //   .then(({data}) => {
+        //     if (data && data.data) {
+        //       this.$notify({
+        //         title: '成功',
+        //         message: '数据更新成功',
+        //         type: 'success',
+        //       })
+        //       this.params.current = 1
+        //       this.getList()
+        //     } else {
+        //       this.$notify({
+        //         title: '警告',
+        //         message: '数据更新失败',
+        //         type: 'warning',
+        //       })
+        //     }
+        //     this.loading = false
+        //   })
+        // }).catch(() => {
+        //   this.loading = false
+        // })
       } else {
         this.$message({
           message: '请选择数据',

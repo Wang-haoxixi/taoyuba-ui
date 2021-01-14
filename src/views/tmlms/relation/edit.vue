@@ -1,7 +1,7 @@
 <template>
   <el-form :model="form" :rules="rules" ref="ruleForm" label-width="150px" :disabled="status === 'detail'">
     <el-row>
-      <el-col span="24">
+      <el-col :span="24">
         <el-form-item label="渔船名" prop="shipName">
           <el-select
             v-model="form.shipName"
@@ -113,8 +113,8 @@ export default {
       },
     },
     span: {
-      type: String,
-      dafault: '24',
+      type: Number,
+      dafault: 24,
     },
     shipNameDisabled: {
       type: Boolean,
@@ -127,6 +127,8 @@ export default {
       dialogVisible: false,
       map,
       form: {
+        shipownerName: '',
+        shipownerPhone: '',
         relationshipType: '',
         files:[],
       },
@@ -141,7 +143,7 @@ export default {
         }],
       },
       rules:{
-        shipName: [{ required: true, message: '请输入渔船名', trigger: 'change' }],
+        shipName: [{ required: true, message: '请输入渔船名', trigger: ['change', 'blur'] }],
         shipownerName: [{ required: true, message: '请输入联系人', trigger: 'blur' }],
         shipownerPhone: [
           { required: true, message: '请输入手机号', trigger: 'blur' },
@@ -192,7 +194,7 @@ export default {
   },
   methods: {
     handlePictureCardPreview (file) {
-      console.log('file', file)
+      // console.log('file', file)
       this.dialogImageUrl = file.url
       this.dialogVisible = true
     },
@@ -249,22 +251,43 @@ export default {
         })
       }
     },
-    getShipNameList (name) {
+    async getShipNameList (name) {
       if (name.length === 5) {
-        getShipNames(name).then(({data}) => {
+        try {
+          let res = await getShipNames(name)
+          let data = res.data
           if (data.code === 0) {
             this.shipNames = data.data
           }
-        })
+          // getShipNames(name).then(({data}) => {
+          //   console.log('data')
+          //   if (data.code === 0) {
+          //     this.shipNames = data.data
+          //   } else {
+          //     this.$notify({
+          //       title: '警告',
+          //       message: data.msg || '数据更新失败',
+          //       type: 'warning',
+          //     })
+          //   }
+          // })
+        } catch (err) {
+          this.$message({
+            message: err || '数据查询失败',
+            type: 'warning',
+          })
+        }
       }
     },
     onChange (shipName) {
       let data = this.shipNames.filter((item) => {
         return item.shipName === shipName
       })
+      console.log('data', data, shipName)
       if (data && data.length > 0) {
         this.$set(this.form, 'shipownerName', data[0].shipowner)
         this.$set(this.form, 'shipownerPhone', data[0].mobile)
+        console.log('this.form', this.form)
       } else {
         this.form.shipownerName = ''
         this.form.shipownerPhone = ''

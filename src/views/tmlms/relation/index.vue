@@ -1,111 +1,118 @@
 <template>
   <basic-container>
-    <page-header title="联系记录"></page-header>
-    <operation-container>
-      <template slot="left">
-        <!-- roles.indexOf(112) !== -1" -->
-        <iep-button @click="handleAdd" type="primary" icon="el-icon-plus" plain v-if="relation_ship_add && roles.indexOf(112) !== -1">新增</iep-button>
-        <!-- <iep-button @click="handleExport" v-if="relation_ship_export && roles.indexOf(112) !== -1" :loading="exportBtnLoading" type="default" plain>导出</iep-button> -->
-      </template>
-      <template slot="right">
-        <el-form :inline="true" :model="params" size="small">
-          <el-form-item v-if="roles.includes(1)">
-            <el-select clearable style="width: 150px !important;" v-model="params.villageId" placeholder="基层组织" size="small">
-              <el-option
-                v-for="item in orgSearchList"
-                :key="item.index"
-                :label="item.villageName"
-                :value="item.userId"
-                >
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-input style="width: 150px !important;" v-model.trim="params.shipName" placeholder="船名号" clearable></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-input style="width: 150px !important;" v-model.trim="params.shipownerName" placeholder="联系人" clearable></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-select style="width: 150px !important;" v-model="params.relationshipType" placeholder="联系设备" clearable>
-              <el-option :label="item.label" :value="item.value" v-for="item in map.relationshipType" :key="item.value"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-date-picker
-              value-format="yyyy-MM-dd"
-              v-model="params.rangeTime"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期">
-            </el-date-picker>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="getList">搜索</el-button>
-          </el-form-item>
-        </el-form>
-      </template>
-    </operation-container>
-    <el-table
-      :data="pagedTable"
-      stripe
-      style="width: 100%">
-      <el-table-column
-        v-if="roles.indexOf(111) !== -1 || roles.indexOf(1) !== -1"
-        prop="villageName"
-        label="基层名">
-      </el-table-column>
-      <el-table-column
-        prop="shipName"
-        label="渔船名">
-      </el-table-column>
-      <el-table-column
-        prop="relationshipType"
-        label="联系设备">
-        <template slot-scope="scope">
-          <span>
-            {{scope.row.relationshipType === 3 ? getLabel(map.relationshipType, scope.row.relationshipType) : getLabel(map.relationshipType, scope.row.relationshipType) + '(' + scope.row.relationshipNumber + ')'}}
-          </span>
+    <div v-show="!show">
+      <page-header title="联系记录"></page-header>
+      <operation-container>
+        <template slot="left">
+          <!-- roles.indexOf(112) !== -1" -->
+          <iep-button @click="handleAdd" type="primary" v-if="relation_ship_add && roles.indexOf(112) !== -1">新增</iep-button>
+          <!-- <iep-button @click="handleStatistics" type="default" v-if="relation_ship_statistics && (roles.indexOf(111) !== -1)">联系记录统计</iep-button> -->
+          <!-- <iep-button @click="handleExport" v-if="relation_ship_export && roles.indexOf(112) !== -1" :loading="exportBtnLoading" type="default" plain>导出</iep-button> -->
         </template>
-      </el-table-column>
-      <el-table-column
-        prop="relationshipReason"
-        label="联系事由">
-        <template slot-scope="scope">
-          <span>{{scope.row.relationshipReason}}</span>
-          <!-- <span>{{getLabel(map.relationshipReason, scope.row.relationshipReason)}}</span> -->
+        <template slot="right">
+          <el-form :inline="true" :model="params" size="small">
+            <el-form-item v-if="roles.includes(111)">
+              <el-select clearable style="width: 150px !important;" v-model="params.villageId" placeholder="基层组织" size="small">
+                <el-option
+                  v-for="item in orgSearchList"
+                  :key="item.index"
+                  :label="item.villageName"
+                  :value="item.userId"
+                  >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item>
+              <el-input style="width: 150px !important;" v-model.trim="params.shipName" placeholder="船名号" clearable></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input style="width: 150px !important;" v-model.trim="params.shipownerName" placeholder="联系人" clearable></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-select style="width: 150px !important;" v-model="params.relationshipType" placeholder="联系设备" clearable>
+                <el-option :label="item.label" :value="item.value" v-for="item in map.relationshipType" :key="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item>
+              <el-date-picker
+                value-format="yyyy-MM-dd"
+                v-model="params.rangeTime"
+                type="daterange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="getList">搜索</el-button>
+            </el-form-item>
+          </el-form>
         </template>
-      </el-table-column>
-      <el-table-column
-        prop="relationshipTime"
-        label="联系时间">
-      </el-table-column>
-      <el-table-column label="操作" fixed="right" width="200">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            @click="handleDetail(scope.row)">详情</el-button>
-          <el-button
-            v-if="relation_ship_edit && roles.indexOf(112) !== -1"
-            size="mini"
-            @click="handleEdit(scope.row)">编辑</el-button>
-          <el-button
-            v-if="relation_ship_delete && roles.indexOf(112) !== -1"
-            size="mini"
-            @click="handleDelete(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <div style="text-align: center;margin: 20px 0;">
-      <el-pagination
-        background
-        layout="total, prev, pager, next, jumper"
-        :total="total"
-        :page-size="params.size"
-        :current-page.sync="params.current"
-        @current-change="currentChange">
-      </el-pagination>
+      </operation-container>
+      <el-table
+        :data="pagedTable"
+        stripe
+        style="width: 100%">
+        <el-table-column
+          v-if="roles.indexOf(111) !== -1 || roles.indexOf(1) !== -1"
+          prop="villageName"
+          label="基层名">
+        </el-table-column>
+        <el-table-column
+          prop="shipName"
+          label="渔船名">
+        </el-table-column>
+        <el-table-column
+          prop="relationshipType"
+          label="联系设备">
+          <template slot-scope="scope">
+            <span>
+              {{scope.row.relationshipType === 3 ? getLabel(map.relationshipType, scope.row.relationshipType) : getLabel(map.relationshipType, scope.row.relationshipType) + '(' + scope.row.relationshipNumber + ')'}}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="relationshipReason"
+          label="联系事由">
+          <template slot-scope="scope">
+            <span>{{scope.row.relationshipReason}}</span>
+            <!-- <span>{{getLabel(map.relationshipReason, scope.row.relationshipReason)}}</span> -->
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="relationshipTime"
+          label="联系时间">
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="220">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              @click="handleDetail(scope.row)">详情</el-button>
+            <el-button
+              v-if="relation_ship_edit && roles.indexOf(112) !== -1"
+              size="mini"
+              @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button
+              v-if="relation_ship_delete && roles.indexOf(112) !== -1"
+              size="mini"
+              @click="handleDelete(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div style="text-align: center;margin: 20px 0;">
+        <el-pagination
+          background
+          layout="total, prev, pager, next, jumper"
+          :total="total"
+          :page-size="params.size"
+          :current-page.sync="params.current"
+          @current-change="currentChange">
+        </el-pagination>
+        <dialog-statistics ref="dialogStatistics"/>
+      </div>
+    </div>
+    <div v-if="show">
+      <form-container ref="formContainer" :status="status" @go-back="onGoBack"></form-container>
     </div>
 </basic-container>
 </template>
@@ -113,10 +120,19 @@
 import { mapGetters } from 'vuex'
 import { getPage, removePage, exportPage } from '@/api/tmlms/relation'
 import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
+import dialogStatistics from './dialogStatistics'
+import formContainer from './form'
 import map from './map'
 export default {
+  components: {
+    dialogStatistics,
+    formContainer,
+  },
   data () {
     return {
+      status: '',
+      id: '',
+      show: false,
       exportBtnLoading: false,
       orgSearchList: [],
       map,
@@ -134,6 +150,7 @@ export default {
       relation_ship_edit: false,
       relation_ship_delete: false,
       relation_ship_export: false,
+      relation_ship_statistics: false,
     }
   },
   computed: {
@@ -149,8 +166,16 @@ export default {
     this.relation_ship_edit = this.permissions['relation_ship_edit']
     this.relation_ship_delete = this.permissions['relation_ship_delete']
     this.relation_ship_export = this.permissions['relation_ship_export']
+    this.relation_ship_statistics = this.permissions['relation_ship_statistics']
   },
   methods: {
+    onGoBack () {
+      this.show = false
+      this.getList()
+    },
+    handleStatistics () {
+      this.$refs.dialogStatistics.open()
+    },
     handleExport () {
       this.exportBtnLoading = true
       exportPage().then(() => {
@@ -185,28 +210,37 @@ export default {
       delete params.rangeTime
       getPage(params).then(({ data }) => {
         if (data.code === 0) {
-          console.log('data', data)
           this.pagedTable = data.data.records
           this.total = data.data.total
         }
       })
     },
     handleAdd () {
-      this.$router.push({
-        path: '/relation_ship/form',
-        query: {
-          status: 'add',
-        },
+      this.show = true
+      this.status = 'add'
+      this.$nextTick(() => {
+        this.$refs.formContainer.open()
       })
+      // this.$router.push({
+      //   path: '/relation_ship/form',
+      //   query: {
+      //     status: 'add',
+      //   },
+      // })
     },
     handleDetail (row) {
-      this.$router.push({
-        path: '/relation_ship/form',
-        query: {
-          id: row.id,
-          status: 'detail',
-        },
+      this.show = true
+      this.status = 'detail'
+      this.$nextTick(() => {
+        this.$refs.formContainer.open(row.id)
       })
+      // this.$router.push({
+      //   path: '/relation_ship/form',
+      //   query: {
+      //     id: row.id,
+      //     status: 'detail',
+      //   },
+      // })
     },
     handleDelete (row) {
       this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
@@ -224,13 +258,18 @@ export default {
       })
     },
     handleEdit (row) {
-      this.$router.push({
-        path: '/relation_ship/form',
-        query: {
-          id: row.id,
-          status: 'update',
-        },
+      this.show = true
+      this.status = 'update'
+      this.$nextTick(() => {
+        this.$refs.formContainer.open(row.id)
       })
+      // this.$router.push({
+      //   path: '/relation_ship/form',
+      //   query: {
+      //     id: row.id,
+      //     status: 'update',
+      //   },
+      // })
     },
     currentChange (val) {
       this.params.current = val

@@ -3,7 +3,7 @@ import { getStore } from '../util/store'
 import axios from 'axios'
 import qs from 'qs'
 import NProgress from 'nprogress' // progress bar
-// import errorCode from '@/const/errorCode'
+import errorCode from '@/const/errorCode'
 // import { Message } from 'element-ui'
 import 'nprogress/nprogress.css'
 import store from '@/store' // progress bar style
@@ -57,7 +57,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(res => {
   NProgress.done()
   const status = Number(res.status) || 200
-  // const message = res.data.msg || errorCode[status] || errorCode['default']
+  const message = res.data.msg || errorCode[status] || errorCode['default']
   if (status === 401 || res.data.code === 401) {
     store.dispatch('FedLogOut').then(() => {
       router.push({ path: '/login' })
@@ -79,9 +79,8 @@ axios.interceptors.response.use(res => {
     //     type: 'error',
     //   })
     // }
-    console.log('res', res)
-    return res
-    // return Promise.reject(new Error(message))
+    // return res
+    return Promise.reject(new Error(message))
   } else {
     return res
   }

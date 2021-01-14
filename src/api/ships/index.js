@@ -147,7 +147,7 @@ export function exportShipExcel (params) {
 }
 export function exportShipNameExcel (params) {                                    
   return exportDownload({
-    url: 'tmlms/tybmlmsExcelExport/downShipCrewTwo ',
+    url: 'tmlms/tybmlmsExcelExport/downShipCrewTwoOld ',
     data: params,                             
     title: params.shipName,
   })

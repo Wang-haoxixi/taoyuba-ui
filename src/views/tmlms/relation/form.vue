@@ -11,6 +11,10 @@
 import editForm from './edit'
 import { initNow } from '@/util/date'
 export default {
+  props: {
+    status: String,
+    id: String,
+  },
   components: {
     editForm,
   },
@@ -21,7 +25,6 @@ export default {
         backPath: null,
         backFunction: () => { this.onGoBack() },
       },
-      status: '',
     }
   },
   computed: {
@@ -36,19 +39,28 @@ export default {
       return '联系记录'
     },
   },
-  mounted () {
-    let id = this.$route.query.id
-    this.status = this.$route.query.status
-    if (id) {
-      this.$refs.editForm.getList(id)
-    }
-    if (this.status === 'add') {
-      this.$set(this.$refs.editForm.form, 'relationshipTime', initNow())
-    }
-  },
+  // mounted () {
+  //   let id = this.$route.query.id
+  //   this.status = this.$route.query.status
+  //   if (id) {
+  //     this.$refs.editForm.getList(id)
+  //   }
+  //   if (this.status === 'add') {
+  //     this.$set(this.$refs.editForm.form, 'relationshipTime', initNow())
+  //   }
+  // },
   methods: {
+    open (id) {
+      if (id) {
+        this.$refs.editForm.getList(id)
+      }
+      if (this.status === 'add') {
+        this.$set(this.$refs.editForm.form, 'relationshipTime', initNow())
+      }
+    },
     onGoBack () {
-      this.$router.history.go(-1)
+      // this.$router.history.go(-1)
+      this.$emit('go-back')
     },
     handleSubmit () {
       this.$refs.editForm.handleSubmit()

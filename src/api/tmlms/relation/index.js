@@ -73,3 +73,11 @@ export function exportPage (data) {
     })
   })
 }
+
+export function getStatistics (data) {
+  return request({
+    url: '/tmlms/statistic/relationRecordByDay',
+    method: 'get',
+    params: data,
+  })
+}
