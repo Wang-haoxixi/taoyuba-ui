@@ -20,7 +20,7 @@
               </el-option>
             </el-select>
           </span> -->
-          <el-button size="small"  @click="getData">搜索</el-button>
+          <el-button size="small" @click="onSearch">搜索</el-button>
         </div>
       </div>
         <el-table
@@ -48,6 +48,7 @@
           background
           layout="total, prev, pager, next, jumper"
           :total="total"
+          :current-page.sync="params.current"
           :page-size="params.size"
           @current-change="currentChange">
         </el-pagination>
@@ -107,6 +108,10 @@ export default {
     }
   },
   methods: {
+    onSearch () {
+      this.params.current = 1
+      this.getData()
+    },
     // 分页
     currentChange (val) {
       this.params.current = val

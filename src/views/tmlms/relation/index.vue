@@ -6,7 +6,7 @@
         <template slot="left">
           <!-- roles.indexOf(112) !== -1" -->
           <iep-button @click="handleAdd" type="primary" v-if="relation_ship_add && roles.indexOf(112) !== -1">新增</iep-button>
-          <!-- <iep-button @click="handleStatistics" type="default" v-if="relation_ship_statistics && (roles.indexOf(111) !== -1)">联系记录统计</iep-button> -->
+          <iep-button @click="handleStatistics" type="default" v-if="relation_ship_statistics && (roles.indexOf(111) !== -1)">联系记录统计</iep-button>
           <!-- <iep-button @click="handleExport" v-if="relation_ship_export && roles.indexOf(112) !== -1" :loading="exportBtnLoading" type="default" plain>导出</iep-button> -->
         </template>
         <template slot="right">
@@ -44,7 +44,7 @@
               </el-date-picker>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="getList">搜索</el-button>
+              <el-button type="primary" @click="onSearch">搜索</el-button>
             </el-form-item>
           </el-form>
         </template>
@@ -52,6 +52,7 @@
       <el-table
         :data="pagedTable"
         stripe
+        :loading="tableLoading"
         style="width: 100%">
         <el-table-column
           v-if="roles.indexOf(111) !== -1 || roles.indexOf(1) !== -1"
@@ -151,6 +152,7 @@ export default {
       relation_ship_delete: false,
       relation_ship_export: false,
       relation_ship_statistics: false,
+      tableLoading: false,
     }
   },
   computed: {
@@ -169,6 +171,10 @@ export default {
     this.relation_ship_statistics = this.permissions['relation_ship_statistics']
   },
   methods: {
+    onSearch () {
+      this.params.current = 1
+      this.getList()
+    },
     onGoBack () {
       this.show = false
       this.getList()
@@ -208,11 +214,15 @@ export default {
         params.endDate = params.rangeTime[1]
       }
       delete params.rangeTime
+      this.tableLoading = true
       getPage(params).then(({ data }) => {
         if (data.code === 0) {
           this.pagedTable = data.data.records
           this.total = data.data.total
         }
+        this.tableLoading = false
+      }).catch(() => {
+        this.tableLoading = false
       })
     },
     handleAdd () {

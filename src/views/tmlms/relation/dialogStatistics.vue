@@ -2,7 +2,7 @@
   <el-dialog
     title="联系记录统计"
     :visible.sync="dialogVisible"
-    width="500px"
+    width="70%"
     :before-close="close">
     <div>
       <div class="header-content clearfix">
@@ -30,8 +30,31 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="result-content" v-loading="loading">
-        <template v-if="data.length">
+      <div class="result-content" >
+         <el-table
+          :data="data"
+          v-loading="loading"
+          height="250"
+          style="width: 100%">
+           <el-table-column
+            prop="village_name"
+            width="200px"
+            label="基层名">
+          </el-table-column>
+          <el-table-column
+            prop="number"
+            width="160px"
+            label="联系数量">
+            <template slot-scope="scope">
+              <span>联系{{scope.row.number}}艘船</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="shipNames"
+            label="渔船名">
+          </el-table-column>
+        </el-table>
+        <!-- <template v-if="data.length">
           <p class="text" v-for="(item, index) in data" :key="index">
             {{item.village_name}}联系{{item.number}}艘船<br/>
             <span class="shipNames">{{item.shipNames}}</span>
@@ -39,7 +62,7 @@
         </template>
         <template v-else>
           <p class="empty-text">暂无数据</p>
-        </template>
+        </template> -->
       </div>
     </div>
     <span slot="footer" class="dialog-footer">
@@ -50,6 +73,7 @@
 <script>
 import { getStatistics } from '@/api/tmlms/relation'
 import { mapGetters } from 'vuex'
+import moment from 'moment'
 export default {
   data () {
     return {
@@ -67,11 +91,17 @@ export default {
   methods: {
     open () {
       this.dialogVisible = true
+      this.startTime = this.getYesterday()
     },
     close () {
       this.dialogVisible = false
       this.data = []
       this.startTime = undefined
+    },
+    getYesterday () {
+      let yesterday = +new Date() - 3600 * 1000 * 24
+      let date = moment(yesterday).format('YYYY-MM-DD')
+      return date
     },
     onSubmit () {
       if (this.startTime) {

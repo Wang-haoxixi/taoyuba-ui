@@ -9,7 +9,7 @@
         <span class="width180"><el-input v-model.trim="params.shipowner" placeholder="船东" size="small" clearable></el-input></span>
         <span class="width180"><el-input v-model.trim="params.crewRealName" placeholder="船员" size="small" clearable></el-input></span>
         <span class="width180"><el-input v-model.trim="params.shipName" placeholder="渔船名" size="small" clearable></el-input></span>
-        <el-button size="small"  @click="getList">搜索</el-button>
+        <el-button size="small"  @click="onSearch">搜索</el-button>
       </template>
     </operation-container>
     <el-table
@@ -117,6 +117,10 @@ export default {
     ]),
   },
   methods: {
+    onSearch () {
+      this.params.current = 1
+      this.getList()
+    },
     getList () {
       let params = {}
       for(let key in this.params) {

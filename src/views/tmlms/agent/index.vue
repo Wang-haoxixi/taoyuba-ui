@@ -18,7 +18,7 @@
               </el-option>
             </el-select>
           </span>
-          <el-button size="small" @click="getData">搜索</el-button>
+          <el-button size="small" @click="onSearch">搜索</el-button>
         </div>
       </div>
         <el-table
@@ -129,6 +129,10 @@ export default {
     }
   },
   methods: {
+    onSearch () {
+      this.params.current = 1
+      this.getData()
+    },
     // 分页
     currentChange (val) {
       this.params.current = val

@@ -27,7 +27,8 @@ export default {
     },
     async loadTable (param, requestFn, fn = m => m) {
       this.isLoadTable = true
-      const { data } = await requestFn({ ...param, ...this.pageOption })
+
+      const { data } = await requestFn({ ...this.pageOption, ...param })
       const { records, size, total, current } = data.data
       const isBug = total / size + 1 === current
       if (isBug && total !== 0) {

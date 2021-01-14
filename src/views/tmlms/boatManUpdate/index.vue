@@ -15,7 +15,7 @@
           clearable
           placeholder="选择日期">
         </el-date-picker>
-        <el-button size="small"  @click="getList()">搜索</el-button>
+        <el-button size="small"  @click="onSearch">搜索</el-button>
       </template>
     </operation-container>
     <div>
@@ -97,6 +97,10 @@ export default {
     },
   },
   methods: {
+    onSearch () {
+      this.params.current = 1
+      this.getList()
+    },
     getList () {
       getPageByBad(this.params).then(({ data }) => {
         if (data.code === 0) {

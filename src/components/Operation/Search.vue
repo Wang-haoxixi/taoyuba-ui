@@ -1,6 +1,6 @@
 <template>
   <div class="input-wrapper">
-    <el-input :placeholder="placeholder" prefix-icon="el-icon-search" size="small" @keyup.enter.native="handleSearch" v-model="input" :maxlength="20">
+    <el-input :placeholder="placeholder" prefix-icon="el-icon-search" size="small" @keyup.enter.native="handleSearch" v-model.trim="input" :maxlength="20">
       <iep-button class="search-btn" slot="append" @click="handleSearch">搜索</iep-button>
     </el-input>
     <el-popover v-if="advanceSearch" placement="bottom-end" width="350" trigger="click">

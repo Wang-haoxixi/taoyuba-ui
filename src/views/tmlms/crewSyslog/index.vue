@@ -88,6 +88,7 @@
           layout="total, prev, pager, next, jumper"
           :total="total"
           :page-size="params.size"
+          :current-page.sync="params.current"
           @current-change="currentChange">
         </el-pagination>
       </div>

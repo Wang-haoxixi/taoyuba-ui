@@ -8,7 +8,7 @@
           <span><el-input v-model.trim="params.contactName" placeholder="请输入联系人" size="small" clearable></el-input></span>
           <span><el-input v-model.trim="params.phone" placeholder="请输入联系电话" size="small" clearable></el-input></span>   
           <span><el-input v-model.trim="params.address" placeholder="请输入机构地址" size="small" clearable></el-input></span>
-          <el-button size="small"  @click="getData">搜索</el-button>
+          <el-button size="small"  @click="onSearch">搜索</el-button>
         </div>
       </div>
         <el-table
@@ -80,6 +80,10 @@ export default {
     }
   },
   methods: {
+    onSearch () {
+      this.params.current = 1
+      this.getData()
+    },
     // 分页
     currentChange (val) {
       this.params.current = val
