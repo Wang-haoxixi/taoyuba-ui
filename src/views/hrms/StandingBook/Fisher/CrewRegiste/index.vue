@@ -9,7 +9,7 @@
         <template slot="right">
           <span><el-input v-model.trim="params.realName" placeholder="请输入姓名" size="small" clearable></el-input></span>
           <span><el-input v-model.trim="params.idcard" placeholder="请输入身份证号" size="small" clearable></el-input></span>
-          <el-button size="small"  @click="loadPage(params)">搜索</el-button>
+          <el-button size="small"  @click="onSearch(params)">搜索</el-button>
           <!-- <el-button @click="backPage">返回</el-button> -->
         </template>
       </operation-container>
@@ -84,6 +84,15 @@ export default {
     }
   },
   created () {
+    let query = sessionStorage.getItem('query')
+    if (sessionStorage.getItem('query')) {
+      let val = JSON.parse(query)
+      for (let key in this.params) {
+        if (val[key]) {
+          this.params[key] = val[key]
+        }
+      }
+    }
     this.loadPage()
     this.isManager()
     this.getTitle()
@@ -121,6 +130,10 @@ export default {
     // getShipNo (){
     //   return this.$route.query.shipNo
     // },
+    onSearch (param) {
+      sessionStorage.setItem('query', JSON.stringify(this.params))
+      this.loadPage(param)
+    },
     async loadPage (param = this.searchForm) { 
       // param.shipNo = this.$route.params.shipNo
       // param.status = 1

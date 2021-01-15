@@ -90,6 +90,9 @@ export default {
       })
     },
     goTo (val) {
+      if (val.path !== this.$route.path) {
+        sessionStorage.removeItem('query')
+      }
       this.$router.push({
         path: val.path,
       })

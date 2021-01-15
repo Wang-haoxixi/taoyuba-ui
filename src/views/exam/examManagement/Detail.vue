@@ -6,7 +6,7 @@
         <el-row>
           <el-col :span="12">            
             <el-form-item label="考试名称" prop="examName">
-              <el-input v-model="form.examName"></el-input>
+              <el-input v-model="form.examName" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
         </el-row> 
@@ -125,8 +125,8 @@ export default {
         examName:'',
         kind:'',//类型
         level:'',//等级
-        answerTime:60,
-        passScore:80,
+        answerTime:90,
+        passScore:60,
         goodScore:90,
         examExplain:'',
         openScope:'1',
@@ -236,7 +236,18 @@ export default {
     
   },
   watch: {
-
+    'form.kind': {
+      handler (newVal) {
+        let name = newVal + this.form.level
+        this.$set(this.form, 'examName', name)
+      },
+    },
+    'form.level': {
+      handler (newVal) {
+        let name = this.form.kind + newVal
+        this.$set(this.form, 'examName', name)
+      },
+    },
   },
 }
 </script>

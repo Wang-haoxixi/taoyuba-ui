@@ -49,6 +49,7 @@
             </el-form>
             
               <el-table
+              :loading="tableLoading"
               :data="crewList"
               >
           <el-table-column prop="realName" label="姓名" >
@@ -117,6 +118,7 @@ export default {
     return {        
       certificateColumns,
       saveBtnLoading: false,
+      tableLoading: false,
       form: {
           address: '',
           idcard: '',
@@ -513,6 +515,9 @@ export default {
             this.form.idcardPhoto = ''
             this.form.facePhoto = ''
             this.form.certList = []
+            this.form.idcardPhoto = ''
+            this.form.photoFront = ''
+            this.form.photoReverse = ''
           }
         })
       } else {
@@ -579,7 +584,7 @@ export default {
         this.$socket.emit('startRead')
         // this.sockets.listener.subscribe('card message', (msg) => {
           this.sockets.subscribe('card message', (msg) => {
-          var base = new Base64()  			  
+          var base = new Base64()
           //2.解密后是json字符串mou
           var result1 = base.decode(msg)
           var data = eval('('+result1+')')
@@ -587,6 +592,9 @@ export default {
               let cardMsg = {}
               let crew = {}
               let flag = false
+              this.form.idcardPhoto = data.photobase64 ? `data:image/png;base64,${data.photobase64}` : ''
+              this.form.photoFront = data.frontImg ? `data:image/png;base64,${data.frontImg}` : ''
+              this.form.photoReverse = data.backImg ? `data:image/png;base64,${data.backImg}` : ''
               this.form.realName = data.name
               this.form.birthday = data.born.slice(0,4)+'-'+data.born.slice(4,6)+'-'+data.born.slice(6)
               this.form.idcard = data.cardno
