@@ -105,23 +105,26 @@ import { getUserInfo } from '@/api/login'
 import { getArea } from '@/api/post/admin'
 import keyBy from 'lodash/keyBy'
 import { mapGetters } from 'vuex'
+import queryMixin from '@/mixins/query'
 export default {
+  mixins: [queryMixin],
   data () {
     return {
       crewregisterList: [],
       provinces:[],
       total: 0,
       // 查询数据
-      params: {       
-        current: 1,   
+      params: {
+        current: 1,
         size: 10,
         idcard: '',
         realName: '',
         phone: '',
         status: '',
+        shipName: '',
         // timeLists: '',
       },
-      exportParams: {                                       
+      exportParams: {
         idcard: '',
         realName: '',
         status: '',
@@ -195,7 +198,7 @@ export default {
       }
     },
     //字典
-    dictJS (item, scope) {                           
+    dictJS (item, scope) {
       if(scope.row[item.value]){
           if(scope.row[item.value] === '0')  return '暂无'
       return keyBy(this.dictGroup[item.dictName], 'value')[scope.row[item.value]].label
@@ -204,7 +207,7 @@ export default {
       }
     },
     // 分页
-    currentChange (val) {                      
+    currentChange (val) {
       this.params.current = val
       this.getData()
     },
@@ -225,7 +228,7 @@ export default {
         this.provinces = data.data.map(item=>{
           return {
             label: item.name,
-            value: item.areaCode,  
+            value: item.areaCode,
           }
         })
       })
@@ -242,7 +245,7 @@ export default {
                 item.certNames=item.certNames+data.label
             }
             })
-          }) 
+          })
           if(item.sourceType == 1){
             item.sourceType = '合同'
           }else if(item.sourceType == 2){
@@ -260,13 +263,14 @@ export default {
       })
     },
     //搜索
-    getParamData () {   
+    getParamData () {
       this.params.current = 1
+      this.setQuery()
       this.getData()
     },
     // 删除
-    handleDel (id) {                                                                            
-        this.$confirm('此操作将永久删除该船员, 是否继续?', '提示', {                                            
+    handleDel (id) {
+        this.$confirm('此操作将永久删除该船员, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
@@ -280,7 +284,7 @@ export default {
           }).catch(err=>{
             this.$message.error(err.data.msg)
           })
-        }).catch(() => {         
+        }).catch(() => {
         })
     },
     // 审核
@@ -312,9 +316,9 @@ export default {
         this.showSwith=true
       }else{
         this.showSwith=false
-      } 
+      }
     },
-    exportInfo () {                               
+    exportInfo () {
       exportExcel (this.exportParams).catch(err => {
         this.$message({
           type: 'warning',
@@ -330,6 +334,7 @@ export default {
     ]),
   },
   created () {
+    this.getQuery()
     this.getData()
     this.isManager()
     this.getProvince()
@@ -346,7 +351,7 @@ export default {
     },
   },
   watch: {
-      'params.idcard': function (val) {          
+      'params.idcard': function (val) {
             this.exportParams.idcard  = val
       },
       'params.realName': function (val) {
@@ -354,11 +359,11 @@ export default {
       },
       'params.phone': function (val) {
             this.exportParams.phone  = val
-      },    
-      'params.remark': function (val) {                
+      },
+      'params.remark': function (val) {
             this.exportParams.remark  = val
       },
-      'params.workStatus': function (val) {                          
+      'params.workStatus': function (val) {
             this.exportParams.workStatus  = val
       },
   },

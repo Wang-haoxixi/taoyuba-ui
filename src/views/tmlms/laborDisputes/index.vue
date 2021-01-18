@@ -86,7 +86,9 @@
 import { getPage, removePage } from '@/api/tmlms/laborDisputes/index'
 import maps from './maps'
 import { mapGetters } from 'vuex'
+import queryMixin from '@/mixins/query'
 export default {
+  mixins: [queryMixin],
   data () {
     return {
       maps,
@@ -94,6 +96,8 @@ export default {
         current: 1,
         size: 10,
         shipName: '',
+        shipowner: '',
+        crewRealName: '',
       },
       status: 'create',
       total: 10,
@@ -105,6 +109,7 @@ export default {
     }
   },
   mounted () {
+    this.getQuery()
     this.getList()
     this.labor_disputes_add = this.permissions['labor_disputes_add']
     this.labor_disputes_edit = this.permissions['labor_disputes_edit']
@@ -119,6 +124,7 @@ export default {
   methods: {
     onSearch () {
       this.params.current = 1
+      this.setQuery()
       this.getList()
     },
     getList () {
