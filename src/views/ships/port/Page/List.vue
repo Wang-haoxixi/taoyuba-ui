@@ -15,11 +15,12 @@
           <span><el-input v-model="params.address" placeholder="港口地址" size="small" clearable></el-input></span>
           <span>
             <el-select
-            v-model="form.provinceId"
-            @change="choseProvince(form.provinceId)"
-            style="width: 33%!important"
-            size="small"
-            placeholder="省">
+              clearable
+              v-model="form.provinceId"
+              @change="choseProvince(form.provinceId)"
+              style="width: 33%!important"
+              size="small"
+              placeholder="省">
               <el-option
               v-for="item in province"
               :key="item.id"
@@ -29,6 +30,7 @@
               </el-option>
             </el-select>
             <el-select
+                clearable
                 v-model="form.cityId"
                 @change="choseCity(form.cityId)"
                 placeholder="市" style="width: 33%!important" size="small" >
@@ -40,6 +42,7 @@
                 </el-option>
             </el-select>
             <el-select
+                clearable
                 v-model="form.districtId"
                 placeholder="区" style="width: 33%!important" size="small" >
                 <el-option

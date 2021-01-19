@@ -18,30 +18,30 @@
             value-format="yyyy-MM-dd"  size="small" clearable></el-date-picker>
           </span>
           <!-- <span><el-input v-model="params.idcard" placeholder="请输入船员身份证" size="small" clearable></el-input></span> -->
-          <el-button size="small"  @click="loadPage(params)">搜索</el-button>
+          <el-button size="small"  @click="onSearch(params)">搜索</el-button>
         </template>
       </operation-container>
-      <iep-table                    
-              :isLoadTable="isLoadTable"
-              :pagination="pagination"
-              :columnsMap="columnsMap"
-              :pagedTable="pagedTable"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              @selection-change="handleSelectionChange"
-              is-mutiple-selection>
+      <iep-table
+        :isLoadTable="isLoadTable"
+        :pagination="pagination"
+        :columnsMap="columnsMap"
+        :pagedTable="pagedTable"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        @selection-change="handleSelectionChange"
+        is-mutiple-selection>
         <el-table-column prop="boatMan" label="船员适任" width="100">
         <template slot-scope="scope">
-          <iep-button size="mini" :type="type">{{certStandard (scope.row.id,scope.row.shipId)}}</iep-button>             
+          <iep-button size="mini" :type="type">{{certStandard (scope.row.id,scope.row.shipId)}}</iep-button>
         </template>
         </el-table-column>
           <el-table-column prop="operation" label="操作" width="200">
-          <template slot-scope="scope">                 
-            <operation-wrapper>                                   
+          <template slot-scope="scope">
+            <operation-wrapper>
               <iep-button size="mini" type="primary" @click="handleView(scope.row.id,scope.row.shipId)">渔船配员</iep-button>
               <!-- <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)" v-if="manager">船员管理</iep-button> -->
               <!-- <iep-button plain @click="handleEdit(scope.row.id)" type="primary" >编辑</iep-button> -->
-              <iep-button @click="handleDetail(scope.row.id,scope.row.shipId)">详情</iep-button>     
+              <iep-button @click="handleDetail(scope.row.id,scope.row.shipId)">详情</iep-button>
               <!-- <iep-button type="warning" @click="handleDelete(scope.row)" v-if="manager"><i class="el-icon-delete"></i></iep-button> -->
             </operation-wrapper>
           </template>
@@ -56,11 +56,12 @@ import { getArea } from '@/api/post/admin'
 // import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
+import queryMixin from '@/mixins/query'
 export default {
   components: {
     // advanceSearch,
   },
-  mixins: [mixins],
+  mixins: [mixins, queryMixin],
   data () {
     return {
       columnsMap,
@@ -72,8 +73,11 @@ export default {
       params: {
         current: 1,
         size: 10,
+        shipName: '',
+        startDate: '',
+        endDate: '',
       },
-      exportParams: {   
+      exportParams: {
         shipName: '',
         startDate:'',
         endDate:'',
@@ -83,15 +87,32 @@ export default {
     }
   },
   created () {
+    this.getQuery()
+    this.pagination.current = this.params.current
+    this.pagination.size = this.params.size
     getArea(0).then(({ data })=>{
       console.log(data)
       this.province=data.data
     })
-    this.loadPage()
+    this.loadPage(this.params)
     // getCrewCert()
   },
-  
   methods: {
+    onSearch (params) {
+      params.current = 1
+      this.setQuery(params)
+      this.loadPage(params)
+    },
+    handleCurrentChange (val) {
+      this.pageOption.current = val
+      this.setQuery({current: val})
+      this.loadPage()
+    },
+    handleSizeChange (val) {
+      this.pageOption.size = val
+      this.setQuery({size: val})
+      this.loadPage()
+    },
     handleAdd () {
       this.$router.push({
         path: '/ship_port/detail/create/0',
@@ -111,7 +132,7 @@ export default {
       })
       return this.boatMan
     },
-    exportInfo () {                               
+    exportInfo () {
       exportExcel (this.exportParams).catch(err => {
         this.$message({
           type: 'warning',
@@ -131,7 +152,7 @@ export default {
         query:{shipId:shipId},
       })
     },
-    handleSelectionChange (val) {     
+    handleSelectionChange (val) {
       this.multipleSelection = val.map(m => m.id)
     },
     async loadPage (param = this.searchForm) {
@@ -185,13 +206,13 @@ export default {
     // },
   },
   watch: {
-    'params.shipName': function (val) {          
+    'params.shipName': function (val) {
           this.exportParams.shipName  = val
-    },  
-    'params.timeLists': function (val) {                
+    },
+    'params.timeLists': function (val) {
           this.exportParams.startDate  = val[0]
           this.exportParams.endDate  = val[1]
     },
-},
+  },
 }
 </script>

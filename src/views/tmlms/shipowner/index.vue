@@ -83,6 +83,7 @@
           layout="total, prev, pager, next, jumper"
           :total="total"
           :page-size="params.size"
+          :current-page.sync="params.current"
           @current-change="currentChange">
         </el-pagination>
       </div>
@@ -92,7 +93,9 @@
 <script>
 import { getShipowner,deleteShipowner,statusShipownerByidcard, exportExcel } from '@/api/tmlms/shipowner'
 import { getUserInfo } from '@/api/login'
+import queryMixin from '@/mixins/query'
 export default {
+  mixins: [queryMixin],
   data () {
     return {
       shipownerList: [],
@@ -155,6 +158,7 @@ export default {
     // 分页
     currentChange (val) {
       this.params.current = val
+      this.setQuery({ current: this.params.current })
       this.getData()
     },
     // 跳转新增页面
@@ -236,6 +240,7 @@ export default {
     //搜索
     getParamData () {
       this.params.current = 1
+      this.setQuery()
       this.getData()
     },
     exportInfo () {           
@@ -255,6 +260,7 @@ export default {
   },
   created () {            
     // console.log(this.smdj) 
+    this.getQuery()
     this.getData()
     this.isManager()
   },

@@ -284,6 +284,7 @@ export default {
     // 分页
     currentChange (val) {
       this.params.current = val
+      this.setQuery({ current: this.params.current })
       this.getData()
     },
     // 跳转新增页面

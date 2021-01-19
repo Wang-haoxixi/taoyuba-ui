@@ -18,7 +18,7 @@
             value-format="yyyy-MM-dd"  size="small"></el-date-picker>
           </span>
           <!-- <span><el-input v-model="params.idcard" placeholder="请输入船员身份证" size="small" clearable></el-input></span> -->
-          <el-button size="small"  @click="loadPage(params)">搜索</el-button>
+          <el-button size="small"  @click="onSearch(params)">搜索</el-button>
         </template>
       </operation-container>
       <iep-table
@@ -56,11 +56,12 @@ import { outList,getCrewCert,exportExcel } from '@/api/ships/inout'
 // import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
+import queryMixin from '@/mixins/query'
 export default {
   components: {
     // advanceSearch,
   },
-  mixins: [mixins],
+  mixins: [mixins, queryMixin],
   data () {
     return {
       columnsMap,
@@ -72,8 +73,11 @@ export default {
       params: {
         current: 1,
         size: 10,
+        shipName: '',
+        startDate:'',
+        endDate:'',
       },
-      exportParams: {   
+      exportParams: {
         shipName: '',
         startDate:'',
         endDate:'',
@@ -83,17 +87,27 @@ export default {
     }
   },
   created () {
-    // getArea(0).then(({ data })=>{
-    //   console.log(data)
-    //   this.province=data.data
-    // })
-      this.loadPage()       
-    // getCrewCert()    
+    this.getQuery()
+    this.$set(this.pagination, 'current', this.params.current)
+    this.$set(this.pagination, 'size', this.params.size)
+    this.loadPage(this.params)
   },
-  mounted () {              
-        //
-  },    
   methods: {
+    onSearch (params) {
+      params.current = 1
+      this.setQuery(params)
+      this.loadPage(params)
+    },
+    handleCurrentChange (val) {
+      this.pageOption.current = val
+      this.setQuery({current: val})
+      this.loadPage()
+    },
+    handleSizeChange (val) {
+      this.pageOption.size = val
+      this.setQuery({size: val})
+      this.loadPage()
+    },
     handleAdd () {
       this.$router.push({
         path: '/ship_port/detail/create/0',

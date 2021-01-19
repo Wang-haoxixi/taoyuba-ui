@@ -25,6 +25,7 @@
         </template>
       </operation-container> -->
       <iep-table
+        :isMutipleSelection="false"
         :isLoadTable = "isLoadTable"
         :pagination="pagination"
         :columnsMap="CrewRegisteColumnsMap"

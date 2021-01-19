@@ -198,6 +198,7 @@ export default {
     },
     currentChange (val) {
       this.params.current = val
+      this.setQuery({ current: this.params.current })
       this.getList()
     },
     getLabel (value, dic) {

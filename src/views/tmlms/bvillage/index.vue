@@ -68,6 +68,7 @@
           background layout="total, prev, pager, next, jumper"
           :total="total"
           :page-size="params.size"
+          :current-page.sync="params.current"
           @current-change="currentChange">
         </el-pagination>
       </div>
@@ -76,7 +77,9 @@
 </template>
 <script>
 import { getVillage,deleteVillage,statusVillage } from '@/api/tmlms/bvillage'
+import queryMixin from '@/mixins/query'
 export default {
+  mixins: [queryMixin],
   data () {
     return {
       shipownerList: [],
@@ -133,12 +136,14 @@ export default {
   },
   methods: {
     onSearch () {
+      this.setQuery()
       this.params.current = 1
       this.getData()
     },
     // 分页
     currentChange (val) {
       this.params.current = val
+      this.setQuery({ current: this.params.current })
       this.getData()
     },
     // 跳转新增页面
@@ -211,6 +216,7 @@ export default {
   computed: {
   },
   created () {
+    this.getQuery()
     this.getData()
   },
   filters: {

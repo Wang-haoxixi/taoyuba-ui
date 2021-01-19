@@ -15,18 +15,18 @@
           <span><el-input v-model="params.shipNo" placeholder="请输入渔船编号" size="small" clearable></el-input></span>
           <span><el-input v-model="params.shipowner" placeholder="请输入持证人姓名" size="small" clearable></el-input></span>
           <span><el-input v-model="params.shipownerIdcard" placeholder="请输入持证人身份证" size="small" clearable></el-input></span>
-          <el-button size="small"  @click="loadPage(params)">搜索</el-button>
+          <el-button size="small"  @click="onSearch(params)">搜索</el-button>
         </template>
       </operation-container>
       <iep-table
-              :isLoadTable="isLoadTable"
-              :pagination="pagination"
-              :columnsMap="columnsMap"
-              :pagedTable="pagedTable"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              @selection-change="handleSelectionChange"
-              is-mutiple-selection>
+        :isLoadTable="isLoadTable"
+        :pagination="pagination"
+        :columnsMap="columnsMap"
+        :pagedTable="pagedTable"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        @selection-change="handleSelectionChange"
+        is-mutiple-selection>
         <el-table-column prop="operation" label="操作" width="400">
           <template slot-scope="scope">
             <operation-wrapper>
@@ -54,9 +54,10 @@ import { getUserInfo } from '@/api/login'
 import CertStandard from '../component'
 import groupBy from 'lodash/groupBy'
 import  { mapGetters } from  'vuex'
+import queryMixin from '@/mixins/query'
 export default {
   components: { CertStandard },
-  mixins: [mixins],
+  mixins: [mixins, queryMixin],
   data () {
     return {
       columnsMap,
@@ -86,7 +87,14 @@ export default {
     }
   },
   created () {
-    this.loadPage()
+    this.getQuery()
+    // console.log(111)
+    this.$set(this.pagination, 'current', this.params.current)
+    this.$nextTick(() => {
+      // this.pagination.current = this.params.current
+      console.log('this.pagination', this.pagination)
+    })
+    this.loadPage(this.params)
   },
 computed: {
     ...mapGetters([
@@ -95,6 +103,21 @@ computed: {
     ]),
  },
   methods: {
+    onSearch (params) {
+      params.current = 1
+      this.setQuery(params)
+      this.loadPage(params)
+    },
+    handleCurrentChange (val) {
+      this.pageOption.current = val
+      this.setQuery({current: val})
+      this.loadPage()
+    },
+    handleSizeChange (val) {
+      this.pageOption.size = val
+      this.setQuery({size: val})
+      this.loadPage()
+    },
     handleSelectionChange (val) {
       this.multipleSelection = val.map(m => m.id)
     },

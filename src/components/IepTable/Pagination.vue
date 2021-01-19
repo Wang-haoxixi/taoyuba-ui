@@ -1,6 +1,6 @@
 <template>
   <div class="content-footer">
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="paginationOption.current" :page-sizes="[10, 20, 30, 40]" :page-size="paginationOption.size" layout="total, sizes, prev, pager, next" :total="paginationOption.total" :pager-count="5" prev-text="上一页" next-text="下一页" background>
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="paginationOption.current" :page-sizes="[10, 20, 30, 40]" :page-size="paginationOption.size" layout="total, sizes, prev, pager, next" :total="paginationOption.total" :pager-count="5" prev-text="上一页" next-text="下一页" background>
     </el-pagination>
   </div>
 </template>

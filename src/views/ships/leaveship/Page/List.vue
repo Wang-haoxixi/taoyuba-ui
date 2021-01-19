@@ -14,10 +14,11 @@
               value-format="yyyy-MM-dd HH:mm:ss"  size="small"></el-date-picker></span>
           <span><el-input v-model.trim="params.realName" placeholder="请输入船员姓名" size="small" clearable></el-input></span>
           <span><el-input v-model.trim="params.idcard" placeholder="请输入船员身份证" size="small" clearable></el-input></span>
-          <el-button size="small" @click="loadPage(params)">搜索</el-button>
+          <el-button size="small" @click="onSearch(params)">搜索</el-button>
         </template>
       </operation-container>
       <iep-table
+        :isMutipleSelection="false"
         :isLoadTable="isLoadTable"
         :pagination="pagination"
         :columnsMap="columnsMap"
@@ -35,11 +36,12 @@ import { getCrewSyslog } from '@/api/ships/shipsyslog'
 // import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
+import queryMixin from '@/mixins/query'
 export default {
   components: {
     // advanceSearch,
   },
-  mixins: [mixins],
+  mixins: [mixins, queryMixin],
   data () {
     return {
       columnsMap,
@@ -55,9 +57,27 @@ export default {
     }
   },
   created () {
-    this.loadPage()
+    this.getQuery()
+    this.$set(this.pagination, 'current', this.params.current)
+    this.$set(this.pagination, 'size', this.params.size)
+    this.loadPage(this.params)
   },
   methods: {
+    onSearch (params) {
+      params.current = 1
+      this.setQuery(params)
+      this.loadPage(params)
+    },
+    handleCurrentChange (val) {
+      this.pageOption.current = val
+      this.setQuery({current: val})
+      this.loadPage()
+    },
+    handleSizeChange (val) {
+      this.pageOption.size = val
+      this.setQuery({size: val})
+      this.loadPage()
+    },
     async loadPage (param = this.searchForm) {
       //  let userId = this.$store.getters.userInfo.userId
       // let idcard = this.$store.getters.userInfo.idCard

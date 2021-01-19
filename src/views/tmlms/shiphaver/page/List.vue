@@ -4,7 +4,7 @@
       <page-header title="渔船经营人"></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button @click="handleAdd()" type="primary" v-if="manager">新增</iep-button>
+          <!-- <iep-button @click="handleAdd()" type="primary" v-if="manager">新增</iep-button> -->
         </template>
         <template slot="right">
           <span><el-input v-model.trim="params.realname" placeholder="请输入姓名" size="small" clearable></el-input></span>
@@ -13,6 +13,7 @@
         </template>
       </operation-container>
       <iep-table
+        :isMutipleSelection="false"
         :isLoadTable="isLoadTable"
         :pagination="pagination"
         :columnsMap="columnsMap"
@@ -67,7 +68,7 @@
         <el-table-column prop="operation" label="操作" width="300">
           <template slot-scope="scope">
             <operation-wrapper>
-              <iep-button plain @click="handleEdit(scope.row.id)" v-if="manager">编辑</iep-button>
+              <!-- <iep-button plain @click="handleEdit(scope.row.id)" v-if="manager">编辑</iep-button> -->
               <iep-button @click="handleView(scope.row.vedioId)"   v-if="!scope.row.shipId">绑定渔船</iep-button>
               <iep-button type="warning" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
             </operation-wrapper>
@@ -83,9 +84,10 @@ import { getShiphaverPage,deleteShiphaver,getShiphaverDetail,reviewShiphaver } f
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
 import { getUserInfo } from '@/api/login'   
+import queryMixin from '@/mixins/query'
 export default {
-  mixins: [mixins],
-  data () {                       
+  mixins: [mixins, queryMixin],
+  data () {
     return {
       columnsMap,
       shipHaverList: [],
@@ -96,7 +98,7 @@ export default {
         realname: '',
         idcard: '',
       },
-      tybShipowner: {   
+      tybShipowner: {
             haverStatus: '',
             orgId: '',
             userId: '',
@@ -109,57 +111,76 @@ export default {
         },
     }
   },
-  created () {      
-    this.loadPage()
+  created () {
+    this.getQuery()
+    this.pagination.current = this.params.current
+    this.pagination.size = this.params.size
+    this.loadPage(this.params)
   },
-  methods: {                    
-    handleSelectionChange (val) {              
+  methods: {
+    onSearch (params) {
+      this.params.current = 1
+      this.loadPage(params)
+    },
+    handleCurrentChange (val) {
+      this.pageOption.current = val
+      this.pageOption.size = this.params.size
+      this.setQuery({current: val, size: this.params.size})
+      this.loadPage()
+    },
+    handleSizeChange (val) {
+      this.pageOption.size = val
+      this.params.size = val
+      this.setQuery({size: val})
+      this.loadPage()
+    },
+    handleSelectionChange (val) {
       this.multipleSelection = val.map(m => m.id)
     },
-    handleDelete (row) {          
+    handleDelete (row) {
       this._handleGlobalDeleteById(row.id, deleteShiphaver)
     },
-    handleAdd () {          
+    handleAdd () {
       // console.log('creathaver')
-      this.$router.push({           
+      this.$router.push({
         path: '/shiphaver/detail/create/0',
-      })      
+      })
     },
-    handleView (id) {     
+    handleView (id) {
       this.$router.push({
         path: `/shiphaver/detail/view/${id}`,
       })
     },
-    handleEdit (id) {           
-      this.$router.push({       
-        path: `/shiphaver/detail/update/${id}`,   
+    handleEdit (id) {
+      this.$router.push({
+        path: `/shiphaver/detail/update/${id}`,
       })
     },
-    async loadPage (param = this.searchForm) {                 
-      const userData = await getUserInfo().then(res => {         
+    async loadPage (param = this.searchForm) {
+      const userData = await getUserInfo().then(res => {
         return res.data.data
       })
-      if(userData.roles.indexOf(111) !== -1 || userData.roles.indexOf(1) !== -1){   
+      if(userData.roles.indexOf(111) !== -1 || userData.roles.indexOf(1) !== -1){
         this.manager = true
       }
-        let data = await this.loadTable(param, getShiphaverPage)          
-        data.records.forEach( async item => {     
+        let data = await this.loadTable(param, getShiphaverPage)
+        data.records.forEach( async item => {
               //绑定类型
               if(item.bindType === 1){
-                    this.$set(item,'type','持证人') 
+                    this.$set(item,'type','持证人')
               }else if(item.bindType  === 2){
-                    this.$set(item,'type','经营人') 
+                    this.$set(item,'type','经营人')
               }else if(item.bindType ===3){
-                      this.$set(item,'type','经营人家属') 
+                      this.$set(item,'type','经营人家属')
               }
-              if(item.status === 0 ||  item.status === 2) 
-                   this.$set(item,'swith',false)  
-              else 
-                  this.$set(item,'swith',true)  
-       })             
-        this.pagedTable = data.records    
-    },    
-   async setStatus (swith,shiphaverId) {               
+              if(item.status === 0 ||  item.status === 2)
+                   this.$set(item,'swith',false)
+              else
+                  this.$set(item,'swith',true)
+       })
+        this.pagedTable = data.records
+    },
+   async setStatus (swith,shiphaverId) {
                   this.tybShipowner.shiphaverId  = shiphaverId
                   let  shiphaver  =  await   getShiphaverDetail(shiphaverId).then(res => {
                         return res.data.data
@@ -167,29 +188,28 @@ export default {
                     this.tybShipowner.orgId  = shiphaver.orgId
                     this.tybShipowner.userId  = shiphaver.userId
                     this.tybShipowner.realName  = shiphaver.realname
-                    this.tybShipowner.idcard  = shiphaver.idcard  
+                    this.tybShipowner.idcard  = shiphaver.idcard
                     this.tybShipowner.bindType = shiphaver.bindType
-                    this.tybShipowner.shipId = shiphaver.shipId   
-          if(swith)     
+                    this.tybShipowner.shipId = shiphaver.shipId
+          if(swith)
                 this.tybShipowner.haverStatus = 1
           else
                this.tybShipowner.haverStatus = 2
-          // console.log(this.tybShipowner)            
+          // console.log(this.tybShipowner)
           reviewShiphaver(this.tybShipowner).then(res => {
-                if(res.data.data === true){   
-                        this.loadPage()       
+                if(res.data.data === true){
+                        this.loadPage()
                       this.$message({
                     type: 'success',
                     message: '审核成功!',
                   })
-                }else {     
-                   this.$message.error('审核失败')    
+                }else {
+                   this.$message.error('审核失败')
                 }
-          }).catch(err => {           
-                     this.$message.error(err.data.msg)    
+          }).catch(err => {
+                     this.$message.error(err.data.msg)
           })
     },
-
   },
 }
-</script>   
+</script>

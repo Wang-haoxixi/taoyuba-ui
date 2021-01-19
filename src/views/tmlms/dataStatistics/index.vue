@@ -1,5 +1,5 @@
 <template>
-  <div id="statisrics">
+  <div id="statisrics" style="min-width: 1200px;">
     <el-row>
       <el-col :span="24">
         <h1 class="chart-title">{{orgTitle}}渔业船员大数据统计墙</h1>
@@ -18,23 +18,35 @@
             :disabled="disabled"
           ></el-cascader>
         </div>
+        <div class="crew-select">
+          <el-select v-model="positionId" placeholder="职位船员" @change="onChangePositionId">
+            <el-option
+              v-for="item in positionDicMap"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </div>
       </el-col>
     </el-row>
     <el-row>
       <el-col :span="7">
         <div class="chart-bg panel">
-          <h2>职务船员数量统计</h2>
-          <div id="certTotal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
-          <div class="panel-footer"></div>
-        </div>
-        <div class="chart-bg panel">
-          <h2>职务船员工资统计</h2>
+          <div>
+            <h2>{{title}}工资统计</h2>
+          </div>
           <div id="salaryTotal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
           <div class="panel-footer"></div>
         </div>
         <div class="chart-bg panel">
-          <h2>职务船员年龄分布</h2>
-          <div id="ageTotal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
+          <h2>{{contractTitle}}劳动合同状态统计</h2>
+          <div id="contractToal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
+          <div class="panel-footer"></div>
+        </div>
+        <div class="chart-bg panel">
+          <h2>职务船员数量统计</h2>
+          <div id="certTotal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
           <div class="panel-footer"></div>
         </div>
       </el-col>
@@ -59,18 +71,18 @@
       </el-col>
       <el-col :span="7">
         <div class="chart-bg panel">
-          <h2>劳动合同状态统计</h2>
-          <div id="contractToal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
+          <h2>{{title}}年龄分布</h2>
+          <div id="ageTotal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
+          <div class="panel-footer"></div>
+        </div>
+        <div class="chart-bg panel">
+          <h2>{{title}}籍贯分布</h2>
+          <div id="provinceTotal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
           <div class="panel-footer"></div>
         </div>
         <div class="chart-bg panel">
           <h2>渔船船龄分布</h2>
           <div  id="shipAge" :style="{width: '100%', height: echartHeight + 'px'}"></div>
-          <div class="panel-footer"></div>
-        </div>
-        <div class="chart-bg panel">
-          <h2>职务船员籍贯分布</h2>
-          <div id="provinceTotal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
           <div class="panel-footer"></div>
         </div>
       </el-col>
@@ -93,6 +105,10 @@ import 'echarts/map/js/china'
 export default {
   data () {
     return {
+      title: '职务船员',
+      contractTitle: '',
+      positionId: '',
+      positionDicMap: [{label: '全部', value: ''}],
       areaListProps: {
         value: 'id',
         label: 'orgRelationName',
@@ -176,9 +192,22 @@ export default {
     this.drawLine()
   },
   created (){
+    this.positionDicMap = this.positionDicMap.concat(this.dictGroup['tyb_resume_position'])
     this.getPageArea()
   },
   methods: {
+    onChangePositionId (val) {
+      let result = this.positionDicMap.filter((item) => {
+        return item.value === val
+      })
+      if (result && result[0].value !== '') {
+        this.contractTitle = result[0].label
+        this.title = result[0].label
+      } else {
+        this.contractTitle = ''
+        this.title = '职务船员'
+      }
+    },
     getPageArea () {
       getPageArea({current: 1, size: 100}).then(({ data }) => {
         if (data.code === 0) {
@@ -203,12 +232,6 @@ export default {
     changeOrg (item = []){
       this.orgId = item[item.length - 1]
       this.findName(this.orgList)
-      // this.orgList.forEach(v=>{
-      //   if(v.id == this.orgId){
-      //     this.orgTitle = v.orgRelationName
-      //   }
-      // })
-      // console.log(this.orgTitle)
       this.disabled = true
       this.getPosition()
       this.getTotalNum()
@@ -610,7 +633,6 @@ export default {
             lineStyle: {
               color: '#dddc6b',
             },
-            
           },
         },
         legend: {
@@ -933,7 +955,6 @@ export default {
         this.disabled = false
       })
     },
-    setTotalNum () {},
     getPosition () {
       this.age = []
       this.province = []
@@ -1018,7 +1039,6 @@ export default {
     },
     // 绘制图表
     drawLine (){
-        // 基于准备好的dom，初始化echarts实例
         // 职务船员数量统计
         this.setCrewNumber()
         // 职务船员工资统计
@@ -1035,9 +1055,6 @@ export default {
         this.setNativePlace()
     },
   },
-  watch:{
-
-  },
 }
 </script>
 <style lang='scss' scoped>
@@ -1049,7 +1066,13 @@ export default {
     .select-wrap{
       position:absolute;
       top:40px;
-      right: 30px;
+      right: 170px;
+    }
+    .crew-select {
+      width: 140px;
+      position:absolute;
+      top:40px;
+      right: 20px;
     }
     .chart-title{
       padding-top:30px;
@@ -1162,5 +1185,11 @@ export default {
   .row-bg {
     padding: 10px 0;
     background-color: #f9fafc;
+  }
+  .crew-select {
+    position: absolute;
+    right: 5px;
+    top: 17px;
+    width: 110px;
   }
 </style>
