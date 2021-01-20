@@ -1,30 +1,35 @@
 <template>
   <div>
-    <basic-container>
-      <page-header title="招聘岗位"></page-header>
-      <operation-container>
-        <template slot="left">
-          <iep-button @click="handleAdd()" type="primary">新增</iep-button>
-          <iep-button @click="exportExcel()" type="default">导出</iep-button>
-        </template>
-        <template slot="right">
-          <operation-search @search-page="searchPage" advance-search :prop="searchData">
-            <advance-search @search-page="searchPage"></advance-search>
-          </operation-search>
-        </template>
-      </operation-container>
-      <iep-table :isLoadTable="isLoadTable" :pagination="pagination" :columnsMap="columnsMap" :pagedTable="pagedTable" :dictsMap="dictsMap" @size-change="handleSizeChange" @current-change="handleCurrentChange" @selection-change="handleSelectionChange" is-mutiple-selection>
-        <el-table-column prop="operation" label="操作" width="220">
-          <template slot-scope="scope">
-            <operation-wrapper>
-              <iep-button type="warning" plain @click="handleEdit(scope.row)">编辑</iep-button>
-              <!-- <iep-button @click="handleDetail(scope.row)">查看</iep-button> -->
-              <iep-button type="default" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
-            </operation-wrapper>
+    <div v-show="!show">
+      <basic-container>
+        <page-header title="招聘岗位"></page-header>
+        <operation-container>
+          <template slot="left">
+            <iep-button @click="handleAdd()" type="primary">新增</iep-button>
+            <iep-button @click="exportExcel()" type="default">导出</iep-button>
           </template>
-        </el-table-column>
-      </iep-table>
-    </basic-container>
+          <template slot="right">
+            <operation-search @search-page="searchPage" advance-search :prop="searchData">
+              <advance-search @search-page="searchPage"></advance-search>
+            </operation-search>
+          </template>
+        </operation-container>
+        <iep-table :isLoadTable="isLoadTable" :pagination="pagination" :columnsMap="columnsMap" :pagedTable="pagedTable" :dictsMap="dictsMap" @size-change="handleSizeChange" @current-change="handleCurrentChange" @selection-change="handleSelectionChange" is-mutiple-selection>
+          <el-table-column prop="operation" label="操作" width="220">
+            <template slot-scope="scope">
+              <operation-wrapper>
+                <iep-button type="warning" plain @click="handleEdit(scope.row)">编辑</iep-button>
+                <!-- <iep-button @click="handleDetail(scope.row)">查看</iep-button> -->
+                <iep-button type="default" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
+              </operation-wrapper>
+            </template>
+          </el-table-column>
+        </iep-table>
+      </basic-container>
+    </div>
+    <div v-if="show">
+      <form-container ref="formContainer" @end="onEnd"/>
+    </div>
   </div>
 </template>
 <script>
@@ -33,11 +38,14 @@ import AdvanceSearch from './AdvanceSearch'
 import mixins from '@/mixins/mixins'
 import { columnsMap, dictsMap } from '../options'
 import { getUserInfo } from '@/api/login'
+import formContainer from './form'
+
 export default {
-  components: { AdvanceSearch },
+  components: { AdvanceSearch, formContainer },
   mixins: [mixins],
   data () {
     return {
+      show: false,
       dictsMap,
       columnsMap,
       searchData: 'contactName',
@@ -51,6 +59,12 @@ export default {
     this.getIds()
   },
   methods: {
+    onEnd (status) {
+      this.show = false
+      if (status) {
+        this.loadPage()
+      }
+    },
     handleSelectionChange (val) {
       this.multipleSelection = val.map(m => m.id)
     },
@@ -58,14 +72,22 @@ export default {
       this._handleGlobalDeleteById(row.recruitId, deleteRecruitById)
     },
     handleAdd () {
-      this.$router.push({
-        path: '/hrms_spa/recruit_post/0',
+      this.show = true
+      this.$nextTick(() => {
+        this.$refs.formContainer.open()
       })
+      // this.$router.push({
+      //   path: '/hrms_spa/recruit_post/0',
+      // })
     },
     handleEdit (row) {
-      this.$router.push({
-        path: `/hrms_spa/recruit_post/${row.recruitId}`,
+      this.show = true
+      this.$nextTick(() => {
+        this.$refs.formContainer.open(row.recruitId)
       })
+      // this.$router.push({
+      //   path: `/hrms_spa/recruit_post/${row.recruitId}`,
+      // })
     },
     handleDetail (row) {
       this.$emit('onDetail', row)
