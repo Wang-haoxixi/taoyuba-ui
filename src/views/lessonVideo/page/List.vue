@@ -12,6 +12,7 @@
         </template>
       </operation-container>
       <iep-table
+        :isMutipleSelection="false"
         :isLoadTable="isLoadTable"
         :pagination="pagination"
         :columnsMap="columnsMap"
@@ -52,12 +53,13 @@
   </div>
 </template>
 <script>
-import { getVideolist, deleteVideo,updateVideo } from '@/api/lessonVideo'           
+import { getVideolist, deleteVideo,updateVideo } from '@/api/lessonVideo'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
 import { getUserInfo } from '@/api/login'
+import queryMixin from '@/mixins/query'
 export default {
-  mixins: [mixins],
+  mixins: [mixins, queryMixin],
   data () {
     return {
       columnsMap,
@@ -71,20 +73,38 @@ export default {
       imgsrc:'',
     }
   },
-  created () {      
-    this.loadPage()
+  created () {
+    this.getQuery()
+    this.pagination.current = this.params.current
+    this.pagination.size = this.params.size
+    this.loadPage(this.params)
   },
-  methods: {                    
-    handleSelectionChange (val) {              
+  methods: {
+    onSearch (params) {
+      params.current = 1
+      this.setQuery(params)
+      this.loadPage(params)
+    },
+    handleCurrentChange (val) {
+      this.pageOption.current = val
+      this.setQuery({current: val})
+      this.loadPage()
+    },
+    handleSizeChange (val) {
+      this.pageOption.size = val
+      this.setQuery({size: val})
+      this.loadPage()
+    },
+    handleSelectionChange (val) {
       this.multipleSelection = val.map(m => m.id)
     },
-    handleDelete (row) {          
+    handleDelete (row) {
       this._handleGlobalDeleteById(row.vedioId, deleteVideo)
     },
-    handleAdd () {      
-      this.$router.push({        
+    handleAdd () {
+      this.$router.push({
         path: '/lessonVideo_spa/detail/create/0',
-      })      
+      })
     },
     handleView (id) {
       this.$router.push({
@@ -110,14 +130,14 @@ export default {
         this.manager = true
       }
     },
-    handleChange (row) {                
-       let newVideo = { vedioId:row.vedioId,sort:row.sort }    
+    handleChange (row) {
+       let newVideo = { vedioId:row.vedioId,sort:row.sort }
         updateVideo(newVideo).then(data => {
-          if(data.data.data){                    
-              this.loadPage()      
+          if(data.data.data){
+              this.loadPage()
           }
-      })      
+      })
     },
   },
 }
-</script>   
+</script>

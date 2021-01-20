@@ -9,7 +9,7 @@
           <span><el-input v-model.trim="params.idcard" placeholder="请输入身份证" size="small" clearable></el-input></span>
           <span><el-input v-model.trim="params.realName" placeholder="请输入姓名" size="small" clearable></el-input></span>
           <span><el-input v-model.trim="params.phone" placeholder="请输入联系电话" size="small" clearable></el-input></span>
-          <span><el-select v-model.trim="params.status" placeholder="请选择状态" size="small" clearable>
+          <!-- <span><el-select v-model.trim="params.status" placeholder="请选择状态" size="small" clearable>
               <el-option
                 v-for="item in status"
                 :key="item.value"
@@ -17,7 +17,7 @@
                 :value="item.value">
               </el-option>
             </el-select>
-          </span>
+          </span> -->
           <el-button size="small"  @click="getParamData">搜索</el-button>
         </div>
       </div>
@@ -106,7 +106,7 @@ export default {
         size: 10,
         idcard: '',
         realName: '',
-        status: '',
+        // status: '',
         phone: '',
       },
       exportParams: {   

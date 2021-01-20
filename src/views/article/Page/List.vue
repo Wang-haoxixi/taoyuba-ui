@@ -19,8 +19,7 @@
         :pagedTable="pagedTable"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        @selection-change="handleSelectionChange"
-        is-mutiple-selection>
+        @selection-change="handleSelectionChange">
         <el-table-column prop="operation" label="操作" width="220">
           <template slot-scope="scope">
             <operation-wrapper>
@@ -28,56 +27,55 @@
               <iep-button type="warning" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
             </operation-wrapper>
           </template>
-        </el-table-column>        
+        </el-table-column>
       </iep-table>
-    </basic-container>                                                                          
+    </basic-container>
   </div>
-</template>                                                          
-<script>                                                                                                                                                                                                                                                                                                                                                           
+</template>
+<script>
 import { getArticleList, delArtilce } from '@/api/article/index'
 import advanceSearch from './AdvanceSearch.vue'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
-export default {                                    
+export default {
   components: {
     advanceSearch,
   },
-  mixins: [mixins],       
-  data () {                              
+  mixins: [mixins],
+  data () {
     return {
       columnsMap,
       searchData: 'title',
     }
   },
-  created () {                               
+  created () {
     this.loadPage()
   },
-  methods: {                                        
+  methods: {
     handleSelectionChange (val) {
       this.multipleSelection = val.map(m => m.id)
     },
-    handleDelete (row) {          
+    handleDelete (row) {
       this._handleGlobalDeleteById(row.articleId, delArtilce)
     },
     handleAdd () {
       this.$router.push({
         path: '/article_spa/article_post/0',
-      })   
+      })
     },
     handleEdit (row) {
       this.$router.push({
         path: `/article_spa/article_post/${row.articleId}`,
       })
     },
-    async loadPage (param = this.searchForm) {    
-       let data = await this.loadTable(param, getArticleList)
-        this.pagedTable = data.records
-        if(this.pagedTable){  
-          this.pagedTable.forEach(ele => {  
-              ele.isDispatch =   ele.isDispatch == 0 ? '否' : '是'
+    async loadPage (param = this.searchForm) {
+      let data = await this.loadTable(param, getArticleList)
+      this.pagedTable = data.records
+      if(this.pagedTable){
+        this.pagedTable.forEach(ele => {
+          ele.isDispatch = ele.isDispatch == 0 ? '否' : '是'
         })
-        }
-        console.log(this.pagedTable)
+      }
     },
   },
 }

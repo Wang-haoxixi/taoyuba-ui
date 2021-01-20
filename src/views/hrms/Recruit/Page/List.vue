@@ -60,25 +60,25 @@ export default {
     handleAdd () {
       this.$router.push({
         path: '/hrms_spa/recruit_post/0',
-      })      
+      })
     },
     handleEdit (row) {
       this.$router.push({
         path: `/hrms_spa/recruit_post/${row.recruitId}`,
-      })    
+      })
     },
     handleDetail (row) {
       this.$emit('onDetail', row)
     },
-  exportExcel () {  
-    exportExcel (this.ids).catch(err => {
-        this.$message({
-          type: 'warning',
-          message: err,
-        })
-   })
-  },
-    async getIds () {     
+    exportExcel () {
+      exportExcel(this.ids).catch(err => {
+          this.$message({
+            type: 'warning',
+            message: err,
+          })
+      })
+    },
+    async getIds () {
       this.roleDate = await getUserInfo().then(res => {
         return res.data.data.roles
       })

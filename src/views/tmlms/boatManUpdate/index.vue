@@ -7,14 +7,16 @@
         <el-checkbox v-model="proIdStatus">户籍为空</el-checkbox>
       </template>
       <template slot="right">
-        <el-date-picker
-          size="small"
-          value-format="yyyy-MM-dd"
-          v-model="params.birthday"
-          type="date"
-          clearable
-          placeholder="选择日期">
-        </el-date-picker>
+        <div style="display: inline-block;width: 280px;">
+          <el-date-picker
+            size="small"
+            value-format="yyyy-MM-dd"
+            v-model="params.birthday"
+            type="date"
+            clearable
+            placeholder="搜索结果为出生日期之后的船员数据">
+          </el-date-picker>
+        </div>
         <el-button size="small"  @click="onSearch">搜索</el-button>
       </template>
     </operation-container>

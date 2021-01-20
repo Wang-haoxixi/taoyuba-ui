@@ -123,7 +123,9 @@ import { getUserInfo } from '@/api/login'
 import { getArea, getRogionList } from '@/api/post/admin'
 import keyBy from 'lodash/keyBy'
 import { mapGetters } from 'vuex'
+import queryMixin from '@/mixins/query'
 export default {
+  mixins: [queryMixin],
   data () {
     return {
       rogionList: [],
@@ -140,6 +142,7 @@ export default {
         phone: '',
         certLevel: '',
         certTitle: '',
+        provinceId: '',
         // timeLists: '',
       },
       exportParams: {
@@ -151,6 +154,7 @@ export default {
         startDate:'',
         endDate:'',
         workStatus:'',
+        provinceId: '',
       },
       options: {
         expandAll: false,
@@ -307,6 +311,7 @@ export default {
     // 分页
     currentChange (val) {
       this.params.current = val
+      this.setQuery({current: val})
       this.getData()
     },
     // 跳转新增页面
@@ -509,6 +514,9 @@ export default {
       },
       'params.workStatus': function (val) {
             this.exportParams.workStatus  = val
+      },
+      'params.provinceId': function (val) {
+        this.exportParams.provinceId  = val
       },
       params () {
       sessionStorage.setItem('query', JSON.stringify(this.params))

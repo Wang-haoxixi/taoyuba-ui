@@ -18,7 +18,7 @@
             :disabled="disabled"
           ></el-cascader>
         </div>
-        <div class="crew-select">
+        <!-- <div class="crew-select">
           <el-select v-model="positionId" placeholder="职位船员" @change="onChangePositionId">
             <el-option
               v-for="item in positionDicMap"
@@ -27,7 +27,7 @@
               :value="item.value">
             </el-option>
           </el-select>
-        </div>
+        </div> -->
       </el-col>
     </el-row>
     <el-row>
@@ -1066,7 +1066,7 @@ export default {
     .select-wrap{
       position:absolute;
       top:40px;
-      right: 170px;
+      right: 20px;
     }
     .crew-select {
       width: 140px;
