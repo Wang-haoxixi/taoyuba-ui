@@ -18,7 +18,7 @@
             :disabled="disabled"
           ></el-cascader>
         </div>
-        <!-- <div class="crew-select">
+        <div class="crew-select">
           <el-select v-model="positionId" placeholder="职位船员" @change="onChangePositionId">
             <el-option
               v-for="item in positionDicMap"
@@ -27,7 +27,7 @@
               :value="item.value">
             </el-option>
           </el-select>
-        </div> -->
+        </div>
       </el-col>
     </el-row>
     <el-row>
@@ -99,6 +99,7 @@ import { mapGetters } from 'vuex'
 import { getCrewByOrg,getCountCrew } from '@/api/tmlms/dataStatistics'
 import { getAllAreaName } from '@/api/post/address'
 import { getPage as getPageArea } from '@/api/tmlms/area'
+import { getPositionInforByOrgID } from '@/api/tmlms/dataStatistics'
 // import { mapState } from 'vuex'
 import 'echarts/map/js/china'
 
@@ -203,9 +204,21 @@ export default {
       if (result && result[0].value !== '') {
         this.contractTitle = result[0].label
         this.title = result[0].label
+        getPositionInforByOrgID({positionId: val, orgRelationId: this.areaValue[this.areaValue.length - 1]}).then((res) => {
+          this.setSalary()
+          this.setCrewAge()
+          this.setContract()
+          this.setNativePlace()
+          this.getSalary(res)
+          this.getCrewAge(res)
+          this.getContract(res)
+          this.getNativePlace(res)
+        })
       } else {
         this.contractTitle = ''
         this.title = '职务船员'
+        this.getPosition()
+        this.drawLine()
       }
     },
     getPageArea () {
@@ -237,6 +250,9 @@ export default {
       this.getTotalNum()
       this.totalCrew = 0
       this.contractCrew = 0
+      this.positionId = ''
+      this.contractTitle = ''
+      this.title = '职务船员'
     },
     // 职务船员数量统计
     getCrewNumber (res) {
@@ -397,6 +413,7 @@ export default {
     },
     // 职务船员年龄分布
     getCrewAge (res) {
+      this.age = []
       Object.keys(res.data.data.age).forEach(key => {
         let age = {}
         switch(key){
@@ -429,11 +446,11 @@ export default {
         legend: {
             data: this.age.name,
         },
-          series: [{
-            // 根据名字对应到相应的系列
-            name: '年龄分布',
-            data: this.age,
-          }],
+        series: [{
+          // 根据名字对应到相应的系列
+          name: '年龄分布',
+          data: this.age,
+        }],
       })
     },
     setCrewAge () {
@@ -480,6 +497,7 @@ export default {
     },
     // 劳动合同状态统计
     getContract (res) {
+      this.contractStatus = []
       this.contract = res.data.data.contract
       this.contractStatus = res.data.data.contract.map(item=>{
         this.statusDict.forEach(v=>{
@@ -493,6 +511,7 @@ export default {
       res.data.data.contract.forEach(item=>{
         conTotal =conTotal+ parseInt(item.number)
       })
+      this.contractNum = []
       this.contractNum = res.data.data.contract.map(item=>{
         item.number = Number((item.number/conTotal)*100).toFixed(0)
         return item.number
@@ -744,6 +763,7 @@ export default {
     },
     // 职务船员籍贯分布， 地图
     getNativePlace (res) {
+      this.getProvince = []
       this.getProvince = res.data.data.province.map(item=>{
         return {
           value:item.number,
@@ -751,7 +771,8 @@ export default {
         }
       })
       if(this.getProvince.length){
-        let getPr = this.getProvince.map(async (item)=>{
+        let getPr = []
+        getPr = this.getProvince.map(async (item)=>{
           item.name = await getAllAreaName(item.name).then(v=>{
             if(v.data.data.name){
               return v.data.data.name
@@ -759,6 +780,7 @@ export default {
           })
           return item
         })
+        this.province = []
         getPr.map(res=>{
           res.then(pr=>{
             this.province.push(pr)
@@ -1066,7 +1088,7 @@ export default {
     .select-wrap{
       position:absolute;
       top:40px;
-      right: 20px;
+      right: 170px;
     }
     .crew-select {
       width: 140px;

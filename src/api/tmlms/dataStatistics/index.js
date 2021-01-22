@@ -15,6 +15,15 @@ export function getPositionInfor (positionId) {
         params: positionId,
     })
 }
+
+export function getPositionInforByOrgID (params) {
+    return request({
+        url: `${prefixUrl}/positionOrgRelation`,
+        method: 'get',
+        params: params,
+    })
+}
+
 export function getCrewByOrg (orgId) {
     return request({
         url: `${prefixUrl}/crewOrgRelation?orgRelationId=${orgId}`,

@@ -592,9 +592,10 @@ export default {
               let cardMsg = {}
               let crew = {}
               let flag = false
-              this.form.idcardPhoto = data.photobase64 ? `data:image/png;base64,${data.photobase64}` : ''
-              this.form.photoFront = data.frontImg ? `data:image/png;base64,${data.frontImg}` : ''
-              this.form.photoReverse = data.backImg ? `data:image/png;base64,${data.backImg}` : ''
+              this.form.idcardPhoto = data.photobase64
+              this.form.photoFront = data.frontImg
+              // this.form.photoReverse = data.photobase64
+              this.form.photoReverse = data.backImg
               this.form.realName = data.name
               this.form.birthday = data.born.slice(0,4)+'-'+data.born.slice(4,6)+'-'+data.born.slice(6)
               this.form.idcard = data.cardno
