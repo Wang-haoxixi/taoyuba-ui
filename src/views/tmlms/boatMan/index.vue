@@ -19,7 +19,7 @@
               </el-option>
             </el-select>
           </span>
-          <span style="width:120px"><iep-dict-select placeholder="证书职位" v-model="params.certTitle" size="small" dict-name="tyb_crew_cert_title"></iep-dict-select></span>
+          <span style="width:120px"><iep-dict-select clearable placeholder="证书职位" v-model="params.certTitle" size="small" dict-name="tyb_crew_cert_title"></iep-dict-select></span>
           <span style="width:120px">
             <el-select v-model="params.workStatus" style="width:120px" placeholder="用工状态" size="small" clearable>
               <el-option
@@ -115,6 +115,21 @@
         </el-pagination>
       </div>
     </basic-container>
+    <el-dialog
+      title="导出信息"
+      :visible.sync="dialogVisible"
+      width="45%">
+      <div class="export-btn-wrapper">
+        <template v-for="(item, index) in (Math.ceil(total / 3000))">
+          <template v-if="(Math.ceil(total / 3000)) > index + 1">
+            <el-button class="export-btn" :key="index" @click="downloadInfo(`船员信息第${(3000 * index + 1)}条第至${(3000 * (index+1))}条`, index+1)">{{`导出信息第${(3000 * index + 1)}条至第${(3000 * (index+1))}条`}}</el-button>
+          </template>
+          <template v-else>
+            <el-button class="export-btn" :key="index" @click="downloadInfo(`船员信息第${(3000 * index + 1)}条第至${total}条`, index+1)">{{`导出信息第${(3000 * index + 1)}条至第${total}条`}}</el-button>
+          </template>
+        </template>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -128,6 +143,7 @@ export default {
   mixins: [queryMixin],
   data () {
     return {
+      dialogVisible: false,
       rogionList: [],
       shipownerList: [],
       provinces:[],
@@ -301,9 +317,10 @@ export default {
     },
     //字典
     dictJS (item, scope) {
+      // console.log('字典', item, scope)
       if(scope.row[item.value]){
-          if(scope.row[item.value] === '0')  return '暂无'
-      return keyBy(this.dictGroup[item.dictName], 'value')[scope.row[item.value]].label
+        if(scope.row[item.value] === '0') return '暂无'
+        return keyBy(this.dictGroup[item.dictName], 'value')[scope.row[item.value]].label
       }else{
         return '暂无'
       }
@@ -385,6 +402,7 @@ export default {
           }
         })
         this.total = res.data.data.total
+        console.log('shipownerList', this.shipownerList)
       })
     },
     //搜索
@@ -453,13 +471,24 @@ export default {
         this.showSwith=false
       } 
     },
-    exportInfo () {
-      exportExcel (this.exportParams).catch(err => {
-        this.$message({
-          type: 'warning',
-          message: err,
+    downloadInfo (title = '', number = undefined) {
+      let val = Object.assign({}, this.exportParams)
+      if (Math.ceil(this.total / 3000) > 1) {
+        val.nowPage = number
+      }
+      exportExcel (val, title).catch(err => {
+          this.$message({
+            type: 'warning',
+            message: err,
+          })
         })
-   })
+    },
+    exportInfo () {
+      if (Math.ceil(this.total / 3000) === 1) {
+        this.downloadInfo('船员信息')
+      } else {
+        this.dialogVisible = true
+      }
     },
   },
   computed: {
@@ -544,5 +573,14 @@ export default {
     display: inline-block;
     margin: 0 5px;
   }
+}
+.export-btn-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+.export-btn {
+  margin-bottom: 10px;
+  margin-left: 0;
+  margin-right: 10px;
 }
 </style>

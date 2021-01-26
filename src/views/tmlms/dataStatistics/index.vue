@@ -19,7 +19,7 @@
           ></el-cascader>
         </div>
         <div class="crew-select">
-          <el-select v-model="positionId" placeholder="职位船员" @change="onChangePositionId">
+          <el-select :disabled="positionDisabled" v-model="positionId" placeholder="职位船员" @change="onChangePositionId">
             <el-option
               v-for="item in positionDicMap"
               :key="item.value"
@@ -117,6 +117,7 @@ export default {
       },
       echartHeight: '282',
       disabled: false,
+      positionDisabled: false,
       areaValue: [],
       orgList: [],
       orgId:21,
@@ -204,7 +205,9 @@ export default {
       if (result && result[0].value !== '') {
         this.contractTitle = result[0].label
         this.title = result[0].label
+        this.positionDisabled = true
         getPositionInforByOrgID({positionId: val, orgRelationId: this.areaValue[this.areaValue.length - 1]}).then((res) => {
+          this.positionDisabled = false
           this.setSalary()
           this.setCrewAge()
           this.setContract()
@@ -212,7 +215,9 @@ export default {
           this.getSalary(res)
           this.getCrewAge(res)
           this.getContract(res)
-          this.getNativePlace(res)
+          this.getNativePlace(res, false)
+        }).catch(() => {
+          this.positionDisabled = false
         })
       } else {
         this.contractTitle = ''
@@ -762,7 +767,7 @@ export default {
       })
     },
     // 职务船员籍贯分布， 地图
-    getNativePlace (res) {
+    getNativePlace (res, mapStatus = true) {
       this.getProvince = []
       this.getProvince = res.data.data.province.map(item=>{
         return {
@@ -807,7 +812,9 @@ export default {
               }
               return tt
             })
-            this.chinaMap(this.mapProvice)
+            if (mapStatus) {
+              this.chinaMap(this.mapProvice)
+            }
           })
         })
         }else{
@@ -829,7 +836,9 @@ export default {
               tt.name = tt.name.replace(reg,'')
               return tt
             })
-            this.chinaMap(this.mapProvice)
+            if (mapStatus) {
+              this.chinaMap(this.mapProvice)
+            }
         }
     },
     setNativePlace () {

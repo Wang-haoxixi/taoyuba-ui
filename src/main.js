@@ -13,6 +13,8 @@ import './plugins/ant-design'
 import './core/use'
 import echarts from 'echarts'
 import 'echarts/map/js/china'
+import { VueJsonp } from 'vue-jsonp'
+Vue.use(VueJsonp)
 // import VueSocketio from 'vue-socket.io'
 // Vue.use(new VueSocketio({
 //     debug: true,

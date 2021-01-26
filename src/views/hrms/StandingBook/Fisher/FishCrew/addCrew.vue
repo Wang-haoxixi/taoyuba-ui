@@ -3,7 +3,7 @@
     <basic-container>
         <h1 v-if="!$route.query.userId">
             <!-- {{ $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }} -->
-            {{$route.query.shipName}}上船登记</h1>           
+            {{$route.query.shipName}}上船登记</h1>
             <el-form :model="form" :rules="userRule" ref="userInfoForm" :disabled="false" label-width="150px" size="small" >
                 <el-row>
                 <el-col :span="12">
@@ -88,7 +88,8 @@ import VueSocketio from 'vue-socket.io'
 import Vue from 'vue'
 import store from '@/store'
 import debounce from 'lodash/debounce'
-import { mapState } from 'vuex'   
+import { mapState } from 'vuex'
+
 Vue.use(new VueSocketio({
     debug: true,
     connection: 'http://localhost:5000', //地址+端口，由后端提供
@@ -525,6 +526,16 @@ export default {
       }
       this.loading = false
     },
+    getIdCardData () {
+      return new Promise((resolve) => {
+        this.$jsonp('https://localhost:9199/api/ReadMsg?cardImg=1').then((res) => {
+          this.form.photoFront = res.frontImg
+          this.form.photoReverse = res.backImg
+          console.log('form1', this.form)
+          resolve()
+        })
+      })
+    },
   },
   // components: { InlineFormTable },
   created () {
@@ -588,42 +599,50 @@ export default {
           //2.解密后是json字符串mou
           var result1 = base.decode(msg)
           var data = eval('('+result1+')')
-          // 将数据录入
-              let cardMsg = {}
-              let crew = {}
-              let flag = false
-              this.form.idcardPhoto = data.photobase64
+          this.getIdCardData().then(() => {
+            // 将数据录入
+            let cardMsg = {}
+            let crew = {}
+            let flag = false
+            this.form.idcardPhoto = data.photobase64
+            if (data.frontImg) {
               this.form.photoFront = data.frontImg
-              // this.form.photoReverse = data.photobase64
+            }
+            // this.form.photoReverse = data.photobase64
+            if (data.backImg) {
               this.form.photoReverse = data.backImg
-              this.form.realName = data.name
-              this.form.birthday = data.born.slice(0,4)+'-'+data.born.slice(4,6)+'-'+data.born.slice(6)
-              this.form.idcard = data.cardno
-              this.form.address = data.address
-              this.form.nation = data.nation
-              this.form.gender = data.sex=='男' ? 1 : 2
-              this.form.nationality  = '中国'
-              cardMsg.provinceId = parseInt(data.cardno.substring(0,2)+'0000000000')
-              cardMsg.cityId = parseInt(data.cardno.substring(0,4)+'00000000')
-              cardMsg.districtId = parseInt(data.cardno.substring(0,6)+'000000')
-              this.choseProvince(cardMsg.provinceId)
-              this.choseCity(cardMsg.cityId)
-              this.form.provinceId = cardMsg.provinceId
-              this.form.cityId = cardMsg.cityId
-              this.form.districtId = cardMsg.districtId
-              this.form.shipId = this.$route.params.shipId
-              this.form.flag = 1
-              crew = JSON.parse(JSON.stringify(this.form))
-              if(this.crewList.length){
-                this.crewList.forEach(item=>{
-                if(crew.idcard==item.idcard){
-                  flag= true
-                }
-                })
+            }
+            this.form.realName = data.name
+            this.form.birthday = data.born.slice(0,4)+'-'+data.born.slice(4,6)+'-'+data.born.slice(6)
+            this.form.idcard = data.cardno
+            this.form.address = data.address
+            this.form.nation = data.nation
+            this.form.gender = data.sex=='男' ? 1 : 2
+            this.form.nationality  = '中国'
+            cardMsg.provinceId = parseInt(data.cardno.substring(0,2)+'0000000000')
+            cardMsg.cityId = parseInt(data.cardno.substring(0,4)+'00000000')
+            cardMsg.districtId = parseInt(data.cardno.substring(0,6)+'000000')
+            this.choseProvince(cardMsg.provinceId)
+            this.choseCity(cardMsg.cityId)
+            this.form.provinceId = cardMsg.provinceId
+            this.form.cityId = cardMsg.cityId
+            this.form.districtId = cardMsg.districtId
+            this.form.shipId = this.$route.params.shipId
+            this.form.flag = 1
+            crew = JSON.parse(JSON.stringify(this.form))
+            if(this.crewList.length){
+              this.crewList.forEach(item=>{
+              if(crew.idcard==item.idcard){
+                flag= true
               }
-              if(!flag) {
-                this.crewList.push(crew)
-              }
+              })
+            }
+            if(!flag) {
+              this.crewList.push(crew)
+            }
+            console.log('data', data)
+            console.log('this.form.photoFront', this.form)
+          })
         })
             //格式化拿到的數據
     function Base64 () { 

@@ -63,6 +63,7 @@ export function saveCrewBatch (data,type) {
         url: `${prefixUrl}/batchCreate?type=${type}`,
         method: 'post',
         data: data,
+        timeout: 1000 * 60 * 5,
     })
 }
 export function deleteCrew (id) {
@@ -137,11 +138,11 @@ export function getIdcardCheck (id) {
     })
 }
 
-export function exportExcel (params) {                                          
+export function exportExcel (params, title = '船员信息') {                                          
     return exportDownload({
       url: 'tmlms/tybmlmsExcelExport/downloadCrew',
       data: params,                 
-      title: '船员信息',
+      title: title,
     })
   }
 

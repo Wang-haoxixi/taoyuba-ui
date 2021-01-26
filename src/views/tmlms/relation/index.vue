@@ -7,41 +7,42 @@
           <!-- roles.indexOf(112) !== -1" -->
           <iep-button @click="handleAdd" type="primary" v-if="relation_ship_add && roles.indexOf(112) !== -1">新增</iep-button>
           <iep-button @click="handleStatistics" type="default" v-if="relation_ship_statistics && (roles.indexOf(111) !== -1)">联系记录统计</iep-button>
-          <!-- <iep-button @click="handleExport" v-if="relation_ship_export && roles.indexOf(112) !== -1" :loading="exportBtnLoading" type="default" plain>导出</iep-button> -->
+          <!-- <iep-button @click="handleExport" v-if="relation_ship_export" :loading="exportBtnLoading" type="default" plain>导出</iep-button> -->
         </template>
         <template slot="right">
           <el-form :inline="true" :model="params" size="small">
             <el-form-item v-if="roles.includes(111)">
-              <el-select clearable style="width: 150px !important;" v-model="params.villageId" placeholder="基层组织" size="small">
+              <el-select clearable style="width: 120px !important;" v-model="params.villageId" placeholder="基层组织" size="small">
                 <el-option
                   v-for="item in orgSearchList"
                   :key="item.index"
                   :label="item.villageName"
-                  :value="item.userId"
-                  >
+                  :value="item.userId">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-input style="width: 150px !important;" v-model.trim="params.shipName" placeholder="船名号" clearable></el-input>
+              <el-input style="width: 120px !important;" v-model.trim="params.shipName" placeholder="船名号" clearable></el-input>
             </el-form-item>
             <el-form-item>
-              <el-input style="width: 150px !important;" v-model.trim="params.shipownerName" placeholder="联系人" clearable></el-input>
+              <el-input style="width: 120px !important;" v-model.trim="params.shipownerName" placeholder="联系人" clearable></el-input>
             </el-form-item>
             <el-form-item>
-              <el-select style="width: 150px !important;" v-model="params.relationshipType" placeholder="联系设备" clearable>
+              <el-select style="width: 120px !important;" v-model="params.relationshipType" placeholder="联系设备" clearable>
                 <el-option :label="item.label" :value="item.value" v-for="item in map.relationshipType" :key="item.value"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-date-picker
-                value-format="yyyy-MM-dd"
-                v-model="params.rangeTime"
-                type="daterange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期">
-              </el-date-picker>
+              <div style="width: 320px;">
+                <el-date-picker
+                  value-format="yyyy-MM-dd"
+                  v-model="params.rangeTime"
+                  type="daterange"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期">
+                </el-date-picker>
+              </div>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSearch">搜索</el-button>
