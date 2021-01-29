@@ -91,7 +91,7 @@ import debounce from 'lodash/debounce'
 import { mapState } from 'vuex'
 
 Vue.use(new VueSocketio({
-    debug: true,
+    debug: false,
     connection: 'http://localhost:5000', //地址+端口，由后端提供
 }))
 export default {
@@ -531,7 +531,7 @@ export default {
         this.$jsonp('https://localhost:9199/api/ReadMsg?cardImg=1').then((res) => {
           this.form.photoFront = res.frontImg
           this.form.photoReverse = res.backImg
-          console.log('form1', this.form)
+          // console.log('form1', this.form)
           resolve()
         })
       })
@@ -599,6 +599,7 @@ export default {
           //2.解密后是json字符串mou
           var result1 = base.decode(msg)
           var data = eval('('+result1+')')
+          console.log('sockets', data)
           this.getIdCardData().then(() => {
             // 将数据录入
             let cardMsg = {}
@@ -608,7 +609,6 @@ export default {
             if (data.frontImg) {
               this.form.photoFront = data.frontImg
             }
-            // this.form.photoReverse = data.photobase64
             if (data.backImg) {
               this.form.photoReverse = data.backImg
             }
@@ -640,8 +640,8 @@ export default {
             if(!flag) {
               this.crewList.push(crew)
             }
-            console.log('data', data)
-            console.log('this.form.photoFront', this.form)
+            // console.log('data', data)
+            // console.log('this.form.photoFront', this.form)
           })
         })
             //格式化拿到的數據

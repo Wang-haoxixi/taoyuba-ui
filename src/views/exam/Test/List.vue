@@ -14,8 +14,9 @@
           </el-dropdown> -->
         </template>
         <template slot="right">
-          <span class="width130"><el-input v-model="params.title" placeholder="题目名称" size="small" clearable></el-input></span>
-          <span style="width:185px"><el-select v-model="params.kind" placeholder="试题分类" size="small" @change="getLevel">
+          <span class="width130"><el-input v-model.trim="params.title" placeholder="题目名称" size="small" clearable></el-input></span>
+          <span style="width:185px">
+            <el-select v-model="params.kind" placeholder="试题分类" clearable size="small" @change="getLevel">
               <el-option
                 v-for="item in kindList"
                 :key="item.index"
@@ -24,7 +25,7 @@
               </el-option>
             </el-select>
           </span>
-          <span style="width:110px" ><el-select v-model="params.level" placeholder="职务等级" size="small">
+          <span style="width:110px" ><el-select v-model="params.level" placeholder="职务等级" clearable size="small">
               <el-option
                 v-for="item in levelList"
                 :key="item.index"
@@ -38,24 +39,24 @@
         <!-- </operation-search> -->
         </template>
       </operation-container>
-      <iep-table                                          
-              :isLoadTable="isLoadTable"
-              :pagination="pagination"
-              :columnsMap="columnsMap"
-              :pagedTable="pagedTable"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              @selection-change="handleSelectionChange"
-              is-mutiple-selection>   
+      <iep-table
+        :isLoadTable="isLoadTable"
+        :pagination="pagination"
+        :columnsMap="columnsMap"
+        :pagedTable="pagedTable"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        @selection-change="handleSelectionChange"
+        is-mutiple-selection>
         <el-table-column prop="operation" label="操作" width="220">
           <template slot-scope="scope">
-            <operation-wrapper>     
+            <operation-wrapper>
               <iep-button plain @click="handleEdit(scope.row.id)">编辑</iep-button>
               <iep-button plain @click="handleDel(scope.row.id)">删除</iep-button>
               <!-- <iep-button type="warning" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button> -->
             </operation-wrapper>
           </template>
-        </el-table-column>        
+        </el-table-column>
       </iep-table>
     </basic-container>
   </div>
@@ -67,8 +68,9 @@ import mixins from '@/mixins/mixins'
 // import {} from ''
 import { examKind,examLevel,getTestList,delTest } from '@/api/exam/examManagement'
 import {columnsMap } from'./options'
+import queryMixin from '@/mixins/query'
 export default {
-  mixins: [mixins],
+  mixins: [mixins, queryMixin],
   data () {
     return {
       columnsMap,
@@ -87,14 +89,27 @@ export default {
     }
   },
   created () {
+    this.getQuery()
     this.getKindLevel()
+    this.getLevel(this.params.kind)
+    console.log('params', this.params)
     this.loadPage()
     this.setPermission()
-    
   },
   computed: {
     ...mapGetters(['userInfo', 'permissions']),
   },
+  // watch: {
+  //   'params.kind': {
+  //     handler () {
+  //       // console.log('kind', newVal)
+  //       // if (newVal === '' || newVal == null) {
+  //       //   this.params.level = ''
+  //       // }
+  //       this.params.level = ''
+  //     },
+  //   },
+  // },
   methods: {
     getKindLevel () {
       examKind().then(res=>{
@@ -102,6 +117,7 @@ export default {
       })
     },
     getLevel (kind){
+      this.params.level = ''
       examLevel(kind).then(res=>{
         this.levelList = res.data.data
       })
@@ -114,12 +130,13 @@ export default {
     handleSelectionChange (val) {
       this.multipleSelection = val.map(m => m.id)
     },
-
     loadPage (param = this.params) {
       this.pagedTable=this.loadTable(param, getTestList)
     },
     getParamData () {
-      this.params.title = this.params.title.replace(/\s*/g,'')
+      // this.params.title = this.params.title.replace(/\s*/g,'')
+      this.params.current = 1
+      this.setQuery()
       this.loadPage()
     },
     /**
@@ -148,7 +165,17 @@ export default {
           }
         })
       }).catch(()=>{})
-      
+    },
+    // 分页
+    currentChange (val) {
+      this.params.current = val
+      this.setQuery({ current: this.params.current })
+      this.loadPage()
+    },
+    handleSizeChange (val) {
+      this.params.size = val
+      this.setQuery({ size: this.params.size })
+      this.loadPage()
     },
   },
 }
