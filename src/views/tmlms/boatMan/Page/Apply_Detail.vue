@@ -679,6 +679,9 @@ export default {
       this.loading = false
     },
   },
+  beforeDestroy () {
+    this.sockets.unsubscribe('card message')
+  },
   // components: { InlineFormTable },
   created () {
     getArea(0).then(({ data }) => {

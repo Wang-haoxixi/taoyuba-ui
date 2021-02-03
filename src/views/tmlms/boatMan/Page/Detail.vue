@@ -249,6 +249,7 @@
                         :before-remove="beforeCardfrontRemove"
                         :on-success="handleAvatarSuccessFront" 
                         :file-list="frontList"
+                        :limit="1"
                         :on-preview="previewFront"
                         :on-remove="handleAvatarDelFront">
                         <i class="el-icon-plus"></i>
@@ -269,6 +270,7 @@
                         :before-remove="beforeCardreverseRemove"
                         :on-success="handleAvatarSuccessReverse" 
                         :file-list="reverseList"
+                        :limit="1"
                         :on-preview="previewReverse"
                         :on-remove="handleAvatarDelReverse">
                         <i class="el-icon-plus"></i>
@@ -421,7 +423,7 @@ import debounce from 'lodash/debounce'
 import { mapState } from 'vuex' 
 import { mapGetters } from 'vuex'  
 Vue.use(new VueSocketio({
-    debug: true,
+    debug: false,
     connection: 'http://localhost:5000', //地址+端口，由后端提供
 }))
 export default {
@@ -446,7 +448,7 @@ export default {
             callback()
         }
       }
-    return {        
+    return {
       certificateColumns,
       imgVisible:false,
       dialogImageUrl:'',
@@ -483,9 +485,8 @@ export default {
           contactName: '',
           phone: '',
           applyType: '',
-          certList: [],
           workStatus:9,
-          maritalStatus:0,    
+          maritalStatus:0,
           salary:'',
           preAddress:'',
           eduDegree:'',
@@ -678,7 +679,7 @@ export default {
       if (this.form.facePhoto.length > 200) {
         await this.getFaceFile()
       }
-      // console.log(this.form)   
+      // console.log(this.form)
       this.$refs['form'].validate((valid) => {
           if (valid) {
             // let form = JSON.parse(JSON.stringify(this.form))
@@ -696,7 +697,6 @@ export default {
                 }
               }
             }
-            
             let form = this.form
             // if (form.certList) {
             //   form.certList.forEach(item=>{
@@ -725,7 +725,7 @@ export default {
                   this.$router.go(-2)
                 })
               }else{
-              editCrew(data,type).then(res=>{            
+              editCrew(data,type).then(res=>{
                   this.$message({
                     message: res.data.msg,
                     type: 'success',
@@ -744,7 +744,7 @@ export default {
                     return
                   }
                    if(this.$route.query.userId){
-                      this.$router.go(-1) 
+                      this.$router.go(-1)
                    }else if(this.$route.query.shipCrew){
                       this.$router.go(-1)
                    }else if(this.$route.query.idcard){
@@ -1109,6 +1109,20 @@ export default {
       }
       this.loading = false
     },
+    getIdCardData () {
+      return new Promise((resolve) => {
+        this.$jsonp('https://localhost:9199/api/ReadMsg?cardImg=1').then((res) => {
+          let form = {
+            photoFront: res.frontImg,
+            photoReverse: res.backImg,
+          }
+          // this.form.photoFront = res.frontImg
+          // this.form.photoReverse = res.backImg
+          // console.log('form1', this.form)
+          resolve(form)
+        })
+      })
+    },
   },
   // components: { InlineFormTable },
   created () {
@@ -1178,59 +1192,81 @@ export default {
       res.data.data.sysUser.userId
     })
   },
+  beforeDestroy () {
+    this.sockets.unsubscribe('card message')
+  },
   mounted () {
             //添加socket事件监听
-        this.$socket.emit('connect')
+        // this.$socket.emit('connect')
         this.$socket.emit('startRead')
         // this.sockets.listener.subscribe('card message', (msg) => {
           this.sockets.subscribe('card message', (msg) => {
-          var base = new Base64()  			  
+          var base = new Base64()
           //2.解密后是json字符串mou
           var result1 = base.decode(msg)
           var data = eval('('+result1+')')
           // 将数据录入
-          getCrewData(data.cardno).then(res=>{
-            if (res.data.data !== true) {
-              this.choseProvince(res.data.data.provinceId)
-              this.choseCity(res.data.data.cityId)
-              this.form = res.data.data
-              // this.form.certList = []
-              this.$set(this.form, 'certList',[])
-              this.isIdcard = true
-              getMyCretList(data.cardno).then(val => {
-                // this.form.certList = val.data.data.map(v => v)
-                val.data.data.forEach(item =>{
-                  this.form.certList.push(item)
-                    if(this.form.certList) {
-                      let id = 0
-                      this.form.certList.forEach(item => {
-                        item.id = id
-                        id ++
-                      })
-                    }
-                  // this.form.certList.forEach(item => {
-                  //   item.annex = item.certFile
-                  // })
-                })   
-              })
-          } else {
-              let cardMsg = {}
-              this.form.realName = data.name
-              this.form.birthday = this.setBirthTimeFormat(data.born.slice(0,4)+'-'+data.born.slice(4,6)+'-'+data.born.slice(6))
-              this.form.idcard = data.cardno
-              this.form.address = data.address
-              this.form.nation = data.nation
-              this.form.gender = data.sex=='男' ? 1 : 2
-              this.form.nationality  = '中国'
-              cardMsg.provinceId = parseInt(data.cardno.substring(0,2)+'0000000000')
-              cardMsg.cityId = parseInt(data.cardno.substring(0,4)+'00000000')
-              cardMsg.districtId = parseInt(data.cardno.substring(0,6)+'000000')
-              this.choseProvince(cardMsg.provinceId)
-              this.choseCity(cardMsg.cityId)
-              this.form.provinceId = cardMsg.provinceId
-              this.form.cityId = cardMsg.cityId
-              this.form.districtId = cardMsg.districtId
-            }
+          this.getIdCardData().then((getD) => {
+            getCrewData(data.cardno).then(res=>{
+              if (res.data.data !== true) {
+                this.choseProvince(res.data.data.provinceId)
+                this.choseCity(res.data.data.cityId)
+                this.form = res.data.data
+                if (!this.form.photoFront) {
+                  this.$set(this, 'frontList', [{ url: getD.photoFront }])
+                  this.form.photoFront = getD.photoFront
+                } else {
+                  this.$set(this, 'frontList', [{ url: this.form.photoFront}])
+                }
+
+                if (!this.form.photoReverse) {
+                  this.$set(this, 'reverseList', [{ url: getD.photoReverse }])
+                  this.form.photoReverse = getD.photoReverse
+                } else {
+                  this.$set(this, 'reverseList', [{ url: this.form.photoReverse}])
+                }
+                console.log('this.form', this.form)
+                // if (!this.form.photoReverse) {
+                //   this.form = getD.photoReverse
+                // }
+                // this.form.certList = []
+                this.$set(this.form, 'certList',[])
+                this.isIdcard = true
+                getMyCretList(data.cardno).then(val => {
+                  // this.form.certList = val.data.data.map(v => v)
+                  val.data.data.forEach(item =>{
+                    this.form.certList.push(item)
+                      if(this.form.certList) {
+                        let id = 0
+                        this.form.certList.forEach(item => {
+                          item.id = id
+                          id ++
+                        })
+                      }
+                    // this.form.certList.forEach(item => {
+                    //   item.annex = item.certFile
+                    // })
+                  })   
+                })
+            } else {
+                let cardMsg = {}
+                this.form.realName = data.name
+                this.form.birthday = this.setBirthTimeFormat(data.born.slice(0,4)+'-'+data.born.slice(4,6)+'-'+data.born.slice(6))
+                this.form.idcard = data.cardno
+                this.form.address = data.address
+                this.form.nation = data.nation
+                this.form.gender = data.sex=='男' ? 1 : 2
+                this.form.nationality  = '中国'
+                cardMsg.provinceId = parseInt(data.cardno.substring(0,2)+'0000000000')
+                cardMsg.cityId = parseInt(data.cardno.substring(0,4)+'00000000')
+                cardMsg.districtId = parseInt(data.cardno.substring(0,6)+'000000')
+                this.choseProvince(cardMsg.provinceId)
+                this.choseCity(cardMsg.cityId)
+                this.form.provinceId = cardMsg.provinceId
+                this.form.cityId = cardMsg.cityId
+                this.form.districtId = cardMsg.districtId
+              }
+            })
           })
         })
             //格式化拿到的數據

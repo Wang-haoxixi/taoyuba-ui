@@ -4,7 +4,7 @@
     :title="title"
     :visible.sync="dialogVisible"
     width="60%" >
-    <edit-form :status="status" ref="editForm" span="12" @end="close" v-model="value" shipNameDisabled></edit-form>
+    <edit-form :status="status" ref="editForm" :span="12" @end="close" v-model="value" shipNameDisabled></edit-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
       <el-button type="primary" @click="handleSubmit">确 定</el-button>

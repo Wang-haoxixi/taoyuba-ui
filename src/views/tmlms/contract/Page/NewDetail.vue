@@ -661,6 +661,9 @@ export default {
       payValueOnce:'',
     }
   },
+  beforeDestroy () {
+    this.sockets.unsubscribe('card message')
+  },
   created () {
     if (this.record) {
       this.getList()

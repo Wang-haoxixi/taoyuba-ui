@@ -84,10 +84,10 @@ import { getUserInfo } from '@/api/login'
 import { getMyCretList } from '@/api/post/cert'
 // import { addUserRole } from '@/api/admin/user'
 import information from '@/mixins/information'
-import VueSocketio from 'vue-socket.io'
-import Vue from 'vue'
 import store from '@/store'
 import debounce from 'lodash/debounce'
+import VueSocketio from 'vue-socket.io'
+import Vue from 'vue'
 import { mapState } from 'vuex'
 
 Vue.use(new VueSocketio({
@@ -589,61 +589,63 @@ export default {
       res.data.data.sysUser.userId
     })
   },
+  beforeDestroy () {
+    this.sockets.unsubscribe('card message')
+  },
   mounted () {
-            //添加socket事件监听
-        this.$socket.emit('connect')
-        this.$socket.emit('startRead')
-        // this.sockets.listener.subscribe('card message', (msg) => {
-          this.sockets.subscribe('card message', (msg) => {
-          var base = new Base64()
-          //2.解密后是json字符串mou
-          var result1 = base.decode(msg)
-          var data = eval('('+result1+')')
-          console.log('sockets', data)
-          this.getIdCardData().then(() => {
-            // 将数据录入
-            let cardMsg = {}
-            let crew = {}
-            let flag = false
-            this.form.idcardPhoto = data.photobase64
-            if (data.frontImg) {
-              this.form.photoFront = data.frontImg
-            }
-            if (data.backImg) {
-              this.form.photoReverse = data.backImg
-            }
-            this.form.realName = data.name
-            this.form.birthday = data.born.slice(0,4)+'-'+data.born.slice(4,6)+'-'+data.born.slice(6)
-            this.form.idcard = data.cardno
-            this.form.address = data.address
-            this.form.nation = data.nation
-            this.form.gender = data.sex=='男' ? 1 : 2
-            this.form.nationality  = '中国'
-            cardMsg.provinceId = parseInt(data.cardno.substring(0,2)+'0000000000')
-            cardMsg.cityId = parseInt(data.cardno.substring(0,4)+'00000000')
-            cardMsg.districtId = parseInt(data.cardno.substring(0,6)+'000000')
-            this.choseProvince(cardMsg.provinceId)
-            this.choseCity(cardMsg.cityId)
-            this.form.provinceId = cardMsg.provinceId
-            this.form.cityId = cardMsg.cityId
-            this.form.districtId = cardMsg.districtId
-            this.form.shipId = this.$route.params.shipId
-            this.form.flag = 1
-            crew = JSON.parse(JSON.stringify(this.form))
-            if(this.crewList.length){
-              this.crewList.forEach(item=>{
-              if(crew.idcard==item.idcard){
-                flag= true
-              }
-              })
-            }
-            if(!flag) {
-              this.crewList.push(crew)
-            }
-            // console.log('data', data)
-            // console.log('this.form.photoFront', this.form)
+        //添加socket事件监听
+    this.$socket.emit('startRead')
+      this.sockets.subscribe('card message', (msg) => {
+        console.log('card message')
+      var base = new Base64()
+      //2.解密后是json字符串mou
+      var result1 = base.decode(msg)
+      var data = eval('('+result1+')')
+      console.log('sockets', data)
+      this.getIdCardData().then(() => {
+        // 将数据录入
+        let cardMsg = {}
+        let crew = {}
+        let flag = false
+        this.form.idcardPhoto = data.photobase64
+        if (data.frontImg) {
+          this.form.photoFront = data.frontImg
+        }
+        if (data.backImg) {
+          this.form.photoReverse = data.backImg
+        }
+        this.form.realName = data.name
+        this.form.birthday = data.born.slice(0,4)+'-'+data.born.slice(4,6)+'-'+data.born.slice(6)
+        this.form.idcard = data.cardno
+        this.form.address = data.address
+        this.form.nation = data.nation
+        this.form.gender = data.sex=='男' ? 1 : 2
+        this.form.nationality  = '中国'
+        cardMsg.provinceId = parseInt(data.cardno.substring(0,2)+'0000000000')
+        cardMsg.cityId = parseInt(data.cardno.substring(0,4)+'00000000')
+        cardMsg.districtId = parseInt(data.cardno.substring(0,6)+'000000')
+        this.choseProvince(cardMsg.provinceId)
+        this.choseCity(cardMsg.cityId)
+        this.form.provinceId = cardMsg.provinceId
+        this.form.cityId = cardMsg.cityId
+        this.form.districtId = cardMsg.districtId
+        this.form.shipId = this.$route.params.shipId
+        this.form.flag = 1
+        crew = JSON.parse(JSON.stringify(this.form))
+        if(this.crewList.length){
+          this.crewList.forEach(item=>{
+          if(crew.idcard==item.idcard){
+            flag= true
+          }
           })
-        })
+        }
+        if(!flag) {
+          this.crewList.push(crew)
+        }
+        // console.log('data', data)
+        // console.log('this.form.photoFront', this.form)
+      })
+    })
             //格式化拿到的數據
     function Base64 () { 
       // private property 

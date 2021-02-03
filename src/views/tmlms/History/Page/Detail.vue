@@ -452,6 +452,9 @@ export default {
   },
   computed: {
   },
+  beforeDestroy () {
+    this.sockets.unsubscribe('card message')
+  },
   created () {
     if (this.$route.query.see || this.$route.query.edit) {                              
       this.getData()

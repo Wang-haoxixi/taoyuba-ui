@@ -471,6 +471,9 @@ export default {
     })
     this.getrealNameList()
   },
+  beforeDestroy () {
+    this.sockets.unsubscribe('card message')
+  },
   mounted () {
           //添加socket事件监听
         this.$socket.emit('connect')

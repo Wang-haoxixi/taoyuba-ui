@@ -679,6 +679,9 @@ export default {
       this.loading = false
     },
   },
+  beforeDestroy () {
+    this.sockets.unsubscribe('card message')
+  },
   // components: { InlineFormTable },
   created () {
     getArea(0).then(({ data }) => {
@@ -760,7 +763,7 @@ export default {
         this.$socket.emit('connect')
         this.$socket.emit('startRead')
         this.sockets.subscribe('card message', (msg) => {
-          var base = new Base64()  			  
+          var base = new Base64()
           //2.解密后是json字符串
           var result1 = base.decode(msg)
           var data = eval('('+result1+')')

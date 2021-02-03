@@ -275,6 +275,9 @@ export default {
   },
   computed: {
   },
+  beforeDestroy () {
+    this.sockets.unsubscribe('card message')
+  },
   created () {
     // 编辑新增放同一个组件 判断分别
     // if(this.$route.query.edit || this.$route.query.see){

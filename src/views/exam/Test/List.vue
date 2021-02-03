@@ -167,7 +167,7 @@ export default {
       }).catch(()=>{})
     },
     // 分页
-    currentChange (val) {
+    handleCurrentChange (val) {
       this.params.current = val
       this.setQuery({ current: this.params.current })
       this.loadPage()
