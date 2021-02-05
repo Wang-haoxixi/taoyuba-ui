@@ -595,7 +595,7 @@ export default {
   mounted () {
         //添加socket事件监听
     this.$socket.emit('startRead')
-      this.sockets.subscribe('card message', (msg) => {
+    this.sockets.subscribe('card message', (msg) => {
         console.log('card message')
       var base = new Base64()
       //2.解密后是json字符串mou

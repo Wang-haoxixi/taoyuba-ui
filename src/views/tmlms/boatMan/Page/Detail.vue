@@ -1,393 +1,394 @@
 <template>
   <div class="agent-add">
     <basic-container>
+      <div>
         <h1 v-if="!$route.query.userId">{{ $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }}船员信息</h1>
-        <h1 v-if="$route.query.userId">完善个人信息</h1>                
-            <el-form ref="form" :model="form" :rules="$route.query.shipCrew ? shipCrewRules:rules" label-width="150px" size="small" :disabled="type === 1">
-                <el-row>
-                <el-col :span="12">
-                    <el-form-item label="个人姓名：" prop="realName">
-                    <el-input v-model="form.realName"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="性别" prop="gender">   
-                    <el-radio v-model="form.gender" :label="1">男</el-radio>
-                    <el-radio v-model="form.gender" :label="2">女</el-radio>
-                    </el-form-item>
-                </el-col>
-                </el-row>
-                <el-row>
-                <el-col :span="12">
-                  <el-form-item label="身份证号码：" prop="idcard">
-                    <el-input v-model.trim="form.idcard" :disabled="!!$route.query.edit" @blur="getidcardList"></el-input>
-                    <!-- <el-select :disabled="!!$route.query.edit" v-model.trim="form.idcard"
-                              placeholder="请选择"
-                              filterable
-                              remote
-                              maxlength="18"
-                              :loading="loading"
-                              allow-create
-                              clearable
-                              @change="idcardChange"
-                              :remote-method="getidcardList">
-                      <el-option v-for="item in idcards" :key="item.id" :label="item.idcard + '(手机号：' + item.phone + ')'" :value="item"></el-option>
-                    </el-select> -->
+        <h1 v-if="$route.query.userId">完善个人信息</h1>
+        <el-form ref="form" :model="form" :rules="$route.query.shipCrew ? shipCrewRules:rules" label-width="150px" size="small" :disabled="type === 1">
+            <el-row>
+            <el-col :span="12">
+                <el-form-item label="个人姓名：" prop="realName">
+                <el-input v-model="form.realName"></el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :span="12">
+                <el-form-item label="性别" prop="gender">   
+                <el-radio v-model="form.gender" :label="1">男</el-radio>
+                <el-radio v-model="form.gender" :label="2">女</el-radio>
+                </el-form-item>
+            </el-col>
+            </el-row>
+            <el-row>
+            <el-col :span="12">
+              <el-form-item label="身份证号码：" prop="idcard">
+                <el-input v-model.trim="form.idcard" :disabled="!!$route.query.edit" @blur="getidcardList"></el-input>
+                <!-- <el-select :disabled="!!$route.query.edit" v-model.trim="form.idcard"
+                          placeholder="请选择"
+                          filterable
+                          remote
+                          maxlength="18"
+                          :loading="loading"
+                          allow-create
+                          clearable
+                          @change="idcardChange"
+                          :remote-method="getidcardList">
+                  <el-option v-for="item in idcards" :key="item.id" :label="item.idcard + '(手机号：' + item.phone + ')'" :value="item"></el-option>
+                </el-select> -->
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+                <iep-form-item class="form-half" prop="birthday" label-name="出生日期">
+                <iep-date-picker format="yyyy-MM-dd" v-model="form.birthday" type="date" placeholder="选择日期"></iep-date-picker>
+                </iep-form-item>
+            </el-col>
+            </el-row>
+            <el-row>
+            <el-col :span="12">
+                <el-form-item label="籍贯地区：" prop="districtId">
+                <el-select
+                    v-model="form.provinceId"
+                    @change="choseProvince(form.provinceId)"
+                    placeholder="省级地区" style="width: 33%!important">
+                    <el-option
+                    v-for="item in province"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.areaCode" prop="provinceId">
+                    </el-option>
+                </el-select>
+                <el-select
+                    v-model="form.cityId"
+                    @change="choseCity(form.cityId)"
+                    placeholder="市级地区" style="width: 33%!important">
+                    <el-option
+                    v-for="item in city"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.areaCode" prop="cityId">
+                    </el-option>
+                </el-select>
+                <el-select
+                    v-model="form.districtId"
+                    placeholder="区级地区" style="width: 33%!important">
+                    <el-option
+                    v-for="item in district"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.areaCode" prop="districtId">
+                    </el-option>
+                </el-select>
+                </el-form-item>
+            </el-col>
+            <!-- <el-col :span="6">
+                <el-form-item label="国籍" prop="nationality">
+                <el-input v-model="form.nationality"></el-input>
+                </el-form-item>
+            </el-col> -->
+            <el-col :span="6">
+                <el-form-item label="民族" prop="nation">
+                <el-select v-model="form.nation" placeholder="请输入民族">
+                    <el-option v-for="item in nationals" :key="item.id" :label="item.name" :value="item.name"></el-option>
+                </el-select>
+                </el-form-item> 
+            </el-col>
+            </el-row>  
+            <el-row>
+            <el-col :span="12">
+                <el-form-item label="家庭地址：" prop="address">
+                <el-input v-model="form.address"></el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :span="12">
+                <el-form-item label="联系电话" prop="phone">
+                <el-input v-model="form.phone"></el-input>
+                </el-form-item>
+            </el-col>
+            </el-row>
+            <el-row>
+            <el-col :span="12">
+                <el-form-item label="家庭联系人：" prop="contactName">
+                <el-input v-model="form.contactName"></el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :span="12">
+                <el-form-item label="家庭联系电话" prop="contactPhone">
+                <el-input v-model="form.contactPhone"></el-input>
+                </el-form-item>
+            </el-col>
+            </el-row>
+            <!-- <el-row>
+            <el-col :span="12">
+                <el-form-item label="船民证号码" prop="crewCert">
+                <el-input v-model="form.crewCert"></el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :span="12">
+                <el-form-item class="form-half" prop="certExpDate" label="船民证有效期限">
+                <iep-date-picker v-model="form.certExpDate" type="date" placeholder="选择日期"></iep-date-picker>
+                </el-form-item>
+            </el-col>               
+            </el-row> -->
+            <el-row>
+            <!-- <el-col :span="8">
+                <el-form-item label="四小件上传：" prop="fourSmallCard">
+                <iep-avatar v-model="form.fourSmallCard"></iep-avatar>
+                </el-form-item>
+            </el-col> -->
+            <!-- <el-col>        
+                <iep-form-item v-if="userId" label-name="资质证书" tip="1.请务必按照证书准确填写全称；2.请务必按照证书准确填写编号；3.请务必按照证书准确填写颁发单位全称，忌单位简称；4.请务必上传电子版证书，否则证书不做任何加分项；"> -->
+                <!-- <inline-form-table :table-data="userCert" :columns="certificateColumns" requestName="certificate" type="employee_profile" @load-page="handleSave"></inline-form-table> -->
+                <!-- <cert-form-table  :crewData="tableData" :crewId="userId" :columns="certificateColumns"></cert-form-table>
+                </iep-form-item>
+            </el-col> -->
+              <el-col :span="8">
+                  <el-form-item label="现任职位：" prop="positionId">
+                  <el-select
+                      v-model="form.positionId"
+                      placeholder="现任职位">
+                      <el-option
+                      v-for="item in position"
+                      :key="item.id"
+                      :label="item.label"
+                      :value="item.value">
+                      </el-option>
+                  </el-select>
+                  </el-form-item>
+              </el-col>
+              <el-col :span="12"  v-if="!$route.query.edit || (userInfo.orgId!=32)">
+                  <el-form-item label="用工状态：" prop="workStatus">
+                  <el-radio-group v-model="form.workStatus">
+                      <el-radio  :label="9">待求职</el-radio>
+                      <el-radio  :label="0">未用工</el-radio>
+                      <el-radio  :label="3">上船，未签合同</el-radio>
+                  </el-radio-group>
                   </el-form-item>
                 </el-col>
-                <el-col :span="12">
-                    <iep-form-item class="form-half" prop="birthday" label-name="出生日期">
-                    <iep-date-picker format="yyyy-MM-dd" v-model="form.birthday" type="date" placeholder="选择日期"></iep-date-picker>
-                    </iep-form-item>
-                </el-col>
-                </el-row>
-                <el-row>
-                <el-col :span="12">
-                    <el-form-item label="籍贯地区：" prop="districtId">
-                    <el-select
-                        v-model="form.provinceId"
-                        @change="choseProvince(form.provinceId)"
-                        placeholder="省级地区" style="width: 33%!important">
-                        <el-option
-                        v-for="item in province"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.areaCode" prop="provinceId">
-                        </el-option>
+              <!-- <el-col :span="8">
+                  <el-form-item label="是否需要培训" prop="isTrain">
+                  <el-radio-group v-model="form.isTrain">
+                      <el-radio  :label="0">否</el-radio>
+                      <el-radio  :label="1">是</el-radio>
+                  </el-radio-group>
+                  </el-form-item>
+              </el-col> -->
+              <!-- <el-col :span="8">
+                  <el-form-item label="申请类别" prop="applyType">
+                  <el-select v-model="form.applyType" placeholder="请输入申请类别">
+                      <el-option v-for="item in applyTypes" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                  </el-select>
+                  </el-form-item> 
+              </el-col> -->
+            <!-- <el-col :span="8">
+                <el-form-item label="所属渔村区域" prop="villageId">
+                <span v-for="(region, key) in regions" :key="key">
+                    <el-select v-model="regionChosen[key]">
+                    <el-option v-for="item in region"
+                                :key="item.areaCode"
+                                :value="item.areaCode"
+                                :label="item.name"></el-option>
                     </el-select>
-                    <el-select
-                        v-model="form.cityId"
-                        @change="choseCity(form.cityId)"
-                        placeholder="市级地区" style="width: 33%!important">
-                        <el-option
-                        v-for="item in city"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.areaCode" prop="cityId">
-                        </el-option>
-                    </el-select>
-                    <el-select
-                        v-model="form.districtId"
-                        placeholder="区级地区" style="width: 33%!important">
-                        <el-option
-                        v-for="item in district"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.areaCode" prop="districtId">
-                        </el-option>
-                    </el-select>
-                    </el-form-item>
-                </el-col>
-                <!-- <el-col :span="6">
-                    <el-form-item label="国籍" prop="nationality">
-                    <el-input v-model="form.nationality"></el-input>
-                    </el-form-item>
-                </el-col> -->
-                <el-col :span="6">
-                    <el-form-item label="民族" prop="nation">
-                    <el-select v-model="form.nation" placeholder="请输入民族">
-                        <el-option v-for="item in nationals" :key="item.id" :label="item.name" :value="item.name"></el-option>
-                    </el-select>
-                    </el-form-item> 
-                </el-col>
-                </el-row>  
-                <el-row>
-                <el-col :span="12">
-                    <el-form-item label="家庭地址：" prop="address">
-                    <el-input v-model="form.address"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="联系电话" prop="phone">
-                    <el-input v-model="form.phone"></el-input>
-                    </el-form-item>
-                </el-col>
-                </el-row>
-                <el-row>
-                <el-col :span="12">
-                    <el-form-item label="家庭联系人：" prop="contactName">
-                    <el-input v-model="form.contactName"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="家庭联系电话" prop="contactPhone">
-                    <el-input v-model="form.contactPhone"></el-input>
-                    </el-form-item>
-                </el-col>
-                </el-row>
-                <!-- <el-row>
-                <el-col :span="12">
-                    <el-form-item label="船民证号码" prop="crewCert">
-                    <el-input v-model="form.crewCert"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item class="form-half" prop="certExpDate" label="船民证有效期限">
-                    <iep-date-picker v-model="form.certExpDate" type="date" placeholder="选择日期"></iep-date-picker>
-                    </el-form-item>
-                </el-col>               
-                </el-row> -->
-                <el-row>
+                </span>
+                </el-form-item>
+            </el-col> -->
+            </el-row>
+            <el-row>
+                
                 <!-- <el-col :span="8">
-                    <el-form-item label="四小件上传：" prop="fourSmallCard">
-                    <iep-avatar v-model="form.fourSmallCard"></iep-avatar>
-                    </el-form-item>
+                  <el-form-item label="婚姻状态：" prop="maritalStatus">
+                  <el-radio-group v-model="form.maritalStatus">
+                      <el-radio  :label="0">未婚</el-radio>
+                      <el-radio  :label="1">已婚</el-radio>
+                  </el-radio-group>
+                  </el-form-item>
                 </el-col> -->
-                <!-- <el-col>        
-                    <iep-form-item v-if="userId" label-name="资质证书" tip="1.请务必按照证书准确填写全称；2.请务必按照证书准确填写编号；3.请务必按照证书准确填写颁发单位全称，忌单位简称；4.请务必上传电子版证书，否则证书不做任何加分项；"> -->
-                    <!-- <inline-form-table :table-data="userCert" :columns="certificateColumns" requestName="certificate" type="employee_profile" @load-page="handleSave"></inline-form-table> -->
-                    <!-- <cert-form-table  :crewData="tableData" :crewId="userId" :columns="certificateColumns"></cert-form-table>
-                    </iep-form-item>
+                <!-- <el-col :span="8">
+                  <el-form-item label="期望薪资：" prop="salary">
+                    <el-input v-model="form.salary"></el-input>
+                  </el-form-item>
                 </el-col> -->
-                  <el-col :span="8">
-                      <el-form-item label="现任职位：" prop="positionId">
-                      <el-select
-                          v-model="form.positionId"
-                          placeholder="现任职位">
-                          <el-option
-                          v-for="item in position"
-                          :key="item.id"
-                          :label="item.label"
-                          :value="item.value">
-                          </el-option>
-                      </el-select>
-                      </el-form-item>
-                  </el-col>
-                  <el-col :span="12"  v-if="!$route.query.edit || (userInfo.orgId!=32)">
-                      <el-form-item label="用工状态：" prop="workStatus">
-                      <el-radio-group v-model="form.workStatus">
-                          <el-radio  :label="9">待求职</el-radio>
-                          <el-radio  :label="0">未用工</el-radio>
-                          <el-radio  :label="3">上船，未签合同</el-radio>
-                      </el-radio-group>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                  <el-form-item label="现住地址：" prop="preAddress">
+                    <el-input v-model="form.preAddress"></el-input>
+                  </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                  <el-form-item label="作业方式：" prop="workRequire">
+                    <iep-dict-select v-model="form.workRequire" dict-name="tyb_resume_worktype"></iep-dict-select>
+                  </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                  <el-form-item label="文化程度：" prop="eduDegree">
+                  <iep-dict-select v-model="form.eduDegree" dict-name="tyb_education_degree"></iep-dict-select>
+                  </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                  <el-form-item label="工作经验：" prop="workExprience">
+                  <iep-dict-select v-model="form.workExprience" dict-name="tyb_work_exprience"></iep-dict-select> 
+                  </el-form-item>
+              </el-col>
+            </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="特长：" prop="speciality">
+                    <el-input v-model="form.speciality"></el-input>
+                  </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item  label="身份证正面照片：" prop="photoFront">
+                  <el-upload
+                    action="/api/admin/file/upload/avatar"
+                    :class="{disabled:hideUpload}"
+                    list-type="picture-card"
+                    :headers="headers"
+                    :on-change="uploadChangeFront"
+                    :before-remove="beforeCardfrontRemove"
+                    :on-success="handleAvatarSuccessFront" 
+                    :file-list="frontList"
+                    :limit="1"
+                    :on-preview="previewFront"
+                    :on-remove="handleAvatarDelFront">
+                    <i class="el-icon-plus"></i>
+                  </el-upload>
+                  <el-dialog :visible.sync="imgVisible" append-to-body>
+                    <img width="100%" :src="dialogImageUrl" alt="">
+                  </el-dialog>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item  label="身份证反面照片：" prop="photoReverse">
+                  <el-upload
+                    action="/api/admin/file/upload/avatar"
+                    :class="{disabled:hideUploadReverse}"
+                    list-type="picture-card"
+                    :headers="headers"
+                    :on-change="uploadChangeReverse"
+                    :before-remove="beforeCardreverseRemove"
+                    :on-success="handleAvatarSuccessReverse" 
+                    :file-list="reverseList"
+                    :limit="1"
+                    :on-preview="previewReverse"
+                    :on-remove="handleAvatarDelReverse">
+                    <i class="el-icon-plus"></i>
+                  </el-upload>
+                  <el-dialog :visible.sync="imgVisibleReverse" append-to-body>
+                    <img width="100%" :src="dialogImageUrlReverse" alt="">
+                  </el-dialog>
+                  
+                  <!-- <el-upload
+                    class="avatar-uploader"
+                    action="/api/admin/file/upload/avatar"
+                    :show-file-list="false"
+                    :on-success="handleAvatarSuccessReverse" :headers="headers"  accept="image/*">
+                    <img v-if="form.photoReverse" :src="form.photoReverse" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                  </el-upload> -->
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item v-if="manager" label="身份证头像：" prop="idcardPhoto">
+                  <img v-if="form.idcardPhoto" :src="form.idcardPhoto">
+                  <i v-else class="el-icon-picture-outline"></i>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item v-if="manager" label="人脸照：" prop="facePhoto">
+                  <img v-if="form.facePhoto" :src="form.facePhoto" style="width:350px;height:200px">
+                  <i v-else class="el-icon-picture-outline"></i>
+                </el-form-item>
+              </el-col>
+            </el-row>      
+            <el-row>                                  
+              <el-col :span="12">   
+                <el-form-item  label="证件照：" prop="certPhoto">
+                  <el-upload
+                    action="/api/admin/file/upload/avatar"
+                    :class="{disabled:hideUploadCert}"
+                    list-type="picture-card"
+                    :headers="headers"
+                    :on-change="uploadChangeCert"
+                    :before-remove="beforeCertRemove"
+                    :on-success="handleAvatarSuccessCert" 
+                    :file-list="CertList"
+                    :on-preview="previewCert"
+                    :on-remove="handleAvatarDelCert">
+                    <i class="el-icon-plus"></i>
+                  </el-upload>
+                  <el-dialog :visible.sync="imgVisibleCert" append-to-body>
+                    <img width="100%" :src="dialogImageUrlCert" alt="">
+                  </el-dialog>
+                </el-form-item>
+              </el-col>
+            </el-row>      
+            <iep-form-item class="form-half" prop="remark" label-name="备注信息" tip="请输入备注信息" v-if="!$route.query.userId">
+              <iep-input-area v-model="form.remark"></iep-input-area>
+            </iep-form-item>
+            <h1 style="font-size: 18px;">船员职务证书: </h1> 
+            <div v-for="(item, index) in form.certList" :key="index">
+              <el-form label-width="150px" size="small" :disabled="type === 1">
+                <el-row>
+                    <el-col :span="9">
+                      <el-form-item label="证书编码：" prop="certNo">
+                        <el-input v-model.trim="item.certNo"></el-input>
                       </el-form-item>
                     </el-col>
-                  <!-- <el-col :span="8">
-                      <el-form-item label="是否需要培训" prop="isTrain">
-                      <el-radio-group v-model="form.isTrain">
-                          <el-radio  :label="0">否</el-radio>
-                          <el-radio  :label="1">是</el-radio>
-                      </el-radio-group>
+                    <el-col :span="8">
+                      <el-form-item label="证书类型：" prop="certType">
+                        <iep-dict-select v-model="item.certType" dict-name="tyb_crew_cert_type"></iep-dict-select>
                       </el-form-item>
-                  </el-col> -->
-                  <!-- <el-col :span="8">
-                      <el-form-item label="申请类别" prop="applyType">
-                      <el-select v-model="form.applyType" placeholder="请输入申请类别">
-                          <el-option v-for="item in applyTypes" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                      </el-select>
-                      </el-form-item> 
-                  </el-col> -->
-                <!-- <el-col :span="8">
-                    <el-form-item label="所属渔村区域" prop="villageId">
-                    <span v-for="(region, key) in regions" :key="key">
-                        <el-select v-model="regionChosen[key]">
-                        <el-option v-for="item in region"
-                                    :key="item.areaCode"
-                                    :value="item.areaCode"
-                                    :label="item.name"></el-option>
-                        </el-select>
-                    </span>
-                    </el-form-item>
-                </el-col> -->
+                    </el-col>
+                    <el-col :span="7">
+                      <el-form-item label="证书等级：" prop="certLevel">
+                        <iep-dict-select v-model="item.certLevel" dict-name="tyb_crew_cert_level"></iep-dict-select>
+                      </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>    
+                    <el-col :span="8">
+                      <el-form-item label="证书职务：" prop="certTitle">
+                        <iep-dict-select v-model="item.certTitle" dict-name="tyb_crew_cert_title"></iep-dict-select>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="证书起始日期：" prop="certDateIssue">
+                        <el-date-picker v-model="item.certDateIssue" type="date" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期"></el-date-picker> 
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="证书结束日期：" prop="certDateExpire">
+                        <el-date-picker v-model="item.certDateExpire" type="date" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期"></el-date-picker> 
+                      </el-form-item>
+                    </el-col>
                 </el-row>
                 <el-row>
-                   
-                    <!-- <el-col :span="8">
-                      <el-form-item label="婚姻状态：" prop="maritalStatus">
-                      <el-radio-group v-model="form.maritalStatus">
-                          <el-radio  :label="0">未婚</el-radio>
-                          <el-radio  :label="1">已婚</el-radio>
-                      </el-radio-group>
+                    <el-col :span="8">
+                      <el-form-item label="扫描件：" prop="certFile">
+                        <el-upload class="upload-demo" action="/api/admin/file/upload/avatar" :show-file-list="false"
+                        :on-success="handleAvatarSuccessFile" :limit="1"  :headers="headers" accept="image/*">
+                        <el-button size="mini" type="primary" @click="fileUpload(index)">点击上传</el-button>
+                        <img v-if="item.certFile" :src="item.certFile" class="certAvatar">
+                        <i v-else class="el-icon-picture-outline"></i>
+                        </el-upload>
                       </el-form-item>
-                    </el-col> -->
-                    <!-- <el-col :span="8">
-                      <el-form-item label="期望薪资：" prop="salary">
-                        <el-input v-model="form.salary"></el-input>
-                      </el-form-item>
-                    </el-col> -->
+                    </el-col>
+                    <el-col :span="4" style="text-align:center">
+                      <!-- manager || !$route.query.edit -->
+                      <el-button v-if="isShowDeleteBtn(item)" type="primary" size="small" plain @click="remove(index)">删除</el-button>
+                    </el-col>
                 </el-row>
-                <el-row>
-                  <el-col :span="12">
-                      <el-form-item label="现住地址：" prop="preAddress">
-                        <el-input v-model="form.preAddress"></el-input>
-                      </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
-                      <el-form-item label="作业方式：" prop="workRequire">
-                        <iep-dict-select v-model="form.workRequire" dict-name="tyb_resume_worktype"></iep-dict-select>
-                      </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="12">
-                      <el-form-item label="文化程度：" prop="eduDegree">
-                      <iep-dict-select v-model="form.eduDegree" dict-name="tyb_education_degree"></iep-dict-select>
-                      </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
-                      <el-form-item label="工作经验：" prop="workExprience">
-                      <iep-dict-select v-model="form.workExprience" dict-name="tyb_work_exprience"></iep-dict-select> 
-                      </el-form-item>
-                  </el-col>
-                </el-row>
-                  <el-row>
-                    <el-col :span="12">
-                      <el-form-item label="特长：" prop="speciality">
-                        <el-input v-model="form.speciality"></el-input>
-                      </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="12">
-                    <el-form-item  label="身份证正面照片：" prop="photoFront">
-                      <el-upload
-                        action="/api/admin/file/upload/avatar"
-                        :class="{disabled:hideUpload}"
-                        list-type="picture-card"
-                        :headers="headers"
-                        :on-change="uploadChangeFront"
-                        :before-remove="beforeCardfrontRemove"
-                        :on-success="handleAvatarSuccessFront" 
-                        :file-list="frontList"
-                        :limit="1"
-                        :on-preview="previewFront"
-                        :on-remove="handleAvatarDelFront">
-                        <i class="el-icon-plus"></i>
-                      </el-upload>
-                      <el-dialog :visible.sync="imgVisible" append-to-body>
-                        <img width="100%" :src="dialogImageUrl" alt="">
-                      </el-dialog>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
-                    <el-form-item  label="身份证反面照片：" prop="photoReverse">
-                      <el-upload
-                        action="/api/admin/file/upload/avatar"
-                        :class="{disabled:hideUploadReverse}"
-                        list-type="picture-card"
-                        :headers="headers"
-                        :on-change="uploadChangeReverse"
-                        :before-remove="beforeCardreverseRemove"
-                        :on-success="handleAvatarSuccessReverse" 
-                        :file-list="reverseList"
-                        :limit="1"
-                        :on-preview="previewReverse"
-                        :on-remove="handleAvatarDelReverse">
-                        <i class="el-icon-plus"></i>
-                      </el-upload>
-                      <el-dialog :visible.sync="imgVisibleReverse" append-to-body>
-                        <img width="100%" :src="dialogImageUrlReverse" alt="">
-                      </el-dialog>
-                      
-                      <!-- <el-upload
-                        class="avatar-uploader"
-                        action="/api/admin/file/upload/avatar"
-                        :show-file-list="false"
-                        :on-success="handleAvatarSuccessReverse" :headers="headers"  accept="image/*">
-                        <img v-if="form.photoReverse" :src="form.photoReverse" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                      </el-upload> -->
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="12">
-                    <el-form-item v-if="manager" label="身份证头像：" prop="idcardPhoto">
-                      <img v-if="form.idcardPhoto" :src="form.idcardPhoto">
-                      <i v-else class="el-icon-picture-outline"></i>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
-                    <el-form-item v-if="manager" label="人脸照：" prop="facePhoto">
-                      <img v-if="form.facePhoto" :src="form.facePhoto" style="width:350px;height:200px">
-                      <i v-else class="el-icon-picture-outline"></i>
-                    </el-form-item>
-                  </el-col>
-                </el-row>      
-                <el-row>                                  
-                  <el-col :span="12">   
-                    <el-form-item  label="证件照：" prop="certPhoto">
-                      <el-upload
-                        action="/api/admin/file/upload/avatar"
-                        :class="{disabled:hideUploadCert}"
-                        list-type="picture-card"
-                        :headers="headers"
-                        :on-change="uploadChangeCert"
-                        :before-remove="beforeCertRemove"
-                        :on-success="handleAvatarSuccessCert" 
-                        :file-list="CertList"
-                        :on-preview="previewCert"
-                        :on-remove="handleAvatarDelCert">
-                        <i class="el-icon-plus"></i>
-                      </el-upload>
-                      <el-dialog :visible.sync="imgVisibleCert" append-to-body>
-                        <img width="100%" :src="dialogImageUrlCert" alt="">
-                      </el-dialog>
-                    </el-form-item>
-                  </el-col>
-                </el-row>      
-                <iep-form-item class="form-half" prop="remark" label-name="备注信息" tip="请输入备注信息" v-if="!$route.query.userId">
-                  <iep-input-area v-model="form.remark"></iep-input-area>
-                </iep-form-item>
-                <h1 style="font-size: 18px;">船员职务证书: </h1> 
-                <div v-for="(item, index) in form.certList" :key="index">
-                  <el-form label-width="150px" size="small" :disabled="type === 1">
-                    <el-row>
-                        <el-col :span="9">
-                          <el-form-item label="证书编码：" prop="certNo">
-                            <el-input v-model.trim="item.certNo"></el-input>
-                          </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                          <el-form-item label="证书类型：" prop="certType">
-                            <iep-dict-select v-model="item.certType" dict-name="tyb_crew_cert_type"></iep-dict-select>
-                          </el-form-item>
-                        </el-col>
-                        <el-col :span="7">
-                          <el-form-item label="证书等级：" prop="certLevel">
-                            <iep-dict-select v-model="item.certLevel" dict-name="tyb_crew_cert_level"></iep-dict-select>
-                          </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>    
-                        <el-col :span="8">
-                          <el-form-item label="证书职务：" prop="certTitle">
-                            <iep-dict-select v-model="item.certTitle" dict-name="tyb_crew_cert_title"></iep-dict-select>
-                          </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                          <el-form-item label="证书起始日期：" prop="certDateIssue">
-                            <el-date-picker v-model="item.certDateIssue" type="date" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期"></el-date-picker> 
-                          </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                          <el-form-item label="证书结束日期：" prop="certDateExpire">
-                            <el-date-picker v-model="item.certDateExpire" type="date" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期"></el-date-picker> 
-                          </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="8">
-                          <el-form-item label="扫描件：" prop="certFile">
-                            <el-upload class="upload-demo" action="/api/admin/file/upload/avatar" :show-file-list="false"
-                            :on-success="handleAvatarSuccessFile" :limit="1"  :headers="headers" accept="image/*">
-                            <el-button size="mini" type="primary" @click="fileUpload(index)">点击上传</el-button>
-                            <img v-if="item.certFile" :src="item.certFile" class="certAvatar">
-                            <i v-else class="el-icon-picture-outline"></i>
-                            </el-upload>
-                          </el-form-item>
-                        </el-col>
-                        <el-col :span="4" style="text-align:center">
-                          <!-- manager || !$route.query.edit -->
-                          <el-button v-if="isShowDeleteBtn(item)" type="primary" size="small" plain @click="remove(index)">删除</el-button>
-                        </el-col>
-                    </el-row>
-                  </el-form>
-                </div>
-                <div style="text-align:center">
-                  <iep-button style="width: 86%; margin-top: 5px; margin-bottom: 8px" icon="el-icon-plus" plain @click="newMember">新增</iep-button>
-                </div>
-            </el-form>
+              </el-form>
+            </div>
+            <div style="text-align:center">
+              <iep-button style="width: 86%; margin-top: 5px; margin-bottom: 8px" icon="el-icon-plus" plain @click="newMember">新增</iep-button>
+            </div>
+        </el-form>
         <div style="text-align:center">
           <el-button @click="save" v-if="!$route.query.see">提交</el-button>
           <template v-if="$route.query.shipCrew">
@@ -403,6 +404,9 @@
           </template>
           <el-button v-if="manager && !$route.query.see" @click="collect">数据读取</el-button>
         </div>
+      </div>
+        <!-- <page-contract ref="pageContract" v-show="current === 2"></page-contract>
+        <page-ship-record ref="pageShipRecord" v-show="current === 3"></page-ship-record> -->
     </basic-container>
   </div>
 </template>
@@ -420,14 +424,16 @@ import VueSocketio from 'vue-socket.io'
 import Vue from 'vue'
 import store from '@/store'
 import debounce from 'lodash/debounce'
-import { mapState } from 'vuex' 
-import { mapGetters } from 'vuex'  
+import { mapState, mapGetters } from 'vuex'
+// import pageContract from './pageContract'
+// import pageShipRecord from './pageShipRecord'
 Vue.use(new VueSocketio({
     debug: false,
     connection: 'http://localhost:5000', //地址+端口，由后端提供
 }))
 export default {
   mixins: [information],
+  // components: { pageContract, pageShipRecord },
   data () {
     this.getidcardList = debounce(this.getidcardList, 800)
       var checkPhone = (rule, value, callback) => {
@@ -449,6 +455,7 @@ export default {
         }
       }
     return {
+      current: 1,
       certificateColumns,
       imgVisible:false,
       dialogImageUrl:'',
@@ -1175,6 +1182,9 @@ export default {
         })
       }
       this.form = data
+      this.$refs.pageContract.getList(this.form.realName)
+      this.$refs.pageShipRecord.getList(this.form.realName)
+      console.log('this.form', this.form)
     }
     getUserInfo().then(res => {
       if (res.data.data.roles.includes(111)) {
@@ -1201,6 +1211,8 @@ export default {
         this.$socket.emit('startRead')
         // this.sockets.listener.subscribe('card message', (msg) => {
           this.sockets.subscribe('card message', (msg) => {
+            console.log('船员信息 card message')
+            console.log(4)
           var base = new Base64()
           //2.解密后是json字符串mou
           var result1 = base.decode(msg)

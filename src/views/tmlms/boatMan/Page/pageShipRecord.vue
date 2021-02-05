@@ -3,7 +3,6 @@
     <el-table
       :data="data"
       stripe
-      max-height="400"
       style="width: 100%">
       <el-table-column
         prop="shipName"
@@ -18,29 +17,29 @@
         label="姓名">
       </el-table-column>
       <el-table-column
-        prop="上下船"
-        label="flag">
+        prop="flag"
+        label="上下船">
         <template slot-scope="scope">
           <span>{{getFlagName(scope.row.flag)}}</span>
         </template>
       </el-table-column>
       <el-table-column
-        prop="职务证书"
-        label="certNames">
+        prop="certNames"
+        label="职务证书">
         <template slot-scope="scope">
           <span>{{getCertNames(scope.row.certs)}}</span>
         </template>
       </el-table-column>
       <el-table-column
-        prop="来源"
-        label="sourceType">
+        prop="sourceType"
+        label="来源">
         <template slot-scope="scope">
           <span>{{getSourceTypeName(scope.row.sourceType)}}</span>
         </template>
       </el-table-column>
       <el-table-column
-        prop="登记时间"
-        label="leftTime">
+        prop="leftTime"
+        label="登记时间">
       </el-table-column>
     </el-table>
   </div>

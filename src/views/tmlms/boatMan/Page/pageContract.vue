@@ -3,38 +3,37 @@
     <el-table
       :data="data"
       stripe
-      max-height="400"
       style="width: 100%">
       <el-table-column
-        prop="船名"
-        label="shipName">
+        prop="shipName"
+        label="船名">
       </el-table-column>
       <el-table-column
-        prop="持证人"
-        label="shipownerName">
+        prop="shipownerName"
+        label="持证人">
       </el-table-column>
       <el-table-column
-        prop="雇主（甲方）"
-        label="employerName">
+        prop="employerName"
+        label="雇主（甲方）">
       </el-table-column>
       <el-table-column
-        prop="雇员（乙方）"
-        label="employeeName">
+        prop="employeeName"
+        label="雇员（乙方）">
       </el-table-column>
       <el-table-column
-        prop="合同创建日期"
-        label="createTime">
+        prop="createTime"
+        label="合同创建日期">
       </el-table-column>
       <el-table-column
-        prop="合同状态"
-        label="status">
+        prop="status"
+        label="合同状态">
         <template slot-scope="scope">
-          <span>{{getCertNames(scope.row.status)}}</span>
+          <span>{{getStatusName(scope.row.status)}}</span>
         </template>
       </el-table-column>
       <el-table-column
-        prop="合同发布者"
-        label="userName">
+        prop="userName"
+        label="合同发布者">
       </el-table-column>
     </el-table>
   </div>
@@ -44,14 +43,14 @@ import { getContractList } from '@/api/tmlms/newContract'
 import { getUserName } from '@/api/admin/user'
 const MAP_DATA = {
   status: [
-    { lable: '', value: '全部'},
-    { lable: 0, value: '未审核' },
-    { lable: 1, value: '合同成立' },
-    { lable: 2, value: '未通过审核' },
-    { lable: 3, value: '合同纠纷' },
-    { lable: 4, value: '合同解除' },
-    { lable: 5, value: '合同过期' },
-    { lable: 6, value: '未签纸质合同' },
+    { value: '', label: '全部'},
+    { value: 0, label: '未审核' },
+    { value: 1, label: '合同成立' },
+    { value: 2, label: '未通过审核' },
+    { value: 3, label: '合同纠纷' },
+    { value: 4, label: '合同解除' },
+    { value: 5, label: '合同过期' },
+    { value: 6, label: '未签纸质合同' },
   ],
 }
 export default {
@@ -90,7 +89,8 @@ export default {
     getUserName (userId, row) {
       getUserName(userId).then(({ data }) => {
         if (data.code === 0) {
-          row.userName = data.data.realName
+          this.$set(row, 'userName', data.data.realName)
+          // row.userName = data.data.realName
         }
       })
     },
