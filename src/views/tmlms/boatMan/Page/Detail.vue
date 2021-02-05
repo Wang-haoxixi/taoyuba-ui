@@ -293,7 +293,7 @@
             </el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item v-if="manager" label="身份证头像：" prop="idcardPhoto">
+                <el-form-item v-if="manager || roles.includes(112)" label="身份证头像：" prop="idcardPhoto">
                   <img v-if="form.idcardPhoto" :src="form.idcardPhoto">
                   <i v-else class="el-icon-picture-outline"></i>
                 </el-form-item>
@@ -1212,32 +1212,31 @@ export default {
         // this.sockets.listener.subscribe('card message', (msg) => {
           this.sockets.subscribe('card message', (msg) => {
             console.log('船员信息 card message')
-            console.log(4)
           var base = new Base64()
           //2.解密后是json字符串mou
           var result1 = base.decode(msg)
           var data = eval('('+result1+')')
           // 将数据录入
-          this.getIdCardData().then((getD) => {
+          this.getIdCardData().then(() => {
             getCrewData(data.cardno).then(res=>{
               if (res.data.data !== true) {
                 this.choseProvince(res.data.data.provinceId)
                 this.choseCity(res.data.data.cityId)
                 this.form = res.data.data
-                if (!this.form.photoFront) {
-                  this.$set(this, 'frontList', [{ url: getD.photoFront }])
-                  this.form.photoFront = getD.photoFront
-                } else {
-                  this.$set(this, 'frontList', [{ url: this.form.photoFront}])
-                }
+                // if (!this.form.photoFront) {
+                //   this.$set(this, 'frontList', [{ url: getD.photoFront }])
+                //   this.form.photoFront = getD.photoFront
+                // } else {
+                //   this.$set(this, 'frontList', [{ url: this.form.photoFront}])
+                // }
 
-                if (!this.form.photoReverse) {
-                  this.$set(this, 'reverseList', [{ url: getD.photoReverse }])
-                  this.form.photoReverse = getD.photoReverse
-                } else {
-                  this.$set(this, 'reverseList', [{ url: this.form.photoReverse}])
-                }
-                console.log('this.form', this.form)
+                // if (!this.form.photoReverse) {
+                //   this.$set(this, 'reverseList', [{ url: getD.photoReverse }])
+                //   this.form.photoReverse = getD.photoReverse
+                // } else {
+                //   this.$set(this, 'reverseList', [{ url: this.form.photoReverse}])
+                // }
+                // console.log('this.form', this.form)
                 // if (!this.form.photoReverse) {
                 //   this.form = getD.photoReverse
                 // }
