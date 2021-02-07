@@ -226,6 +226,16 @@ export default {
     addUserInfo () {
       this.$refs.userInfoForm.validate((valid) => {
           if (valid) {
+            let re = this.crewList.findIndex((item) => {
+              return item.idcard === this.form.idcard
+            })
+            if (re >= 0) {
+              this.$message({
+                message: '该身份已存在',
+                type: 'warning',
+              })
+              return false
+            }
             // this.form.idcard = ''
             // this.form.address = ''
             // this.form.nation = ''
