@@ -528,7 +528,7 @@ export default {
     },
     getIdCardData () {
       return new Promise((resolve) => {
-        this.$jsonp('https://localhost:9199/api/ReadMsg?cardImg=1').then((res) => {
+        this.$jsonp('http://localhost:8989/api/ReadMsg?cardImg=1').then((res) => {
           this.form.photoFront = res.frontImg
           this.form.photoReverse = res.backImg
           // console.log('form1', this.form)

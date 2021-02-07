@@ -36,6 +36,9 @@
         label="合同发布者">
       </el-table-column>
     </el-table>
+    <div style="text-align:center;margin-top: 30px;">
+      <el-button @click="$router.go(-1)">返回</el-button>
+    </div>
   </div>
 </template>
 <script>

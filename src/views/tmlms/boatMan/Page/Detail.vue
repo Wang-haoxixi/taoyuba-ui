@@ -1,6 +1,14 @@
 <template>
   <div class="agent-add">
     <basic-container>
+      <!-- <div class="tyb-tabs-wrapper clearfix" v-if="$route.query.see">
+        <div class="tyb-tabs">
+          <div class="item" @click="onTabs(1)" :class="current === 1 ? 'active' : ''">船员信息</div>
+          <div class="item" @click="onTabs(2)" :class="current === 2 ? 'active' : ''">合同信息</div>
+          <div class="item" @click="onTabs(3)" :class="current === 3 ? 'active' : ''">上下船记录</div>
+        </div>
+      </div> -->
+      <!-- <div v-show="current === 1"> -->
       <div>
         <h1 v-if="!$route.query.userId">{{ $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }}船员信息</h1>
         <h1 v-if="$route.query.userId">完善个人信息</h1>
@@ -596,6 +604,13 @@ export default {
     }
   },
   methods: {
+    init (name) {
+      this.$refs.pageContract.getList(name)
+      this.$refs.pageShipRecord.getList(name)
+    },
+    onTabs (index) {
+      this.current = index
+    },
     onBackByFrom () {
       let from = this.$route.query.from
       if (from) {
@@ -1118,7 +1133,7 @@ export default {
     },
     getIdCardData () {
       return new Promise((resolve) => {
-        this.$jsonp('https://localhost:9199/api/ReadMsg?cardImg=1').then((res) => {
+        this.$jsonp('http://localhost:8989/api/ReadMsg?cardImg=1').then((res) => {
           let form = {
             photoFront: res.frontImg,
             photoReverse: res.backImg,
@@ -1185,6 +1200,7 @@ export default {
       this.$refs.pageContract.getList(this.form.realName)
       this.$refs.pageShipRecord.getList(this.form.realName)
       console.log('this.form', this.form)
+      this.init(this.form.realName)
     }
     getUserInfo().then(res => {
       if (res.data.data.roles.includes(111)) {
@@ -1424,5 +1440,46 @@ export default {
 }
 .disabled .el-upload--picture-card {
     display: none;
+}
+.tyb-tabs-wrapper {
+
+  .tyb-tabs {
+    border: 1px solid #e4e7ed;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    box-sizing: border-box;
+    font-size: 20px;
+    white-space: nowrap;
+    position: relative;
+    transition: transform .3s;
+    float: left;
+    z-index: 2;
+    .item {
+      display: inline-block;
+      border-bottom: 1px solid #e4e7ed;
+      border-left: 1px solid #e4e7ed;
+      padding: 0 20px;
+      height: 40px;
+      box-sizing: border-box;
+      line-height: 40px;
+      display: inline-block;
+      list-style: none;
+      font-size: 14px;
+      font-weight: 500;
+      color: #303133;
+      position: relative;
+      cursor: pointer;
+      &.active {
+        border-bottom-color: #fff;
+        color: #409eff;
+      }
+      &:first-child {
+        border-left-color: #fff;
+      }
+      &:last-child {
+        border-right-color: #fff;
+      }
+    }
+  }
 }
 </style>
