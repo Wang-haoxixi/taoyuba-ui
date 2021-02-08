@@ -1,15 +1,15 @@
 <template>
   <div class="agent-add">
     <basic-container>
-      <!-- <div class="tyb-tabs-wrapper clearfix" v-if="$route.query.see">
+      <div class="tyb-tabs-wrapper clearfix" v-if="$route.query.see">
         <div class="tyb-tabs">
           <div class="item" @click="onTabs(1)" :class="current === 1 ? 'active' : ''">船员信息</div>
           <div class="item" @click="onTabs(2)" :class="current === 2 ? 'active' : ''">合同信息</div>
           <div class="item" @click="onTabs(3)" :class="current === 3 ? 'active' : ''">上下船记录</div>
         </div>
-      </div> -->
-      <!-- <div v-show="current === 1"> -->
-      <div>
+      </div>
+      <div v-show="current === 1">
+      <!-- <div> -->
         <h1 v-if="!$route.query.userId">{{ $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }}船员信息</h1>
         <h1 v-if="$route.query.userId">完善个人信息</h1>
         <el-form ref="form" :model="form" :rules="$route.query.shipCrew ? shipCrewRules:rules" label-width="150px" size="small" :disabled="type === 1">
@@ -413,8 +413,8 @@
           <el-button v-if="manager && !$route.query.see" @click="collect">数据读取</el-button>
         </div>
       </div>
-        <!-- <page-contract ref="pageContract" v-show="current === 2"></page-contract>
-        <page-ship-record ref="pageShipRecord" v-show="current === 3"></page-ship-record> -->
+      <page-contract ref="pageContract" v-show="current === 2"></page-contract>
+      <page-ship-record ref="pageShipRecord" v-show="current === 3"></page-ship-record>
     </basic-container>
   </div>
 </template>
@@ -433,15 +433,15 @@ import Vue from 'vue'
 import store from '@/store'
 import debounce from 'lodash/debounce'
 import { mapState, mapGetters } from 'vuex'
-// import pageContract from './pageContract'
-// import pageShipRecord from './pageShipRecord'
+import pageContract from './pageContract'
+import pageShipRecord from './pageShipRecord'
 Vue.use(new VueSocketio({
     debug: false,
     connection: 'http://localhost:5000', //地址+端口，由后端提供
 }))
 export default {
   mixins: [information],
-  // components: { pageContract, pageShipRecord },
+  components: { pageContract, pageShipRecord },
   data () {
     this.getidcardList = debounce(this.getidcardList, 800)
       var checkPhone = (rule, value, callback) => {
