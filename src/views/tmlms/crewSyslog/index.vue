@@ -186,6 +186,12 @@ export default {
       manager: false,
       showSwith:false,
       userData: {roles: []},
+      certLevel: [
+        { value: '0', label: '' },
+        { value: '1', label: '一级' },
+        { value: '2', label: '二级' },
+        { value: '3', label: '三级' },
+      ],
     }
   },
   methods: {
@@ -239,16 +245,27 @@ export default {
     getData () {
       getCrewAllSyslog(this.params).then(res=>{
         this.crewregisterList = res.data.data.records
-        this.total = res.data.data.totals
+        this.total = res.data.data.total
         this.crewregisterList.map(async (item) => {
+          let arr = []
           item.certs.forEach(v=>{
-            this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
-              if(v.certTitle==data.value){
-                  item.certNames=item.certNames+data.label
+            let name = ''
+            this.certLevel.map(data=>{
+              if (v.certLevel === data.value) {
+                name = data.label
               }
             })
+            this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
+              if(v.certTitle==data.value){
+                  // item.certNames=item.certNames+data.label
+                  name += data.label
+              }
+            })
+            if (name) {
+              arr.push(name)
+            }
           })
-          console.log('item.certNames', item.certNames)
+          item.certNames = arr.join(',')
           if(item.sourceType == 1){
             item.sourceType = '合同'
           }else if(item.sourceType == 2){
