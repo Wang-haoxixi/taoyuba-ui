@@ -36,6 +36,16 @@
         label="合同发布者">
       </el-table-column>
     </el-table>
+    <div style="text-align:center;margin-top: 20px;">
+      <el-pagination
+        background
+        @current-change="handleCurrentChange"
+        :current-page.sync="page.current"
+        layout="total, prev, pager, next"
+        :page-size="page.size"
+        :total="total">
+      </el-pagination>
+    </div>
     <div style="text-align:center;margin-top: 30px;">
       <el-button @click="$router.go(-1)">返回</el-button>
     </div>
@@ -60,6 +70,12 @@ export default {
   data () {
     return {
       data: [],
+      total: 0,
+      page: {
+        size: 10,
+        current: 1,
+      },
+      name: '',
     }
   },
   methods: {
@@ -80,12 +96,14 @@ export default {
       if (!name) {
         return
       }
-      getContractList({employeeName: name}).then(({ data }) => {
+      this.name = name
+      getContractList({size: this.page.size, current: this.page.current, employeeName: this.name}).then(({ data }) => {
         if (data.code === 0) {
           this.data = data.data.records
           this.data.forEach(async (item) => {
             await this.getUserName(item.userId, item)
           })
+          this.total = data.data.total
         }
       })
     },
@@ -97,11 +115,10 @@ export default {
         }
       })
     },
+    handleCurrentChange (val) {
+      this.page.current = val
+      this.getList(this.name)
+    },
   },
 }
 </script>
-<style lang="scss" scoped>
-.contract-container {
-
-}
-</style>

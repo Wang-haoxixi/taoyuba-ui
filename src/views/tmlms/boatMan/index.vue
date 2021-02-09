@@ -472,7 +472,8 @@ export default {
       } 
     },
     downloadInfo (title = '', number = undefined) {
-      let val = Object.assign({}, this.exportParams)
+      let val = Object.assign({}, this.params)
+      console.log()
       if (Math.ceil(this.total / 3000) > 1) {
         val.nowPage = number
       }

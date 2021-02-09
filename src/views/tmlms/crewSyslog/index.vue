@@ -73,7 +73,7 @@
           </el-table-column> -->
           <el-table-column label="操作" width="180">
             <template slot-scope="scope">
-              <el-button size="mini" @click="handleView(scope.row.shipName,scope.row.idcard)" v-if="manager">查看
+              <el-button size="mini" @click="handleView(scope.row.idcard)" v-if="manager">查看
               </el-button>
               <!-- <el-button type="text" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row.idcard)"  v-if="manager">编辑
               </el-button>
@@ -217,8 +217,9 @@ export default {
       this.$router.push({name: 'detailBoatMan'})
     },
     // 查看
-    handleView (shipName,val) {
-      this.$router.push({path:'/crewSyslog/detail',query:{ see: val,shipName:shipName }})
+    handleView (val) {
+      this.$router.push({name: 'detailBoatMan',query:{ see: val }})
+      // this.$router.push({path:'/crewSyslog/detail',query:{ see: val,shipName:shipName }})
     },
     // 编辑
     handleEdit (val) {
@@ -238,15 +239,16 @@ export default {
     getData () {
       getCrewAllSyslog(this.params).then(res=>{
         this.crewregisterList = res.data.data.records
-        this.total = res.data.data.total
+        this.total = res.data.data.totals
         this.crewregisterList.map(async (item) => {
           item.certs.forEach(v=>{
             this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
-            if(v.certTitle==data.value){
-                item.certNames=item.certNames+data.label
-            }
+              if(v.certTitle==data.value){
+                  item.certNames=item.certNames+data.label
+              }
             })
           })
+          console.log('item.certNames', item.certNames)
           if(item.sourceType == 1){
             item.sourceType = '合同'
           }else if(item.sourceType == 2){

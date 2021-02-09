@@ -42,6 +42,16 @@
         label="登记时间">
       </el-table-column>
     </el-table>
+    <div style="text-align:center;margin-top: 20px;">
+      <el-pagination
+        background
+        @current-change="handleCurrentChange"
+        :current-page.sync="page.current"
+        layout="total, prev, pager, next"
+        :page-size="page.size"
+        :total="total">
+      </el-pagination>
+    </div>
     <div style="text-align:center;margin-top: 30px;">
       <el-button @click="$router.go(-1)">返回</el-button>
     </div>
@@ -65,6 +75,11 @@ export default {
   data () {
     return {
       data: [],
+      total: 0,
+      page: {
+        size: 10,
+        current: 1,
+      },
     }
   },
   computed: {
@@ -104,18 +119,19 @@ export default {
     },
     getList (name) {
       if (name) {
-        getCrewAllSyslog({ size: 10000, current: 1, realName: name}).then(({ data }) => {
+        this.name = name
+        getCrewAllSyslog({ size: this.page.size, current: this.page.current, realName: this.name}).then(({ data }) => {
           if (data.code === 0) {
             this.data = data.data.records
+            this.total = data.data.total
           }
         })
       }
     },
+    handleCurrentChange (val) {
+      this.page.current = val
+      this.getList(this.name)
+    },
   },
 }
 </script>
-<style lang="scss" scoped>
-  .ship-record-container {
-
-  }
-</style>
