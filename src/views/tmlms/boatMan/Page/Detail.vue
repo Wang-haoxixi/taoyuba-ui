@@ -421,7 +421,7 @@
 <script>
 // import InlineFormTable from '@/views/hrms/ComponentsNew/InlineFormTable'
 import { getArea,getPosition} from '@/api/post/admin'
-import { saveCrew, detailCrew, editCrew, uploadPic, getCrewData } from '@/api/tmlms/boatMan'
+import { saveCrew, detailCrew, editCrew, uploadPic, getCrewData, uploadImgBase64 } from '@/api/tmlms/boatMan'
 import { getLastData } from '@/api/hrms/databuspayload'
 import { certificateColumns } from '@/views/hrms/ComponentsNew/options'
 import { getUserInfo } from '@/api/login'
@@ -604,9 +604,9 @@ export default {
     }
   },
   methods: {
-    init (name) {
-      this.$refs.pageContract.getList(name)
-      this.$refs.pageShipRecord.getList(name)
+    init (name, idcard) {
+      this.$refs.pageContract.getList(idcard)
+      this.$refs.pageShipRecord.getList(idcard)
     },
     onTabs (index) {
       this.current = index
@@ -1145,6 +1145,11 @@ export default {
         })
       })
     },
+    uploadImgBase (data) {
+      uploadImgBase64({baseImage: data}).then(({ data }) => {
+        console.log(data)
+      })
+    },
   },
   // components: { InlineFormTable },
   created () {
@@ -1197,10 +1202,10 @@ export default {
         })
       }
       this.form = data
-      this.$refs.pageContract.getList(this.form.realName)
-      this.$refs.pageShipRecord.getList(this.form.realName)
-      console.log('this.form', this.form)
-      this.init(this.form.realName)
+      // this.$refs.pageContract.getList(this.form.idcard)
+      // this.$refs.pageShipRecord.getList(this.form.realName)
+      // console.log('this.form', this.form)
+      this.init(this.form.realName, this.form.idcard)
     }
     getUserInfo().then(res => {
       if (res.data.data.roles.includes(111)) {
@@ -1239,6 +1244,7 @@ export default {
                 this.choseProvince(res.data.data.provinceId)
                 this.choseCity(res.data.data.cityId)
                 this.form = res.data.data
+                // this.uploadImgBase(idCardData.photoFront)
                 // if (!this.form.photoFront) {
                 //   this.$set(this, 'frontList', [{ url: getD.photoFront }])
                 //   this.form.photoFront = getD.photoFront

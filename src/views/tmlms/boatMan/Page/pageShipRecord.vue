@@ -76,6 +76,7 @@ export default {
     return {
       data: [],
       total: 0,
+      idcard: '',
       page: {
         size: 10,
         current: 1,
@@ -117,10 +118,10 @@ export default {
     getSourceTypeName (val) {
       return this.getMapByVal(MAP_DATA.sourceType, val)
     },
-    getList (name) {
-      if (name) {
-        this.name = name
-        getCrewAllSyslog({ size: this.page.size, current: this.page.current, realName: this.name}).then(({ data }) => {
+    getList (idcard) {
+      if (idcard) {
+        this.idcard = idcard
+        getCrewAllSyslog({ size: this.page.size, current: this.page.current, idcard: this.idcard}).then(({ data }) => {
           if (data.code === 0) {
             this.data = data.data.records
             this.total = data.data.total
@@ -130,7 +131,7 @@ export default {
     },
     handleCurrentChange (val) {
       this.page.current = val
-      this.getList(this.name)
+      this.getList(this.idcard)
     },
   },
 }

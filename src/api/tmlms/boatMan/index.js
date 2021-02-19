@@ -160,3 +160,11 @@ export function updatePageBatchByBad (params) {
         data: params,
     })
 }
+
+export function uploadImgBase64 (params) {
+    return request({
+        url: `${prefixUrl}/uploadBaseImage`,
+        method: 'post',
+        data: params,
+    })
+}

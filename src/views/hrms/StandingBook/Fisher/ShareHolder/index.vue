@@ -10,7 +10,8 @@
           <el-button @click="backPage">返回</el-button>
         </template>
       </operation-container>
-      <iep-table                    
+      <iep-table
+              :isLoadTable="false"
               :pagination="pagination"
               :columnsMap="shareHolderColumnsMap"
               :pagedTable="pagedTable"
@@ -21,7 +22,8 @@
         <el-table-column prop="operation" label="操作" width="200">
           <template slot-scope="scope">
             <operation-wrapper>
-              <iep-button size="mini" plain v-if="!(scope.row.showbtn==1)" @click="handleEdit(scope.row.idcard)">编辑</iep-button>
+              <!-- <iep-button size="mini" plain v-if="!(scope.row.showbtn==1)" @click="handleEdit(scope.row.idcard)">编辑</iep-button> -->
+              <iep-button size="mini" plain v-if="scope.$index !== 0 && scope.row.isEdit" @click="handleEdit(scope.row.idcard)">编辑</iep-button>
               <!-- <iep-button size="mini" plain @click="handleView(scope.row.shipName)">查看</iep-button> -->
               <!-- <iep-button size="mini" plain @click="handleDelete(scope.row.id)">删除</iep-button>     -->
             </operation-wrapper>
@@ -41,6 +43,7 @@ import { getShipByShipId } from '@/api/ships/index'
 import mixins from '@/mixins/mixins'
 import { shareHolderColumnsMap } from '../options'
 import { getUserInfo } from '@/api/login'
+import { getCrew } from '@/api/tmlms/boatMan'
 export default {
   mixins: [mixins],
   data () {
@@ -56,13 +59,23 @@ export default {
   },
   created () {
     this.loadPage()
-    this.isManager()
+    // this.isManager()
     this.getTitle()
   },
   methods: {
-      getTitle (){
-          this.title = this.$route.query.shipName+'股东'
-      },
+    getTitle (){
+      this.title = this.$route.query.shipName+'股东'
+    },
+    getCrewInfo (idcard, row) {
+      getCrew({idcard: idcard}).then(({ data }) => {
+        if (data.code === 0) {
+          if (data.data.records.length > 0) {
+            this.$set(row, 'isEdit', true)
+            // row.isEdit = true
+          }
+        }
+      })
+    },
     handleSelectionChange (val) {     
       this.multipleSelection = val.map(m => m.id)
     },
@@ -101,8 +114,14 @@ export default {
       this.owner.showbtn = 1
       getHoldersByShip(shipId).then(res=>{
         let alldata = [this.owner,...res.data.data]
+        alldata[0].realName = alldata[0].realName + '(持证人)'
         this.pagedTable = alldata
-        console.log(this.pagedTable)
+        this.pagedTable.forEach(async (item, index) => {
+          if (index !== 0) {
+            await this.getCrewInfo(item.idcard, item)
+          }
+        })
+        // console.log(this.pagedTable)
       })
     //   let data = await this.loadTable(shipId, getHoldersByShip)
     //   console.log(data)

@@ -75,7 +75,7 @@ export default {
         size: 10,
         current: 1,
       },
-      name: '',
+      employeeIdcard: '',
     }
   },
   methods: {
@@ -92,12 +92,12 @@ export default {
     getStatusName (val) {
       return this.getMapByVal(MAP_DATA.status, val)
     },
-    getList (name) {
-      if (!name) {
+    getList (employeeIdcard) {
+      if (!employeeIdcard) {
         return
       }
-      this.name = name
-      getContractList({size: this.page.size, current: this.page.current, employeeName: this.name}).then(({ data }) => {
+      this.employeeIdcard = employeeIdcard
+      getContractList({size: this.page.size, current: this.page.current, employeeIdcard: this.employeeIdcard}).then(({ data }) => {
         if (data.code === 0) {
           this.data = data.data.records
           this.data.forEach(async (item) => {
@@ -117,7 +117,7 @@ export default {
     },
     handleCurrentChange (val) {
       this.page.current = val
-      this.getList(this.name)
+      this.getList(this.employeeIdcard)
     },
   },
 }
