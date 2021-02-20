@@ -604,7 +604,7 @@ export default {
     }
   },
   methods: {
-    init (name, idcard) {
+    init (idcard) {
       this.$refs.pageContract.getList(idcard)
       this.$refs.pageShipRecord.getList(idcard)
     },
@@ -899,7 +899,7 @@ export default {
       console.log(this.frontList)
       this.form.photoFront = file.data.url
     },
-    handleAvatarDelFront (file,fileList) {
+    handleAvatarDelFront (fileList) {
       this.form.photoFront = ''
       this.hideUpload = fileList.length >= this.limitCount
     },
@@ -910,7 +910,7 @@ export default {
             type: 'warning',
       })
     },
-    uploadChangeFront (file,fileList) {
+    uploadChangeFront (fileList) {
       this.hideUpload = fileList.length >= this.limitCount
     },
     previewFront (url) {
@@ -922,7 +922,7 @@ export default {
       console.log(fileList)
       this.form.photoReverse = file.data.url
     },
-    handleAvatarDelReverse (file,fileList) {
+    handleAvatarDelReverse (fileList) {
       this.form.photoReverse = ''
       this.hideUploadReverse = fileList.length >= this.limitCount
     },
@@ -933,7 +933,7 @@ export default {
             type: 'warning',
       })
     },
-    uploadChangeReverse (file,fileList) {
+    uploadChangeReverse (fileList) {
       this.hideUploadReverse = fileList.length >= this.limitCount
     },
     previewReverse (url) {
@@ -945,7 +945,7 @@ export default {
       console.log(fileList)
       this.form.certPhoto = file.data.url
     },
-    handleAvatarDelCert (file,fileList) {
+    handleAvatarDelCert (fileList) {
       this.form.certPhoto = ''
       this.hideUploadCert = fileList.length >= this.limitCount
     },
@@ -956,7 +956,7 @@ export default {
             type: 'warning',
       })
     },
-    uploadChangeCert (file,fileList) {
+    uploadChangeCert (fileList) {
       this.hideUploadCert = fileList.length >= this.limitCount
     },
     previewCert (url) {
@@ -1137,6 +1137,7 @@ export default {
           let form = {
             photoFront: res.frontImg,
             photoReverse: res.backImg,
+            certPhoto: res.photobase64,
           }
           // this.form.photoFront = res.frontImg
           // this.form.photoReverse = res.backImg
@@ -1145,10 +1146,21 @@ export default {
         })
       })
     },
-    uploadImgBase (data) {
-      uploadImgBase64({baseImage: data}).then(({ data }) => {
-        console.log(data)
+    // eslint-disable-next-line no-unused-vars
+    uploadImgBase (img) {
+      return new Promise((resolve, reject) => {
+        uploadImgBase64({baseImage: img}).then(({ data }) => {
+          if (data.code === 0 && data.data) {
+            resolve(data.data)
+          }
+          resolve()
+        }).catch((e) => {
+          reject(e)
+        })
       })
+    },
+    isHttpsStart (url) {
+      return url.indexOf('https') === 0
     },
   },
   // components: { InlineFormTable },
@@ -1238,31 +1250,66 @@ export default {
           var result1 = base.decode(msg)
           var data = eval('('+result1+')')
           // 将数据录入
-          this.getIdCardData().then(() => {
+          this.getIdCardData().then((idCardData) => {
+            console.log('idCardData', idCardData)
             getCrewData(data.cardno).then(res=>{
               if (res.data.data !== true) {
                 this.choseProvince(res.data.data.provinceId)
                 this.choseCity(res.data.data.cityId)
                 this.form = res.data.data
-                // this.uploadImgBase(idCardData.photoFront)
-                // if (!this.form.photoFront) {
-                //   this.$set(this, 'frontList', [{ url: getD.photoFront }])
-                //   this.form.photoFront = getD.photoFront
-                // } else {
-                //   this.$set(this, 'frontList', [{ url: this.form.photoFront}])
-                // }
+                this.uploadImgBase(idCardData.photoFront, this.form.certPhoto)
 
-                // if (!this.form.photoReverse) {
-                //   this.$set(this, 'reverseList', [{ url: getD.photoReverse }])
-                //   this.form.photoReverse = getD.photoReverse
-                // } else {
-                //   this.$set(this, 'reverseList', [{ url: this.form.photoReverse}])
-                // }
-                // console.log('this.form', this.form)
-                // if (!this.form.photoReverse) {
-                //   this.form = getD.photoReverse
-                // }
-                // this.form.certList = []
+                // 正面照
+                if (this.isHttpsStart(this.form.photoFront)) {
+                  this.frontList.push({name: 'photoFront', url: this.form.photoFront})
+                  this.hideUpload = this.frontList.length >= this.limitCount
+                } else {
+                  if (idCardData.photoFront) {
+                    this.uploadImgBase(idCardData.photoFront).then((result) => {
+                      if (result) {
+                        this.frontList = []
+                        this.frontList.push({name: 'photoFront', url: result})
+                        this.hideUpload = this.frontList.length >= this.limitCount
+                        this.form.photoFront = result
+                      }
+                    })
+                  }
+                }
+
+                // 反面照
+                if (this.isHttpsStart(this.form.photoReverse)) {
+                  this.reverseList.push({name: 'photoReverse', url: this.form.photoReverse})
+                      this.hideUploadReverse = this.reverseList.length >= this.limitCount
+                } else {
+                  if (idCardData.photoReverse) {
+                    this.uploadImgBase(idCardData.photoReverse).then((result) => {
+                      if (result) {
+                        this.reverseList = []
+                        this.reverseList.push({name: 'photoReverse', url: result})
+                        this.hideUploadReverse = this.reverseList.length >= this.limitCount
+                        this.form.photoReverse = result
+                      }
+                    })
+                  }
+                }
+
+                // 证件照
+                if (this.isHttpsStart(this.form.certPhoto)) {
+                  this.CertList.push({name: 'certPhoto', url: this.form.certPhoto})
+                  this.hideUploadCert = this.CertList.length >= this.limitCount
+                } else {
+                  if (idCardData.certPhoto) {
+                    this.uploadImgBase(idCardData.certPhoto).then((result) => {
+                      if (result) {
+                        this.CertList = []
+                        this.CertList.push({name: 'certPhoto', url: result})
+                        this.hideUploadCert = this.CertList.length >= this.limitCount
+                        this.form.certPhoto = result
+                      }
+                    })
+                  }
+                }
+
                 this.$set(this.form, 'certList',[])
                 this.isIdcard = true
                 getMyCretList(data.cardno).then(val => {
@@ -1298,6 +1345,39 @@ export default {
                 this.form.provinceId = cardMsg.provinceId
                 this.form.cityId = cardMsg.cityId
                 this.form.districtId = cardMsg.districtId
+                // 证件照
+                if (idCardData.certPhoto) {
+                  this.uploadImgBase(idCardData.certPhoto).then((result) => {
+                    if (result) {
+                      this.CertList = []
+                      this.CertList.push({name: 'certPhoto', url: result})
+                      this.hideUploadCert = this.CertList.length >= this.limitCount
+                      this.form.certPhoto = result
+                    }
+                  })
+                }
+                // 身份证正面
+                if (idCardData.photoFront) {
+                  this.uploadImgBase(idCardData.photoFront).then((result) => {
+                    if (result) {
+                      this.frontList = []
+                      this.frontList.push({name: 'photoFront', url: result})
+                      this.hideUpload = this.frontList.length >= this.limitCount
+                      this.form.photoFront = result
+                    }
+                  })
+                }
+                // 身份证反面
+                if (idCardData.photoReverse) {
+                  this.uploadImgBase(idCardData.photoReverse).then((result) => {
+                    if (result) {
+                      this.reverseList = []
+                      this.reverseList.push({name: 'photoReverse', url: result})
+                      this.hideUploadReverse = this.reverseList.length >= this.limitCount
+                      this.form.photoReverse = result
+                    }
+                  })
+                }
               }
             })
           })
