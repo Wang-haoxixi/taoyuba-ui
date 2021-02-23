@@ -105,6 +105,7 @@
               <el-button v-if="mlms_contract_upload && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')  && scope.row.contractImage === '1' " size="mini" @click="handleUpload(scope.row.contractId)">查看纸质合同
             </el-button>
             <el-button v-if="mlms_contract_employee" size="mini" @click="onToEmployee(scope.row.employeeIdcard)">船员编辑</el-button>
+            <el-button v-if="scope.row.status === '合同过期'" size="mini" @click="onRenewContracte(scope.row.contractId)">续签</el-button>
           </template>
         </el-table-column>
       </avue-tree-table>
@@ -394,8 +395,8 @@ export default {
       //  }
       if (key === 'timeLists' && query[key] !== '' && query[key] != null) {
         this.params[key] = query[key].split(',')
-        this.params.timeStart = this.params[key][0]
-        this.params.timeEnd = this.params[key][1]
+        this.params.workTimeStart = this.params[key][0]
+        this.params.workTimeEnd = this.params[key][1]
       }
     }
     this.getVillageOrg()      
@@ -453,8 +454,8 @@ export default {
             value: 'employeeName',
           },
           {
-            text: '合同创建日期',
-            value: 'createTime',
+            text: '渔业生产周期',
+            value: 'workTime',
           },
           {
             text: '合同状态',
@@ -470,6 +471,10 @@ export default {
     },
   },
   methods: {
+    // 续签合同
+    onRenewContracte (id) {
+      this.$emit('onRenew', id)
+    },
     onToEmployee (idcard) {
       let from = '/crew/htgl/contract_admin'
       for (let key in this.params) {
@@ -511,6 +516,7 @@ export default {
         if (data.code === 0) {
           this.contractList = data.data.records
           this.contractList.forEach(v => {
+            v.workTime = `${v.workDateStart}-${v.workDateEnd || ''}`
             if(v.cancelTime) {
               if( (day > new Date(Date.parse(v.workDateStart))) && (new Date(Date.parse(now)) < new Date(Date.parse(v.cancelTime.substring(0, 10)))) ) {
                 this.$set(v, 'isDate', 0)
@@ -554,8 +560,11 @@ export default {
       this.params.employerName = (this.params.employerName || '').replace(/\s*/g,'')
       this.params.employeeName = (this.params.employeeName || '').replace(/\s*/g,'')
       if (this.params.timeLists) {
-        this.params.timeStart = this.params.timeLists[0]
-        this.params.timeEnd = this.params.timeLists[1]
+        this.params.workTimeStart = this.params.timeLists[0]
+        this.params.workTimeEnd = this.params.timeLists[1]
+      } else {
+        this.params.workTimeStart = undefined
+        this.params.workTimeEnd = undefined
       }
       if (this.conStatus) {
         this.statusDict.forEach(m => {

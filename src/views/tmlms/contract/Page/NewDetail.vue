@@ -2,7 +2,7 @@
   <div class="contract">
     <basic-container id="pdfDom">
       <page-header :title="getTitle"></page-header>
-      <el-form :disabled="type !== 'add' && type !== 'edit'" :model="formData" size="small" ref="form" label-width="120px"
+      <el-form :disabled="type !== 'add' && type !== 'edit' && type !== 'renew'" :model="formData" size="small" ref="form" label-width="120px"
         :rules="rules" class="form" >
         <el-container>
           <el-aside class="side">
@@ -493,7 +493,7 @@
         </el-container> -->
       </el-form>
       <div style="text-align: center;padding: 20px 0;">                   
-        <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add' || type === 'edit'" type="primary" @click="handleSubmit">保存</iep-button>
+        <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add' || type === 'edit' || type === 'renew'" type="primary" @click="handleSubmit">保存</iep-button>
         <iep-button v-if="!$route.query.see" :disabeld="false" @click="handleBack">返回</iep-button>  
         <iep-button v-else :disabeld="false" @click="handleGo">返回</iep-button>           
       </div>
@@ -786,6 +786,8 @@ export default {
         return '合同新增'
       } else if (this.type === 'edit') {
         return '合同编辑'
+      } else if (this.type === 'renew') {
+        return '合同续签'
       } else {
         return '合同查看'
       }
@@ -1168,7 +1170,7 @@ export default {
       }
       this.$refs['form'].validate(valid => {
         if (valid) {
-          if (this.type === 'add') {
+          if (this.type === 'add' || this.type === 'renew') {
                 if(this.checkEmployeeIdcard) {
                   this.$message.error('乙方船员已签订合同!请重新输入身份证号')
                   this.formData.employeeIdcard = ''

@@ -1,5 +1,5 @@
 <template>
-  <component @on-add="handleAdd" @onDetail="handleDetail" @onEdit="handleEdit" @onGoBack="handleGoBack" :record="record" :type="type" :is="currentComponet" @on-record="handleRecord" @on-remove="handleRmove"></component>
+  <component @on-add="handleAdd" @onDetail="handleDetail" @onRenew="handleRenew" @onEdit="handleEdit" @onGoBack="handleGoBack" :record="record" :type="type" :is="currentComponet" @on-record="handleRecord" @on-remove="handleRmove"></component>
 </template>
 <script>
 import List from './Page/List'
@@ -49,6 +49,11 @@ export default {
       this.record = id
       this.type = 'rem'
       this.currentComponet = 'Remove'
+    },
+    handleRenew (id) {
+      this.record = id
+      this.type = 'renew',
+      this.currentComponet = 'Detail'
     },
   },
   watch: {
