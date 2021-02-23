@@ -168,3 +168,10 @@ export function uploadImgBase64 (params) {
         data: params,
     })
 }
+export function updateCertificate (params) {
+    return request({
+        url: `${prefixUrl}/updateCertByIdcard`,
+        method: 'post',
+        params: params,
+    })
+}

@@ -93,13 +93,15 @@
             {{ scope.row.status | typeFilter}}
           </template>
           </el-table-column> -->
-          <el-table-column label="操作" width="230">
+          <el-table-column label="操作" width="300">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleView(scope.row.idcard)">查看
               </el-button>
               <el-button size="mini" @click="handleEdit(scope.row.idcard)"  v-if="manager">编辑
               </el-button>
               <el-button v-if="onlyManager" size="mini" @click="handleDel(scope.row.idcard)">删除
+              </el-button>
+              <el-button v-if="onlyManager" size="mini" @click="handleUpdateCertificate(scope.row.idcard)">证书更新
               </el-button>
             </template>
           </el-table-column>
@@ -133,7 +135,7 @@
   </div>
 </template>
 <script>
-import { getCrew,deleteCrew,statusCrew,exportExcel } from '@/api/tmlms/boatMan'
+import { getCrew,deleteCrew,statusCrew,exportExcel, updateCertificate } from '@/api/tmlms/boatMan'
 import { getUserInfo } from '@/api/login'
 import { getArea, getRogionList } from '@/api/post/admin'
 import keyBy from 'lodash/keyBy'
@@ -290,6 +292,27 @@ export default {
     }
   },
   methods: {
+    handleUpdateCertificate (idcard) {
+      this.$confirm('是否更新船员证书', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        updateCertificate({ idcard }).then(({ data }) => {
+          if (data.code === 0) {
+            this.$message({
+              type: 'success',
+              message: data.data || '证书更新成功',
+            })
+          } else {
+            this.$message({
+              type: 'warning',
+              message: '证书更新失败',
+            })
+          }
+        })
+      })
+    },
     getRogionList () {
       getRogionList(0).then(({ data }) => {
         if (data.code === 0) {
