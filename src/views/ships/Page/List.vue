@@ -32,7 +32,7 @@
             <operation-wrapper>
               <iep-button size="mini" type="primary" @click="handleShow(scope.row.shipId)" v-if="manager">船员配置</iep-button>
               <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)" v-if="manager">船员管理</iep-button>
-              <iep-button plain @click="handleEdit(scope.row.shipId)" v-if="manager">编辑</iep-button>
+              <!-- <iep-button plain @click="handleEdit(scope.row.shipId)" v-if="manager">编辑</iep-button> -->
               <iep-button @click="handleView(scope.row.shipId)">查看</iep-button>
               <iep-button type="warning" @click="handleDelete(scope.row)" v-if="manager"><i class="el-icon-delete"></i></iep-button>
             </operation-wrapper>
