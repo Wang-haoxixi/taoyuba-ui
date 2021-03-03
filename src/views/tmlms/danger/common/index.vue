@@ -1,6 +1,6 @@
 <template>
   <div>
-    <basic-container>
+    <basic-container v-show="show">
       <operation-container>
         <template slot="left">
           <el-button type="primary" size="small" @click="handleCreate">新增</el-button>
@@ -57,11 +57,15 @@
         </div>
       </div>
     </basic-container>
+    <page-form v-if="showForm" :status="status" @back="onBack" ref="pageForm"></page-form>
   </div>
 </template>
 <script>
 import { getPage } from '@/api/tmlms/danger'
+import pageForm from './components/form.vue'
+
 export default {
+  components: { pageForm },
   data () {
     return {
       params: {
@@ -71,6 +75,9 @@ export default {
       total: 0,
       tableData: [],
       loading: false,
+      show: true,
+      showForm: false,
+      statue: 'create',
     }
   },
   mounted () {
@@ -89,13 +96,35 @@ export default {
         this.loading = false
       })
     },
-    handleCreate () {},
-    handleUpdate () {},
-    handleDetail () {},
+    handleCreate () {
+      this.status = 'create'
+      this.show = false
+      this.showForm = true
+    },
+    handleUpdate (row) {
+      this.status = 'update'
+      this.show = false
+      this.showForm = true
+      this.$nextTick(() => {
+        this.$refs.pageForm.getList(row.id)
+      })
+    },
+    handleDetail (row) {
+      this.status = 'detail'
+      this.show = false
+      this.showForm = true
+      this.$nextTick(() => {
+        this.$refs.pageForm.getList(row.id)
+      })
+    },
     // 分页
     currentChange (val) {
       this.params.current = val
       this.getList()
+    },
+    onBack () {
+      this.show = true,
+      this.showForm = false
     },
   },
 }
