@@ -1,6 +1,14 @@
 import request from '@/router/axios'
 const prefixUrl = '/tmlms/tybTroubleshootReport'
 
+export function getShipInfo (params) {
+  return request({
+    url: '/tmlms/tybship/allPage',
+    method: 'get',
+    params: params,
+  })
+}
+
 export function getPage (params) {
   return request({
     url: `${prefixUrl}/page`,

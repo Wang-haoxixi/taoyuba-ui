@@ -12,12 +12,11 @@
   </div>
 </template>
 <script>
-import { getPageById, getPageByShipNo, createPage, updatePage } from '@/api/tmlms/danger'
+import { getPageById, getPageByShipNo, createPage, updatePage, getShipInfo } from '@/api/tmlms/danger'
 // import pageInfo from './info'
 import formMixin from './form.js'
 import pageContent from './content'
 import pageSearchShip from './searchShip'
-import { getShipList } from '@/api/ships/index'
 export default {
   mixins: [formMixin],
   components: {
@@ -58,7 +57,7 @@ export default {
   methods: {
     getShipBaseInfo (shipName) {
       if (shipName) {
-        getShipList({shipName: shipName}).then(({ data }) => {
+        getShipInfo({shipName: shipName}).then(({ data }) => {
           if (data.code === 0) {
             let val = data.data.records
             this.shipInfo = val ? data.data.records[0] : {}
