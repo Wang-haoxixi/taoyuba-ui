@@ -6,7 +6,7 @@
         <page-search-ship @shipInfo="getShipInfo"></page-search-ship>
       </div>
       <div class="content-wrapper" v-show="showForm">
-        <page-content :options="options" v-model="form" :disabled="status === 'detail'" :historyData="historyData" @submit="onSubmit"></page-content>
+        <page-content :status="status" :options="options" v-model="form" :disabled="status === 'detail'" :historyData="historyData" @submit="onSubmit"></page-content>
       </div>
     </basic-container>
   </div>
@@ -36,6 +36,7 @@ export default {
       rules: {},
       showForm: false,
       showSearch: false,
+      form: {},
     }
   },
   computed: {
@@ -83,7 +84,7 @@ export default {
             this.getLastHistory(result.lastId)
             this.setForm(result)
             if (this.status !== 'create') {
-              // this.getShipBaseInfo(result.shipName)
+              this.getShipBaseInfo(result.shipName)
             }
           }
         })
@@ -125,18 +126,33 @@ export default {
         })
       }
     },
-    onSubmit () {
-      let form = Object.assign({}, this.value)
+    onSubmit (data) {
+      let form = Object.assign({}, data)
       this.setResult(form)
-      form.lastId = Object.keys(this.historyData).length > 0 ? this.historyData.lastId : 0
-      console.log('form', form)
+      // form.lastId = Object.keys(this.historyData).length > 0 ? this.historyData.lastId : 0
+      console.log('2', form)
+      if (this.status === 'create') {
+        if (Object.keys(this.historyData).length > 0) {
+          form.lastId = this.historyData.id
+        } else {
+          form.lastId = 0
+        }
+      } else {
+        if (Object.keys(this.historyData).length > 0) {
+          form.id = this.historyData.id
+          form.lastId = this.historyData.lastId
+        } else {
+          form.lastId = 0
+        }
+      }
       let api = this.status === 'create' ? createPage : (this.status === 'update' ? updatePage : null)
       if (api) {
         api(form).then(({ data }) => {
           let text = this.status === 'create' ? '新增' : '编辑'
           if (data.code === 0) {
             this.$message.success(`${text}成功`)
-            this.onGoBack()
+            this.$emit('success')
+            // this.onGoBack()
           } else {
             this.$message.error(data.msg || `${text}失败`)
           }

@@ -25,10 +25,79 @@ export default {
       },
       shipInfo: {},
       form: {
+        shipName: '',
+        enterprise: '',
+        registrant: '',
+        shipNo: '',
+        address: '',
+        // 船员配置
         driveStandardResult: '', //驾驶职务船员最低配员标准
         driveStandardImage: [],
         turbineStandardResult: '', //轮机职务船员最低配员标准
         turbineStandardImage: [],
+        crewResult: '',
+        crewImage: [],
+        // 救生设备
+        lifeRaftResult: '',
+        lifeRaftImage: [],
+        ringBuoyFirstResult: '',
+        ringBuoyFirstImage: [],
+        ringBuoySecondResult: '',
+        ringBuoySecondImage: [],
+        ringBuoyThirdResult: '',
+        ringBuoyThirdImage: [],
+        ringBuoyFourthResult: '',
+        ringBuoyFourthImage: [],
+        ringBuoyFifthResult: '',
+        ringBuoyFifthImage: [],
+        lifeJackFirstResult: '',
+        lifeJackFirstImage: [],
+        lifeJackSecondResult: '',
+        lifeJackSecondImage: [],
+        lifeJackThirdResult: '',
+        lifeJackThirdImage: [],
+        lifeJackFourthResult: '',
+        lifeJackFourthImage: [],
+        otherPreserverFirstResult: '',
+        otherPreserverFirstImage: [],
+        otherPreserverSecondResult: '',
+        otherPreserverSecondImage: [],
+        otherPreserverThirdResult: '',
+        otherPreserverThirdImage: [],
+        // 消防设备
+        extinguisherFirstResult: '',
+        extinguisherFirstImage: [],
+        extinguisherSecondResult: '',
+        extinguisherSecondImage: [],
+        extinguisherThirdResult: '',
+        extinguisherThirdImage: [],
+        waterFireFightingFirstResult: '',
+        waterFireFightingFirstImage: [],
+        // 信号设备
+        signalLampResult: '',
+        signalLampImage: [],
+        signalLampTypeResult: '',
+        signalLampTypeImage: [],
+        signalLampStatusResult: '',
+        signalLampStatusImage: [],
+        // 通道设备
+        communicationEquipmentResult: '',
+        communicationEquipmentImage: [],
+        navigationalAidsResult: '',
+        navigationalAidsImage: [],
+        // 其他情况
+        escapeTrunkResult: '',
+        escapeTrunkImage: [],
+        fishHoldResult: '',
+        fishHoldImage: [],
+        wireResult: '',
+        wireImage: [],
+        liquefiedBottleResult: '',
+        liquefiedBottleImage: [],
+        behaviorResult: '',
+        behaviorImage: [],
+        regulationResult: '',
+        regulationImage: [],
       },
     }
   },
@@ -62,7 +131,6 @@ export default {
               title: '轮机职务船员最低配员标准',
               props: [
                 { title: this.turbineStandardTitle || '', value: 'turbineStandard', required: true },
-                { title: this.turbineStandardTitle || '', value: 'turbineStandard1', required: true },
               ],
             },
             {
@@ -260,6 +328,7 @@ export default {
     },
     setFormShipInfo () {
       this.form.shipName = this.shipInfo.shipName
+      this.form.shipNo = this.shipInfo.shipNo
     },
     setForm (data, name = 'form') {
       for (let key in data) {
@@ -285,7 +354,11 @@ export default {
       for (let key in data) {
         let val = data[key]
         if (Array.isArray(val)) {
-          data[key] = val.join(',')
+          let result = []
+          result = val.map((item) => {
+            return item.url
+          })
+          data[key] = result.join(',')
         }
       }
     },

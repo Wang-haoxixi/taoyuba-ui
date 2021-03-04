@@ -1,6 +1,7 @@
 <template>
   <div>
     <basic-container v-show="show">
+      <page-header title="一般性隐患排查"></page-header>
       <operation-container>
         <template slot="left">
           <el-button type="primary" size="small" @click="handleCreate">新增</el-button>
@@ -41,7 +42,8 @@
             width="150">
             <template slot-scope="scope">
               <el-button @click="handleDetail(scope.row)" size="small">查看</el-button>
-              <el-button @click="handleUpdate(scope.row)" size="small">编辑</el-button>
+               <!-- v-if="scope.row.status === 1" -->
+              <el-button @click="handleUpdate(scope.row)" size="small" v-if="scope.row.status === 1">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -57,7 +59,7 @@
         </div>
       </div>
     </basic-container>
-    <page-form v-if="showForm" :status="status" @back="onBack" ref="pageForm"></page-form>
+    <page-form v-if="showForm" :status="status" @back="onBack" @success="onSuccess" ref="pageForm"></page-form>
   </div>
 </template>
 <script>
@@ -125,6 +127,10 @@ export default {
     onBack () {
       this.show = true,
       this.showForm = false
+    },
+    onSuccess () {
+      this.onBack()
+      this.getList()
     },
   },
 }

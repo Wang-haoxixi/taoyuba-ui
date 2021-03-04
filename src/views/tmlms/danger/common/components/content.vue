@@ -29,7 +29,7 @@
           <div v-for="(item1, index1) in item.column" :key="index1">
             <div class="sub-title">{{item1.title}}</div>
             <!-- 二级标题 -->
-            <div v-for="(item2, index2) in item1.props" :key="index2">
+            <div v-for="(item2) in item1.props" :key="item2.value">
               <div class="item-title"><span class="fw7">排查要点：</span>{{item2.title}}</div>
               <!-- 三级标题 -->
               <el-row :gutter="20">
@@ -40,7 +40,7 @@
                     </el-radio-group>
                   </el-form-item>
                 </el-col>
-                <el-col :span="16" v-if="item2.show">
+                <el-col :span="16" v-if="showUpload[item2.value]">
                   <el-form-item label="照片：" :prop="`${item2.value}Image`">
                     <el-upload
                       :headers="headers"
@@ -110,6 +110,7 @@ export default {
       curOptions: [],
       dialogVisible: false,
       dialogImageUrl: '',
+      showUpload: {},
       headers: {
         Authorization: 'Bearer ' + store.getters.access_token,
       },
@@ -117,6 +118,7 @@ export default {
         { label: '合格', value: 1 },
         { label: '不合格', value: 0 },
       ],
+      once: true,
     }
   },
   computed: {
@@ -181,17 +183,18 @@ export default {
     value: {
       handler (newVal) {
         if (newVal) {
-          for (let key in newVal) {
-            if (key.indexOf('Image') > -1 && newVal[key].length > 0) {
-              console.log('key', key)
-              let name = key.replace('Image', '')
-              this.setOptionsUpload(true, name)
+          if (this.once) {
+            for (let key in newVal) {
+              if (key.indexOf('Image') > -1 && newVal[key].length > 0) {
+                let name = key.replace('Image', '')
+                this.uploadShowStatus(name, true)
+              }
             }
+            this.once = false
           }
         }
       },
       deep: true,
-      immediate: true,
     },
   },
   methods: {
@@ -200,31 +203,16 @@ export default {
       // this.value[`${name}Image`] = []
       let historyData = this.historyData
       if (historyData && historyData[`${name}Result`] === 0) {
-        this.setOptionsUpload(true, name)
+        this.uploadShowStatus(name, true)
+        // console.log('this.curOptions', this.curOptions)
         return
       }
       this.$set(this.value, `${name}Image`, [])
       let show = val === 0
-      this.setOptionsUpload(show, name)
+      this.uploadShowStatus(name, show)
     },
-    setOptionsUpload (showStatus, name) {
-      let options = this.curOptions
-      for(let i = 0, len = options.length; i < len; i++) {
-        let column = options[i].column
-        if (column && column.length > 0) {
-          for (let j = 0, len1 = column.length; j < len1; j++) {
-            let props = column[j].props
-            if (props && props.length > 0) {
-              for (let k = 0, len2 = props.length; k < len2; k++) {
-                let val = props[k]
-                if (val.value === name) {
-                  this.$set(val, 'show', showStatus)
-                }
-              }
-            }
-          }
-        }
-      }
+    uploadShowStatus (name, status) {
+      this.$set(this.showUpload, name, status)
     },
     handlePictureCardPreview (file) {
       this.dialogImageUrl = file.url
@@ -243,6 +231,8 @@ export default {
       let obj = {
         url: response.data.url,
       }
+      console.log('name', name, this.value[name], obj)
+      this.value[name] = this.value[name] ? this.value[name] : []
       this.value[name].push(obj)
       // console.log('handleSuccess', response, file, fileList, name, this.value[name])
     },
@@ -252,7 +242,9 @@ export default {
     submitForm () {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
-          this.$emit('submit')
+          // console.log('value', this.value)
+          this.$emit('input', this.value)
+          this.$emit('submit', this.value)
         } else {
           console.log('error submit!!')
           return false
