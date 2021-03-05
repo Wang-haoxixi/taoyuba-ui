@@ -145,6 +145,7 @@ export default {
           form.lastId = 0
         }
       }
+      this.form.reportType = 0
       let api = this.status === 'create' ? createPage : (this.status === 'update' ? updatePage : null)
       if (api) {
         api(form).then(({ data }) => {

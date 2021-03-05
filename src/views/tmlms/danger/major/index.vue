@@ -73,7 +73,7 @@ export default {
       params: {
         current: 1,
         size: 10,
-        reportType: 0,
+        reportType: 1,
       },
       total: 0,
       tableData: [],

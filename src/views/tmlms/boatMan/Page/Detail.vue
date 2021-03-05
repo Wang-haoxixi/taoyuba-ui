@@ -1217,7 +1217,7 @@ export default {
       // this.$refs.pageContract.getList(this.form.idcard)
       // this.$refs.pageShipRecord.getList(this.form.realName)
       // console.log('this.form', this.form)
-      this.init(this.form.realName, this.form.idcard)
+      this.init(this.form.idcard, this.form.idcard)
     }
     getUserInfo().then(res => {
       if (res.data.data.roles.includes(111)) {
