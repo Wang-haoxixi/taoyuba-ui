@@ -408,4 +408,16 @@ export default [
       },
     ],
   },
+  {
+    path: '/danger',
+    component: Layout,
+    children: [
+      {
+        path: 'all',
+        name: 'danerAll',
+        component: () => import('@/views/tmlms/danger/all/index'),
+        meta: noKeepAlive,
+      },
+    ],
+  },
 ]

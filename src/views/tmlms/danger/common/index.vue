@@ -7,8 +7,8 @@
           <el-button type="primary" size="small" @click="handleCreate">新增</el-button>
         </template>
         <template slot="right">
-          <!-- <span><el-input v-model.trim="params.shipName" placeholder="请输入船名号" size="small" clearable></el-input></span>
-          <el-button size="small"  @click="onSearch(params)">搜索</el-button> -->
+          <span><el-input v-model.trim="params.shipName" placeholder="请输入船名号" size="small" clearable></el-input></span>
+          <el-button size="small"  @click="onSearch(params)">搜索</el-button>
         </template>
       </operation-container>
       <div>
@@ -87,6 +87,10 @@ export default {
     this.getList()
   },
   methods: {
+    onSearch () {
+      this.params.current = 1
+      this.getList()
+    },
     getList () {
       this.loading = true
       getPage(this.params).then(({ data }) => {

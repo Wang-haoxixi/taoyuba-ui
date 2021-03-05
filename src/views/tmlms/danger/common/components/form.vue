@@ -29,6 +29,7 @@ export default {
       type: String,
       default: '',
     },
+    shipName: String,
   },
   data () {
     return {
@@ -42,7 +43,7 @@ export default {
   computed: {
     getTitle () {
       let text = '一般性隐患排查'
-      return this.status === 'create' ? `新增${text}` : (this.status === 'update' ? `编辑${text}` : text)
+      return (this.status === 'create' || this.status === 'createNoSearch') ? `新增${text}` : (this.status === 'update' ? `编辑${text}` : text)
     },
   },
   watch: {
@@ -50,6 +51,13 @@ export default {
       handler  (newVal) {
         this.showSearch = newVal === 'create'
         this.showForm = newVal !== 'create'
+        if (newVal === 'createNoSearch' && this.shipName) {
+          this.setFormInfo()
+          this.getShipBaseInfo(this.shipName).then(() => {
+            this.setFormShipInfo()
+          })
+          this.getPageByShipNo()
+        }
       },
       deep: true,
       immediate: true,
@@ -57,14 +65,17 @@ export default {
   },
   methods: {
     getShipBaseInfo (shipName) {
-      if (shipName) {
-        getShipInfo({shipName: shipName}).then(({ data }) => {
-          if (data.code === 0) {
-            let val = data.data.records
-            this.shipInfo = val ? data.data.records[0] : {}
-          }
-        })
-      }
+      return new Promise((resolve) => {
+        if (shipName) {
+          getShipInfo({shipName: shipName}).then(({ data }) => {
+            if (data.code === 0) {
+              let val = data.data.records
+              this.shipInfo = val ? data.data.records[0] : {}
+              resolve()
+            }
+          })
+        }
+      })
     },
     getShipInfo (data) {
       this.shipInfo = data
@@ -83,7 +94,7 @@ export default {
             let result = data.data
             this.getLastHistory(result.lastId)
             this.setForm(result)
-            if (this.status !== 'create') {
+            if (this.status !== 'create' || this.status === 'createNoSearch') {
               this.getShipBaseInfo(result.shipName)
             }
           }
@@ -131,25 +142,18 @@ export default {
       this.setResult(form)
       // form.lastId = Object.keys(this.historyData).length > 0 ? this.historyData.lastId : 0
       console.log('2', form)
-      if (this.status === 'create') {
+      if (this.status === 'create' || this.status === 'createNoSearch') {
         if (Object.keys(this.historyData).length > 0) {
           form.lastId = this.historyData.id
         } else {
           form.lastId = 0
         }
-      } else {
-        if (Object.keys(this.historyData).length > 0) {
-          form.id = this.historyData.id
-          form.lastId = this.historyData.lastId
-        } else {
-          form.lastId = 0
-        }
       }
-      this.form.reportType = 0
-      let api = this.status === 'create' ? createPage : (this.status === 'update' ? updatePage : null)
+      form.reportType = 0
+      let api = (this.status === 'create' || this.status === 'createNoSearch') ? createPage : (this.status === 'update' ? updatePage : null)
       if (api) {
         api(form).then(({ data }) => {
-          let text = this.status === 'create' ? '新增' : '编辑'
+          let text = (this.status === 'create' || this.status === 'createNoSearch') ? '新增' : '编辑'
           if (data.code === 0) {
             this.$message.success(`${text}成功`)
             this.$emit('success')

@@ -4,6 +4,80 @@ export default {
   data () {
     return {
       constText,
+      backOption: {
+        isBack: true,
+        backPath: null,
+        backFunction: () => { this.onGoBack() },
+      },
+      form: {
+        shipName: '',
+        enterprise: '',
+        registrant: '',
+        shipNo: '',
+        address: '',
+        id: '',
+        lastId: '',
+        // 四种机器
+        machineResult: '',
+        machineImage: [],
+        // 救生设备
+        lifeRaftResult: '',
+        lifeRaftImage: [],
+        otherPreserverFirstResult: '',
+        otherPreserverFirstImage: [],
+        otherPreserverSecondResult: '',
+        otherPreserverSecondImage: [],
+        // 警报设备
+        alarmFirstResult: '',
+        alarmFirstImage: [],
+        alarmSecondResult: '',
+        alarmSecondImage: [],
+        // 信号设备
+        signalLampResult: '',
+        signalLampImage: [],
+        signalLampTypeResult: '',
+        signalLampTypeImage: [],
+        signalLampStatusResult: '',
+        signalLampStatusImage: [],
+        // 消防、防火情况
+        waterFireFightingFirstResult: '',
+        waterFireFightingFirstImage: [],
+        waterFireFightingSecondResult: '',
+        waterFireFightingSecondImage: [],
+        kitchenFirstResult: '',
+        kitchenFirstImage: [],
+        kitchenSecondResult: '',
+        kitchenSecondImage: [],
+        kitchenThirdResult: '',
+        kitchenThirdImage: [],
+        engineRoomFirstResult: '',
+        engineRoomFirstImage: [],
+        engineRoomSecondResult: '',
+        engineRoomSecondImage: [],
+        engineRoomThirdResult: '',
+        engineRoomThirdImage: [],
+        engineRoomFourthResult: '',
+        engineRoomFourthImage: [],
+        electricAccessoryFirstResult: '',
+        electricAccessoryFirstImage: [],
+        electricAccessorySecondResult: '',
+        electricAccessorySecondImage: [],
+        // 其他情况
+        fishingEquipmentFirstResult: '',
+        fishingEquipmentSecondImage: [],
+        hullFirstResult: '',
+        hullFirstImage: [],
+        hullSecondResult: '',
+        hullSecondImage: [],
+        hullThirdResult: '',
+        hullThirdImage: [],
+        submarineValveResult: '',
+        submarineValveImage: [],
+        catchStorageRoomResult: '',
+        catchStorageRoomImage: [],
+        engineRoomResult: '',
+        engineRoomImage: [],
+      },
     }
   },
   computed: {
@@ -103,15 +177,65 @@ export default {
               ],
             },
             {
-              title: '号型',
+              title: '厨房防火',
               props: [
-                { title: this.constText.signalLampType1 || '', value: 'signalLampType', required: true },
+                { title: this.constText.kitchenFirst || '', value: 'kitchenFirst', required: true },
+                { title: this.constText.kitchenSecond || '', value: 'kitchenSecond', required: true },
+                { title: this.constText.kitchenThird || '', value: 'kitchenThird', required: true },
               ],
             },
             {
-              title: '号笛、号钟',
+              title: '机舱防火',
               props: [
-                { title: this.constText.signalLampStatus1 || '', value: 'signalLampStatus', required: true },
+                { title: this.constText.engineRoomFirst || '', value: 'engineRoomFirst', required: true },
+                { title: this.constText.engineRoomSecond || '', value: 'engineRoomSecond', required: true },
+                { title: this.constText.engineRoomThird || '', value: 'engineRoomThird', required: true },
+                { title: this.constText.engineRoomFourth || '', value: 'engineRoomFourth', required: true },
+              ],
+            },
+            {
+              title: '电气设备防火',
+              props: [
+                { title: this.constText.electricAccessoryFirst || '', value: 'electricAccessoryFirst', required: true },
+                { title: this.constText.electricAccessorySecond || '', value: 'electricAccessorySecond', required: true },
+              ],
+            },
+          ],
+        },
+        {
+          title: '其他情况',
+          column: [
+            {
+              title: '渔捞起重设备',
+              props: [
+                { title: this.constText.fishingEquipmentFirst || '', value: 'fishingEquipmentFirst', required: true },
+                { title: this.constText.fishingEquipmentSecond || '', value: 'fishingEquipmentSecond', required: true },
+              ],
+            },
+            {
+              title: '船体结构',
+              props: [
+                { title: this.constText.hullFirst || '', value: 'hullFirst', required: true },
+                { title: this.constText.hullSecond || '', value: 'hullSecond', required: true },
+                { title: this.constText.hullThird || '', value: 'hullThird', required: true },
+              ],
+            },
+            {
+              title: '海底阀',
+              props: [
+                { title: this.constText.submarineValve || '', value: 'submarineValve', required: true },
+              ],
+            },
+            {
+              title: '渔获物储藏室',
+              props: [
+                { title: this.constText.catchStorageRoom || '', value: 'catchStorageRoom', required: true },
+              ],
+            },
+            {
+              title: '机舱',
+              props: [
+                { title: this.constText.engineRoom || '', value: 'engineRoom', required: true },
               ],
             },
           ],

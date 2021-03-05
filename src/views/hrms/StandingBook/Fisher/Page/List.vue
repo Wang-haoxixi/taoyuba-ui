@@ -99,6 +99,7 @@
                   <el-dropdown-item v-if="mlms_shipname_export"><span @click="exportShipInfo(scope.row.shipId,scope.row.shipName)">船员登记表</span></el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
+              <iep-button size="mini" type="primary" v-if="mlms_ship_danger" @click="handleDanger(scope.row)">隐患排查</iep-button>
               <!-- <iep-button size="mini" type="primary" v-if="mlms_ship_export" @click="exportInfo(scope.row.shipId,scope.row.shipName)">导出</iep-button> -->
               <!-- <iep-button size="mini" type="primary" @click="handleOperat(scope.row.shipId,scope.row.shipNo)">经营人</iep-button> -->
             </operation-wrapper>
@@ -270,6 +271,7 @@ export default {
       mlms_ship_download: false,
       mlms_ship_export: false,
       mlms_shipname_export: false,
+      mlms_ship_danger: false,
     }
   },
   created () {
@@ -301,11 +303,17 @@ export default {
     this.mlms_ship_download = this.permissions['mlms_ship_download']
     this.mlms_ship_export = this.permissions['mlms_ship_export']
     this.mlms_shipname_export = this.permissions['mlms_shipname_export']
+    this.mlms_ship_danger = this.permissions['mlms_ship_danger']
   },
   computed: {
     ...mapGetters(['userInfo', 'roles','permissions']),
   },
   methods: {
+    handleDanger (row) {
+      this.$router.push({
+        path: `/danger/all?shipName=${row.shipName}`,
+      })
+    },
     handleFresh () {
       this.getData()
     },
