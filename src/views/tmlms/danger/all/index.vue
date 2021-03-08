@@ -1,6 +1,7 @@
 <template>
   <div>
     <basic-container v-show="show">
+      <page-header :title="shipName"></page-header>
       <el-tabs v-model="activeName" type="card">
         <el-tab-pane label="一般性隐患排查" name="first">
           <table-common ref="tableCommon" :shipName="shipName" @open="openCommon"></table-common>
@@ -61,6 +62,7 @@ export default {
       this.showCommon = false
       this.showMajor = true
       this.status = status
+      console.log('openMajor', status, id)
       if (id) {
         this.$nextTick(() => {
           this.$refs.formMajor.getList(id)

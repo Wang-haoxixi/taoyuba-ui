@@ -53,6 +53,7 @@ export default {
           this.setFormInfo()
           this.getShipBaseInfo(this.shipName).then(() => {
             this.setFormShipInfo()
+            this.getPageByShipNo()
           })
         }
       },
@@ -71,7 +72,6 @@ export default {
               resolve()
             }
           })
-          this.getPageByShipNo()
         }
       })
     },
@@ -104,7 +104,7 @@ export default {
         getPageById(id).then(({ data }) => {
           if (data.code === 0) {
             this.setForm(data.data, 'historyData')
-            console.log('historyData', this.historyData)
+            // console.log('historyData', this.historyData)
           }
         })
       }
@@ -116,12 +116,13 @@ export default {
       } else {
         params.shipName = this.shipInfo.shipName
       }
+      params.reportType = 1
       getPageByShipNo(params).then(({ data }) => {
         if (data.code === 0) {
           let val = data.data.records
           if (val.length !== 0) {
             this.setForm(val[0], 'historyData')
-            console.log('historyData', this.historyData)
+            // console.log('historyData', this.historyData)
           }
         }
       })

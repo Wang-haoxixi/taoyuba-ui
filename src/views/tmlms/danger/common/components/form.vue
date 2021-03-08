@@ -55,8 +55,8 @@ export default {
           this.setFormInfo()
           this.getShipBaseInfo(this.shipName).then(() => {
             this.setFormShipInfo()
+            this.getPageByShipNo()
           })
-          this.getPageByShipNo()
         }
       },
       deep: true,
@@ -117,6 +117,7 @@ export default {
       } else {
         params.shipName = this.shipInfo.shipName
       }
+      params.reportType = 0
       getPageByShipNo(params).then(({ data }) => {
         if (data.code === 0) {
           let val = data.data.records
