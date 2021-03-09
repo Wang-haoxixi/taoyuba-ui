@@ -7,7 +7,7 @@
             <div class="title">{{item.title}}</div>
             <div v-for="(item1, index1) in item.column" :key="index1">
               <div v-if="item1.column">
-                <div class="title">{{item1.title}}</div>
+                <div class="sub-title">{{item1.title}}</div>
                 <template v-for="(item2, index2) in item1.column">
                   <el-col :span="item2.span || 24" :key="index2">
                     <el-form-item :label="`${item2.label}:`">
@@ -117,5 +117,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  
+  .title {
+    font-size: 18px;
+    color: #333;
+    font-weight: 700;
+    margin: 35px 0;
+    text-align: center;
+  }
+  .sub-title {
+    font-size: 14px;
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 35px;
+  }
 </style>

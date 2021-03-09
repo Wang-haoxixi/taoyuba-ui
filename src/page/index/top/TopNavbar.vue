@@ -34,8 +34,8 @@
           <span class="sub-menu" @click="open(name='recruit')">招聘</span>
         </el-menu-item>
         <el-menu-item v-if="roles.indexOf(1) > -1 || roles.indexOf(111) > -1">
-          <router-link class="sub-menu" to="/datastatistics" target="_blank">大数据墙</router-link>
-          <!-- <span class="sub-menu" @click="$router.push('/datastatistics')">大数据墙</span> -->
+          <!-- <router-link class="sub-menu" to="/dataStatistics" target="_blank">大数据墙</router-link> -->
+          <span class="sub-menu" @click="open('dataStatistics')">大数据墙</span>
         </el-menu-item>
       </el-menu>
       <!-- <div class="search-con">
@@ -105,6 +105,13 @@ export default {
       if(name === 'recruit') {
         this.$router.push({ path: '/hrms_spa/recruit_list' })
         // window.open('https://www.taoyu58.com/article/index.html')
+      }
+      if (name === 'dataStatistics') {
+        const { href } = this.$router.resolve({
+          name: 'dataStatistics',
+        })
+        console.log('href', href)
+        window.open(href, '_blank')
       }
     },
   },

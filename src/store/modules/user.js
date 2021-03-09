@@ -48,14 +48,14 @@ const user = {
       return new Promise(async (resolve, reject) => {
         try {
           const {data} = await loginByUsername(user.username, user.password, user.code, user.randomStr)
-          if (user.isKeepLogin) {
-            commit('SET_KEEP_LOGIN_TOKEN', {
-              is_keep_login: true,
-              access_token: data.access_token,
-              refresh_token: data.refresh_token,
-              expires_in: data.expires_in,
-            })
-          }
+          // if (user.isKeepLogin) {
+          // }
+          commit('SET_KEEP_LOGIN_TOKEN', {
+            is_keep_login: true,
+            access_token: data.access_token,
+            refresh_token: data.refresh_token,
+            expires_in: data.expires_in,
+          })
           commit('SET_ACCESS_TOKEN', data.access_token)
           commit('SET_REFRESH_TOKEN', data.refresh_token)
           commit('SET_EXPIRES_IN', data.expires_in)

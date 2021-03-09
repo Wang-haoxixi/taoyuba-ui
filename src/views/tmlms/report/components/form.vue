@@ -25,7 +25,6 @@ export default {
   data () {
     return {
       data: {},
-      form: {},
       shipInfo: {},
     }
   },
@@ -50,9 +49,10 @@ export default {
       if (id) {
         getPageById(id).then(({ data }) => {
           if (data.code === 0) {
-            let data = data.data
+            let res = Object.assign({}, data.data)
             this.data = data.data
-            this.form = this.setFormImage(data)
+            this.form = this.setFormImage(res)
+            console.log('this.form', this.form)
           }
         })
       }
@@ -62,7 +62,13 @@ export default {
       for (let key in data) {
         if (key.indexOf('Image') > -1) {
           if (data[key].length > 0) {
-            obj[key] = data[key].join(',')
+            console.log(key, data[key])
+            let value = data[key].split(',')
+            obj[key] = []
+            value.forEach((item) => {
+              let obj1 = {url: item}
+              obj[key].push(obj1)
+            })
           } else {
             obj[key] = []
           }

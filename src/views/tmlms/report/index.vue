@@ -59,7 +59,7 @@ export default {
   },
   data () {
     return {
-       params: {
+      params: {
         current: 1,
         size: 10,
         // shipName: '',
@@ -101,7 +101,10 @@ export default {
         this.loading = false
       })
     },
-    onSearch () {},
+    onSearch () {
+      this.params.current = 1
+      this.getList()
+    },
     handleDetail (row) {
       this.status = 'detail'
       this.show = false

@@ -12,6 +12,33 @@ export default {
           { label: '无', value: 0 },
         ],
       },
+      form: {
+        // 证书部分
+        fishLicenceImage: [],
+        ownershipRegistrationImage: [],
+        nationalityRegistrationImage: [],
+        fishVesselImage: [],
+        // 船体部分
+        shipBoardImage: [],
+        shellPlatImage: [],
+        deckImage: [],
+        fishFacilityImage: [],
+        superstructureImage: [],
+        pilothouseImage: [],
+        pilotDeckImage: [],
+        monkeyIslandImage: [],
+        sternCharacteristicsImage: [],
+        shipBreadthImage: [],
+        shipSizeImage: [],
+        kitchenImage: [],
+        crewCabinImage: [],
+        wallDoorImage: [],
+        shipMarkImage: [],
+        dynamoImage: [],
+        electricBoxImage: [],
+        gearBoxImage: [],
+        oilEquipmentImage: [],
+      },
     }
   },
   computed: {
@@ -52,8 +79,8 @@ export default {
               title: '1.主机',
               column: [
                 { label: '实船型号', prop: 'shipMark', type: 'input', span: 12 },
-                { label: '铭牌', prop: 'shipMark', type: 'select', dictMap: this.dicData.isNot, span: 12 },
-                { label: '照片', prop: 'shipMark', type: 'upload', span: 24 },
+                { label: '铭牌', prop: 'shipMark', type: 'input', dictMap: this.dicData.isNot, span: 12 },
+                { label: '照片', prop: 'shipMarkImage', type: 'upload', span: 24 },
               ],
             },
             {
@@ -82,7 +109,7 @@ export default {
               title: '5.防污染设备',
               column: [
                 { label: '滤油设备型号', prop: 'oilEquipmentMark', type: 'input', span: 12 },
-                { label: '滤油设备铭牌', prop: 'oilEquipmentFlag', type: 'select', dictMap: this.dicData.isNot, span: 12 },
+                { label: '滤油设备铭牌', prop: 'oilEquipmentFlag', type: 'input', dictMap: this.dicData.isNot, span: 12 },
                 { label: '照片', prop: 'oilEquipmentImage', type: 'upload', span: 24 },
               ],
             },
