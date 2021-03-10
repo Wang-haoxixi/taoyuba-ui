@@ -222,7 +222,7 @@ export default {
           ],
         },
         {
-          title: '通道设备',
+          title: '通导设备',
           column: [
             {
               title: '通信设备',
