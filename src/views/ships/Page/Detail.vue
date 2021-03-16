@@ -199,7 +199,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="作业方式1：" prop="workMode">
+            <el-form-item label="实际作用方式：" prop="workMode">
               <el-select v-model="form.workMode">
                 <el-option
                         v-for="item in $store.getters.dictGroup.tyb_work_mode"

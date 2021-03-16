@@ -1,6 +1,7 @@
 <template>
   <div class="form-item-wrapper">
-    <el-form :model="value" :rules="rules" ref="ruleForm" label-width="100px" :disabled="disabled">
+    <!-- :rules="rules" -->
+    <el-form :model="value" ref="ruleForm" label-width="100px" :disabled="disabled">
       <div v-for="(item, index) in curOptions" :key="index" class="item">
         <div class="title">{{item.title}}</div>
         <!-- 一级标题 -->

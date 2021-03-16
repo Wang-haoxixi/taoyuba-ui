@@ -85,7 +85,7 @@
           prop="relationshipTime"
           label="联系时间">
         </el-table-column>
-        <el-table-column label="操作" fixed="right" width="220">
+        <el-table-column label="操作" fixed="right" width="290">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -98,6 +98,9 @@
               v-if="relation_ship_delete && roles.indexOf(112) !== -1"
               size="mini"
               @click="handleDelete(scope.row)">删除</el-button>
+            <el-button
+              size="mini"
+              @click="handleImg(scope.row)">图片</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -116,6 +119,15 @@
     <div v-if="show">
       <form-container ref="formContainer" :status="status" @go-back="onGoBack"></form-container>
     </div>
+    <el-dialog
+      :visible.sync="dialogVisible"
+      width="30%">
+      <div style="max-height: 250px;overflow: hidden;">
+        <div style="text-align: center;" v-for="(item, index) in imgList" :key="index">
+          <img :src="item">
+        </div>
+      </div>
+    </el-dialog>
 </basic-container>
 </template>
 <script>
@@ -132,6 +144,8 @@ export default {
   },
   data () {
     return {
+      dialogVisible: false,
+      imgList: [],
       status: '',
       id: '',
       show: false,
@@ -226,6 +240,7 @@ export default {
         this.tableLoading = false
       })
     },
+    handleImg () {},
     handleAdd () {
       this.show = true
       this.status = 'add'

@@ -3,11 +3,42 @@
     <el-row>
       <el-col :span="24">
         <h1 class="chart-title">{{orgTitle}}渔业船员大数据统计墙</h1>
-        <div class="select-wrap">
-          <!-- <el-select v-model="orgId" @change="changeOrg">
-            <el-option v-for="item in orgList" :key="item.orgId" :label="item.name" :value="item.orgId">
-            </el-option>
-          </el-select> -->
+        <div class="select-wrapper">
+          <el-form :inline="true" class="demo-form-inline">
+            <el-form-item style="width: 180px;">
+              <el-cascader
+                @change="changeOrg"
+                placeholder=""
+                :options="orgList"
+                v-model="areaValue"
+                :props="areaListProps"
+                change-on-select
+                :disabled="disabled"
+              ></el-cascader>
+            </el-form-item>
+            <el-form-item style="width: 120px;" v-show="levelShow" @change="onChangeLevel">
+              <el-select v-model="positionId">
+                <el-option
+                  v-for="item in levelList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item style="width: 120px;">
+              <el-select :disabled="positionDisabled" v-model="positionId" placeholder="职位船员" @change="onChangePositionId">
+                <el-option
+                  v-for="item in positionDicMap"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+        </div>
+        <!-- <div class="select-wrap">
           <el-cascader
             @change="changeOrg"
             placeholder=""
@@ -27,7 +58,7 @@
               :value="item.value">
             </el-option>
           </el-select>
-        </div>
+        </div> -->
       </el-col>
     </el-row>
     <el-row>
@@ -106,6 +137,8 @@ import 'echarts/map/js/china'
 export default {
   data () {
     return {
+      levelShow: false,
+      levelList: [{label: '全部', value: ''}],
       title: '职务船员',
       contractTitle: '',
       positionId: '',
@@ -198,6 +231,9 @@ export default {
     this.getPageArea()
   },
   methods: {
+    onChangeLevel () {
+
+    },
     onChangePositionId (val) {
       let result = this.positionDicMap.filter((item) => {
         return item.value === val
@@ -248,6 +284,7 @@ export default {
       }
     },
     changeOrg (item = []){
+      console.log('item', item)
       this.orgId = item[item.length - 1]
       this.findName(this.orgList)
       this.disabled = true
@@ -258,6 +295,27 @@ export default {
       this.positionId = ''
       this.contractTitle = ''
       this.title = '职务船员'
+      let orgInfo = this.getOrgInfo(this.orgList, this.orgId)
+      this.levelShow = orgInfo && !(orgInfo.children && orgInfo.children.length > 0)
+      this.getOrgList(this.orgId)
+      // console.log('content', this.getOrgInfo(this.orgList, this.orgId))
+    },
+    getOrgList () {
+
+    },
+    getOrgInfo (data, id) {
+      for (let i = 0, len = data.length; i < len; i++) {
+        if (data[i].id === id) {
+          return data[i]  
+        }
+        let children = data[i].children
+        if (children && children.length > 0) {
+          let result = this.getOrgInfo(children, id) 
+          if (result) {
+            return result
+          }
+        }
+      }
     },
     // 职务船员数量统计
     getCrewNumber (res) {
@@ -1222,5 +1280,10 @@ export default {
     right: 5px;
     top: 17px;
     width: 110px;
+  }
+  .select-wrapper {
+    position: absolute;
+    top:40px;
+    right: 20px;
   }
 </style>
