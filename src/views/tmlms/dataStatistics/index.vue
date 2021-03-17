@@ -16,13 +16,13 @@
                 :disabled="disabled"
               ></el-cascader>
             </el-form-item>
-            <el-form-item style="width: 120px;" v-show="levelShow" @change="onChangeLevel">
-              <el-select v-model="positionId">
+            <el-form-item style="width: 120px;" v-show="levelShow">
+              <el-select v-model="villageId" @change="onChangeLevel">
                 <el-option
                   v-for="item in levelList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  :key="item.userId"
+                  :label="item.villageName"
+                  :value="item.userId">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -127,10 +127,17 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { getCrewByOrg,getCountCrew } from '@/api/tmlms/dataStatistics'
 import { getAllAreaName } from '@/api/post/address'
 import { getPage as getPageArea } from '@/api/tmlms/area'
-import { getPositionInforByOrgID } from '@/api/tmlms/dataStatistics'
+import {
+  getPositionInforByOrgID,
+  getCrewByOrg,
+  getCountCrew,
+  getVillage,
+  getCrewOrgRelationVillage,
+  getCountCrewVillage,
+  getPositionInforVillage,
+} from '@/api/tmlms/dataStatistics'
 // import { mapState } from 'vuex'
 import 'echarts/map/js/china'
 
@@ -138,10 +145,11 @@ export default {
   data () {
     return {
       levelShow: false,
-      levelList: [{label: '全部', value: ''}],
+      levelList: [],
       title: '职务船员',
       contractTitle: '',
       positionId: '',
+      villageId: '',
       positionDicMap: [{label: '全部', value: ''}],
       areaListProps: {
         value: 'id',
@@ -231,36 +239,116 @@ export default {
     this.getPageArea()
   },
   methods: {
+    getCountCrewVillage () {
+      getCountCrewVillage({orgRelationId: this.orgId, villageId: this.villageId, positionId: this.positionId}).then(data=>{
+        let dataNum
+        dataNum = data.data.data
+        // console.log('dataNum', dataNum)
+        Object.keys(dataNum).forEach(item=>{
+          let num = parseInt(dataNum[item])
+          this.totalCrew = this.totalCrew+num
+          if(item=='1') this.contractCrew = num
+          // console.log('this.totalCrew', this.totalCrew)
+        })
+        this.disabled = false
+      })
+    },
+    getCrewOrgRelationVillage () {
+      getCrewOrgRelationVillage({ villageId: this.villageId }).then(res=>{
+        //职务船员数量
+        this.getCrewNumber(res)
+        // 职务船员年龄分布
+        this.getCrewAge(res)
+        // 船东统计
+        this.getShipOwner(res)
+        // 职务船员工资统计
+        this.getSalary(res)
+        // 渔船船龄分布
+        this.getShipAge(res)
+        // 劳动合同状态统计
+        this.getContract(res)
+        // 职务船员籍贯分布， 地图
+        this.getNativePlace(res)
+      })
+    },
     onChangeLevel () {
-
+      this.totalCrew = 0
+      this.contractCrew = 0
+      this.positionId = ''
+      if (this.villageId) {
+        this.getCrewOrgRelationVillage()
+        this.getCountCrewVillage()
+      } else {
+        this.findName(this.orgList)
+        this.getPosition()
+        this.getTotalNum()
+        this.totalCrew = 0
+        this.contractCrew = 0
+        if (this.positionId) {
+          this.getPositionInforByOrg()
+        }
+      }
     },
     onChangePositionId (val) {
       let result = this.positionDicMap.filter((item) => {
         return item.value === val
       })
-      if (result && result[0].value !== '') {
-        this.contractTitle = result[0].label
-        this.title = result[0].label
-        this.positionDisabled = true
-        getPositionInforByOrgID({positionId: val, orgRelationId: this.areaValue[this.areaValue.length - 1]}).then((res) => {
-          this.positionDisabled = false
-          this.setSalary()
-          this.setCrewAge()
-          this.setContract()
-          this.setNativePlace()
-          this.getSalary(res)
-          this.getCrewAge(res)
-          this.getContract(res)
-          this.getNativePlace(res, false)
-        }).catch(() => {
-          this.positionDisabled = false
-        })
+      if (this.villageId) {
+        if (result && result[0].value !== '') {
+          this.contractTitle = result[0].label
+          this.title = result[0].label
+          this.positionDisabled = true
+          getPositionInforVillage({
+            positionId: this.positionId,
+            orgRelationId: this.areaValue[this.areaValue.length - 1],
+            villageId: this.villageId,
+          }).then((res) => {
+            this.positionDisabled = false
+            this.setSalary()
+            this.setCrewAge()
+            this.setContract()
+            this.setNativePlace()
+            this.getSalary(res)
+            this.getCrewAge(res)
+            this.getContract(res)
+            this.getNativePlace(res, false)
+          }).catch(() => {
+            this.positionDisabled = false
+          })
+        } else {
+          this.contractTitle = ''
+          this.title = '职务船员'
+          this.getPosition()
+          this.drawLine()
+        }
       } else {
-        this.contractTitle = ''
-        this.title = '职务船员'
-        this.getPosition()
-        this.drawLine()
+        if (result && result[0].value !== '') {
+          this.contractTitle = result[0].label
+          this.title = result[0].label
+          this.positionDisabled = true
+          this.getPositionInforByOrg()
+        } else {
+          this.contractTitle = ''
+          this.title = '职务船员'
+          this.getPosition()
+          this.drawLine()
+        }
       }
+    },
+    getPositionInforByOrg () {
+      getPositionInforByOrgID({positionId: this.positionId, orgRelationId: this.areaValue[this.areaValue.length - 1]}).then((res) => {
+            this.positionDisabled = false
+            this.setSalary()
+            this.setCrewAge()
+            this.setContract()
+            this.setNativePlace()
+            this.getSalary(res)
+            this.getCrewAge(res)
+            this.getContract(res)
+            this.getNativePlace(res, false)
+          }).catch(() => {
+            this.positionDisabled = false
+          })
     },
     getPageArea () {
       getPageArea({current: 1, size: 100}).then(({ data }) => {
@@ -284,7 +372,6 @@ export default {
       }
     },
     changeOrg (item = []){
-      console.log('item', item)
       this.orgId = item[item.length - 1]
       this.findName(this.orgList)
       this.disabled = true
@@ -297,11 +384,19 @@ export default {
       this.title = '职务船员'
       let orgInfo = this.getOrgInfo(this.orgList, this.orgId)
       this.levelShow = orgInfo && !(orgInfo.children && orgInfo.children.length > 0)
-      this.getOrgList(this.orgId)
+      if (this.levelShow) {
+        this.getOrgList(this.orgId)
+      }
+      this.villageId = ''
       // console.log('content', this.getOrgInfo(this.orgList, this.orgId))
     },
-    getOrgList () {
-
+    getOrgList (id) {
+      getVillage({id, page: 100}).then(({ data }) => {
+        if (data.code === 0) {
+          this.levelList = [{villageName: '全部', userId: ''}]
+          this.levelList = this.levelList.concat(data.data.records)
+        }
+      })
     },
     getOrgInfo (data, id) {
       for (let i = 0, len = data.length; i < len; i++) {
@@ -1036,6 +1131,7 @@ export default {
       getCountCrew(this.orgId).then(data=>{
         let dataNum
         dataNum = data.data.data
+        this.totalCrew = 0
         Object.keys(dataNum).forEach(item=>{
           let num = parseInt(dataNum[item])
           this.totalCrew = this.totalCrew+num

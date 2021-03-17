@@ -38,3 +38,35 @@ export function getCountCrew (orgId) {
         params: orgId,
     })
 }
+
+export function getVillage (params) {
+    return request({
+        url: '/tmlms/orgRelation/village_page',
+        method: 'get',
+        params: params,
+    })
+}
+
+export function getCrewOrgRelationVillage (params) {
+    return request({
+        url: `${prefixUrl}/crewOrgRelationVillage`,
+        method: 'get',
+        params: params,
+    })
+}
+
+export function getCountCrewVillage (params) {
+    return request({
+        url: `${prefixUrl}/vi_countOrgRelationCrew`,
+        method: 'get',
+        params: params,
+    })
+}
+
+export function getPositionInforVillage  (params) {
+    return request({
+        url: `${prefixUrl}/positionOrgRelationVillage`,
+        method: 'get',
+        params: params,
+    })
+}

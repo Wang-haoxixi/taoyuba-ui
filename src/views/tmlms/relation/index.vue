@@ -82,6 +82,13 @@
           </template>
         </el-table-column>
         <el-table-column
+          prop="workMode"
+          label="工作方式">
+          <template slot-scope="scope">
+            {{getWorkModeLabel(scope.row.workMode)}}
+          </template>
+        </el-table-column>
+        <el-table-column
           prop="relationshipTime"
           label="联系时间">
         </el-table-column>
@@ -99,6 +106,7 @@
               size="mini"
               @click="handleDelete(scope.row)">删除</el-button>
             <el-button
+              v-if="scope.row.relationshipImages && scope.row.relationshipImages.length > 0"
               size="mini"
               @click="handleImg(scope.row)">图片</el-button>
           </template>
@@ -120,11 +128,12 @@
       <form-container ref="formContainer" :status="status" @go-back="onGoBack"></form-container>
     </div>
     <el-dialog
+      title="图片"
       :visible.sync="dialogVisible"
-      width="30%">
-      <div style="max-height: 250px;overflow: hidden;">
-        <div style="text-align: center;" v-for="(item, index) in imgList" :key="index">
-          <img :src="item">
+      width="40%">
+      <div style="max-height: 350px;overflow: auto;">
+        <div style="text-align: center;margin-bottom: 10px;" v-for="(item, index) in imgList" :key="index">
+          <img :src="item" width="100%">
         </div>
       </div>
     </el-dialog>
@@ -174,6 +183,7 @@ export default {
     ...mapGetters([
       'permissions',
       'roles',
+      'dictGroup',
     ]),
   },
   created () {
@@ -186,8 +196,32 @@ export default {
     this.relation_ship_statistics = this.permissions['relation_ship_statistics']
   },
   methods: {
+    getWorkModeLabel (value) {
+      let maps = this.dictGroup.tyb_work_mode
+      let result = ''
+      for (let i = 0, len = maps.length; i < len; i++) {
+        if (value === maps[i].value) {
+          result = maps[i].label
+          break
+        }
+      }
+      return result
+    },
     onSearch () {
       this.params.current = 1
+      // let params = this.params
+      // if (Array.isArray(params.rangeTime) && params.rangeTime.length > 0) {
+      //   params.startDate = params.rangeTime[0]
+      //   params.endDate = params.rangeTime[1]
+      // }
+      // if (params.startDate
+      //   && params.endDate
+      //   && !params.villageId
+      //   && params.shipName === ''
+      //   && params.shipownerName
+      //   && !params.relationshipType) {
+
+      //   }
       this.getList()
     },
     onGoBack () {
@@ -240,7 +274,10 @@ export default {
         this.tableLoading = false
       })
     },
-    handleImg () {},
+    handleImg (row) {
+      this.imgList = row.relationshipImages || []
+      this.dialogVisible = true
+    },
     handleAdd () {
       this.show = true
       this.status = 'add'
