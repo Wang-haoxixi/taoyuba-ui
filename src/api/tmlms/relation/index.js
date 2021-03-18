@@ -10,6 +10,13 @@ export function getPage (query) {
   })
 }
 
+export function getCountByTime (query) {
+  return request({
+    url: `${prefixUrl}/countRecord`,
+    method: 'get',
+    params: query,
+  })
+}
 export function getPageById (id) {
   return request({
     url: `${prefixUrl}/${id}`,

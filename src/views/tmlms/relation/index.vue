@@ -50,6 +50,30 @@
           </el-form>
         </template>
       </operation-container>
+      <div v-show="showCount" class="count-wrapper">
+        <div class="title-count">基层联系数量统计</div>
+        <el-table
+          :data="countList"
+          stripe
+          :loading="loadingCount"
+          style="width: 100%">
+          <el-table-column
+            prop="village_id"
+            label="基层名">
+            <template slot-scope="scope">
+              {{getVillageLabel(scope.row.village_id)}}
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="number"
+            label="已联系数量">
+          </el-table-column>
+          <el-table-column
+            prop="readyNumber"
+            label="未联系数量">
+          </el-table-column>
+        </el-table>
+      </div>
       <el-table
         :data="pagedTable"
         stripe
@@ -141,7 +165,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { getPage, removePage, exportPage } from '@/api/tmlms/relation'
+import { getPage, removePage, exportPage, getCountByTime } from '@/api/tmlms/relation'
 import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
 import dialogStatistics from './dialogStatistics'
 import formContainer from './form'
@@ -153,6 +177,9 @@ export default {
   },
   data () {
     return {
+      loadingCount: false,
+      showCount: false,
+      countList: [],
       dialogVisible: false,
       imgList: [],
       status: '',
@@ -196,6 +223,17 @@ export default {
     this.relation_ship_statistics = this.permissions['relation_ship_statistics']
   },
   methods: {
+    getVillageLabel (value) {
+      let maps = this.orgSearchList || []
+      let result = ''
+      for (let i = 0, len = maps.length; i < len; i++) {
+        if (value === maps[i].userId) {
+          result = maps[i].villageName
+          break
+        }
+      }
+      return result
+    },
     getWorkModeLabel (value) {
       let maps = this.dictGroup.tyb_work_mode
       let result = ''
@@ -209,19 +247,42 @@ export default {
     },
     onSearch () {
       this.params.current = 1
-      // let params = this.params
-      // if (Array.isArray(params.rangeTime) && params.rangeTime.length > 0) {
-      //   params.startDate = params.rangeTime[0]
-      //   params.endDate = params.rangeTime[1]
-      // }
-      // if (params.startDate
-      //   && params.endDate
-      //   && !params.villageId
-      //   && params.shipName === ''
-      //   && params.shipownerName
-      //   && !params.relationshipType) {
-
-      //   }
+      let params = this.params
+      if (Array.isArray(params.rangeTime) && params.rangeTime.length > 0) {
+        params.startDate = params.rangeTime[0]
+        params.endDate = params.rangeTime[1]
+      } else {
+        params.startDate = undefined
+        params.endDate = undefined
+      }
+      // console.log(`
+      //   startDate:${params.startDate},
+      //   endDate:${params.endDate},
+      //   villageId:${params.villageId},
+      //   shipName:${params.shipName},
+      //   shipownerName:${params.shipownerName},
+      //   relationshipType:${params.relationshipType},
+      // `)
+      if (params.startDate
+        && params.endDate
+        && !params.villageId
+        && (params.shipName === '' || params.shipName == null)
+        && (params.shipownerName === '' || params.shipownerName == null)
+        && !params.relationshipType) {
+          this.loadingCount = true
+          getCountByTime({ startDate: params.startDate, endDate: params.endDate }).then(({ data }) => {
+            if (data.code === 0) {
+              this.countList = data.data
+            }
+            this.showCount = true
+            this.loadingCount = false
+          }).catch(() => {
+            this.loadingCount = false
+            this.showCount = true
+          })
+        } else {
+          this.showCount = false
+        }
       this.getList()
     },
     onGoBack () {
@@ -344,5 +405,14 @@ export default {
 <style lang="scss" scoped>
 .el-form-item {
   margin-bottom:0 !important;
+}
+.count-wrapper {
+  margin: 20px 0;
+}
+.title-count {
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #333;
+  font-weight: 700;
 }
 </style>
