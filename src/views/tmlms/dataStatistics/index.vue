@@ -91,12 +91,28 @@
             <el-col :span="12" class="font-text">已上船登记船员</el-col>
             <el-col :span="12" class="font-text">已签订劳务协议船员</el-col>
           </el-row>
+          <el-row>
+            <el-col :span="12" class="font-yellow">{{counts.shipStandardCertCount}}</el-col>
+            <el-col :span="12" class="font-yellow">{{counts.shipRealCertCount}}</el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12" class="font-text">应配船员</el-col>
+            <el-col :span="12" class="font-text">实配船员</el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12" class="font-yellow">{{counts.shipCount}}</el-col>
+            <el-col :span="12" class="font-yellow">{{counts.contractCount}}</el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12" class="font-text">渔船数量</el-col>
+            <el-col :span="12" class="font-text">已签合同数</el-col>
+          </el-row>
         </div>
         <div id="mapChina" :style="{width: '100%', height: '600px'}"></div>
         <div class="panel-footer"></div>
         <div class="chart-bg panel">
           <h2>船东统计</h2>
-          <div id="peopleTotal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
+          <div id="peopleTotal"  :style="{width: '100%', height: '282' + 'px'}"></div>
           <div class="panel-footer"></div>
         </div>
       </el-col>
@@ -130,6 +146,7 @@ import { mapGetters } from 'vuex'
 import { getAllAreaName } from '@/api/post/address'
 import { getPage as getPageArea } from '@/api/tmlms/area'
 import {
+  getShipCount,
   getPositionInforByOrgID,
   getCrewByOrg,
   getCountCrew,
@@ -137,6 +154,7 @@ import {
   getCrewOrgRelationVillage,
   getCountCrewVillage,
   getPositionInforVillage,
+  getShipCountVillage,
 } from '@/api/tmlms/dataStatistics'
 // import { mapState } from 'vuex'
 import 'echarts/map/js/china'
@@ -144,6 +162,12 @@ import 'echarts/map/js/china'
 export default {
   data () {
     return {
+      counts: {
+        contractCount: '',
+        shipCount: '',
+        shipRealCertCount: '',
+        shipStandardCertCount: '',
+      },
       levelShow: false,
       levelList: [],
       title: '职务船员',
@@ -156,7 +180,7 @@ export default {
         label: 'orgRelationName',
         children: 'children',
       },
-      echartHeight: '282',
+      echartHeight: '352',
       disabled: false,
       positionDisabled: false,
       areaValue: [],
@@ -278,12 +302,14 @@ export default {
       if (this.villageId) {
         this.getCrewOrgRelationVillage()
         this.getCountCrewVillage()
+        this.getShipCountVillage()
       } else {
         this.findName(this.orgList)
         this.getPosition()
         this.getTotalNum()
         this.totalCrew = 0
         this.contractCrew = 0
+        this.getShipCount()
         if (this.positionId) {
           this.getPositionInforByOrg()
         }
@@ -377,6 +403,7 @@ export default {
       this.disabled = true
       this.getPosition()
       this.getTotalNum()
+      this.getShipCount()
       this.totalCrew = 0
       this.contractCrew = 0
       this.positionId = ''
@@ -389,6 +416,26 @@ export default {
       }
       this.villageId = ''
       // console.log('content', this.getOrgInfo(this.orgList, this.orgId))
+    },
+    getShipCount () {
+      getShipCount({orgRelationId: this.orgId}).then(({ data }) => {
+        if (data.code === 0) {
+          this.counts.contractCount = data.data.contractCount
+          this.counts.shipCount = data.data.shipCount
+          this.counts.shipRealCertCount = data.data.shipRealCert['0_0']
+          this.counts.shipStandardCertCount = data.data.shipStandardCert['0_0']
+        }
+      })
+    },
+    getShipCountVillage () {
+      getShipCountVillage({orgRelationId: this.orgId, villageId: this.villageId}).then(({ data }) => {
+        if (data.code === 0) {
+          this.counts.contractCount = data.data.contractCount
+          this.counts.shipCount = data.data.shipCount
+          this.counts.shipRealCertCount = data.data.shipRealCert['0_0']
+          this.counts.shipStandardCertCount = data.data.shipStandardCert['0_0']
+        }
+      })
     },
     getOrgList (id) {
       getVillage({id, page: 100}).then(({ data }) => {

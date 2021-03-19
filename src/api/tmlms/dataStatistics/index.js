@@ -70,3 +70,17 @@ export function getPositionInforVillage  (params) {
         params: params,
     })
 }
+export function getShipCount  (params) {
+    return request({
+        url: `${prefixUrl}/shipCount`,
+        method: 'get',
+        params: params,
+    })
+}
+export function getShipCountVillage  (params) {
+    return request({
+        url: `${prefixUrl}/shipCountVillage`,
+        method: 'get',
+        params: params,
+    })
+}
