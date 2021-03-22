@@ -3,6 +3,7 @@
     <el-row>
       <el-col :span="24">
         <h1 class="chart-title">{{orgTitle}}渔业船员大数据统计墙</h1>
+        <h6 class="chart-time">数据更新时间：{{time}}</h6>
         <div class="select-wrapper">
           <el-form :inline="true" class="demo-form-inline">
             <el-form-item style="width: 180px;">
@@ -166,10 +167,11 @@ import {
 } from '@/api/tmlms/dataStatistics'
 // import { mapState } from 'vuex'
 import 'echarts/map/js/china'
-
+import moment from 'moment'
 export default {
   data () {
     return {
+      time: '',
       counts: {
         contractCount: 0,
         shipCount: 0,
@@ -269,8 +271,12 @@ export default {
   created (){
     this.positionDicMap = this.positionDicMap.concat(this.dictGroup['tyb_resume_position'])
     this.getPageArea()
+    this.getTime()
   },
   methods: {
+    getTime () {
+      this.time = moment().format('lll')
+    },
     getCountCrewVillage () {
       getCountCrewVillage({orgRelationId: this.orgId, villageId: this.villageId, positionId: this.positionId}).then(data=>{
         let dataNum
@@ -322,6 +328,7 @@ export default {
           this.getPositionInforByOrg()
         }
       }
+      this.getTime()
     },
     onChangePositionId (val) {
       let result = this.positionDicMap.filter((item) => {
@@ -368,6 +375,7 @@ export default {
           this.drawLine()
         }
       }
+      this.getTime()
     },
     getPositionInforByOrg () {
       getPositionInforByOrgID({positionId: this.positionId, orgRelationId: this.areaValue[this.areaValue.length - 1]}).then((res) => {
@@ -423,6 +431,7 @@ export default {
         this.getOrgList(this.orgId)
       }
       this.villageId = ''
+      this.getTime()
       // console.log('content', this.getOrgInfo(this.orgList, this.orgId))
     },
     getShipCount () {
@@ -1441,5 +1450,10 @@ export default {
     .el-row-text {
       margin-bottom: 5px;
     }
+  }
+  .chart-time {
+    text-align: center;
+    color: #fff;
+    font-size: 12px;
   }
 </style>
