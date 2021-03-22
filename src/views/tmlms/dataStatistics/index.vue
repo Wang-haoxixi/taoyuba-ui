@@ -87,7 +87,7 @@
             <el-col :span="12" class="font-yellow">{{totalCrew}}</el-col>
             <el-col :span="12" class="font-yellow">{{contractCrew}}</el-col>
           </el-row>
-          <el-row>
+          <el-row class="el-row-text">
             <el-col :span="12" class="font-text">已上船登记船员</el-col>
             <el-col :span="12" class="font-text">已签订劳务协议船员</el-col>
           </el-row>
@@ -95,7 +95,7 @@
             <el-col :span="12" class="font-yellow">{{counts.shipStandardCertCount}}</el-col>
             <el-col :span="12" class="font-yellow">{{counts.shipRealCertCount}}</el-col>
           </el-row>
-          <el-row>
+          <el-row class="el-row-text">
             <el-col :span="12" class="font-text">应配职务船员</el-col>
             <el-col :span="12" class="font-text">实配职务船员</el-col>
           </el-row>
@@ -103,7 +103,7 @@
             <el-col :span="12" class="font-yellow">0</el-col>
             <el-col :span="12" class="font-yellow">0</el-col>
           </el-row>
-          <el-row>
+          <el-row class="el-row-text">
             <el-col :span="12" class="font-text">应配船员</el-col>
             <el-col :span="12" class="font-text">实配船员</el-col>
           </el-row>
@@ -188,7 +188,7 @@ export default {
         label: 'orgRelationName',
         children: 'children',
       },
-      echartHeight: '382',
+      echartHeight: '370',
       disabled: false,
       positionDisabled: false,
       areaValue: [],
@@ -1436,5 +1436,10 @@ export default {
     position: absolute;
     top:40px;
     right: 20px;
+  }
+  .all-crew {
+    .el-row-text {
+      margin-bottom: 5px;
+    }
   }
 </style>
