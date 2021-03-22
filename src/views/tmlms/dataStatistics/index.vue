@@ -96,6 +96,14 @@
             <el-col :span="12" class="font-yellow">{{counts.shipRealCertCount}}</el-col>
           </el-row>
           <el-row>
+            <el-col :span="12" class="font-text">应配职务船员</el-col>
+            <el-col :span="12" class="font-text">实配职务船员</el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12" class="font-yellow">0</el-col>
+            <el-col :span="12" class="font-yellow">0</el-col>
+          </el-row>
+          <el-row>
             <el-col :span="12" class="font-text">应配船员</el-col>
             <el-col :span="12" class="font-text">实配船员</el-col>
           </el-row>
@@ -163,10 +171,10 @@ export default {
   data () {
     return {
       counts: {
-        contractCount: '',
-        shipCount: '',
-        shipRealCertCount: '',
-        shipStandardCertCount: '',
+        contractCount: 0,
+        shipCount: 0,
+        shipRealCertCount: 0,
+        shipStandardCertCount: 0,
       },
       levelShow: false,
       levelList: [],
@@ -180,7 +188,7 @@ export default {
         label: 'orgRelationName',
         children: 'children',
       },
-      echartHeight: '352',
+      echartHeight: '382',
       disabled: false,
       positionDisabled: false,
       areaValue: [],
