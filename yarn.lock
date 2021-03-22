@@ -11569,6 +11569,11 @@ vue-json-editor@^1.2.3:
   dependencies:
     vue "^2.2.6"
 
+vue-jsonp@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npm.taobao.org/vue-jsonp/download/vue-jsonp-2.0.0.tgz#3bfac56bb72941a2511c11e1a123b876f03427f7"
+  integrity sha1-O/rFa7cpQaJRHBHhoSO4dvA0J/c=
+
 vue-loader@^15.7.0:
   version "15.7.0"
   resolved "https://registry.npm.taobao.org/vue-loader/download/vue-loader-15.7.0.tgz#27275aa5a3ef4958c5379c006dd1436ad04b25b3"

@@ -54,4 +54,7 @@ export default {
 .el-menu-item:hover{
   border-color: #0185d8!important;
 }
+.el-range-separator {
+  width: 40px!important;
+}
 </style>
