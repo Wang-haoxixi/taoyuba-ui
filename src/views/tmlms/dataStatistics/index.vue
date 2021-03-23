@@ -93,28 +93,24 @@
             <el-col :span="12" class="font-text">已签订劳务协议船员</el-col>
           </el-row>
           <el-row>
-            <el-col :span="12" class="font-yellow">{{counts.shipStandardCertCount}}</el-col>
-            <el-col :span="12" class="font-yellow">{{counts.shipRealCertCount}}</el-col>
-          </el-row>
-          <el-row class="el-row-text">
-            <el-col :span="12" class="font-text">应配职务船员</el-col>
-            <el-col :span="12" class="font-text">实配职务船员</el-col>
+            <el-col :span="8" class="font-yellow">{{counts.shipStandardCertCount}}</el-col>
+            <el-col :span="8" class="font-yellow">0</el-col>
+            <el-col :span="8" class="font-yellow">{{counts.shipCount}}</el-col>
           </el-row>
           <el-row>
-            <el-col :span="12" class="font-yellow">0</el-col>
-            <el-col :span="12" class="font-yellow">0</el-col>
-          </el-row>
-          <el-row class="el-row-text">
-            <el-col :span="12" class="font-text">应配船员</el-col>
-            <el-col :span="12" class="font-text">实配船员</el-col>
+            <el-col :span="8" class="font-text">应配职务船员</el-col>
+            <el-col :span="8" class="font-text">应配船员</el-col>
+            <el-col :span="8" class="font-text">渔船数量</el-col>
           </el-row>
           <el-row>
-            <el-col :span="12" class="font-yellow">{{counts.shipCount}}</el-col>
-            <el-col :span="12" class="font-yellow">{{counts.contractCount}}</el-col>
+            <el-col :span="8" class="font-yellow">{{counts.shipRealCertCount}}</el-col>
+            <el-col :span="8" class="font-yellow">0</el-col>
+            <el-col :span="8" class="font-yellow">{{counts.contractCount}}</el-col>
           </el-row>
           <el-row>
-            <el-col :span="12" class="font-text">渔船数量</el-col>
-            <el-col :span="12" class="font-text">已签合同数</el-col>
+            <el-col :span="8" class="font-text">实配职务船员</el-col>
+            <el-col :span="8" class="font-text">实配船员</el-col>
+            <el-col :span="8" class="font-text">已签合同数</el-col>
           </el-row>
         </div>
         <div id="mapChina" :style="{width: '100%', height: '600px'}"></div>
@@ -190,7 +186,7 @@ export default {
         label: 'orgRelationName',
         children: 'children',
       },
-      echartHeight: '370',
+      echartHeight: '332',
       disabled: false,
       positionDisabled: false,
       areaValue: [],
@@ -1353,7 +1349,7 @@ export default {
     }
     .font-yellow{
       height:30px;
-      font-size: 30px;
+      font-size: 24px;
       color: #ffeb7b;
       padding-top:10px;
       font-family: electronicFont;
@@ -1448,12 +1444,15 @@ export default {
   }
   .all-crew {
     .el-row-text {
-      margin-bottom: 5px;
+      margin-bottom: 0px;
     }
   }
   .chart-time {
     text-align: center;
     color: #fff;
     font-size: 12px;
+  }
+  .el-row {
+    margin-bottom: 12px;
   }
 </style>
