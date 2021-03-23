@@ -55,6 +55,7 @@
         <el-table
           :data="countList"
           stripe
+          border
           :loading="loadingCount"
           style="width: 100%">
           <el-table-column
@@ -408,6 +409,8 @@ export default {
 }
 .count-wrapper {
   margin: 20px 0;
+  padding: 20px;
+  border: 1px solid #f6f6f6;
 }
 .title-count {
   margin-bottom: 20px;
