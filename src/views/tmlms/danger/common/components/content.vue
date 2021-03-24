@@ -41,7 +41,7 @@
                     </el-radio-group>
                   </el-form-item>
                 </el-col>
-                <el-col :span="16" v-if="showUpload[item2.value]">
+                <el-col :span="16" v-if="showUpload[item2.value] || value[`${item2.value}Result`] === 0">
                   <el-form-item label="照片：" :prop="`${item2.value}Image`">
                     <el-upload
                       :headers="headers"
@@ -54,6 +54,11 @@
                       :on-remove="(file, fileList) => {handleRemove(file, fileList, `${item2.value}Image`)}">
                       <i class="el-icon-plus"></i>
                     </el-upload>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8" v-if="value[`${item2.value}Result`] === 0">
+                  <el-form-item label="不合格原因：" :prop="`${item2.value}Reason`">
+                    <el-input v-model="value[`${item2.value}Reason`]" :maxlength="200"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -73,6 +78,7 @@
                       <img class="img" width="150px" height="150px" :src="img.url" v-for="(img, index) in historyData[`${item2.value}Image`]" :key="index" @click="handlePictureCardPreview(img)"/>
                     </div>
                   </div>
+                  <div v-if="historyData[`${item2.value}Reason`]">不合格原因:{{ historyData[`${item2.value}Reason`] }}</div>
                 </div>
               </div>
             </div>
@@ -307,6 +313,7 @@ export default {
       .img-history-wrapper {
         .img-wrapper {
           display: flex;
+          margin-bottom: 10px;
           img {
             margin: 10px 10px 0 0;
             cursor: pointer;
