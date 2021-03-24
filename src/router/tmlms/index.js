@@ -208,6 +208,12 @@ export default [
         meta: noKeepAlive,
       },
       {
+        path: '/shipStatistics',
+        name: 'shipStatistics',
+        component: () => import('@/views/tmlms/dataStatistics/ship'),
+        meta: noKeepAlive,
+      },
+      {
         path: '/statistics',
         component: Layout,
         children: [
