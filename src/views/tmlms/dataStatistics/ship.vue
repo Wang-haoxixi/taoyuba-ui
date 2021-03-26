@@ -69,7 +69,7 @@
           <div>
             <h2>进出港统计</h2>
           </div>
-          <div id="inAndOut" :style="{width: '100%', height: '330px'}"></div>
+          <div id="inAndOut" :style="{width: '100%', height: '280px'}"></div>
           <div class="panel-footer"></div>
         </div>
       </el-col>
@@ -78,7 +78,7 @@
           <div>
             <h2>基层情况统计</h2>
           </div>
-          <div id="baseLevel" :style="{width: '100%', height: '330px'}"></div>
+          <div id="baseLevel" :style="{width: '100%', height: '280px'}"></div>
           <div class="panel-footer"></div>
         </div>
       </el-col>
@@ -88,70 +88,155 @@
       <el-col :span="8">
         <div class="chart-bg panel">
           <div>
-            <h2>事故统计</h2>
+            <h2>渔船事故违规统计</h2>
           </div>
-          <div id="accident" :style="{width: '100%', height: '280px'}"></div>
-          <div class="panel-footer"></div>
-        </div>
-      </el-col>
-      <el-col :span="8">
-        <div class="chart-bg panel">
-          <div>
-            <h2>渔船健康档案</h2>
-          </div>
-          <div id="healthy" :style="{width: '100%', height: '280px'}"></div>
-          <div class="panel-footer"></div>
-        </div>
-      </el-col>
-      <el-col :span="8">
-        <div class="chart-bg panel">
-          <div>
-            <h2>渔船检验数据统计</h2>
-          </div>
-          <div id="shipCheckout" :style="{width: '100%', height: '280px'}"></div>
-          <div class="panel-footer"></div>
-        </div>
-      </el-col>
-    </el-row>
-    <!-- 三 -->
-    <el-row>
-      <el-col :span="8">
-        <div class="chart-bg panel">
-          <div>
-            <h2>违规统计</h2>
-          </div>
-          <div id="violation" :style="{width: '100%', height: '280px'}"></div>
+          <div id="accident" :style="{width: '100%', height: '636px'}"></div>
           <div class="panel-footer"></div>
         </div>
       </el-col>
       <el-col :span="16">
         <el-row>
-          <el-col :span="8">
+          <el-col :span="12">
             <div class="chart-bg panel">
               <div>
-                <h2>勘验报告</h2>
+                <h2>渔船健康档案</h2>
               </div>
-              <div id="shipTest" :style="{width: '100%', height: '280px'}"></div>
+              <div id="healthy" :style="{width: '100%', height: '280px'}"></div>
               <div class="panel-footer"></div>
             </div>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="12">
             <div class="chart-bg panel">
               <div>
-                <h2>渔船隐患排查</h2>
+                <h2>渔船检验数据统计</h2>
               </div>
-              <div id="shipDanger" :style="{width: '100%', height: '280px'}"></div>
+              <div id="shipCheckout" :style="{width: '100%', height: '280px'}"></div>
               <div class="panel-footer"></div>
             </div>
           </el-col>
-          <el-col :span="8">
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-row>
+              <el-col :span="8">
+                <div class="chart-bg panel">
+                  <div>
+                    <h2>勘验报告</h2>
+                  </div>
+                  <div id="shipTest" :style="{width: '100%', height: '280px'}"></div>
+                  <div class="panel-footer"></div>
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="chart-bg panel">
+                  <div>
+                    <h2>渔船隐患排查</h2>
+                  </div>
+                  <div id="shipDanger" :style="{width: '100%', height: '280px'}"></div>
+                  <div class="panel-footer"></div>
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="chart-bg panel">
+                  <div>
+                    <h2>船龄统计</h2>
+                  </div>
+                  <div id="shipAge" :style="{width: '100%', height: '280px'}"></div>
+                  <div class="panel-footer"></div>
+                </div>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+      </el-col>
+    </el-row>
+    <!-- 三 -->
+    <el-row>
+      <el-col :span="8">
+        <el-row>
+          <el-col :span="24">
             <div class="chart-bg panel">
               <div>
-                <h2>船龄统计</h2>
+                <h2>渔船分类统计</h2>
               </div>
-              <div id="shipAge" :style="{width: '100%', height: '280px'}"></div>
+              <div id="shipKind" :style="{width: '100%', height: '280px'}"></div>
               <div class="panel-footer"></div>
             </div>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <div class="chart-bg panel">
+              <div>
+                <h2>船长数据占比分类</h2>
+              </div>
+              <div id="captain" :style="{width: '100%', height: '280px'}"></div>
+              <div class="panel-footer"></div>
+            </div>
+          </el-col>
+          <el-col :span="12">
+            <div class="chart-bg panel">
+              <div>
+                <h2>功率数据占比分类</h2>
+              </div>
+              <div id="power" :style="{width: '100%', height: '280px'}"></div>
+              <div class="panel-footer"></div>
+            </div>
+          </el-col>
+        </el-row>
+      </el-col>
+      <el-col :span="16">
+        <el-row>
+          <el-col :span="16">
+            <div class="chart-bg panel">
+              <div>
+                <h2>船员基本统计</h2>
+              </div>
+              <div id="" :style="{width: '100%', height: '280px'}"></div>
+              <div class="panel-footer"></div>
+            </div>
+            <el-row>
+              <el-col :span="12">
+                <div class="chart-bg panel">
+                  <div>
+                    <h2>劳动合同状态分布</h2>
+                  </div>
+                  <div id="contract" :style="{width: '100%', height: '280px'}"></div>
+                  <div class="panel-footer"></div>
+                </div>
+              </el-col>
+              <el-col :span="12">
+                <div class="chart-bg panel">
+                  <div>
+                    <h2>职务船员数量统计</h2>
+                  </div>
+                  <div id="shipInfo" :style="{width: '100%', height: '280px'}"></div>
+                  <div class="panel-footer"></div>
+                </div>
+              </el-col>
+            </el-row>
+          </el-col>
+          <el-col :span="8">
+            <el-row>
+              <el-col :span="24">
+                <div class="chart-bg panel">
+                  <div>
+                    <h2>船员年龄分布统计</h2>
+                  </div>
+                  <div id="shipAgeInfo" :style="{width: '100%', height: '280px'}"></div>
+                  <div class="panel-footer"></div>
+                </div>
+              </el-col>
+              <el-col :span="24">
+                <div class="chart-bg panel">
+                  <div>
+                    <h2>船员籍贯分布统计</h2>
+                  </div>
+                  <div id="shipAddressInfo" :style="{width: '100%', height: '280px'}"></div>
+                  <div class="panel-footer"></div>
+                </div>
+              </el-col>
+            </el-row>
           </el-col>
         </el-row>
       </el-col>
@@ -161,63 +246,46 @@
       <el-col :span="8">
         <div class="chart-bg panel">
           <div>
-            <h2>渔船分类统计</h2>
-          </div>
-          <div id="shipKind" :style="{width: '100%', height: '580px'}"></div>
-          <div class="panel-footer"></div>
-        </div>
-      </el-col>
-      <el-col :span="10">
-        <div class="chart-bg panel">
-          <div>
-            <h2>船员基本统计</h2>
-          </div>
-          <div id="shipInfo" :style="{width: '100%', height: '580px'}"></div>
-          <div class="panel-footer"></div>
-        </div>
-      </el-col>
-      <el-col :span="6">
-        <el-row>
-          <el-col :span="24">
-            <div class="chart-bg panel">
-              <div>
-                <h2>船员年龄分布统计</h2>
-              </div>
-              <div id="shipAgeInfo" :style="{width: '100%', height: '242px'}"></div>
-              <div class="panel-footer"></div>
-            </div>
-          </el-col>
-          <el-col :span="24">
-            <div class="chart-bg panel">
-              <div>
-                <h2>船员籍贯分布统计</h2>
-              </div>
-              <div id="shipAddressInfo" :style="{width: '100%', height: '242px'}"></div>
-              <div class="panel-footer"></div>
-            </div>
-          </el-col>
-        </el-row>
-      </el-col>
-    </el-row>
-    <!-- 五 -->
-    <el-row>
-      <el-col :span="12">
-        <div class="chart-bg panel">
-          <div>
             <h2>渔船保险统计</h2>
           </div>
-          <div id="" :style="{width: '100%', height: '280px'}"></div>
+          <div id="insurance" :style="{width: '100%', height: '637px'}"></div>
           <div class="panel-footer"></div>
         </div>
       </el-col>
-      <el-col :span="12">
-        <div class="chart-bg panel">
-          <div>
-            <h2>渔船交易数据统计</h2>
-          </div>
-          <div id="" :style="{width: '100%', height: '280px'}"></div>
-          <div class="panel-footer"></div>
-        </div>
+      <el-col :span="16">
+        <el-row>
+          <el-col :span="16">
+            <div class="chart-bg panel">
+              <div>
+                <h2>渔船交易数据统计</h2>
+              </div>
+              <div id="transaction" :style="{width: '100%', height: '637px'}"></div>
+              <div class="panel-footer"></div>
+            </div>
+          </el-col>
+          <el-col :span="8">
+            <el-row>
+              <el-col :span="24">
+                <div class="chart-bg panel">
+                  <div>
+                    <h2>渔船钓具流转统计</h2>
+                  </div>
+                  <div id="toolCirculation" :style="{width: '100%', height: '280px'}"></div>
+                  <div class="panel-footer"></div>
+                </div>
+              </el-col>
+              <el-col :span="24">
+                <div class="chart-bg panel">
+                  <div>
+                    <h2>渔船交易用图</h2>
+                  </div>
+                  <div id="shipTransaction" :style="{width: '100%', height: '280px'}"></div>
+                  <div class="panel-footer"></div>
+                </div>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
       </el-col>
     </el-row>
   </div>
@@ -241,7 +309,6 @@ export default {
       villageId: '',
       areaValue: [],
       levelList: [],
-      inAndOut: null,
     }
   },
   mounted () {
@@ -418,58 +485,58 @@ export default {
       this.baseLevel.setOption(option)
 
     },
-    // 事故统计
+    // 渔船事故违规统计
     echartAccident () {
-      let option = {
-        tooltip: {
-          trigger: 'axis',
-        },
-        legend: {
-          textStyle:{
-            color:'#ffffff',
-          },
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true,
-        },
-        xAxis: {
-          type: 'category',
-          boundaryGap: false,
-          data: ['2015', '2016', '2017', '2018', '2019', '2020', '2021'],
-          axisLabel: {
-            color: 'rgba(255,255,255,.7)',
-            interval:0,
-          },
-          // 去除x坐标轴的颜色
-          axisLine: {
-            show: false,
-          },
-        },
-        yAxis: {
-          type: 'value',
-          axisLabel: {
-            color: 'rgba(255,255,255,.7)',
-          },
-          // 修改y轴分割线的颜色
-          splitLine: {
-            lineStyle: {
-              color: '#012f4a',
-            },
-          },
-        },
-        series: [
-          {
-            // name: '事故',
-            type: 'line',
-            data: [120, 232, 101, 134, 90, 230, 210],
-          },
-        ],
-      }
-      this.accident = this.$echarts.init(document.getElementById('accident'))
-      this.accident.setOption(option)
+      // let option = {
+      //   tooltip: {
+      //     trigger: 'axis',
+      //   },
+      //   legend: {
+      //     textStyle:{
+      //       color:'#ffffff',
+      //     },
+      //   },
+      //   grid: {
+      //     left: '3%',
+      //     right: '4%',
+      //     bottom: '3%',
+      //     containLabel: true,
+      //   },
+      //   xAxis: {
+      //     type: 'category',
+      //     boundaryGap: false,
+      //     data: ['2015', '2016', '2017', '2018', '2019', '2020', '2021'],
+      //     axisLabel: {
+      //       color: 'rgba(255,255,255,.7)',
+      //       interval:0,
+      //     },
+      //     // 去除x坐标轴的颜色
+      //     axisLine: {
+      //       show: false,
+      //     },
+      //   },
+      //   yAxis: {
+      //     type: 'value',
+      //     axisLabel: {
+      //       color: 'rgba(255,255,255,.7)',
+      //     },
+      //     // 修改y轴分割线的颜色
+      //     splitLine: {
+      //       lineStyle: {
+      //         color: '#012f4a',
+      //       },
+      //     },
+      //   },
+      //   series: [
+      //     {
+      //       // name: '事故',
+      //       type: 'line',
+      //       data: [120, 232, 101, 134, 90, 230, 210],
+      //     },
+      //   ],
+      // }
+      // this.accident = this.$echarts.init(document.getElementById('accident'))
+      // this.accident.setOption(option)
     },
     // 渔船健康档案
     echartHealthy () {
@@ -515,61 +582,26 @@ export default {
     // 渔船检验数据统计
     echartShipCheckout () {
       let option = {
-        color: [
-          '#006cff',
-          '#60cda0',
-          '#ed8884',
-          '#ff9f7f',
-          '#0096ff',
-          '#9fe6b8',
-          '#32c5e9',
-          '#1d9dff',
-          '#ffeb7b',
-        ],
-        tooltip: {
-            trigger: 'item',
-            formatter: '{a} <br/>{b} : {c} ({d}%)',
+         xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          axisLabel: {
+            color: '#fff',
+            interval:0,
+          },
         },
-        legend: {
-            left: 'center',
-            top: 'bottom',
-            textStyle:{
-              color:'#ffffff',
-            },
-            icon:'rect',
-            itemWidth:5,
-            itemHeight:5,
-            data: ['rose1', 'rose2', 'rose3', 'rose4', 'rose5', 'rose6', 'rose7', 'rose8'],
+        yAxis: {
+          type: 'value',
+          axisLabel: {
+            color: '#fff',
+            interval:0,
+          },
         },
         series: [{
-            name: '渔船检验数据统计',
-            type: 'pie',
-            radius: ['10%', '60%'],
-            center: ['50%', '42%'],
-            roseType: 'area',
-            // radius: [10, 60],
-            // center: ['50%', '50%'],
-            // roseType: 'area',
-            data: [
-              {value: 10, name: 'rose1'},
-              {value: 5, name: 'rose2'},
-              {value: 15, name: 'rose3'},
-              {value: 25, name: 'rose4'},
-              {value: 20, name: 'rose5'},
-              {value: 35, name: 'rose6'},
-              {value: 30, name: 'rose7'},
-              {value: 40, name: 'rose8'},
-            ],
-            label: {
-              fontSize: 10,
-            },
-            // 修饰引导线样式
-            labelLine: {
-              // 连接到图形的线长度
-              length: 10,
-              // 连接到文字的线长度
-              length2: 10,
-            },
+          data: [820, 932, 901, 934, 1290, 1330, 1320],
+          type: 'line',
+          areaStyle: {},
         }],
       }
       this.shipCheckout = this.$echarts.init(document.getElementById('shipCheckout'))
@@ -771,74 +803,37 @@ export default {
     },
     // 渔船分类统计
     echartShipKind () {
-      let myColor = ['#1089E7', '#F57474', '#56D0E3', '#F8B448', '#8B78F6','#1089E7']
       let option = {
-        grid: {
-          top: '10%',
-          left: '25%',
-          bottom: '10%',
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)',
         },
-        xAxis: {
-          show: false,
+        legend: {
+          orient: 'vertical',
+          left: 'left',
+          data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎'],
+          textStyle:{
+            color:'#ffffff',
+          },
         },
-        yAxis: [
-          {
-            show: true,
-            data: ['拖网', '刺网', '张网', '围网', '笼壶', '钓具', '耙刺', '陷阱', '敷网', '抄网', '地拉网', '杂渔网', '12米以下', '12米以上', '45千瓦以下', '45千瓦以上'],
-            inverse: true,
-            axisLine: {
-              show: false,
-            },
-            splitLine: {
-              show: false,
-            },
-            axisTick: {
-              show: false,
-            },
-            axisLabel: {
-              color: '#fff',
-              padding:5,
-              rich: {
-                lg: {
-                  backgroundColor: '#339911',
-                  color: '#fff',
-                  borderRadius: 15,
-                  // padding: 5,
-                  align: 'center',
-                  width: 15,
-                  height: 15,
-                },
-              },
-            },
-          },
-          {
-            show: false,
-            inverse: true,
-            data: ['拖网'],
-          },
-        ],
         series: [
           {
-            name: '条',
-            type: 'bar',
-            yAxisIndex: 0,
-            data: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
-            barCategoryGap: 50,
-            barWidth: 10,
-            itemStyle: {
-              normal: {
-                barBorderRadius: 20,
-                color: function (params) {
-                  let num = myColor.length
-                  return myColor[params.dataIndex % num]
-                },
-              },
-            },
-            label: {
-              normal: {
-                show: true,
-                position: 'inside',
-                formatter: '{c}%',
+            name: '访问来源',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],
+            data: [
+              {value: 335, name: '直接访问'},
+              {value: 310, name: '邮件营销'},
+              {value: 234, name: '联盟广告'},
+              {value: 135, name: '视频广告'},
+              {value: 1548, name: '搜索引擎'},
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)',
               },
             },
           },
@@ -846,6 +841,90 @@ export default {
       }
       this.shipKind = this.$echarts.init(document.getElementById('shipKind'))
       this.shipKind.setOption(option)
+    },
+    // 船长数据占比分类
+    echartCaptain () {
+      let option = {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)',
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'left',
+          show: false,
+          data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎'],
+          textStyle:{
+            color:'#ffffff',
+          },
+        },
+        series: [
+          {
+            name: '访问来源',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],
+            data: [
+              {value: 335, name: '直接访问'},
+              {value: 310, name: '邮件营销'},
+              {value: 234, name: '联盟广告'},
+              {value: 135, name: '视频广告'},
+              {value: 1548, name: '搜索引擎'},
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)',
+              },
+            },
+          },
+        ],
+      }
+      this.captain = this.$echarts.init(document.getElementById('captain'))
+      this.captain.setOption(option)
+    },
+    // 功率数据占比分类
+    echartPower () {
+      let option = {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)',
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'left',
+          show: false,
+          data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎'],
+          textStyle:{
+            color:'#ffffff',
+          },
+        },
+        series: [
+          {
+            name: '访问来源',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],
+            data: [
+              {value: 335, name: '直接访问'},
+              {value: 310, name: '邮件营销'},
+              {value: 234, name: '联盟广告'},
+              {value: 135, name: '视频广告'},
+              {value: 1548, name: '搜索引擎'},
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)',
+              },
+            },
+          },
+        ],
+      }
+      this.power = this.$echarts.init(document.getElementById('power'))
+      this.power.setOption(option)
     },
     // 船员基本统计
     echartShipInfo () {
@@ -1007,13 +1086,346 @@ export default {
       this.shipAddressInfo = this.$echarts.init(document.getElementById('shipAddressInfo'))
       this.shipAddressInfo.setOption(option)
     },
+    // 劳动合同状态分布
+    echartContract () {
+      var myColor = ['#1089E7', '#F57474', '#56D0E3', '#F8B448', '#8B78F6','#1089E7']
+      let option = {
+        // color:['#1089E7', '#F57474', '#56D0E3', '#F8B448', '#8B78F6'],
+          //图标位置
+          grid: {
+            top: '10%',
+            left: '25%',
+            bottom: '10%',
+          },
+          xAxis: {
+            show: false,
+          },
+          yAxis: [
+            {
+              show: true,
+              data: ['未通过审核', '合同成立', '合同纠纷', '合同解除', '合同过期', '未签纸质合同'],
+              inverse: true,
+              axisLine: {
+                show: false,
+              },
+              splitLine: {
+                show: false,
+              },
+              axisTick: {
+                show: false,
+              },
+              axisLabel: {
+                color: '#fff',
+                padding:5,
+                rich: {
+                  lg: {
+                    backgroundColor: '#339911',
+                    color: '#fff',
+                    borderRadius: 15,
+                    // padding: 5,
+                    align: 'center',
+                    width: 15,
+                    height: 15,
+                  },
+                },
+              },
+            },
+            {
+              show: false,
+              inverse: true,
+              data: ['未通过审核', '合同成立', '合同纠纷', '合同解除', '合同过期', '未签纸质合同'],
+            },
+          ],
+          series: [
+          {
+            name: '条',
+            type: 'bar',
+            yAxisIndex: 0,
+            data: [100, 100, 100, 100, 100, 100],
+            barCategoryGap: 50,
+            barWidth: 10,
+            itemStyle: {
+              normal: {
+                barBorderRadius: 20,
+                color: function (params) {
+                  var num = myColor.length
+                  return myColor[params.dataIndex % num]
+                },
+              },
+            },
+            label: {
+              normal: {
+                show: true,
+                position: 'inside',
+                formatter: '{c}%',
+              },
+            },
+          },
+        ],
+      }
+      this.contract = this.$echarts.init(document.getElementById('contract'))
+      this.contract.setOption(option)
+    },
+    // 渔船保险统计
+    echartInsurance () {
+      let option = {
+        tooltip: {
+          trigger: 'axis',
+        },
+        legend: {
+          data: ['进港', '出港'],
+          textStyle:{
+            color:'#ffffff',
+          },
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true,
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: ['2015', '2016', '2017', '2018', '2019', '2020', '2021'],
+          axisLabel: {
+            color: 'rgba(255,255,255,.7)',
+            interval:0,
+          },
+          // 去除x坐标轴的颜色
+          axisLine: {
+            show: false,
+          },
+        },
+        yAxis: {
+          type: 'value',
+          axisLabel: {
+            color: 'rgba(255,255,255,.7)',
+          },
+          // 修改y轴分割线的颜色
+          splitLine: {
+            lineStyle: {
+              color: '#012f4a',
+            },
+          },
+        },
+        series: [
+          {
+            name: '进港',
+            type: 'line',
+            data: [120, 232, 101, 134, 90, 230, 210],
+          },
+          {
+            name: '出港',
+            type: 'line',
+            data: [220, 182, 191, 234, 290, 330, 310],
+          },
+        ],
+      }
+      this.insurance = this.$echarts.init(document.getElementById('insurance'))
+      this.insurance.setOption(option)
+    },
+    // 渔船交易数据统计
+    echartTransaction () {
+      let option = {
+        legend: {
+          textStyle:{
+            color:'#ffffff',
+          },
+        },
+        tooltip: {},
+        dataset: {
+          dimensions: ['product', '2015', '2016', '2017'],
+          source: [
+            {product: 'Matcha Latte', '2015': 43.3, '2016': 85.8, '2017': 93.7},
+            {product: 'Milk Tea', '2015': 83.1, '2016': 73.4, '2017': 55.1},
+            {product: 'Cheese Cocoa', '2015': 86.4, '2016': 65.2, '2017': 82.5},
+            {product: 'Walnut Brownie', '2015': 72.4, '2016': 53.9, '2017': 39.1},
+          ],
+        },
+        xAxis: {
+          type: 'category',
+          axisLabel: {
+            color: '#fff',
+            interval:0,
+          },
+        },
+        yAxis: {
+          axisLabel: {
+            color: '#fff',
+            interval:0,
+          },
+        },
+        // Declare several bar series, each will be mapped
+        // to a column of dataset.source by default.
+        series: [
+          {type: 'bar'},
+          {type: 'bar'},
+          {type: 'bar'},
+        ],
+      }
+      this.transaction = this.$echarts.init(document.getElementById('transaction'))
+      this.transaction.setOption(option)
+    },
+    // 渔船钓具流转统计
+    echartToolCirculation () {
+      let option = {
+        legend: {
+          data: ['利润', '支出', '收入'],
+          textStyle:{
+            color:'#ffffff',
+          },
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true,
+        },
+        xAxis: [
+          {
+            type: 'value',
+            axisLabel: {
+              color: '#fff',
+              interval:0,
+            },
+          },
+        ],
+        yAxis: [
+          {
+            type: 'category',
+            axisTick: {
+              show: false,
+            },
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+            axisLabel: {
+              color: '#fff',
+              interval:0,
+            },
+          },
+        ],
+        series: [
+            {
+              name: '利润',
+              type: 'bar',
+              label: {
+                show: true,
+                position: 'inside',
+              },
+              data: [200, 170, 240, 244, 200, 220, 210],
+            },
+            {
+              name: '收入',
+              type: 'bar',
+              stack: '总量',
+              label: {
+                show: true,
+              },
+              data: [320, 302, 341, 374, 390, 450, 420],
+            },
+            {
+              name: '支出',
+              type: 'bar',
+              stack: '总量',
+              label: {
+                show: true,
+                position: 'left',
+              },
+              data: [-120, -132, -101, -134, -190, -230, -210],
+            },
+        ],
+      }
+      this.toolCirculation = this.$echarts.init(document.getElementById('toolCirculation'))
+      this.toolCirculation.setOption(option)
+    },
+    // 渔船交易用图
+    echartShipTransaction () {
+      let option = {
+        legend: {
+          data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎'],
+          textStyle:{
+            color:'#ffffff',
+          },
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true,
+        },
+        xAxis: [
+          {
+            type: 'category',
+            boundaryGap: false,
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+            axisLabel: {
+              color: '#fff',
+              interval:0,
+            },
+          },
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            axisLabel: {
+              color: '#fff',
+              interval:0,
+            },
+          },
+        ],
+        series: [
+          {
+            name: '邮件营销',
+            type: 'line',
+            stack: '总量',
+            areaStyle: {},
+            data: [120, 132, 101, 134, 90, 230, 210],
+          },
+          {
+            name: '联盟广告',
+            type: 'line',
+            stack: '总量',
+            areaStyle: {},
+            data: [220, 182, 191, 234, 290, 330, 310],
+          },
+          {
+            name: '视频广告',
+            type: 'line',
+            stack: '总量',
+            areaStyle: {},
+            data: [150, 232, 201, 154, 190, 330, 410],
+          },
+          {
+            name: '直接访问',
+            type: 'line',
+            stack: '总量',
+            areaStyle: {},
+            data: [320, 332, 301, 334, 390, 330, 320],
+          },
+          {
+            name: '搜索引擎',
+            type: 'line',
+            stack: '总量',
+            label: {
+              normal: {
+                show: true,
+                position: 'top',
+              },
+            },
+            areaStyle: {},
+            data: [820, 932, 901, 934, 1290, 1330, 1320],
+          },
+        ],
+      }
+      this.shipTransaction = this.$echarts.init(document.getElementById('shipTransaction'))
+      this.shipTransaction.setOption(option)
+    },
     setEchart () {
       this.echartInAndOut()
       this.echartBaseLevel()
       this.echartAccident()
       this.echartHealthy()
       this.echartShipCheckout()
-      this.echartViolation()
       this.echartShipTest()
       this.echartShipDanger()
       this.echartShipAge()
@@ -1021,6 +1433,13 @@ export default {
       this.echartShipInfo()
       this.echartShipAgeInfo()
       this.echartShipAddressInfo()
+      this.echartCaptain()
+      this.echartPower()
+      this.echartContract()
+      this.echartInsurance()
+      this.echartTransaction()
+      this.echartToolCirculation()
+      this.echartShipTransaction()
     },
   },
 }
@@ -1051,7 +1470,7 @@ export default {
       background-color: #101F51;
       border:solid 1px #11395A;
       border-radius: 3px;
-      margin:20px;
+      margin:10px;
       padding-bottom: 10px;
       position: relative;
       h2{
