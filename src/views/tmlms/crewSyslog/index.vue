@@ -2,24 +2,59 @@
   <div class="contract-box">
     <basic-container>
       <page-header title="上船记录"></page-header>
-      <div class="shipowner_title">
-        <!-- <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner" v-if="manager">新增</el-button>
-        <el-button v-if="manager"  type="primary" size="small" icon="el-icon-edit" @click="exportInfo">导出信息</el-button>              -->
-        <div style="float:right">
-          <span style="width:120px"><el-input v-model.trim="params.shipName" placeholder="船名号" size="small" clearable></el-input></span>
-          <span style="width:120px"><el-input v-model.trim="params.idcard" placeholder="身份证号" size="small" clearable></el-input></span>
-          <span style="width:120px"><el-input v-model.trim="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
-          <!-- <span style="width:150px"><el-select v-model="params.status" placeholder="请选择合同状态" size="small">
-              <el-option
-                v-for="item in status"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </span>                                                                                                                -->
-          <el-button size="small"  @click="getParamData">搜索</el-button>
-        </div>
+       <operation-container>
+          <!-- <div class="shipowner_title"> -->
+            <!-- <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner" v-if="manager">新增</el-button>
+            <el-button v-if="manager"  type="primary" size="small" icon="el-icon-edit" @click="exportInfo">导出信息</el-button>              -->
+            <template slot="right">
+              <span style="width:120px"><el-input v-model.trim="params.shipName" placeholder="船名号" size="small" clearable></el-input></span>
+              <span style="width:120px"><el-input v-model.trim="params.idcard" placeholder="身份证号" size="small" clearable></el-input></span>
+              <span style="width:120px"><el-input v-model.trim="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
+              <!-- <span style="width:150px"><el-select v-model="params.status" placeholder="请选择合同状态" size="small">
+                  <el-option
+                    v-for="item in status"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </span>                                                                                                                -->
+              <span style="width: 320px;">
+                  <el-date-picker
+                      size="small"
+                      value-format="yyyy-MM-dd HH:mm:ss"
+                      v-model="params.rangeTime"
+                      type="daterange"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期">
+                  </el-date-picker>
+              </span>
+              <el-button size="small"  @click="getParamData">搜索</el-button>
+            </template>
+          <!-- </div> -->
+       </operation-container>
+      <div v-show="showCount" class="count-wrapper">
+        <div class="title-count">上下船数量统计</div>
+        <el-table
+          :data="countList"
+          stripe
+          border
+          :loading="loadingCount"
+          style="width: 100%">
+          <el-table-column
+            prop="villageName"
+            label="基层名">
+          </el-table-column>
+          <el-table-column
+            prop="upCount"
+            label="上船数量">
+          </el-table-column>
+          <el-table-column
+            prop="downCount"
+            label="下船数量">
+          </el-table-column>
+        </el-table>
       </div>
         <el-table
           :data="crewregisterList"
@@ -99,6 +134,7 @@
 import {
   //getCrew,
   deleteCrew,statusCrew,exportExcel } from '@/api/tmlms/boatMan'
+import { getPageBy } from '@/api/tmlms/tybcrewsyslog'
 import { getCrewAllSyslog } from '@/api/ships/shipsyslog'  
 import { getShipByShipId } from '@/api/ships'
 import { getUserInfo } from '@/api/login'
@@ -192,6 +228,9 @@ export default {
         { value: '2', label: '二级' },
         { value: '3', label: '三级' },
       ],
+      showCount: false,
+      loadingCount: false,
+      countList: [],
     }
   },
   methods: {
@@ -243,6 +282,30 @@ export default {
     },
     // 获取列表数据
     getData () {
+      let params = this.params
+      if (Array.isArray(params.rangeTime) && params.rangeTime.length > 0) {
+        params.startDate = params.rangeTime[0]
+        params.endDate = params.rangeTime[1]
+      } else {
+        params.startDate = undefined
+        params.endDate = undefined
+      }
+      if (params.startDate
+        && params.endDate) {
+          this.loadingCount = true
+          getPageBy({ startDate: params.startDate, endDate: params.endDate }).then(({ data }) => {
+            if (data.code === 0) {
+              this.countList = data.data
+            }
+            this.showCount = true
+            this.loadingCount = false
+          }).catch(() => {
+            this.loadingCount = false
+            this.showCount = true
+          })
+        } else {
+          this.showCount = false
+        }
       getCrewAllSyslog(this.params).then(res=>{
         this.crewregisterList = res.data.data.records
         this.total = res.data.data.total
@@ -399,5 +462,16 @@ export default {
     display: inline-block;
     margin: 0 5px;
   }
+}
+.count-wrapper {
+  margin: 20px 0;
+  padding: 20px;
+  border: 1px solid #f6f6f6;
+}
+.title-count {
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #333;
+  font-weight: 700;
 }
 </style>
