@@ -10,15 +10,11 @@
               <span style="width:120px"><el-input v-model.trim="params.shipName" placeholder="船名号" size="small" clearable></el-input></span>
               <span style="width:120px"><el-input v-model.trim="params.idcard" placeholder="身份证号" size="small" clearable></el-input></span>
               <span style="width:120px"><el-input v-model.trim="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
-              <!-- <span style="width:150px"><el-select v-model="params.status" placeholder="请选择合同状态" size="small">
-                  <el-option
-                    v-for="item in status"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
+              <span style="width:150px"><el-select v-model="params.flag" placeholder="请选择上下船" size="small" clearable >
+                  <el-option label="上船" value="1"></el-option>
+                  <el-option label="下船" value="2"></el-option>
                 </el-select>
-              </span>                                                                                                                -->
+              </span>                                                                                                               
               <span style="width: 320px;">
                   <el-date-picker
                       size="small"
@@ -291,7 +287,7 @@ export default {
         params.endDate = undefined
       }
       if (params.startDate
-        && params.endDate) {
+        && params.endDate && !params.shipName && !params.idcard && !params.realName && !params.flag) {
           this.loadingCount = true
           getPageBy({ startDate: params.startDate, endDate: params.endDate }).then(({ data }) => {
             if (data.code === 0) {
