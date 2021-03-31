@@ -110,7 +110,7 @@
           prop="workMode"
           label="工作方式">
           <template slot-scope="scope">
-            {{getWorkModeLabel(scope.row.workMode)}}
+            {{getWorkModeLabel(scope.row.workMode2)}}
           </template>
         </el-table-column>
         <el-table-column
