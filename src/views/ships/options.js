@@ -262,6 +262,102 @@ const columnsMap = [
     // ],
   }
 
+  const rulesDeatil = {
+    engineTotalPower: [
+      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+    ],
+    mainEnginePower: [
+      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+    ],
+    dualPower: [
+      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+    ],
+    mainEngineModel: [
+      {required: true, message: '该选项必填！', trigger: 'blur'},
+    ],
+    grossTonnage: [
+      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 0, message: '请输入0~999的整数！'},
+    ],
+    hullLength: [
+      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+    ],
+    mouldedBreadth: [
+      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+    ],
+    mouldedDepth: [
+      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+    ],
+    netTonnage: [
+      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 0, message: '请输入0~999的整数！'},
+    ],
+    regionId: [
+      {required: true, message: '该选项必填！', trigger: 'blur'},
+    ],
+    activityType: [
+      {required: true, message: '该选项必填！', trigger: 'change'},
+    ],
+    buildFactory: [
+      {required: true, message: '该选项必填！', trigger: 'blur'},
+    ],
+    buildDate: [
+      {required: true, message: '该选项必填！', trigger: 'blur'},
+    ],
+    createTime: [
+      {required: true, message: '该选项必填！', trigger: 'blur'},
+    ],
+    fishingGear: [
+      {required: true, message: '该选项必填！', trigger: 'change'},
+    ],
+    hullMaterial: [
+      {required: true, message: '该选项必填！', trigger: 'change'},
+    ],
+    licensesFishingNo: [
+      {required: true, message: '该选项必填！', trigger: 'blur'},
+    ],
+    licensesInspectionNo: [
+      {required: true, message: '该选项必填！', trigger: 'blur'},
+    ],
+    licensesNationalNo: [
+      {required: true, message: '该选项必填！', trigger: 'blur'},
+    ],
+    licensesOwnerShip: [
+      {required: true, message: '该选项必填！', trigger: 'blur'},
+    ],
+    mobile: [
+      {required: true, validator: numberValidate, trigger: 'blur', length: 11, decimal: 0, message: '请输入正确的手机号码！'},
+    ],
+    portRegister: [
+      {required: true, message: '该选项必填！', trigger: 'change'},
+    ],
+    shipId: [
+      {required: true, message: '该选项必填！', trigger: 'blur'},
+    ],
+    shipName: [
+      {required: true, message: '该选项必填！', trigger: 'blur'},
+    ],
+    shipNo: [
+      {required: true, message: '该选项必填！', trigger: 'blur'},
+    ],
+    shipShare: [
+      {required: true, message: '该选项必填！', trigger: 'change'},
+    ],
+    shipowner: [
+      {required: true, message: '该选项必填！', trigger: 'blur'},
+    ],
+    shipownerIdcard: [
+      {required: true, validator: idCardValidate, trigger: 'blur', length: 3, decimal: 0, message: '请输入正确的身份证号码！'},
+    ],
+    updateTime: [
+      {required: true, message: '该选项必填！', trigger: 'blur'},
+    ],
+    workMode: [
+      {required: true, message: '该选项必填！', trigger: 'change'},
+    ],
+    workMode2: [
+      {required: true, message: '该选项必填！', trigger: 'change'},
+    ],
+  }
+
   const initSearchForm = () => {
     return {
       shipName: '', // 船名号
@@ -293,4 +389,29 @@ const columnsMap = [
     return newForm
   }
 
-export{columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm}
+  const columnsAudit = [
+    {
+      prop: 'shipName',
+      label: '渔船名',
+    },
+    {
+      prop: 'shipNo',
+      label: '渔船编号',
+    },
+    {
+      prop: 'certificateHolderName',
+      label: '持证人姓名',
+    },
+    {
+      prop: 'auditState',
+      label: '审核状态',
+      type: 'dictGroup',
+      dictName: 'audit_state',
+    },
+    {
+      prop: 'rejectReason',
+      label: '驳回理由',
+    },
+  ]
+
+export{columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm, columnsAudit,rulesDeatil}

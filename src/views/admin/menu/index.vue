@@ -50,7 +50,7 @@
                 <el-input v-model="form.path" :disabled="formEdit" placeholder="iframe嵌套地址"></el-input>
               </el-form-item>
               <el-form-item label="路由缓冲" prop="component">
-                <el-switch v-model="form.keepAlive" :disabled="formEdit" active-color="#13ce66" inactive-color="#ff4949" :active-value="'1'" :inactive-value="'0'" active-text="缓存（该页面不需要实时数据更新）" inactive-text="不缓存（该页面需要实时数据更新）">
+                <el-switch v-model="form.keepAlive" :disabled="formEdit" active-color="#13ce66" inactive-color="#ff4949" :active-value="'0'" :inactive-value="'1'" active-text="缓存（该页面不需要实时数据更新）" inactive-text="不缓存（该页面需要实时数据更新）">
                 </el-switch>
               </el-form-item>
               <el-form-item v-if="formStatus == 'update'">

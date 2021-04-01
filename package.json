@@ -3,7 +3,7 @@
   "version": "1.4.4",
   "private": true,
   "scripts": {
-    "serve": "node --max_old_space_size=10240 node_modules/@vue/cli-service/bin/vue-cli-service.js serve",
+    "serve": "node --max_old_space_size=4096 node_modules/@vue/cli-service/bin/vue-cli-service.js serve",
     "build": "node --max_old_space_size=10240 node_modules/@vue/cli-service/bin/vue-cli-service.js build",
     "lint": "node --max_old_space_size=10240 node_modules/@vue/cli-service/bin/vue-cli-service.js lint",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -w -r 0",

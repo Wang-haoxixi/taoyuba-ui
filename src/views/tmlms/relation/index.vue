@@ -67,11 +67,24 @@
           </el-table-column>
           <el-table-column
             prop="number"
-            label="已联系数量">
+            label="总数（帆张网）">
+            <template slot-scope="scope">
+              {{scope.row.totalNumber}}({{scope.row.totalWorkNumber}})
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="number"
+            label="已联系数量（帆张网）">
+            <template slot-scope="scope">
+              {{scope.row.number}}({{scope.row.workNumber}})
+            </template>
           </el-table-column>
           <el-table-column
             prop="readyNumber"
-            label="未联系数量">
+            label="未联系数量（帆张网）">
+            <template slot-scope="scope">
+              {{scope.row.readyNumber}}({{scope.row.readyWorkNumber}})
+            </template>
           </el-table-column>
         </el-table>
       </div>

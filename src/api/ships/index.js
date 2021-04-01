@@ -159,6 +159,40 @@ export function exportContractModel (params) {
     title: params.shipName,
   })
 }
+// 获取申请列表
+export function tybOrderPage (params) {                                    
+  return request({
+    url: 'tmlms/tyb_order/page',
+    method: 'get',
+    params: params,
+  })
+}
+
+// 获取单个详情
+export function tybOrderPageDetail (params) {                                    
+  return request({
+    url: 'tmlms/tyb_order/getById',
+    method: 'get',
+    params: params,
+  })
+}
+// 同意
+export function agree (data) {                                  
+  return request({
+    url: 'tmlms/tyb_order/agree',
+    method: 'post',
+    data: data,
+  })
+}
+// 不同意
+export function noAgree (data) {                                  
+  return request({
+    url: 'tmlms/tyb_order/reject',
+    method: 'post',
+    data: data,
+  })
+}
+
 
 
 
