@@ -105,12 +105,12 @@
           <el-row>
             <el-col :span="8" class="font-yellow">{{counts.shipRealCertCount}}</el-col>
             <el-col :span="8" class="font-yellow">0</el-col>
-            <el-col :span="8" class="font-yellow">{{counts.contractCount}}</el-col>
+            <el-col :span="8" class="font-yellow">{{counts.upShipCount}}</el-col>
           </el-row>
           <el-row>
             <el-col :span="8" class="font-text">实配职务船员</el-col>
             <el-col :span="8" class="font-text">实配船员</el-col>
-            <el-col :span="8" class="font-text">已签合同数</el-col>
+            <el-col :span="8" class="font-text">今年上船登记船员</el-col>
           </el-row>
         </div>
         <div id="mapChina" :style="{width: '100%', height: '600px'}"></div>
@@ -169,7 +169,7 @@ export default {
     return {
       time: '',
       counts: {
-        contractCount: 0,
+        upShipCount: 0,
         shipCount: 0,
         shipRealCertCount: 0,
         shipStandardCertCount: 0,
@@ -433,7 +433,7 @@ export default {
     getShipCount () {
       getShipCount({orgRelationId: this.orgId}).then(({ data }) => {
         if (data.code === 0) {
-          this.counts.contractCount = data.data.contractCount
+          this.counts.upShipCount = data.data.upShipCount
           this.counts.shipCount = data.data.shipCount
           this.counts.shipRealCertCount = data.data.shipRealCert['0_0']
           this.counts.shipStandardCertCount = data.data.shipStandardCert['0_0']
@@ -443,7 +443,7 @@ export default {
     getShipCountVillage () {
       getShipCountVillage({orgRelationId: this.orgId, villageId: this.villageId}).then(({ data }) => {
         if (data.code === 0) {
-          this.counts.contractCount = data.data.contractCount
+          this.counts.upShipCount = data.data.upShipCount
           this.counts.shipCount = data.data.shipCount
           this.counts.shipRealCertCount = data.data.shipRealCert['0_0']
           this.counts.shipStandardCertCount = data.data.shipStandardCert['0_0']
