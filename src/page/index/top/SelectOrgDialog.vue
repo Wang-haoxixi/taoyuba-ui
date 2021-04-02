@@ -53,7 +53,8 @@ export default {
           setTimeout(async () => {                                                                                                                                                                                                                                                                                                                                                                                                                                                       
             // const data = await this.GetMenu()                   
             // this.$router.$avueRouter.formatRoutes(data, true)
-            loading.close()   
+            loading.close()
+            location.reload()
             this.$message({       
               message: '组织切换成功!',
               type: 'success',
