@@ -178,6 +178,13 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="金额：" prop="sellPrice">
+              <el-input v-model="form.sellPrice"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-row v-if="!disabled">
             <div style="width:170px;text-align:right">
                 <el-button @click="addPeople" size="small">添加共有人信息</el-button>

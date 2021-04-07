@@ -263,6 +263,9 @@ const columnsMap = [
   }
 
   const rulesDeatil = {
+    sellPrice: [
+      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+    ],
     engineTotalPower: [
       {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
     ],
