@@ -75,6 +75,7 @@ import {
   MessageBox,
   Message,
   Notification,
+  Image,
 } from 'element-ui'
 
 // Vue.prototype.$ELEMENT = { size: 'small', zIndex: 3000 }
@@ -147,6 +148,7 @@ Vue.use(Header)
 Vue.use(Aside)
 Vue.use(Main)
 Vue.use(Footer)
+Vue.use(Image)
 
 Vue.use(Loading.directive)
 

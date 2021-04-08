@@ -65,8 +65,8 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="总吨位：" prop="grossTonnage">
-              <el-input maxlength="3" v-model="form.grossTonnage"></el-input>
+            <el-form-item label="总吨位（吨）：" prop="grossTonnage">
+              <el-input v-model="form.grossTonnage"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -156,20 +156,20 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="型宽：" prop="mouldedBreadth">
+            <el-form-item label="型宽（m）：" prop="mouldedBreadth">
               <el-input maxlength="6" v-model="form.mouldedBreadth"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="型深：" prop="mouldedDepth">
+            <el-form-item label="型深（m）：" prop="mouldedDepth">
               <el-input maxlength="6" v-model="form.mouldedDepth"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="净吨位：" prop="netTonnage">
-              <el-input maxlength="3" v-model="form.netTonnage"></el-input>
+            <el-form-item label="净吨位（吨）" prop="netTonnage">
+              <el-input v-model="form.netTonnage"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -185,6 +185,58 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="所有权证书：">
+                <el-image
+                  v-for="(item,index) in form.licensesOwnerShipUrlList"
+                  :key="index"
+                  style="width: 100px; height: 100px;margin-left: 30px"
+                  :src="item" 
+                  :preview-src-list="form.licensesOwnerShipUrlList">
+                </el-image>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="国籍证(增加照片)：">
+                <el-image
+                  v-for="(item,index) in form.licensesNationalNoUrlList"
+                  :key="index"
+                  style="width: 100px; height: 100px;margin-left: 30px"
+                  :src="item" 
+                  :preview-src-list="form.licensesNationalNoUrlList">
+                </el-image>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="捕捞许可证(增加照片)：">
+                <el-image
+                  v-for="(item,index) in form.licensesFishingNoUrlList"
+                  :key="index"
+                  style="width: 100px; height: 100px;margin-left: 30px"
+                  :src="item" 
+                  :preview-src-list="form.licensesFishingNoUrlList">
+                </el-image>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="船舶检验证：">
+                <el-image
+                  v-for="(item,index) in form.licensesInspectionNoUrlList"
+                  :key="index"
+                  style="width: 100px; height: 100px;margin-left: 30px"
+                  :src="item" 
+                  :preview-src-list="form.licensesInspectionNoUrlList">
+                </el-image>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-row v-if="!disabled">
             <div style="width:170px;text-align:right">
                 <el-button @click="addPeople" size="small">添加共有人信息</el-button>
@@ -193,7 +245,7 @@
         <el-row v-for="(item,index) in form.participants" :key="index">
           <el-col :span="11">
             <el-form-item label="共有人姓名：">
-              <el-input maxlength="3" v-model="item.name"></el-input>
+              <el-input v-model="item.name"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="11">
