@@ -13,7 +13,7 @@ import { mapGetters } from 'vuex'
 import NavTab from './NavTab'
 import NavContent from './contractContent'
 import { getContractList } from '@/api/tmlms/contract/index'
-import { getUserInfo } from '@/api/login'
+// import { getUserInfo } from '@/api/login'
 const detailUrlMap = {
   approval: '/hrms_spa/approval_detail',
   instruction: '/mlms_spa/email/detail',
@@ -64,10 +64,10 @@ export default {
       })
     },
     tab (val) {
-      getUserInfo().then((data) => {
+      // getUserInfo().then((data) => {
         let userId = ''
         let params = {}
-        userId = data.data.data.sysUser.userId             
+        userId = JSON.parse(localStorage.getItem('user')).sysUser.userId             
         if (userId === 1) {
           params = {size:5}
         } else {
@@ -81,7 +81,7 @@ export default {
             }
           })
         })
-      })
+      // })
     },
   },
 }

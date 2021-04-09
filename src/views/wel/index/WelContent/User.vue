@@ -121,7 +121,7 @@
 </template>
 <script>    
 // import { getIndex } from '@/api/wel/index'
-import { getUserInfo } from '@/api/login'
+// import { getUserInfo } from '@/api/login'
 import { timeFix, welcome } from '@/util/text'
 import { getObj } from '@/api/admin/role'
 // import { getCrewByUserId } from '@/api/post/crew'
@@ -256,9 +256,9 @@ export default {
       })
     },
     loadPage () {
-      getUserInfo().then(res=>{
-        this.userInfo = res.data.data
-        if (res.data.data.sysUser.idCard && res.data.data.sysUser.idCard !== '') {
+      // getUserInfo().then(res=>{
+        this.userInfo = JSON.parse(localStorage.getItem('user'))
+        if (this.userInfo.sysUser.idCard && this.userInfo.sysUser.idCard !== '') {
           this.isIdCard = true
         } else {
           this.isIdCard = false
@@ -281,7 +281,7 @@ export default {
         // detailVillage(this.userInfo.sysUser.userId).then((data) => {
         //   this.villageStatus = data.data.data.status
         // })
-      })
+      // })
       this.pageLoading = false
       // getIndex().then(({ data }) => {
       //   this.form = this.$mergeByFirst(initIndexForm(), data.data)

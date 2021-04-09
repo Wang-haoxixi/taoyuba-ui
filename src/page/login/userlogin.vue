@@ -44,6 +44,7 @@ import { codeUrl } from '@/config/env'
 import { randomLenNum } from '@/util/util'
 import { mapGetters, mapActions } from 'vuex'
 import { validatenull } from '@/util/validate'
+import { getUserInfo } from '@/api/login'
 export default {
   name: 'Userlogin',
   data () {
@@ -146,9 +147,12 @@ export default {
           try {
             this.loginLoading = true
             await this.LoginByUsername(this.form)
-            const data = await this.GetMenu()
-            this.$router.$avueRouter.formatRoutes(data, true)
-            this.$router.push({ path: this.tagWel.value })
+            const menu = await this.GetMenu()
+            getUserInfo().then(({data}) => {
+                  localStorage.setItem('user', JSON.stringify(data.data))
+                  this.$router.$avueRouter.formatRoutes(menu, true)
+                  this.$router.push({ path: this.tagWel.value })
+            })
           } catch (error) {
             this.$message.error(error.message)
           } finally {

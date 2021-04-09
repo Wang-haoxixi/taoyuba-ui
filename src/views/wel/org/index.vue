@@ -58,7 +58,7 @@
 import { mapGetters } from 'vuex'
 import { initForm } from './options'
 import { getOrgList, addObj, applyObj, validOrgName } from '@/api/goms/org'
-import { getUserInfo } from '@/api/login'       
+// import { getUserInfo } from '@/api/login'       
 export default {
   name: 'org',
   data () {
@@ -179,11 +179,11 @@ export default {
       })
     },
     checkmanage () {
-         getUserInfo().then(res => {    
-                  if(res.data.data.roles.includes(1)){
+        //  getUserInfo().then(res => {    
+                  if(JSON.parse(localStorage.getItem('user')).roles.includes(1)){
                         this.ifismanage = true
                   }
-         })
+        //  })
     },
   },
 }

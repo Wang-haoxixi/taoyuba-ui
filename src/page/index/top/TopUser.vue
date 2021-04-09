@@ -35,7 +35,7 @@
   </div>
 </template>
 <script>
-import { getUserInfo } from '@/api/login'
+// import { getUserInfo } from '@/api/login'
 import { mapGetters, mapActions } from 'vuex'
 import AboutDialog from './AboutDialog'
 import SelectOrgDialog from './SelectOrgDialog'
@@ -94,9 +94,9 @@ export default {
     // 根据角色跳转       
     // $openPage('BaseSettings','name')
     goInfo () {                                          
-      getUserInfo().then(() =>{
+      // getUserInfo().then(() =>{
         this.$router.push({name: 'detailIformation'})
-      })
+      // })
     },
   },
 }

@@ -10,7 +10,7 @@
 </template>
 <script>
 import NewApproval from '@/views/wel/approval/Components/NewApproval.vue'
-import { getUserInfo } from '@/api/login'
+// import { getUserInfo } from '@/api/login'
 export default {
   components: { NewApproval },
   data () {
@@ -112,8 +112,8 @@ export default {
     }
   },
   created (){
-    getUserInfo().then(res =>{
-      this.roleIds = res.data.data.roles
+    // getUserInfo().then(res =>{
+      this.roleIds = JSON.parse(localStorage.getItem('user')).roles
       this.dataList.map(m => {
         // 105船员 108船东
         if (m.title === '招聘' && this.roleIds.includes(105)) {
@@ -132,7 +132,7 @@ export default {
           m.isFrame = true
         }
       })
-    })
+    // })
   },
   methods: {
     //创建标签事件
