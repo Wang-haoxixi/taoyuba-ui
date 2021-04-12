@@ -264,34 +264,34 @@ const columnsMap = [
 
   const rulesDeatil = {
     sellPrice: [
-      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+      {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
     engineTotalPower: [
-      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+      {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
     mainEnginePower: [
-      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+      {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
     dualPower: [
-      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+      {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
     mainEngineModel: [
       {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
     grossTonnage: [
-      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 0, message: '请输入0~999的整数！'},
+      {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
     hullLength: [
-      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+      {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
     mouldedBreadth: [
-      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+      {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
     mouldedDepth: [
-      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 2, message: '请输入0~999.99的整数或小数！'},
+      {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
     netTonnage: [
-      {required: true, validator: numberValidate, trigger: 'blur', length: 3, decimal: 0, message: '请输入0~999的整数！'},
+      {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
     regionId: [
       {required: true, message: '该选项必填！', trigger: 'blur'},
@@ -348,7 +348,7 @@ const columnsMap = [
       {required: true, message: '该选项必填！', trigger: 'blur'},
     ],
     shipownerIdcard: [
-      {required: true, validator: idCardValidate, trigger: 'blur', length: 3, decimal: 0, message: '请输入正确的身份证号码！'},
+      {required: true, validator: idCardValidate, trigger: 'blur', length: 33333333, decimal: 0, message: '请输入正确的身份证号码！'},
     ],
     updateTime: [
       {required: true, message: '该选项必填！', trigger: 'blur'},
