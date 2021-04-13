@@ -79,3 +79,11 @@ export function getByVillagename (params) {
         params: params,
     })
 }
+
+export function getCountRecordWithShip (params) {
+    return request({
+        url: '/tmlms/relationship/countRecordWithShip',
+        method: 'get',
+        params: params,
+    })
+}

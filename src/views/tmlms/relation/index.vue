@@ -62,7 +62,9 @@
             prop="village_id"
             label="基层名">
             <template slot-scope="scope">
-              {{getVillageLabel(scope.row.village_id)}}
+              <div @click="getDetail(scope.row)" style="cursor: pointer">
+                {{getVillageLabel(scope.row.village_id)}}
+              </div>
             </template>
           </el-table-column>
           <el-table-column
@@ -175,12 +177,41 @@
         </div>
       </div>
     </el-dialog>
+    <el-dialog
+      title="详情"
+      :visible.sync="dialogVisibleDetail"
+      width="80%">
+      <el-table
+          :data="detailList"
+          stripe
+          border
+          style="width: 100%">
+          <el-table-column
+            prop="village_id"
+            label="未联系名称">
+            <template slot-scope="scope">
+              <div>
+                <el-tag v-for="(item,index) in scope.row[11]" :key="index" style="margin:5px">{{ item.shipName }}</el-tag>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="village_id"
+            label="帆张网">
+            <template slot-scope="scope">
+              <div>
+                <el-tag v-for="(item,index) in scope.row.total" :key="index" style="margin:5px">{{ item.shipName }}</el-tag>
+              </div>
+            </template>
+          </el-table-column>
+      </el-table>
+    </el-dialog>
 </basic-container>
 </template>
 <script>
 import { mapGetters } from 'vuex'
 import { getPage, removePage, exportPage, getCountByTime } from '@/api/tmlms/relation'
-import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
+import { getVillageByOrg,getCountRecordWithShip } from '@/api/tmlms/bvillage/index'
 import dialogStatistics from './dialogStatistics'
 import formContainer from './form'
 import map from './map'
@@ -218,6 +249,8 @@ export default {
       relation_ship_export: false,
       relation_ship_statistics: false,
       tableLoading: false,
+      detailList: [],
+      dialogVisibleDetail: false,
     }
   },
   computed: {
@@ -412,6 +445,21 @@ export default {
     currentChange (val) {
       this.params.current = val
       this.getList()
+    },
+    getDetail (row) {
+      let params = {}
+      if (Array.isArray(this.params.rangeTime) && this.params.rangeTime.length > 0) {
+        params.startDate = this.params.rangeTime[0]
+        params.endDate = this.params.rangeTime[1]
+      } else {
+        params.startDate = undefined
+        params.endDate = undefined
+      }
+      params.villageId = row.village_id
+      getCountRecordWithShip(params).then(res=>{
+        this.detailList = [res.data.data]
+        this.dialogVisibleDetail = true
+      })
     },
   },
 }
