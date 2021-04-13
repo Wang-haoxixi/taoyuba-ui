@@ -42,24 +42,24 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="主机总功率(kw)：" prop="engineTotalPower">
-              <el-input maxlength="6" v-model="form.engineTotalPower"></el-input>
+              <el-input  v-model="form.engineTotalPower"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="主机功率(kw)：" prop="mainEnginePower">
-              <el-input maxlength="6" v-model="form.mainEnginePower"></el-input>
+              <el-input  v-model="form.mainEnginePower"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item label="双控功率(kw)：" prop="dualPower">
-              <el-input maxlength="6" v-model="form.dualPower"></el-input>
+              <el-input  v-model="form.dualPower"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="主机型号：" prop="mainEngineModel">
-              <el-input maxlength="50" v-model="form.mainEngineModel"></el-input>
+              <el-input  v-model="form.mainEngineModel"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -266,6 +266,22 @@
           </operation-wrapper>
         </el-form-item>
       </el-form>
+      <el-dialog
+        title="驳回理由"
+        :visible.sync="dialogVisible"
+        width="50%">
+        <el-checkbox-group v-model="checkbox">
+          <el-checkbox label="信息有误">信息有误</el-checkbox>
+          <el-checkbox label="证件照片不规范">证件照片不规范</el-checkbox>
+          <el-checkbox label="其他">
+            其他<el-input v-model="input" placeholder="请输入内容" :disabled="checkbox.indexOf('其他') === -1" style="margin-left: 10px"></el-input>
+          </el-checkbox>
+        </el-checkbox-group>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="refute">确 定</el-button>
+        </span>
+      </el-dialog>
     </basic-container>
   </div>
 </template>
@@ -285,6 +301,9 @@ export default {
             backPath: null,
             backFunction: () => { this.back() },
         },
+        dialogVisible: false,
+        checkbox: [],
+        input: '',
     }                               
   },
   computed: {                                                                                                                                                               
@@ -309,22 +328,47 @@ export default {
         })
       },
       handle () {
-        this.$prompt('请输入驳回理由', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            inputPattern: /\S/,
-            inputErrorMessage: '驳回理由不能为空',
-        }).then(({ value }) => {
-            let data = {
-                auditState: '4',
-                ids: [this.form.id],
-                rejectReason: value,
-            }
-            noAgree(data).then(()=>{
-                this.$message.success('操作成功!')
-                this.$emit('getList')
-                this.$emit('back')
-            })
+        this.dialogVisible = true
+        // this.$prompt('请输入驳回理由', '提示', {
+        //     confirmButtonText: '确定',
+        //     cancelButtonText: '取消',
+        //     inputPattern: /\S/,
+        //     inputErrorMessage: '驳回理由不能为空',
+        // }).then(({ value }) => {
+        //     let data = {
+        //         auditState: '4',
+        //         ids: [this.form.id],
+        //         rejectReason: value,
+        //     }
+        //     noAgree(data).then(()=>{
+        //         this.$message.success('操作成功!')
+        //         this.$emit('getList')
+        //         this.$emit('back')
+        //     })
+        // })
+      },
+      refute () {
+        if( this.checkbox.length === 0 ){
+          this.$message.warning('驳回理由不能为空!')
+          return false
+        }
+        let value = ''
+        this.checkbox.forEach(element => {
+          if( element === '其他' ){
+            value = value + this.input + ','
+          }else{
+            value = value + element + ','
+          }
+        })
+        let data = {
+            auditState: '4',
+            ids: [this.form.id],
+            rejectReason: value,
+        }
+        noAgree(data).then(()=>{
+            this.$message.success('操作成功!')
+            this.$emit('getList')
+            this.$emit('back')
         })
       },
       back () {
