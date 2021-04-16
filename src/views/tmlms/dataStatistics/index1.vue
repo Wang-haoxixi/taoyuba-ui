@@ -2,8 +2,7 @@
   <div id="statisrics" style="min-width: 1200px;">
     <el-row>
       <el-col :span="24">
-        <h1 class="chart-title">{{orgTitle}}渔业船员大数据统计墙</h1>
-        <h6 class="chart-time">数据更新时间：{{time}}</h6>
+        <h1 class="chart-title">海洋捕捞渔船管理统计墙</h1>
         <div class="select-wrapper">
           <el-form :inline="true" class="demo-form-inline">
             <el-form-item style="width: 180px;">
@@ -66,7 +65,7 @@
       <el-col :span="7">
         <div class="chart-bg panel">
           <div>
-            <h2>{{title}}工资统计</h2>
+            <h2>进出港统计</h2>
           </div>
           <div id="salaryTotal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
           <div class="panel-footer"></div>
@@ -1308,6 +1307,9 @@ export default {
     overflow-y:auto;
     height: 100%;
     background-color: #06164A;
+    ::v-deep .el-scrollbar__wrap {
+      height: 400px;
+    }
     .select-wrap{
       position:absolute;
       top:40px;
@@ -1323,7 +1325,7 @@ export default {
       padding-top:30px;
       font-size:30px;
       color:#fff;
-      text-align: center;
+      text-align: left;
     }
     .chart-bg{
       background-color: #101F51;

@@ -178,7 +178,7 @@
       </div>
     </el-dialog>
     <el-dialog
-      title="详情"
+      :title="name"
       :visible.sync="dialogVisibleDetail"
       width="80%">
       <el-table
@@ -188,7 +188,7 @@
           style="width: 100%">
           <el-table-column
             prop="village_id"
-            label="未联系名称">
+            label="未联系帆张网数量">
             <template slot-scope="scope">
               <div>
                 <el-tag v-for="(item,index) in scope.row[11]" :key="index" style="margin:5px">{{ item.shipName }}</el-tag>
@@ -197,7 +197,7 @@
           </el-table-column>
           <el-table-column
             prop="village_id"
-            label="帆张网">
+            label="未联系其他数量">
             <template slot-scope="scope">
               <div>
                 <el-tag v-for="(item,index) in scope.row.total" :key="index" style="margin:5px">{{ item.shipName }}</el-tag>
@@ -225,6 +225,7 @@ export default {
       loadingCount: false,
       showCount: false,
       countList: [],
+      name: '',
       dialogVisible: false,
       imgList: [],
       status: '',
@@ -456,6 +457,7 @@ export default {
         params.endDate = undefined
       }
       params.villageId = row.village_id
+      this.name = this.getVillageLabel(row.village_id)
       getCountRecordWithShip(params).then(res=>{
         this.detailList = [res.data.data]
         this.dialogVisibleDetail = true
