@@ -64,6 +64,7 @@
 import { getList,delList } from '@/api/tmlms/faceList'
 import detail from './detail.vue'
 export default {
+  name: 'faceList',
   mixins: [],
   data () {
     return {

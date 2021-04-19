@@ -95,6 +95,7 @@ import { getShipowner,deleteShipowner,statusShipownerByidcard, exportExcel } fro
 import { getUserInfo } from '@/api/login'
 import queryMixin from '@/mixins/query'
 export default {
+  name: 'shipOwner',
   mixins: [queryMixin],
   data () {
     return {
