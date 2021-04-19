@@ -38,27 +38,6 @@
             </el-form-item>
           </el-form>
         </div>
-        <!-- <div class="select-wrap">
-          <el-cascader
-            @change="changeOrg"
-            placeholder=""
-            :options="orgList"
-            v-model="areaValue"
-            :props="areaListProps"
-            change-on-select
-            :disabled="disabled"
-          ></el-cascader>
-        </div>
-        <div class="crew-select">
-          <el-select :disabled="positionDisabled" v-model="positionId" placeholder="职位船员" @change="onChangePositionId">
-            <el-option
-              v-for="item in positionDicMap"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </div> -->
       </el-col>
     </el-row>
     <el-row>
@@ -621,7 +600,7 @@ export default {
             },
         },
         series: [{
-            name: '工资统计',
+            name: '进出港',
             data: [],
             type: 'line',
             smooth: true,
