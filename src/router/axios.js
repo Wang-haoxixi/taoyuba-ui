@@ -8,7 +8,7 @@ import errorCode from '@/const/errorCode'
 import 'nprogress/nprogress.css'
 import store from '@/store' // progress bar style
 import router from '@/router/router'
-// import { Message } from 'element-ui'
+import { Message } from 'element-ui'
 
 axios.defaults.timeout = 30000
 axios.defaults.baseURL = '/api'
@@ -74,10 +74,10 @@ axios.interceptors.response.use(res => {
     //   router.push({ path: '/500' })
     //   return
   } else if (status !== 200 || res.data.code === 1) {
-    // Message({
-    //   message: message,
-    //   type: 'error',
-    // })
+    Message({
+      message: message,
+      type: 'error',
+    })
     // if (process.env.NODE_ENV === 'development') {
     //   Message({
     //     message: message,

@@ -80,6 +80,14 @@ export function getByVillagename (params) {
     })
 }
 
+export function getByVillagelist (params) {
+    return request({
+        url: `${prefixUrl}/list`,
+        method: 'get',
+        params: params,
+    })
+}
+
 export function getCountRecordWithShip (params) {
     return request({
         url: '/tmlms/relationship/countRecordWithShip',
