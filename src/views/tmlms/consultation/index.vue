@@ -46,7 +46,7 @@
             label="二维码"
           >
           <template slot-scope="scope">
-            <el-button size="mini" @click="lookQr(scope.row.id)">查看</el-button>
+            <el-button size="mini" @click="lookQr(scope.row)">查看</el-button>
           </template>
           </el-table-column>
           <el-table-column label="操作" width="300" fixed="right">
@@ -74,8 +74,11 @@
       title="查看二维码"
       :visible.sync="dialogVisible"
       width="30%">
-      <vue-qr :text="downloadData.url" :margin="0" colorDark="#f67b29" colorLight="#fff" :logoScale="0.3" :size="200"></vue-qr>
+      <div style="text-align:center">
+        <vue-qr :text="downloadData.url" :margin="0" colorLight="#fff" :logoScale="0.3" :size="200" ref="qr"></vue-qr>
+      </div>
       <span slot="footer" class="dialog-footer">
+        <el-button @click="clickDown">下载</el-button>
         <el-button @click="dialogVisible = false">返回</el-button>
       </span>
     </el-dialog>
@@ -100,7 +103,7 @@ export default {
       faceList: [],
       dialogVisible: false,
       downloadData: {
-        url: '扫码访问的链接地址',
+        url: 'https://new.taoyu58.com?type=1&',
       },
     }
   },
@@ -152,9 +155,18 @@ export default {
         this.$refs.detail.getDetail()
       })
     },
-    lookQr (id) {
-      console.log(id)
+    lookQr (row) {
+      this.downloadData.url = this.downloadData.url + `id=${row.id}&orgId=${row.orgId}`
       this.dialogVisible = true
+    },
+    clickDown () {
+        let a = document.createElement('a')
+        // 下载图名字
+        a.download = '二维码.jpg'
+        //url 
+        a.href = this.$refs.qr.$el.src
+        //合成函数，执行下载 
+        a.dispatchEvent(new MouseEvent('click'))
     },
   },
   components: {

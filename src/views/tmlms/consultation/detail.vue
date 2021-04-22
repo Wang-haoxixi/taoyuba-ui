@@ -5,6 +5,15 @@
       <el-form ref="form" :model="form" label-width="150px" size="small" :rules="rules">
         <el-row :gutter="80">
           <el-col :span="12">
+              <el-form-item label="区域：" prop="orgId">
+                    <el-select v-model="form.orgId" placeholder="请选择">
+                      <el-option label="象山区域" :value="1"> </el-option>
+                      <el-option label="衢山区域" :value="21"> </el-option>
+                      <el-option label="普陀区域" :value="32"> </el-option>
+                    </el-select>
+              </el-form-item>
+          </el-col>
+          <el-col :span="12">
               <el-form-item label="主题：" prop="meetName">
                 <el-input v-model="form.meetName" ></el-input>
               </el-form-item>
@@ -40,7 +49,7 @@
             <el-form-item label="参会人员及时间点：" class="amap-page-container is-required">
                 <el-row>
                   <el-col :span="4">
-                    <div class="time-consultation" v-for="(item,index) in form.list" :key="index">{{ arr[item.userType] }}参加: <el-switch v-model="item.status" active-color="#13ce66" inactive-color="#ff4949"></el-switch></div>
+                    <div class="time-consultation" v-for="(item,index) in form.list" :key="index"><span class="span-consultation">{{ arr[item.userType] }}参加:</span> <el-switch v-model="item.status" active-color="#13ce66" inactive-color="#ff4949"></el-switch></div>
                   </el-col>
                   <el-col :span="12">
                     <div class="time-consultation" v-for="(item,index) in form.list" :key="index">
@@ -142,6 +151,9 @@ export default {
           { required: true, message: '此项不能为空', trigger: 'blur' },
         ],
         meetStartTime: [
+          { required: true, message: '此项不能为空', trigger: 'blur' },
+        ],
+        orgId: [
           { required: true, message: '此项不能为空', trigger: 'blur' },
         ],
       },
@@ -318,5 +330,9 @@ export default {
   ::v-deep .el-switch {
     margin: 10px;
   }
+}
+.span-consultation {
+  display: inline-block;
+  width: 105px;
 }
 </style>

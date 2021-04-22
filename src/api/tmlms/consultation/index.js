@@ -39,3 +39,11 @@ export function edit (data) {
         data: data,
     })
 }
+
+
+export function detailPeople (id) {
+    return request({
+        url: `/tmlms/trainMeetSign/${id}`,
+        method: 'get',
+    })
+}

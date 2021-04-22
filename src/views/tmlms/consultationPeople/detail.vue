@@ -6,57 +6,57 @@
         <el-row :gutter="80">
           <el-col :span="12">
               <el-form-item label="姓名：" prop="realName">
-                <el-input v-model="form.realName" ></el-input>
+                <div> {{ form.realName }} </div>
               </el-form-item>
           </el-col>
           <el-col :span="12">
               <el-form-item label="手机号码：" prop="realName">
-                <el-input v-model="form.realName" ></el-input>
+                <div> {{ form.phone }} </div>
               </el-form-item>
           </el-col>
           <el-col :span="12">
               <el-form-item label="船名号：" prop="realName">
-                <el-input v-model="form.realName" ></el-input>
+                <div> {{ form.shipName }} </div>
               </el-form-item>
           </el-col>
           <el-col :span="12">
               <el-form-item label="身份证号：" prop="realName">
-                <el-input v-model="form.realName" ></el-input>
+                <div>{{ form.idcard }}</div>
               </el-form-item>
           </el-col>
           <el-col :span="12">
               <el-form-item label="角色：" prop="realName">
-                <el-input v-model="form.realName" ></el-input>
+                <div>{{ form.userType === 0 ? '船东' : form.userType === 1 ? '职务船员' : '家属'  }}</div>
               </el-form-item>
           </el-col>
           <el-col :span="12">
-              <el-form-item label="职务：" prop="realName">
-                <el-input v-model="form.realName" ></el-input>
+              <el-form-item label="职务：" v-if="form.userType === 1">
+                <iep-dict-select v-model="form.positionId" dict-name="tyb_resume_position"></iep-dict-select>
               </el-form-item>
           </el-col>
           <el-col :span="12">
               <el-form-item label="会议名称：" prop="realName">
-                <el-input v-model="form.realName" ></el-input>
+                <div>{{ form.meetName }}</div>
               </el-form-item>
           </el-col>
           <el-col :span="12">
               <el-form-item label="时间：" prop="realName">
-                <el-input v-model="form.realName" ></el-input>
+                {{ form.meetStartTime }}
               </el-form-item>
           </el-col>
           <el-col :span="12">
               <el-form-item label="人脸头像：" prop="realName">
                 <el-image
                   style="width: 100px; height: 100px;margin-left: 30px"
-                  :src="form.image" 
-                  :preview-src-list="[form.image]">
+                  :src="form.signInImage" 
+                  :preview-src-list="[form.signInImage]">
                 </el-image>
               </el-form-item>
           </el-col>
           <el-col :span="20">
             <el-form-item label="培训地点:" prop="address" class="amap-page-container is-required">
                 <div>
-                  <el-input id="tipinput" v-model="form.address"></el-input>
+                  <el-input id="tipinput" v-model="form.address" :disabled="true"></el-input>
                     <div id="GDMap" style="height:400px;margin-top: 20px"></div>
                     <div id="panel"></div>
                     <!-- <input id="tipinput" type="text" /> -->
@@ -74,6 +74,7 @@
 <script>
 import loadMap from '@/util/loadMap'
 import map from '@/mixins/map.js'
+import { detailPeople } from '@/api/tmlms/consultation/index'
 export default {
   mixins: [map],
   data () {
@@ -88,17 +89,26 @@ export default {
   },
   methods: {
     // 获取详情
-    getDetail () {
-
+    getDetail (id) {
+      console.log(123)
+        detailPeople(id).then(res=>{
+          // 数据拿到后需要进行一系列的转化
+          this.form = res.data.data
+          this.showCityInfo()
+        })
     },
     showCityInfo () {
       /* eslint-disable */
       loadMap(this.key, this.plugins, this.v)
         .then(AMap => {
           this.GDMap = new AMap.Map("GDMap", {
-            zoom: 10
-            //center: [119.947, 31.7728]
+            zoom: 18,
+            center: JSON.parse(this.form.location),
           });
+          this.marker = new AMap.Marker({
+            position: JSON.parse(this.form.location),
+            map: this.GDMap,
+          })
           this.GDMap.on("complete", () => {
             var auto = new AMap.Autocomplete({
               input: "tipinput"
@@ -130,7 +140,6 @@ export default {
   created () {
   },
   mounted () {
-    this.showCityInfo()
   },
   filters: {
   },

@@ -22,50 +22,42 @@
           >
           </el-table-column>
           <el-table-column
-            prop="手机号"
+            prop="phone"
             label="手机号"
           >
           </el-table-column>
           <el-table-column
-            prop="渔船名"
+            prop="shipName"
             label="渔船名"
           >
           </el-table-column>
           <el-table-column
-            prop="角色"
+            prop="userType"
             label="角色"
           >
-            <template>
-              <div>角色</div>
+            <template slot-scope="scope">
+              <div>{{ scope.row.userType === 0 ? '船东' : scope.row.userType === 1 ? '职务船员' : '家属'  }}</div>
             </template>
           </el-table-column>
           <el-table-column
-            prop="签到时间"
+            prop="signInTime"
             label="签到时间"
           >
           </el-table-column>
           <el-table-column
-            prop="签到时间"
-            label="签到时间"
-          >
-          </el-table-column>
-          <el-table-column
-            prop="签退时间"
+            prop="signOutTime"
             label="签退时间"
           >
           </el-table-column>
           <el-table-column
-            prop="培训名称"
+            prop="meetName"
             label="培训名称"
           >
           </el-table-column>
           <el-table-column
-            prop="合作社"
+            prop="cooperateNames"
             label="合作社"
           >
-            <template>
-              <div>合作社</div>
-            </template>
           </el-table-column>
           <el-table-column label="操作" width="300" fixed="right">
             <template slot-scope="scope">
@@ -90,7 +82,7 @@
   </div>
 </template>
 <script>
-import { getList } from '@/api/tmlms/faceList'
+import { listPeople } from '@/api/tmlms/faceList'
 import detail from './detail.vue'
 import statistics from './statistics.vue'
 export default {
@@ -118,7 +110,7 @@ export default {
       this.getData()
     },
     getData () {
-      getList({...this.params,...this.page}).then(res=>{
+      listPeople({...this.params,...this.page}).then(res=>{
         this.faceList = res.data.data.records
         this.page = {
           size: res.data.data.size,

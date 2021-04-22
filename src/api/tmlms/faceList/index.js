@@ -22,3 +22,11 @@ export function detailFace (id) {
         method: 'get',
     })
 }
+
+export function listPeople (query) {
+    return request({
+        url: '/tmlms/trainMeetSign/page',
+        method: 'get',
+        params: query,
+    })
+}
