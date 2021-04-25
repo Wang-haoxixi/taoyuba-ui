@@ -49,7 +49,7 @@
             <el-button size="mini" @click="lookQr(scope.row)">查看</el-button>
           </template>
           </el-table-column>
-          <el-table-column label="操作" width="300" fixed="right">
+          <el-table-column label="操作"  fixed="right">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleView(scope.row.id)">编辑
               </el-button>

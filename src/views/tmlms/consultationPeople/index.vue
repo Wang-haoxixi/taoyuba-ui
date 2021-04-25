@@ -15,6 +15,7 @@
         <el-table
           :data="faceList"
           stripe
+          :row-class-name="tableRowClassName"
           style="width: 100%">
           <el-table-column
             prop="realName"
@@ -42,11 +43,13 @@
           <el-table-column
             prop="signInTime"
             label="签到时间"
+            width="150"
           >
           </el-table-column>
           <el-table-column
             prop="signOutTime"
             label="签退时间"
+            width="150"
           >
           </el-table-column>
           <el-table-column
@@ -59,7 +62,7 @@
             label="合作社"
           >
           </el-table-column>
-          <el-table-column label="操作" width="300" fixed="right">
+          <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleView(scope.row.id)">查看
               </el-button>
@@ -133,6 +136,13 @@ export default {
         this.$refs.statistics.getDetail(id)
       })
     },
+    tableRowClassName ({row}) {
+      if( row.status === 0 ){
+        return 'warning-row'
+      }else{
+        return ''
+      }
+    },
   },
   components: {
     detail,
@@ -163,5 +173,8 @@ export default {
   margin-bottom: 10px;
   margin-left: 0;
   margin-right: 10px;
+}
+::v-deep .el-table .warning-row {
+    color: red !important;
 }
 </style>
