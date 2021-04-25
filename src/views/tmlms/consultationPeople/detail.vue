@@ -31,7 +31,7 @@
           </el-col>
           <el-col :span="12">
               <el-form-item label="职务：" v-if="form.userType === 1">
-                <iep-dict-select v-model="form.positionId" dict-name="tyb_resume_position"></iep-dict-select>
+                <iep-dict-select v-model="form.positionId" dict-name="tyb_resume_position" :disabled="true"></iep-dict-select>
               </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -41,15 +41,15 @@
           </el-col>
           <el-col :span="12">
               <el-form-item label="时间：" prop="realName">
-                {{ form.meetStartTime }}
+                {{ form.signInTime || '无' }} —— {{ form.signOutTime || '无' }}
               </el-form-item>
           </el-col>
           <el-col :span="12">
               <el-form-item label="人脸头像：" prop="realName">
                 <el-image
                   style="width: 100px; height: 100px;margin-left: 30px"
-                  :src="form.signInImage" 
-                  :preview-src-list="[form.signInImage]">
+                  :src="form.signInImage || form.signOutImage" 
+                  :preview-src-list="[form.signInImage || form.signOutImage]">
                 </el-image>
               </el-form-item>
           </el-col>
@@ -90,7 +90,6 @@ export default {
   methods: {
     // 获取详情
     getDetail (id) {
-      console.log(123)
         detailPeople(id).then(res=>{
           // 数据拿到后需要进行一系列的转化
           this.form = res.data.data
