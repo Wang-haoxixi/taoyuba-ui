@@ -28,6 +28,7 @@ export default {
   },
   created () {                 
     this.orgForm.orgId = this.orgId
+    localStorage.setItem('orgId',this.orgForm.orgId)
   },
   computed: {           
     ...mapState({
@@ -40,7 +41,8 @@ export default {
       'GetUserInfo',
       'GetMenu',
     ]),
-    submitForm () {                                                                                                                                               
+    submitForm () {
+      localStorage.setItem('orgId',this.orgForm.orgId)                                                                                                                           
       setOrg(this.orgForm.orgId).then(() => {                                    
         this.GetUserInfo().then(() => {   
           this.dialogShow = false

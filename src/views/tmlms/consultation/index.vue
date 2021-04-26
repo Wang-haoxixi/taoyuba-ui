@@ -6,6 +6,16 @@
         <el-button @click="add" type="default" size="small">新增</el-button>
         <div style="float:right">
           <span style="width:120px"><el-input v-model.trim="params.meetName" placeholder="会议标题" size="small" clearable></el-input></span>
+          <span style="width:120px">
+              <el-select v-model="params.cooperateIds" filterable placeholder="请选择" size="small">
+                <el-option
+                  v-for="item in options"
+                  :key="item.userId"
+                  :label="item.villageName"
+                  :value="item.userId">
+                </el-option>
+              </el-select>
+          </span>
           <el-button size="small"  @click="getData">搜索</el-button>
         </div>
       </div>
@@ -86,6 +96,7 @@
 </template>
 <script>
 import vueQr from 'vue-qr'
+import { getVillage } from '@/api/tmlms/bvillage/index'
 import { page,del } from '@/api/tmlms/consultation/index'
 import detail from './detail.vue'
 export default {
@@ -98,6 +109,7 @@ export default {
         current: 1,
         total: 0,
       },
+      options:[],
       params: {},
       detailType: true,
       faceList: [],
@@ -109,6 +121,9 @@ export default {
   },
   created () {
     this.getData()
+    getVillage({size: 500}).then(res=>{
+      this.options = res.data.data.records
+    })
   },
   methods: {
         // 分页
@@ -156,6 +171,7 @@ export default {
       })
     },
     lookQr (row) {
+      this.downloadData.url = 'https://new.taoyu58.com?type=1&'
       this.downloadData.url = this.downloadData.url + `id=${row.id}&orgId=${row.orgId}`
       this.dialogVisible = true
     },

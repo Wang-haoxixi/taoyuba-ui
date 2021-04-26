@@ -37,6 +37,9 @@
           <!-- <router-link class="sub-menu" to="/dataStatistics" target="_blank">大数据墙</router-link> -->
           <span class="sub-menu" @click="open('dataStatistics')">大数据墙</span>
         </el-menu-item>
+        <!-- <el-menu-item v-if="roles.indexOf(1) > -1 || roles.indexOf(111) > -1">
+          <span class="sub-menu" @click="open('oneStatistics')">一地数据墙</span>
+        </el-menu-item> -->
       </el-menu>
       <!-- <div class="search-con">
         <top-search class="search-con-input" :style="{top: isTop}" :class="{inactive:!isShow }">
@@ -109,6 +112,13 @@ export default {
       if (name === 'dataStatistics') {
         const { href } = this.$router.resolve({
           name: 'dataStatistics',
+        })
+        console.log('href', href)
+        window.open(href, '_blank')
+      }
+      if (name === 'oneStatistics') {
+        const { href } = this.$router.resolve({
+          name: 'oneStatistics',
         })
         console.log('href', href)
         window.open(href, '_blank')

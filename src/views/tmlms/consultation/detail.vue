@@ -1,10 +1,10 @@
 <template>
   <div class="contract-box port-detail">
-    <page-header title="面对面培训" :backOption="backOption"></page-header>
+    <page-header title="面对面教育" :backOption="backOption"></page-header>
     <basic-container>
       <el-form ref="form" :model="form" label-width="150px" size="small" :rules="rules">
         <el-row :gutter="80">
-          <el-col :span="12">
+          <!-- <el-col :span="12">
               <el-form-item label="区域：" prop="orgId">
                     <el-select v-model="form.orgId" placeholder="请选择">
                       <el-option label="象山区域" :value="1"> </el-option>
@@ -12,7 +12,7 @@
                       <el-option label="普陀区域" :value="32"> </el-option>
                     </el-select>
               </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col :span="12">
               <el-form-item label="主题：" prop="meetName">
                 <el-input v-model="form.meetName" ></el-input>
@@ -48,7 +48,7 @@
           <el-col :span="24">
             <el-form-item label="参会人员及时间点：" class="amap-page-container is-required">
                 <el-row>
-                  <el-col :span="4">
+                  <el-col :span="5">
                     <div class="time-consultation" v-for="(item,index) in form.list" :key="index"><span class="span-consultation">{{ arr[item.userType] }}参加:</span> <el-switch v-model="item.status" active-color="#13ce66" inactive-color="#ff4949"></el-switch></div>
                   </el-col>
                   <el-col :span="12">
@@ -104,7 +104,7 @@
   </div>
 </template>
 <script>
-import { getByVillagelist } from '@/api/tmlms/bvillage/index'
+import { getVillage } from '@/api/tmlms/bvillage/index'
 import { create,detail,edit } from '@/api/tmlms/consultation/index'
 import loadMap from '@/util/loadMap'
 import map from '@/mixins/map.js'
@@ -187,8 +187,8 @@ export default {
       this.$emit('back')
     },
     remoteMethod () {
-      getByVillagelist().then(res=>{
-        this.options = res.data.data
+      getVillage({size: 500}).then(res=>{
+        this.options = res.data.data.records
       })
     },
     showCityInfo (val) {
@@ -263,8 +263,8 @@ export default {
                 this.$message.warning('参会具体时间不能为空!')
                 return false
               }
-              form.list[i].meetStartTime =form.list[i].meetStartTime.length > 10 ? form.list[i].meetStartTime :  `${ form.meetStartTime.slice(0,10) } ${ form.list[i].meetStartTime }:00`
-              form.list[i].meetEndTime =form.list[i].meetEndTime.length > 10 ? form.list[i].meetEndTime : `${ form.meetStartTime.slice(0,10) } ${ form.list[i].meetEndTime }:00`
+              form.list[i].meetStartTime =form.list[i].meetStartTime.length > 10 ? `${ form.meetStartTime.slice(0,10) }${ form.list[i].meetStartTime.slice(10,22) }` :  `${ form.meetStartTime.slice(0,10) } ${ form.list[i].meetStartTime }:00`
+              form.list[i].meetEndTime =form.list[i].meetEndTime.length > 10 ? `${ form.meetStartTime.slice(0,10) }${ form.list[i].meetStartTime.slice(10,22) }` : `${ form.meetStartTime.slice(0,10) } ${ form.list[i].meetEndTime }:00`
             }
           }
           // 后端的时间 开始和结束是同一个
@@ -274,6 +274,8 @@ export default {
           form.cooperateIds = JSON.stringify(form.cooperateIds)
           // 这个是转成经纬度给他
           form.location = JSON.stringify(form.location)
+          console.log(localStorage.getItem('orgId'))
+          form.orgId = localStorage.getItem('orgId') || 1
           // 有机会要找个理由吧后端打死
           if( form.id ){
             edit(form).then(res=>{

@@ -4,10 +4,10 @@
       <div class="shipowner_title">
         <el-button @click="getData" type="default" size="small">刷新</el-button>
         <el-button @click="handleStatistics" type="default" size="small">统计</el-button>
-        <el-button @click="getData" type="default" size="small">导出信息</el-button>
+        <el-button @click="getInformation" type="default" size="small">导出信息</el-button>
         <div style="float:right">
-          <span style="width:120px"><el-input v-model.trim="params.realName" placeholder="会议标题" size="small" clearable></el-input></span>
-          <span style="width:120px"><el-input v-model.trim="params.realName" placeholder="船名号" size="small" clearable></el-input></span>
+          <span style="width:120px"><el-input v-model.trim="params.meetName" placeholder="会议标题" size="small" clearable></el-input></span>
+          <span style="width:120px"><el-input v-model.trim="params.shipName" placeholder="船名号" size="small" clearable></el-input></span>
           <span style="width:120px"><el-input v-model.trim="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
           <el-button size="small"  @click="getData">搜索</el-button>
         </div>
@@ -86,6 +86,7 @@
 </template>
 <script>
 import { listPeople } from '@/api/tmlms/faceList'
+import { exportExcelPeople} from '@/api/post/recruit'
 import detail from './detail.vue'
 import statistics from './statistics.vue'
 export default {
@@ -142,6 +143,11 @@ export default {
       }else{
         return ''
       }
+    },
+    getInformation () {
+      exportExcelPeople().then(res=>{
+        console.log(res)
+      })
     },
   },
   components: {

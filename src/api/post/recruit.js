@@ -61,6 +61,14 @@ export function exportExcel (ids) {
     title: '招聘信息',
   })
 }
+
+export function exportExcelPeople () {
+  return exportDownload({
+    url: '/tmlms/tybmlmsExcelExport/sign_export',
+    title: '人员信息',
+    method: 'get',
+  })
+}
 // 通过渔船名查找相关信息
 export function getInfoByShipName (shipName) {
   return request ({
