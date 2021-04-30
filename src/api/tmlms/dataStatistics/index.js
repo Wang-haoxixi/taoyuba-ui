@@ -84,3 +84,19 @@ export function getShipCountVillage  (params) {
         params: params,
     })
 }
+
+export function crewOrgRelationNew (params) {
+    return request({
+        url: `/tmlms/statistic/crewOrgRelationNew?orgRelationId=${ params }`,
+        method: 'get',
+        params: params,
+    })
+}
+
+export function crewOrgRelationVillageNew (params) {
+    return request({
+        url: `/tmlms/statistic/crewOrgRelationVillageNew?villageId=${params}`,
+        method: 'get',
+        params: params,
+    })
+}

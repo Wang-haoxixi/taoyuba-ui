@@ -274,6 +274,10 @@ export default {
           form.cooperateIds = JSON.stringify(form.cooperateIds)
           // 这个是转成经纬度给他
           form.location = JSON.stringify(form.location)
+          if( !form.location ){
+            this.$message.warning('请在地图选取具体地点!')
+            return false
+          }
           console.log(localStorage.getItem('orgId'))
           form.orgId = localStorage.getItem('orgId') || 1
           // 有机会要找个理由吧后端打死

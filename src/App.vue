@@ -57,4 +57,7 @@ export default {
 .el-range-separator {
   width: 40px!important;
 }
+  .el-cascader-panel {
+    min-height: 200px;
+  }
 </style>
