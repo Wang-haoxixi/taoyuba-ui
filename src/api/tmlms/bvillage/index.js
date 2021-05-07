@@ -95,3 +95,10 @@ export function getCountRecordWithShip (params) {
         params: params,
     })
 }
+
+export function setTime (data) {
+    return request({
+        url: `/tmlms/trainMeet/createTime?id=${data.id}&type=${data.type}`,
+        method: 'post',
+    })
+}

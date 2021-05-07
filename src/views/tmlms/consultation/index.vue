@@ -52,14 +52,34 @@
           >
           </el-table-column>
           <el-table-column
+          width="180"
+            prop="meetStartSignTime"
+            label="签到时间"
+          >
+          </el-table-column>
+          <el-table-column
+          width="180"
+            prop="meetEndSignTime"
+            label="签退时间"
+          >
+          </el-table-column>
+          <el-table-column
             prop="二维码"
-            label="二维码"
+            label="签到二维码"
           >
           <template slot-scope="scope">
-            <el-button size="mini" @click="lookQr(scope.row)">查看</el-button>
+            <el-button size="mini" @click="lookQr(scope.row,1)">{{ !scope.row.meetStartSignTime && scope.row.typeNames.indexOf('职务船员') !== -1 ? '生成' : '查看' }}</el-button>
           </template>
           </el-table-column>
-          <el-table-column label="操作"  fixed="right">
+          <el-table-column
+            prop="二维码"
+            label="签退二维码"
+          >
+          <template slot-scope="scope">
+            <el-button size="mini" @click="lookQr(scope.row,2)">{{ scope.row.meetEndSignTime ? '查看' : '生成' }}</el-button>
+          </template>
+          </el-table-column>
+          <el-table-column label="操作"  fixed="right" width="180">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleView(scope.row.id)">编辑
               </el-button>
@@ -96,7 +116,7 @@
 </template>
 <script>
 import vueQr from 'vue-qr'
-import { getVillage } from '@/api/tmlms/bvillage/index'
+import { getVillage,setTime } from '@/api/tmlms/bvillage/index'
 import { page,del } from '@/api/tmlms/consultation/index'
 import detail from './detail.vue'
 export default {
@@ -170,10 +190,28 @@ export default {
         this.$refs.detail.getDetail()
       })
     },
-    lookQr (row) {
-      this.downloadData.url = 'https://new.taoyu58.com?type=1&'
-      this.downloadData.url = this.downloadData.url + `id=${row.id}&orgId=${row.orgId}`
-      this.dialogVisible = true
+    lookQr (row,Sign) {
+      let obj = {
+        id: row.id,
+        type: Sign,
+      }
+      let type = 0
+      if( row.typeNames.indexOf('职务船员') !== -1 ){
+        type = 1
+      }
+      if( (Sign === 2 && !row.meetEndSignTime) ||(Sign === 1 && !row.meetStartSignTime)){
+        setTime(obj).then(({data})=>{
+          if(data.code === 0){
+            this.downloadData.url = `https://new.taoyu58.com?type=1&sign=${Sign}&isCrew=${type}&id=${row.id}&orgId=${row.orgId}`
+            this.dialogVisible = true
+            this.getData()
+          }
+        })
+      }else{
+            this.downloadData.url = `https://new.taoyu58.com?type=1&sign=${Sign}&isCrew=${type}&id=${row.id}&orgId=${row.orgId}`
+            this.dialogVisible = true
+            this.getData()
+      }
     },
     clickDown () {
         let a = document.createElement('a')

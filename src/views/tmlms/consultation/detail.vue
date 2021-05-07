@@ -49,7 +49,7 @@
             <el-form-item label="参会人员及时间点：" class="amap-page-container is-required">
                 <el-row>
                   <el-col :span="5">
-                    <div class="time-consultation" v-for="(item,index) in form.list" :key="index"><span class="span-consultation">{{ arr[item.userType] }}参加:</span> <el-switch v-model="item.status" active-color="#13ce66" inactive-color="#ff4949"></el-switch></div>
+                    <div class="time-consultation" v-for="(item,index) in form.list" :key="index"><span class="span-consultation">{{ arr[item.userType] }}参加:</span> <el-switch v-model="item.status" active-color="#13ce66" inactive-color="#ff4949" :disabled="setDisabled(item)"></el-switch></div>
                   </el-col>
                   <el-col :span="12">
                     <div class="time-consultation" v-for="(item,index) in form.list" :key="index">
@@ -118,17 +118,17 @@ export default {
           userType: 0,
           meetStartTime: '',
           meetEndTime: '',
-          status: true,
+          status: false,
         },{
           userType: 1,
           meetStartTime: '',
           meetEndTime: '',
-          status: true,
+          status: false,
         },{
           userType: 2,
           meetStartTime: '',
           meetEndTime: '',
-          status: true,
+          status: false,
         }],
       },
       arr: ['船东','职务船员','渔船监护人'],
@@ -303,6 +303,21 @@ export default {
           return false
         }
       })
+    },
+    setDisabled (val) {
+      if( val.userType === 1 ){
+        if( this.form.list[0].status || this.form.list[2].status ){
+          return true
+        }else{
+          return false
+        }
+      }else{
+        if( this.form.list[1].status ){
+          return true
+        }else{
+          return false
+        }
+      }
     },
   },
   computed: {

@@ -37,6 +37,14 @@
             label="手机号码"
           >
           </el-table-column>
+          <el-table-column
+            prop="gatherType"
+            label="类型"
+          >
+          <template slot-scope="scope">
+            <div>{{ scope.row.gatherType === 0? '船东' : scope.row.gatherType === 1?'职务船员':'家属' }}</div>
+          </template>
+          </el-table-column>
           <el-table-column label="操作" width="300" fixed="right">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleView(scope.row.id)">查看
