@@ -141,7 +141,7 @@ export default {
   },
   created () {
     this.getData()
-    getVillage({size: 500}).then(res=>{
+    getVillage({size: 500,status: 2}).then(res=>{
       this.options = res.data.data.records
     })
   },
