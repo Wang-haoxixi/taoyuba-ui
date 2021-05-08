@@ -28,11 +28,6 @@
           >
           </el-table-column>
           <el-table-column
-            prop="shipName"
-            label="渔船名"
-          >
-          </el-table-column>
-          <el-table-column
             prop="userType"
             label="角色"
           >
