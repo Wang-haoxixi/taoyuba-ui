@@ -1,6 +1,7 @@
 <template>
   <div class="contract-box">
     <basic-container v-if="detailType">
+      <page-header title="培训咨询管理"></page-header>
       <div class="shipowner_title">
         <el-button @click="getData" type="default" size="small">刷新</el-button>
         <el-button @click="add" type="default" size="small">新增</el-button>
@@ -54,13 +55,13 @@
           <el-table-column
           width="180"
             prop="meetStartSignTime"
-            label="签到时间"
+            label="培训开始时间"
           >
           </el-table-column>
           <el-table-column
           width="180"
             prop="meetEndSignTime"
-            label="签退时间"
+            label="培训结束时间"
           >
           </el-table-column>
           <el-table-column
@@ -79,12 +80,11 @@
             <el-button size="mini" @click="lookQr(scope.row,2)">{{ scope.row.meetEndSignTime ? '查看' : '生成' }}</el-button>
           </template>
           </el-table-column>
-          <el-table-column label="操作"  fixed="right" width="180">
+          <el-table-column label="操作"  fixed="right">
             <template slot-scope="scope">
-              <el-button size="mini" @click="handleView(scope.row.id)">编辑
-              </el-button>
-              <el-button size="mini" @click="handleDel(scope.row.id)">删除
-              </el-button>
+              <div style="text-align:center"><el-button size="mini" @click="handleView(scope.row.id)">编辑</el-button></div>
+              <div style="text-align:center;margin: 5px 0;"><el-button size="mini" @click="handleDel(scope.row.id)">删除</el-button></div>
+              <div style="text-align:center"><el-button size="mini" @click="lookPeople(scope.row.id)">人员</el-button></div>
             </template>
           </el-table-column>
         </el-table>
@@ -112,6 +112,17 @@
         <el-button @click="dialogVisible = false">返回</el-button>
       </span>
     </el-dialog>
+    <el-dialog
+      title="查看人员"
+      :visible.sync="dialogVisiblePeople"
+      width="90%">
+      <div style="text-align:center" v-if="dialogVisiblePeople">
+        <list :trainMeetId="id"></list>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisiblePeople = false">返回</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -119,6 +130,7 @@ import vueQr from 'vue-qr'
 import { getVillage,setTime } from '@/api/tmlms/bvillage/index'
 import { page,del } from '@/api/tmlms/consultation/index'
 import detail from './detail.vue'
+import list from '../consultationPeople/index.vue'
 export default {
   name: 'faceList',
   mixins: [],
@@ -137,6 +149,8 @@ export default {
       downloadData: {
         url: 'https://new.taoyu58.com?type=1&',
       },
+      dialogVisiblePeople: false,
+      id: 0,
     }
   },
   created () {
@@ -200,12 +214,23 @@ export default {
         type = 1
       }
       if( (Sign === 2 && !row.meetEndSignTime) ||(Sign === 1 && !row.meetStartSignTime)){
-        setTime(obj).then(({data})=>{
-          if(data.code === 0){
-            this.downloadData.url = `https://new.taoyu58.com?type=1&sign=${Sign}&isCrew=${type}&id=${row.id}&orgId=${row.orgId}`
-            this.dialogVisible = true
-            this.getData()
-          }
+        this.$confirm(`请确认本次会议已经${Sign === 2 ? '结束' : '开始'}!, 是否确认?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }).then(() => {
+            setTime(obj).then(({data})=>{
+              if(data.code === 0){
+                this.downloadData.url = `https://new.taoyu58.com?type=1&sign=${Sign}&isCrew=${type}&id=${row.id}&orgId=${row.orgId}`
+                this.dialogVisible = true
+                this.getData()
+              }
+            })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消',
+          })
         })
       }else{
             this.downloadData.url = `https://new.taoyu58.com?type=1&sign=${Sign}&isCrew=${type}&id=${row.id}&orgId=${row.orgId}`
@@ -222,10 +247,16 @@ export default {
         //合成函数，执行下载 
         a.dispatchEvent(new MouseEvent('click'))
     },
+    // 看人
+    lookPeople (id) {
+      this.id = id
+      this.dialogVisiblePeople = true
+    },
   },
   components: {
     detail,
     vueQr,
+    list,
   },
   filters: {
   },

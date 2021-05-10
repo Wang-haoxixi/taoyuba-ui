@@ -1,14 +1,23 @@
 <template>
   <div class="contract-box">
     <basic-container v-if="detailType === 0 ">
-      <div class="shipowner_title">
+      <page-header title="培训人员管理" v-if="!trainMeetId"></page-header>
+      <div class="shipowner_title" v-if="!trainMeetId">
         <el-button @click="getData" type="default" size="small">刷新</el-button>
         <el-button @click="handleStatistics" type="default" size="small">统计</el-button>
         <el-button @click="getInformation" type="default" size="small">导出信息</el-button>
         <div style="float:right">
           <span style="width:120px"><el-input v-model.trim="params.meetName" placeholder="会议标题" size="small" clearable></el-input></span>
-          <span style="width:120px"><el-input v-model.trim="params.shipName" placeholder="船名号" size="small" clearable></el-input></span>
           <span style="width:120px"><el-input v-model.trim="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
+          <span style="width:120px">
+              <el-select v-model="params.userType" filterable placeholder="请选择" size="small">
+                <el-option v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+          </span>
           <el-button size="small"  @click="getData">搜索</el-button>
         </div>
       </div>
@@ -32,19 +41,19 @@
             label="角色"
           >
             <template slot-scope="scope">
-              <div>{{ scope.row.userType === 0 ? '船东' : scope.row.userType === 1 ? '职务船员' : '家属'  }}</div>
+              <div>{{ scope.row.userType === 0 ? '船东' : scope.row.userType === 1 ? '职务船员' : '船员监护人'  }}</div>
             </template>
           </el-table-column>
           <el-table-column
             prop="signInTime"
             label="签到时间"
-            width="150"
+            width="180"
           >
           </el-table-column>
           <el-table-column
             prop="signOutTime"
             label="签退时间"
-            width="150"
+            width="180"
           >
           </el-table-column>
           <el-table-column
@@ -87,8 +96,24 @@ import statistics from './statistics.vue'
 export default {
   name: 'faceList',
   mixins: [],
+  props: {
+    trainMeetId: {
+      type: Number,
+      default: 0,
+    },
+  },
   data () {
     return {
+      options: [{
+        label: '船东',
+        value: 0,
+      },{
+        label: '职务船员',
+        value: 1,
+      },{
+        label: '渔船监护人',
+        value: 2,
+      }],
       page: {
         size: 10,
         current: 1,
@@ -109,7 +134,7 @@ export default {
       this.getData()
     },
     getData () {
-      listPeople({...this.params,...this.page}).then(res=>{
+      listPeople({trainMeetId: this.trainMeetId,...this.params,...this.page}).then(res=>{
         this.faceList = res.data.data.records
         this.page = {
           size: res.data.data.size,
