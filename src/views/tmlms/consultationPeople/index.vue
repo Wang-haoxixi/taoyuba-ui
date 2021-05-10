@@ -2,12 +2,12 @@
   <div class="contract-box">
     <basic-container v-if="detailType === 0 ">
       <page-header title="培训人员管理" v-if="!trainMeetId"></page-header>
-      <div class="shipowner_title" v-if="!trainMeetId">
-        <el-button @click="getData" type="default" size="small">刷新</el-button>
-        <el-button @click="handleStatistics" type="default" size="small">统计</el-button>
-        <el-button @click="getInformation" type="default" size="small">导出信息</el-button>
+      <div class="shipowner_title">
+        <el-button @click="getData" type="default" size="small" v-if="!trainMeetId">刷新</el-button>
+        <el-button @click="handleStatistics" type="default" size="small" v-if="!trainMeetId">统计</el-button>
+        <el-button @click="getInformation" type="default" size="small" v-if="!trainMeetId">导出信息</el-button>
         <div style="float:right">
-          <span style="width:120px"><el-input v-model.trim="params.meetName" placeholder="会议标题" size="small" clearable></el-input></span>
+          <span style="width:120px"><el-input v-model.trim="params.meetName" placeholder="会议标题" size="small" clearable v-if="!trainMeetId"></el-input></span>
           <span style="width:120px"><el-input v-model.trim="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
           <span style="width:120px">
               <el-select v-model="params.userType" filterable placeholder="请选择" size="small">
@@ -134,7 +134,7 @@ export default {
       this.getData()
     },
     getData () {
-      listPeople({trainMeetId: this.trainMeetId,...this.params,...this.page}).then(res=>{
+      listPeople({trainMeetId: this.trainMeetId == 0 ? '' : this.trainMeetId,...this.params,...this.page}).then(res=>{
         this.faceList = res.data.data.records
         this.page = {
           size: res.data.data.size,
