@@ -24,6 +24,21 @@
           </el-table-column>
           <el-table-column
             prop="realName"
+            label="渔船"
+          >
+          <template slot-scope="scope">
+            <div>
+                <el-tag
+                  v-for="(tag,index) in scope.row.ships"
+                  :key="index"
+                  style="margin:5px">
+                  {{tag.shipName}}
+                </el-tag> 
+            </div>
+          </template>
+          </el-table-column>
+          <el-table-column
+            prop="realName"
             label="姓名"
           >
           </el-table-column>
@@ -51,6 +66,8 @@
               </el-button>
               <el-button size="mini" @click="handleDel(scope.row.faceToken)">删除
               </el-button>
+              <el-button size="mini" @click="handleSelect(scope.row)">关联渔船
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -66,11 +83,24 @@
       </div>
     </basic-container>
     <detail v-else ref="detail" @back="detailType = true"></detail>
+    <el-dialog
+      title="渔船信息"
+      :visible.sync="dialogVisible"
+      width="70%"
+      :destroy-on-close="true"
+      >
+      <selects ref="selectIndex"></selects>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="sureSelect">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { getList,delList } from '@/api/tmlms/faceList'
+import { getList,delList,selectShip } from '@/api/tmlms/faceList'
 import detail from './detail.vue'
+import selects from './selects.vue'
 export default {
   name: 'faceList',
   mixins: [],
@@ -84,6 +114,8 @@ export default {
       params: {},
       detailType: true,
       faceList: [],
+      dialogVisible: false,
+      id: 0,
     }
   },
   created () {
@@ -128,9 +160,26 @@ export default {
         this.$refs.detail.getDetail(id)
       })
     },
+    // 关联渔船
+    handleSelect (row) {
+      this.dialogVisible = true
+      this.$nextTick(()=>{
+        this.$refs.selectIndex.multipleSelection = JSON.parse(JSON.stringify(row.ships))
+        this.id = row.id
+      })
+    },
+    sureSelect () {
+      selectShip({ id: this.id,ships: this.$refs.selectIndex.multipleSelection }).then(res=>{
+        console.log(res)
+        this.$message.success('关联成功!')
+        this.getData()
+        this.dialogVisible = false
+      })
+    },
   },
   components: {
     detail,
+    selects,
   },
   filters: {
   },

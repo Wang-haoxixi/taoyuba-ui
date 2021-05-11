@@ -30,3 +30,11 @@ export function listPeople (query) {
         params: query,
     })
 }
+
+export function selectShip (data) {
+    return request({
+        url: '/admin/gather/linkShip',
+        method: 'post',
+        data: data,
+    })
+}

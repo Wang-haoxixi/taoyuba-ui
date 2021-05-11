@@ -214,7 +214,7 @@ export default {
         type = 1
       }
       if( (Sign === 2 && !row.meetEndSignTime) ||(Sign === 1 && !row.meetStartSignTime)){
-        this.$confirm(`请确认本次会议已经${Sign === 2 ? '结束' : '开始'}!, 是否确认?`, '提示', {
+        this.$confirm(`${Sign === 2 ? '请确认是否结束本次会议' : '请确认是否开始本次会议'}!`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
