@@ -25,6 +25,7 @@
           <el-table-column
             prop="realName"
             label="渔船"
+            width="200"
           >
           <template slot-scope="scope">
             <div>

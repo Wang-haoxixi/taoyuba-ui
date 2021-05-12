@@ -7,6 +7,7 @@
           <!-- roles.indexOf(112) !== -1" -->
           <iep-button @click="handleAdd" type="primary" v-if="relation_ship_add && roles.indexOf(112) !== -1">新增</iep-button>
           <iep-button @click="handleStatistics" type="default" v-if="relation_ship_statistics && (roles.indexOf(111) !== -1)">联系记录统计</iep-button>
+          <iep-button @click="lookNoCall" type="default">查看未联系渔船</iep-button>
           <!-- <iep-button @click="handleExport" v-if="relation_ship_export" :loading="exportBtnLoading" type="default" plain>导出</iep-button> -->
         </template>
         <template slot="right">
@@ -206,6 +207,12 @@
           </el-table-column>
       </el-table>
     </el-dialog>
+    <el-dialog
+      title="未联系渔船"
+      :visible.sync="dialogVisibleNo"
+      width="80%">
+      <detail ></detail>
+    </el-dialog>
 </basic-container>
 </template>
 <script>
@@ -215,10 +222,12 @@ import { getVillageByOrg,getCountRecordWithShip } from '@/api/tmlms/bvillage/ind
 import dialogStatistics from './dialogStatistics'
 import formContainer from './form'
 import map from './map'
+import detail from './detail'
 export default {
   components: {
     dialogStatistics,
     formContainer,
+    detail,
   },
   data () {
     return {
@@ -252,6 +261,7 @@ export default {
       tableLoading: false,
       detailList: [],
       dialogVisibleDetail: false,
+      dialogVisibleNo: false,
     }
   },
   computed: {
@@ -271,6 +281,9 @@ export default {
     this.relation_ship_statistics = this.permissions['relation_ship_statistics']
   },
   methods: {
+    lookNoCall () {
+      this.dialogVisibleNo = true
+    },
     getVillageLabel (value) {
       let maps = this.orgSearchList || []
       let result = ''

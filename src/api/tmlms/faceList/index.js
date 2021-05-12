@@ -38,3 +38,11 @@ export function selectShip (data) {
         data: data,
     })
 }
+
+export function tybpage (query) {
+    return request({
+        url: '/tmlms/tyb_location_message/page',
+        method: 'get',
+        params: query,
+    })
+}
