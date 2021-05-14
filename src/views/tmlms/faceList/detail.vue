@@ -36,12 +36,21 @@
                 <el-input v-model="form.nation" :disabled="true"></el-input>
               </el-form-item>
           </el-col>
-          <el-col :span="24">
+          <el-col :span="12">
               <el-form-item label="头像：" >
                 <el-image
                   style="width: 100px; height: 100px;margin-left: 30px"
                   :src="form.image" 
                   :preview-src-list="[form.image]">
+                </el-image>
+              </el-form-item>
+          </el-col>
+          <el-col :span="12">
+              <el-form-item label="身份证照片：" >
+                <el-image
+                  style="width: 100px; height: 100px;margin-left: 30px"
+                  :src="form.facePhoto" 
+                  :preview-src-list="[form.facePhoto]">
                 </el-image>
               </el-form-item>
           </el-col>

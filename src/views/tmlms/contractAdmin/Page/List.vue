@@ -1,5 +1,5 @@
 <template>
-  <div class="contract-box">
+  <div class="contract-box aa">
     <basic-container>
       <page-header title="网签合同"></page-header>
       <!-- <div class="tips" v-if="roles.indexOf(109) !== -1 || roles.indexOf(112) !== -1">
@@ -1202,7 +1202,7 @@ export default {
    width: 360px;
     height: 180px;
   }
-  .el-upload-list__item-name {
+  .aa .el-upload-list__item-name {
      display: none;
   }
   .outer-grey {

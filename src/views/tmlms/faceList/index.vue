@@ -65,7 +65,7 @@
             <template slot-scope="scope">
               <el-button size="mini" @click="handleView(scope.row.id)">查看
               </el-button>
-              <el-button size="mini" @click="handleDel(scope.row.faceToken)">删除
+              <el-button size="mini" @click="handleDel(scope.row.faceToken)" v-if="roleId.indexOf(1) !== -1 || roleId.indexOf(111) !== -1">删除
               </el-button>
               <el-button size="mini" @click="handleSelect(scope.row)">关联渔船
               </el-button>
@@ -117,10 +117,13 @@ export default {
       faceList: [],
       dialogVisible: false,
       id: 0,
+      roleId: [],
     }
   },
   created () {
     this.getData()
+    this.roleId = JSON.parse(localStorage.getItem('user')).roles
+    console.log(this.roleId)
   },
   methods: {
         // 分页

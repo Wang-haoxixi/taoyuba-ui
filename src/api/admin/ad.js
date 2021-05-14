@@ -69,3 +69,49 @@ export function removePicPage (id) {
     method: 'post',
   })
 }
+
+export function getColumnPage (params) {
+  return request({
+    url: '/tmlms/e_ac_column/page',
+    method: 'get',
+    params: params,
+  })
+}
+
+export function addColumn (data) {
+  return request({
+    url: '/tmlms/e_ac_column/saveOrUpdate',
+    method: 'post',
+    data: data,
+  })
+}
+
+export function detail (id) {
+  return request({
+    url: `/tmlms/e_ac_column/${id}`,
+    method: 'get',
+  })
+}
+
+export function getPage (params) {
+  return request({
+    url: '/tmlms/e_ac/page',
+    method: 'get',
+    params: params,
+  })
+}
+
+export function getDetail (id) {
+  return request({
+    url: `/tmlms/e_ac/${id}`,
+    method: 'get',
+  })
+}
+
+export function addColumnNew (data) {
+  return request({
+    url: '/tmlms/e_ac/saveOrUpdate',
+    method: 'post',
+    data: data,
+  })
+}
