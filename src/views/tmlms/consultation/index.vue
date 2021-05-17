@@ -8,7 +8,7 @@
         <div style="float:right">
           <span style="width:120px"><el-input v-model.trim="params.meetName" placeholder="会议标题" size="small" clearable></el-input></span>
           <span style="width:120px">
-              <el-select v-model="params.cooperateIds" filterable placeholder="请选择" size="small">
+              <el-select v-model="params.cooperateIds" filterable placeholder="请选择" size="small" clearable>
                 <el-option
                   v-for="item in options"
                   :key="item.userId"

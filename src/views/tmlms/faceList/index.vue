@@ -4,6 +4,27 @@
       <div class="shipowner_title">
         <el-button @click="getData" type="default" size="small">刷新</el-button>
         <div style="float:right">
+          <span style="width:120px" v-if="roleId.indexOf(1) !== -1 || roleId.indexOf(111) !== -1">
+            <el-select v-model="params.villageId" filterable placeholder="请选择基层" size="small" clearable>
+              <el-option
+                v-for="item in options"
+                :key="item.userId"
+                :label="item.villageName"
+                :value="item.userId">
+              </el-option>
+            </el-select>
+          </span>
+          <span style="width:120px"><el-input v-model.trim="params.idcard" placeholder="身份证" size="small" clearable></el-input></span>
+          <span style="width:120px">
+            <el-select v-model="params.gatherType" filterable placeholder="请选择类型" size="small" clearable>
+              <el-option
+                v-for="item in optionsType"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </span>
           <span style="width:120px"><el-input v-model.trim="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
           <el-button size="small"  @click="getData">搜索</el-button>
         </div>
@@ -61,6 +82,11 @@
             <div>{{ scope.row.gatherType === 0? '船东' : scope.row.gatherType === 1?'职务船员':'家属' }}</div>
           </template>
           </el-table-column>
+          <el-table-column
+            prop="villageName"
+            label="合作社"
+          >
+          </el-table-column>
           <el-table-column label="操作" width="300" fixed="right">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleView(scope.row.id)">查看
@@ -100,6 +126,7 @@
 </template>
 <script>
 import { getList,delList,selectShip } from '@/api/tmlms/faceList'
+import { getVillage } from '@/api/tmlms/bvillage/index'
 import detail from './detail.vue'
 import selects from './selects.vue'
 export default {
@@ -118,12 +145,30 @@ export default {
       dialogVisible: false,
       id: 0,
       roleId: [],
+      options:[],
+      optionsType: [
+        {
+          value: 0,
+          label: '船东',
+        },
+        {
+          value: 1,
+          label: '职务船员',
+        },
+        {
+          value: 2,
+          label: '家属',
+        },
+      ],
     }
   },
   created () {
     this.getData()
     this.roleId = JSON.parse(localStorage.getItem('user')).roles
     console.log(this.roleId)
+    getVillage({size: 500,status: 2}).then(res=>{
+      this.options = res.data.data.records
+    })
   },
   methods: {
         // 分页

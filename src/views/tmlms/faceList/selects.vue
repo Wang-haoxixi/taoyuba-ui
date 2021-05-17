@@ -8,7 +8,7 @@
             :key="tag.shipName"
             style="margin:0 5px;width: auto"
             @close="handleClose(index)"
-            closable>
+            :closable="roleId.indexOf(112)===-1 || userId === tag.villageId ? true : false">
             {{tag.shipName}}
           </el-tag> 
         </div>
@@ -91,6 +91,8 @@ export default {
       faceList: [],
       IDArr: [],
       multipleSelection: [],
+      userId: '',
+      roleId: [],
     }
   },
   created () {
@@ -103,7 +105,9 @@ export default {
       this.getData()
     },
     getData () {
-      getShipList({...this.params,...this.page}).then(res=>{
+      this.userId = JSON.parse(localStorage.getItem('user')).sysUser.userId
+      this.roleId = JSON.parse(localStorage.getItem('user')).roles
+      getShipList({...this.params,...this.page,...{ userId: this.roleId.indexOf(112)!==-1?this.userId:'' }}).then(res=>{
         this.faceList = res.data.data.records
         this.page = {
           size: res.data.data.size,

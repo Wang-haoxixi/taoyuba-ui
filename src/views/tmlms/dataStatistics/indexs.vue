@@ -45,23 +45,17 @@
       </el-col>
       <el-col :span="10" class="all-crew">
         <div class="chart-bg panel font-height boss-bg">
-          <el-row>
-            <el-col :span="6" class="font-yellow">{{ data[2]['渔船总数'] }}</el-col>
-            <el-col :span="6" class="font-yellow">{{ data[2]['船员总数'] }}</el-col>
-            <el-col :span="6" class="font-yellow">{{ data[2]['基层总数'] }}</el-col>
-            <el-col :span="6" class="font-yellow">{{ data[2]['渔港总数'] }}</el-col>
-          </el-row>
-          <el-row class="el-row-text">
+          <el-row class="el-row-text big">
             <el-col :span="6" class="font-text">渔船总数</el-col>
             <el-col :span="6" class="font-text">船员总数</el-col>
             <el-col :span="6" class="font-text">基层总数</el-col>
             <el-col :span="6" class="font-text">渔港总数</el-col>
           </el-row>
-          <el-row>
-            <el-col :span="6" class="font-yellow">{{ data[2]['本地渔船'] }}</el-col>
-            <el-col :span="6" class="font-yellow">{{ data[2]['持证船员'] }}</el-col>
-            <el-col :span="6" class="font-yellow">{{ data[2]['在港渔船'] }}</el-col>
-            <el-col :span="6" class="font-yellow">{{ data[2]['额定船员'] }}</el-col>
+          <el-row class="big">
+            <el-col :span="6" class="font-yellow">{{ data[2]['渔船总数'] }}</el-col>
+            <el-col :span="6" class="font-yellow">{{ data[2]['船员总数'] }}</el-col>
+            <el-col :span="6" class="font-yellow">{{ data[2]['基层总数'] }}</el-col>
+            <el-col :span="6" class="font-yellow">{{ data[2]['渔港总数'] }}</el-col>
           </el-row>
           <el-row>
             <el-col :span="6" class="font-text">本地渔船</el-col>
@@ -70,16 +64,22 @@
             <el-col :span="6" class="font-text">额定船员</el-col>
           </el-row>
           <el-row>
-            <el-col :span="6" class="font-yellow">{{ data[2]['外地渔船'] }}</el-col>
-            <el-col :span="6" class="font-yellow">{{ data[2]['普通船员'] }}</el-col>
-            <el-col :span="6" class="font-yellow">{{ data[2]['出海渔船'] }}</el-col>
-            <el-col :span="6" class="font-yellow">{{ data[2]['实配船员'] }}</el-col>
+            <el-col :span="6" class="font-yellow">{{ data[2]['本地渔船'] }}</el-col>
+            <el-col :span="6" class="font-yellow">{{ data[2]['持证船员'] }}</el-col>
+            <el-col :span="6" class="font-yellow">{{ data[2]['在港渔船'] }}</el-col>
+            <el-col :span="6" class="font-yellow">{{ data[2]['额定船员'] }}</el-col>
           </el-row>
           <el-row>
             <el-col :span="6" class="font-text">外地渔船</el-col>
             <el-col :span="6" class="font-text">普通船员</el-col>
             <el-col :span="6" class="font-text">出海渔船</el-col>
             <el-col :span="6" class="font-text">实配船员</el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="6" class="font-yellow">{{ data[2]['外地渔船'] }}</el-col>
+            <el-col :span="6" class="font-yellow">{{ data[2]['普通船员'] }}</el-col>
+            <el-col :span="6" class="font-yellow">{{ data[2]['出海渔船'] }}</el-col>
+            <el-col :span="6" class="font-yellow">{{ data[2]['实配船员'] }}</el-col>
           </el-row>
           <div class="panel-footer"></div>
         </div>
@@ -98,70 +98,79 @@
           <div>
             <h2>船员培训情况</h2>
           </div>
-          <div style="border-bottom: 1px solid #78cde9">
+          <div style="border-bottom: 1px dashed #78cde9">
             <div id="CrewTrainingB" style="width: 100%;box-sizing: border-box" class="height-230"></div>
             <div class="panel-footer"></div>
           </div>
-          <div class="flex-356">
-            <div id="CrewTrainingZ" style="width: 100%;box-sizing: border-box" class="height-230"></div>
+          <div>
+            <h2>培训人员分类</h2>
+          </div>
+          <div class="flex-285">
+            <div id="CrewTrainingZ" style="width: 100%;box-sizing: border-box;height: 285px" class="height-230"></div>
             <div class="panel-footer"></div>
           </div>
         </div>
       </el-col>
-      <el-col :span="11">
+      <el-col :span="17">
         <div class="chart-bg panel height-500">
-          <div>
-            <h2>船员基本情况统计</h2>
-          </div>
-          <div>
-            <div class="crew-information height-230" v-if="data[6]">
-              <div><span class="crew-information-title">合同成立：</span><el-progress :format="()=>{return data[6][0].number}" :color="'#00feff'" :text-inside="true" :stroke-width="26" :percentage="(data[6][0].number/getMax()) * 100"></el-progress></div>
-              <div><span class="crew-information-title">未通过审核：</span><el-progress :format="()=>{return data[6][1].number}" :color="'#00feff'" :text-inside="true" :stroke-width="26" :percentage="(data[6][1].number/getMax()) * 100"></el-progress></div>
-              <div><span class="crew-information-title">合同纠纷：</span><el-progress :format="()=>{return data[6][2].number}" :color="'#00feff'" :text-inside="true" :stroke-width="26" :percentage="(data[6][2].number/getMax()) * 100"></el-progress></div>
-              <div><span class="crew-information-title">合同解除：</span><el-progress :format="()=>{return data[6][3].number}" :color="'#00feff'" :text-inside="true" :stroke-width="26" :percentage="(data[6][3].number/getMax()) * 100"></el-progress></div>
-              <div><span class="crew-information-title">合同过期：</span><el-progress :format="()=>{return data[6][4].number}" :color="'#00feff'" :text-inside="true" :stroke-width="26" :percentage="(data[6][4].number/getMax()) * 100"></el-progress></div>
-              <div><span class="crew-information-title">未签纸质合同：</span><el-progress :format="()=>{return data[6][5].number}" :color="'#00feff'" :text-inside="true" :stroke-width="26" :percentage="(data[6][5].number/getMax()) * 100"></el-progress></div>
-              <div><span class="crew-information-title">已上船登记船员：</span><el-progress :format="()=>{return data[6][6]['crewNum'][1]}" :color="'#00feff'" :text-inside="true" :stroke-width="26" :percentage="(data[6][6]['crewNum'][1]/getMax()) * 100"></el-progress></div>
-              <div><span class="crew-information-title">已签劳务协议船员：</span><el-progress :format="()=>{return all(data[6][6]['crewNum'])}" :color="'#00feff'" :text-inside="true" :stroke-width="26" :percentage="(all(data[6][6]['crewNum'])/getMax()) * 100"></el-progress></div>
-            </div>
-            <div class="panel-footer"></div>
-          </div>
-          <div class="crew-one">
-            <div class="crew-one-children" style="border-right: 1px solid #78cde9">
+          <el-row>
+          <el-col :span="16">
+            <div class="" style="border-right: 1px dashed #78cde9">
               <div>
-                <h2>船东船只持有统计</h2>
+                <h2>船员基本情况统计</h2>
               </div>
-              <div id="VesselHolding" style="width: 100%;box-sizing: border-box" class="height-282"></div>
-              <div class="panel-footer"></div>
-            </div>
-            <div class="crew-one-children">
               <div>
-                <h2>职务船员数量统计</h2>
+                <div class="crew-information height-230" v-if="data[6]">
+                  <div><span class="crew-information-title">合同成立：</span><el-progress :format="()=>{return data[6][0].number}" :color="'#00feff'"  :stroke-width="26" :percentage="(data[6][0].number/getMax()) * 100"></el-progress></div>
+                  <div><span class="crew-information-title">未通过审核：</span><el-progress :format="()=>{return data[6][1].number}" :color="'#00feff'" :stroke-width="26" :percentage="(data[6][1].number/getMax()) * 100"></el-progress></div>
+                  <div><span class="crew-information-title">合同纠纷：</span><el-progress :format="()=>{return data[6][2].number}" :color="'#00feff'" :stroke-width="26" :percentage="(data[6][2].number/getMax()) * 100"></el-progress></div>
+                  <div><span class="crew-information-title">合同解除：</span><el-progress :format="()=>{return data[6][3].number}" :color="'#00feff'"  :stroke-width="26" :percentage="(data[6][3].number/getMax()) * 100"></el-progress></div>
+                  <div><span class="crew-information-title">合同过期：</span><el-progress :format="()=>{return data[6][4].number}" :color="'#00feff'"  :stroke-width="26" :percentage="(data[6][4].number/getMax()) * 100"></el-progress></div>
+                  <div><span class="crew-information-title">未签纸质合同：</span><el-progress :format="()=>{return data[6][5].number}" :color="'#00feff'"  :stroke-width="26" :percentage="(data[6][5].number/getMax()) * 100"></el-progress></div>
+                  <div><span class="crew-information-title">已上船登记船员：</span><el-progress :format="()=>{return data[6][6]['crewNum'][1]}" :color="'#00feff'"  :stroke-width="26" :percentage="(data[6][6]['crewNum'][1]/getMax()) * 100"></el-progress></div>
+                  <div><span class="crew-information-title">已签劳务协议船员：</span><el-progress :format="()=>{return all(data[6][6]['crewNum'])}" :color="'#00feff'"  :stroke-width="26" :percentage="(all(data[6][6]['crewNum'])/getMax()) * 100"></el-progress></div>
+                </div>
+                <div class="panel-footer"></div>
               </div>
-              <div id="crewNum" style="width: 100%;box-sizing: border-box" class="height-282"></div>
-              <div class="panel-footer"></div>
+              <div class="crew-one">
+                <div class="crew-one-children" style="border-right: 1px dashed #78cde9">
+                  <div>
+                    <h2>船东船只持有统计</h2>
+                  </div>
+                  <div id="VesselHolding" style="width: 100%;box-sizing: border-box" class="height-282"></div>
+                  <div class="panel-footer"></div>
+                </div>
+                <div class="crew-one-children">
+                  <div>
+                    <h2>职务船员数量统计</h2>
+                  </div>
+                  <div id="crewNum" style="width: 100%;box-sizing: border-box" class="height-282"></div>
+                  <div class="panel-footer"></div>
+                </div>
+              </div>
+            </div>
+          </el-col>
+          <el-col :span="8">
+          <div class="height-500" >
+            <div class="">
+              <div>
+                <h2>船员年龄分布统计</h2>
+              </div>
+              <div style="border-bottom: 1px dashed #78cde9">
+                <div id="crewOld" style="width: 100%;box-sizing: border-box" class="height-230"></div>
+                <div class="panel-footer"></div>
+              </div>
+              <div>
+                <h2>船员籍贯分布统计</h2>
+              </div>
+              <div>
+                <div id="crewNative" style="width: 100%;" class="height-282"></div>
+                <div class="panel-footer"></div>
+              </div>
             </div>
           </div>
-        </div>
-      </el-col>
-      <el-col :span="6">
-        <div class="chart-bg panel height-500" >
-          <div class="chart-bg panel height-500">
-            <div>
-              <h2>船员年龄分布统计</h2>
-            </div>
-            <div style="border-bottom: 1px solid #78cde9">
-              <div id="crewOld" style="width: 100%;box-sizing: border-box" class="height-230"></div>
-              <div class="panel-footer"></div>
-            </div>
-            <div>
-              <h2>船员籍贯分布统计</h2>
-            </div>
-            <div>
-              <div id="crewNative" style="width: 100%;" class="height-282"></div>
-              <div class="panel-footer"></div>
-            </div>
-          </div>
+        </el-col>
+        </el-row>
         </div>
       </el-col>
       <el-col :span="7">
@@ -412,8 +421,22 @@ export default {
                },
           },
           series: [{
-              data: [200, 200, 150],
-              itemStyle: {
+              data: [{
+                value: 100,
+                itemStyle: {
+                  normal: {//写上normal属性，否则不起作用；
+                      color:new this.$echarts.graphic.LinearGradient(
+                          0, 0, 0, 1,//从上往下渐变
+                          [
+                              {offset: 0, color: 'rgba(30, 172, 88, 1)'},
+                              {offset: 1, color: 'rgba(30, 172, 88, 0.2)'}
+                          ]
+                      )
+                  }
+                }
+              },{
+                value: 200,
+                itemStyle: {
                   normal: {//写上normal属性，否则不起作用；
                       color:new this.$echarts.graphic.LinearGradient(
                           0, 0, 0, 1,//从上往下渐变
@@ -423,9 +446,23 @@ export default {
                           ]
                       )
                   }
-              },
+                }
+              },{
+                value: 150,
+                itemStyle: {
+                  normal: {//写上normal属性，否则不起作用；
+                      color:new this.$echarts.graphic.LinearGradient(
+                          0, 0, 0, 1,//从上往下渐变
+                          [
+                              {offset: 0, color: 'rgba(251, 8, 6, 1)'},
+                              {offset: 1, color: 'rgba(251, 8, 6, 0.2)'}
+                          ]
+                      )
+                  }
+                }
+              }],
               type: 'bar',
-              barWidth : 30,
+              barWidth : 70,
               showBackground: true,
               backgroundStyle: {
                   color: 'rgba(180, 180, 180, 0.2)'
@@ -1839,7 +1876,7 @@ export default {
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-      border-bottom: 1px solid #78cde9;
+      border-bottom: 1px dashed #78cde9;
       .crew-information-title {
         display: inline-block;
         width: 130px;
@@ -1908,16 +1945,39 @@ export default {
     }
     .font-yellow{
       height:30px;
-      font-size: 24px;
+      font-size: 18px;
       color: #ffeb7b;
-      padding-top:10px;
       font-family: electronicFont;
       font-weight: bold;
+      text-align: left;
+      padding-left: 47px;
     }
     .font-text{
-      height:30px;
-      font-size:14px;
-      // line-height: 30px;
+      font-size:19px;
+      padding-left: 47px;
+      text-align: left;
+    }
+    .big {
+      .font-yellow {
+        height:30px;
+        font-size: 23px;
+        color: #ffeb7b;
+        font-family: electronicFont;
+        font-weight: bold;
+        text-align: left;
+        padding-left: 47px;
+      }
+      .font-text {
+        font-size:28px;
+        text-align: left;
+        padding-left: 47px;
+      }
+    }
+    ::v-deep .el-progress-bar {
+      width: 90%;
+    }
+    ::v-deep .el-progress-bar__outer{
+      border: 1px solid #00ffff;
     }
   }
   .panel::before {
@@ -1927,8 +1987,8 @@ export default {
     content: "";
     width: 10px;
     height: 10px;
-    border-top: 2px solid #02a6b5;
-    border-left: 2px solid #02a6b5;
+    border-top: 2px solid #78cde9;
+    border-left: 2px solid #78cde9;
     border-radius: 20%;
 }
 .panel .panel-footer::before {
@@ -1938,8 +1998,8 @@ export default {
     content: "";
     width: 10px;
     height: 10px;
-    border-bottom: 2px solid #02a6b5;
-    border-left: 2px solid #02a6b5;
+    border-bottom: 2px solid #78cde9;
+    border-left: 2px solid #78cde9;
     border-radius: 20%;
 }
 .panel::after {
@@ -1949,8 +2009,8 @@ export default {
     content: "";
     width: 10px;
     height: 10px;
-    border-top: 2px solid #02a6b5;
-    border-right: 2px solid #02a6b5;
+    border-top: 2px solid #78cde9;
+    border-right: 2px solid #78cde9;
     border-radius: 20%;
 }
 .panel .panel-footer::after {
@@ -1960,8 +2020,8 @@ export default {
     content: "";
     width: 10px;
     height: 10px;
-    border-bottom: 2px solid #02a6b5;
-    border-right: 2px solid #02a6b5;
+    border-bottom: 2px solid #78cde9;
+    border-right: 2px solid #78cde9;
     border-radius: 20%;
 }
  .el-row {
@@ -2017,8 +2077,8 @@ export default {
   ::v-deep .el-progress-bar__outer{
     background-color: rgba(255,255,255,0);
   }
-  ::v-deep .el-progress-bar__innerText {
-    color: #0018a4;
+  ::v-deep .el-progress__text {
+    color: white;
   }
   .height-230 {
     height: 240px;
@@ -2037,11 +2097,11 @@ export default {
   .height-454 {
     height: 454px;
   }
-  .flex-356 {
+  .flex-285 {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 356px;
+    height: 285px;
   }
   .flex-610 {
     display: flex;
@@ -2051,14 +2111,14 @@ export default {
   }
   .width-33 {
     width: 33.3333%;
-    border: 1px solid #78cde9;
+    border: 1px dashed #78cde9;
     border-top: none;
     padding: 3px;
     box-sizing: border-box;
   }
   .width-50 {
     width: 50%;
-    border: 1px solid #78cde9;
+    border: 1px dashed #78cde9;
     border-top: none;
     padding: 3px;
     box-sizing: border-box;
@@ -2069,6 +2129,6 @@ export default {
     height: 10px;
     display: block;
     margin: 0 auto;
-    border-bottom: 1px solid #78cde9;
+    border-bottom: 1px dashed #78cde9;
   }
 </style>
