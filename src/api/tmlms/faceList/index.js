@@ -46,3 +46,11 @@ export function tybpage (query) {
         params: query,
     })
 }
+
+export function editFace (data) {
+    return request({
+        url: '/admin/gather/update',
+        method: 'post',
+        data: data,
+    })
+}

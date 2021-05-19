@@ -165,7 +165,16 @@ export default {
       }
     },
     getInformation () {
-      exportExcelPeople().then(res=>{
+      if( !this.params.userType && this.params.userType !== 0 ){
+        this.$message.warning('请先选择导出人员类型！')
+        return false
+      }
+      if(this.params.userType === 2){
+        this.$message.warning('无法导出渔船监护人信息！')
+        return false
+      }
+      let data = this.params.userType === 0 ? '船东信息' : '职务船员信息'
+      exportExcelPeople(this.params.userType,data).then(res=>{
         console.log(res)
       })
     },

@@ -156,7 +156,12 @@ export default {
         if (!isLt2M) {
             this.$message.error('上传大小不能超过 10MB!')
         }
-        return isLt2M
+        var testmsg=file.name.substring(file.name.lastIndexOf('.')+1) 
+        const extension = testmsg === 'txt' 
+        if (extension) {
+            this.$message.error('无法上传txt文件!')
+        }
+        return isLt2M && !extension
     },
   },
   computed: {

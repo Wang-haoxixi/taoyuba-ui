@@ -121,14 +121,62 @@
               </div>
               <div>
                 <div class="crew-information height-230" v-if="data[6]">
-                  <div><span class="crew-information-title">合同成立：</span><el-progress :format="()=>{return data[6][0].number}" :color="'#00feff'"  :stroke-width="26" :percentage="(data[6][0].number/getMax()) * 100"></el-progress></div>
-                  <div><span class="crew-information-title">未通过审核：</span><el-progress :format="()=>{return data[6][1].number}" :color="'#00feff'" :stroke-width="26" :percentage="(data[6][1].number/getMax()) * 100"></el-progress></div>
-                  <div><span class="crew-information-title">合同纠纷：</span><el-progress :format="()=>{return data[6][2].number}" :color="'#00feff'" :stroke-width="26" :percentage="(data[6][2].number/getMax()) * 100"></el-progress></div>
-                  <div><span class="crew-information-title">合同解除：</span><el-progress :format="()=>{return data[6][3].number}" :color="'#00feff'"  :stroke-width="26" :percentage="(data[6][3].number/getMax()) * 100"></el-progress></div>
-                  <div><span class="crew-information-title">合同过期：</span><el-progress :format="()=>{return data[6][4].number}" :color="'#00feff'"  :stroke-width="26" :percentage="(data[6][4].number/getMax()) * 100"></el-progress></div>
-                  <div><span class="crew-information-title">未签纸质合同：</span><el-progress :format="()=>{return data[6][5].number}" :color="'#00feff'"  :stroke-width="26" :percentage="(data[6][5].number/getMax()) * 100"></el-progress></div>
-                  <div><span class="crew-information-title">已上船登记船员：</span><el-progress :format="()=>{return data[6][6]['crewNum'][1]}" :color="'#00feff'"  :stroke-width="26" :percentage="(data[6][6]['crewNum'][1]/getMax()) * 100"></el-progress></div>
-                  <div><span class="crew-information-title">已签劳务协议船员：</span><el-progress :format="()=>{return all(data[6][6]['crewNum'])}" :color="'#00feff'"  :stroke-width="26" :percentage="(all(data[6][6]['crewNum'])/getMax()) * 100"></el-progress></div>
+                  <div class="crew-div">
+                    <span class="crew-information-title">合同成立：</span>
+                    <div style="position: relative;width: 59%;display: inline-block;">
+                      <div style="position: absolute;right: 5px">{{ data[6][0].number || '0' }}</div>
+                      <el-progress :color="'#00feff'" :stroke-width="26" :percentage="(data[6][0].number/getMax()) * 100"></el-progress>
+                    </div>
+                  </div>
+                  <div class="crew-div">
+                    <span class="crew-information-title">未通过审核：</span>
+                    <div style="position: relative;width: 59%;display: inline-block;">
+                      <div style="position: absolute;right: 5px">{{ data[6][1].number || '0' }}</div>
+                      <el-progress :color="'#ffff80'" :stroke-width="26" :percentage="(data[6][1].number/getMax()) * 100"></el-progress>
+                    </div>
+                  </div>
+                  <div class="crew-div">
+                    <span class="crew-information-title">合同纠纷：</span>
+                    <div style="position: relative;width: 59%;display: inline-block;">
+                      <div style="position: absolute;right: 5px">{{ data[6][2].number || '0' }}</div>
+                      <el-progress :format="()=>{return data[6][2].number || '0'}" :color="'#00bfbf'" :stroke-width="26" :percentage="(data[6][2].number/getMax()) * 100"></el-progress>
+                    </div>
+                  </div>
+                  <div class="crew-div">
+                    <span class="crew-information-title">合同解除：</span>
+                    <div class="crew-div-re">
+                      <div class="crew-div-ab">{{ data[6][3].number || '0' }}</div>
+                      <el-progress :format="()=>{return data[6][3].number || '0'}" :color="'#ffff00'"  :stroke-width="26" :percentage="(data[6][3].number/getMax()) * 100"></el-progress>
+                    </div>
+                  </div>
+                  <div class="crew-div">
+                    <span class="crew-information-title">合同过期：</span>
+                    <div class="crew-div-re">
+                      <div class="crew-div-ab">{{ data[6][4].number || '0' }}</div>
+                      <el-progress :format="()=>{return data[6][4].number || '0'}" :color="'#008080'"  :stroke-width="26" :percentage="(data[6][4].number/getMax()) * 100"></el-progress>
+                    </div>
+                  </div>
+                  <div class="crew-div">
+                    <span class="crew-information-title">未签纸质合同：</span>
+                    <div class="crew-div-re">
+                      <div class="crew-div-ab">{{ data[6][5].number || '0' }}</div>
+                      <el-progress :format="()=>{return data[6][5].number || '0'}" :color="'#bfbf00'"  :stroke-width="26" :percentage="(data[6][5].number/getMax()) * 100"></el-progress>
+                    </div>
+                  </div>
+                  <div class="crew-div">
+                    <span class="crew-information-title">已上船登记船员：</span>
+                    <div class="crew-div-re">
+                      <div class="crew-div-ab">{{ data[6][6]['crewNum'][1] || '0' }}</div>
+                      <el-progress :format="()=>{return data[6][6]['crewNum'][1] || '0'}" :color="'#02a7f0'"  :stroke-width="26" :percentage="(data[6][6]['crewNum'][1]/getMax()) * 100"></el-progress>
+                    </div>
+                  </div>
+                  <div class="crew-div">
+                    <span class="crew-information-title">已签劳务协议船员：</span>
+                    <div class="crew-div-re">
+                      <div class="crew-div-ab">{{ all(data[6][6]['crewNum']) || '0' }}</div>
+                      <el-progress :format="()=>{return all(data[6][6]['crewNum']) || '0'}" :color="'#808000'"  :stroke-width="26" :percentage="(all(data[6][6]['crewNum'])/getMax()) * 100"></el-progress>
+                    </div>
+                  </div>
                 </div>
                 <div class="panel-footer"></div>
               </div>
@@ -173,65 +221,62 @@
         </el-row>
         </div>
       </el-col>
-      <el-col :span="7">
-        <div class="chart-bg panel height-500" >
-          <div class="chart-bg panel height-500">
-            <div>
-              <h2>渔船事故违规统计</h2>
-            </div>
-            <div class="flex-610">
-              <div id="shipAccident" style="width: 100%;box-sizing: border-box" class="height-454"></div>
-              <div class="panel-footer"></div>
-            </div>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="17">
-        <div class="chart-bg panel height-500" >
-          <div class="chart-bg panel height-500">
-            <div class="after">
-              <h2>渔船检验情况统计分析</h2>
-            </div>
-            <div class="crew-one">
-              <div class="width-33" style="border-left: none;border-top:none">
-                <h3>渔船作业分类统计</h3>
-                <div id="shipWork" style="width: 100%;box-sizing: border-box" class="height-230"></div>
-                <div class="panel-footer"></div>
-              </div>
-              <div class="width-33">
-                <h3>渔船检验项目数据统计</h3>
-                <div id="shipCheck" style="width: 100%;box-sizing: border-box" class="height-230"></div>
-                <div class="panel-footer"></div>
-              </div>
-              <div class="width-33" style="border-right: none;border-top:none">
-                <h3>隐患排查情况分析</h3>
-                <div id="troubleInvestigation" style="width: 100%;box-sizing: border-box" class="height-230"></div>
-                <div class="panel-footer"></div>
-              </div>
-              <div class="width-33" style="border-left:none;border-bottom:none">
-                <div style="width:50%;display:inline-block">
-                  <h3>船龄占比</h3>
-                  <div id="shipHign" style="width: 100%;box-sizing: border-box" class="height-230"></div>
-                  <div class="panel-footer"></div>
-                </div>
-                <div style="width:50%;display:inline-block">
-                  <h3>功率船长占比</h3>
-                  <div id="shipW" style="width: 100%;box-sizing: border-box" class="height-230"></div>
-                  <div class="panel-footer"></div>
+      <el-col :span="24">
+        <div class="chart-bg panel height-600">
+          <el-row>
+            <el-col :span="7">
+              <div >
+                <div style="border-right: 1px dashed #78cde9">
+                  <div style="border-bottom: 1px dashed #78cde9;padding-bottom: 5px;">
+                    <h3>船龄占比</h3>
+                    <div id="shipHign" style="width: 100%;box-sizing: border-box" class="height-230"></div>
+                    <div class="panel-footer"></div>
+                  </div>
+                  <div>
+                    <h3>功率船长占比</h3>
+                    <div id="shipW" style="width: 100%;box-sizing: border-box" class="height-230"></div>
+                    <div class="panel-footer"></div>
+                  </div>
                 </div>
               </div>
-              <div class="width-33" style="border-bottom:none">
-                <h3>渔船检验合格分析</h3>
-                <div id="shipPass" style="width: 100%;box-sizing: border-box" class="height-230"></div>
-                <div class="panel-footer"></div>
+            </el-col>
+            <el-col :span="17">
+              <div >
+                <div>
+                  <!-- <div class="after">
+                    <h2>渔船检验情况统计分析</h2>
+                  </div> -->
+                  <div class="crew-one">
+                    <div class="width-66" style="border-right:none;border-left:none;">
+                      <h3>渔船检验项目数据统计</h3>
+                      <div id="shipCheck" style="width: 100%;box-sizing: border-box" class="height-230"></div>
+                      <div class="panel-footer"></div>
+                    </div>
+                    <div class="width-33" style="border-right:none;">
+                      <h3>排查情况分析</h3>
+                      <div id="checkInformation" style="width: 100%;box-sizing: border-box" class="height-230"></div>
+                      <div class="panel-footer"></div>
+                    </div>
+                    <div class="width-33" style="border-left: none;border-top:none;border-bottom:none">
+                      <h3>隐患排查情况分析</h3>
+                      <div id="troubleInvestigation" style="width: 100%;box-sizing: border-box" class="height-230"></div>
+                      <div class="panel-footer"></div>
+                    </div>
+                    <div class="width-33" style="border-left: none;border-right: none;border-top:none;border-bottom:none">
+                      <h3>渔船作业分类统计</h3>
+                      <div id="shipWork" style="width: 100%;box-sizing: border-box" class="height-230"></div>
+                      <div class="panel-footer"></div>
+                    </div>
+                    <div class="width-33" style="border-bottom:none;border-right:none">
+                      <h3>渔船检验合格分析</h3>
+                      <div id="shipPass" style="width: 100%;box-sizing: border-box" class="height-230"></div>
+                      <div class="panel-footer"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="width-33" style="border-right:none;border-bottom:none">
-                <h3>排查情况分析</h3>
-                <div id="checkInformation" style="width: 100%;box-sizing: border-box" class="height-230"></div>
-                <div class="panel-footer"></div>
-              </div>
-            </div>
-          </div>
+            </el-col>
+          </el-row>
         </div>
       </el-col>
       <el-col :span="7">
@@ -240,14 +285,21 @@
             <div>
               <h2>渔船承保情况统计</h2>
             </div>
-            <div class="flex-610">
-              <div id="shipUnderwriting" style="width: 100%;box-sizing: border-box" class="height-454"></div>
+            <div class="flex-285" style="border-bottom: 1px dashed #78cde9;height: 368px">
+              <div id="shipUnderwriting" style="width: 100%;box-sizing: border-box" class="height-230"></div>
+              <div class="panel-footer"></div>
+            </div>
+            <div>
+              <h2>渔船事故违规统计</h2>
+            </div>
+            <div class="flex-285">
+              <div id="shipAccident" style="width: 100%;box-sizing: border-box" class="height-230"></div>
               <div class="panel-footer"></div>
             </div>
           </div>
         </div>
       </el-col>
-      <el-col :span="10">
+      <el-col :span="11">
         <div class="chart-bg panel height-500" >
           <div class="chart-bg panel height-500">
             <div>
@@ -280,14 +332,21 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="7">
+      <el-col :span="6">
         <div class="chart-bg panel height-500" >
           <div class="chart-bg panel height-500">
             <div>
-              <h2>渔港基层情况统计</h2>
+              <h2>渔港情况统计</h2>
             </div>
-            <div class="flex-610">
-              <div id="shipBase" style="width: 100%;box-sizing: border-box" class="height-454"></div>
+            <div class="flex-285" style="border-bottom: 1px dashed #78cde9;height: 368px">
+              <div id="comnyBase" style="width: 100%;box-sizing: border-box" class="height-230"></div>
+              <div class="panel-footer"></div>
+            </div>
+            <div>
+              <h2>基层情况统计</h2>
+            </div>
+            <div class="flex-285">
+              <div id="shipBase" style="width: 100%;box-sizing: border-box" class="height-230"></div>
               <div class="panel-footer"></div>
             </div>
           </div>
@@ -738,7 +797,7 @@ export default {
                         {value: this.data[7][1], name: '31-40',itemStyle: { color: '#a1eaa3' }},
                         {value: this.data[7][2], name: '41-50',itemStyle: { color: '#5573f5' }},
                         {value: this.data[7][3], name: '51-60',itemStyle: { color: '#85daef' }},
-                        {value: this.data[7][4], name: '60及以上',itemStyle: { color: '#85daef' }}
+                        {value: this.data[7][4], name: '60及以上',itemStyle: { color: '#bfbf00' }}
                     ]
                 }
             ]
@@ -797,7 +856,8 @@ export default {
               containLabel: true
           },
           xAxis: {
-              type: 'value',
+              type: 'category',
+              data: ['事故', '违规', '纠纷', '违法','失信','变更'],
               boundaryGap: [0, 0.01],
               // 修饰刻度标签的颜色
               axisLabel: {
@@ -805,8 +865,7 @@ export default {
               },
           },
           yAxis: {
-              type: 'category',
-              data: ['事故', '违规', '纠纷', '违法','失信','变更'],
+              type: 'value',
                             // 修饰刻度标签的颜色
               axisLabel: {
                 color: 'white',
@@ -1025,6 +1084,14 @@ export default {
           tooltip: {
               trigger: 'item'
           },
+          legend: {
+              orient: 'vertical',
+              left: 'left',
+              textStyle: {
+                  fontSize: 16,
+                  color: 'white'
+              }
+          },
           series: [
               {
                   name: '',
@@ -1044,12 +1111,12 @@ export default {
                           shadowColor: 'rgba(0, 0, 0, 0.5)'
                       }
                   },
-                  label: {
-                    normal: {
-                      show: true,
-                      position: 'inner'
-                    }
-                  }
+                  // label: {
+                  //   normal: {
+                  //     show: true,
+                  //     position: 'inner'
+                  //   }
+                  // }
               }
           ]
       }
@@ -1062,6 +1129,14 @@ export default {
             tooltip: {
                 trigger: 'item',
                 formatter: '{a} <br/>{b}: {c} ({d}%)'
+            },
+            legend: {
+              orient: 'vertical',
+              left: 'left',
+              textStyle: {
+                  fontSize: 16,
+                  color: 'white'
+              }
             },
             series: [
                 {
@@ -1259,7 +1334,8 @@ export default {
               containLabel: true
           },
           xAxis: {
-              type: 'value',
+              type: 'category',
+              data: ['2016', '2017', '2018', '2019', '2020', '2021'],
               boundaryGap: [0, 0.01],
               // 修饰刻度标签的颜色
               axisLabel: {
@@ -1267,8 +1343,7 @@ export default {
               },
           },
           yAxis: {
-              type: 'category',
-              data: ['2016', '2017', '2018', '2019', '2020', '2021'],
+              type: 'value',
               // 修饰刻度标签的颜色
               axisLabel: {
                 color: 'white',
@@ -1672,60 +1747,97 @@ export default {
     shipBase () {
       this.shipBase = this.$echarts.init(document.getElementById('shipBase'))
       let option = {
-          tooltip: {
-              trigger: 'item',
-              formatter: '{a} <br/>{b}: {c} ({d}%)'
+        xAxis: {
+          type: 'category',
+          data: ['基层合作社总数', '基层工作人员总数', '管理渔船总数'],
+          axisLabel: {
+            color: 'white',
+            interval:0,
           },
-          legend: {
-              bottom: 'bottom',
-              data: ['基层总数', '工作人员总数', '管理渔船总数', '管理船员总数', '码头总数', '渔船停靠数', '工作人员总数', '未知数据'],
-              textStyle: {
-                  fontSize: 12,
-                  color: 'white'
-              }
+          axisLine:{
+            lineStyle:{color:'white'}    // x轴坐标轴颜色
           },
-          series: [
-              {
-                  name: '统计',
-                  type: 'pie',
-                  selectedMode: 'single',
-                  radius: [0, '30%'],
-                  label: {
-                      position: 'inner',
-                      fontSize: 14,
-                  },
-                  labelLine: {
-                      show: false
-                  },
-                  data: [
-                      {value: 1548, name: '基层'},
-                      {value: 775, name: '渔港码头'},
-                  ]
-              },
-              {
-                  type: 'pie',
-                  radius: ['45%', '60%'],
-                  labelLine: {
-                      length: 30,
-                  },
-                  label: {
-                      // position: 'inner',
-                      fontSize: 14,
-                  },
-                  data: [
-                      {value: 1048, name: '基层总数'},
-                      {value: 335, name: '工作人员总数'},
-                      {value: 310, name: '管理渔船总数'},
-                      {value: 251, name: '管理船员总数'},
-                      {value: 234, name: '码头总数'},
-                      {value: 147, name: '渔船停靠数'},
-                      {value: 135, name: '工作人员总数'},
-                      {value: 102, name: '未知数据'}
-                  ]
-              }
-          ]
+        },
+        yAxis: {
+          type: 'value',
+          axisLabel: {
+            color: 'white',
+            interval:0,
+          },
+          xisLine:{
+            lineStyle:{color:'white'}    // x轴坐标轴颜色
+          },
+        },
+        series: [{
+            data: [{
+                value: 10,
+                itemStyle: {
+                    color: '#a1eaa3'
+                }
+            }, {
+                value: 130,
+                itemStyle: {
+                    color: '#5573f5'
+                }
+            }, {
+                value: 260,
+                itemStyle: {
+                    color: '#85daef'
+                }
+            }
+            ],
+            type: 'bar',
+            barWidth : 50,
+        }]
       };
       this.shipBase.setOption(option)
+    },
+    comnyBase () {
+      this.comnyBase = this.$echarts.init(document.getElementById('comnyBase'))
+      let option = {
+          xAxis: {
+              type: 'category',
+              data: ['渔港总数', '渔港管理渔船总数', '渔港工人总数'],
+              axisLine:{
+                lineStyle:{color:'white'}    // x轴坐标轴颜色
+              },
+              axisLabel: {
+                color: 'white',
+                interval:0,
+              },
+          },
+          yAxis: {
+              type: 'value',
+              axisLine:{
+                lineStyle:{color:'white'}    // x轴坐标轴颜色
+              },
+              axisLabel: {
+                color: 'white',
+                interval:0,
+              },
+          },
+          series: [{
+              data: [{
+                value: 100,
+                itemStyle: {
+                    color: '#a1eaa3'
+                }
+            }, {
+                value: 200,
+                itemStyle: {
+                    color: '#5573f5'
+                }
+            }, {
+                value: 250,
+                itemStyle: {
+                    color: '#85daef'
+                }
+            }],
+            type: 'bar',
+            barWidth : 50,
+          }]
+      };
+      this.comnyBase.setOption(option)
     },
     // 改变区域
     changeOrg (item) {
@@ -1849,6 +1961,8 @@ export default {
     this.shipRun()
     // 渔船基层
     this.shipBase()
+    // 渔船渔港
+    this.comnyBase()
     }
      /* eslint-enable */
   },
@@ -1860,8 +1974,12 @@ export default {
     overflow-y:auto;
     height: 100%;
     background-color: #06164A;
+    padding: 0 10px;
     ::v-deep .el-scrollbar__wrap {
       height: 400px;
+    }
+    &::-webkit-scrollbar {
+      width: 0;
     }
     .crew-one {
       display: flex;
@@ -1882,13 +2000,23 @@ export default {
         width: 130px;
         text-align: right;
       }
-      div {
+      .crew-div {
         display: inline-block;
         width: 50%;
         box-sizing: border-box;
         padding-right: 5px;
         color: white;
         padding: 5px 0;
+        .crew-div-re {
+          position: relative;
+          width: 59%;
+          display: inline-block;
+        }
+        .crew-div-ab {
+          position: absolute;
+          right: 5px;
+          z-index: 1;
+        }
       }
     }
     .boss-bg {
@@ -1950,11 +2078,11 @@ export default {
       font-family: electronicFont;
       font-weight: bold;
       text-align: left;
-      padding-left: 47px;
+      padding-left: 40px;
     }
     .font-text{
       font-size:19px;
-      padding-left: 47px;
+      padding-left: 40px;
       text-align: left;
     }
     .big {
@@ -1965,19 +2093,23 @@ export default {
         font-family: electronicFont;
         font-weight: bold;
         text-align: left;
-        padding-left: 47px;
+        padding-left: 40px;
       }
       .font-text {
         font-size:28px;
         text-align: left;
-        padding-left: 47px;
+        padding-left: 40px;
       }
     }
     ::v-deep .el-progress-bar {
-      width: 90%;
+      width: 100%;
+      padding-right: 0!important;
     }
     ::v-deep .el-progress-bar__outer{
       border: 1px solid #00ffff;
+    }
+    ::v-deep .el-progress__text {
+      display: none;
     }
   }
   .panel::before {
@@ -2081,15 +2213,18 @@ export default {
     color: white;
   }
   .height-230 {
-    height: 240px;
+    height: 300px;
   }
   .height-282 {
-    height: 323px;
+    height: 378px;
     display: flex;
     align-items: center;
   }
   .height-500 {
-    height: 665px!important;
+    height: 780px!important;
+  }
+  .height-600 {
+    height: 720px!important;
   }
   .height-340 {
     height: 340px;
@@ -2101,7 +2236,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 285px;
+    height: 350px;
   }
   .flex-610 {
     display: flex;
@@ -2111,6 +2246,13 @@ export default {
   }
   .width-33 {
     width: 33.3333%;
+    border: 1px dashed #78cde9;
+    border-top: none;
+    padding: 3px;
+    box-sizing: border-box;
+  }
+  .width-66 {
+    width: 66.6666%;
     border: 1px dashed #78cde9;
     border-top: none;
     padding: 3px;

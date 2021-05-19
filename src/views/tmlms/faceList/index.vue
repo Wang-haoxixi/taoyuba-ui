@@ -89,7 +89,7 @@
           </el-table-column>
           <el-table-column label="操作" width="300" fixed="right">
             <template slot-scope="scope">
-              <el-button size="mini" @click="handleView(scope.row.id)">查看
+              <el-button size="mini" @click="handleView(scope.row.id)">编辑
               </el-button>
               <el-button size="mini" @click="handleDel(scope.row.faceToken)" v-if="roleId.indexOf(1) !== -1 || roleId.indexOf(111) !== -1">删除
               </el-button>
@@ -109,7 +109,7 @@
         </el-pagination>
       </div>
     </basic-container>
-    <detail v-else ref="detail" @back="detailType = true"></detail>
+    <detail v-else ref="detail" @back="detailType = true;getData()"></detail>
     <el-dialog
       title="渔船信息"
       :visible.sync="dialogVisible"

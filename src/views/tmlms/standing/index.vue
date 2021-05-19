@@ -7,13 +7,23 @@
         <el-button @click="add" type="default" size="small">新增</el-button>
         <div style="float:right">
           <span style="width:120px" v-if="roleId.indexOf(1) !== -1 || roleId.indexOf(111) !== -1">
-              <el-select v-model="params.userId" filterable placeholder="请选择" size="small">
+              <el-select v-model="params.userId" filterable placeholder="请选择" size="small" clearable>
                 <el-option
                   v-for="item in options"
                   :key="item.userId"
                   :label="item.villageName"
                   :value="item.userId">
                 </el-option>
+              </el-select>
+          </span>
+          <span style="width:120px">
+              <el-select v-model="params.columnId" filterable placeholder="请选择" size="small" clearable>
+                    <el-option
+                      v-for="item in optionsList"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id">
+                    </el-option>
               </el-select>
           </span>
           <span style="width:120px"><el-input v-model.trim="params.name" placeholder="台账名称" size="small" clearable></el-input></span>
@@ -69,7 +79,7 @@
   </div>
 </template>
 <script>
-import { getPage } from '@/api/admin/ad.js'
+import { getPage,getColumnPage } from '@/api/admin/ad.js'
 import { getVillage } from '@/api/tmlms/bvillage/index'
 import detail from './detail.vue'
 export default {
@@ -92,6 +102,7 @@ export default {
       dialogVisiblePeople: false,
       id: 0,
       roleId: [],
+      optionsList: [],
     }
   },
   created () {
@@ -99,6 +110,9 @@ export default {
     this.roleId = JSON.parse(localStorage.getItem('user')).roles
     getVillage({size: 500,status: 2}).then(res=>{
       this.options = res.data.data.records
+    })
+    getColumnPage({size: 500}).then(res=>{
+      this.optionsList = res.data.data.records
     })
   },
   methods: {

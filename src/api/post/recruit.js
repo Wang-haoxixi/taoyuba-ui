@@ -62,10 +62,10 @@ export function exportExcel (ids) {
   })
 }
 
-export function exportExcelPeople () {
+export function exportExcelPeople (userType,title) {
   return exportDownload({
-    url: '/tmlms/tybmlmsExcelExport/sign_export',
-    title: '人员信息',
+    url: `/tmlms/tybmlmsExcelExport/sign_export?userType=${ userType }`,
+    title: title,
     method: 'get',
   })
 }
