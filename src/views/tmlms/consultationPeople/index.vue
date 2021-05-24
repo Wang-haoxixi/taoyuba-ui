@@ -10,7 +10,7 @@
           <span style="width:120px"><el-input v-model.trim="params.meetName" placeholder="会议标题" size="small" clearable v-if="!trainMeetId"></el-input></span>
           <span style="width:120px"><el-input v-model.trim="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
           <span style="width:120px">
-              <el-select v-model="params.userType" filterable placeholder="请选择" size="small">
+              <el-select v-model="params.userType" filterable placeholder="请选择" size="small" clearable>
                 <el-option v-for="item in options"
                   :key="item.value"
                   :label="item.label"

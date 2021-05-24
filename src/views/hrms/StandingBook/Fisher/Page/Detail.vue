@@ -163,19 +163,19 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="主机总功率(kw)：" prop="engineTotalPower">
-              <el-input maxlength="6" v-model="form.engineTotalPower"></el-input>
+              <el-input oninput="if(value>9999.99)value=9999.99" v-model="form.engineTotalPower" type="number"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="主机功率(kw)：" prop="mainEnginePower">
-              <el-input maxlength="6" v-model="form.mainEnginePower"></el-input>
+              <el-input oninput="if(value>9999.99)value=9999.99" v-model="form.mainEnginePower" type="number"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item label="双控功率(kw)：" prop="dualPower">
-              <el-input maxlength="6" v-model="form.dualPower"></el-input>
+              <el-input oninput="if(value>9999.99)value=9999.99" v-model="form.dualPower" type="number"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -187,12 +187,12 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="总吨位：" prop="grossTonnage">
-              <el-input maxlength="3" v-model="form.grossTonnage"></el-input>
+              <el-input maxlength="3" v-model="form.grossTonnage" oninput="if(value>999)value=999" type="number" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="船长（m）：" prop="hullLength">
-              <el-input maxlength="6" v-model="form.hullLength"></el-input>
+              <el-input oninput="if(value>999.99)value=999.99" v-model="form.hullLength" type="number"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -283,19 +283,19 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="型宽：" prop="mouldedBreadth">
-              <el-input maxlength="6" v-model="form.mouldedBreadth"></el-input>
+              <el-input  v-model="form.mouldedBreadth" oninput="if(value>999.99)value=999.99" type="number"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="型深：" prop="mouldedDepth">
-              <el-input maxlength="6" v-model="form.mouldedDepth"></el-input>
+              <el-input  v-model="form.mouldedDepth" oninput="if(value>999.99)value=999.99" type="number"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item label="净吨位：" prop="netTonnage">
-              <el-input maxlength="3" v-model="form.netTonnage"></el-input>
+              <el-input v-model="form.netTonnage" oninput="if(value>999)value=999" type="number" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))"></el-input>
             </el-form-item>
           </el-col>
           <!-- <el-col :span="12" >
@@ -416,7 +416,7 @@ export default {
       if(this.$route.query.see && this.form.villageName){
         villageName = '-所属基层：'+this.form.villageName
       }                                                      
-      return `${ this.$route.query.see ? '查看' : this.$route.query.edit ? '编辑' :'新增' }渔船信息${villageName}`
+      return `${ this.$route.query.see ? '查看' : this.$route.query.edit ? '编辑' :'新增' }渔船信3息${villageName}`
     },
   },
   created () {                                    

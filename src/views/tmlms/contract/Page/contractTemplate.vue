@@ -282,7 +282,7 @@ export default {
         this.formData.employerIdcard = ''
         this.formData.employerPhone = ''
         this.formData.employerAddr = ''
-        getOperatorList (this.formData.shipName.shipName).then(data => {
+        getOperatorList (this.formData.shipName,2).then(data => {
           // console.log('lll')
           // console.log(data.data.data)
           if(data.data.data){
