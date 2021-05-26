@@ -54,3 +54,41 @@ export function editFace (data) {
         data: data,
     })
 }
+
+export function getDatabusList (query) {
+    return request({
+        url: '/tmlms/databus/page',
+        method: 'get',
+        params: query,
+    })
+}
+
+export function deleteDatabusList (id) {
+    return request({
+        url: `/tmlms/databus/delete/${id}`,
+        method: 'post',
+    })
+}
+
+export function createdDatabusList (data) {
+    return request({
+        url: '/tmlms/databus/create',
+        method: 'post',
+        data: data,
+    })
+}
+
+export function editDatabusList (data) {
+    return request({
+        url: '/tmlms/databus/edit',
+        method: 'post',
+        data: data,
+    })
+}
+
+export function databusDetail (id) {
+    return request({
+        url: `/tmlms/databus/${id}`,
+        method: 'get',
+    })
+}
