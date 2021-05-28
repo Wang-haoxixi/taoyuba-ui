@@ -92,3 +92,10 @@ export function databusDetail (id) {
         method: 'get',
     })
 }
+
+export function deviceSearch () {
+    return request({
+        url: '/tmlms/databus/deviceSearch',
+        method: 'get',
+    })
+}

@@ -5,7 +5,9 @@
         <el-row>
           <el-col :span="12">
               <el-form-item label="设备编号：" prop="sn">
-                <el-input v-model="form.sn"></el-input>
+                <el-select v-model="form.sn" placeholder="请选择设备">
+                  <el-option :label="item" :value="item" v-for="(item,index) in option" :key="index"></el-option>
+                </el-select>
               </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -50,7 +52,7 @@
   </div>
 </template>
 <script>
-import { databusDetail,createdDatabusList,editDatabusList } from '@/api/tmlms/faceList'
+import { databusDetail,createdDatabusList,editDatabusList,deviceSearch } from '@/api/tmlms/faceList'
 import selects from './selects.vue'
 export default {
   mixins: [],
@@ -58,6 +60,7 @@ export default {
     return {
       form: {},
       dialogVisible: false,
+      option: [],
       roleId: [],
         rules: {
           sn: [
@@ -77,6 +80,9 @@ export default {
   },
   methods: {
     getDetail (id) {
+      deviceSearch().then(res=>{
+        this.option = res.data.data
+      })
       this.roleId = JSON.parse(localStorage.getItem('user')).roles
       if(id){
         databusDetail(id).then(res=>{

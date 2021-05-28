@@ -1,6 +1,6 @@
 import { loadAllDictMap } from '@/api/admin/dict'
 import { getUserPyList } from '@/api/admin/contacts'
-import { getOneConfig } from '@/api/fams/config'
+// import { getOneConfig } from '@/api/fams/config'
 import { getStore, setStore } from '@/util/store'
 import { pickDeep } from '@/util/util'
 import keyBy from 'lodash/keyBy'
@@ -12,19 +12,19 @@ const cache = {
   },
   actions: {
     // 获取财务配置
-    LoadFamsConfig ({
-      commit,
-    }) {
-      return new Promise((resolve, reject) => {
-        getOneConfig().then(res => {
-          const { data } = res
-          commit('SET_FAMS_CONFIG', data.data)
-          resolve()
-        }).catch(err => {
-          reject(err)
-        })
-      })
-    },
+    // LoadFamsConfig ({
+    //   commit,
+    // }) {
+    //   return new Promise((resolve, reject) => {
+    //     getOneConfig().then(res => {
+    //       const { data } = res
+    //       commit('SET_FAMS_CONFIG', data.data)
+    //       resolve()
+    //     }).catch(err => {
+    //       reject(err)
+    //     })
+    //   })
+    // },
     // 获取通讯录
     LoadContactsPyGroup ({
       commit,

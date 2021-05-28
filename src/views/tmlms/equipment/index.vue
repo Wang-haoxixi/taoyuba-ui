@@ -55,7 +55,9 @@
             <template slot-scope="scope">
               <el-button size="mini" @click="handleView(scope.row.id)">编辑
               </el-button>
-              <el-button size="mini" @click="handleDel(scope.row.id)" v-if="roleId.indexOf(1) !== -1 || roleId.indexOf(111) !== -1">删除
+              <!-- <el-button size="mini" @click="handleDel(scope.row.id)" v-if="roleId.indexOf(1) !== -1 || roleId.indexOf(111) !== -1">删除
+              </el-button> -->
+              <el-button size="mini" @click="handleDel(scope.row.id)">解绑
               </el-button>
               <el-button size="mini" @click="handleSelect(scope.row)">关联会议
               </el-button>

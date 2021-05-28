@@ -117,10 +117,10 @@
       :visible.sync="dialogVisiblePeople"
       width="90%">
       <div style="text-align:center" v-if="dialogVisiblePeople">
-        <list :trainMeetId="id"></list>
+        <list :trainMeetId="id" ref="list"></list>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisiblePeople = false">返回</el-button>
+        <el-button @click="back">返回</el-button>
       </span>
     </el-dialog>
   </div>
@@ -131,6 +131,8 @@ import { getVillage,setTime } from '@/api/tmlms/bvillage/index'
 import { page,del } from '@/api/tmlms/consultation/index'
 import detail from './detail.vue'
 import list from '../consultationPeople/index.vue'
+// import VueSocketio from 'vue-socket.io'
+// import Vue from 'vue'
 export default {
   name: 'faceList',
   mixins: [],
@@ -251,6 +253,53 @@ export default {
     lookPeople (id) {
       this.id = id
       this.dialogVisiblePeople = true
+      this.timer = setInterval(() => {
+          this.$refs.list.getData()
+      }, 2000)  
+      // this.initWebSocket(id)
+      // Vue.use(new VueSocketio({
+      //     debug: true,
+      //     connection: 'http://localhost:5000', //地址+端口，由后端提供
+      //     options: { path: `/my-app/${id}` },
+      // }))
+      // this.$socket.open()
+      // this.sockets.subscribe('cardmessage', (data) => {
+      //   console.log(data)
+      // })
+    },
+    back () {
+      clearTimeout(this.timer)
+      this.dialogVisiblePeople = false
+      // console.log(this.websock)
+      // this.websock.close()
+    },
+    initWebSocket (id) {
+        console.log('创建WebSocket')
+        this.websock = new WebSocket(`ws://183.131.134.242:6888/tmlms/websocket/${id}`)
+        console.log(this.websock)
+        this.websock.onmessage = this.websocketonmessage
+        this.websock.onerror = this.websocketonerror
+        this.websock.onopen = this.websocketonopen
+        this.websock.onclose = this.websocketclose
+    },
+    // 连接建立之后执行send方法发送数据
+    websocketonopen () {
+      this.websocketsend('')
+    },
+    websocketonerror () {
+      console.log( 'WebSocket连接失败')
+    },
+    // 数据接收
+    websocketonmessage (e) {
+      console.log('数据接收' + e.data)
+    },
+    // 数据发送
+    websocketsend (Data) {
+      this.websock.send(Data)
+    },
+    // 关闭
+    websocketclose (e) {
+      console.log('已关闭连接', e)
     },
   },
   components: {

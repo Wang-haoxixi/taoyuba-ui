@@ -41,7 +41,7 @@
             label="角色"
           >
             <template slot-scope="scope">
-              <div>{{ scope.row.userType === 0 ? '船东' : scope.row.userType === 1 ? '职务船员' : '船员监护人'  }}</div>
+              <div>{{ scope.row.userType === 0 ? '船东' : scope.row.userType === 1 ? '职务船员' : '渔船监护人'  }}</div>
             </template>
           </el-table-column>
           <el-table-column
