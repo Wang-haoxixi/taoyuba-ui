@@ -99,3 +99,11 @@ export function deviceSearch () {
         method: 'get',
     })
 }
+
+export function sign (data) {
+    return request({
+        url: '/tmlms/trainMeetSign/addSign',
+        method: 'post',
+        data: data,
+    })
+}

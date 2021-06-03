@@ -89,11 +89,15 @@
           </el-table-column>
           <el-table-column label="操作" width="300" fixed="right">
             <template slot-scope="scope">
-              <el-button size="mini" @click="handleView(scope.row.id)">编辑
+              <el-button size="mini" @click="handleView(scope.row.id)" v-if="!isSelect">编辑
               </el-button>
-              <el-button size="mini" @click="handleDel(scope.row.faceToken)" v-if="roleId.indexOf(1) !== -1 || roleId.indexOf(111) !== -1">删除
+              <span v-if="!isSelect">
+                <el-button size="mini" @click="handleDel(scope.row.faceToken)" v-if="roleId.indexOf(1) !== -1 || roleId.indexOf(111) !== -1">删除
+                </el-button>
+              </span>
+              <el-button size="mini" @click="handleSelect(scope.row)" v-if="!isSelect">关联渔船
               </el-button>
-              <el-button size="mini" @click="handleSelect(scope.row)">关联渔船
+              <el-button size="mini" @click="selectRow(scope.row)" v-if="isSelect">选择
               </el-button>
             </template>
           </el-table-column>
@@ -132,6 +136,12 @@ import selects from './selects.vue'
 export default {
   name: 'faceList',
   mixins: [],
+  props: {
+    isSelect: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data () {
     return {
       page: {
@@ -225,6 +235,9 @@ export default {
         this.dialogVisible = false
       })
     },
+    selectRow (row) {
+      this.$emit('selectPeople',row)
+    },
   },
   components: {
     detail,
@@ -233,6 +246,77 @@ export default {
   filters: {
   },
   watch: {
+  },
+    mounted () {
+            //添加socket事件监听
+        this.$socket.emit('connect')
+        this.$socket.emit('startRead')
+        this.sockets.subscribe('card message', (msg) => {
+          var base = new Base64()
+          //2.解密后是json字符串
+          var result1 = base.decode(msg)
+          var data = eval('('+result1+')')
+          // 将数据录入
+          this.form.realName = data.name
+          this.form.idcard = data.cardno
+        })
+            //格式化拿到的數據
+    function Base64 () { 
+      // private property 
+      var _keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
+      // public method for decoding 
+      this.decode = function (input) { 
+          var output = ''
+          var chr1, chr2, chr3 
+          var enc1, enc2, enc3, enc4 
+          var i = 0 
+          input = input.replace(/[^A-Za-z0-9+/=]/g, '') 
+          while (i < input.length) { 
+              enc1 = _keyStr.indexOf(input.charAt(i++)) 
+              enc2 = _keyStr.indexOf(input.charAt(i++)) 
+              enc3 = _keyStr.indexOf(input.charAt(i++)) 
+              enc4 = _keyStr.indexOf(input.charAt(i++)) 
+              chr1 = (enc1 << 2) | (enc2 >> 4) 
+              chr2 = ((enc2 & 15) << 4) | (enc3 >> 2) 
+              chr3 = ((enc3 & 3) << 6) | enc4 
+              output = output + String.fromCharCode(chr1) 
+              if (enc3 != 64) { 
+                  output = output + String.fromCharCode(chr2) 
+              } 
+              if (enc4 != 64) { 
+                  output = output + String.fromCharCode(chr3) 
+              } 
+          } 
+          output = _utf8_decode(output) 
+          return output 
+      }  
+      
+      // private method for UTF-8 decoding 
+      var _utf8_decode = function (utftext) { 
+          var string = '' 
+          var i = 0 
+          var c = 0
+          var c2 = 0 
+          var c3 = 0 
+          while ( i < utftext.length ) { 
+              c = utftext.charCodeAt(i) 
+              if (c < 128) { 
+                  string += String.fromCharCode(c) 
+                  i++ 
+              } else if((c > 191) && (c < 224)) { 
+                  c2 = utftext.charCodeAt(i+1) 
+                  string += String.fromCharCode(((c & 31) << 6) | (c2 & 63)) 
+                  i += 2 
+              } else { 
+                  c2 = utftext.charCodeAt(i+1) 
+                  c3 = utftext.charCodeAt(i+2) 
+                  string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63)) 
+                  i += 3 
+              } 
+          } 
+          return string 
+      } 
+   }
   },
 }
 </script>

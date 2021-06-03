@@ -5,7 +5,8 @@
       <div class="shipowner_title">
         <el-button @click="getData" type="default" size="small" v-if="!trainMeetId">刷新</el-button>
         <el-button @click="handleStatistics" type="default" size="small" v-if="!trainMeetId">统计</el-button>
-        <el-button @click="getInformation" type="default" size="small" v-if="!trainMeetId">导出信息</el-button>
+        <el-button @click="signature" type="default" size="small" v-if="!trainMeetId">补签</el-button>
+        <el-button @click="getInformation" type="default" size="small">导出信息</el-button>
         <div style="float:right">
           <span style="width:120px"><el-input v-model.trim="params.meetName" placeholder="会议标题" size="small" clearable v-if="!trainMeetId"></el-input></span>
           <span style="width:120px"><el-input v-model.trim="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
@@ -86,6 +87,7 @@
     </basic-container>
     <detail v-if="detailType === 1" ref="detail" @back="detailType = 0"></detail>
     <statistics v-if="detailType === 2" ref="statistics" @back="detailType = 0"></statistics>
+    <signature v-if="detailType === 3" ref="signature" @back="detailType = 0"></signature>
   </div>
 </template>
 <script>
@@ -93,6 +95,7 @@ import { listPeople } from '@/api/tmlms/faceList'
 import { exportExcelPeople} from '@/api/post/recruit'
 import detail from './detail.vue'
 import statistics from './statistics.vue'
+import signature from './signature.vue'
 export default {
   name: 'faceList',
   mixins: [],
@@ -174,14 +177,19 @@ export default {
         return false
       }
       let data = this.params.userType === 0 ? '船东信息' : '职务船员信息'
-      exportExcelPeople(this.params.userType,data).then(res=>{
+      exportExcelPeople(this.params.userType,data,this.trainMeetId || '').then(res=>{
         console.log(res)
       })
+    },
+    // 补签
+    signature () {
+      this.detailType = 3
     },
   },
   components: {
     detail,
     statistics,
+    signature,
   },
   filters: {
   },
@@ -194,6 +202,7 @@ export default {
   padding: 20px;
 }
 .shipowner_title {
+  text-align: left;
   span {
     width: 150px;
     display: inline-block;

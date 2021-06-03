@@ -21,6 +21,7 @@
         :isPagination="false"
         :pagination="pagination"
         :columnsMap="allcrewColumnsMap"
+        :dictsMap="dictsMap"
         :pagedTable="pagedTable"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -78,7 +79,7 @@ import { getCrewByShipId,deleteCrewRelation } from '@/api/tmlms/boatMan'
 import { addUpWork } from '@/api/post/admin'
 import { getContractByidcard } from '@/api/tmlms/newContract'
 import mixins from '@/mixins/mixins'
-import { allcrewColumnsMap } from '../options'
+import { allcrewColumnsMap,dictsMap } from '../options'
 // import { getShipByShipNo } from '@/api/ships'
 import { getUserInfo } from '@/api/login'
 import keyBy from 'lodash/keyBy'
@@ -93,6 +94,7 @@ export default {
   data () {
     return {
       relationStatus: '',
+      dictsMap,
       form:{
         idcard:'',
         workStatus:'',

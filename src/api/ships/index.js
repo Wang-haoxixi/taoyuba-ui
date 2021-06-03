@@ -193,6 +193,30 @@ export function noAgree (data) {
   })
 }
 
+export function tybPortRecord (params) {
+  return request({
+    url: '/tmlms/tybPortRecord/page',
+    method: 'get',
+    params: params,
+  })
+}
+
+export function lastRecord (params) {
+  return request({
+    url: '/tmlms/tybPortRecord/lastRecord',
+    method: 'get',
+    params: params,
+  })
+}
+
+export function getCrewByRecordId (params) {
+  return request({
+    url: '/tmlms/tybPortRecord/getCrewByRecordId',
+    method: 'get',
+    params: params,
+  })
+}
+
 
 
 

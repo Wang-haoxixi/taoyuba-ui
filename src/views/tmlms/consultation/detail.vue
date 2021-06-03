@@ -175,6 +175,16 @@ export default {
           // this.form.cooperateIds.map(s => +s)
           this.form.location = JSON.parse(this.form.location)
           this.form.meetStartTime = this.form.meetStartTime.slice(0,10)
+          console.log(this.form)
+          // this.form.list.forEach(res=>{
+          //   if(res.meetStartTime){
+          //     res.meetStartTime = res.meetStartTime.slice(11,999)
+          //   }
+
+          //   if(res.meetEndTime){
+          //     res.meetEndTime = res.meetEndTime.slice(11,999)
+          //   }
+          // })
           // this.form.location.map(s => +s)
           // console.log(this.form)
           this.showCityInfo(this.form.location)
@@ -266,7 +276,7 @@ export default {
                 return false
               }
               form.list[i].meetStartTime =form.list[i].meetStartTime.length > 10 ? `${ form.meetStartTime.slice(0,10) }${ form.list[i].meetStartTime.slice(10,22) }` :  `${ form.meetStartTime.slice(0,10) } ${ form.list[i].meetStartTime }:00`
-              form.list[i].meetEndTime =form.list[i].meetEndTime.length > 10 ? `${ form.meetStartTime.slice(0,10) }${ form.list[i].meetStartTime.slice(10,22) }` : `${ form.meetStartTime.slice(0,10) } ${ form.list[i].meetEndTime }:00`
+              form.list[i].meetEndTime =form.list[i].meetEndTime.length > 10 ? `${ form.meetStartTime.slice(0,10) }${ form.list[i].meetEndTime.slice(10,22) }` : `${ form.meetStartTime.slice(0,10) } ${ form.list[i].meetEndTime }:00`
             }
           }
           // 后端的时间 开始和结束是同一个

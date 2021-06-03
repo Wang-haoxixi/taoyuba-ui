@@ -62,9 +62,9 @@ export function exportExcel (ids) {
   })
 }
 
-export function exportExcelPeople (userType,title) {
+export function exportExcelPeople (userType,title,trainMeetId) {
   return exportDownload({
-    url: `/tmlms/tybmlmsExcelExport/sign_export?userType=${ userType }`,
+    url: `/tmlms/tybmlmsExcelExport/sign_export?userType=${ userType }&trainMeetId=${ trainMeetId }`,
     title: title,
     method: 'get',
   })

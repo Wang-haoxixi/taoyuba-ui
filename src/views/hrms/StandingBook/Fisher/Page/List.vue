@@ -1,6 +1,6 @@
 <template>
   <div>
-    <basic-container>
+    <basic-container v-if="prot">
       <page-header title="一船一档"></page-header>
       <operation-container>
         <template slot="left">
@@ -86,7 +86,8 @@
                   <!-- <iep-button size="mini" type="primary" v-if="mlms_ship_download && scope.row.contractModelStatus" @click="handlePrint(scope.row.shipName)">下载</iep-button> -->
                 </el-dropdown-menu>
               </el-dropdown>
-              <iep-button size="mini" type="primary" v-if="mlms_ship_crew" @click="handleAllCrew(scope.row.shipId,scope.row.shipName, scope.row)">船员</iep-button>
+              <iep-button size="mini" type="primary" v-if="mlms_ship_crew && isqushan == 21" @click="handleAllCrew(scope.row.shipId,scope.row.shipName, scope.row)">船员</iep-button>
+              <iep-button size="mini" type="primary" v-if="mlms_ship_crew" @click="handlePort(scope.row)">进出港</iep-button>
               <iep-button size="mini" type="primary" v-if="mlms_ship_shareholder && scope.row.shipShare==1" @click="handleHodler(scope.row.shipId,scope.row.shipName)">股东</iep-button>
               <iep-button size="mini" type="primary" v-if="mlms_ship_contract" @click="handleCrew(scope.row)">合同</iep-button>
               <!-- <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">船员</iep-button> -->
@@ -161,6 +162,9 @@
         </el-pagination>
       </div>
     </basic-container>
+    <basic-container v-if="!prot">
+      <prots :row="row" @back="prot = true"></prots>
+    </basic-container>
   </div>
 </template>
 <script>
@@ -168,16 +172,16 @@ import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
 import { countCrew } from '@/api/tmlms/boatMan/index'
 import { getVillageShipList,changeShip,exportShipExcel, exportShipNameExcel,exportContractModel,getFixOrgIds,changeOrgIds } from '@/api/ships'
 // import { getVillageShipList } from '@/api/ships'
-// import advanceSearch from './AdvanceSearch.vue'
+import prots from './Prot.vue'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
 import { getUserInfo } from '@/api/login'
 // import { checkIsExist } from '@/api/tmlms/contractModel'
 import { mapGetters } from 'vuex'
 export default {
-  // components: {
-  //   advanceSearch,
-  // },
+  components: {
+    prots,
+  },
   mixins: [mixins],
   data () {
     return {
@@ -272,9 +276,15 @@ export default {
       mlms_ship_export: false,
       mlms_shipname_export: false,
       mlms_ship_danger: false,
+      isqushan: '',
+      prot: true,
+      row: {},
     }
   },
   created () {
+    // this.isqushan = JSON.parse(localStorage.getItem('user')).sysUser.orgId
+    let user = localStorage.getItem('orgId')
+    this.isqushan = JSON.parse(user)
     if (sessionStorage.getItem('query')) {
       var query = sessionStorage.getItem('query')
       this.params = JSON.parse(query)
@@ -309,6 +319,11 @@ export default {
     ...mapGetters(['userInfo', 'roles','permissions']),
   },
   methods: {
+    // 进出港
+    handlePort (row) {
+      this.row = row
+      this.prot = false
+    },
     handleDanger (row) {
       this.$router.push({
         path: `/danger/all?shipName=${row.shipName}`,

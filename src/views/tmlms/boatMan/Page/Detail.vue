@@ -6,6 +6,7 @@
           <div class="item" @click="onTabs(1)" :class="current === 1 ? 'active' : ''">船员信息</div>
           <div class="item" @click="onTabs(2)" :class="current === 2 ? 'active' : ''">合同信息</div>
           <div class="item" @click="onTabs(3)" :class="current === 3 ? 'active' : ''">上下船记录</div>
+          <div class="item" @click="onTabs(4)" :class="current === 4 ? 'active' : ''">签到记录</div>
         </div>
       </div>
       <div v-show="current === 1">
@@ -415,6 +416,7 @@
       </div>
       <page-contract ref="pageContract" v-show="current === 2"></page-contract>
       <page-ship-record ref="pageShipRecord" v-show="current === 3"></page-ship-record>
+      <page-sign ref="pageSign" v-show="current === 4" :idcard="form.idcard"></page-sign>
     </basic-container>
   </div>
 </template>
@@ -435,13 +437,14 @@ import debounce from 'lodash/debounce'
 import { mapState, mapGetters } from 'vuex'
 import pageContract from './pageContract'
 import pageShipRecord from './pageShipRecord'
+import pageSign from './pageSign'
 Vue.use(new VueSocketio({
     debug: false,
     connection: 'http://localhost:5000', //地址+端口，由后端提供
 }))
 export default {
   mixins: [information],
-  components: { pageContract, pageShipRecord },
+  components: { pageContract, pageShipRecord, pageSign },
   data () {
     this.getidcardList = debounce(this.getidcardList, 800)
       var checkPhone = (rule, value, callback) => {
@@ -610,6 +613,11 @@ export default {
     },
     onTabs (index) {
       this.current = index
+      if( index === 4 ){
+        this.$nextTick(()=>{
+          this.$refs.pageSign.getList()
+        })
+      }
     },
     onBackByFrom () {
       let from = this.$route.query.from

@@ -81,7 +81,18 @@ const columnsMap = [
       prop: 'provinceIdName',
       label: '籍贯',
     },
+    {
+      prop: 'signStatus',
+      label: '是否培训',
+      type: 'dict',
+    },
   ]
+  const dictsMap = {
+    signStatus: {
+      0: '否',
+      1: '是',
+    },
+  }
   const addcrewColumnsMap = [
     {
       prop: 'realName',
@@ -521,4 +532,4 @@ const columnsMap = [
     return newForm
   }
 
-export{columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm, crewColumnsMap,allcrewColumnsMap,addcrewColumnsMap, operatColumnsMap ,shipColumnsMap,shareHolderColumnsMap,CrewRegisteColumnsMap,CrewRecordColumnsMap}
+export{dictsMap,columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm, crewColumnsMap,allcrewColumnsMap,addcrewColumnsMap, operatColumnsMap ,shipColumnsMap,shareHolderColumnsMap,CrewRegisteColumnsMap,CrewRecordColumnsMap}
