@@ -5,7 +5,7 @@
       <operation-container>
         <template slot="left">
           <iep-button size="small" type="primary" icon="el-icon-plus" plain @click="handleAdd">新增</iep-button>
-          <!-- <iep-button size="small" @click="handleDeleteAll" v-if="permissionAll">批量删除</iep-button> -->
+          <iep-button size="small" @click="handleDeleteAll">批量删除</iep-button>
           <!-- <el-dropdown size="medium">
             <iep-button size="small" type="default">更多操作<i class="el-icon-arrow-down el-icon--right"></i></iep-button>
             <el-dropdown-menu slot="dropdown">
@@ -46,7 +46,8 @@
         :pagedTable="pagedTable"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        @selection-change="handleSelectionChange"
+        @select="handleSelectionChange"
+        @select-all="handleSelectionChange"
         is-mutiple-selection>
         <el-table-column prop="operation" label="操作" width="220">
           <template slot-scope="scope">
@@ -66,13 +67,14 @@
 import { mapGetters } from 'vuex'
 import mixins from '@/mixins/mixins'
 // import {} from ''
-import { examKind,examLevel,getTestList,delTest } from '@/api/exam/examManagement'
+import { examKind,examLevel,getTestList,delTest,deleteAll } from '@/api/exam/examManagement'
 import {columnsMap } from'./options'
 import queryMixin from '@/mixins/query'
 export default {
   mixins: [mixins, queryMixin],
   data () {
     return {
+      pagedTable: [],
       columnsMap,
       permissionAll: false,
       permissionAdd: false,
@@ -86,6 +88,7 @@ export default {
       },
       levelList:[],
       kindList:[],
+      multipleSelection: [],
     }
   },
   created () {
@@ -128,10 +131,12 @@ export default {
       this.permissionView = this.permissions['exam_library_view']
     },
     handleSelectionChange (val) {
+      console.log(12)
+      console.log(val)
       this.multipleSelection = val.map(m => m.id)
     },
     loadPage (param = this.params) {
-      this.pagedTable=this.loadTable(param, getTestList)
+      this.loadTable(param, getTestList)
     },
     getParamData () {
       // this.params.title = this.params.title.replace(/\s*/g,'')
@@ -161,6 +166,7 @@ export default {
             message: '删除成功',
             type: 'success',
             })
+            this.multipleSelection = []
             this.loadPage()
           }
         })
@@ -176,6 +182,26 @@ export default {
       this.params.size = val
       this.setQuery({ size: this.params.size })
       this.loadPage()
+    },
+    handleDeleteAll () {
+      if (this.multipleSelection.length === 0) {
+        this.$message.error('请至少选择一项试题！')
+        return
+      }
+      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        deleteAll(this.multipleSelection).then(() => {
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+          })
+          this.loadPage()
+        })
+      }).catch(() => {         
+      })
     },
   },
 }

@@ -129,7 +129,8 @@
           </el-container>
         </el-container>
       </el-form>
-      <div style="text-align: center;padding: 20px 0;">                   
+      <div style="text-align: center;padding: 20px 0;">
+        <iep-button style="margin-right: 20px;" :disabeld="false"  type="primary" @click="handleUpload" v-if="$route.query.operate=='edit'">更新</iep-button>
         <iep-button style="margin-right: 20px;" :disabeld="false"  type="primary" @click="handleSubmit">保存</iep-button>
         <iep-button :disabeld="false" @click="handleBack">返回</iep-button>            
       </div>
@@ -146,7 +147,7 @@ import store from '@/store'
 import { getOperatorList } from '@/api/ships/shipoperat/index'
 // import { detailCrew } from '@/api/tmlms/boatMan/index'
 import { findMyship } from '@/api/ships'
-import { addContractModel,editContractModel,getContractModel } from '@/api/tmlms/contractModel'
+import { addContractModel,editContractModel,getContractModel,uploadContract } from '@/api/tmlms/contractModel'
 // import { getShipownerByidcard } from '@/api/tmlms/shipowner/index'
 // import { isCheckIdcard } from '@/api/tmlms/newContract'
 export default {
@@ -300,6 +301,12 @@ export default {
           this.formData.employerAddr = ''
           this.employer =false
       }
+    },
+    handleUpload () {
+      uploadContract({ shipName: this.formData.shipName,contractModelId: this.formData.contractModelId }).then(res=>{
+        console.log(res)
+        this.getShipDetail()
+      })
     },
     handleSubmit () {
       this.formData.shipJointNo = this.formData.shipownerName

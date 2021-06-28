@@ -46,10 +46,13 @@
           <el-input v-model="form.orgRelationName"></el-input>
         </el-form-item>
         <el-form-item label="区域名称" prop="ids">
-          <el-select v-model="form.ids" multiple>
-            <el-option v-for="item in orgList" :key="item.orgId" :label="item.name" :value="item.orgId + ''">
-            </el-option>
-          </el-select>
+          <div style="display:flex;">
+              <el-select v-model="form.ids" multiple>
+                <el-option v-for="item in orgList" :key="item.orgId" :label="item.name" :value="item.orgId + ''">
+                </el-option>
+              </el-select>
+              <el-button type="primary" size="small" style="margin-left: 10px" @click="addOrg">新增</el-button>
+          </div>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -60,7 +63,7 @@
   </basic-container>
 </template>
 <script>
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
 const initForm = () => {
   return {
     id: '',
@@ -71,6 +74,7 @@ const initForm = () => {
   }
 }
 import { getPage, createPage, updatePage, removePage } from '@/api/tmlms/area'
+import { fetchList,createdOrg } from '@/api/admin/org'
 export default {
   data () {
     return {
@@ -87,12 +91,13 @@ export default {
         ids: [{ required: true, message: '请选择区域', trigger: 'change' }],
         orgRelationName: [{ required: true, message: '请输入区域名称', trigger: 'blur' }],
       },
+      orgList: [],
     }
   },
   computed: {
-    ...mapState({
-      orgList: state => state.user.orgs,
-    }),
+    // ...mapState({
+    //   orgList: state => state.user.orgs,
+    // }),
     title () {
       if (this.status === 'create') {
         return '新增'
@@ -106,6 +111,7 @@ export default {
   },
   mounted () {
     this.getList()
+    this.getOrgList()
   },
   methods: {
     getList () {
@@ -211,6 +217,33 @@ export default {
     currentChange (current) {
       this.params.current = current
       this.getContractList()
+    },
+    getOrgList () {
+      fetchList({size: 500}).then(res=>{
+        console.log(res)
+        this.orgList = res.data.data.records
+      })
+    },
+    addOrg () {
+        this.$prompt('请输入区域名称', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            inputErrorMessage: '输入不能为空',
+            inputValidator: (value) => {       // 点击按钮时，对文本框里面的值进行验证
+                if(!value) {
+                    return '输入不能为空'
+                }
+            },
+        }).then(({ value }) => {
+          createdOrg({ name: value,contactMethod: '电话' }).then(res=>{
+            console.log(res)
+            if( res.data.code === 0 ){
+              this.$message.success('操作成功!')
+              this.getOrgList()
+            }
+          })
+        }).catch(() => {     
+        })
     },
   },
 }

@@ -416,7 +416,7 @@ export default {
       if(this.$route.query.see && this.form.villageName){
         villageName = '-所属基层：'+this.form.villageName
       }                                                      
-      return `${ this.$route.query.see ? '查看' : this.$route.query.edit ? '编辑' :'新增' }渔船信3息${villageName}`
+      return `${ this.$route.query.see ? '查看' : this.$route.query.edit ? '编辑' :'新增' }渔船信息${villageName}`
     },
   },
   created () {                                    

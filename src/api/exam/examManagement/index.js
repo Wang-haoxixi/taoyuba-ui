@@ -99,6 +99,14 @@ export function getTestById (id){
     data:id,
   })
 }
+/**批量删除 */
+export function deleteAll (data){
+  return request({
+    url:'tmlms/exam_question/batchDelete',
+    method:'post',
+    data:data,
+  })
+}
 
 
 

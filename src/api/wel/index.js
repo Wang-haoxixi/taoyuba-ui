@@ -48,3 +48,48 @@ export function getCustomerList (query) {
     params: query,
   })
 }
+
+export function countShipAndCrew () {
+  return request({
+    url: '/tmlms/workSpace/countShipAndCrew',
+    method: 'get',
+  })
+}
+export function countRecordByVillageId () {
+  return request({
+    url: '/tmlms/workSpace/countRecordByVillageId',
+    method: 'get',
+  })
+}
+export function countInfo () {
+  return request({
+    url: '/tmlms/workSpace/countInfo',
+    method: 'get',
+  })
+}
+export function countPortByOrg () {
+  return request({
+    url: '/tmlms/workSpace/countPortByOrg',
+    method: 'get',
+  })
+}
+export function countShipAndCrewByOrg () {
+  return request({
+    url: '/tmlms/workSpace/countShipAndCrewByOrg',
+    method: 'get',
+  })
+}
+export function countSignAndContractByOrg () {
+  return request({
+    url: '/tmlms/workSpace/countSignAndContractByOrg',
+    method: 'get',
+  })
+}
+
+export function countVillageByOrg () {
+  return request({
+    url: '/tmlms/workSpace/countVillageByOrg',
+    method: 'get',
+  })
+}
+

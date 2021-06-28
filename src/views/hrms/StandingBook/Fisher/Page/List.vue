@@ -1,6 +1,6 @@
 <template>
   <div>
-    <basic-container v-if="prot">
+    <basic-container v-if="prot && archives">
       <page-header title="一船一档"></page-header>
       <operation-container>
         <template slot="left">
@@ -86,8 +86,9 @@
                   <!-- <iep-button size="mini" type="primary" v-if="mlms_ship_download && scope.row.contractModelStatus" @click="handlePrint(scope.row.shipName)">下载</iep-button> -->
                 </el-dropdown-menu>
               </el-dropdown>
-              <iep-button size="mini" type="primary" v-if="mlms_ship_crew && isqushan == 21" @click="handleAllCrew(scope.row.shipId,scope.row.shipName, scope.row)">船员</iep-button>
+              <iep-button size="mini" type="primary" v-if="mlms_ship_crew" @click="handleAllCrew(scope.row.shipId,scope.row.shipName, scope.row)">船员</iep-button>
               <iep-button size="mini" type="primary" v-if="mlms_ship_crew" @click="handlePort(scope.row)">进出港</iep-button>
+              <iep-button size="mini" type="primary"  @click="boatArchives(scope.row)">渔船档案</iep-button>
               <iep-button size="mini" type="primary" v-if="mlms_ship_shareholder && scope.row.shipShare==1" @click="handleHodler(scope.row.shipId,scope.row.shipName)">股东</iep-button>
               <iep-button size="mini" type="primary" v-if="mlms_ship_contract" @click="handleCrew(scope.row)">合同</iep-button>
               <!-- <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">船员</iep-button> -->
@@ -165,6 +166,9 @@
     <basic-container v-if="!prot">
       <prots :row="row" @back="prot = true"></prots>
     </basic-container>
+    <basic-container v-if="!archives">
+      <archives  @back="archives = true"></archives>
+    </basic-container>
   </div>
 </template>
 <script>
@@ -173,6 +177,7 @@ import { countCrew } from '@/api/tmlms/boatMan/index'
 import { getVillageShipList,changeShip,exportShipExcel, exportShipNameExcel,exportContractModel,getFixOrgIds,changeOrgIds } from '@/api/ships'
 // import { getVillageShipList } from '@/api/ships'
 import prots from './Prot.vue'
+import archives from './Archives.vue'
 import mixins from '@/mixins/mixins'
 import { columnsMap } from '../options'
 import { getUserInfo } from '@/api/login'
@@ -181,6 +186,7 @@ import { mapGetters } from 'vuex'
 export default {
   components: {
     prots,
+    archives,
   },
   mixins: [mixins],
   data () {
@@ -278,6 +284,7 @@ export default {
       mlms_ship_danger: false,
       isqushan: '',
       prot: true,
+      archives: true,
       row: {},
     }
   },
@@ -517,6 +524,10 @@ export default {
       this.params.shipownerIdcard = this.params.shipownerIdcard.replace(/\s*/g,'')
       this.params.current = 1
       this.getData()
+    },
+    boatArchives (row) {
+      console.log(row)
+      this.archives = false
     },
     async isManager () {
       this.userData = await getUserInfo().then(res => {

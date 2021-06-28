@@ -178,3 +178,11 @@ export function getGomsInfo (id) {
     method: 'get',
   })
 }
+
+export function createdOrg (data) {
+  return request({
+    url: '/admin/org/createOrg',
+    method: 'post',
+    data: data,
+  })
+}

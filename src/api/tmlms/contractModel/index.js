@@ -29,6 +29,14 @@ export function checkIsExist (shipName) {
         params: shipName,
     })
 }
+
+export function uploadContract (data) {
+    return request({
+        url: '/tmlms/tybContractModel/updateWithShip',
+        method: 'post',
+        data: data,
+    })
+}
 // export function getContractList (query) {
 //     return request({
 //         url: `${prefixUrl}/getPage`,

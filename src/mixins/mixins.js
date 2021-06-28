@@ -32,7 +32,7 @@ export default {
       const { records, size, total, current } = data.data
       const isBug = total / size + 1 === current
       if (isBug && total !== 0) {
-        this.searchPage() // 防止分页为空页的情况
+        this.searchPage({current: current-1, size:size,total: total}) // 防止分页为空页的情况
       } else {
         this.pagination = { current, size, total }
       }

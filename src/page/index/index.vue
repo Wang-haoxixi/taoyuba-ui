@@ -61,6 +61,13 @@ export default {
       editableTabs: [],
     }
   },
+  watch:{
+    $route (to) {
+      if( to.path === '/wel/index' ){
+        this.editableTabs = []
+      }
+    },
+  },
   created () {
     //实时检测刷新token
     // this.handleRefreshToken()

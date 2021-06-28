@@ -19,6 +19,12 @@
                 </el-option>
               </el-select>
           </span>
+          <span style="width:120px">
+              <el-select v-model="params.sourceType" filterable placeholder="请选择来源" size="small" clearable>
+                <el-option label="小程序" :value="0"></el-option>
+                <el-option label="设备" :value="1"></el-option>
+              </el-select>
+          </span>
           <el-button size="small"  @click="getData">搜索</el-button>
         </div>
       </div>
@@ -66,6 +72,14 @@
             prop="cooperateNames"
             label="合作社"
           >
+          </el-table-column>
+          <el-table-column
+            prop="sourceType"
+            label="来源"
+          >
+            <template slot-scope="scope">
+              <div>{{ scope.row.sourceType === 0 ? '小程序' : '设备'  }}</div>
+            </template>
           </el-table-column>
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">

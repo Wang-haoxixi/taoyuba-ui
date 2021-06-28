@@ -524,6 +524,7 @@ export default {
     if (sessionStorage.getItem('query')) {
       var query = sessionStorage.getItem('query')
       this.params = JSON.parse(query)
+      this.params.realName = this.$route.query.realName
     } else {
       this.params = {
         current: 1,
@@ -535,6 +536,7 @@ export default {
         certLevel: '',
         certTitle: '',
       }
+      this.params.realName = this.$route.query.realName
     }
     this.getData()
     this.isManager()

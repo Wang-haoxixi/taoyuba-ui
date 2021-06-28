@@ -23,7 +23,7 @@ export default {
 </script>
 <style  lang="scss" scoped>
 .aside {
-  background: #fafafa;
+  background: white;
   font-size: 12px;
   margin: 0;
   box-sizing: border-box;
@@ -55,7 +55,7 @@ export default {
   }
   .el-scrollbar {
     position: relative;
-    height: calc(100% - 64px);
+    height: calc(100%);
     padding: 0;
     .el-scrollbar__view {
       > div {

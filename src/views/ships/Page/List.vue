@@ -94,6 +94,7 @@ export default {
       // this.pagination.current = this.params.current
       console.log('this.pagination', this.pagination)
     })
+    this.params.shipName = this.$route.query.shipName
     this.loadPage(this.params)
   },
 computed: {
@@ -139,7 +140,7 @@ computed: {
         path: `/ship_spa/detail/update/${id}`,
       })
     },
-    async loadPage (param = this.searchForm) {
+    async loadPage (param = this.params) {
       this.userData = await getUserInfo().then(res => {
         return res.data.data
       })
