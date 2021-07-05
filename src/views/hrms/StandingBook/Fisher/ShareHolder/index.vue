@@ -24,7 +24,7 @@
             <operation-wrapper>
               <!-- <iep-button size="mini" plain v-if="!(scope.row.showbtn==1)" @click="handleEdit(scope.row.idcard)">编辑</iep-button> -->
               <iep-button size="mini" plain v-if="scope.$index !== 0 && scope.row.isEdit" @click="handleEdit(scope.row.idcard)">编辑</iep-button>
-              <!-- <iep-button size="mini" plain @click="handleView(scope.row.shipName)">查看</iep-button> -->
+              <iep-button size="mini" plain @click="handleView(scope.row.idcard)">查看</iep-button>
               <!-- <iep-button size="mini" plain @click="handleDelete(scope.row.id)">删除</iep-button>     -->
             </operation-wrapper>
           </template>
@@ -85,10 +85,9 @@ export default {
     // handleDelete (row) {
     //   this._handleGlobalDeleteById(row, deleteShipManager)
     // },
-    // handleView (val) {
-    //   let shipNo = this.$route.query.shipNo
-    //   this.$router.push({path: `/hrms_spa/shipOperat_Detial/${val}`,query:{ see: shipNo }})
-    // },
+    handleView (val) {
+      this.$router.push({path: '/boatMan/detail',query:{ see: val }})
+    },
     // getPhone (idcard){
     //   getShipownerByidcard(idcard).then(res=>{
     //         if(res.data.data){

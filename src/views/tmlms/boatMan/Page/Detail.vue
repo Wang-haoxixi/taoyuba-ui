@@ -299,6 +299,12 @@
                   </el-upload> -->
                 </el-form-item>
               </el-col>
+              <el-col :span="24">
+                <el-form-item  label="身份证照片下载：">
+                  <div type="primary" @click="uploadImg" class="upload">下载身份证</div>
+                  <img src="" alt="" id="avatar" style="display: none">
+                </el-form-item>
+              </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
@@ -618,6 +624,47 @@ export default {
           this.$refs.pageSign.getList()
         })
       }
+    },
+    uploadImg () {
+      console.log(123)
+      console.log(this.form.photoFront)
+      console.log(this.form.photoReverse)
+      /* eslint-disable */
+      var canvas = document.createElement("canvas");
+			    canvas.width = 794;
+			    canvas.height = 1123;
+			    var context = canvas.getContext("2d");
+			
+			    // context.rect(100 , 100 , 500 , 0);
+			    // context.fillStyle = "#fff";
+			    // context.fill();
+			
+			    var myImage = new Image();
+          myImage.setAttribute('crossOrigin', 'anonymous');
+			    myImage.src = `${this.form.photoFront}`;    //背景图片  你自己本地的图片或者在线图片
+          let that = this
+			    myImage.onload = function(){
+			        context.drawImage(myImage , 100 , 0,myImage.width,myImage.height );
+			        var myImage2 = new Image();
+              myImage2.setAttribute('crossOrigin', 'anonymous');
+			        myImage2.src = `${that.form.photoReverse}`;   //你自己本地的图片或者在线图片
+			        myImage2.onload = function(){
+			            context.drawImage(myImage2,100,myImage.height + 100,myImage2.width,myImage2.height);
+			            var base64 = canvas.toDataURL("image/png");  //"image/png" 这里注意一下
+			            var img = document.getElementById('avatar');
+
+			            document.getElementById('avatar').src = base64;
+			            img.setAttribute('src' , base64);
+                    var i = document.getElementById('avatar'); // 获取要下载的图片
+                    var url = i.src;                            // 获取图片地址
+                    var a = document.createElement('a');          // 创建一个a节点插入的document
+                    var event = new MouseEvent('click')           // 模拟鼠标click点击事件
+                    a.download = '身份证图片.png'                 // 设置a节点的download属性值
+                    a.href = url;                                 // 将图片的src赋值给a节点的href
+                    a.dispatchEvent(event)    
+			        }
+			    }
+      /* eslint-enable */
     },
     onBackByFrom () {
       let from = this.$route.query.from
@@ -1482,6 +1529,14 @@ export default {
 }
 </script>
 <style lang="scss">
+.upload {
+display: inline-block;
+    padding: 2px 10px;
+    color: #FFF;
+    border-radius: 5px;
+    background-color: #409eff;
+    border-color: #409eff;
+}
 .el-form {
   margin-right:16%;
 }
