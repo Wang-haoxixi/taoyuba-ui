@@ -48,6 +48,7 @@
           <test></test>
         </el-tab-pane>
         <el-tab-pane label="渔船交易" name="4">
+          <ship-sale></ship-sale>
         </el-tab-pane>
         <el-tab-pane label="渔船大事记" name="5">
         </el-tab-pane>
@@ -61,6 +62,7 @@ import crew from './archives/crew'
 import InOut from './archives/InAndOut'
 import insurance from './archives/Insurance'
 import test from './archives/test'
+import shipSale from './archives/shipSale'
 export default {
   name: 'prot',
   data () {
@@ -91,6 +93,7 @@ export default {
     InOut,
     insurance,
     test,
+    shipSale,
   },
 }
 </script>

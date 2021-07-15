@@ -24,6 +24,16 @@
               <div class="iep-ellipsis" :title="scope.row.intro">{{scope.row.intro}}</div>
             </template>
           </el-table-column>
+          <el-table-column label="区域代码" width="150px">
+            <template slot-scope="scope">
+              <div class="iep-ellipsis" :title="scope.row.abrName">{{scope.row.abrName}}</div>
+            </template>
+          </el-table-column>
+          <el-table-column label="排序" width="150px">
+            <template slot-scope="scope">
+              <div class="iep-ellipsis" :title="scope.row.sort">{{scope.row.sort}}</div>
+            </template>
+          </el-table-column>
         </template>
         <el-table-column prop="operation" label="操作" width="220">
           <template slot-scope="scope">

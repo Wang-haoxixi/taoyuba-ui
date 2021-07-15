@@ -16,11 +16,17 @@ export function changeShip (shipId,villageId) {
     // params: params,
   })
 }
-export function getFixOrgIds (shipId,orgId ) {
+// export function getFixOrgIds (shipId,orgId ) {
+//   return request({
+//     url: `${prefixUrl}/getFixOrgIds?shipId=${shipId}&&orgId=${orgId}`,
+//     method: 'get',
+//     // params: params,
+//   })
+// }
+export function getFixOrgIds () {
   return request({
-    url: `${prefixUrl}/getFixOrgIds?shipId=${shipId}&&orgId=${orgId}`,
+    url: '/admin/org/page',
     method: 'get',
-    // params: params,
   })
 }
 export function changeOrgIds (shipId,orgId ) {

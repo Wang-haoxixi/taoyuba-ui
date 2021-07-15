@@ -88,7 +88,7 @@
               </el-dropdown>
               <iep-button size="mini" type="primary" v-if="mlms_ship_crew" @click="handleAllCrew(scope.row.shipId,scope.row.shipName, scope.row)">船员</iep-button>
               <iep-button size="mini" type="primary" v-if="mlms_ship_crew" @click="handlePort(scope.row)">进出港</iep-button>
-              <iep-button size="mini" type="primary"  @click="boatArchives(scope.row)">渔船档案</iep-button>
+              <!-- <iep-button size="mini" type="primary"  @click="boatArchives(scope.row)">渔船档案</iep-button> -->
               <iep-button size="mini" type="primary" v-if="mlms_ship_shareholder && scope.row.shipShare==1" @click="handleHodler(scope.row.shipId,scope.row.shipName)">股东</iep-button>
               <iep-button size="mini" type="primary" v-if="mlms_ship_contract" @click="handleCrew(scope.row)">合同</iep-button>
               <!-- <iep-button size="mini" type="primary" @click="handleCrew(scope.row.shipNo)">船员</iep-button> -->
@@ -411,11 +411,10 @@ export default {
       this.shipId = shipId
       this.dialogVisible = true
     },
-    handleChangeArea (shipId,orgId){
-      orgId = 0
+    handleChangeArea (shipId){
       this.areaShipId = shipId
-      getFixOrgIds(shipId,orgId).then(res=>{
-        this.areaorgList = res.data.data
+      getFixOrgIds().then(res=>{
+        this.areaorgList = res.data.data.records
       })  
       // console.log(villageId)
       // this.shipId = shipId

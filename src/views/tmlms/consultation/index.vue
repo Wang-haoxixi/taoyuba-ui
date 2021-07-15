@@ -253,10 +253,10 @@ export default {
     lookPeople (id) {
       this.id = id
       this.dialogVisiblePeople = true
-      this.timer = setInterval(() => {
-          this.$refs.list.getData()
-      }, 2000)  
-      // this.initWebSocket(id)
+      // this.timer = setInterval(() => {
+      //     this.$refs.list.getData()
+      // }, 2000)  
+      this.initWebSocket(id)
       // Vue.use(new VueSocketio({
       //     debug: true,
       //     connection: 'http://localhost:5000', //地址+端口，由后端提供
@@ -275,7 +275,9 @@ export default {
     },
     initWebSocket (id) {
         console.log('创建WebSocket')
-        this.websock = new WebSocket(`ws://183.131.134.242:6888/tmlms/websocket/${id}`)
+        console.log(window.location.host)
+        let url = window.location.host === 'new.taoyu58.com' ? 'new.taoyu58.com' : 'testpc.taoyu58.com:6888'
+        this.websock = new WebSocket(`ws://${url}/sk/tmlms/connectWebSocket/meet/${id}`)
         console.log(this.websock)
         this.websock.onmessage = this.websocketonmessage
         this.websock.onerror = this.websocketonerror
@@ -285,13 +287,16 @@ export default {
     // 连接建立之后执行send方法发送数据
     websocketonopen () {
       this.websocketsend('')
+      console.log('连接成功!')
     },
     websocketonerror () {
       console.log( 'WebSocket连接失败')
     },
     // 数据接收
     websocketonmessage (e) {
+      console.log(123)
       console.log('数据接收' + e.data)
+      this.$refs.list.getData()
     },
     // 数据发送
     websocketsend (Data) {

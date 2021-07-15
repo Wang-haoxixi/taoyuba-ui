@@ -10,6 +10,12 @@
       <el-form-item label="组织描述" prop="intro">
         <el-input type="textarea" v-model="form.intro"></el-input>
       </el-form-item>
+      <el-form-item label="区域代码">
+        <el-input  v-model="form.abrName"></el-input>
+      </el-form-item>
+      <el-form-item label="排序">
+          <el-input-number v-model="form.sort" :min="1" :max="100000"></el-input-number>
+      </el-form-item>
     </el-form>
     <template slot="footer">
       <iep-button type="primary" @click="submitForm('form')">{{methodName}}</iep-button>

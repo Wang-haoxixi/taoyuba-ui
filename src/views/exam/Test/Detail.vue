@@ -114,6 +114,29 @@
             <el-form-item label="答案：" prop="answer">
               <el-input  type="textarea" v-model="form.answer" maxlength="500" show-word-limit placeholder="请输入内容"></el-input>
             </el-form-item>
+            <el-form-item label="上传图片：">
+              <el-upload
+                class="avatar-uploader"
+                action="/api/admin/file/upload/avatar"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess">
+                <i class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+              <div class="demo-image__preview">
+                  <template v-for="(url,index) in imgList">
+                    <span class="demo-image__preview-boss" :key="index">
+                      <div class="chacha" @click="deleteImg(index)">
+                        <i class="el-icon-error"></i>
+                      </div>
+                        <el-image
+                          style="width: 100px; height: 100px;"
+                          :src="url" 
+                          :preview-src-list="imgList">
+                        </el-image>
+                      </span>
+                  </template>
+              </div>
+            </el-form-item>
             </el-row>
             <el-form-item label="">
               <operation-wrapper>
@@ -214,6 +237,7 @@ export default {
       kindList:[],
       levelList:[],
       fileList: [],
+      imgList: [],
     }
   },
   computed: {
@@ -229,6 +253,9 @@ export default {
     this.getKindLevel()
   },
   methods: {
+    handleAvatarSuccess (res) {
+      this.imgList.push(res.data.url)
+    },
     addItem () {
       let str
       if(this.testOptions.length){
@@ -253,6 +280,9 @@ export default {
         type: 'error',
         duration: 6000,
       })
+    },
+    deleteImg (index) {
+      this.imgList.splice(index,1)
     },
     deleteItem (item, index) {
       this.testOptions.splice(index, 1)
@@ -292,6 +322,10 @@ export default {
       getTestById(this.$route.query.edit).then(item=>{
         this.getLevel(item.data.data.kind)
         this.form = item.data.data
+        if(item.data.data.url){
+          this.imgList = JSON.parse(item.data.data.url)
+        }
+        console.log(this.form.options)
         this.testOptions = JSON.parse(this.form.options)
       })
     },
@@ -306,7 +340,7 @@ export default {
         this.form.options = JSON.stringify(this.testOptions)
         if(valid){
           if(this.$route.query.edit){
-            updateTest(this.form).then(res=>{
+            updateTest({...this.form,url: JSON.stringify(this.imgList)}).then(res=>{
               if(res.data.data){
                 this.$message({
                 message: `${this.methodName}成功`,
@@ -327,8 +361,9 @@ export default {
             })
           }else{
             this.testFrom.examQuestionList = []
-            this.testFrom.examQuestionList.push(this.form)
-            createTest(this.testFrom).then(res=>{
+            let data = {...this.form,url: JSON.stringify(this.imgList)}
+            this.testFrom.examQuestionList.push(data)
+            createTest({...this.testFrom}).then(res=>{
             if(res.data.data){
               this.$message({
               message: `${this.methodName}成功`,
@@ -356,7 +391,30 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="scss">
+ ::v-deep .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  ::v-deep .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  ::v-deep.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+  }
+  ::v-deep .avatar {
+    width: 100px;
+    height: 100px;
+    display: block;
+  }
   /* .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
@@ -380,4 +438,19 @@ export default {
     height: 120px;
     display: block;
   } */
+  .demo-image__preview-boss {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    margin-right: 20px;
+    .chacha {
+      position: absolute;
+      z-index: 2;
+      right: 0;
+      top: -6px;
+      color: red;
+      font-size: 20px;
+    }
+  }
 </style>

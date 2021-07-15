@@ -95,6 +95,8 @@
           </el-table-column> -->
           <el-table-column label="操作" width="300" fixed="right">
             <template slot-scope="scope">
+              <el-button size="mini" @click="handleChange(scope.row.idcard)">变更
+              </el-button>
               <el-button size="mini" @click="handleView(scope.row.idcard)">查看
               </el-button>
               <el-button size="mini" @click="handleEdit(scope.row.idcard)"  v-if="manager">编辑
@@ -132,6 +134,7 @@
         </template>
       </div>
     </el-dialog>
+    <change-man ref="changeMan" @back="getData()"></change-man>
   </div>
 </template>
 <script>
@@ -141,8 +144,10 @@ import { getArea, getRogionList } from '@/api/post/admin'
 import keyBy from 'lodash/keyBy'
 import { mapGetters } from 'vuex'
 import queryMixin from '@/mixins/query'
+import changeMan from '@/components/changeMan/index'
 export default {
   mixins: [queryMixin],
+  components: { changeMan },
   data () {
     return {
       dialogVisible: false,
@@ -513,6 +518,10 @@ export default {
       } else {
         this.dialogVisible = true
       }
+    },
+    handleChange (id) {
+      this.$refs.changeMan.dialogVisible = true
+      this.$refs.changeMan.getOption(id)
     },
   },
   computed: {

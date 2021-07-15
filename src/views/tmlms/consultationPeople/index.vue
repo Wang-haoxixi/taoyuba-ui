@@ -78,7 +78,7 @@
             label="来源"
           >
             <template slot-scope="scope">
-              <div>{{ scope.row.sourceType === 0 ? '小程序' : '设备'  }}</div>
+              <div>{{ scope.row.sourceType === 0 ? '小程序' : scope.row.sourceType === 2 ? '补签' :'设备'  }}</div>
             </template>
           </el-table-column>
           <el-table-column label="操作" fixed="right">

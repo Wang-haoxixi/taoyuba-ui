@@ -31,6 +31,7 @@
         <el-table-column prop="operation" label="操作" width="300">
           <template slot-scope="scope">
             <operation-wrapper>
+              <iep-button size="mini" plain @click="handleChange(scope.row.idcard)">变更</iep-button>
               <iep-button size="mini" plain @click="handleView(scope.row.idcard)">查看</iep-button>
               <iep-button size="mini" plain v-if="scope.row.sign" @click="handleSign(scope.row.idcard)">合同</iep-button>                       
               <iep-button size="mini" plain v-if="!roles.includes(115)" @click="handleDelete(scope.row.idcard)">删除</iep-button>
@@ -68,6 +69,7 @@
         </div>
     </el-dialog> -->
     <dialog-form-relation ref="dialogFormRelation" :status="relationStatus" v-model="formRelation"></dialog-form-relation>
+    <change-man ref="changeMan" @back="getData()"></change-man>
   </div>
 </template>
 <script>
@@ -75,6 +77,7 @@
 // import { getList } from '@/api/tmlms/newContract'
 // import { getMyRecruitPage } from '@/api/post/recruit'
 import { getCrewByShipId,deleteCrewRelation } from '@/api/tmlms/boatMan'
+import changeMan from '@/components/changeMan/index'
 // import { getShipCrewList } from '@/api/ships/shipcrew'
 import { addUpWork } from '@/api/post/admin'
 import { getContractByidcard } from '@/api/tmlms/newContract'
@@ -90,6 +93,7 @@ export default {
   mixins: [mixins, rogionMixin],
   components: {
     dialogFormRelation,
+    changeMan,
   },
   data () {
     return {
@@ -167,23 +171,26 @@ export default {
     }
   },
   created () {
-    // this.loadPage()
-    this.getRogionList().then(() => {
-      this.getTableData()
-    }).catch(() => {
-      this.getTableData()
-    })
-    this.isManager()
-    this.getTitle()
-    this.formRelation.shipName = this.$route.query.shipName
-    this.formRelation.shipownerName = this.$route.query.shipowner
-    this.formRelation.shipownerPhone = this.$route.query.mobile
-    this.relation_ship_add = this.permissions['relation_ship_add']
+    this.getData()
   },
   computed: {
     ...mapGetters(['roles', 'permissions']),
   },
   methods: {
+    getData () {
+            // this.loadPage()
+      this.getRogionList().then(() => {
+        this.getTableData()
+      }).catch(() => {
+        this.getTableData()
+      })
+      this.isManager()
+      this.getTitle()
+      this.formRelation.shipName = this.$route.query.shipName
+      this.formRelation.shipownerName = this.$route.query.shipowner
+      this.formRelation.shipownerPhone = this.$route.query.mobile
+      this.relation_ship_add = this.permissions['relation_ship_add']
+    },
     handleView (val) {
       this.$router.push({name: 'detailBoatMan',query:{ see: val }})
     },
@@ -193,6 +200,10 @@ export default {
     },
     getTitle (){
       this.shipTitle = this.$route.query.shipName+'渔船船员'
+    },
+    handleChange (id) {
+      this.$refs.changeMan.dialogVisible = true
+      this.$refs.changeMan.getOption(id)
     },
     handleSelectionChange (val) {     
       this.multipleSelection = val.map(m => m.id)

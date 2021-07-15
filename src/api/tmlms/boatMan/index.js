@@ -175,3 +175,26 @@ export function updateCertificate (params) {
         params: params,
     })
 }
+// 变更船员
+export function changeShip (data) {
+    return request({
+        url: `${prefixUrl}/changeShip`,
+        method: 'post',
+        data: data,
+    })
+}
+export function getShipRelationByIdcard (params) {
+    return request({
+        url: `${prefixUrl}/getShipRelationByIdcard`,
+        method: 'get',
+        params: params,
+    })
+}
+export function allPage (params) {
+    return request({
+        url: '/tmlms/tybship/pageForChange',
+        method: 'get',
+        params: params,
+    })
+}
+
