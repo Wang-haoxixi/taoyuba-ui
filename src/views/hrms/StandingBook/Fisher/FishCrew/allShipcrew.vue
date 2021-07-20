@@ -160,6 +160,10 @@ export default {
           label: '微信',
           value: 2,
         },
+        {
+          label: '变更登记',
+          value: 3,
+        },
       ],
       rules:{
         reason:[{required: true, message: '该选项必填！', trigger: 'blur'}],

@@ -5,27 +5,29 @@
                 :data="tableData"
                 style="width: 100%">
                 <el-table-column
-                    prop="date"
+                    prop="createDate"
                     label="时间">
                     </el-table-column>
                     <el-table-column
-                    prop="name"
+                    prop="pointName"
                     label="港口">
                     </el-table-column>
                     <el-table-column
-                    prop="province"
+                    prop="number"
                     label="人数">
                     </el-table-column>
                     <el-table-column
                     prop="city"
                     label="进出港类型">
+                    <template slot-scope="scope">
+                      <div>{{ scope.row.type === 'IN' ? '进港' : '出港'}}</div>
+                    </template>
                     </el-table-column>
                     <el-table-column
                     label="操作"
                     width="100">
                     <template slot-scope="scope">
-                        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-                        <el-button type="text" size="small">合同</el-button>
+                        <el-button @click="handleLook(scope.row)" type="text" size="small">查看</el-button>
                     </template>
                     </el-table-column>
                 </el-table>
@@ -49,11 +51,11 @@
                 :data="tableDataList"
                 style="width: 100%">
                 <el-table-column
-                    prop="date"
+                    prop="name"
                     label="姓名">
                     </el-table-column>
                     <el-table-column
-                    prop="name"
+                    prop="cardNum"
                     label="身份证">
                     </el-table-column>
                     <el-table-column
@@ -61,15 +63,15 @@
                     label="手机">
                     </el-table-column>
                     <el-table-column
-                    prop="city"
-                    label="籍贯">
+                    prop="address"
+                    label="地址">
                     </el-table-column>
                     <el-table-column
-                    prop="city"
+                    prop="duty"
                     label="职务">
                     </el-table-column>
                     <el-table-column
-                    prop="city"
+                    prop="smNum"
                     label="证书号码">
                     </el-table-column>
                     <el-table-column
@@ -84,6 +86,7 @@
     </div>
 </template>
 <script>
+import { countContractByShipPage,getCrewByRecordId } from '@/api/ships/index.js'
 export default {
   name: 'prot',
   data () {
@@ -98,15 +101,22 @@ export default {
         dialogVisible: false,
     }
   },
+  props: {
+    shipName: {
+      default: '',
+      type: String,
+    },
+  },
   created () {
+    this.getData()
   },
   mounted () {
   },
-  props: {
-  },
   methods: {
     getData () {
-
+      countContractByShipPage({...this.page,shipName: this.shipName}).then(res=>{
+        this.tableData = res.data.data.records
+      })
     },
     handleSizeChange (val) {
       this.page.size = val
@@ -116,6 +126,16 @@ export default {
     currentChange (val) {
       this.page.current = val
       this.getData()
+    },
+    handleClick (row) {
+        this.dialogVisible = false
+      this.$router.push(`/boatMan/detail?see=${row.cardNum}`)
+    },
+    handleLook (row) {
+      getCrewByRecordId({ id: row.id }).then(res=>{
+        this.tableDataList = res.data.data
+        this.dialogVisible = true
+      })
     },
   },
   components: {

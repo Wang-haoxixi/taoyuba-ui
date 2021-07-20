@@ -2,10 +2,10 @@
     <div class="crew">
         <div style="margin-top: 21px">
             <el-tabs v-model="activeName" type="card" >
-                <el-tab-pane label="综合责任险" name="first"></el-tab-pane>
-                <el-tab-pane label="附加机损险" name="second"></el-tab-pane>
-                <el-tab-pane label="全损险" name="second"></el-tab-pane>
-                <el-tab-pane label="雇主责任险" name="second"></el-tab-pane>
+                <el-tab-pane label="综合责任险" name="11"></el-tab-pane>
+                <el-tab-pane label="附加机损险" name="222"></el-tab-pane>
+                <el-tab-pane label="全损险" name="33"></el-tab-pane>
+                <el-tab-pane label="雇主责任险" name="44"></el-tab-pane>
             </el-tabs>
               <el-table
                 :data="tableData"

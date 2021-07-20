@@ -4,34 +4,63 @@
             <div v-for="(item,index) in list" :key="index" style="width: 20%">
                 <div v-for="(items,indexs) in item" :key="indexs" class="archives-info-content">
                     <p>{{ items.name }}</p>
-                    <p>{{ items.value }}</p>
+                    <p v-if="!items.dic">{{ data[items.value] || '暂无' }}</p>
+                    <p v-else>{{ getName(data[items.value],items.dic) || '暂无' }}</p>
                 </div>
             </div>
         </div>
         <div class="archives-certificate">
             <div>
                 <p>渔船所有权证书编号</p>
-                <p>3310000586554</p>
-                <p>到期日期：2025-01-13</p>
-                <img src="/img/ship.png">
+                <p>{{ data.licensesOwnerShip || '暂无' }}</p>
+                <p>到期日期：{{ list.licensesDateExpire || '暂无'}}</p>
+                <template v-if="img.ownershipRegistrationImage">
+                    <el-image 
+                        style="width: 100px; height: 100px"
+                        v-for="(item,index) in img.ownershipRegistrationImage.split(',')" :key="index"
+                        :src="item" 
+                        :preview-src-list="[item]">
+                    </el-image>
+                </template>
             </div>
             <div>
                 <p>渔船捕捞证书编号</p>
-                <p>3310000586554</p>
-                <p>到期日期：2025-01-13</p>
-                <img src="/img/ship.png">
+                <p>{{ data.licensesFishingNo || '暂无' }}</p>
+                <p>到期日期：{{ list.licensesFishingExpireDate || '暂无' }}</p>
+                <template v-if="img.fishLicenceImage">
+                    <el-image 
+                        style="width: 100px; height: 100px"
+                        v-for="(item,index) in img.fishLicenceImage.split(',')" :key="index"
+                        :src="item" 
+                        :preview-src-list="[item]">
+                    </el-image>
+                </template>
             </div>
             <div>
                 <p>船舶检验证书编号</p>
-                <p>3310000586554</p>
-                <p>到期日期：2025-01-13</p>
-                <img src="/img/ship.png">
+                <p>{{ data.licensesInspectionNo || '暂无' }}</p>
+                <p>到期日期：{{ list.licensesInspectionExpireDate || '暂无' }}</p>
+                <template v-if="img.fishVesselImage">
+                    <el-image 
+                        style="width: 100px; height: 100px"
+                        v-for="(item,index) in img.fishVesselImage.split(',')" :key="index"
+                        :src="item" 
+                        :preview-src-list="[item]">
+                    </el-image>
+                </template>
             </div>
             <div>
                 <p>国籍证书编号</p>
-                <p>3310000586554</p>
-                <p>到期日期：2025-01-13</p>
-                <img src="/img/ship.png">
+                <p>{{ data.licensesNationalNo || '暂无' }}</p>
+                <p>到期日期：{{ list.licensesNationalExpireDate || '暂无' }}</p>
+                <template v-if="img.nationalityRegistrationImage">
+                    <el-image 
+                        style="width: 100px; height: 100px"
+                        v-for="(item,index) in img.nationalityRegistrationImage.split(',')" :key="index"
+                        :src="item" 
+                        :preview-src-list="[item]">
+                    </el-image>
+                 </template>
             </div>
         </div>
     </div>
@@ -45,19 +74,20 @@ export default {
             [
                 {
                     name: '船籍港',
-                    value: '苍南',
+                    value: 'portName',
                 },
                 {
                     name: '船舶产地',
-                    value: '浙江舟山',
+                    value: 'buildFactory',
                 },
                 {
                     name: '船体材料',
-                    value: '工业级纳米高分子塑料聚合',
+                    value: 'hullMaterial',
+                    dic: 'tyb_ship_material',
                 },
                 {
                     name: '造船日期',
-                    value: '2016年04月02日',
+                    value: 'buildDate',
                 },
             ],
             [
@@ -67,7 +97,7 @@ export default {
                 },
                 {
                     name: '船长',
-                    value: '53KM',
+                    value: 'hullLength',
                 },
                 {
                     name: '航速',
@@ -81,55 +111,55 @@ export default {
             [
                 {
                     name: '主机型号',
-                    value: 'Chinese Theater Missile Defense',
+                    value: 'mainEngineModel',
                 },
                 {
                     name: '主机功率',
-                    value: '56KW',
+                    value: 'mainEnginePower',
                 },
                 {
                     name: '总机功率',
-                    value: '80KW',
+                    value: 'engineTotalPower',
                 },
                 {
                     name: '双控功率',
-                    value: '42KW',
+                    value: 'dualPower',
                 },
             ],
             [
                 {
                     name: '型深',
-                    value: '7M',
+                    value: 'mouldedDepth',
                 },
                 {
                     name: '型宽',
-                    value: '8M',
+                    value: 'mouldedBreadth',
                 },
                 {
                     name: '总吨位',
-                    value: '176t',
+                    value: 'grossTonnage',
                 },
                 {
                     name: '净吨位',
-                    value: '53t',
+                    value: 'netTonnage',
                 },
             ],
             [
                 {
                     name: '作业类型',
-                    value: '张网',
+                    value: 'workTypeName ',
                 },
                 {
                     name: '作业方式',
-                    value: '帆张网',
+                    value: 'workModeName ',
                 },
                 {
                     name: '渔具',
-                    value: '刺网',
+                    value: 'fishingGearName',
                 },
                 {
                     name: '主捕种类',
-                    value: '大鱿鱼',
+                    value: 'fishType',
                 },
             ],
         ],
@@ -140,7 +170,11 @@ export default {
   mounted () {
   },
   props: {
-    row: {
+    data: {
+      default: ()=>{},
+      type: Object,
+    },
+    img: {
       default: ()=>{},
       type: Object,
     },
@@ -149,6 +183,16 @@ export default {
     handleClick () {
     },
     back () {
+    },
+    getName (val,arr) {
+        let data = ''
+        console.log(this.$store.getters.dictGroup)
+        this.$store.getters.dictGroup[arr].forEach(element => {
+            if( element.value === val ){
+                data = element.label
+            }
+        })
+        return data
     },
   },
   components: {
@@ -176,6 +220,7 @@ export default {
 .archives-certificate {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     margin-top: 30px;
     img {
         max-width: 200px;

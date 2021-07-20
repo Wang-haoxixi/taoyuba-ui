@@ -223,8 +223,57 @@ export function getCrewByRecordId (params) {
   })
 }
 
+export function infoShip (shipId) {
+  return request({
+    url: `/tybship/tybship/info/${shipId}`,
+    method: 'get',
+  })
+}
 
+export function certStandard (shipId) {
+  return request({
+    url: `/tmlms/crew_cert/certStandard/${shipId}`,
+    method: 'get',
+  })
+}
 
+export function investigationReport (shipName) {
+  return request({
+    url: `/tmlms/investigationReport/pageByShipName?shipName=${shipName}`,
+    method: 'get',
+  })
+}
+
+export function countContractByShipId (shipId) {
+  return request({
+    url: `/tmlms/crew/countContractByShipId?shipId=${shipId}`,
+    method: 'get',
+  })
+}
+
+export function countContractByShipPage (params) {
+  return request({
+    url: '/tmlms/tybPortRecord/page',
+    method: 'get',
+    params: params,
+  })
+}
+
+export function pageByShipName (params) {
+  return request({
+    url: '/tmlms/investigationReport/pageByShipName',
+    method: 'get',
+    params: params,
+  })
+}
+
+// export function getCrewByRecordId (recordId) {
+//   return request({
+//     url: '/tmlms/tybPortRecord/getCrewByRecordId',
+//     method: 'get',
+//     params: { recordId: recordId },
+//   })
+// }
 
 
 

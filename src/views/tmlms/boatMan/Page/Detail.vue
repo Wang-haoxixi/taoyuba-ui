@@ -536,7 +536,7 @@ export default {
         {id:41,name:'塔吉克族'}, {id:42,name:'怒族'}, {id:43,name:'乌孜别克族'}, {id:44,name:'俄罗斯族'}, {id:45,name:'鄂温克族'},
         {id:46,name:'德昂族'}, {id:47,name:'保安族'}, {id:48,name:'裕固族'}, {id:49,name:'京族'}, {id:50,name:'塔塔尔族'},
         {id:51,name:'独龙族'}, {id:52,name:'鄂伦春族'}, {id:53,name:'赫哲族'}, {id:54,name:'门巴族'}, {id:55,name:'珞巴族'},
-        {id:56,name:'基诺族'},
+        {id:56,name:'基诺族'},{id:57,name:'穿青人'},
       ],
       rules: {
         realName: [
@@ -616,6 +616,11 @@ export default {
     init (idcard) {
       this.$refs.pageContract.getList(idcard)
       this.$refs.pageShipRecord.getList(idcard)
+      if(this.$route.query.current){
+        console.log(222)
+        console.log(this.$route.query.current)
+        this.current = Number(this.$route.query.current)
+      }
     },
     onTabs (index) {
       this.current = index

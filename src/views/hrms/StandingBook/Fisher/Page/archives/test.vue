@@ -63,6 +63,7 @@
     </div>
 </template>
 <script>
+import { pageByShipName } from '@/api/ships/index.js'
 export default {
   name: 'prot',
   data () {
@@ -71,12 +72,22 @@ export default {
     }
   },
   created () {
+      this.getData()
   },
   mounted () {
   },
   props: {
+    shipName: {
+      default: '',
+      type: String,
+    },
   },
   methods: {
+      getData () {
+          pageByShipName({ shipName: this.shipName }).then(res=>{
+              console.log(res)
+          })
+      },
   },
   components: {
   },
