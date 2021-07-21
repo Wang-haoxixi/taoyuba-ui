@@ -22,9 +22,9 @@
                         <div>船图相符：是</div>
                     </div>
                     <div class="test-content">
-                        <div>检验地点：温岭</div>
-                        <div>检验机构：温岭检验站</div>
-                        <div>检验时间：2021-04-07</div>
+                        <div>检验地点：{{ list.address }}</div>
+                        <div>检验机构：{{ list.enterprise }}</div>
+                        <div>检验时间：{{ list.reportTime }}</div>
                         <div>下次检验时间：202-04-07</div>
                         <div>下次换证时间：2022-04-08</div>
                     </div>
@@ -33,7 +33,7 @@
             <el-col :span="12">
                 <div class="test-boss">
                     <div class="test-title">
-                        <div>渔船检验</div>
+                        <div>检验结果</div>
                         <div class="test-title">
                             <el-button style="margin-right: 20px">质量证明书</el-button>
                             <el-date-picker
@@ -43,19 +43,20 @@
                             </el-date-picker>
                         </div>
                     </div>
+                    <!-- 有些字段没有  我就先写个0代替下 -->
                     <div class="test-content">
-                        <div>船体项目：<span style="color: #E6893A">1项不合格</span></div>
-                        <div>消防项目：合格</div>
-                        <div>电器项目：<span style="color: #E6893A">1项不合格</span></div>
-                        <div>轮机项目：<span style="color: #E6893A">1项不合格</span></div>
-                        <div>其他项目：合格</div>
+                        <div>船体项目：<span :style="list.hullFirstResult ? '' :'color: #E6893A'">{{ list.hullFirstResult ? '合格' : '不合格' }}</span></div>
+                        <div>消防项目：<span :style="list.waterFireFightingFirstResult ? '' :'color: #E6893A'">{{ list.waterFireFightingFirstResult ? '合格' : '不合格' }}</span></div>
+                        <div>电器项目：<span :style="list.electricAccessoryFirstResult ? '' :'color: #E6893A'">{{ list.electricAccessoryFirstResult ? '合格' : '不合格' }}</span></div>
+                        <div>轮机项目：<span :style="list.turbineStandardResult ? '' :'color: #E6893A'">{{ list.turbineStandardResult ? '合格' : '不合格' }}</span></div>
+                        <div>其他项目：<span :style="0 ? '' :'color: #E6893A'">{{ 0 ? '合格' : '不合格' }}</span></div>
                     </div>
                     <div class="test-content">
-                        <div>渔捞设备：<span style="color: #E6893A">1项不合格</span></div>
-                        <div>防污染设备：<span style="color: #E6893A">1项不合格</span></div>
-                        <div>防火控火设备：合格</div>
-                        <div>救生逃生设备：合格</div>
-                        <div>航行信号设备：合格</div>
+                        <div>渔捞设备：<span :style="list.fishingEquipmentFirstResult ? '' :'color: #E6893A'">{{ list.fishingEquipmentFirstResult ? '合格' : '不合格' }}</span></div>
+                        <div>防污染设备：<span :style="0 ? '' :'color: #E6893A'">{{ 0 ? '合格' : '不合格' }}</span></div>
+                        <div>防火控火设备：<span :style="list.kitchenFirstResult ? '' :'color: #E6893A'">{{ list.kitchenFirstResult ? '合格' : '不合格' }}</span></div>
+                        <div>救生逃生设备：<span :style="list.lifeRaftResult ? '' :'color: #E6893A'">{{ list.lifeRaftResult ? '合格' : '不合格' }}</span></div>
+                        <div>航行信号设备：<span :style="list.signalLampResult ? '' :'color: #E6893A'">{{ list.signalLampResult ? '合格' : '不合格' }}</span></div>
                     </div>
                 </div>
             </el-col>
@@ -69,6 +70,7 @@ export default {
   data () {
     return {
         value2: '',
+        list: {},
     }
   },
   created () {
@@ -86,6 +88,7 @@ export default {
       getData () {
           pageByShipName({ shipName: this.shipName }).then(res=>{
               console.log(res)
+              this.list = res.data.data.records[0] || {}
           })
       },
   },

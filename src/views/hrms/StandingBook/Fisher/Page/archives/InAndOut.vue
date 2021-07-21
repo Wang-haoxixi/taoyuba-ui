@@ -116,6 +116,7 @@ export default {
     getData () {
       countContractByShipPage({...this.page,shipName: this.shipName}).then(res=>{
         this.tableData = res.data.data.records
+        this.page.total = res.data.data.total
       })
     },
     handleSizeChange (val) {

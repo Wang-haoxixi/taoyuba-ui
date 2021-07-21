@@ -649,12 +649,12 @@ export default {
 			    myImage.src = `${this.form.photoFront}`;    //背景图片  你自己本地的图片或者在线图片
           let that = this
 			    myImage.onload = function(){
-			        context.drawImage(myImage , 100 , 0,myImage.width,myImage.height );
-			        var myImage2 = new Image();
+              var myImage2 = new Image();
               myImage2.setAttribute('crossOrigin', 'anonymous');
 			        myImage2.src = `${that.form.photoReverse}`;   //你自己本地的图片或者在线图片
+			        context.drawImage(myImage , (794 - myImage.width) / 2  , (1123 - ( myImage2.height + myImage.height + 200 ))/2,myImage.width,myImage.height );
 			        myImage2.onload = function(){
-			            context.drawImage(myImage2,100,myImage.height + 100,myImage2.width,myImage2.height);
+			            context.drawImage(myImage2,(794 - myImage2.width) / 2,(1123 - ( myImage2.height + myImage.height + 200 ))/2 + 200 + myImage.height,myImage2.width,myImage2.height);
 			            var base64 = canvas.toDataURL("image/png");  //"image/png" 这里注意一下
 			            var img = document.getElementById('avatar');
 

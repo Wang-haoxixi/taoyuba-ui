@@ -261,12 +261,46 @@ export function countContractByShipPage (params) {
 
 export function pageByShipName (params) {
   return request({
-    url: '/tmlms/investigationReport/pageByShipName',
+    url: '/tmlms/tybTroubleshootReport/pageByShipNo',
     method: 'get',
     params: params,
   })
 }
 
+export function ByShipName (params) {
+  return request({
+    url: '/tmlms/tyb_order/pageByShipName',
+    method: 'get',
+    params: params,
+  })
+}
+
+export function verification (params) {
+  return request({
+    url: '/tmlms/verification/page',
+    method: 'get',
+    params: params,
+  })
+}
+
+export function postExcelExport (fileds) {
+  return request({
+    url: '/tmlms/tybmlmsExcelExport/downVerification',
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    responseType: 'arraybuffer',
+    data: fileds,
+  }).then(response => {
+    // 处理返回的文件流
+    const blob = new Blob([response.data], { type: 'application/vnd.ms-excel' })
+    const link = document.createElement('a')
+    link.href = window.URL.createObjectURL(blob)
+    link.download = '实船鉴证.xls'
+    link.click()
+  })
+}
 // export function getCrewByRecordId (recordId) {
 //   return request({
 //     url: '/tmlms/tybPortRecord/getCrewByRecordId',

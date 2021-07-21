@@ -48,7 +48,7 @@
           <test :shipName="row.shipName"></test>
         </el-tab-pane>
         <el-tab-pane label="渔船交易" name="d">
-          <ship-sale></ship-sale>
+          <ship-sale :shipNo="row.shipNo"></ship-sale>
         </el-tab-pane>
         <el-tab-pane label="渔船大事记" name="e">
         </el-tab-pane>

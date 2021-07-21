@@ -1,38 +1,38 @@
 <template>
     <div class="crew">
         <div style="margin-top: 21px">
-            <el-tabs v-model="activeName" type="card" >
-                <el-tab-pane label="综合责任险" name="11"></el-tab-pane>
-                <el-tab-pane label="附加机损险" name="222"></el-tab-pane>
-                <el-tab-pane label="全损险" name="33"></el-tab-pane>
-                <el-tab-pane label="雇主责任险" name="44"></el-tab-pane>
-            </el-tabs>
               <el-table
                 :data="tableData"
                 style="width: 100%">
                 <el-table-column
-                    prop="date"
+                    prop="updateTime"
                     label="历史交易时间">
                     </el-table-column>
                     <el-table-column
-                    prop="name"
+                    prop=""
                     label="流转地点">
                     </el-table-column>
                     <el-table-column
-                    prop="province"
+                    prop="sellerName"
                     label="买方">
                     </el-table-column>
                     <el-table-column
-                    prop="city"
+                    prop="buyerName"
                     label="卖方">
                     </el-table-column>
                     <el-table-column
                     prop="address"
                     label="作业类型">
+                        <template slot-scope="scope">
+                            <div> {{ getLabel('tyb_resume_worktype',scope.row.activityType) }} </div>
+                        </template>
                     </el-table-column>
                     <el-table-column
                     prop="zip"
                     label="交易方式">
+                        <template>
+                            <div> 交易服务中心 </div>
+                        </template>
                     </el-table-column>
                 </el-table>
         </div>
@@ -50,6 +50,7 @@
     </div>
 </template>
 <script>
+import { ByShipName } from '@/api/ships/index.js'
 export default {
   name: 'prot',
   data () {
@@ -64,14 +65,32 @@ export default {
     }
   },
   created () {
+      this.getData()
   },
   mounted () {
   },
   props: {
+    shipNo: {
+      default: '',
+      type: String,
+    },
   },
   methods: {
     getData () {
-
+      ByShipName({...this.page,shipNo: this.shipNo}).then(res=>{
+        this.tableData = res.data.data.records
+        this.page.total = res.data.data.total
+      })
+    },
+        // 获取字典
+    getLabel (dic,arr) {
+        let data = ''
+            this.$store.state.cache.dictGroup[dic].forEach(element => {
+                if( element.value === arr ){
+                    data = element.label
+                }
+            })
+        return data
     },
     handleSizeChange (val) {
       this.page.size = val
