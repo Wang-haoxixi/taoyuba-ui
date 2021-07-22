@@ -909,7 +909,7 @@ export default {
     handleGo () {
       this.$router.go(-1)
     },
-    shipNameChange (name) {                             
+    shipNameChange (name) {                       
       if (typeof name === 'object') {      
         this.refreshShipName(name)
       } else {                                                    
@@ -930,6 +930,7 @@ export default {
         this.formData.employerPhone = mobile
         this.formData.employerAddr = address
         this.formData.employerProp = 1
+        this.formData.shipName = name.shipName
         this.employer =true
         if(shipShare==1){
           this.formData.shipJoint = 1

@@ -76,7 +76,7 @@ export default {
         ],
         code: [
           { required: true, message: '请输入验证码', trigger: 'blur' },
-          { min: 4, max: 4, message: '验证码长度为4位', trigger: 'blur' },
+          // { min: 4, max: 4, message: '验证码长度为4位', trigger: 'blur' },
         ],
       },
       passwordType: 'password',
