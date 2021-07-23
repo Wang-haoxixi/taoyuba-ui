@@ -98,6 +98,12 @@ export default {
     return {
         tableData: [],
         activeName: 'first',
+         certLevel: [
+        { value: '0', label: '' },
+        { value: '1', label: '一级' },
+        { value: '2', label: '二级' },
+        { value: '3', label: '三级' },
+      ],
     }
   },
   props: {
@@ -123,12 +129,21 @@ export default {
       getLabel (dic,arr) {
           let data = ''
           arr.forEach(chil => {
+              this.certLevel.map(iep=>{
+               if (chil.certLevel === iep.value) {
+                 data = iep.label
+                }
+               })
              this.$store.state.cache.dictGroup[dic].forEach(element => {
+                
                 if( element.value === chil.certTitle ){
-                    data = element.label + ',' + data
+                    data += element.label + ','
                 }
             })
           })
+          if(data){
+            data=data.slice(0,data.length-1)
+          }
           return data
       },
       handleClick (row,current) {
