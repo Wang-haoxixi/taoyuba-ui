@@ -631,9 +631,6 @@ export default {
       }
     },
     uploadImg () {
-      console.log(123)
-      console.log(this.form.photoFront)
-      console.log(this.form.photoReverse)
       /* eslint-disable */
       var canvas = document.createElement("canvas");
 			    canvas.width = 794;
@@ -664,7 +661,7 @@ export default {
                     var url = i.src;                            // 获取图片地址
                     var a = document.createElement('a');          // 创建一个a节点插入的document
                     var event = new MouseEvent('click')           // 模拟鼠标click点击事件
-                    a.download = '身份证图片.png'                 // 设置a节点的download属性值
+                    a.download = '身份证图片.jpg'                 // 设置a节点的download属性值
                     a.href = url;                                 // 将图片的src赋值给a节点的href
                     a.dispatchEvent(event)    
 			        }
