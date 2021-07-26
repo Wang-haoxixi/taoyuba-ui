@@ -477,9 +477,11 @@ export default {
     },
     onToEmployee (idcard) {
       let from = '/crew/htgl/contract_admin'
-      for (let key in this.params) {
-        if (this.params[key]) {
-          from += `&${key}=${this.params[key]}`
+      let params = JSON.parse(JSON.stringify(this.params))
+      delete params.current
+      for (let key in params) {
+        if (params[key]) {
+          from += `&${key}=${params[key]}`
         }
       }
       this.$router.push(`/boatMan/detail?edit=${idcard}&from=${from}`)
@@ -788,6 +790,9 @@ export default {
       iframe.onload = function () {
         iframe.contentWindow.focus()
         iframe.contentWindow.print()
+        iframe.onload = function () {
+          console.log(1)
+        }
       }
       // getContract(contractId).then(({data}) => {
       //   if (data.code == 0) {
