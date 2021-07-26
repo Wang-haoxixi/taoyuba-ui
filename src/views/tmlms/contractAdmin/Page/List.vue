@@ -790,6 +790,9 @@ export default {
       iframe.onload = function () {
         iframe.contentWindow.focus()
         iframe.contentWindow.print()
+        iframe.onload = function () {
+          console.log(1)
+        }
       }
       // getContract(contractId).then(({data}) => {
       //   if (data.code == 0) {
