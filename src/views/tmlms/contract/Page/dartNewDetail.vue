@@ -494,7 +494,7 @@
       </el-form>
       <div style="text-align: center;padding: 20px 0;">                   
         <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add' || type === 'edit' || type === 'renew'" type="primary" @click="handleSubmit">保存</iep-button>
-        <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add'" type="primary" @click="handleSubmitCaoGao">保存为草稿</iep-button>
+        <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add'|| type === 'edit' " type="primary" @click="handleSubmitCaoGao">保存为草稿</iep-button>
 
         <iep-button v-if="!$route.query.see" :disabeld="false" @click="handleBack">返回</iep-button>  
         <iep-button v-else :disabeld="false" @click="handleGo">返回</iep-button>           
@@ -522,8 +522,10 @@ Vue.use(new VueSocketio({
 }))
 import { 
   addContract, 
-  updateContract, getContractDetail, isCheckIdcard,getContractByidcard} from '@/api/tmlms/newContract'
+  updateContract, isCheckIdcard,getContractByidcard} from '@/api/tmlms/newContract'
   import { 
+ getDartContractDetail} from '@/api/tmlms/draftContract'
+  import {  
   AddTybcontractDraft} from '@/api/mlms/index'
 export default {
   props: {
@@ -857,7 +859,7 @@ export default {
       }
     },
     getList () {
-      getContractDetail (this.record).then(data =>{
+      getDartContractDetail (this.record).then(data =>{
         this.formData = data.data.data
         if(data.data.data.employeePosition === '0'){       
           this.formData.employeePosition=''

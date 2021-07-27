@@ -17,3 +17,11 @@ export function getCommentPage (obj) {
     params: obj,
   })
 }
+//新增草稿
+export function AddTybcontractDraft (obj) {
+  return request({
+    url: '/tmlms/tybcontractDraft/saveOrUpdate',
+    method: 'post',
+    data: obj,
+  })
+}

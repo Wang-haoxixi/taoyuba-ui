@@ -1,0 +1,1212 @@
+<template>
+  <div class="contract-box aa">
+    <basic-container>
+      <page-header title="网签合同"></page-header>
+      <!-- <div class="tips" v-if="roles.indexOf(109) !== -1 || roles.indexOf(112) !== -1">
+        <dl>
+          <dt> 合同如有以下情况：</dt>
+          <dd>1、合同信息填写错误，需重新编辑。</dd>
+          <dd>2、合同非正常解除，需解除合同。</dd>
+          <dd>请前往衢山船员服务中心。联系人：李岳雷，电话：15924014846</dd>
+        </dl>
+      </div> -->
+            <operation-container>
+        <template slot="left">
+          <iep-button v-if="mlms_contract_add" @click="handleAdd" type="primary">新增</iep-button>
+          <iep-button @click="handleFresh" type="default" >刷新</iep-button>
+        </template>
+        <template slot="right">
+          <span style="width:150px" v-if="!roles.includes(112)">
+            <el-select v-model="chooseOrg" placeholder="基层组织" clearable size="small">
+              <el-option
+                v-for="item in orgList"
+                :key="item.index"
+                :label="item.villageName"
+                :value="item.userId"
+                >
+              </el-option>
+            </el-select>
+          </span>
+          <span><el-input v-model.trim="params.shipName" clearable placeholder="船名号" size="small" style="width:120px"></el-input></span>
+          <!-- <span><el-input v-model="params.shipownerName" placeholder="持证人姓名" size="small" style="width:120px"></el-input></span> -->
+          <span><el-input v-model.trim="params.employerName" clearable placeholder="甲方姓名" size="small" style="width:120px"></el-input></span>
+          <span><el-input v-model.trim="params.employeeName" clearable placeholder="乙方姓名" size="small" style="width:120px"></el-input></span>
+          <span style="width:240px">
+            <el-date-picker v-model="params.timeLists" type="daterange" clearable range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
+            value-format="yyyy-MM-dd"  size="small"></el-date-picker>
+          </span>
+          <span style="width:120px">
+            <el-select v-model="conStatus" placeholder="合同状态" size="small" clearable>
+              <el-option
+                v-for="item in statusDict"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                >
+              </el-option>
+            </el-select>
+          </span>
+          <el-button size="small" @click="getParamData">搜索</el-button>
+        </template>
+      </operation-container>
+      <avue-tree-table :option="options" style="margin-top: 20px;" :row-class-name="rowClassName">
+        <!-- <el-table-column label="是否审核" prop="status">
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.status" active-color="#13ce66" inactive-color="#ff4949"
+            @change="handleReview(scope.row.swith, scope.row.contractId)">
+            </el-switch>
+          </template>
+        </el-table-column> -->
+        <!-- <el-table-column
+            prop="status"
+            label="是否审核"
+            width="100"
+            v-if="mangner"
+          >
+          <template slot-scope="scope">
+            <div>
+              <el-switch
+                v-model="scope.row.swith"
+                active-color="#13ce66"
+                @change="handleReview(scope.row.swith,scope.row.contractId)"
+                inactive-color="#ff4949">
+              </el-switch>
+            </div>
+          </template>
+          </el-table-column> -->
+        <el-table-column label="操作" width="250" fixed="right">
+          <template slot-scope="scope">
+             <!-- <el-button v-if="mlms_contract_view" size="mini" @click="handleView(scope.row.id)">合同查看
+            </el-button> -->
+            <el-button v-if="(mlms_contract_edit && scope.row.status === '未审核') || (mlms_contract_edit && scope.row.status === '未通过审核')" size="mini" @click="handleEdit(scope.row.id)">编辑
+            </el-button>
+            <el-button v-if="mlms_contract_del " size="mini" @click="handleDel(scope.row.id)">删除
+            </el-button>
+            <el-button v-if="mlms_contract_rev && scope.row.status === '未审核'" size="mini" @click="handleReview(scope.row.id)">审核
+            </el-button>
+            <iep-button v-if="mlms_contract_rec && scope.row.status === '未通过审核'" size="mini" @click="handleRecord(scope.row.id)">审核记录
+            </iep-button>
+            <iep-button v-if="mlms_contract_rem && (scope.row.status === '合同解除' || scope.row.status === '合同纠纷')" @click="handleRemove(scope.row.id)">解除记录
+            </iep-button>
+            <el-button v-if="mlms_contract_pri && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')" size="mini" @click="handlePrint(scope.row.id)">打印
+            </el-button>
+            <el-button v-if="mlms_contract_rel && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')" size="mini" @click="handleRelieve(scope.row.id)">解除
+            </el-button>
+            <el-button v-if="mlms_relieve_rel && (scope.row.status === '合同成立' || scope.row.status === '未签纸质合同' || scope.row.status === '合同纠纷')" size="mini" @click="goTo(scope.row.id)">申请解除
+            </el-button>
+            <el-button v-if="mlms_contract_com && scope.row.status === '合同纠纷'" size="mini" @click="go(scope.row.id)">投诉管理
+            </el-button>
+            <el-button v-if="mlms_contract_eva && scope.row.status === '合同解除' && scope.row.isRate === 0 && scope.row.isDate === 0" size="mini" @click="handleEvaluate(scope.row.id)">评价
+            </el-button>
+             <el-button v-if="mlms_contract_recall && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同') " size="mini" @click="handleCall(scope.row.id)">撤销
+            </el-button>
+             <el-button v-if="mlms_contract_upload && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')  && scope.row.contractImage !== '1' " size="mini" @click="handleUpload(scope.row.id)">上传纸质合同
+            </el-button>
+              <el-button v-if="mlms_contract_upload && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')  && scope.row.contractImage === '1' " size="mini" @click="handleUpload(scope.row.id)">查看纸质合同
+            </el-button>
+            <el-button v-if="mlms_contract_employee" size="mini" @click="onToEmployee(scope.row.employeeIdcard)">船员编辑</el-button>
+            <el-button v-if="scope.row.status === '合同过期'" size="mini" @click="onRenewContracte(scope.row.contractId)">续签</el-button>
+          </template>
+        </el-table-column>
+      </avue-tree-table>
+      <div style="text-align: center;margin: 20px 0;">
+        <el-pagination
+          background
+          layout="total, prev, pager, next, jumper"
+          :total="total"
+          :page-size="params.size"
+          @current-change="currentChange">
+        </el-pagination>
+      </div>
+      <iframe id="iframe"
+          style="visibility: hidden;"
+          title="Inline Frame Example"
+          width="300"
+          height="200">
+      </iframe>
+      <el-dialog title="提示" :visible.sync="revDialog" width="30%" :before-close="canClose">
+        <p>是否通过此合同？如拒绝请输入拒绝理由：</p>
+        <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="content"></el-input>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="agreeReview">同 意</el-button>
+          <el-button type="primary" @click="cancelReview">拒 绝</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog title="提示" :visible.sync="relDialog" width="30%" :before-close="relClose">
+        <p>是否解除此合同？如同意解除请输入解除理由：</p>
+        <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="relform.content"></el-input>
+        <span>上传双方签名的解除协议：</span>
+        <el-upload
+          class="avatar-uploader"
+          action="/api/admin/file/upload/avatar"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess" :headers="headers"  accept="image/*">
+         <img v-if="relform.image" :src="relform.image" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="agreeRelieve">同 意</el-button>
+          <el-button type="primary" @click="relClose">取 消</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog :title="aName" :visible.sync="seaDialog" width="30%" :before-close="seaClose">  
+        <el-row>
+          <el-col :span="6">
+            <span>工作环境：</span>
+          </el-col>
+          <el-col :span="12">
+            <el-rate v-model="rateList.rateEnv"></el-rate>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="6">
+            <span>劳务关系：</span>
+          </el-col>
+          <el-col :span="12">
+            <el-rate v-model="rateList.rateEmploy"></el-rate>
+          </el-col>
+        </el-row>
+        <el-row>
+          <span>评价：</span>
+          <el-input type="textarea" v-model="rateList.content"></el-input>
+        </el-row>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="seaClose">取 消</el-button>
+          <el-button type="primary" @click="seaSave">确 定</el-button>
+        </span>
+      </el-dialog>
+      <!-- <el-dialog :title="bName" :visible.sync="ownDialog" width="30%" :before-close="ownClose">
+        <el-row>
+          <el-col :span="6">
+            <span>作业技能：</span>
+          </el-col>
+          <el-col :span="12">
+            <el-rate v-model="rateList.rateSkill"></el-rate>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="6">
+            <span>身体素质：</span>
+          </el-col>
+          <el-col :span="12">
+            <el-rate v-model="rateList.rateBody"></el-rate>
+          </el-col>
+        </el-row>
+        <el-row>
+          <span>评价：</span>
+          <el-input type="textarea" v-model="rateList.content"></el-input>
+        </el-row>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="ownClose">取 消</el-button>
+          <el-button type="primary" @click="ownSave">确 定</el-button>
+        </span>
+      </el-dialog>        -->
+      <el-dialog :title="uploadTitle" :visible.sync="paperVisible" width="30%" :before-close="paperClose">    
+               <!-- <el-upload       
+                  class="upload-demo"
+                  drag
+                  action="/api/admin/file/upload/avatar"
+                  :headers="headers"
+                  :on-success="handlePaperSuccess"    
+                  multiple>
+                  <img v-if="contractImage" :src="contractImage" class="avatarUpload">
+                  <i class="el-icon-upload"></i>    
+                  <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                </el-upload> -->
+             <el-upload
+                action="/api/admin/file/upload/avatar"
+                multiple
+                list-type="picture-card"
+                :limit="5"
+                 :headers="headers"
+                :on-remove="handlePaperRemove"
+                :before-remove="beforeRemove"
+                :on-success="uploadSuccess" 
+                :on-preview="handlePictureCardPreview"
+                 :file-list="contractFiles"
+                 accept="image/*" style="margin-left:30px!important">
+                <i  class="el-icon-plus"></i>
+            </el-upload>
+              <el-dialog class="preview-modal" :visible.sync="imgVisible" append-to-body>
+                <img style="width:100%" :src="dialogImageUrl" alt="photo">
+              </el-dialog>
+      </el-dialog>
+    </basic-container>
+  </div>
+</template>
+
+<script>
+import {
+  getContractList, 
+  deleteContract,
+  // getContract,
+  getDict, reviewContract, cancelContract, getDartContractDetail,recallContract,uploadContravt,uploadImages } from '@/api/tmlms/draftContract'
+import { saveRate, getRate } from '@/api/tmlms/rate'  
+import {getImages} from '@/api/tmlms/multiimage'
+import { getUserInfo } from '@/api/login'
+import { mapGetters } from 'vuex'
+import { getUserName } from '@/api/admin/user'
+import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
+// import contractPrint from '../../contract/Page/ContractPrint.vue'
+// import Vue from 'vue'
+import store from '@/store'
+export default {
+  name: 'contract',
+  props: {
+    placeholder: {
+      type: String,
+      default: '请输入拥有者关键字搜索',
+    },
+    prop: {
+      type: String,
+      default: 'shipowner',
+    },
+  },
+  data () {
+    return {
+      dialogImageUrl: '',
+      aName: '',
+      bName: '',
+      contractList: [],
+      params: {
+        shipName: '',
+        shipownerName: '',
+        employerName: '',
+        employeeName: '',
+        timeLists:'',
+        orgId:'' ,
+        status: '',
+        current: 1,
+        size: 10,
+      },
+      total: 0,
+      mlms_contract_add: false,
+      mlms_contract_view: false,
+      mlms_contract_edit: false,
+      mlms_contract_del: false,
+      mlms_contract_rev: false,
+      mlms_contract_pri: false,
+      mlms_contract_rel: false,
+      mlms_relieve_rel: false,
+      mlms_contract_com: false,
+      mlms_contract_eva: false,
+      mlms_contract_rec: false,
+      mlms_contract_rem: false,
+      mlms_contract_recall: false,
+      mlms_contract_upload:false,
+      mlms_contract_employee: false,
+      shipAttrDict: [],
+      employeePayTypeDict: [],
+      periodTypeDict: [],
+      payComputeTypeDict: [],
+      payTypeDict: [],
+      input: '',
+      form: {
+      },
+      timeList: [],
+      statusDict: [
+        {
+          lable: '',
+          value: '全部',
+        },
+        {
+          lable: 0,
+          value: '未审核',
+        },
+        {
+          lable: 1,
+          value: '合同成立',
+        },
+        {
+          lable: 2,
+          value: '未通过审核',
+        },
+        {
+          lable: 3,
+          value: '合同纠纷',
+        },
+        {
+          lable: 4,
+          value: '合同解除',
+        },
+        {
+          lable: 5,
+          value: '合同过期',
+        },
+        {
+          lable: 6,
+          value: '未签纸质合同',
+        },
+      ],
+      contStatus: '',
+      contractAddr: '',
+      mangner: false,
+      conStatus: '',
+      chooseOrg:'',
+      revDialog: false,
+      seaDialog: false,
+      ownDialog: false,
+      relDialog: false,
+      paperVisible:false,
+      cd: '',
+      content: '',
+      rateList: {
+        contractId: '',
+        type: '',
+        employerName: '',
+        employerIdcard: '',
+        employeeName: '',
+        employeeIdcard: '',
+        rateEnv: '',
+        rateEmploy: '',
+        rateSkill: '',
+        rateBody: '',
+        content: '',
+      },
+      idCardVal: '',
+      nameVal: '',
+      obj: {},
+      relform: {
+        contractId: '',
+        content: '',
+        image: '',
+      },
+      rd: '',
+      headers: {
+        Authorization: 'Bearer ' + store.getters.access_token,
+      },
+      rateType: 0,
+      nowContractId: '',
+      contractImage: '',
+      uploadTitle: '',
+      userName:'',
+      imgVisible: false,
+      addPhoto:'',
+      contractFiles: [],
+      orgList:[],
+    }
+  },
+  created () {
+    let query = this.$route.query
+    for (let key in this.params) {
+       this.params[key] = query[key]
+      //  if (key === 'status') {
+      //    this.conStatus = +query.status
+      //  }
+      if (key === 'timeLists' && query[key] !== '' && query[key] != null) {
+        this.params[key] = query[key].split(',')
+        this.params.workTimeStart = this.params[key][0]
+        this.params.workTimeEnd = this.params[key][1]
+      }
+    }
+    this.getVillageOrg()      
+    this.getContractList()     
+    this.getDicts()
+    this.mlms_contract_employee = this.permissions['mlms_contract_employee']
+    this.mlms_contract_add = this.permissions['mlms_contract_add']
+    this.mlms_contract_view = this.permissions['mlms_contract_view']
+    this.mlms_contract_edit = this.permissions['mlms_contract_edit']
+    this.mlms_contract_del = this.permissions['mlms_contract_del']
+    this.mlms_contract_rev = this.permissions['mlms_contract_rev']
+    this.mlms_contract_pri = this.permissions['mlms_contract_pri']
+    this.mlms_contract_rel = this.permissions['mlms_contract_rel']
+    this.mlms_relieve_rel = this.permissions['mlms_relieve_rel']
+    this.mlms_contract_com = this.permissions['mlms_contract_com']
+    this.mlms_contract_eva = this.permissions['mlms_contract_eva']
+    this.mlms_contract_rec = this.permissions['mlms_contract_rec']
+    this.mlms_contract_rem = this.permissions['mlms_contract_rem']
+    this.mlms_contract_recall  =  this.permissions['mlms_contract_recall']
+    this.mlms_contract_upload = this.permissions['mlms_contract_upload']
+    getUserInfo().then(res => {
+      if (res.data.data.roles.indexOf(111) !== -1) {
+        this.mangner = true
+      } else {
+        this.mangner = false
+      }
+      this.idCardVal = res.data.data.sysUser.idCard
+      this.nameVal = res.data.data.sysUser.realName
+    })
+    
+  },
+  computed: {
+    ...mapGetters([
+      'permissions',
+      'roles',
+    ]),
+    options () {
+      return {
+        expandAll: false,
+        columns: [
+          {
+            text: '船名',
+            value: 'shipName',
+          },
+          {
+            text: '持证人',
+            value: 'shipownerName',
+          },
+          {
+            text: '雇主（甲方）',
+            value: 'employerName',
+          },
+          {
+            text: '雇员（乙方）',
+            value: 'employeeName',
+          },
+          {
+            text: '渔业生产周期',
+            value: 'workTime',
+          },
+          {
+            text: '合同状态',
+            value: 'status',
+          },
+          {
+            text: '合同发布者',
+            value: 'userId',
+          },
+        ],
+        data: this.contractList,
+      }
+    },
+  },
+  methods: {
+    // 续签合同
+    onRenewContracte (id) {
+      this.$emit('onRenew', id)
+    },
+    onToEmployee (idcard) {
+      let from = '/crew/htgl/contract_admin'
+      for (let key in this.params) {
+        if (this.params[key]) {
+          from += `&${key}=${this.params[key]}`
+        }
+      }
+      this.$router.push(`/boatMan/detail?edit=${idcard}&from=${from}`)
+    },
+    rowClassName ({row}) {
+      // 合同解除
+      if (row.status === '合同解除') {
+        return 'outer-grey'
+      } else if (row.status === '合同过期') {
+        return 'outer-grey'
+      }
+    },
+    //获取基层组织
+  getVillageOrg () {
+    getVillageByOrg().then(res=>{
+      this.orgList = res.data.data
+      this.orgList.unshift({userId:' ',villageName:'全部'})
+    })
+  },
+    async getContractList () {
+      this.rateType = await getUserInfo().then(res => {
+        if (res.data.data.roles.indexOf(105) !== -1) {
+          return 2
+        }
+        if (res.data.data.roles.indexOf(108) !== -1) {
+          return 1
+        } 
+      })
+      getContractList(this.params).then(({data}) => {
+        var day = new Date()
+        var day2 = new Date(day)
+        day2.setDate(day.getDate() - 7)
+        var now = day2.getFullYear() + '-' + (day2.getMonth() + 1) + '-' + day2.getDate()
+        if (data.code === 0) {
+          this.contractList = data.data.records
+          this.contractList.forEach(v => {
+            v.workTime = `${v.workDateStart}-${v.workDateEnd || ''}`
+            if(v.cancelTime) {
+              if( (day > new Date(Date.parse(v.workDateStart))) && (new Date(Date.parse(now)) < new Date(Date.parse(v.cancelTime.substring(0, 10)))) ) {
+                this.$set(v, 'isDate', 0)
+              } else {
+                this.$set(v, 'isDate', 1)
+              }
+            }
+            this.statusDict.forEach(m => {
+              if (v.status === m.lable) {
+                v.status = m.value
+              }
+            })
+            getRate({contractId: v.contractId, type: this.rateType}).then(res => {
+              if(res.data.data.records.length !== 0) {
+                this.$set(v, 'isRate', 1)
+              } else {
+                this.$set(v, 'isRate', 0)
+              }
+            })
+            getUserName(v.userId).then(res=>{
+               this.$set(v, 'userId', res.data.data.realName)
+            })
+          
+
+          })
+          // this.contractList.forEach( item=>{
+            // if(item.status === '合同成立'){
+            //   item.swith = true
+            // }else{
+            //   item.swith = false
+            // }   
+          // })
+          this.total = data.data.total
+        }
+      }, (error) => {
+        this.$message.error(error.message)
+      })
+    },
+    getParamData () {
+      this.params.shipName = (this.params.shipName || '').replace(/\s*/g,'')
+      this.params.employerName = (this.params.employerName || '').replace(/\s*/g,'')
+      this.params.employeeName = (this.params.employeeName || '').replace(/\s*/g,'')
+      if (this.params.timeLists) {
+        this.params.workTimeStart = this.params.timeLists[0]
+        this.params.workTimeEnd = this.params.timeLists[1]
+      } else {
+        this.params.workTimeStart = undefined
+        this.params.workTimeEnd = undefined
+      }
+      if (this.conStatus) {
+        this.statusDict.forEach(m => {
+          if(m.value === this.conStatus) {
+            this.params.status = m.lable
+          }
+        })
+      }
+      if (this.chooseOrg) {
+        this.params.userId = this.chooseOrg
+      }else{
+        this.params.userId=''
+      }
+      console.log(this.params)
+      this.params.current = 1
+      this.getContractList()
+    },
+    currentChange (current) {
+      this.params.current = current
+      this.getContractList()
+    },
+    handleFresh () {
+      this.getContractList() 
+    },
+    handleAdd () {
+      // console.log('bbbb')
+      // this.$router.push({path: '/tmlms_spa/contract_add',query:{add:'add'}})
+      this.$emit('on-add')
+    },
+    handleRecord (contractId) {
+      this.$emit('on-record', contractId)
+    },
+    handleRemove (contractId) {
+      this.$emit('on-remove', contractId)
+    },
+    handleView (contractId) {
+      // this.$emit('onDetail', contractId)
+      // let urlHttp = window.location.href.split('//')[0]
+      let urlHeade = window.location.href.split('/')[0,2]
+      let  dataMap  = '%7B%7D'
+      // let Base64 = require('js-base64').Base64
+      // let rlt = Base64.encodeURI(`id=${contractId}`)
+    //  window.open(`${urlHttp}//${urlHeade}/tmlms/downLoad/intoContractHtml?${rlt}`)
+       this.$openPage(`//${urlHeade}/api/tmlms/downLoad/intoContractHtml?contractId=${contractId}&dataMap=${dataMap}`,'url')
+      // window.location.href = `//${urlHeade}/tmlms/downLoad/intoContractHtml?contractId=${contractId}&dataMap=${dataMap}`
+      // getContract(contractId).then(({data}) => {
+      //   if (data.code == 0) {
+      //     let formData = data.data
+      //     let print = Vue.extend(contractPrint)
+      //     let el = new print({
+      //       propsData:{
+      //         formData: formData,
+      //         shipAttrDict: this.shipAttrDict,
+      //         employeePayTypeDict: this.employeePayTypeDict,
+      //         periodTypeDict: this.periodTypeDict,
+      //         payComputeTypeDict: this.payComputeTypeDict,
+      //         payTypeDict: this.payTypeDict,
+      //       },
+      //     }).$mount().$el
+      //     let h = window.open('http://localhost:8090/wel/index')
+      //     h.document.write(`
+      //       <style>
+      //          ul,li{list-style: none;}
+      //         .body-width{width: 210mm;color: #333;}
+      //         #contract{margin:0px auto;font-size:14px;}
+      //         .contract-table{border:solid 1px #606266;border-collapse:collapse;border-spacing:0px;width:90%;height: 297mm;overflow: hidden;margin:20mm auto;}
+      //         .contract-table td,.contract-table th{color:#606266;border-bottom: solid 1px #606266;border-right: solid 1px #333;height: 30px;line-height: 30px;text-align: center;font-size:12px;}
+      //         .contract-table td.check{text-align: left;padding:10px 30px;}
+      //         .contract-table th{font-weight: normal;padding:0px 10px;}
+      //         .check el-date-picker{}
+      //         .set-width .el-input{width: 50%;margin: 5px 0px;}
+      //         .contract-table .el-checkbox-group{display: inline-block;}
+      //         .con-cover{text-align: center;height: 297mm;overflow: hidden;}
+      //         .cover-num{text-align: right;padding: 80px 0px;font-weight:normal;font-size:18px;margin-right: 50px;}
+      //         .con-cover h1{font-size: 30px;font-weight: bold;margin-top: 120px;margin-bottom: 50px}
+      //         .con-cover h2{font-size:30px;font-weight: bold;}
+      //         .cover-tip{margin-top:600px;}
+      //         .cover-tip p{margin-bottom: 40px;font-weight:normal;font-size:18px;}
+      //         .body-width td.check{padding:0px 30px;}
+      //         .con-detail{width:90%;margin:0 auto;margin-top:220px;}
+      //         .con-detail h2{text-align: center;font-size: 20px;font-weight: bold;}
+      //         .con-detail h3{font-size: 16px;font-weight: bold;margin-top: 15px;}
+      //         .con-detail p{text-indent: 2em;line-height: 35px;font-size:16px;}
+      //         .con-detail .special{text-decoration: underline;}
+      //         .sign{width:90%;margin:0 auto;margin-top: 50px;font-size:16px;}
+      //         .sign span{padding-left: 50px;}
+      //         .sign h3{font-size:18px;font-weight: bold;}
+      //         .sign i{font-style: normal;padding-left: 20px;}
+      //         .sign-name{margin-top: 10px;overflow: hidden;}
+      //         .sign-name li{float: left;width: 50%;line-height: 30px;}
+      //         .sign-see{margin-top: 30px;}
+      //         .sign-see li{line-height: 30px;}
+      //         .margin70{margin-top: 70px;}
+      //         .margin160{margin-top: 160px;}
+      //       </style>
+      //     `)
+      //     h.document.write(el.outerHTML)
+      //     h.document.close()
+      //     // h.print()
+      //     // h.close()
+      //   }
+      // }, (error) => {
+      //   this.$message.error(error.message)
+      // })
+    },
+    handleEdit (contractId) {
+      this.$emit('onEdit', contractId)
+    },
+    handleDel (contractId) {
+      this.$confirm('此操作将永久删除该合同, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        deleteContract(contractId), (error) => {
+          this.$message.error(error.message)
+        }
+        this.$message.success('删除成功！')
+        this.getContractList()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除',
+        })
+      }) 
+    },
+    agreeReview () {
+      let data = 1
+      reviewContract({contractId: this.cd, status: data}).then(() =>{
+        this.$message.success('审核通过！')
+        this.getContractList()
+        this.revDialog = false
+      }).catch(() => {
+        this.$message.console.error('审核通过失败！')
+      })
+    },
+    cancelReview () {
+      let data = 2
+      if (this.content && this.content !== '') {
+        reviewContract({contractId: this.cd, status: data, content: this.content}).then(() =>{
+          this.$message.success('审核不通过')
+          this.getContractList()
+          this.revDialog = false
+        }).catch(() => {
+          this.$message.console.error('审核不通过失败！')
+        })
+      } else {
+        this.$message.error('请填写理由！')
+      }
+      
+    },
+    handleReview (contractId) {
+      this.revDialog = true
+      this.cd = contractId
+    },
+    handleRelieve (contractId) {
+      this.relDialog = true
+      this.rd = contractId
+    },
+    //上传纸质合同
+    handleUpload (contractId) {                       
+        this.contractFiles = []
+        this.uploadTitle = '上传纸质合同'     
+        this.paperVisible = true
+        this.nowContractId  = contractId
+        setTimeout(() => {
+        getImages(contractId,'contract').then(res => {
+            if(res.data.data.length >0){
+                  let  images  = res.data.data
+                  for(let t=0; t<images.length; t++){
+                  this.contractFiles.push({name: 'image' + images[t].id, url: images[t].image})
+                  }
+              // this.imgVisible = true
+            }
+        })
+        },100)        
+    },
+    paperClose () {       
+        this.paperVisible = false 
+        this.contractFiles = []
+    },
+    async agreeRelieve () {
+      this.contStatus = await getDartContractDetail(this.rd).then(res => {
+        return res.data.data.status
+      })
+      this.$confirm('此操作将解除该合同', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type:'warning',
+      }).then(() => {
+        this.relform.contractId = this.rd
+        if(this.relform.content === '') {
+          this.$message.error('请输入解除理由！')
+        }else {
+          if (this.contStatus === 1 || this.contStatus === 6) {
+            cancelContract(this.relform).then(() => {
+              this.relDialog = false
+              this.$message.success('解除成功！')
+              this.getContractList()
+            }).catch(() => {
+              this.$message.error('解除失败！')
+            })
+          } else {
+            this.$message.error('合同状态不正确，需要管理员审核！')
+          }
+        }  
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消解除',
+        })
+      })  
+    },
+    handlePrint (contractId) {
+      let urlHeade = window.location.origin
+      let  dataMap  = '%7B%7D'
+      let url = `${urlHeade}/api/tmlms/downLoad/intoContractHtml?contractId=${contractId}&dataMap=${dataMap}`
+      // console.log('url',url)
+      let iframe = window.document.getElementById('iframe')
+      iframe.src = url
+      iframe.onload = function () {
+        iframe.contentWindow.focus()
+        iframe.contentWindow.print()
+      }
+      // getContract(contractId).then(({data}) => {
+      //   if (data.code == 0) {
+      //     let formData = data.data
+      //     let print = Vue.extend(contractPrint)
+      //     let el = new print({
+      //       propsData:{
+      //         formData: formData,
+      //         shipAttrDict: this.shipAttrDict,
+      //         employeePayTypeDict: this.employeePayTypeDict,
+      //         periodTypeDict: this.periodTypeDict,
+      //         payComputeTypeDict: this.payComputeTypeDict,
+      //         payTypeDict: this.payTypeDict,
+      //       },
+      //     }).$mount().$el
+      //     console.log(el,print)
+      //     let h = window.open('http://localhost:8090/api/tmlms/downLoad/intoContractHtml?contractId=8&dataMap=%7B%7D', '_blank')
+      //     // h.document.write(`
+      //     //   <style>
+      //     //    @page {
+      //     //       size: A4 portrait;
+      //     //       margin: 3.7cm 2.6cm 3.5cm;
+      //     //     }
+      //     //     .con-cover,.contract-table,.con-detail{
+      //     //         page-break-before: always;
+      //     //       }
+      //     //       h1, h2, h3, h4, h5 { page-break-after: avoid; }
+      //     //       table, figure{ page-break-inside: avoid; }
+      //     //       *{padding: 0px;margin:0px;}
+      //     //     ul,li{list-style: none;}
+      //     //     .body-width{width: 210mm;color: #333;}
+      //     //     #contract{margin:0px auto;font-size:14px;}
+      //     //     .contract-table{border:solid 1px #606266;border-collapse:collapse;border-spacing:0px;width:100%; height: 297mm;overflow: hidden;}
+      //     //     .contract-table td,.contract-table th{color:#606266;border-bottom: solid 1px #606266;border-right: solid 1px #333;text-align: center;font-size:12px;padding:10px;}
+      //     //     .contract-table td.check{text-align: left;padding: 10px 25px 10px 10px;}
+      //     //     .contract-table td label{display: inline-block; width:100px;}
+      //     //     .contract-table th{font-weight: normal;padding:0px 10px;}
+      //     //     .contract-table td label{display: inline-block; width:80px;}
+      //     //     .check el-date-picker{}
+      //     //     .set-width .el-input{width: 50%;margin: 5px 0px;}
+      //     //     .contract-table .el-checkbox-group{display: inline-block;}
+      //     //     .con-cover{text-align: center;height: 297mm;overflow: hidden;}
+      //     //     .cover-num{text-align: right;padding: 20px 0px;font-weight:normal;font-size:18px;margin-right: 50px;}
+      //     //     .con-cover h1{font-size: 30px;font-weight: bold;margin-top: 180px;margin-bottom: 50px}
+      //     //     .con-cover h2{font-size:30px;font-weight: bold;}
+      //     //     .cover-tip{margin-top:750px;}
+      //     //     .cover-tip p{margin-bottom: 40px;font-weight:normal;font-size:18px;}
+      //     //     .con-detail{width:100%;margin:0 auto;}
+      //     //     .con-detail h2{text-align: center;font-size: 20px;font-weight: bold;}
+      //     //     .con-detail h3{font-size: 16px;font-weight: bold;margin-top: 15px;}
+      //     //     .con-detail p{text-indent: 2em;line-height: 32px;font-size:16px;}
+      //     //     .con-detail .special{text-decoration: underline;}
+      //     //     .sign{width:100%;margin:0 auto;margin-top: 50px;font-size:16px;}
+      //     //     .sign span{padding-left: 50px;}
+      //     //     .sign h3{font-size:18px;font-weight: bold;}
+      //     //     .sign i{font-style: normal;padding-left: 20px;}
+      //     //     .sign-name{margin-top: 10px;overflow: hidden;}
+      //     //     .sign-name li{float: left;width: 50%;line-height: 30px;}
+      //     //     .sign-see{margin-top: 30px;}
+      //     //     .sign-see li{line-height: 30px;}
+      //     //     .margint10{margin-top: 10px;}
+      //     //     .contract-table .el-checkbox__label{font-size:12px;}
+      //     //     .paylist{text-align: center;}
+      //     //     .paylist .el-checkbox-group{text-align: left;}
+      //     //     .paylist .el-checkbox{margin-right: 0px;}
+      //     //     .paylist .el-checkbox-group label{width:60px;}
+      //     //     .contract-table .textL10{text-align: left;}
+      //     //   </style>
+      //     // `)
+      //     // h.document.write(el.outerHTML)
+      //     // h.document.close()
+      //     h.print()
+      //     // h.close()
+      //   }
+      // }, (error) => {
+      //   this.$message.error(error.message)
+      // })
+    },
+    getDicts () {
+      getDict('tyb_contract_ship_attr').then(({data}) => {
+        if (data.code === 0) this.shipAttrDict = data.data
+      })
+      getDict('tyb_contract_employee_pay_type').then(({data}) => {
+        if (data.code === 0) this.employeePayTypeDict = data.data
+      })
+      getDict('tyb_contract_period_type').then(({data}) => {
+        if (data.code === 0) this.periodTypeDict = data.data
+      })
+      getDict('tyb_contract_pay_compute_type').then(({data}) => {
+        if (data.code === 0) this.payComputeTypeDict = data.data
+      })
+      getDict('tyb_contract_pay_type').then(({data}) => {
+        if (data.code === 0) this.payTypeDict = data.data
+      })
+    },
+    handleSearch () {
+      this.form[this.prop] = this.input
+      var params = {}
+      if (this.timeList) {
+        this.form.periodDateStart = this.timeList[0]
+        this.form.periodDateEnd = this.timeList[1]
+      }
+      getUserInfo().then(res => {
+        if(res.data.data.roles.indexOf(111) !== -1 || res.data.data.roles.indexOf(1) !== -1){
+          params = {...this.form}
+        } else {
+          params = {...this.form}
+          params.userId = res.data.data.sysUser.userId
+          params.shipownerId = res.data.data.sysUser.userId
+          params.employeeId = res.data.data.sysUser.userId
+        }
+        getContractList(params).then(({data}) => {
+          if (data.code === 0) {
+            this.contractList = data.data.records
+            this.total = data.data.total
+          }
+        }, (error) => {
+          this.$message.error(error.message)
+        })
+      })
+    },
+    clearSearchParam () {
+      this.form = {}
+      this.timeList = []
+    },
+    goTo (contractId) {
+      this.$router.push({ 
+        path: `/tmlms_spa/contractCancel_list/${contractId}`, 
+      })
+    },
+    go (contractId) {
+      this.$router.push({ 
+        path: `/tmlms_spa/contractCancel_admin/${contractId}`, 
+      })
+    },
+    canClose () {
+      this.revDialog = false
+      this.content = ''
+    },
+    relClose () {
+      this.relDialog = false
+      this.relform.content = ''
+      this.relform.image = ''
+    },
+    // handleEvaluate (val) {
+    //   this.rateList.contractId = val
+    //   getContractDetail(val).then(data => {
+    //     this.obj = data.data.data
+    //     if (this.obj.employerIdcard === this.idCardVal) {
+    //       this.rateList.type = 1
+    //       this.rateList.employerName = this.nameVal
+    //       this.rateList.employerIdcard = this.idCardVal
+    //       this.rateList.employeeName = this.obj.employeeName
+    //       this.rateList.employeeIdcard = this.obj.employeeIdcard
+    //       this.ownDialog = true 
+    //       this.bName = '对' + this.obj.employeeName + '评价：'
+    //     } else if (this.obj.employeeIdcard === this.idCardVal) {
+    //       this.rateList.type = 2
+    //       this.rateList.employeeName = this.nameVal
+    //       this.rateList.employeeIdcard = this.idCardVal
+    //       this.rateList.employerName = this.obj.employerName
+    //       this.rateList.employerIdcard = this.obj.employerIdcard
+    //       this.seaDialog = true
+    //       this.aName = '对' + this.obj.employerName + '评价：'
+    //     }
+    //   })
+    // },
+    // ownClose () {
+    //   this.ownDialog = false
+    //   this.rateList = {}
+    // },
+    seaClose () {
+      this.seaDialog = false
+      this.rateList = {}
+    },
+    seaSave () {
+      if (this.rateList.rateEnv === 0) {
+        this.$message.error('请给工作环境打分！')
+      } else if (this.rateList.rateEmploy === 0) {
+        this.$message.error('请给劳务关系打分！')
+      } else if (this.rateList.content === '') {
+        this.$message.error('评价不能为空！')
+      } else {
+        saveRate(this.rateList).then(() => {
+          this.$message.success('评分成功！')
+          this.seaDialog = false
+          this.rateList = {}
+          this.getContractList()
+        }).catch(err => {
+          this.$message.error(err.message)
+        })
+      }  
+    },
+    ownSave () {
+      if (this.rateList.rateSkill === 0) {
+        this.$message.error('请给作业技能打分！')
+      } else if (this.rateList.rateBody === 0) {
+        this.$message.error('请给身体素质打分！')
+      } else if (this.rateList.content === '') {
+        this.$message.error('评价不能为空！')
+      } else {
+        saveRate(this.rateList).then(() => {
+          this.$message.success('评分成功！')
+          this.ownDialog = false
+          this.rateList = {}
+          this.getContractList()
+        }).catch(err => {
+          this.$message.error(err.message)
+        })
+      } 
+    },
+    handleAvatarSuccess (res) {
+      this.relform.image = res.data.url
+    },
+    handlePaperSuccess (res) {         
+      //  this.contractImage = res.data.url        
+        uploadContravt(this.nowContractId,res.data.url).then(res =>{
+              if(res.data.data) {
+                    this.contractImage = res.data.url
+                    this.$message.success('上传成功!')
+                    this.paperVisible = false
+                    this.getContractList()
+              }
+        })
+    },
+    lookImage (contaractId) {             
+      this.uploadTitle = '纸质合同'
+      getDartContractDetail(contaractId).then(res => {
+              let  contaract  =  res.data.data
+              this.contractImage  = contaract.contractImage
+              this.paperVisible = true
+        })   
+    },
+    handleCall (contractId) {                    
+      //审核不通过    
+      let staus = 2
+        this.$confirm('此操作将撤销该合同, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        recallContract(contractId,staus), (error) => {
+          this.$message.error(error.message)
+        }
+        this.$message.success('撤销成功！')
+        this.getContractList()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消撤销',
+        })
+      }) 
+    },
+    //图片预览
+  handlePictureCardPreview (file) {
+        this.dialogImageUrl = file.url
+        this.imgVisible = true
+      },
+    //上传成功
+    async uploadSuccess (res,file,fileList ) {          
+        await  this.fileChange(fileList)
+        this.getContractList()
+      },
+      //设置photo   
+  fileChange (fileList,type) { 
+    console.log(fileList) 
+    console.log(type)            
+    //  console.log(fileList)
+        let temp_str = ''
+        if(fileList.length > 0){
+          for(let i=0; i<fileList.length; i++){
+            if(fileList[i].response){
+              if(fileList[i].response.code === 0){
+                if(i===0){
+                  temp_str += fileList[i].response.data.url
+                } else {
+                  // 最终photo的格式是所有已上传的图片的url拼接的字符串（逗号隔开）
+                  temp_str += ',' + fileList[i].response.data.url
+                }
+              }
+            }else{
+                if(i ===0)
+                  temp_str += fileList[i].url
+                else
+                  temp_str += ',' + fileList[i].url
+            }
+          }
+        this.addPhoto = temp_str
+        // if(type === 'del'){
+        //   this.$confirm('测试111, 是否继续?', '提示', {
+        //     confirmButtonText: '确定',
+        //     cancelButtonText: '取消',
+        //     type: 'warning',
+        //   }).then(() =>{
+        //     uploadImages(this.nowContractId,this.addPhoto).then(res => {
+        //       if(res.data.data){
+        //         this.$message.success('删除成功!')
+        //       }
+        //     })
+        //   })
+        // }else{
+        //   uploadImages(this.nowContractId,this.addPhoto).then(res => {
+        //       if(res.data.data){
+        //         this.$message.success('上传成功!')
+        //       }
+        //   })
+        // }
+        uploadImages(this.nowContractId,this.addPhoto).then(res => {
+              if(res.data.data){
+                  if(type === 'del')
+                      this.$message.success('删除成功!')
+                  else
+                    this.$message.success('上传成功!')
+              }
+        })
+  }else{   
+        uploadImages(this.nowContractId,'').then(res => {   
+              if(res.data.data){
+                      this.$message.success('删除成功!')
+              }
+        })
+    }
+    },
+      //删除照片    
+    async handlePaperRemove (file,fileList) {
+      await this.fileChange(fileList,'del')
+      this.getContractList()
+      // async  
+      // await  this.fileChange(fileList,'del')
+      //     this.getContractList()
+    },
+    beforeRemove () {
+      return this.$confirm('确定移除该纸质合同图片吗？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+      })
+    },
+
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+.contract-box {
+  padding: 20px;
+}
+.el-button {
+  margin-bottom: 5px;
+}
+</style>
+
+<style scoped>
+
+.tips {
+  background: #ecf5ff;
+  padding:10px 10px 4px 10px;
+  margin-bottom: 30px;
+}
+.input-wrapper {
+  display: flex;
+  max-width: 350px;
+}
+.input-wrapper > * {
+  margin-right: 5px;
+}
+.input-wrapper >>> .el-input.is-active .el-input__inner {
+  border-color: #c0c4cc;
+}
+.input-wrapper >>> .el-input__inner:focus {
+  border-color: #c0c4cc;
+}
+.input-wrapper >>> .senior-btn {
+  margin-left: -6px;
+  padding: 9px 5px;
+  border-radius: 0 3px 3px 0;
+}
+.input-wrapper >>> .el-input-group {
+  width: inherit;
+}
+.search-btn:hover,
+.search-btn:focus {
+  opacity: 0.8;
+}
+</style>
+
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+  .avatarUpload {   
+   width: 360px;
+    height: 180px;
+  }
+  .aa .el-upload-list__item-name {
+     display: none;
+  }
+  .outer-grey {
+    color: #ccc !important;
+  }
+
+</style>
