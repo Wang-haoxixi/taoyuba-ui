@@ -649,10 +649,10 @@ export default {
               var myImage2 = new Image();
               myImage2.setAttribute('crossOrigin', 'anonymous');
 			        myImage2.src = `${that.form.photoReverse}`;   //你自己本地的图片或者在线图片
-                        // 218和345 为固定的长宽 
-			        context.drawImage(myImage , (794 - 345) / 2  , (1123 - ( 218 + 218 + 200 ))/2,345,218 );
+                        // 212和335 为固定的长宽 
+			        context.drawImage(myImage , (794 - 335) / 2  , (1123 - ( 212 + 212 + 200 ))/2,335,212 );
 			        myImage2.onload = function(){
-			            context.drawImage(myImage2,(794 - 345) / 2,(1123 - ( 218 + 218 + 200 ))/2 + 200 + 218,345,218);
+			            context.drawImage(myImage2,(794 - 335) / 2,(1123 - ( 212 + 212 + 200 ))/2 + 200 + 218,335,212);
 			            var base64 = canvas.toDataURL("image/png");  //"image/png" 这里注意一下
 			            var img = document.getElementById('avatar');
 
