@@ -1,7 +1,7 @@
 <template>
   <div class="contract-box aa">
     <basic-container>
-      <page-header title="网签合同"></page-header>
+      <page-header title="合同草稿"></page-header>
       <!-- <div class="tips" v-if="roles.indexOf(109) !== -1 || roles.indexOf(112) !== -1">
         <dl>
           <dt> 合同如有以下情况：</dt>
@@ -31,7 +31,7 @@
           <!-- <span><el-input v-model="params.shipownerName" placeholder="持证人姓名" size="small" style="width:120px"></el-input></span> -->
           <span><el-input v-model.trim="params.employerName" clearable placeholder="甲方姓名" size="small" style="width:120px"></el-input></span>
           <span><el-input v-model.trim="params.employeeName" clearable placeholder="乙方姓名" size="small" style="width:120px"></el-input></span>
-          <span style="width:240px">
+          <!-- <span style="width:240px">
             <el-date-picker v-model="params.timeLists" type="daterange" clearable range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" 
             value-format="yyyy-MM-dd"  size="small"></el-date-picker>
           </span>
@@ -45,7 +45,7 @@
                 >
               </el-option>
             </el-select>
-          </span>
+          </span> -->
           <el-button size="small" @click="getParamData">搜索</el-button>
         </template>
       </operation-container>
@@ -104,8 +104,8 @@
             </el-button>
               <el-button v-if="mlms_contract_upload && (scope.row.status === '合同成立'||scope.row.status === '未签纸质合同')  && scope.row.contractImage === '1' " size="mini" @click="handleUpload(scope.row.id)">查看纸质合同
             </el-button>
-            <el-button v-if="mlms_contract_employee" size="mini" @click="onToEmployee(scope.row.employeeIdcard)">船员编辑</el-button>
-            <el-button v-if="scope.row.status === '合同过期'" size="mini" @click="onRenewContracte(scope.row.contractId)">续签</el-button>
+            <!-- <el-button v-if="mlms_contract_employee" size="mini" @click="onToEmployee(scope.row.employeeIdcard)">船员编辑</el-button> -->
+            <!-- <el-button v-if="scope.row.status === '合同过期'" size="mini" @click="onRenewContracte(scope.row.contractId)">续签</el-button> -->
           </template>
         </el-table-column>
       </avue-tree-table>
@@ -399,6 +399,8 @@ export default {
         this.params.workTimeEnd = this.params[key][1]
       }
     }
+    console.log(this.params)
+    console.log('"hdk"')
     this.getVillageOrg()      
     this.getContractList()     
     this.getDicts()
@@ -499,6 +501,48 @@ export default {
       this.orgList.unshift({userId:' ',villageName:'全部'})
     })
   },
+  //去除空值
+  removeEmptyField (obj) {
+  var newObj = {}
+  if (typeof obj === 'string') {
+    obj = JSON.parse(obj)
+  }
+  if (obj instanceof Array) {
+    newObj = []
+  }
+  if (obj instanceof Object) {
+    for (var attr in obj) {
+      // 属性值不为'',null,undefined才加入新对象里面(去掉'',null,undefined)
+      if (obj.hasOwnProperty(attr) && obj[attr] !== '' && obj[attr] !== null && obj[attr] !== undefined) {
+        if (obj[attr] instanceof Object) {
+          // 空数组或空对象不加入新对象(去掉[],{})
+          if(JSON.stringify(obj[attr]) === '{}' || JSON.stringify(obj[attr]) === '[]') {
+              continue
+          }
+          // 属性值为对象,则递归执行去除方法
+          newObj[attr] = this.removeEmptyField(obj[attr])
+        } else if (
+          typeof obj[attr] === 'string' &&
+          ((obj[attr].indexOf('{') > -1 && obj[attr].indexOf('}') > -1) ||
+            (obj[attr].indexOf('[') > -1 && obj[attr].indexOf(']') > -1))
+        ) {
+          // 属性值为JSON时
+          try {
+            var attrObj = JSON.parse(obj[attr])
+            if (attrObj instanceof Object) {
+              newObj[attr] = this.removeEmptyField(attrObj)
+            }
+          } catch (e) {
+            newObj[attr] = obj[attr]
+          }
+        } else {
+          newObj[attr] = obj[attr]
+        }
+      }
+    }
+  }
+  return newObj
+},
     async getContractList () {
       this.rateType = await getUserInfo().then(res => {
         if (res.data.data.roles.indexOf(105) !== -1) {
@@ -508,7 +552,8 @@ export default {
           return 1
         } 
       })
-      getContractList(this.params).then(({data}) => {
+      var hdk=this.removeEmptyField(this.params)
+      getContractList(hdk).then(({data}) => {
         var day = new Date()
         var day2 = new Date(day)
         day2.setDate(day.getDate() - 7)
@@ -516,7 +561,10 @@ export default {
         if (data.code === 0) {
           this.contractList = data.data.records
           this.contractList.forEach(v => {
-            v.workTime = `${v.workDateStart}-${v.workDateEnd || ''}`
+            if(v.workDateStart){
+              v.workTime = `${v.workDateStart}-${v.workDateEnd || ''}`
+            }
+          
             if(v.cancelTime) {
               if( (day > new Date(Date.parse(v.workDateStart))) && (new Date(Date.parse(now)) < new Date(Date.parse(v.cancelTime.substring(0, 10)))) ) {
                 this.$set(v, 'isDate', 0)

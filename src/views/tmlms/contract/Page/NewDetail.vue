@@ -493,7 +493,7 @@
         </el-container> -->
       </el-form>
       <div style="text-align: center;padding: 20px 0;">                   
-        <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add' || type === 'edit' || type === 'renew'" type="primary" @click="handleSubmit">保存</iep-button>
+        <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add' || type === 'edit' || type === 'renew'" type="primary" @click="handleSubmit">提交</iep-button>
         <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add'" type="primary" @click="handleSubmitCaoGao">保存为草稿</iep-button>
 
         <iep-button v-if="!$route.query.see" :disabeld="false" @click="handleBack">返回</iep-button>  
@@ -1176,14 +1176,18 @@ export default {
       }
       this.$refs['form'].validate(valid => {
         console.log(valid)
-       AddTybcontractDraft(this.formData).then(()=>{
-                      this.$message.success('保存成功！')
-                      // this.$emit('onGoBack')
-                    }).catch(err=>{
-                      console.log(err)
-                      this.$message.error('新增失败,请联系管理员!')
-                    })
-          
+        if(this.formData.shipName){
+        
+         AddTybcontractDraft(this.formData).then(()=>{
+         this.$message.success('保存成功！')
+            // this.$emit('onGoBack')
+            }).catch(err=>{
+               console.log(err)
+              this.$message.error('新增失败,请联系管理员!')
+          })
+        }else{
+          this.$message.error('请选择船名')
+        }
       })
     },
     handleSubmit () {
