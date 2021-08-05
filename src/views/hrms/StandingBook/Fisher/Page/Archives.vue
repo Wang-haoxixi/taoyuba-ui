@@ -36,7 +36,7 @@
           <info :data="list" :img="img"></info>
         </el-tab-pane>
         <el-tab-pane label="船员" name="seconda">
-          <crew :shipMan="shipMan" :crew="crew" :num="num"></crew>
+          <crew :shipMan="shipMan" :crew="crew" :num="num" :row="row"></crew>
         </el-tab-pane>
         <el-tab-pane label="进出港记录" name="a">
           <in-out :shipName="row.shipName"></in-out>
@@ -67,7 +67,7 @@ import insurance from './archives/Insurance'
 import test from './archives/test'
 import shipSale from './archives/shipSale'
 import { infoShip,certStandard,investigationReport,countContractByShipId } from '@/api/ships/index.js'
-import { getCrewByShipId } from '@/api/tmlms/boatMan/index.js'
+import { getCrewByShipId ,getCrewOldByShipId } from '@/api/tmlms/boatMan/index.js'
 export default {
   name: 'prot',
   data () {
@@ -121,6 +121,12 @@ export default {
     // 获取船员
     getCrewByShipId () {
       getCrewByShipId(this.row.shipId).then(res=>{
+        this.crew = res.data.data
+      })
+    },
+      // 获取历史船员
+    getCrewOldByShipId () {
+      getCrewOldByShipId(this.row.shipId).then(res=>{
         this.crew = res.data.data
       })
     },

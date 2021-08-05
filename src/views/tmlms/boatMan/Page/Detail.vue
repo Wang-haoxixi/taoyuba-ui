@@ -169,6 +169,7 @@
                       <el-radio  :label="9">待求职</el-radio>
                       <el-radio  :label="0">未用工</el-radio>
                       <el-radio  :label="3">上船，未签合同</el-radio>
+                      <el-radio v-if="mlms_submit_radio||$route.query.see" :label="4">上船，已签合同</el-radio>
                   </el-radio-group>
                   </el-form-item>
                 </el-col>
@@ -509,7 +510,7 @@ export default {
           contactName: '',
           phone: '',
           applyType: '',
-          workStatus:9,
+          workStatus:0,
           maritalStatus:0,
           salary:'',
           preAddress:'',
@@ -610,6 +611,7 @@ export default {
       loading: false,
       idcards: [],
       isShipCrew:false,
+      mlms_submit_radio:false,
     }
   },
   methods: {
@@ -690,19 +692,23 @@ export default {
       return time.split(' ')[0]
     },
     isShowDeleteBtn (data) {
+      console.log(data)
       if (this.$route.query.edit) {
-        let status = true
-        let arr = ['certNo', 'certType', 'certLevel', 'certTitle', 'certDateIssue', 'certDateExpire', 'certFile']
-        for (let key in data) {
-          if (arr.includes(key) && data[key]) {
-            status = false
-          }
-        }
-        return this.manager || status
-      } else if (this.$route.query.see) {
-        return false
-      } else {
-        return this.manager || !this.$route.query.edit
+      //   let status = true
+      //   let arr = ['certNo', 'certType', 'certLevel', 'certTitle', 'certDateIssue', 'certDateExpire', 'certFile']
+      //   for (let key in data) {
+      //     if (arr.includes(key) && data[key]) {
+      //       status = false
+      //     }
+      //   }
+      //   return this.manager || status
+      // } else if (this.$route.query.see) {
+      //   return false
+      // } else {
+      //   return this.manager || !this.$route.query.edit
+      return true
+      }else {
+         return false
       }
     },
     validateCertificate (data) {
@@ -1223,6 +1229,7 @@ export default {
   },
   // components: { InlineFormTable },
   created () {
+    this.mlms_submit_radio = this.permissions['mlms_submit_radio']
     getArea(0).then(({ data }) => {
       this.province = data.data
     })
@@ -1499,7 +1506,7 @@ export default {
    }
   },
   computed: {
-    ...mapGetters(['userInfo']),
+    ...mapGetters(['userInfo', 'permissions']),
     uploadDisabled:function () {
       console.log(this.imagelist.length)
         return this.imagelist.length >0

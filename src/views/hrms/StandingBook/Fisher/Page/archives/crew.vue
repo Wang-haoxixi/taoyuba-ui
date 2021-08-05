@@ -39,12 +39,12 @@
             </div>
         </div>
         <div style="margin-top: 21px">
-            <el-tabs v-model="activeName" type="card" >
+            <el-tabs v-model="activeName" type="card" @tab-click="handleClickPane">
                 <el-tab-pane label="现有船员" name="first"></el-tab-pane>
                 <el-tab-pane label="历史船员" name="second"></el-tab-pane>
             </el-tabs>
               <el-table
-                :data="crew"
+                :data="crewLoacl"
                 style="width: 100%">
                 <el-table-column
                     prop="realName"
@@ -87,18 +87,39 @@
                         <el-button @click="handleClick(scope.row,2)" type="text" size="small">合同</el-button>
                     </template>
                     </el-table-column>
+                
                 </el-table>
+                          <div style="text-align: center;margin: 20px 0;" v-if="pagination">
+        <el-pagination 
+          background
+          layout="total, prev, pager, next, jumper"
+          :total="total"
+          :page-size="params.size"
+          :current-page.sync="params.current"
+         @current-change="currentChange"
+          >
+        </el-pagination>
+      </div>
         </div>
     </div>
 </template>
 <script>
+import {  getCrewByShipId,getCrewOldByShipId } from '@/api/tmlms/boatMan/index.js'
 export default {
   name: 'prot',
   data () {
     return {
+        pagination:false,
+        crewLoacl:[],
+        total: 10,
+        params: {
+         current: 1,
+         size: 10,
+         shipId:'',
+        },
         tableData: [],
         activeName: 'first',
-         certLevel: [
+        certLevel: [
         { value: '0', label: '' },
         { value: '1', label: '一级' },
         { value: '2', label: '二级' },
@@ -111,20 +132,56 @@ export default {
       default: ()=>{},
       type: Object,
     },
-    crew: {
-      default: ()=>[],
-      type: Array,
-    },
+    // crew: {
+    //   default: ()=>[],
+    //   type: Array,
+    // },
     num: {
       default: 0,
       type: Number,
     },
+    row: {
+      default: ()=>{},
+      type: Object,
+    },
   },
   created () {
+   this.getCrewByShipId()
   },
   mounted () {
   },
   methods: {
+      // 历史船员
+      getCrewOldByShipId (){
+          this.params.shipId=this.row.shipId
+         getCrewOldByShipId(this.params).then(res=>{
+         this.crewLoacl = res.data.data.records
+        this.total=res.data.data.total
+          })   
+      },
+      //分页
+      currentChange (current) {
+       this.params.current = current
+       this.getCrewOldByShipId()
+      },
+      //船员切换
+      handleClickPane (tab) {
+        if(tab.name=='second'){
+          this.pagination=true
+          this.params.current=1
+          this.params.size=10
+          this.getCrewOldByShipId()
+        }else{
+         this.pagination=false
+         this.getCrewByShipId()
+        }
+      },
+      // 船员
+      getCrewByShipId (){
+         getCrewByShipId(this.row.shipId).then(res=>{
+         this.crewLoacl = res.data.data
+          })   
+      },
       // 获取字典
       getLabel (dic,arr) {
           let data = ''

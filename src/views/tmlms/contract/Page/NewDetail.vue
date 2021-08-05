@@ -496,7 +496,7 @@
         <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add' || type === 'edit' || type === 'renew'" type="primary" @click="handleSubmit">提交</iep-button>
         <iep-button style="margin-right: 20px;" :disabeld="false" v-show="type === 'add'" type="primary" @click="handleSubmitCaoGao">保存为草稿</iep-button>
 
-        <iep-button v-if="!$route.query.see" :disabeld="false" @click="handleBack">返回</iep-button>  
+        <iep-button v-if="!$route.query.see&&akk" :disabeld="false" @click="handleBack">返回</iep-button>  
         <iep-button v-else :disabeld="false" @click="handleGo">返回</iep-button>           
       </div>
     </basic-container>
@@ -533,6 +533,7 @@ export default {
   data () {
     this.getShipNameList = debounce(this.getShipNameList, 50)
     return {
+      akk:true,
       formData: {
         shipownerName: '',
         shipownerIdcard: '',
@@ -669,7 +670,8 @@ export default {
     this.sockets.unsubscribe('card message')
   },
   created () {
-    console.log(this.record)
+    // console.log(this.record)
+    console.log( this.$route)
     if (this.record) {
       this.getList()
     }else if(this.$route.query.idcard){
@@ -679,6 +681,12 @@ export default {
       this.getListByidcard()
       console.log('type')
       console.log(this.type)
+    }
+    if(this.$route.query.add){
+      console.log(this.$route.query.add)
+      this.refreshShipName(this.$route.query.add)
+      this.type='add'
+      this.akk=false
     }
   },
   mounted () {
@@ -1174,21 +1182,111 @@ export default {
       }else if(this.formData.payType==2){
         this.formData.payTypeValue =  this.payValueOnce
       }
-      this.$refs['form'].validate(valid => {
-        console.log(valid)
-        if(this.formData.shipName){
-        
-         AddTybcontractDraft(this.formData).then(()=>{
-         this.$message.success('保存成功！')
-            // this.$emit('onGoBack')
+      if(this.formData.payType==1){
+        this.formData.payTypeValue = this.payValueLong
+      }else if(this.formData.payType==2){
+        this.formData.payTypeValue =  this.payValueOnce
+      }
+       const p1 = new Promise(resolve => {
+        this.$refs['form'].validateField('shipownerName', err => {
+          resolve(err)
+        })
+        resolve()
+      })
+      const p2 = new Promise(resolve => {
+        this.$refs['form'].validateField('shipownerIdcard', err => {
+          resolve(err)
+        })
+        resolve()
+      })
+      const p3 = new Promise(resolve => {
+        this.$refs['form'].validateField('shipName', err => {
+          resolve(err)
+        })
+        resolve()
+      })
+       const p4 = new Promise(resolve => {
+        this.$refs['form'].validateField('shipLicenses', err => {
+          resolve(err)
+        })
+        resolve()
+      })
+      const p5 = new Promise(resolve => {
+        this.$refs['form'].validateField('shipownerPhone', err => {
+          resolve(err)
+        })
+        resolve()
+      })
+      const p6 = new Promise(resolve => {
+        this.$refs['form'].validateField('shipownerAddr', err => {
+          resolve(err)
+        })
+        resolve()
+      })
+       const p7 = new Promise(resolve => {
+        this.$refs['form'].validateField('employerName', err => {
+          resolve(err)
+        })
+        resolve()
+      })
+      const p8 = new Promise(resolve => {
+        this.$refs['form'].validateField('employerIdcard', err => {
+          resolve(err)
+        })
+        resolve()
+      })
+      const p9 = new Promise(resolve => {
+        this.$refs['form'].validateField('employerProp', err => {
+          resolve(err)
+        })
+        resolve()
+      })
+       const p10 = new Promise(resolve => {
+        this.$refs['form'].validateField('employerPhone', err => {
+          resolve(err)
+        })
+        resolve()
+      })
+      const p11 = new Promise(resolve => {
+        this.$refs['form'].validateField('employerAddr', err => {
+          resolve(err)
+        })
+        resolve()
+      })
+       Promise.all ( [p1, p2, p3 ,p4, p5, p6 ,p7, p8, p9 ,p10, p11])
+        .then(result => {
+          console.log(result)
+             if (!result.join('')) {
+            AddTybcontractDraft(this.formData).then(()=>{
+            this.$message.success('保存成功！')
+            this.$emit('onGoBack')
             }).catch(err=>{
                console.log(err)
-              this.$message.error('新增失败,请联系管理员!')
+              this.$message.error('保存失败,请联系管理员!')
           })
-        }else{
-          this.$message.error('请选择船名')
-        }
-      })
+             }else{
+                this.$message.error('请确认已经填写了持证人和甲方信息！')
+             }
+         
+        })
+        .catch(() => {
+          this.disableGetCode = false
+        })
+      // this.$refs['form'].validate(valid => {
+      //   console.log(valid)
+      //   if(this.formData.shipName){
+        
+      //    AddTybcontractDraft(this.formData).then(()=>{
+      //    this.$message.success('保存成功！')
+      //       // this.$emit('onGoBack')
+      //       }).catch(err=>{
+      //          console.log(err)
+      //         this.$message.error('新增失败,请联系管理员!')
+      //     })
+      //   }else{
+      //     this.$message.error('请选择船名')
+      //   }
+      // })
     },
     handleSubmit () {
       // if (this.period) {

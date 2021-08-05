@@ -80,7 +80,7 @@
             </el-button> -->
             <el-button v-if="(mlms_contract_edit && scope.row.status === '未审核') || (mlms_contract_edit && scope.row.status === '未通过审核')" size="mini" @click="handleEdit(scope.row.id)">编辑
             </el-button>
-            <el-button v-if="mlms_contract_del " size="mini" @click="handleDel(scope.row.id)">删除
+            <el-button  size="mini" @click="handleDel(scope.row.id)">删除
             </el-button>
             <el-button v-if="mlms_contract_rev && scope.row.status === '未审核'" size="mini" @click="handleReview(scope.row.id)">审核
             </el-button>
@@ -455,14 +455,14 @@ export default {
             text: '雇员（乙方）',
             value: 'employeeName',
           },
-          {
-            text: '渔业生产周期',
-            value: 'workTime',
-          },
-          {
-            text: '合同状态',
-            value: 'status',
-          },
+          // {
+          //   text: '渔业生产周期',
+          //   value: 'workTime',
+          // },
+          // {
+          //   text: '合同状态',
+          //   value: 'status',
+          // },
           {
             text: '合同发布者',
             value: 'userId',

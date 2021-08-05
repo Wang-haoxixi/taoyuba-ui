@@ -99,9 +99,11 @@
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item v-if="mlms_ship_export"><span @click="exportInfo(scope.row.shipId,scope.row.shipName)">开航登记表</span></el-dropdown-item>
                   <el-dropdown-item v-if="mlms_shipname_export"><span @click="exportShipInfo(scope.row.shipId,scope.row.shipName)">船员登记表</span></el-dropdown-item>
+                  <el-dropdown-item v-if="mlms_shipname_export"><span @click="exportRecord(scope.row.shipId,scope.row.shipName)">实名备案登记表</span></el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
               <iep-button size="mini" type="primary" v-if="mlms_ship_danger" @click="handleDanger(scope.row)">隐患排查</iep-button>
+               <iep-button size="mini" type="primary" @click="contractAdd(scope.row)">签合同</iep-button>
               <!-- <iep-button size="mini" type="primary" v-if="mlms_ship_export" @click="exportInfo(scope.row.shipId,scope.row.shipName)">导出</iep-button> -->
               <!-- <iep-button size="mini" type="primary" @click="handleOperat(scope.row.shipId,scope.row.shipNo)">经营人</iep-button> -->
             </operation-wrapper>
@@ -174,7 +176,7 @@
 <script>
 import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
 import { countCrew } from '@/api/tmlms/boatMan/index'
-import { getVillageShipList,changeShip,exportShipExcel, exportShipNameExcel,exportContractModel,getFixOrgIds,changeOrgIds } from '@/api/ships'
+import { getVillageShipList,changeShip,exportShipExcel, exportShipNameExcel,exportContractModel,getFixOrgIds,changeOrgIds,exportRecord } from '@/api/ships'
 // import { getVillageShipList } from '@/api/ships'
 import prots from './Prot.vue'
 import archives from './Archives.vue'
@@ -378,6 +380,16 @@ export default {
         })
     })
     },
+     exportRecord (shipId,shipName) {   
+      this.exportParams.shipId = shipId
+      this.exportParams.shipName = shipName                         
+      exportRecord (this.exportParams).catch(err => {
+        this.$message({
+          type: 'warning',
+          message: err,
+        })
+    })
+    },
     getVillageOrg () {
       getVillageByOrg().then(res=>{
         this.orgList = res.data.data
@@ -402,6 +414,12 @@ export default {
         path: '/hrms_spa/village_ship_detail',
         query:{ add: 'add' },
       })  
+    },
+    contractAdd (e) {
+       this.$router.push({
+         path: '/tmlms_spa/contract_add',
+         query:{add:e},
+        })
     },
     handleHodler (shipId,shipName){
       // console.log(shipId)

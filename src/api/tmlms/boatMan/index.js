@@ -23,6 +23,13 @@ export function getCrewByShipId (shipId) {
         params: shipId,
     })
 }
+export function getCrewOldByShipId (shipId) {
+    return request({
+        url: `${prefixUrl}/getHistoryByShipId?shipId=${shipId.shipId}`,
+        method: 'get',
+        params: shipId,
+    })
+}
 export function getCrewRegiste (param) {
     return request({
         url: `${prefixUrl}/pageWithShip`,

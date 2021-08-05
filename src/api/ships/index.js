@@ -151,6 +151,13 @@ export function exportShipExcel (params) {
     title: params.shipName,
   })
 }
+export function exportRecord (params) {                                    
+  return exportDownload({
+    url: 'tmlms/tybmlmsExcelExport/downShipCrewRecord',
+    data: params,                             
+    title: '实名登记备案表-'+params.shipName,
+  })
+}
 export function exportShipNameExcel (params) {                                    
   return exportDownload({
     url: 'tmlms/tybmlmsExcelExport/downShipCrewTwoOld ',

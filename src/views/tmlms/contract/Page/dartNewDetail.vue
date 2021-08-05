@@ -911,6 +911,7 @@ export default {
       })
     },
     handleBack () {
+    
       this.$emit('onGoBack')
     },
     handleGo () {
@@ -1248,7 +1249,7 @@ export default {
              if (!result.join('')) {
             AddTybcontractDraft(this.formData).then(()=>{
             this.$message.success('保存成功！')
-            // this.$emit('onGoBack')
+            this.$emit('onGoBack')
             }).catch(err=>{
                console.log(err)
               this.$message.error('保存失败,请联系管理员!')

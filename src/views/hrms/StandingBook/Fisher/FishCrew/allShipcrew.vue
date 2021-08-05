@@ -104,6 +104,12 @@ export default {
         workStatus:'',
         reason:'',
       },
+      certLevel: [
+        { value: '0', label: '' },
+        { value: '1', label: '一级' },
+        { value: '2', label: '二级' },
+        { value: '3', label: '三级' },
+      ],
       reasons:[
         {
           label: '船员觉得开船时间太久',
@@ -261,16 +267,30 @@ export default {
         item.flag=keyBy(this.flag, 'value')[item.flag].label
         // item.certName = ''
         if(item.certList){
-          let certName = []
+          // let certName = []
+          let hdk = ''
           item.certName = ''
           item.certList.forEach(v=>{
+          this.certLevel.map(iep=>{
+            if (v.certLevel === iep.value) {
+              hdk = iep.label
+               console.log(hdk)
+            }
+          })
+          
           this.$store.getters.dictGroup.tyb_crew_cert_title.map(data=>{
           if(v.certTitle==data.value){
-            certName.push(data.label)
+                hdk += data.label + ','
+            // certName.push(data.label)
               // item.certName=item.certName+' '+data.label
           }
           })
-          item.certName = certName.join('，')
+           console.log(hdk)
+          if(hdk){
+            hdk=hdk.slice(0,hdk.length-1)
+          }
+          item.certName = hdk
+          console.log(item.certName)
         })
         }
       })
