@@ -722,6 +722,9 @@ export default {
                     this.formData.employeePosition = res.data.data.positionId
                     this.formData.contactName = res.data.data.contactName
                     this.formData.contactPhone = res.data.data.contactPhone
+                    if(this.formData.employeeIdcard){
+                      this.getEmployee()
+                    }
                   }
                 }).catch(()=>{
                     this.formData.employeeName = data.name
@@ -730,6 +733,9 @@ export default {
                     this.formData.provinceId = parseInt(data.cardno.substring(0,2)+'0000000000')
                     this.formData.cityId = parseInt(data.cardno.substring(0,4)+'00000000')
                     this.formData.districtId = parseInt(data.cardno.substring(0,6)+'000000')
+                     if(this.formData.employeeIdcard){
+                      this.getEmployee()
+                    }
                 })
             }
           })
@@ -814,17 +820,22 @@ export default {
     // }
     // },
     getEmployee () {
+      console.log('hddddk1')
       this.formData.employeeIdcard = this.formData.employeeIdcard.replace(/\s*/g,'')
       if(this.formData.employeeIdcard.length==18) {
+            console.log('hddddk2')
         isCheckIdcard(this.formData.employeeIdcard).then(res => {
         // console.log(res.data. msg)
         if (res.data.data === false) {
+              console.log('hddddk3')
           this.$message.error(res.data.msg)
           this.checkEmployeeIdcard = true
           this.formData.employeeIdcard = ''
           this.idcards = []
         } else {
+              console.log('hddddk4')
           if (this.formData.employeeIdcard !== '') {
+                console.log('hddddk5')
             detailCrew(this.formData.employeeIdcard).then(({data}) => {
               let employee = data.data
               if(employee.positionId!=='0'){
@@ -961,6 +972,7 @@ export default {
       }
     },
     getShipNameList (shipName) {
+      console.log(shipName)
       this.loading = true
       if (shipName !== '' && shipName.length==5) {
           getShipNames(shipName).then(({data})=>{
@@ -970,6 +982,7 @@ export default {
             data.data.forEach(v => {
               this.shipNames.push(v)
             })
+            console.log(this.shipNames)
           }else{
             this.$message.error(data.msg)
           }
@@ -1005,6 +1018,7 @@ export default {
       this.loading = false
     },
     employerPropChange (val) {
+      console.log(this.formData)
       if (val === 1) {
         this.formData.employerName = this.formData.shipownerName
         this.formData.employerIdcard = this.formData.shipownerIdcard
@@ -1019,7 +1033,7 @@ export default {
         this.formData.employerIdcard = ''
         this.formData.employerPhone = ''
         this.formData.employerAddr = ''
-        getOperatorList (this.formData.shipName.shipName,2).then(data => {
+        getOperatorList (this.formData.shipName,2).then(data => {
           // console.log('lll')
           // console.log(data.data.data)
           if(data.data.data){
@@ -1035,7 +1049,7 @@ export default {
           this.formData.employerIdcard = ''
           this.formData.employerPhone = ''
           this.formData.employerAddr = ''
-          getOperatorList (this.formData.shipName.shipName,3).then(data => {
+          getOperatorList (this.formData.shipName,3).then(data => {
           if(data.data.data){
             this.formData.employerName = data.data.data.realname
             this.formData.employerIdcard = data.data.data.idcard

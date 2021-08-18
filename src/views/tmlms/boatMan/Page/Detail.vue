@@ -163,7 +163,7 @@
                   </el-select>
                   </el-form-item>
               </el-col>
-              <el-col :span="12"  v-if="!$route.query.edit || (userInfo.orgId!=32)">
+              <el-col :span="12">
                   <el-form-item label="用工状态：" prop="workStatus">
                   <el-radio-group v-model="form.workStatus">
                       <el-radio  :label="9">待求职</el-radio>
@@ -1047,7 +1047,7 @@ export default {
       let arr = dataurl.split(',')
       let mime = arr[0].match(/:(.*?);/)[1]
       let suffix = mime.split('/')[1]
-      let bstr = atob(arr[1])
+      let bstr = atob(arr[1])  
       let n = bstr.length
       let u8arr = new Uint8Array(n)
       while (n--) {
@@ -1201,7 +1201,7 @@ export default {
           let form = {
             photoFront: res.frontImg,
             photoReverse: res.backImg,
-            certPhoto: res.photobase64,
+            idcardPhoto: res.photobase64,
           }
           // this.form.photoFront = res.frontImg
           // this.form.photoReverse = res.backImg
@@ -1302,7 +1302,7 @@ export default {
   },
   beforeDestroy () {
     this.sockets.unsubscribe('card message')
-  },
+  },  
   mounted () {
             //添加socket事件监听
         // this.$socket.emit('connect')
@@ -1318,18 +1318,16 @@ export default {
           this.getIdCardData().then((idCardData) => {
             console.log('idCardData', idCardData)
             getCrewData(data.cardno).then(res=>{
+              console.log(res.data.data !== true)
               if (res.data.data !== true) {
+                console.log('hddddddddddddddk')
                 this.choseProvince(res.data.data.provinceId)
                 this.choseCity(res.data.data.cityId)
                 this.form = res.data.data
-                this.uploadImgBase(idCardData.photoFront, this.form.certPhoto)
+                // this.uploadImgBase(idCardData.photoFront)
 
                 // 正面照
-                if (this.isHttpsStart(this.form.photoFront)) {
-                  this.frontList.push({name: 'photoFront', url: this.form.photoFront})
-                  this.hideUpload = this.frontList.length >= this.limitCount
-                } else {
-                  if (idCardData.photoFront) {
+                if (idCardData.photoFront) {
                     this.uploadImgBase(idCardData.photoFront).then((result) => {
                       if (result) {
                         this.frontList = []
@@ -1338,15 +1336,16 @@ export default {
                         this.form.photoFront = result
                       }
                     })
+                  }else{
+                        if (this.isHttpsStart(this.form.photoFront)) {
+                  this.frontList.push({name: 'photoFront', url: this.form.photoFront})
+                  this.hideUpload = this.frontList.length >= this.limitCount
+                } 
                   }
-                }
+             
 
                 // 反面照
-                if (this.isHttpsStart(this.form.photoReverse)) {
-                  this.reverseList.push({name: 'photoReverse', url: this.form.photoReverse})
-                      this.hideUploadReverse = this.reverseList.length >= this.limitCount
-                } else {
-                  if (idCardData.photoReverse) {
+                if (idCardData.photoReverse) {
                     this.uploadImgBase(idCardData.photoReverse).then((result) => {
                       if (result) {
                         this.reverseList = []
@@ -1355,25 +1354,30 @@ export default {
                         this.form.photoReverse = result
                       }
                     })
+                  }else {
+                      if (this.isHttpsStart(this.form.photoReverse)) {
+                      this.reverseList.push({name: 'photoReverse', url: this.form.photoReverse})
+                      this.hideUploadReverse = this.reverseList.length >= this.limitCount
+                 } 
                   }
-                }
-
-                // 证件照
-                if (this.isHttpsStart(this.form.certPhoto)) {
-                  this.CertList.push({name: 'certPhoto', url: this.form.certPhoto})
-                  this.hideUploadCert = this.CertList.length >= this.limitCount
-                } else {
-                  if (idCardData.certPhoto) {
-                    this.uploadImgBase(idCardData.certPhoto).then((result) => {
+            
+                // 身份证头像
+                if (idCardData.idcardPhoto) {
+                    this.uploadImgBase(idCardData.idcardPhoto).then((result) => {
                       if (result) {
-                        this.CertList = []
-                        this.CertList.push({name: 'certPhoto', url: result})
-                        this.hideUploadCert = this.CertList.length >= this.limitCount
-                        this.form.certPhoto = result
+                        // this.CertList = []
+                        // this.CertList.push({name: 'idcardPhoto', url: result})
+                        // this.hideUploadCert = this.CertList.length >= this.limitCount
+                        this.form.idcardPhoto = result
                       }
                     })
                   }
-                }
+                // else {
+                //    if (this.isHttpsStart(this.form.idcardPhoto)) {
+                //   this.CertList.push({name: 'idcardPhoto', url: this.form.idcardPhoto})
+                //   this.hideUploadCert = this.CertList.length >= this.limitCount
+                // }
+                // }
 
                 this.$set(this.form, 'certList',[])
                 this.isIdcard = true
@@ -1394,6 +1398,7 @@ export default {
                   })   
                 })
             } else {
+              console.log('gkddddddddddddddd')
                 let cardMsg = {}
                 this.form.realName = data.name
                 this.form.birthday = this.setBirthTimeFormat(data.born.slice(0,4)+'-'+data.born.slice(4,6)+'-'+data.born.slice(6))
@@ -1411,13 +1416,13 @@ export default {
                 this.form.cityId = cardMsg.cityId
                 this.form.districtId = cardMsg.districtId
                 // 证件照
-                if (idCardData.certPhoto) {
-                  this.uploadImgBase(idCardData.certPhoto).then((result) => {
+                if (idCardData.idcardPhoto) {
+                  this.uploadImgBase(idCardData.idcardPhoto).then((result) => {
                     if (result) {
-                      this.CertList = []
-                      this.CertList.push({name: 'certPhoto', url: result})
-                      this.hideUploadCert = this.CertList.length >= this.limitCount
-                      this.form.certPhoto = result
+                      // this.CertList = []
+                      // this.CertList.push({name: 'idcardPhoto', url: result})
+                      // this.hideUploadCert = this.CertList.length >= this.limitCount
+                      this.form.idcardPhoto = result
                     }
                   })
                 }

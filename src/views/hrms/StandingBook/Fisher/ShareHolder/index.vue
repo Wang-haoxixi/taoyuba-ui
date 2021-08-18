@@ -112,7 +112,16 @@ export default {
       this.owner.shipId = shipId
       this.owner.showbtn = 1
       getHoldersByShip(shipId).then(res=>{
-        let alldata = [this.owner,...res.data.data]
+        let alldata=[]
+        alldata[0] = this.owner
+        if(res.data.data.length>0){
+          for( let key in res.data.data){
+            if(res.data.data[key].positionId == 0){
+              res.data.data[key].positionId=''
+            }
+          }
+           alldata = [...alldata,...res.data.data]
+        }      
         alldata[0].realName = alldata[0].realName + '(持证人)'
         this.pagedTable = alldata
         this.pagedTable.forEach(async (item, index) => {

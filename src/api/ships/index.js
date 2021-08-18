@@ -148,7 +148,7 @@ export function exportShipExcel (params) {
   return exportDownload({
     url: 'tmlms/tybmlmsExcelExport/downShipCrew',
     data: params,                             
-    title: params.shipName,
+    title: '开航登记表-'+params.shipName,
   })
 }
 export function exportRecord (params) {                                    
@@ -162,7 +162,7 @@ export function exportShipNameExcel (params) {
   return exportDownload({
     url: 'tmlms/tybmlmsExcelExport/downShipCrewTwoOld ',
     data: params,                             
-    title: params.shipName,
+    title: '船员登记表-'+params.shipName,
   })
 }
 export function exportContractModel (params) {                                    

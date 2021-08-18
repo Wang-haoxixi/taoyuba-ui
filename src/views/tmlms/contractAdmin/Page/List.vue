@@ -203,7 +203,7 @@
       </el-dialog>        -->
       <el-dialog :title="uploadTitle" :visible.sync="paperVisible" width="30%" :before-close="paperClose">    
                <!-- <el-upload       
-                  class="upload-demo"
+                  class="upload-demo" 
                   drag
                   action="/api/admin/file/upload/avatar"
                   :headers="headers"
@@ -241,7 +241,8 @@ import {
   deleteContract,
   // getContract,
   getDict, reviewContract, cancelContract, getContractDetail,recallContract,uploadContravt,uploadImages } from '@/api/tmlms/newContract'
-import { saveRate, getRate } from '@/api/tmlms/rate'  
+// import { saveRate, getRate } from '@/api/tmlms/rate'  
+import { saveRate } from '@/api/tmlms/rate'  
 import {getImages} from '@/api/tmlms/multiimage'
 import { getUserInfo } from '@/api/login'
 import { mapGetters } from 'vuex'
@@ -531,13 +532,13 @@ export default {
                 v.status = m.value
               }
             })
-            getRate({contractId: v.contractId, type: this.rateType}).then(res => {
-              if(res.data.data.records.length !== 0) {
-                this.$set(v, 'isRate', 1)
-              } else {
-                this.$set(v, 'isRate', 0)
-              }
-            })
+            // getRate({contractId: v.contractId, type: this.rateType}).then(res => {
+            //   if(res.data.data.records.length !== 0) {
+            //     this.$set(v, 'isRate', 1)
+            //   } else {
+            //     this.$set(v, 'isRate', 0)
+            //   }
+            // })
             getUserName(v.userId).then(res=>{
                this.$set(v, 'userId', res.data.data.realName)
             })
