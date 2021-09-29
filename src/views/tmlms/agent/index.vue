@@ -177,9 +177,10 @@ export default {
           type: 'warning',
         }).then(() => {
           deleteAgent(id).then(res=>{
+            console.log(res)
             this.$message({
               type: 'success',
-              message: res.data.msg,
+              message: '操作成功',
             })
             this.getData()
           }).catch(err=>{

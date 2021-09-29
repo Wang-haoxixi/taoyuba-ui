@@ -62,6 +62,14 @@ export function getDatabusList (query) {
         params: query,
     })
 }
+export function setUrl (query) {
+    return request({
+        url: '/tmlms/databus/deviceSetUrl',
+        method: 'POST',
+        params: query,
+    })
+}
+
 
 export function deleteDatabusList (id) {
     return request({

@@ -24,11 +24,14 @@
         <hr>
         <h3>渔船越界提醒</h3>
         <div class="message-p">浙岱渔<span style="color: #0185D8">00036</span>在东经30度，北纬50度，请及时与船东联系进行核实。</div>
+        <hr>
+        <h3>证书数量</h3>
+        <div class="message-p"> 在东经30度，北纬50度，请及时与船东联系进行核实。</div>
     </div>
 </template>
 
 <script>
-import { countInfo } from '@/api/wel/index'
+import { countInfo ,countWithDate} from '@/api/wel/index'
 export default {
    data () {
     return {
@@ -39,6 +42,10 @@ export default {
   created () {
         countInfo().then(({ data })=>{
           this.info = data.data
+        })
+         countWithDate().then(({ data })=>{
+        //   this.info = data.data
+        console.log(data)
         })
   },
   computed: {

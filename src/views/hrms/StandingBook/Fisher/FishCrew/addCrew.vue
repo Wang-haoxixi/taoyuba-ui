@@ -266,9 +266,11 @@ export default {
     },
     // 提交表单
     save () {
-      let type=1
-      console.log(this.crewList)
-      if(this.crewList){
+      // this.$refs['userInfoForm'].validate((valid) => {
+      //   if(valid){
+       let type=1
+       console.log(this.crewList)
+       if(this.crewList){
         this.$confirm('提交之后将无法修改, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -302,7 +304,15 @@ export default {
             this.saveBtnLoading = false
           })
         })
+      }else{
+        return
       }
+      // else{
+      //   return
+      // }
+      //   }
+      // })
+      
     },
     // 选择城市
     choseProvince (id) {

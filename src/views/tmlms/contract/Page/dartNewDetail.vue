@@ -522,7 +522,7 @@ Vue.use(new VueSocketio({
 }))
 import { 
   addContract, 
-  updateContract, isCheckIdcard,getContractByidcard} from '@/api/tmlms/newContract'
+   isCheckIdcard,getContractByidcard} from '@/api/tmlms/newContract'
   import { 
  getDartContractDetail} from '@/api/tmlms/draftContract'
   import {  
@@ -1350,12 +1350,13 @@ export default {
                   })  
                 }    
           } else if (this.type === 'edit') {
-              updateContract(this.formData).then(() =>{
-              this.$message.success('修改成功！')
-              this.$emit('onGoBack')
-              }).catch(() => {
-                this.$message.error('修改失败！')
-              })
+               addContract(this.formData).then(()=>{
+                      this.$message.success('保存成功！')
+                      this.$emit('onGoBack')
+                    }).catch(err=>{
+                      console.log(err)
+                      this.$message.error('新增失败,请联系管理员!')
+                    })
           }      
         }else{
           this.$message.error('请确认已经填写了所有必填信息！')

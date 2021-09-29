@@ -241,11 +241,12 @@ import {
   deleteContract,
   // getContract,
   getDict, reviewContract, cancelContract, getDartContractDetail,recallContract,uploadContravt,uploadImages } from '@/api/tmlms/draftContract'
-import { saveRate, getRate } from '@/api/tmlms/rate'  
+// import { saveRate, getRate } from '@/api/tmlms/rate'  
+import { saveRate } from '@/api/tmlms/rate'  
 import {getImages} from '@/api/tmlms/multiimage'
 import { getUserInfo } from '@/api/login'
 import { mapGetters } from 'vuex'
-import { getUserName } from '@/api/admin/user'
+// import { getUserName } from '@/api/admin/user'
 import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
 // import contractPrint from '../../contract/Page/ContractPrint.vue'
 // import Vue from 'vue'
@@ -463,10 +464,10 @@ export default {
           //   text: '合同状态',
           //   value: 'status',
           // },
-          {
-            text: '合同发布者',
-            value: 'userId',
-          },
+          // {
+          //   text: '合同发布者',
+          //   value: 'realName',
+          // },
         ],
         data: this.contractList,
       }
@@ -577,16 +578,16 @@ export default {
                 v.status = m.value
               }
             })
-            getRate({contractId: v.contractId, type: this.rateType}).then(res => {
-              if(res.data.data.records.length !== 0) {
-                this.$set(v, 'isRate', 1)
-              } else {
-                this.$set(v, 'isRate', 0)
-              }
-            })
-            getUserName(v.userId).then(res=>{
-               this.$set(v, 'userId', res.data.data.realName)
-            })
+            // getRate({contractId: v.contractId, type: this.rateType}).then(res => {
+            //   if(res.data.data.records.length !== 0) {
+            //     this.$set(v, 'isRate', 1)
+            //   } else {
+            //     this.$set(v, 'isRate', 0)
+            //   }
+            // })
+            // getUserName(v.userId).then(res=>{
+            //    this.$set(v, 'userId', res.data.data.realName)
+            // })
           
 
           })

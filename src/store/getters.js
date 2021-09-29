@@ -31,5 +31,7 @@ const getters = {
   dictGroup: state => state.cache.dictGroup,
   contactsPyGroup: state => state.cache.contactsPyGroup,
   famsConfig: state => state.cache.famsConfig,
+  //
+  // rowerHdk:state => state,
 }
 export default getters

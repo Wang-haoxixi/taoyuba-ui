@@ -79,6 +79,12 @@ export default [
         meta: noKeepAlive,
       },
       {
+        path: 'bot_admin/:id',
+        name: '管理表单',
+        component: () => import('@/views/hrms/BoatmanRecruitment/Page/Edit.vue'),
+        meta: noKeepAlive,
+      },
+      {
         path: 'crew_view/:userId',
         name: '管理表单',
         component: () => import('@/views/hrms/AdminCrew/Page/Detail.vue'),
@@ -118,6 +124,12 @@ export default [
         path: 'crew_admin_list',
         name: '船员管理列表页',
         component: () => import('@/views/hrms/AdminCrew/Page/List.vue'),
+        meta: noKeepAlive,
+      },
+      {
+        path: 'bot_admin_list',
+        name: '船老大招聘列表页',
+        component: () => import('@/views/hrms/BoatmanRecruitment/Page/List.vue'),
         meta: noKeepAlive,
       },
       {

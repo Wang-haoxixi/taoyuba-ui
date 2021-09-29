@@ -32,7 +32,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="userName"
+        prop="realName"
         label="合同发布者">
       </el-table-column>
     </el-table>
@@ -100,9 +100,9 @@ export default {
       getContractList({size: this.page.size, current: this.page.current, employeeIdcard: this.employeeIdcard}).then(({ data }) => {
         if (data.code === 0) {
           this.data = data.data.records
-          this.data.forEach(async (item) => {
-            await this.getUserName(item.userId, item)
-          })
+          // this.data.forEach(async (item) => {
+          //   await this.getUserName(item.userId, item)
+          // })
           this.total = data.data.total
         }
       })

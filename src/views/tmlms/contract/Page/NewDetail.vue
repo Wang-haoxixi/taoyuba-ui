@@ -683,8 +683,9 @@ export default {
       console.log(this.type)
     }
     if(this.$route.query.add){
-      console.log(this.$route.query.add)
-      this.refreshShipName(this.$route.query.add)
+      this.formData.employeeIdcard=this.$route.query.hdkId
+      this.getEmployee()
+      this.refreshShipName(JSON.parse(sessionStorage.getItem('hdkRow')))
       this.type='add'
       this.akk=false
     }

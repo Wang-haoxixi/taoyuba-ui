@@ -2,7 +2,7 @@ import request from '@/router/axios'
 import {exportDownload} from '@/util/export'
 
 const prefixUrl = 'tybhrms/resume'
-
+const Url='tmlms/shipownerRecruit'
 export function getResumePage (query) {
   return request({
     url: `${prefixUrl}/getPage`,
@@ -68,3 +68,55 @@ export function exportExcel (ids) {
     title: '简历信息',
   })
 }
+
+//船老大招聘
+export function getList (query) {
+  return request({
+    url: `${Url}/page`,
+    method: 'get',
+    params: query,
+  })
+}
+
+export function deleteById (id) {
+  return request({
+    url: `${Url}/delete/` +id,
+    method: 'post',
+    data: id,
+  })
+}
+
+export function getById (id) {
+  return request({
+    url: `${Url}/` +id,
+    method: 'get',
+    dparamsata: id,
+  })
+}
+
+export function update (data) {
+  return request({
+    url: `${Url}/update`,
+    method: 'post',
+    data: data,
+  })
+}
+
+export function create (data) {
+  return request({
+    url: `${Url}/create`,
+    method: 'post',
+    data: data,
+  })
+}
+
+export function change (data) {
+  return request({
+    url: 'tybship/tybship/findmyship/'+data,
+    method: 'get',
+
+  })
+}
+
+
+

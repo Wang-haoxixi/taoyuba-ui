@@ -48,7 +48,7 @@ export default {
           this.dialogShow = false
           const loading = this.$loading({
             lock: true,
-            text: '组织切换中....',
+            text: '区域切换中....',
             spinner: 'el-icon-loading',
             background: 'rgba(0, 0, 0, 0.7)',
           })
@@ -58,7 +58,7 @@ export default {
             loading.close()
             location.reload()
             this.$message({       
-              message: '组织切换成功!',
+              message: '区域切换成功!',
               type: 'success',
             })          
             this.$router.push({                                      

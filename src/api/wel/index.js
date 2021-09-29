@@ -93,3 +93,9 @@ export function countVillageByOrg () {
   })
 }
 
+export function countWithDate () {
+  return request({
+    url: '/tmlms/crew_cert/countWithDate',
+    method: 'get',
+  })
+}

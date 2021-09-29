@@ -4,6 +4,8 @@
       <div class="shipowner_title">
         <el-button @click="getData" type="default" size="small">刷新</el-button>
         <el-button @click="add" type="default" size="small">新增</el-button>
+          <el-button type="default" size="small" @click="setUrl()">关联第三方url
+              </el-button>
         <div style="float:right">
           <span style="width:120px">
             <el-select v-model="params.villageId" filterable placeholder="请选择基层" size="small" clearable>
@@ -61,6 +63,7 @@
               </el-button>
               <el-button size="mini" @click="handleSelect(scope.row)">关联会议
               </el-button>
+            
             </template>
           </el-table-column>
         </el-table>
@@ -87,7 +90,7 @@
   </div>
 </template>
 <script>
-import { getDatabusList,deleteDatabusList,editDatabusList } from '@/api/tmlms/faceList'
+import { getDatabusList,deleteDatabusList,editDatabusList,setUrl } from '@/api/tmlms/faceList'
 // import { getVillage } from '@/api/tmlms/bvillage/index'
 import detail from './detail.vue'
 import selects from './selects.vue'
@@ -133,6 +136,18 @@ export default {
     // })
   },
   methods: {
+    setUrl (){
+       setUrl().then(res=>{
+         if(res.data.data==true){
+            this.$message.success('第三方url关联成功')
+         }else{
+              this.$message.error('操作失败')
+         }
+      
+      }).catch(() => {
+         this.$message.error('操作失败')
+        })
+    },
         // 分页
     currentChange (val) {
       this.page.current = val

@@ -180,6 +180,14 @@ export default [
             },
           },
           {
+            path: '/crew/smdj/certificate',
+            name: 'certificate',
+            component: () => import('@/views/tmlms/certificate/index'),
+            meta: {   
+              keepAlive: true,
+            },
+          },
+          {
             path: 'apply_detail',
               name: 'applyDetailBoatMan',
               component: () => import('@/views/tmlms/boatMan/Page/Apply_Detail'),

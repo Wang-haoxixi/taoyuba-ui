@@ -1,9 +1,9 @@
 import { loadAllDictMap } from '@/api/admin/dict'
-import { getUserPyList } from '@/api/admin/contacts'
+// import { getUserPyList } from '@/api/admin/contacts'
 // import { getOneConfig } from '@/api/fams/config'
 import { getStore, setStore } from '@/util/store'
 import { pickDeep } from '@/util/util'
-import keyBy from 'lodash/keyBy'
+// import keyBy from 'lodash/keyBy'
 const cache = {
   state: {
     dictGroup: getStore({ name: 'dictGroup' }) || {},
@@ -26,19 +26,19 @@ const cache = {
     //   })
     // },
     // 获取通讯录
-    LoadContactsPyGroup ({
-      commit,
-    }) {
-      return new Promise((resolve, reject) => {
-        getUserPyList().then(res => {
-          const { data } = res
-          commit('SET_CONTACTS_PY_GROUP', keyBy(data.data, 'id'))
-          resolve()
-        }).catch(err => {
-          reject(err)
-        })
-      })
-    },
+    // LoadContactsPyGroup ({
+    //   commit,
+    // }) {
+    //   return new Promise((resolve, reject) => {
+    //     getUserPyList().then(res => {
+    //       const { data } = res
+    //       commit('SET_CONTACTS_PY_GROUP', keyBy(data.data, 'id'))
+    //       resolve()
+    //     }).catch(err => {
+    //       reject(err)
+    //     })
+    //   })
+    // },
     // 获取全部字典
     LoadAllDictMap ({
       commit,

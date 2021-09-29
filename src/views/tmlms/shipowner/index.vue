@@ -155,6 +155,10 @@ export default {
       userData: {roles: []},
     }
   },
+  mounted (){
+    this.params.current=1
+    this.getData()
+  },
   methods: {
     // 分页
     currentChange (val) {

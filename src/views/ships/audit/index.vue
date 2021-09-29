@@ -24,25 +24,31 @@
             <operation-wrapper>
               <iep-button @click="handleView(scope.row.id)" v-if="scope.row.auditState === '2'">审核</iep-button>
               <iep-button @click="handleView(scope.row.id,true)">查看</iep-button>
+              <iep-button @click="watch(scope.row.id)">查看当前进度</iep-button>
             </operation-wrapper>
           </template>
         </el-table-column>
       </iep-table>
     </basic-container>
     <detail v-else @back="back" ref="detail" @getList="loadPage"></detail>
+   <dialogArchar  :dialogCertvisible='dialogCertvisible' @close="close" :list="list" ref="dialog"></dialogArchar>
   </div>
+  
 </template>
 <script>
-import { tybOrderPage,tybOrderPageDetail } from '@/api/ships'
+import { tybOrderPage,tybOrderPageDetail,getById } from '@/api/ships'
 import mixins from '@/mixins/mixins'
 import { columnsAudit } from '../options'
 import detail from './detail'
+import dialogArchar from './dialog'
+
 import queryMixin from '@/mixins/query'
 export default {
-  components: { detail },
+  components: { detail , dialogArchar },
   mixins: [mixins, queryMixin],
   data () {
     return {
+      dialogCertvisible:false,
       columnsAudit,
       params: {
         current: 1,
@@ -50,6 +56,7 @@ export default {
       },
       isLoadTable: false,
       detail: true,
+      list:{},
     }
   },
   created () {
@@ -89,9 +96,20 @@ export default {
     back () {
       this.detail = true
     },
+    close () {
+      this.dialogCertvisible = false
+    },
     handleRefresh () {
       this.pagination.current = 1
       this.loadPage()
+    },
+    watch (id) {
+      console.log(id)
+      this.dialogCertvisible=true
+       getById({ id }).then(res=>{
+        console.log(res.data.data)
+      this.list=res.data.data
+      })
     },
   },
 }

@@ -27,6 +27,9 @@
           <template v-else-if="item.type==='areaCode'">
             <div>{{getAreaCode(item, scope)}}</div>
           </template>
+           <template v-else-if="item.type==='ldate'">
+            <div>{{getLdata(item, scope)}}</div>
+          </template>
           <template v-else-if="item.type==='shipStatus'">
             <iep-button size="mini" :type="scope.row[item.css]" >{{getShipStatus (item, scope)}}</iep-button>
             <!-- <div><span :class="[tableLabel,shipColor]">{{getShipStatus (item, scope)}}</span></div> -->
@@ -190,6 +193,35 @@ export default {
         return '暂无'
       }
     },
+    getLdata (item, scope) {
+      // console.log(scope.row[item.prop])
+      // console.log('scope.row[item.prop]')
+     if(scope.row[item.prop]){
+       let date = new Date(scope.row[item.prop])
+        scope.row[item.prop]=this.dateFormat('YYYY-mm-dd', date)
+        // console.log(scope.row[item.prop])
+     }
+      return scope.row[item.prop]
+    },
+     dateFormat (fmt, date) {
+    let ret 
+    const opt = {
+        'Y+' :  date.getFullYear().toString()    ,  // 年
+        'm+' : (date.getMonth() + 1).toString()  ,  // 月
+        'd+' : date.getDate().toString()     ,      // 日
+        'H+' : date.getHours().toString()     ,     // 时
+        'M+' : date.getMinutes().toString()    ,    // 分
+        'S+' : date.getSeconds().toString()    ,   // 秒
+        // 有其他格式化字符需求可以继续添加，必须转化成字符串
+    }
+    for (let k in opt) {
+        ret = new RegExp('(' + k + ')').exec(fmt)
+        if (ret) {
+            fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, '0')))
+        };
+    };
+    return fmt
+    },
     getShipStatus (item, scope) {
       if(scope.row[item.prop]==0){
         scope.row[item.prop] = '证书已过期'
@@ -291,11 +323,11 @@ span.ms-tree-space {
   color:#fff;
   padding:10px;
 }
-.red {
-  .el-button--primary{
+.red 
+  >>>el-button--primary{
     background:#c7535a;
   }
-}
+
 .green {
   background:#3eaf7c;
 }

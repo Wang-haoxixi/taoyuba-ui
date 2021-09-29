@@ -19,7 +19,7 @@
           style="width: 100%; margin-top: 30px">
           <el-table-column label="编号" prop="id" width="100">
           </el-table-column>
-          <el-table-column label="分类" prop="type">
+          <el-table-column label="分类" prop="dictLabel">
           </el-table-column>
           <el-table-column
             v-for="(item,index) in options.columns"
@@ -60,7 +60,7 @@
 </template>
 <script>
 import { getBookList, delBook,updateBook }  from '@/api/book'
-import { getChild } from '@/api/tmlms/contract'
+// import { getChild } from '@/api/tmlms/contract' 
 import { mapGetters } from 'vuex'
 export default {
   data () {
@@ -150,9 +150,9 @@ export default {
         this.bookList = data.data.data.records
         this.total = data.data.data.total
         this.bookList.forEach(v => {
-          getChild(v.type).then(res => {
-            v.type = res.data.data.label
-          })
+          // getChild(v.type).then(res => {
+          //   v.type = res.data.data.label
+          // })
           v.price = v.price + '元'
         })
       })

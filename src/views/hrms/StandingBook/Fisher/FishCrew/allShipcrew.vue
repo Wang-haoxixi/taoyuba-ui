@@ -34,7 +34,8 @@
               <iep-button size="mini" plain  @click="handleEdit(scope.row.idcard)">编辑</iep-button>
               <iep-button size="mini" plain @click="handleChange(scope.row.idcard)">变更</iep-button>
               <iep-button size="mini" plain @click="handleView(scope.row.idcard)">查看</iep-button>
-              <iep-button size="mini" plain v-if="scope.row.sign" @click="handleSign(scope.row.idcard)">合同</iep-button>                       
+              <iep-button size="mini" plain v-if="scope.row.sign" @click="handleSign(scope.row.idcard)">合同</iep-button>         
+              <iep-button size="mini" plain @click="contractAdd(scope.row.idcard)">签合同</iep-button>       
               <iep-button size="mini" plain v-if="!roles.includes(115)" @click="handleDelete(scope.row.idcard)">删除</iep-button>
               <!-- <iep-button size="mini" @click="handleView(scope.row.idcard)">查看</iep-button> -->
               <!-- <iep-button size="mini" plain v-if="scope.row.workStatus!='上船，已签合同'" @click="handleEdit(scope.row.idcard)">编辑</iep-button> -->
@@ -98,6 +99,7 @@ export default {
   },
   data () {
     return {
+      row:'',
       relationStatus: '',
       dictsMap,
       form:{
@@ -250,6 +252,15 @@ export default {
             this.$message.success('船员删除成功!')
             this.getTableData()
           })
+        })
+    },
+    contractAdd (e) {
+       this.$router.push({
+         path: '/tmlms_spa/contract_add',
+         query:{
+          add:'add',
+          hdkId:e,
+         },
         })
     },
     // handleView (val) {

@@ -246,7 +246,7 @@ import { saveRate } from '@/api/tmlms/rate'
 import {getImages} from '@/api/tmlms/multiimage'
 import { getUserInfo } from '@/api/login'
 import { mapGetters } from 'vuex'
-import { getUserName } from '@/api/admin/user'
+// import { getUserName } from '@/api/admin/user'
 import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
 // import contractPrint from '../../contract/Page/ContractPrint.vue'
 // import Vue from 'vue'
@@ -464,7 +464,7 @@ export default {
           },
           {
             text: '合同发布者',
-            value: 'userId',
+            value: 'realName',
           },
         ],
         data: this.contractList,
@@ -539,9 +539,9 @@ export default {
             //     this.$set(v, 'isRate', 0)
             //   }
             // })
-            getUserName(v.userId).then(res=>{
-               this.$set(v, 'userId', res.data.data.realName)
-            })
+            // getUserName(v.userId).then(res=>{
+            //    this.$set(v, 'userId', res.data.data.realName)
+            // })
           
 
           })

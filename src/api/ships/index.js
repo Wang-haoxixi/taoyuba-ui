@@ -290,6 +290,13 @@ export function verification (params) {
   })
 }
 
+export function getById (id) {
+  console.log(id)
+  return request({
+    url: `/tmlms/tyb_order/getById?id=${id.id}`,
+    method: 'get',
+  })
+}
 export function postExcelExport (fileds) {
   return request({
     url: '/tmlms/tybmlmsExcelExport/downVerification',

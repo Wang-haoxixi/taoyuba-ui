@@ -1,10 +1,10 @@
 <template>
   <div>
     <basic-container>
-      <page-header title="组织管理"></page-header>
+      <page-header title="区域管理"></page-header>
       <operation-container>
         <template slot="left">
-          <!-- <iep-button @click="handleAdd" type="primary" plain>添加组织</iep-button> -->
+          <iep-button @click="handleAdd" type="primary" plain>添加区域</iep-button>
           <iep-button @click="handleReviewDialog">批量审核</iep-button>
         </template>
         <template slot="right">
@@ -14,22 +14,22 @@
       </operation-container>
       <iep-table :isLoadTable="isLoadTable" :pagination="pagination" :dictsMap="dictsMap" :columnsMap="columnsMap" :pagedTable="pagedTable" @size-change="handleSizeChange" @current-change="handleCurrentChange" @selection-change="handleSelectionChange" is-mutiple-selection>
         <template slot="before-columns">
-          <el-table-column label="组织名称" width="150px">
+          <el-table-column label="区域名称" >
             <template slot-scope="scope">
               <span>{{scope.row.name}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="组织描述" width="150px">
+          <el-table-column label="区域描述">
             <template slot-scope="scope">
               <div class="iep-ellipsis" :title="scope.row.intro">{{scope.row.intro}}</div>
             </template>
           </el-table-column>
-          <el-table-column label="区域代码" width="150px">
+          <el-table-column label="区域代码" >
             <template slot-scope="scope">
-              <div class="iep-ellipsis" :title="scope.row.abrName">{{scope.row.abrName}}</div>
+              <div class="iep-ellipsis" :title="scope.row.abrName">{{scope.row.orgId}}</div>
             </template>
           </el-table-column>
-          <el-table-column label="排序" width="150px">
+          <el-table-column label="排序">
             <template slot-scope="scope">
               <div class="iep-ellipsis" :title="scope.row.sort">{{scope.row.sort}}</div>
             </template>
@@ -55,7 +55,7 @@
 <script>
 import AddDialogForm from './AddDialogForm'
 import PersonDialogForm from './PersonDialogForm'
-import { addObj, putObj, delObj, fetchList, reviewById } from '@/api/admin/org'
+import {  putObj, delObj, fetchList, reviewById ,addOrg } from '@/api/admin/org'
 import { dictsMap, columnsMap, initForm, initOrgSearchForm } from './options'
 import mixins from '@/mixins/mixins'
 export default {
@@ -90,7 +90,7 @@ export default {
     },
     handleAdd () {
       this.$refs['addDialogForm'].methodName = '创建'
-      this.$refs['addDialogForm'].formRequestFn = addObj
+      this.$refs['addDialogForm'].formRequestFn = addOrg
       this.$refs['addDialogForm'].dialogShow = true
     },
     handleReviewDialog (row) {

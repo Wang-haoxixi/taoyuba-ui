@@ -261,7 +261,7 @@
         </el-row>
         <el-form-item label="" v-if="!disabled">
           <operation-wrapper style="text-align: center">
-            <iep-button type="primary" @click="handleSubmit">审核通过</iep-button>
+            <iep-button type="primary" @click="handleSubmit"  :loading="loading">审核通过</iep-button>
             <iep-button type="danger" @click="handle">审核驳回</iep-button>
           </operation-wrapper>
         </el-form-item>
@@ -291,6 +291,7 @@ import { rulesDeatil } from '../options'
 export default {
   data () {
     return {
+        loading:false,
         form: {
             participants:[],
         },
@@ -317,8 +318,12 @@ export default {
       handleSubmit () {
         this.$refs['form'].validate((valid) => {
           if (valid) {
+            this.loading=true
             agree(this.form).then(()=>{
                 this.$message.success('操作成功!')
+                setTimeout(function (){
+	                this.loading=false
+                }, 2000)            
                 this.$emit('getList')
                 this.$emit('back')
             })

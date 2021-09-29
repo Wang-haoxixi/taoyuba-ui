@@ -24,7 +24,7 @@
                 </el-col>
                 <el-col :span="12">
                     <div class="kjtd">
-                        <h3>船员总数 <span style="float: none">{{ inS.certCount.total }}</span></h3>
+                        <h3>船员登记 <span style="float: none">{{ inS.certCount.total }}</span></h3>
                         <div class="kjtd-ship"><div>持证船员</div><p>{{ inS.certCount.cert }}</p></div>
                         <div class="kjtd-ship"><div>普通船员</div><p>{{ inS.certCount.normal }}</p></div>
                         <div class="kjtd-ship"><div>已上船船员</div><p>{{ inS.certCount.total }}</p></div>

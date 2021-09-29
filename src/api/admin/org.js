@@ -18,6 +18,14 @@ export function addObj (obj) {
   })
 }
 
+export function addOrg (obj) {
+  return request({
+    url: '/admin/org/createOrg',
+    method: 'post',
+    data: obj,
+  })
+}
+
 export function fetchList (query) {
   return request({
     url: '/admin/org/page',

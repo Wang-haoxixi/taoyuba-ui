@@ -103,7 +103,7 @@
                 </el-dropdown-menu>
               </el-dropdown>
               <iep-button size="mini" type="primary" v-if="mlms_ship_danger" @click="handleDanger(scope.row)">隐患排查</iep-button>
-               <iep-button size="mini" type="primary" @click="contractAdd(scope.row)">签合同</iep-button>
+               <!-- <iep-button size="mini" type="primary" @click="contractAdd(scope.row)">签合同</iep-button> -->
               <!-- <iep-button size="mini" type="primary" v-if="mlms_ship_export" @click="exportInfo(scope.row.shipId,scope.row.shipName)">导出</iep-button> -->
               <!-- <iep-button size="mini" type="primary" @click="handleOperat(scope.row.shipId,scope.row.shipNo)">经营人</iep-button> -->
             </operation-wrapper>
@@ -175,7 +175,7 @@
 </template>
 <script>
 import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
-import { countCrew } from '@/api/tmlms/boatMan/index'
+// import { countCrew } from '@/api/tmlms/boatMan/index'
 import { getVillageShipList,changeShip,exportShipExcel, exportShipNameExcel,exportContractModel,getFixOrgIds,changeOrgIds,exportRecord } from '@/api/ships'
 // import { getVillageShipList } from '@/api/ships'
 import prots from './Prot.vue'
@@ -210,7 +210,7 @@ export default {
         expandAll: false,
         columns: [
           {
-            value: 'villageId',
+            value: 'villageName',
             text: '基层组织',
           },
           {
@@ -467,22 +467,23 @@ export default {
         // this.pagedTable =  JSON.parse(JSON.stringify(data.data.data.records))
         data.data.data.records.forEach(async (v) => {
           // v.countCrews = ''
-          if (v.villageId == 0) {
-            v.villageId = '--'
+          if (!v.villageName) {
+            v.villageName = '--'
             // v.villageId = '--'
-          }else{
-            getVillageByOrg().then(res=>{
-              res.data.data.map(item=>{
-                if(item.userId == v.villageId){
-                  v.villageId = item.villageName
-                }
-              })
-            })
           }
-          v.countCrews = ''
-          v.countCrews = await countCrew(v.shipId).then(res=>{
-            return res.data.data. contract+'/'+res.data.data.crew
-          })
+          // else{
+          //   getVillageByOrg().then(res=>{
+          //     res.data.data.map(item=>{
+          //       if(item.userId == v.villageId){
+          //         v.villageId = item.villageName
+          //       }
+          //     })
+          //   })
+          // }
+          v.countCrews = v.contractCount+'/'+v.crewCount
+          // v.countCrews = await countCrew(v.shipId).then(res=>{
+          //   return res.data.data. contract+'/'+res.data.data.crew
+          // })
           if (v.shipNo === '0') {
             v.shipNo = '请完善'
           }
@@ -517,6 +518,7 @@ export default {
       })
     },
     handleAllCrew (shipId,shipName, row) {
+      sessionStorage.setItem('hdkRow', JSON.stringify(row)),
       this.$router.push({       
         path: `/hrms_spa/ship_allcrew/${shipId}`, 
         query:{

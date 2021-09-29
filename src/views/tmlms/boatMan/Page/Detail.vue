@@ -169,7 +169,7 @@
                       <el-radio  :label="9">待求职</el-radio>
                       <el-radio  :label="0">未用工</el-radio>
                       <el-radio  :label="3">上船，未签合同</el-radio>
-                      <el-radio v-if="mlms_submit_radio||$route.query.see" :label="4">上船，已签合同</el-radio>
+                      <el-radio v-if="mlms_submit_radio||$route.query.see" :label="1">上船，已签合同</el-radio>
                   </el-radio-group>
                   </el-form-item>
                 </el-col>
@@ -387,11 +387,19 @@
                     <el-col :span="8">
                       <el-form-item label="扫描件：" prop="certFile">
                         <el-upload class="upload-demo" action="/api/admin/file/upload/avatar" :show-file-list="false"
-                        :on-success="handleAvatarSuccessFile" :limit="1"  :headers="headers" accept="image/*">
+                        :on-success="handleAvatarSuccessFile" :limit="1"  :headers="headers" accept="image/*" :on-preview="previewCertCopy">
                         <el-button size="mini" type="primary" @click="fileUpload(index)">点击上传</el-button>
-                        <img v-if="item.certFile" :src="item.certFile" class="certAvatar">
-                        <i v-else class="el-icon-picture-outline"></i>
+                       
+                        
                         </el-upload>
+                         <img v-if="item.certFile" :src="item.certFile" class="certAvatar" @click="previewCertCopy(item.certFile)">
+                        <!-- <el-dialog visible.sync=true append-to-body v-if="item.certFile">
+                        <img  :src="item.certFile" class="certAvatar">
+                        </el-dialog>
+                        <i v-else class="el-icon-picture-outline"></i> -->
+                        <el-dialog :visible.sync="imgVisibleCertCopy" append-to-body>
+                           <img width="100%" :src="dialogImageUrlCertCopy" alt="">
+                        </el-dialog>
                       </el-form-item>
                     </el-col>
                     <el-col :span="4" style="text-align:center">
@@ -473,10 +481,12 @@ export default {
         }
       }
     return {
+      dialogImageUrlCertCopy:'',
       current: 1,
       certificateColumns,
       imgVisible:false,
       dialogImageUrl:'',
+      imgVisibleCertCopy:false,
       imgVisibleReverse:false,
       dialogImageUrlReverse:'',
       imgVisibleCert:false,
@@ -1027,6 +1037,10 @@ export default {
         this.dialogImageUrlCert = url.url
         this.imgVisibleCert = true
     },
+    previewCertCopy (url) {
+        this.dialogImageUrlCertCopy = url
+        this.imgVisibleCertCopy = true
+    },
     async getIdcardFile () {
       let idcardFile = this.dataURLtoFile(this.form.idcardPhoto)
       let formdata  =  new FormData() 
@@ -1058,14 +1072,20 @@ export default {
       })
     },
     newMember () {
+      console.log(this.form.certList)
       if (!this.form.certList) {
         this.$set(this.form, 'certList',[])
+        console.log('232')
       }
       const length = this.form.certList.length
+      // console.log(length,this.form.certList==true)
+      
       if (length < 2 && this.form.certList) {
+        console.log('123')
         this.form.certList.push({
           id: length ? (parseInt(this.form.certList[length - 1].id) + 1).toString() : '0',
         })
+        console.log(this.form.certList)
       } else {
         this.$message({
           message: '最多两个证书',
@@ -1122,6 +1142,8 @@ export default {
       }
     },
     getidcardList (e) {
+
+      console.log(e)
       let number = e.target.value || ''
       // console.log('number', number, e.target.value)
       // console.log('getidcardList')
@@ -1153,6 +1175,16 @@ export default {
             this.choseProvince(res.data.data.provinceId)
             this.choseCity(res.data.data.cityId)
             this.form = res.data.data
+            // this.form.photoFront=res.data.data.photoFront
+            if(this.form.photoFront){
+             this.frontList=[]
+             this.frontList.push({name: 'photoFront', url: res.data.data.photoFront})
+            }
+            if(this.form.photoReverse){
+               this.reverseList=[]
+             this.reverseList.push({name: 'photoReverse', url: res.data.data.photoReverse})
+            }
+            console.log(res.data.data.photoFront)
             this.$set(this.form, 'certList',[])
             this.isIdcard = true
             this.form.birthday = this.setBirthTimeFormat(this.form.birthday)
@@ -1187,7 +1219,7 @@ export default {
             this.form.photoReverse = ''
             this.form.idcardPhoto = ''
             this.form.facePhoto = ''
-            this.form.certList = []
+            // this.form.certList = []
           }
         })
       } else {

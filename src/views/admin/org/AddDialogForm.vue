@@ -1,17 +1,17 @@
 <template>
-  <iep-dialog :dialog-show="dialogShow" :title="`${methodName}组织`" width="50%" @close="loadPage">
+  <iep-dialog :dialog-show="dialogShow" :title="`${methodName}区域`" width="50%" @close="loadPage">
     <el-form :model="form" :rules="rules" ref="form" size="small" label-width="100px">
-      <el-form-item label="组织名称" prop="name">
+      <el-form-item label="区域名称" prop="name">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="允许加入" prop="isOpen">
+      <!-- <el-form-item label="允许加入" prop="isOpen">
         <el-switch v-model="form.isOpen" :active-value="0" :inactive-value="1"></el-switch>
-      </el-form-item>
-      <el-form-item label="组织描述" prop="intro">
+      </el-form-item> -->
+      <el-form-item label="区域描述" prop="intro">
         <el-input type="textarea" v-model="form.intro"></el-input>
       </el-form-item>
       <el-form-item label="区域代码">
-        <el-input  v-model="form.abrName"></el-input>
+        <el-input  v-model="form.orgId"></el-input>
       </el-form-item>
       <el-form-item label="排序">
           <el-input-number v-model="form.sort" :min="1" :max="100000"></el-input-number>
@@ -50,6 +50,7 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.form.isOpen=0
           this.formRequestFn(this.form).then(() => {
             this.$message({
               message: `${this.methodName}成功`,

@@ -12,20 +12,20 @@ const dictsMap = {
 }
 
 const columnsMap = [
-  {
-    prop: 'isOpen',
-    label: '允许加入',
-    type: 'dict',
-  },
-  {
-    prop: 'status',
-    label: '状态',
-    type: 'dict',
-  },
+  // {
+  //   prop: 'isOpen',
+  //   label: '允许加入',
+  //   type: 'dict',
+  // },
+  // {
+  //   prop: 'status',
+  //   label: '状态',
+  //   type: 'dict',
+  // },
   {
     prop: 'createTime',
     label: '创建时间',
-    minWidth: 120,
+    // minWidth: 120,
   },
   {
     prop: 'creator',

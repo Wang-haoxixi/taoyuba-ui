@@ -2,9 +2,23 @@
   <div class="contract-box">
     <basic-container>
       <div class="shipowner_title">
+        
         <el-button type="primary" size="small" @click="addShipowner" v-if="manager">新增</el-button>
         <el-button v-if="manager"  type="default" size="small" @click="exportInfo">导出信息</el-button>
+        <el-upload 
+        ref="upload"
+        class="upload-demo"
+    action="/api/tmlms/crewAndShip/import"
+    accept="excel"
+    :show-file-list="false"
+    :headers="headers"
+    :on-success="onBeforeUpload"
+    :limit="1">
+    <el-button  type="default" size="small" :loading='loading'>{{ importA }}</el-button>
+</el-upload>
+      
         <el-button @click="handleFresh" type="default" size="small">刷新</el-button>
+        
         <div style="float:right">
           <span style="width:120px"><el-input v-model.trim="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
           <span style="width:120px"><el-input v-model.trim="params.idcard" placeholder="身份证" size="small" clearable></el-input></span>
@@ -138,18 +152,23 @@
   </div>
 </template>
 <script>
-import { getCrew,deleteCrew,statusCrew,exportExcel, updateCertificate } from '@/api/tmlms/boatMan'
+import { getCrew,deleteCrew,statusCrew,exportExcel, updateCertificate,lookTask } from '@/api/tmlms/boatMan'
 import { getUserInfo } from '@/api/login'
 import { getArea, getRogionList } from '@/api/post/admin'
 import keyBy from 'lodash/keyBy'
 import { mapGetters } from 'vuex'
 import queryMixin from '@/mixins/query'
 import changeMan from '@/components/changeMan/index'
+import store from '@/store'
 export default {
   mixins: [queryMixin],
   components: { changeMan },
   data () {
     return {
+      headers: {
+        Authorization: 'Bearer ' + store.getters.access_token,
+      },
+      importA:'船员证书导入',
       dialogVisible: false,
       rogionList: [],
       shipownerList: [],
@@ -294,9 +313,45 @@ export default {
       onlyManager:false,
       showSwith:false,
       userData: {roles: []},
+     loading:false,
     }
   },
   methods: {
+    parseInt (e){
+      console.log(e)
+      var top =e.successCount+e.failCount
+      
+        this.importA=parseInt(top/e.total*100)+'%'
+    },
+    onBeforeUpload (e){
+     this.loading = true
+     lookTask(e.data).then(({ data }) => {
+        console.log(data.data)
+       this.parseInt(data.data)
+       if(data.data.status!=1){
+         var that =this
+       var id =  setInterval(function (){
+           var e = {
+           data:data.data.midId,
+            }
+            lookTask(e.data).then(({ data }) => {
+              var e =data.data
+               var top =e.successCount+e.failCount
+               that.importA=parseInt(top/e.total*100)+'%'
+               console.log(this.importA)
+              if(data.data.status==1){
+                
+                clearInterval(id)
+                that.$refs.upload.clearFiles()
+                that.loading = false
+                that.importA='船员证书导入'
+              }
+             })
+          },1000)
+        }
+      })
+      
+    },
     handleUpdateCertificate (idcard) {
       this.$confirm('是否更新船员证书', '提示', {
         confirmButtonText: '确定',
@@ -484,7 +539,7 @@ export default {
       this.userData = await getUserInfo().then(res => {
         return res.data.data
       })
-      if(this.userData.roles.indexOf(111) !== -1 || this.userData.roles.indexOf(1) !== -1 || this.userData.roles.indexOf(112) !== -1) { 
+      if(this.userData.roles.indexOf(111) !== -1 || this.userData.roles.indexOf(1) !== -1 || this.userData.roles.indexOf(112) !== -1 || this.userData.roles.indexOf(109) !== -1) { 
         this.manager = true
       }
       if(this.userData.roles.indexOf(111) !== -1 || this.userData.roles.indexOf(1) !== -1){
@@ -603,6 +658,7 @@ export default {
   padding: 20px;
 }
 .shipowner_title {
+   display: inline-block;
   span {
     width: 150px;
     display: inline-block;
@@ -617,5 +673,9 @@ export default {
   margin-bottom: 10px;
   margin-left: 0;
   margin-right: 10px;
+}
+.upload-demo{
+  margin:0 10px;
+  display: inline-block;
 }
 </style>

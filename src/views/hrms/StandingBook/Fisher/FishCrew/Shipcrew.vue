@@ -119,7 +119,7 @@ export default {
         {
           label: '离船，未解除合同 ',
           value: 2,
-        },
+        }, 
         {
           label: '上船，未签合同',
           value: 3,

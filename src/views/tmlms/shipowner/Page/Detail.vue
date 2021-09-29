@@ -279,7 +279,7 @@ export default {
                     message: res.data.msg,
                     type: 'success',
                   })
-                  this.$router.go(-1) 
+                 this.$router.push({name: 'Shipowner'})
               }).catch(err=>{
                 this.$message.error(err.message)
               })
@@ -297,7 +297,7 @@ export default {
                     message: res.data.msg,
                     type: 'success',
                   })
-                  this.$router.go(-1) 
+                  this.$router.push({name: 'Shipowner'})
               }).catch(err=>{
                 this.$message.error(err.message)
               })

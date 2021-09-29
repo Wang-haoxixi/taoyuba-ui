@@ -1,5 +1,5 @@
 import request from '@/router/axios'
-const prefixUrl = '/tmlms/crew'     
+const prefixUrl = '/tmlms/crew'    
 import {exportDownload} from '@/util/export'
 
 export function getCrew (query) {
@@ -204,4 +204,27 @@ export function allPage (params) {
         params: params,
     })
 }
+export function crewAndShipImport (params) {
+    return request({
+        url: '/tmlms/crewAndShip/import',
+        method: 'post',
+        data: params,
+    })
+}
+export function lookTask (params) {
+    return request({
+        url: '/tmlms/importTask/lookTask',
+        method: 'get',
+        params: {
+            taksId:params,
+        },
+    })
+}
 
+export function getList (params) {
+    return request({
+        url: '/tmlms/crew_cert/newPage',
+        method: 'get',
+        params: params,
+    })
+}
