@@ -52,8 +52,8 @@
                 <el-col :span="12">
                     <div class="kjtd">
                         <h3>进出港管理 </h3>
-                        <div class="kjtd-ship"><div>进港</div><p>{{ inM.port.IN }}</p></div>
-                        <div class="kjtd-ship"><div>出港</div><p>{{ inM.port.OUT }}</p></div>
+                        <div class="kjtd-ship"><div>进港</div><p>{{ inM.IN }}</p></div>
+                        <div class="kjtd-ship"><div>出港</div><p>{{ inM.OUT }}</p></div>
                         <div class="kjtd-ship"><div>已上报/未上报</div><p>0/0</p></div>
                         <div class="kjtd-ship"><div>免报告</div><p>0</p></div>
                     </div>
@@ -61,10 +61,10 @@
                 <el-col :span="12">
                     <div class="kjtd">
                         <h3>招聘岗位 </h3>
-                        <div class="kjtd-ship"><div>持证船员</div><p>215</p></div>
-                        <div class="kjtd-ship"><div>普通船员</div><p>215</p></div>
-                        <div class="kjtd-ship"><div>已上船船员</div><p>215</p></div>
-                        <div class="kjtd-ship"><div>合同船员</div><p>215</p></div>
+                        <div class="kjtd-ship"><div>持证船员</div><p>{{Zhao.licensedCrew}}</p></div>
+                        <div class="kjtd-ship"><div>普通船员</div><p>{{Zhao.rating}}</p></div>
+                        <div class="kjtd-ship"><div>已上船船员</div><p>{{Zhao.boarding}}</p></div>
+                        <div class="kjtd-ship"><div>合同船员</div><p>{{Zhao.contractCrew}}</p></div>
                     </div>
                 </el-col>
                 <el-col :span="12">
@@ -132,7 +132,7 @@
 <script>
 import SelectOrgDialog from '@/page/index/top/SelectOrgDialog'
 import { mapState } from 'vuex'
-import { countPortByOrg,countShipAndCrewByOrg,countVillageByOrg,countSignAndContractByOrg } from '@/api/wel/index'
+import { countPortByOrg,countShipAndCrewByOrg,countVillageByOrg,countSignAndContractByOrg,jobRecruitment } from '@/api/wel/index'
 export default {
    data () {
     return {
@@ -148,6 +148,7 @@ export default {
           shipCount: {},
       },
       inO: {},
+      Zhao:{},
       placeholders: ['请输入船名号','请输入证书号','请输入船员名称'],
       time: {
           z: '',
@@ -163,9 +164,13 @@ export default {
       })
       countPortByOrg().then(({ data })=>{
           this.inM = data.data
+          console.log(this.inM)
       })
       countShipAndCrewByOrg().then(({ data })=>{
           this.inS = data.data
+      })
+      jobRecruitment().then(({data})=>{
+          this.Zhao = data.data
       })
       countSignAndContractByOrg().then(({data})=>{
           this.inO = data.data

@@ -12,8 +12,8 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                  <el-form-item label="身份证号码：" prop="idcard">
-                    <el-input v-model="form.idcard" ></el-input>
+                  <el-form-item label="身份证号码：" prop="idcard" >
+                    <el-input v-model="form.idcard" @blur="getidcardList"></el-input>
                     <!-- <el-select :disabled="$route.query.edit" v-model="form.idcard"
                               placeholder="请选择"
                               filterable
@@ -223,6 +223,35 @@ export default {
     }
   },
   methods: {
+    getidcardList (e) {
+
+      console.log(e)
+      let number = e.target.value || ''
+      if (number.length !== 18) {
+        return
+      }
+      if (!/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(number)) {
+        this.$message({
+          message: '身份证号码不正确',
+          type: 'warning',
+        })
+        this.form.idcard = ''
+        return
+      }
+        getCrewData(number).then(res => {
+          // if(!(this.roles.includes(111) || this.roles.includes(1))){
+            if (res.data.data.userId !== 0 && res.data.data !== true ) {
+              // this.$message.error('该船员已存在，请重新填写！')
+              // this.form = {}
+              // return
+            }else{
+              this.form.realName=res.data.data.realName
+              this.form.address=res.data.data.address
+              return
+            }
+          // }
+        })
+    },
     addUserInfo () {
       this.$refs.userInfoForm.validate((valid) => {
           if (valid) {
@@ -487,65 +516,65 @@ export default {
         this.form.idcard = ''
       }
     },
-    getidcardList (number) {
-      this.loading = false
-      if (number !== '') {
-        getCrewData(number).then(res => {           
-          if(!(this.roles.includes(111) || this.roles.includes(1))){                        
-            if (res.data.data.userId !== 0 && res.data.data !== true ) {
-              this.$message.error('该船员已存在，请重新填写！')
-              this.form = {}
-              return
-            }
-          }
-          if(res.data.data !== true) {
-            this.choseProvince(res.data.data.provinceId)
-            this.choseCity(res.data.data.cityId)
-            this.form = res.data.data
-            this.$set(this.form, 'certList',[])
-            this.isIdcard = true
-            getMyCretList(number).then(val => {
-              val.data.data.forEach(item =>{
-                this.form.certList.push(item)
-                  if(this.form.certList) {
-                    let id = 0
-                    this.form.certList.forEach(item => {
-                      item.id = id
-                      id ++
-                    })
-                  }
-              })   
-            })        
-          } else {
-            this.form.realName = ''
-            this.form.positionId = ''
-            this.form.birthday = ''
-            this.form.provinceId = ''
-            this.form.cityId = ''
-            this.form.districtId = ''
-            this.form.address = ''
-            this.form.phone = ''
-            this.form.contactName = ''
-            this.form.contactPhone = ''
-            this.form.applyType = ''
-            this.form.remark = ''
-            this.form.nation = ''
-            this.form.speciality = ''
-            this.form.photoFront = ''
-            this.form.photoReverse = ''
-            this.form.idcardPhoto = ''
-            this.form.facePhoto = ''
-            this.form.certList = []
-            this.form.idcardPhoto = ''
-            this.form.photoFront = ''
-            this.form.photoReverse = ''
-          }
-        })
-      } else {
-        this.idcards = []
-      }
-      this.loading = false
-    },
+    // getidcardList (number) {
+    //   this.loading = false
+    //   if (number !== '') {
+    //     getCrewData(number).then(res => {           
+    //       if(!(this.roles.includes(111) || this.roles.includes(1))){                        
+    //         if (res.data.data.userId !== 0 && res.data.data !== true ) {
+    //           this.$message.error('该船员已存在，请重新填写！')
+    //           this.form = {}
+    //           return
+    //         }
+    //       }
+    //       if(res.data.data !== true) {
+    //         this.choseProvince(res.data.data.provinceId)
+    //         this.choseCity(res.data.data.cityId)
+    //         this.form = res.data.data
+    //         this.$set(this.form, 'certList',[])
+    //         this.isIdcard = true
+    //         getMyCretList(number).then(val => {
+    //           val.data.data.forEach(item =>{
+    //             this.form.certList.push(item)
+    //               if(this.form.certList) {
+    //                 let id = 0
+    //                 this.form.certList.forEach(item => {
+    //                   item.id = id
+    //                   id ++
+    //                 })
+    //               }
+    //           })   
+    //         })        
+    //       } else {
+    //         this.form.realName = ''
+    //         this.form.positionId = ''
+    //         this.form.birthday = ''
+    //         this.form.provinceId = ''
+    //         this.form.cityId = ''
+    //         this.form.districtId = ''
+    //         this.form.address = ''
+    //         this.form.phone = ''
+    //         this.form.contactName = ''
+    //         this.form.contactPhone = ''
+    //         this.form.applyType = ''
+    //         this.form.remark = ''
+    //         this.form.nation = ''
+    //         this.form.speciality = ''
+    //         this.form.photoFront = ''
+    //         this.form.photoReverse = ''
+    //         this.form.idcardPhoto = ''
+    //         this.form.facePhoto = ''
+    //         this.form.certList = []
+    //         this.form.idcardPhoto = ''
+    //         this.form.photoFront = ''
+    //         this.form.photoReverse = ''
+    //       }
+    //     })
+    //   } else {
+    //     this.idcards = []
+    //   }
+    //   this.loading = false
+    // },
     getIdCardData () {
       return new Promise((resolve) => {
         this.$jsonp('http://localhost:8989/api/ReadMsg?cardImg=1').then((res) => {

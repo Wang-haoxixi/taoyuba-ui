@@ -99,3 +99,10 @@ export function countWithDate () {
     method: 'get',
   })
 }
+
+export function jobRecruitment () {
+  return request({
+    url: '/tmlms/workSpace/job_recruitment',
+    method: 'get',
+  })
+}

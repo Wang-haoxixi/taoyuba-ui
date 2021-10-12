@@ -90,7 +90,7 @@ export default {
         // window.open('https://www.taoyu58.com/ship/index.html')
       }
       if(name === 'crew') {
-        this.$router.push({ path: '/admin/bostMan'})
+        this.$router.push({ path: '/crew/smdj/boatMan'})
         // window.open('https://www.taoyu58.com/crew/index.html')
       }
       if(name === 'fish') {

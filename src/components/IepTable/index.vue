@@ -28,7 +28,7 @@
             <div>{{getAreaCode(item, scope)}}</div>
           </template>
            <template v-else-if="item.type==='ldate'">
-            <div>{{getLdata(item, scope)}}</div>
+            <div >{{getLdata(item, scope)}}</div>
           </template>
           <template v-else-if="item.type==='shipStatus'">
             <iep-button size="mini" :type="scope.row[item.css]" >{{getShipStatus (item, scope)}}</iep-button>
@@ -162,6 +162,7 @@ export default {
   data () {
     return{
       area:[],
+      color:'',
     }
   },
   computed: {
@@ -196,6 +197,19 @@ export default {
     getLdata (item, scope) {
       // console.log(scope.row[item.prop])
       // console.log('scope.row[item.prop]')
+      // var strtime = scope.row[item.prop].replace('/-/g', '/')//时间转换
+      //      //时间
+      // var date1=new Date(strtime)
+      //     //现在时间
+      // var date2=new Date()
+      //   // / /判断时间是否过期
+      // if(date2>date1){
+      //  this.color='red'
+      // }else if(parseInt(Math.abs(date1-date2)/1000/60/60/24) < 183){
+      //   this.color='yel'
+      // }else {
+      //   this.color=''
+      // }
      if(scope.row[item.prop]){
        let date = new Date(scope.row[item.prop])
         scope.row[item.prop]=this.dateFormat('YYYY-mm-dd', date)
@@ -287,6 +301,13 @@ export default {
 }
 </script>
 <style scoped>
+.red{
+ color: #ff0000;
+} 
+.yel{
+ color: #ff9900;
+
+}
 .table >>> .th {
   background: #ccc;
 }

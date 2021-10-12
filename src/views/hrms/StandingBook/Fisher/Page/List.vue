@@ -51,6 +51,7 @@
               is-mutiple-selection> -->
       <el-table
           :data="pagedTable"
+          v-loading="loading"
           stripe
           style="width: 100%">
         <el-table-column
@@ -97,9 +98,9 @@
                   导出<i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-if="mlms_ship_export"><span @click="exportInfo(scope.row.shipId,scope.row.shipName)">开航登记表</span></el-dropdown-item>
-                  <el-dropdown-item v-if="mlms_shipname_export"><span @click="exportShipInfo(scope.row.shipId,scope.row.shipName)">船员登记表</span></el-dropdown-item>
-                  <el-dropdown-item v-if="mlms_shipname_export"><span @click="exportRecord(scope.row.shipId,scope.row.shipName)">实名备案登记表</span></el-dropdown-item>
+                  <el-dropdown-item v-if="mlms_ship_export"  @click.native="exportInfo(scope.row.shipId,scope.row.shipName)"><span >开航登记表</span></el-dropdown-item>
+                  <el-dropdown-item v-if="mlms_shipname_export" @click.native="exportShipInfo(scope.row.shipId,scope.row.shipName)"><span >船员登记表</span></el-dropdown-item>
+                  <el-dropdown-item v-if="mlms_shipname_export" @click.native="exportRecord(scope.row.shipId,scope.row.shipName)"><span >实名备案登记表</span></el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
               <iep-button size="mini" type="primary" v-if="mlms_ship_danger" @click="handleDanger(scope.row)">隐患排查</iep-button>
@@ -193,6 +194,7 @@ export default {
   mixins: [mixins],
   data () {
     return {
+      loading:false,
       pagedTabl: [],
       columnsMap,
       // searchData: 'shipName',
@@ -360,35 +362,51 @@ export default {
         })
       }
     },
-    exportInfo (shipId,shipName) {   
+    exportInfo (shipId,shipName) {
+      console.log(shipId,shipName)
+      this.loading=true   
       this.exportParams.shipId = shipId
       this.exportParams.shipName = shipName                         
       exportShipExcel (this.exportParams).catch(err => {
+        this.loading=false
         this.$message({
           type: 'warning',
           message: err,
         })
-    })
+    }).then(res=>{
+        console.log(res)
+       this.loading=false
+      })
     },
     exportShipInfo (shipId,shipName) {   
+      this.loading=true   
       this.exportParams.shipId = shipId
       this.exportParams.shipName = shipName                         
       exportShipNameExcel (this.exportParams).catch(err => {
+        this.loading=false
         this.$message({
           type: 'warning',
           message: err,
         })
-    })
+     }).then(res=>{
+        console.log(res)
+       this.loading=false
+      })
     },
      exportRecord (shipId,shipName) {   
+      this.loading=true
       this.exportParams.shipId = shipId
       this.exportParams.shipName = shipName                         
       exportRecord (this.exportParams).catch(err => {
+        this.loading=false
         this.$message({
           type: 'warning',
           message: err,
         })
-    })
+      }).then(res=>{
+        console.log(res)
+       this.loading=false
+      })
     },
     getVillageOrg () {
       getVillageByOrg().then(res=>{

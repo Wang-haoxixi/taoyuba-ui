@@ -1,10 +1,23 @@
 <template>
   <div>
     <basic-container>
+
       <page-header title="职务证书"></page-header>
+
       <operation-container>
         <template slot="left">
           <!-- <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button> -->
+              <el-upload 
+        ref="upload"
+        class="upload-demo"
+    action="/api/tmlms/crewAndShip/import"
+    accept="excel"
+    :show-file-list="false"
+    :headers="headers"
+    :on-success="onBeforeUpload"
+    :limit="1">
+    <el-button  type="default" size="small" :loading='loading'>{{ importA }}</el-button>
+    </el-upload>
         </template>
         <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -26,14 +39,19 @@
   </div>
 </template>
 <script>
-import { getList} from '@/api/tmlms/boatMan'
+import { getList,lookTask} from '@/api/tmlms/boatMan'
 import mixins from '@/mixins/mixins'
 import { columnsMap, dictsMap } from '../options'
 import { mapGetters } from 'vuex'
+import store from '@/store'
 export default {
   mixins: [mixins],
   data () {
     return {
+      headers: {
+        Authorization: 'Bearer ' + store.getters.access_token,
+      },
+      importA:'船员证书导入',
       dictsMap,
       columnsMap,
       searchData: 'realName',
@@ -50,6 +68,35 @@ export default {
     
   },
   methods: {
+    onBeforeUpload (e){
+     this.loading = true
+     lookTask(e.data).then(({ data }) => {
+        console.log(data.data)
+       this.parseInt(data.data)
+       if(data.data.status!=1){
+         var that =this
+       var id =  setInterval(function (){
+           var e = {
+           data:data.data.midId,
+            }
+            lookTask(e.data).then(({ data }) => {
+              var e =data.data
+               var top =e.successCount+e.failCount
+               that.importA=parseInt(top/e.total*100)+'%'
+               console.log(this.importA)
+              if(data.data.status==1){
+                
+                clearInterval(id)
+                that.$refs.upload.clearFiles()
+                that.loading = false
+                that.importA='船员证书导入'
+              }
+             })
+          },1000)
+        }
+      })
+      
+    },
     handleSelectionChange (val) {
       this.multipleSelection = val.map(m => m.id)
     },

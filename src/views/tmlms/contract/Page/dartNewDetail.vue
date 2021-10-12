@@ -1146,6 +1146,16 @@ export default {
         this.formData.contractImage = ''
     },
     handleSubmitCaoGao () {
+          var oDate1 = this.formData.workDateStart.replace('-','/')
+    var oDate2 = this.formData.workDateEnd.replace('-','/')
+    console.log(oDate1,oDate2)
+    oDate1=new Date(Date.parse(oDate1))
+     oDate2=new Date(Date.parse(oDate2))
+    if(oDate1 > oDate2){
+      console.log('lll')
+       this.$message.error('开始时间不能早于结束时间')
+        return
+    }
       // if (this.period) {
       //   this.formData.workDateStart = this.period[0]
       //   this.formData.workDateEnd = this.period[1]       
@@ -1243,13 +1253,14 @@ export default {
         })
         resolve()
       })
+      var that = this
        Promise.all ( [p1, p2, p3 ,p4, p5, p6 ,p7, p8, p9 ,p10, p11])
         .then(result => {
           console.log(result)
              if (!result.join('')) {
             AddTybcontractDraft(this.formData).then(()=>{
             this.$message.success('保存成功！')
-            this.$emit('onGoBack')
+            that.$router.go(-1)
             }).catch(err=>{
                console.log(err)
               this.$message.error('保存失败,请联系管理员!')
@@ -1281,6 +1292,16 @@ export default {
       // })
     },
     handleSubmit () {
+    var oDate1 = this.formData.workDateStart.replace('-','/')
+    var oDate2 = this.formData.workDateEnd.replace('-','/')
+    console.log(oDate1,oDate2)
+    oDate1=new Date(Date.parse(oDate1))
+     oDate2=new Date(Date.parse(oDate2))
+    if(oDate1 > oDate2){
+      console.log('lll')
+       this.$message.error('开始时间不能早于结束时间')
+        return
+    }
       // if (this.period) {
       //   this.formData.workDateStart = this.period[0]
       //   this.formData.workDateEnd = this.period[1]       
@@ -1313,6 +1334,7 @@ export default {
       }else if(this.formData.payType==2){
         this.formData.payTypeValue =  this.payValueOnce
       }
+      var that =this
       this.$refs['form'].validate(valid => {
         console.log(valid)
         if (valid) {
@@ -1326,13 +1348,14 @@ export default {
                     cancelButtonText: '取消',
                     type: 'warning',
                   }).then(() => {
+                   
                     // addContract(this.formData).then(()=>{
                     //   this.$message.success('保存成功！')
                     // })
                     // this.$emit('onGoBack')
                     addContract(this.formData).then(()=>{
                       this.$message.success('保存成功！')
-                      this.$emit('onGoBack')
+                      that.$router.go(-1)
                     }).catch(err=>{
                       console.log(err)
                       this.$message.error('新增失败,请联系管理员!')

@@ -5,7 +5,7 @@
         
         <el-button type="primary" size="small" @click="addShipowner" v-if="manager">新增</el-button>
         <el-button v-if="manager"  type="default" size="small" @click="exportInfo">导出信息</el-button>
-        <el-upload 
+        <!-- <el-upload 
         ref="upload"
         class="upload-demo"
     action="/api/tmlms/crewAndShip/import"
@@ -15,7 +15,7 @@
     :on-success="onBeforeUpload"
     :limit="1">
     <el-button  type="default" size="small" :loading='loading'>{{ importA }}</el-button>
-</el-upload>
+</el-upload> -->
       
         <el-button @click="handleFresh" type="default" size="small">刷新</el-button>
         

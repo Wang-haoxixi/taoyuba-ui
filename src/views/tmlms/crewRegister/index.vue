@@ -1,7 +1,7 @@
 <template>
   <div class="contract-box">
     <basic-container>
-      <page-header title="上船人员登记"></page-header>
+      <page-header title="上船人员管理"></page-header>
       <div class="shipowner_title">
         <!-- <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner" v-if="manager">新增</el-button>                                    
         <el-button v-if="manager"  type="primary" size="small" icon="el-icon-edit" @click="exportInfo">导出信息</el-button>              -->

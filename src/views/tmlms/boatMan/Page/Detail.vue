@@ -167,10 +167,10 @@
                   <el-form-item label="用工状态：" prop="workStatus">
                   <el-radio-group v-model="form.workStatus">
                       <el-radio  :label="9">待求职</el-radio>
-                      <el-radio  :label="0">未用工</el-radio>
+                      <el-radio  :label="0">未用工</el-radio> 
                       <el-radio  :label="3">上船，未签合同</el-radio>
                       <el-radio v-if="mlms_submit_radio||$route.query.see" :label="1">上船，已签合同</el-radio>
-                  </el-radio-group>
+                  </el-radio-group>       
                   </el-form-item>
                 </el-col>
               <!-- <el-col :span="8">

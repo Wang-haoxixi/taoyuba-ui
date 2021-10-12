@@ -28,9 +28,9 @@ const columnsMap = [
       type: 'ldate',
     },
     {
-      prop: 'certType',
-      label: '证书种类',
-      dictName: 'tyb_crew_cert_type',
+      prop: 'certTitle',
+      label: '证书职务',
+      dictName: 'tyb_crew_cert_title',
       type: 'dictGroup',
     },
     {
