@@ -8,14 +8,14 @@
       <div class="header-content clearfix">
         <el-form :inline="true" class="form-content">
           <el-form-item label="">
-            <el-date-picker
+            <!-- <el-date-picker
               v-model="startTime"
               type="date"
               size="small"
               value-format="yyyy-MM-dd"
               placeholder="选择日期">
-            </el-date-picker>
-            <!-- <el-date-picker
+            </el-date-picker> -->
+            <el-date-picker
               v-model="rangeTime"
               size="small"
               type="daterange"
@@ -23,7 +23,7 @@
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期">
-            </el-date-picker> -->
+            </el-date-picker>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSubmit" size="small">查询</el-button>
@@ -81,7 +81,11 @@ export default {
       startTime: undefined,
       loading: false,
       data: [],
+      rangeTime:[],
     }
+  },
+  created (){
+    this.initTimeRange()
   },
   computed: {
     ...mapGetters([
@@ -89,6 +93,35 @@ export default {
     ]),
   },
   methods: {
+    initTimeRange (){
+    var nowDate = new Date()
+    var syy = nowDate.getFullYear()
+    var smm = nowDate.getMonth() + 1
+    var sdd = nowDate.getDate()
+    if (smm < 10) {
+      smm = `0${smm}`
+    }
+    if (sdd < 10) {
+      sdd = `0${sdd}`
+    }
+    var endD = syy + '-' + smm +  '-' + sdd
+    nowDate.setDate(nowDate.getDate() - 6)
+    var eyy = nowDate.getFullYear()
+    var emm = nowDate.getMonth() + 1
+    var edd = nowDate.getDate()
+    if (emm < 10) {
+      emm = `0${emm}`
+    }
+    if (edd < 10) {
+      edd = `0${edd}`
+    }
+    var startD = eyy +  '-' + emm +  '-' + edd
+    // console.log(startD)
+    // console.log(endD)
+    this.rangeTime[0] = startD
+    this.rangeTime[1] = endD
+    this.onSubmit()
+    },
     open () {
       this.dialogVisible = true
       this.startTime = this.getYesterday()
@@ -104,9 +137,11 @@ export default {
       return date
     },
     onSubmit () {
-      if (this.startTime) {
+      if (this.rangeTime.length>0) {
         this.loading = true
-        getStatistics({startTime: this.startTime, orgId: this.userInfo.orgId}).then(({ data }) => {
+        this.startTime = this.rangeTime[0]
+        this.endTime = this.rangeTime[1]
+        getStatistics({startTime: this.startTime, orgId: this.userInfo.orgId,endTime:this.endTime}).then(({ data }) => {
           if (data.code === 0) {
             this.data = data.data
           }

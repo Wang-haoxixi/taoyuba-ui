@@ -79,6 +79,7 @@ export default {
     getData () {
       ByShipName({...this.page,shipNo: this.shipNo}).then(res=>{
         this.tableData = res.data.data.records
+        console.log(this.tableData)
         this.page.total = res.data.data.total
       })
     },

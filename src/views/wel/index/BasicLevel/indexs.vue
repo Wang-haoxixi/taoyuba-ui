@@ -1,15 +1,20 @@
 <template>
     <div class="main-see">
         <div class="title">
-            <div class="title-img">
+            <div style="display:flex;align-items:center">
+                 <div class="title-img">
                 <img src="/img/title.png" alt="">
             </div>
             <div class="title-hello">
                 <div class="hello">您好,欢迎来到淘渔吧后台系统</div>
                 <div class="hello1"><span class="hello2">您的区域管理范围为：</span><el-button type="primary" plain size="mini" style="margin-right:5px" @click="selectArea()">{{ getAreaName() }}</el-button><span style="color: #0185D8;cursor: pointer;" @click="selectArea()">点击切换</span>当前区域渔业概况。</div>
             </div>
-            <div class="title-one">{{ time.z }}</div>
-            <div class="title-two">{{ time.y }}</div>
+            </div>
+            <!-- <div class="title-one">{{ time.z }}</div>
+            <div class="title-two">{{ time.y }}</div> -->
+            <div class="">
+                 <el-button type="primary" @click="open">大数据墙</el-button>
+            </div>
         </div>
         <div>
             <el-row :gutter="20">
@@ -44,9 +49,9 @@
                     <div class="kjtd">
                         <h3>网签合同</h3>
                         <div class="kjtd-ship"><div>成立合同</div><p>{{ inO.contract.startContract }}</p></div>
-                        <div class="kjtd-ship"><div>过期合同</div><p>{{ inO.contract.overContract }}</p></div>
+                        <div class="kjtd-ship"><div>失效合同</div><p>{{ inO.contract.overContract }}</p></div>
                         <div class="kjtd-ship"><div>解除合同</div><p>{{ inO.contract.endContract }}</p></div>
-                        <div class="kjtd-ship"><div>未签纸质合同</div><p>{{ inO.contract.noPaperContract }}</p></div>
+                        <div class="kjtd-ship"><div>合同备案</div><p>{{ inO.contract.noPaperContract }}</p></div>
                     </div>
                 </el-col>
                 <el-col :span="12">
@@ -60,7 +65,7 @@
                 </el-col>
                 <el-col :span="12">
                     <div class="kjtd">
-                        <h3>招聘岗位 </h3>
+                        <h3>求职招聘</h3>
                         <div class="kjtd-ship"><div>持证船员</div><p>{{Zhao.licensedCrew}}</p></div>
                         <div class="kjtd-ship"><div>普通船员</div><p>{{Zhao.rating}}</p></div>
                         <div class="kjtd-ship"><div>已上船船员</div><p>{{Zhao.boarding}}</p></div>
@@ -187,6 +192,13 @@ export default {
     }),
   },
   methods: {
+      open (){
+          const { href } = this.$router.resolve({
+          name: 'dataStatistics',
+        })
+        console.log('href', href)
+        window.open(href, '_blank')
+      },
       searchName (val) {
           this.active = val
       },
@@ -230,6 +242,8 @@ export default {
         background: white;
         position: relative;
         display: flex;
+        align-items: center;
+        justify-content: space-between;
         .title-one {
             position: absolute;
             width: 50px;

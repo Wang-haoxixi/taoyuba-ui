@@ -1,6 +1,6 @@
 <template>
   <basic-container>
-    <page-header title="船员数据更新"></page-header>
+    <page-header title="异常数据更新"></page-header>
     <operation-container>
       <template slot="left">
         <el-button type="primary" size="small" @click="batchUpdate" :loading="loading">批量更新</el-button>
@@ -51,6 +51,12 @@
           prop="provinceIdName"
           label="户籍">
         </el-table-column>
+         <el-table-column
+          label="详情">
+        <template slot-scope="scope">
+         <el-button type="primary" size="small" @click="goDetails(scope.row.idcard)">查看详情</el-button>
+        </template>
+        </el-table-column>
       </el-table>
       <div style="text-align: center;margin: 20px 0;">
         <el-pagination
@@ -99,6 +105,13 @@ export default {
     },
   },
   methods: {
+    goDetails (val) {
+      // this.$router.push({name: 'detailBoatMan',query:{ see: val }})
+      this.$router.push({
+        path:'/boatMan/detail',
+        query:{ see: val },
+      })
+    },
     onSearch () {
       this.params.current = 1
       this.getList()

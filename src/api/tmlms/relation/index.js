@@ -83,7 +83,7 @@ export function exportPage (data) {
 
 export function getStatistics (data) {
   return request({
-    url: '/tmlms/statistic/relationRecordByDay',
+    url: '/tmlms/statistic/relationRecordWithDays',
     method: 'get',
     params: data,
   })

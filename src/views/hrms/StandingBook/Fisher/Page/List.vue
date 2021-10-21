@@ -54,6 +54,9 @@
           v-loading="loading"
           stripe
           style="width: 100%">
+          <el-table-column v-if="pagedTable[0].villageId != $store.state.user.userInfo.userId" prop="villageName" label="基层组织">
+
+          </el-table-column>
         <el-table-column
           v-for="(item,index) in options.columns"
           :key="index"
@@ -211,10 +214,10 @@ export default {
       options: {
         expandAll: false,
         columns: [
-          {
-            value: 'villageName',
-            text: '基层组织',
-          },
+          // {
+          //   value: 'villageName',
+          //   text: '基层组织',
+          // },
           {
             value: 'shipName',
             text: '渔船名',
@@ -517,6 +520,7 @@ export default {
           })
         this.$nextTick(()=>{
           this.pagedTable = data.data.data.records
+          console.log(this.$store.state.user.userInfo)
         })
         this.total = data.data.data.total
       })

@@ -659,6 +659,7 @@ export default {
 }
 .shipowner_title {
    display: inline-block;
+   width: 100%;
   span {
     width: 150px;
     display: inline-block;

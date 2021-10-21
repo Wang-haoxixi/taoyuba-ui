@@ -168,7 +168,7 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="现有资格证书：" prop="employeePosition">
-                    <iep-dict-select v-model="formData.employeePosition" dict-name="tyb_resume_position" style="width:380px!important" ></iep-dict-select>
+                    <iep-dict-select @change="changeType" v-model="formData.employeePosition" dict-name="tyb_resume_position" style="width:380px!important" ></iep-dict-select>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -279,7 +279,7 @@
                 </el-col>
                 <el-col :span="4">
                   <el-form-item label="船担任" style="width: 150px!important" prop="workPosition">
-                    <iep-dict-select v-model="formData.workPosition" dict-name="tyb_resume_position" style="width: 100px!important"></iep-dict-select>
+                    <iep-dict-select disabled v-model="formData.workPosition" dict-name="tyb_resume_position" style="width: 100px!important"></iep-dict-select>
                   </el-form-item >
                 </el-col>
                 <el-col :span="4">
@@ -288,7 +288,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="。试用期" prop="workProbationTypeValue"> 
+                  <el-form-item label="试用期" prop="workProbationTypeValue"> 
                     <el-col :span="6">
                       <el-input type="number" min="0"  oninput="if(value.length>3)value=value.slice(0,3)" v-model="formData.workProbationTypeValue"  style="width:80px"></el-input>
                     </el-col> 
@@ -313,16 +313,27 @@
             <el-header class="head"></el-header>
             <el-main class="mai">
               <el-row>
-                <el-col :span="7">
+                <el-col :span="12">
                   <!-- (this.formData.workDateStart -->
-                  <el-form-item label="按渔业生产周期：" prop="workDateStart" label-width="150px">
-                    <el-date-picker
+                  <el-form-item label="按渔业生产周期：" prop="time" label-width="150px">
+                    <!-- <el-date-picker
                     v-model="formData.workDateStart"
                     type="date"
                     format="yyyy-MM-dd"
                     value-format="yyyy-MM-dd"
                     placeholder="选择开始日期">
-                  </el-date-picker>
+                  </el-date-picker> -->
+                    <el-date-picker
+            v-model="formData.time"
+            type="daterange"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            range-separator="至"
+            start-placeholder="选择开始日期"
+            end-placeholder="选择结束日期"
+            :picker-options="expireTimeOption"
+          >
+          </el-date-picker>
                   </el-form-item>
                   <!-- <el-form-item label="至" prop="workDateEnd">
                     <el-date-picker
@@ -332,7 +343,7 @@
                   </el-date-picker>
                   </el-form-item> -->
                 </el-col>
-                <el-col :span="5">
+                <!-- <el-col :span="5">
                   <el-form-item label='至' prop="workDateEnd" label-width="60px">
                     <el-date-picker
                     v-model="formData.workDateEnd"
@@ -342,7 +353,7 @@
                     placeholder="选择结束日期">
                   </el-date-picker>
                   </el-form-item>
-                </el-col>
+                </el-col> -->
                 <el-col :span="10">
                   <el-form-item label="薪水类型：" prop="paySalaryType">
                     <el-radio-group v-model="formData.paySalaryType">
@@ -350,7 +361,7 @@
                       <el-radio :label="2">月薪</el-radio>
                       <el-radio :label="3">年薪</el-radio> 
                     </el-radio-group>
-                    <el-input maxlength="6" oninput="if(value.length>6)value=value.slice(0,6)" v-model="formData.paySalaryTypeValue" size="mini" type="number" style="width:100px; margin:10px"></el-input><span>元</span>
+                    <el-input maxlength="6" oninput="if(value.length>6)value=value.slice(0,6)" v-model="formData.paySalaryTypeValue" size="mini" type="number" style="width:100px;"></el-input><span>元</span>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -504,6 +515,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import debounce from 'lodash/debounce'
 import store from '@/store'
 import { 
@@ -527,6 +539,20 @@ import {
  getDartContractDetail} from '@/api/tmlms/draftContract'
   import {  
   AddTybcontractDraft} from '@/api/mlms/index'
+  const checkTime = (rule, value, callback) => {
+    if (Array.isArray(value)) {
+      value.map(function (item) {
+        if (item === '') {
+          return callback('日期不能为空')
+        }
+      })
+    } else {
+      if (value === '') {
+        return callback('日期不能为空')
+      }
+    }
+    return callback()
+  }
 export default {
   props: {
     record: {},
@@ -570,6 +596,7 @@ export default {
         workProbationType: 1,
         workDateStart: '',
         workDateEnd: '',
+        time:[],
         paySalaryType: 2,
         paySalaryTypeValue: '',
         payType: 3,
@@ -644,12 +671,16 @@ export default {
         contactPhone: [{ 
           required: true, message: '请输入紧急联系人电话', trigger: 'blur',
         }],
-        workDateStart: [{ 
-          required: true, message: '请选择生产周期开始日期', trigger: 'blur',
-        }],
-        workDateEnd: [{ 
-          required: true, message: '请选择生产周期结束日期', trigger: 'blur',
-        }],
+        // workDateStart: [{ 
+        //   required: true, message: '请选择生产周期开始日期', trigger: 'blur',
+        // }],
+        // workDateEnd: [{ 
+        //   required: true, message: '请选择生产周期结束日期', trigger: 'blur',
+        // }],
+          time: [
+        { required: true, message: '时间不能为空' },
+        { validator: checkTime, trigger: 'change' },
+    ],
       },
       shipNames: [],
       loading: false,
@@ -665,10 +696,20 @@ export default {
       employer:false,
       payValueLong:'',
       payValueOnce:'',
+       expireTimeOption: {
+      disabledDate: (time) => {
+        return time.getTime() < Date.now() - 8.64e7
+      },
+    },
+    timer:'',
+    updateId:'',
     }
   },
   beforeDestroy () {
     this.sockets.unsubscribe('card message')
+  },
+  destroyed () {
+    clearInterval(this.timer)
   },
   created () {
     console.log(this.record)
@@ -682,6 +723,7 @@ export default {
       console.log('type')
       console.log(this.type)
     }
+    this.timer = setInterval(this.handleSaveCaoGao,15000)
   },
   mounted () {
             //添加socket事件监听
@@ -716,6 +758,9 @@ export default {
                     this.formData.employeePosition = res.data.data.positionId
                     this.formData.contactName = res.data.data.contactName
                     this.formData.contactPhone = res.data.data.contactPhone
+                    this.$set(this.formData,'time',[res.data.data.workDateStart,res.data.data.workDateEnd])
+
+                    // console.log(this.formData.time)
                   }
                 }).catch(()=>{
                     this.formData.employeeName = data.name
@@ -799,6 +844,9 @@ export default {
         return '合同查看'
       }
     },
+    ...mapGetters([
+      'dictGroup',
+    ]),
   },
   methods: {
     // checkShipName () {
@@ -807,6 +855,10 @@ export default {
     //     return  false
     // }
     // },
+    changeType (){
+      // console.log(type)
+      this.$set(this.formData,'workPosition',this.formData.employeePosition)
+    },
     getEmployee () {
       this.formData.employeeIdcard = this.formData.employeeIdcard.replace(/\s*/g,'')
       if(this.formData.employeeIdcard.length==18) {
@@ -861,6 +913,8 @@ export default {
     getList () {
       getDartContractDetail (this.record).then(data =>{
         this.formData = data.data.data
+        this.$set(this.formData,'time',[data.data.data.workDateStart,data.data.data.workDateEnd])
+        // console.log (this.formData)
         if(data.data.data.employeePosition === '0'){       
           this.formData.employeePosition=''
         }
@@ -889,6 +943,10 @@ export default {
     getListByidcard () {
       getContractByidcard (this.$route.query.idcard).then(data =>{
         this.formData = data.data.data
+        this.$set(this.formData,'time',[data.data.data.workDateStart,data.data.data.workDateEnd])
+
+        console.log (this.formData)
+        
         if(data.data.data.employeePosition === '0'){       
           this.formData.employeePosition=''
         }
@@ -917,12 +975,18 @@ export default {
     handleGo () {
       this.$router.go(-1)
     },
-    shipNameChange (name) {                       
+    shipNameChange (name) {           
+      // console.log(name)        
       if (typeof name === 'object') {      
         this.refreshShipName(name)
       } else {                                                    
         this.refreshShipName({shipName: name})
-      }   
+      }
+      if (name.workMode2!=''){
+        this.formData.workMode= this.dictGroup['tyb_resume_worktype'][name.workMode2].label
+      // console.log(this.formData.workMode)
+      }
+      // console.log(this.formData.workMode)
       this.shipNames = []       
     },
     refreshShipName (name) {
@@ -976,7 +1040,7 @@ export default {
           // }
           })
         
-      } else {
+      } else if (shipName.length>5) {
         this.$message.error('请输入5位数字船名号')
         this.shipNames = []
       }
@@ -1146,22 +1210,28 @@ export default {
         this.formData.contractImage = ''
     },
     handleSubmitCaoGao () {
-          var oDate1 = this.formData.workDateStart.replace('-','/')
-    var oDate2 = this.formData.workDateEnd.replace('-','/')
-    console.log(oDate1,oDate2)
-    oDate1=new Date(Date.parse(oDate1))
-     oDate2=new Date(Date.parse(oDate2))
-    if(oDate1 > oDate2){
-      console.log('lll')
-       this.$message.error('开始时间不能早于结束时间')
-        return
-    }
+    //       var oDate1 = this.formData.workDateStart.replace('-','/')
+    // var oDate2 = this.formData.workDateEnd.replace('-','/')
+    // console.log(oDate1,oDate2)
+    // oDate1=new Date(Date.parse(oDate1))
+    //  oDate2=new Date(Date.parse(oDate2))
+    // if(oDate1 > oDate2){
+    //   console.log('lll')
+    //    this.$message.error('开始时间不能早于结束时间')
+    //     return
+    // }
+     this.formData.workDateStart = this.formData.time[0]
+    this.formData.workDateEnd = this.formData.time[1]
+    console.log(this.formData)
       // if (this.period) {
       //   this.formData.workDateStart = this.period[0]
       //   this.formData.workDateEnd = this.period[1]       
       // }
       if(this.checked) {
         this.formData.status = 6
+      }
+       if(this.updateId !=''){
+         this.formData.id = this.updateId
       }
       this.formData.shipJointNo = this.formData.shipownerName
       if (this.formData.shipName.shipName) {
@@ -1292,16 +1362,20 @@ export default {
       // })
     },
     handleSubmit () {
-    var oDate1 = this.formData.workDateStart.replace('-','/')
-    var oDate2 = this.formData.workDateEnd.replace('-','/')
-    console.log(oDate1,oDate2)
-    oDate1=new Date(Date.parse(oDate1))
-     oDate2=new Date(Date.parse(oDate2))
-    if(oDate1 > oDate2){
-      console.log('lll')
-       this.$message.error('开始时间不能早于结束时间')
-        return
-    }
+    // var oDate1 = this.formData.workDateStart.replace('-','/')
+    // var oDate2 = this.formData.workDateEnd.replace('-','/')
+    // console.log(oDate1,oDate2)
+    // oDate1=new Date(Date.parse(oDate1))
+    //  oDate2=new Date(Date.parse(oDate2))
+    // if(oDate1 > oDate2){
+    //   console.log('lll')
+    //    this.$message.error('开始时间不能早于结束时间')
+    //     return
+    // }
+    console.log(666)
+     this.formData.workDateStart = this.formData.time[0]
+    this.formData.workDateEnd = this.formData.time[1]
+    console.log(this.formData)
       // if (this.period) {
       //   this.formData.workDateStart = this.period[0]
       //   this.formData.workDateEnd = this.period[1]       
@@ -1386,6 +1460,65 @@ export default {
           // this.$message.error(valid)
         }
       })
+    },
+    handleSaveCaoGao () {
+     this.formData.workDateStart = this.formData.time[0]
+    this.formData.workDateEnd = this.formData.time[1]
+    // console.log(this.formData)
+      if(this.checked) {
+        this.formData.status = 6
+      }
+      if(this.updateId !=''){
+         this.formData.id = this.updateId
+      }
+      this.formData.shipJointNo = this.formData.shipownerName
+      if (this.formData.shipName.shipName) {
+        this.formData.shipName = this.formData.shipName.shipName
+      }
+      if (this.formData.employeeIdcard.idcard) {
+        this.formData.employeeIdcard = this.formData.employeeIdcard.idcard
+      }
+      if (this.contractImageList) {
+        this.formData.contractImages = this.contractImageList
+      }
+      if (this.licensesImage) {
+        this.formData.licensesOwnerShipImage = this.licensesImage
+      }
+      // if (this.formData.contactName) {
+      //   this.formData.employeeLinkMan = this.formData.contactName
+      // }
+      // if (this.formData.contactPhone) {
+      //   this.formData.employeeLinkPhone = this.formData.contactPhone
+      // }
+      if(this.formData.payType==1){
+        this.formData.payTypeValue = this.payValueLong
+      }else if(this.formData.payType==2){
+        this.formData.payTypeValue =  this.payValueOnce
+      }
+      
+      AddTybcontractDraft(this.formData).then((res)=>{
+        // console.log(res.data.data)
+        this.updateId = res.data.data
+        console.log(this.updateId)
+      })
+             
+        
+
+      // this.$refs['form'].validate(valid => { 
+      //     console.log(valid)
+      //    if(this.formData.shipName){
+        
+      //    AddTybcontractDraft(this.formData).then(()=>{
+      //    this.$message.success('保存成功！')
+      //       // this.$emit('onGoBack')
+      //       }).catch(err=>{
+      //          console.log(err)
+      //         this.$message.error('新增失败,请联系管理员!')
+      //     })
+      //   }else{
+      //     this.$message.error('请选择船名')
+      //   }
+      // })
     },
   },
 }
