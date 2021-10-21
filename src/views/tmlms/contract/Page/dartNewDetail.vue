@@ -1499,7 +1499,7 @@ export default {
       AddTybcontractDraft(this.formData).then((res)=>{
         // console.log(res.data.data)
         this.updateId = res.data.data
-        console.log(this.updateId)
+        // console.log(this.updateId)
       })
              
         

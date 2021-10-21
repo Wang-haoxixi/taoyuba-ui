@@ -732,7 +732,7 @@ export default {
       this.type='add'
       this.akk=false
     }
-        // this.timer = setInterval(this.handleSaveCaoGao,15000)
+        this.timer = setInterval(this.handleSaveCaoGao,15000)
 
   },
   mounted () {
@@ -1243,6 +1243,9 @@ export default {
       if(this.checked) {
         this.formData.status = 6
       }
+       if(this.updateId !=''){
+         this.formData.id = this.updateId
+      }
       this.formData.shipJointNo = this.formData.shipownerName
       if (this.formData.shipName.shipName) {
         this.formData.shipName = this.formData.shipName.shipName
@@ -1477,6 +1480,9 @@ export default {
       if(this.checked) {
         this.formData.status = 6
       }
+       if(this.updateId !=''){
+         this.formData.id = this.updateId
+      }
       this.formData.shipJointNo = this.formData.shipownerName
       if (this.formData.shipName.shipName) {
         this.formData.shipName = this.formData.shipName.shipName
@@ -1504,7 +1510,7 @@ export default {
       
       AddTybcontractDraft(this.formData).then((res)=>{
         // console.log(res)
-        this.updateId = res.data.data.data
+        this.updateId = res.data.data
       })
              
         
