@@ -7,7 +7,7 @@
           <!-- roles.indexOf(112) !== -1" -->
           <iep-button @click="handleAdd" type="primary" v-if="relation_ship_add && roles.indexOf(112) !== -1">新增</iep-button>
           <iep-button @click="handleStatistics" type="default" v-if="relation_ship_statistics && (roles.indexOf(111) !== -1)">联系记录统计</iep-button>
-          <iep-button @click="lookNoCall" type="default">查看未联系渔船</iep-button>
+          <!-- <iep-button @click="lookNoCall" type="default">查看未联系渔船</iep-button> -->
           <!-- <iep-button @click="handleExport" v-if="relation_ship_export" :loading="exportBtnLoading" type="default" plain>导出</iep-button> -->
         </template>
         <template slot="right">

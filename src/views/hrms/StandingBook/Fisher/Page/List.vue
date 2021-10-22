@@ -54,7 +54,7 @@
           v-loading="loading"
           stripe
           style="width: 100%">
-          <el-table-column v-if="pagedTable[0].villageId != $store.state.user.userInfo.userId" prop="villageName" label="基层组织">
+          <el-table-column  v-if="!roles.includes(112)" prop="villageName" label="基层组织">
 
           </el-table-column>
         <el-table-column

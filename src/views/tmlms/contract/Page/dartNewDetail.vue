@@ -983,7 +983,7 @@ export default {
         this.refreshShipName({shipName: name})
       }
       if (name.workMode2!=''){
-        this.formData.workMode= this.dictGroup['tyb_resume_worktype'][name.workMode2].label
+        this.formData.workMode= this.dictGroup['tyb_resume_worktype'][name.workMode2].value
       // console.log(this.formData.workMode)
       }
       // console.log(this.formData.workMode)

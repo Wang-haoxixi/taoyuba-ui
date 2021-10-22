@@ -85,7 +85,7 @@ export default {
     },
     handleSetAsset (row) {
       this.form.assetOrgId = row.id
-      console.log(row.id)
+      // console.log(row.id)
     },
     load () {
       // getRoleOrgList().then(({ data }) => {
@@ -125,7 +125,14 @@ export default {
           if (arr && arr.length > 0) {
             let result = []
             arr.forEach((item) => {
-              if (!(item.roleId === 114 || item.roleId === 3 || item.roleId === 1)) {
+              // if (!(item.roleId === 114 || item.roleId === 3 || item.roleId === 1)) {
+              //   let obj = {
+              //     label: item.roleName,
+              //     value: item.roleId,
+              //   }
+              //   result.push(obj)
+              // }
+                if (!(item.roleId === 1 ||item.roleId === 114)) {
                 let obj = {
                   label: item.roleName,
                   value: item.roleId,
@@ -134,6 +141,7 @@ export default {
               }
             })
             this.roleList = result
+            // console.log(this.roleList)
           }
         }
       })
