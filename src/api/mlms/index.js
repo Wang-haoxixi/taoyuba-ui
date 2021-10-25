@@ -18,10 +18,14 @@ export function getCommentPage (obj) {
   })
 }
 //新增草稿
-export function AddTybcontractDraft (obj) {
+export function AddTybcontractDraft (obj,status) {
   return request({
     url: '/tmlms/tybcontractDraft/saveOrUpdate',
     method: 'post',
     data: obj,
+    //请求头增加参数，用于判断静默保存，不显示NProgress
+    headers:{
+      process:status,
+    },
   })
 }

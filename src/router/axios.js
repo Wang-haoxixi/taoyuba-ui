@@ -27,7 +27,11 @@ NProgress.configure({
 // HTTPrequest拦截
 axios.interceptors.request.use(
   config => {
-    NProgress.start() // start progress bar
+    // console.log(config)
+    //请求头增加参数，用于判断合同新增静默自动保存，不显示NProgress
+    if(config.headers.process != false){
+      NProgress.start() // start progress bar
+    }
     const TENANT_ID = getStore({ name: 'tenantId' })
     const isToken = (config.headers || {}).isToken === false
     let token = store.getters.access_token

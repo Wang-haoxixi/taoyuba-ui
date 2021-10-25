@@ -1347,7 +1347,7 @@ export default {
         .then(result => {
           console.log(result)
              if (!result.join('')) {
-            AddTybcontractDraft(this.formData).then(()=>{
+            AddTybcontractDraft(this.formData,true).then(()=>{
             this.$message.success('保存成功！')
             that.$router.go(-1)
             // that.$emit('onGoBack')
@@ -1509,7 +1509,7 @@ export default {
         this.formData.payTypeValue =  this.payValueOnce
       }
       
-      AddTybcontractDraft(this.formData).then((res)=>{
+      AddTybcontractDraft(this.formData,false).then((res)=>{
         // console.log(res)
         this.updateId = res.data.data
       })

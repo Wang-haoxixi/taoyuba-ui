@@ -58,6 +58,7 @@ export default {
     },
     close () {
       this.dialogVisible = false
+      this.$emit('closeDialog')
     },
     handleSubmit () {
       this.$refs.editForm.handleSubmit()
