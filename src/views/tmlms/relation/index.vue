@@ -480,6 +480,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+::v-deep .el-form {
+    margin-right: 0% !important;
+}
 .el-form-item {
   margin-bottom:0 !important;
 }

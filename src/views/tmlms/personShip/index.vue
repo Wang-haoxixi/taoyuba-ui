@@ -1,7 +1,7 @@
 .<template>
   <basic-container>
       <page-header title="人船联动"></page-header>
-     <!-- <operation-container>
+     <operation-container v-if="!roles.includes(112)">
         <template slot="right">
           <el-form :inline="true" :model="params" size="small">
             <el-form-item>
@@ -14,7 +14,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item>
+            <!-- <el-form-item>
               <div style="width: 320px;">
                 <el-date-picker
                   value-format="yyyy-MM-dd"
@@ -25,17 +25,17 @@
                   end-placeholder="结束日期">
                 </el-date-picker>
               </div>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item>
               <el-button type="primary" @click="onSearch">搜索</el-button>
             </el-form-item>
           </el-form>
         </template>
-      </operation-container> -->
+      </operation-container>
       <div class="title">
           未联系渔船船名号
       </div>
-      <div class="content">
+      <div class="content" v-if="tableData.records.length>0">
           <div class="contentItem" 
             :class="item.isResolved==2?'active':''" 
             :style="index%8==0?'border-left:1px solid #efefef':''" 
@@ -44,6 +44,7 @@
               {{item.shipName}}
           </div>
       </div>
+      <div class="empty" v-else>暂无数据</div>
     <div style="text-align: center;margin: 20px 0;">
         <el-pagination
           background
@@ -61,7 +62,8 @@
 <script>
 import { getPage} from '@/api/tmlms/personShip'
 import dialogFormRelation from '@/views/tmlms/relation/dialogForm'
-// import { getVillageByOrg} from '@/api/tmlms/bvillage/index'
+import { getVillageByOrg} from '@/api/tmlms/bvillage/index'
+import { mapGetters } from 'vuex'
 export default {
   components: {
     dialogFormRelation,
@@ -74,26 +76,30 @@ export default {
             params:{
                 current: 1,
                 size: 80,
-                // villageId:'',
+                villageId:'',
                 // rangeTime:[],
             },
             total:0,
-            // orgSearchList: [],
+            orgSearchList: [],
             formRelation: {},
             id:'',
         }
     },
     created (){
         this.getList()
+        this.getVillageOrg()
     },
+    computed: {
+    ...mapGetters(['roles']),
+  },
     methods:{
-        // getVillageOrg () {
-        //     getVillageByOrg().then(res=>{
-        //         let orgList = res.data.data
-        //         this.orgSearchList = orgList.slice()
-        //         this.orgSearchList.unshift({userId:'',villageName:'全部'})
-        //     })
-        // },
+        getVillageOrg () {
+            getVillageByOrg().then(res=>{
+                let orgList = res.data.data
+                this.orgSearchList = orgList.slice()
+                this.orgSearchList.unshift({userId:'',villageName:'全部'})
+            })
+        },
         showDialog (item){
           if(item.isResolved==2){
             // console.log(item)
@@ -126,6 +132,10 @@ export default {
             }
           })
         },
+        onSearch (){
+          this.params.current = 1
+          this.getList()
+        },
     },
 }
 </script>
@@ -156,5 +166,12 @@ export default {
 .active{
     color:red;
     cursor: pointer;
+}
+.empty{
+  font-size: 14px;
+  line-height: 60px;
+  color: #909399;
+  text-align: center;
+  border-bottom:1px solid #efefef ;
 }
 </style>
