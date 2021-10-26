@@ -5,6 +5,10 @@
         <template slot="right">
           <el-form :inline="true" :model="params" size="small">
             <el-form-item>
+              <el-input v-model="params.shipName" placeholder="请输入船名">
+              </el-input>
+            </el-form-item>
+            <el-form-item>
               <el-select clearable style="width: 120px !important;" v-model="params.villageId" placeholder="基层组织" size="small">
                 <el-option
                   v-for="item in orgSearchList"
@@ -77,6 +81,7 @@ export default {
                 current: 1,
                 size: 80,
                 villageId:'',
+                shipName:'',
                 // rangeTime:[],
             },
             total:0,

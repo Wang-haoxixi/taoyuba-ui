@@ -27,16 +27,19 @@
       </el-form-item> -->
        <el-form-item label="东经" prop="longitude">
         <el-input @change="onInputLongitude" v-model="form.longitude" type="number"></el-input>
+        <!-- <el-input-number v-model="form.longitude" :step="1" :controls="false" :precision="2"></el-input-number> -->
       </el-form-item>
       <el-form-item label="北纬" prop="latitude">
         <el-input @change="onInputLatitude" v-model="form.latitude" type="number"></el-input>
+        <!-- <el-input-number v-model="form.latitude" :step="1" :controls="false" :precision="2"></el-input-number> -->
       </el-form-item>
       <el-form-item label="范围（海里）">
         <el-input @change="onInputDistance" v-model="form.distance" type="number"></el-input>
+        <!-- <el-input-number v-model="form.distance" :step="1" :controls="false" :precision="2"></el-input-number> -->
       </el-form-item>
     </el-form>
     <template slot="footer">
-      <iep-button type="primary" @click="submitForm('form')">{{methodName}}</iep-button>
+      <iep-button :loading="loadingStatus" type="primary" @click="submitForm('form')">{{methodName}}</iep-button>
     </template>
   </iep-dialog>
 </template>
@@ -45,6 +48,7 @@ import { initForm } from './options'
 export default {
   data () {
     return {
+      loadingStatus:false,
       dialogShow: false,
       formRequestFn: () => { },
       methodName: '创建',
@@ -75,12 +79,14 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.form.isOpen=0
+          this.loadingStatus = true
           this.formRequestFn(this.form).then(() => {
             this.$message({
               message: `${this.methodName}成功`,
               type: 'success',
             })
             this.loadPage()
+            this.loadingStatus=false
           })
         } else {
           return false
