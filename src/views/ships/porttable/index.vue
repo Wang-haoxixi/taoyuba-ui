@@ -1,7 +1,7 @@
 <template>
   <div>
     <basic-container>
-      <page-header title="港口表"></page-header>
+      <page-header title="港口坐标管理"></page-header>
       <operation-container>
         <template slot="left">
           <iep-button @click="handleAdd" type="primary" plain>添加港口</iep-button>
@@ -31,7 +31,7 @@
           </el-table-column>
           <el-table-column label="范围（海里）" >
             <template slot-scope="scope">
-              <span>{{scope.row.longitudeUp}}</span>
+              <span>{{scope.row.distance}}</span>
             </template>
           </el-table-column>
           <!-- <el-table-column label="排序">
@@ -39,6 +39,11 @@
               <div class="iep-ellipsis" :title="scope.row.sort">{{scope.row.sort}}</div>
             </template>
           </el-table-column> -->
+           <el-table-column label="创建时间" >
+            <template slot-scope="scope">
+              <span>{{scope.row.createTime.split(' ')[0]}}</span>
+            </template>
+          </el-table-column>
         </template>
         <el-table-column prop="operation" label="操作" width="220">
           <template slot-scope="scope">

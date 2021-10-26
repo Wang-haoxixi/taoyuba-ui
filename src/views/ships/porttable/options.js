@@ -22,13 +22,13 @@ const columnsMap = [
   //   label: '状态',
   //   type: 'dict',
   // },
-  {
-    prop: 'createTime',
-    label: '创建时间',
-    // minWidth: 120,
-    type: 'ldate',
-  }
-  ,
+  // {
+  //   prop: 'createTime',
+  //   label: '创建时间',
+  //   minWidth: 120,
+  //   type: 'ldate',
+  // }
+  // ,
   // {
   //   prop: 'creator',
   //   label: '创建人',
@@ -51,6 +51,7 @@ const initForm = () => {
     longitudeSecond: '',
     longitudeUp: '',
     id: '',
+    distance:'',
   }
 }
 

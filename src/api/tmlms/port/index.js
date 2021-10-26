@@ -10,7 +10,7 @@ export function fetchList (query) {
 }
 export function putObj (data) {
     return request({
-        url: `${prefixUrl}/saveOrUpdate`,
+        url: `${prefixUrl}/saveOrUpdatePort`,
         method: 'post',
         data: data,
     })

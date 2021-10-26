@@ -7,7 +7,7 @@
       <!-- <el-form-item label="允许加入" prop="isOpen">
         <el-switch v-model="form.isOpen" :active-value="0" :inactive-value="1"></el-switch>
       </el-form-item> -->
-      <el-form-item label="东经/度" prop="longitudeDegree">
+      <!-- <el-form-item label="东经/度" prop="longitudeDegree">
         <el-input-number v-model="form.longitudeDegree" :min="1"  :max="179" :step="1" step-strictly></el-input-number>
       </el-form-item>
       <el-form-item label="东经/分" prop="longitudeBranch">        
@@ -24,13 +24,16 @@
       </el-form-item>
       <el-form-item label="北纬/秒" prop="latitudeSecond">
         <el-input-number v-model="form.latitudeSecond" :min="0" :max="59" :step="1" step-strictly></el-input-number>
+      </el-form-item> -->
+       <el-form-item label="东经" prop="longitude">
+        <el-input @change="onInputLongitude" v-model="form.longitude" type="number"></el-input>
       </el-form-item>
-      <!-- <el-form-item label="纬度">
-        <el-input oninput="value=value.replace(/[^0-9.]/g,'')" v-model="form.latitude"></el-input>
+      <el-form-item label="北纬" prop="latitude">
+        <el-input @change="onInputLatitude" v-model="form.latitude" type="number"></el-input>
       </el-form-item>
       <el-form-item label="范围（海里）">
-        <el-input oninput="value=value.replace(/[^0-9.]/g,'')"  v-model="form.longitudeUp"></el-input>
-      </el-form-item> -->
+        <el-input @change="onInputDistance" v-model="form.distance" type="number"></el-input>
+      </el-form-item>
     </el-form>
     <template slot="footer">
       <iep-button type="primary" @click="submitForm('form')">{{methodName}}</iep-button>
@@ -52,6 +55,12 @@ export default {
         ],
         intro: [
           { required: true, message: '请填写组织描述', trigger: 'blur' },
+        ],
+        longitude: [
+          { required: true, message: '东经不能为空', trigger: 'blur' },
+        ],
+        latitude: [
+          { required: true, message: '北纬不能为空', trigger: 'blur' },
         ],
       },
     }
@@ -77,6 +86,21 @@ export default {
           return false
         }
       })
+    },
+    onInputLongitude (){
+      if(this.form.longitude.includes('.') && this.form.longitude.split('.')[1].length>2){
+        this.form.longitude=  this.form.longitude.substring(-1,this.form.longitude.length -(this.form.longitude.split('.')[1].length-2))
+      }
+    },
+     onInputLatitude (){
+       if(this.form.latitude.includes('.') && this.form.latitude.split('.')[1].length>2){
+        this.form.latitude=  this.form.latitude.substring(-1,this.form.latitude.length -(this.form.latitude.split('.')[1].length-2))
+      }
+    },
+     onInputDistance (){
+       if(this.form.distance.includes('.') && this.form.distance.split('.')[1].length>2){
+        this.form.distance=  this.form.distance.substring(-1,this.form.distance.length -(this.form.distance.split('.')[1].length-2))
+      }
     },
   },
 }
