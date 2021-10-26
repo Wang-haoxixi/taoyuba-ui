@@ -125,12 +125,13 @@ export default {
         },
         close (){
           //新增成功
-          this.tableData.records.forEach(item=>{
-            if(item.shipId==this.id){
-              item.isResolved =1
-              this.id = ''
-            }
-          })
+          // this.tableData.records.forEach(item=>{
+          //   if(item.shipId==this.id){
+          //     item.isResolved =1
+          //     this.id = ''
+          //   }
+          // })
+          this.getList()
         },
         onSearch (){
           this.params.current = 1
