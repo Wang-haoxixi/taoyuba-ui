@@ -100,7 +100,7 @@ export default {
   },
   methods: {
       getTitle (){
-          this.title = '上船人员登记'
+          this.title = '在船人员登记'
       },
     handleSelectionChange (val) {     
       this.multipleSelection = val.map(m => m.id)

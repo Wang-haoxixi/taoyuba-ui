@@ -1,7 +1,7 @@
 <template>
   <div class="contract-box">
     <basic-container>
-      <page-header title="上船记录"></page-header>
+      <page-header title="流转记录"></page-header>
        <operation-container>
           <!-- <div class="shipowner_title"> -->
             <!-- <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner" v-if="manager">新增</el-button>
