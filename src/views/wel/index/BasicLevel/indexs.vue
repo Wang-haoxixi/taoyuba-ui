@@ -100,7 +100,7 @@
                     <div class="kjtd">
                         <h3>基层操作排行（当月）</h3>
                         <el-table
-                            :data="pagedTable"
+                            :data="pageTable"
                             stripe
                             style="width: 100%">
                             <el-table-column
@@ -143,6 +143,7 @@ export default {
     return {
       list: [],
       pagedTable: [],
+      pageTable:[],
       search: '',
       active: 0,
       inM: {
@@ -164,12 +165,11 @@ export default {
   components: { SelectOrgDialog },
   created () {
       countVillageByOrg({current:1,size:6}).then(({ data })=>{
-          console.log(data)
-          this.pagedTable = data.records
+          this.pagedTable = data.data.record
       })
       countPortByOrg().then(({ data })=>{
           this.inM = data.data
-          console.log(this.inM)
+        //   console.log(this.inM)
       })
       countShipAndCrewByOrg().then(({ data })=>{
           this.inS = data.data

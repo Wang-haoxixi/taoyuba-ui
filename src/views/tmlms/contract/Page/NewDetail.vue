@@ -6,7 +6,7 @@
         :rules="rules" class="form" >
         <el-container>
           <el-aside class="side">
-            <div class="tex">持证人信息</div>
+            <div class="tex">持证人信息666</div>
           </el-aside>
           <el-container>
             <el-header class="head"></el-header>
@@ -279,7 +279,7 @@
                 </el-col>
                 <el-col :span="4">
                   <el-form-item label="船担任" style="width: 150px!important" prop="workPosition">
-                    <iep-dict-select disabled v-model="formData.workPosition" dict-name="tyb_resume_position" style="width: 100px!important"></iep-dict-select>
+                    <iep-dict-select v-model="formData.workPosition" dict-name="tyb_resume_position" style="width: 100px!important"></iep-dict-select>
                   </el-form-item >
                 </el-col>
                 <el-col :span="4">
@@ -313,16 +313,36 @@
             <el-header class="head"></el-header>
             <el-main class="mai">
               <el-row>
-                <el-col :span="12">
+                <el-col :span="6">
                   <!-- (this.formData.workDateStart -->
-                  <el-form-item label="按渔业生产周期：" prop="time" label-width="150px">
-                    <!-- <el-date-picker
+                  <!-- <el-form-item label="按渔业生产周期：" label-width="150px"> -->
+                     <el-form-item label="按渔业生产周期：" prop="workDateStart" label-width="150px">
+                    <el-date-picker
                     v-model="formData.workDateStart"
                     type="date"
                     format="yyyy-MM-dd"
                     value-format="yyyy-MM-dd"
-                    placeholder="选择开始日期">
-                  </el-date-picker> -->
+                    placeholder="选择开始日期"
+                    :picker-options="pickerOptionsS">
+                  </el-date-picker>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                   <el-form-item label="至" prop="workDateEnd" label-width="60px">
+                    <el-date-picker
+                    v-model="formData.workDateEnd"
+                    type="date"
+                    format="yyyy-MM-dd"
+                    value-format="yyyy-MM-dd"
+                    placeholder="选择结束日期"
+                    :picker-options="pickerOptionsE">
+                  </el-date-picker>
+                  </el-form-item>
+                </el-col>
+                <!-- <el-col :span="12">
+                  (this.formData.workDateStart
+                  <el-form-item label="按渔业生产周期：" prop="time" label-width="150px">
+                  
                   <el-date-picker
             v-model="formData.time"
             type="daterange"
@@ -331,29 +351,12 @@
             range-separator="至"
             start-placeholder="选择开始日期"
             end-placeholder="选择结束日期"
-            :picker-options="expireTimeOption"
           >
           </el-date-picker>
                   </el-form-item>
-                  <!-- <el-form-item label="至" prop="workDateEnd">
-                    <el-date-picker
-                    v-model="formData.workDateEnd"
-                    type="date"
-                    placeholder="选择结束日期">
-                  </el-date-picker>
-                  </el-form-item> -->
-                </el-col>
-                <!-- <el-col :span="5">
-                  <el-form-item label='至' prop="workDateEnd" label-width="60px">
-                    <el-date-picker
-                    v-model="formData.workDateEnd"
-                    type="date"
-                    format="yyyy-MM-dd"
-                    value-format="yyyy-MM-dd"
-                    placeholder="选择结束日期">
-                  </el-date-picker>
-                  </el-form-item>
+                  
                 </el-col> -->
+               
                 <el-col :span="10">
                   <el-form-item label="薪水类型：" prop="paySalaryType">
                     <el-radio-group v-model="formData.paySalaryType">
@@ -442,7 +445,7 @@
             </el-main>
           </el-container>
         </el-container> -->
-        <el-container>
+        <!-- <el-container>
           <el-aside class="sidef">
             <div class="tex">渔船所有权登记证书上传</div>
           </el-aside>
@@ -461,7 +464,7 @@
               </el-upload>
             </el-main>
           </el-container>
-          <!-- <el-aside class="sidef">                     
+          <el-aside class="sidef">                     
             <div class="tex">纸质合同上传</div>             
           </el-aside>
           <el-container>                          
@@ -477,8 +480,8 @@
                 <i v-else class="el-icon-plus"></i>
               </el-upload>
             </el-main>
-          </el-container> -->
-        </el-container>
+          </el-container>
+        </el-container> -->
         <!-- <el-container>
           <el-aside class="sidef">
             <div class="tex">纸质合同照片（多张）</div>
@@ -671,12 +674,12 @@ export default {
         contactPhone: [{ 
           required: true, message: '请输入紧急联系人电话', trigger: 'blur',
         }],
-        // workDateStart: [{ 
-        //   required: true, message: '请选择生产周期开始日期', trigger: 'blur',
-        // }],
-        // workDateEnd: [{ 
-        //   required: true, message: '请选择生产周期结束日期', trigger: 'blur',
-        // }],
+        workDateStart: [{ 
+          required: true, message: '请选择生产周期开始日期', trigger: 'blur',
+        }],
+        workDateEnd: [{ 
+          required: true, message: '请选择生产周期结束日期', trigger: 'blur',
+        }],
         time: [
         { required: true, message: '时间不能为空' },
         { validator: checkTime, trigger: 'blur' },
@@ -701,6 +704,18 @@ export default {
         return time.getTime() < Date.now() - 8.64e7
       },
     },
+    pickerOptionsS:{
+        disabledDate:(time)=>{
+          if(this.formData.workDateEnd!=''){
+            return time.getTime() >  new Date(this.formData.workDateEnd).getTime()
+          }
+        },
+      },
+      pickerOptionsE:{
+         disabledDate:(time)=>{
+            return time.getTime() < new Date(this.formData.workDateStart).getTime()- 1*24*60*60*1000
+        },
+      },
     timer:'',
     //自动保存接口调用后返回的草稿ID，避免每次自动保存都是生成一条新数据
     updateId:'',
@@ -932,7 +947,7 @@ export default {
     getList () {
       getContractDetail (this.record).then(data =>{
         this.formData = data.data.data
-        this.$set(this.formData,'time',[data.data.data.workDateStart,data.data.data.workDateEnd])
+        // this.$set(this.formData,'time',[data.data.data.workDateStart,data.data.data.workDateEnd])
         if(data.data.data.employeePosition === '0'){       
           this.formData.employeePosition=''
         }
@@ -1227,8 +1242,8 @@ export default {
         this.formData.contractImage = ''
     },
     handleSubmitCaoGao () {
-    this.formData.workDateStart = this.formData.time[0]
-    this.formData.workDateEnd = this.formData.time[1]
+    // this.formData.workDateStart = this.formData.time[0]
+    // this.formData.workDateEnd = this.formData.time[1]
     // console.log(this.formData)
     // oDate1=new Date(Date.parse(oDate1))
     //  oDate2=new Date(Date.parse(oDate2))
@@ -1380,9 +1395,8 @@ export default {
       // })
     },
     handleSubmit () {
-      
-      this.formData.workDateStart = this.formData.time[0]
-      this.formData.workDateEnd = this.formData.time[1]
+      // this.formData.workDateStart = this.formData.time[0]
+      // this.formData.workDateEnd = this.formData.time[1]
     // console.log(this.formData)
     // oDate1=new Date(Date.parse(oDate1))
     //  oDate2=new Date(Date.parse(oDate2))
@@ -1475,8 +1489,8 @@ export default {
       })
     },
     handleSaveCaoGao () {
-     this.formData.workDateStart = this.formData.time[0]
-    this.formData.workDateEnd = this.formData.time[1]
+    //  this.formData.workDateStart = this.formData.time[0]
+    // this.formData.workDateEnd = this.formData.time[1]
     // console.log(this.formData)
       if(this.checked) {
         this.formData.status = 6
