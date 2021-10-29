@@ -17,7 +17,7 @@
         <img slot="addonAfter" :src="code.src" class="login-code-img" @click="refreshCode" />
       </a-input>
     </el-form-item>
-    <el-form-item>
+    <!-- <el-form-item>
       <div class="login-text">
         <el-checkbox v-model="form.isKeepLogin">保持登录</el-checkbox>
         <div class="check-text">
@@ -25,15 +25,15 @@
           <el-button type="text" @click.prevent="handleRegister">立即注册</el-button>
         </div>
       </div>
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item>
       <a-row :gutter="8">
-        <a-col :span="12">
+        <a-col :span="24">
           <a-button type="primary" size="large" :loading="loginLoading" @click="handleLogin" block>登录</a-button>
         </a-col>
-        <a-col :span="12">
+        <!-- <a-col :span="12">
           <a-button size="large" @click="$message.success('功能开发中')" block>访客</a-button>
-        </a-col>
+        </a-col> -->
       </a-row>
     </el-form-item>
   </el-form>

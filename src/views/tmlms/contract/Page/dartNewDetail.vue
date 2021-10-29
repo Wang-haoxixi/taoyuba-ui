@@ -273,8 +273,8 @@
             <el-main class="mai">
               <el-row>
                 <el-col :span="4">
-                  <el-form-item label="在" style="width: 150px!important" prop="workMode">
-                    <iep-dict-select v-model="formData.workMode" dict-name="tyb_resume_worktype" style="width: 100px!important"></iep-dict-select>
+                  <el-form-item label="在" style="width: 150px!important" prop="activityType">
+                    <iep-dict-select v-model="formData.activityType" dict-name="tyb_resume_worktype" style="width: 100px!important"></iep-dict-select>
                   </el-form-item >
                 </el-col>
                 <el-col :span="4">
@@ -604,7 +604,8 @@ export default {
         employeePayBank: '',
         employeeLinkMan: '',
         employeeLinkPhone: '',
-        workMode: '',
+        activityType: '',
+        workMode:'',
         workPosition: '',
         workSkill: '',
         workProbationTypeValue: '',
@@ -1009,8 +1010,8 @@ export default {
       } else {                                                    
         this.refreshShipName({shipName: name})
       }
-      if (name.workMode2!=''){
-        this.formData.workMode= this.dictGroup['tyb_resume_worktype'][name.workMode2].value
+      if (name.activityType!=''){
+        this.formData.activityType= this.dictGroup['tyb_resume_worktype'][name.activityType].value
       // console.log(this.formData.workMode)
       }
       // console.log(this.formData.workMode)
@@ -1091,6 +1092,7 @@ export default {
       this.loading = false
     },
     employerPropChange (val) {
+      // console.log(this.formData)
       if (val === 1) {
         this.formData.employerName = this.formData.shipownerName
         this.formData.employerIdcard = this.formData.shipownerIdcard
@@ -1105,9 +1107,10 @@ export default {
         this.formData.employerIdcard = ''
         this.formData.employerPhone = ''
         this.formData.employerAddr = ''
-        getOperatorList (this.formData.shipName.shipName,2).then(data => {
+        getOperatorList (this.formData.shipName,2).then(data => {
           // console.log('lll')
           // console.log(data.data.data)
+          // console.log(this.formData.shipName)
           if(data.data.data){
             this.formData.employerName = data.data.data.realname
             this.formData.employerIdcard = data.data.data.idcard
@@ -1121,7 +1124,8 @@ export default {
           this.formData.employerIdcard = ''
           this.formData.employerPhone = ''
           this.formData.employerAddr = ''
-          getOperatorList (this.formData.shipName.shipName,3).then(data => {
+          getOperatorList (this.formData.shipName,3).then(data => {
+          // console.log(this.formData.shipName)
           if(data.data.data){
             this.formData.employerName = data.data.data.realname
             this.formData.employerIdcard = data.data.data.idcard
@@ -1237,16 +1241,15 @@ export default {
         this.formData.contractImage = ''
     },
     handleSubmitCaoGao () {
-          var oDate1 = this.formData.workDateStart.replace('-','/')
-    var oDate2 = this.formData.workDateEnd.replace('-','/')
+    //       var oDate1 = this.formData.workDateStart.replace('-','/')
+    // var oDate2 = this.formData.workDateEnd.replace('-','/')
     // console.log(oDate1,oDate2)
     // oDate1=new Date(Date.parse(oDate1))
     //  oDate2=new Date(Date.parse(oDate2))
-    if(oDate1 > oDate2){
-      // console.log('lll')
-       this.$message.error('开始时间不能早于结束时间')
-        return
-    }
+    // if(oDate1 > oDate2){
+    //    this.$message.error('开始时间不能早于结束时间')
+    //     return
+    // }
     //  this.formData.workDateStart = this.formData.time[0]
     // this.formData.workDateEnd = this.formData.time[1]
     // console.log(this.formData)
@@ -1389,16 +1392,16 @@ export default {
       // })
     },
     handleSubmit () {
-    var oDate1 = this.formData.workDateStart.replace('-','/')
-    var oDate2 = this.formData.workDateEnd.replace('-','/')
+      this.formData.workMode = this.formData.activityType
+    // var oDate1 = this.formData.workDateStart.replace('-','/')
+    // var oDate2 = this.formData.workDateEnd.replace('-','/')
     // console.log(oDate1,oDate2)
     // oDate1=new Date(Date.parse(oDate1))
     //  oDate2=new Date(Date.parse(oDate2))
-    if(oDate1 > oDate2){
-      // console.log('lll')
-       this.$message.error('开始时间不能早于结束时间')
-        return
-    }
+    // if(oDate1 > oDate2){
+    //    this.$message.error('开始时间不能早于结束时间')
+    //     return
+    // }
     // console.log(666)
     //  this.formData.workDateStart = this.formData.time[0]
     // this.formData.workDateEnd = this.formData.time[1]
