@@ -6,7 +6,7 @@
         :rules="rules" class="form" >
         <el-container>
           <el-aside class="side">
-            <div class="tex">持证人信息666</div>
+            <div class="tex">持证人信息</div>
           </el-aside>
           <el-container>
             <el-header class="head"></el-header>
@@ -273,8 +273,8 @@
             <el-main class="mai">
               <el-row>
                 <el-col :span="4">
-                  <el-form-item label="在" style="width: 150px!important" prop="workMode">
-                    <iep-dict-select v-model="formData.workMode" dict-name="tyb_resume_worktype" style="width: 100px!important"></iep-dict-select>
+                  <el-form-item label="在" style="width: 150px!important" prop="activityType">
+                    <iep-dict-select v-model="formData.activityType" dict-name="tyb_resume_worktype" style="width: 100px!important"></iep-dict-select>
                   </el-form-item >
                 </el-col>
                 <el-col :span="4">
@@ -592,7 +592,7 @@ export default {
         employeePayBank: '',
         employeeLinkMan: '',
         employeeLinkPhone: '',
-        workMode: '',
+        activityType: '',
         workPosition: '',
         workSkill: '',
         workProbationTypeValue: '',
@@ -909,6 +909,7 @@ export default {
               let employee = data.data
               if(employee.positionId!=='0'){
                 this.formData.employeePosition = employee.positionId
+                this.formData.workPosition = this.formData.employeePosition 
               }else{
                 this.formData.employeePosition = ''
               }
@@ -1009,16 +1010,18 @@ export default {
         this.refreshShipName(name)
       } else {                                                    
         this.refreshShipName({shipName: name})
-      }   
-      if (name.workMode2!=''){
+      }
+      // console.log(name)
+      if (name.activityType!=''){
         // console.log(this.dictGroup['tyb_resume_worktype'][name.workMode2])
-        this.formData.workMode= this.dictGroup['tyb_resume_worktype'][name.workMode2].value
+        this.formData.activityType= this.dictGroup['tyb_resume_worktype'][name.activityType].value
       // console.log(this.formData.workMode)
       }
       this.shipNames = []       
     },
     refreshShipName (name) {
       if (name !== null) {
+        console.log(name)
         let {shipowner = '', shipownerIdcard = '', licensesOwnerShip = '', mobile = '', address = '',shipJointYes = '',shipShare = ''} = name
         this.formData.shipownerName = shipowner
         this.formData.shipownerIdcard = shipownerIdcard
@@ -1032,6 +1035,11 @@ export default {
         this.formData.employerProp = 1
         this.formData.shipName = name.shipName
         this.employer =true
+         if (name.activityType!=''){
+        // console.log(this.dictGroup['tyb_resume_worktype'][name.workMode2])
+        this.formData.activityType= this.dictGroup['tyb_resume_worktype'][name.activityType].value
+      // console.log(this.formData.workMode)
+      }
         if(shipShare==1){
           this.formData.shipJoint = 1
           this.formData.shipJointYes = shipJointYes+1
@@ -1095,7 +1103,7 @@ export default {
       this.loading = false
     },
     employerPropChange (val) {
-      console.log(this.formData)
+      // console.log(this.formData)
       if (val === 1) {
         this.formData.employerName = this.formData.shipownerName
         this.formData.employerIdcard = this.formData.shipownerIdcard
@@ -1111,6 +1119,7 @@ export default {
         this.formData.employerPhone = ''
         this.formData.employerAddr = ''
         getOperatorList (this.formData.shipName,2).then(data => {
+          // console.log(this.formData.shipName)
           // console.log('lll')
           // console.log(data.data.data)
           if(data.data.data){
@@ -1127,6 +1136,7 @@ export default {
           this.formData.employerPhone = ''
           this.formData.employerAddr = ''
           getOperatorList (this.formData.shipName,3).then(data => {
+          // console.log(this.formData.shipName)
           if(data.data.data){
             this.formData.employerName = data.data.data.realname
             this.formData.employerIdcard = data.data.data.idcard
@@ -1395,13 +1405,14 @@ export default {
       // })
     },
     handleSubmit () {
+      this.formData.workMode = this.formData.activityType
       // this.formData.workDateStart = this.formData.time[0]
       // this.formData.workDateEnd = this.formData.time[1]
     // console.log(this.formData)
-    // oDate1=new Date(Date.parse(oDate1))
-    //  oDate2=new Date(Date.parse(oDate2))
+    // var oDate1 = this.formData.workDateStart.replace('-','/')
+    // var oDate2 = this.formData.workDateEnd.replace('-','/')
     // if(oDate1 > oDate2){
-    //   console.log('lll')
+    //   // console.log('lll')
     //    this.$message.error('开始时间不能早于结束时间')
     //     return
     // }
