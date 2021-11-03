@@ -69,4 +69,5 @@ Router.addRoutes([
   ...examRouter,
   ...adminRouter,
 ])
+
 export default Router

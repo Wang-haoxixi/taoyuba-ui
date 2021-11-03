@@ -737,10 +737,10 @@ export default {
     this.sockets.unsubscribe('card message')
   },
   destroyed () {
-    clearInterval(this.timer)
+    // clearInterval(this.timer)
   },
   created () {
-    console.log(this.record)
+    // console.log(this.record)
     if (this.record) {
       this.getList()
     }else if(this.$route.query.idcard){
@@ -751,7 +751,7 @@ export default {
       console.log('type')
       console.log(this.type)
     }
-    this.timer = setInterval(this.handleSaveCaoGao,15000)
+    // this.timer = setInterval(this.handleSaveCaoGao,15000)
   },
   mounted () {
             //添加socket事件监听

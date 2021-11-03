@@ -346,7 +346,9 @@ export default {
                 message: `${this.methodName}成功`,
                 type: 'success',
                 })
-                this.$router.go(-1)
+                if(this.methodName=='编辑'){
+                  this.$router.go(-1)
+                }
               }else{
                 this.$message({
                 message: `${this.methodName}失败`,
@@ -369,7 +371,9 @@ export default {
               message: `${this.methodName}成功`,
               type: 'success',
               })
-              this.$router.go(-1)
+              if(this.methodName=='编辑'){
+                this.$router.go(-1)
+              }
             }else{
               this.$message({
               message: `${this.methodName}失败`,

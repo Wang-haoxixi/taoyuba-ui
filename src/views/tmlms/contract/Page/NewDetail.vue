@@ -725,7 +725,7 @@ export default {
     this.sockets.unsubscribe('card message')
   },
   destroyed () {
-    clearInterval(this.timer)
+    // clearInterval(this.timer)
   },
   created () {
     // console.log(this.record)
@@ -747,7 +747,7 @@ export default {
       this.type='add'
       this.akk=false
     }
-        this.timer = setInterval(this.handleSaveCaoGao,15000)
+        // this.timer = setInterval(this.handleSaveCaoGao,15000)
 
   },
   mounted () {

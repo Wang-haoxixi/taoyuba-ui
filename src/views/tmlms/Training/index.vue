@@ -8,7 +8,17 @@
           <span><el-input v-model.trim="params.deptName" placeholder="请输入机构名称" size="small" clearable></el-input></span>
           <span><el-input v-model.trim="params.contactName" placeholder="请输入联系人" size="small" clearable></el-input></span>
           <span><el-input v-model.trim="params.phone" placeholder="请输入联系电话" size="small" clearable></el-input></span>   
-          <span><el-input v-model.trim="params.address" placeholder="请输入机构地址" size="small" clearable></el-input></span>   
+          <span><el-input v-model.trim="params.address" placeholder="请输入机构地址" size="small" clearable></el-input></span>
+          <span>
+              <el-select v-model="params.trainScope" placeholder="请输入选择培训范围" size="small" clearable>
+                <el-option
+                  v-for="item in trainScopeOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </span>   
           <el-button plain size="small"  @click="onSearch">搜索</el-button>
         </div>
       </div>
@@ -77,6 +87,7 @@ export default {
         contactName: '',
         phone: '',
         address: '',
+        trainScope:'',
       },
       options: {
         expandAll: false,
@@ -97,8 +108,34 @@ export default {
             text: '机构地址',
             value: 'address',
           },
+           {
+            text: '培训范围',
+            value: 'trainScope',
+          },
         ],
       },
+      trainScopeOptions:[
+        {
+          value: '各类各级渔业职务船员培训',
+          label: '各类各级渔业职务船员培训',
+        }, {
+          value: 'GMDSS无线电操作员培训、电机员培训',
+          label: 'GMDSS无线电操作员培训、电机员培训',
+        }, {
+          value: '外海二级及以下渔业职务船员岗位适任培训',
+          label: '外海二级及以下渔业职务船员岗位适任培训',
+        }, {
+          value: '国内一级及以下渔业职务船员培训',
+          label: '国内一级及以下渔业职务船员培训',
+        }, {
+          value: '普通船员培训',
+          label: '普通船员培训',
+        },
+         {
+          value: '机驾长培训',
+          label: '机驾长培训',
+        },
+      ],
     }
   },
   methods: {

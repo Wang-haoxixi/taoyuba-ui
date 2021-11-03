@@ -4,6 +4,7 @@
       <page-header title="试题库"></page-header>
       <operation-container>
         <template slot="left">
+          <iep-button @click="getData" type="primary" size="small">刷新</iep-button>
           <iep-button size="small" type="primary" icon="el-icon-plus" plain @click="handleAdd">新增</iep-button>
           <iep-button size="small" @click="handleDeleteAll">批量删除</iep-button>
           <!-- <el-dropdown size="medium">
@@ -114,6 +115,9 @@ export default {
   //   },
   // },
   methods: {
+    getData (){
+      this.loadPage()
+    },
     getKindLevel () {
       examKind().then(res=>{
         this.kindList = res.data.data

@@ -1,6 +1,16 @@
 import Layout from '@/page/index/index'
 export default [
   {
+    path: '/dataStatistics/tourist',
+    component: () => import(/* webpackChunkName: "exception" */ '@/components/dataStatistics/index'),
+    name: 'dataStatisticsTourist',
+    meta: {
+      keepAlive: true,
+      isTab: false,
+      isAuth: false,
+    },
+  },
+  {
     path: '/404',
     component: () => import(/* webpackChunkName: "exception" */ '@/components/error-page/404'),
     name: '404',
