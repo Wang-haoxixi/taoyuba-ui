@@ -52,10 +52,6 @@ const columnsMap = [
   ]
   const allcrewColumnsMap = [
     {
-      prop: 'realName',
-      label: '姓名',
-    },
-    {
       prop: 'idcard',
       label: '身份证号码',
     },
@@ -531,5 +527,19 @@ const columnsMap = [
     newForm.shipownerIdcard = row.shipownerIdcard ? row.shipownerIdcard : null
     return newForm
   }
+  function checkPhone (value) {
+   if (!value.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[0-9]|18[0-9]|14[0-9]|19[0-9]|16[0-9])[0-9]{8}$/)) {
+      return true
+    } else {
+      return false
+    }
+  }
+  function checIdCard (value) {
 
-export{dictsMap,columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm, crewColumnsMap,allcrewColumnsMap,addcrewColumnsMap, operatColumnsMap ,shipColumnsMap,shareHolderColumnsMap,CrewRegisteColumnsMap,CrewRecordColumnsMap}
+  if (!value.match(/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/)) {
+    return true
+  } else {
+    return false
+  }
+}
+export{checkPhone,checIdCard, dictsMap,columnsMap, rules, initForm, formToDto, initSearchForm, initDtoSearchForm, toDtoSearchForm, crewColumnsMap,allcrewColumnsMap,addcrewColumnsMap, operatColumnsMap ,shipColumnsMap,shareHolderColumnsMap,CrewRegisteColumnsMap,CrewRecordColumnsMap}

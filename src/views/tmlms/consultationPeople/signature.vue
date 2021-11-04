@@ -38,6 +38,18 @@
               <span> {{ form.trainMeetName || '' }} </span>
             </el-form-item>
           </el-col>
+          <!-- <el-col :span="13">
+            <el-form-item label="签到时间" prop="startTime">
+              <el-button @click="selectMeet">选择会议</el-button>
+              <span> {{ form.trainMeetName || '' }} </span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="13">
+            <el-form-item label="签退时间" prop="endTime">
+              <el-button @click="selectMeet">选择会议</el-button>
+              <span> {{ form.trainMeetName || '' }} </span>
+            </el-form-item>
+          </el-col> -->
         </el-row>
       </el-form>
       <div style="text-align: center;margin: 20px 0;">

@@ -1,11 +1,16 @@
 <template>
   <div>
     <basic-container>
-      <page-header :title='shipTitle'></page-header>
+      <page-header :title="shipTitle"></page-header>
       <operation-container>
         <template slot="left">
           <iep-button @click="handleAdd" type="primary">上船登记</iep-button>
-          <iep-button v-if="relation_ship_add" @click="handleAddRelation" type="default">新增联系记录</iep-button>
+          <iep-button
+            v-if="relation_ship_add"
+            @click="handleAddRelation"
+            type="default"
+            >新增联系记录</iep-button
+          >
         </template>
         <!-- <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -17,6 +22,7 @@
         </template>
       </operation-container>
       <iep-table
+        :cell-style="tableCellStyle"
         :isLoadTable="false"
         :isPagination="false"
         :pagination="pagination"
@@ -27,16 +33,68 @@
         @current-change="handleCurrentChange"
         @selection-change="handleSelectionChange"
         :emptyText="message"
-        is-mutiple-selection>
+        is-mutiple-selection
+      >
+      <template slot="before-columns">
+        <el-table-column
+      label="姓名"
+      width="180"
+      prop="realName">
+      <template slot-scope="scope">
+        <el-popover trigger="hover" placement="top" v-if="scope.row.idcard == '' || checIdCard(scope.row.idcard) || scope.row.phone == '' || checkPhone(scope.row.phone)">
+          <p v-if="scope.row.idcard == '' || checIdCard(scope.row.idcard)">身份证缺失或有误</p>
+          <p v-if="scope.row.phone == '' || checkPhone(scope.row.phone) ">联系方式缺失或有误</p>
+          <p v-if="scope.row.workStatus == '上船，未签合同'" >上船未签合同</p>
+          <p v-if="scope.row.signStatus == 0">未培训</p>
+          <div slot="reference" class="name-wrapper">
+            {{ scope.row.realName }}
+          </div>
+        </el-popover>
+      </template>
+    </el-table-column>
+      </template>
         <el-table-column prop="operation" label="操作" width="300">
           <template slot-scope="scope">
             <operation-wrapper>
-              <iep-button size="mini" plain  @click="handleEdit(scope.row.idcard)">编辑</iep-button>
-              <iep-button size="mini" plain @click="handleChange(scope.row.idcard)">变更</iep-button>
-              <iep-button size="mini" plain @click="handleView(scope.row.idcard)">查看</iep-button>
-              <iep-button size="mini" plain v-if="scope.row.sign" @click="handleSign(scope.row.idcard)">合同</iep-button>         
-              <iep-button size="mini" plain v-if="!scope.row.sign" @click="contractAdd(scope.row.idcard)">签合同</iep-button>       
-              <iep-button size="mini" plain v-if="!roles.includes(115)" @click="handleDelete(scope.row.idcard)">删除</iep-button>
+              <iep-button
+                size="mini"
+                plain
+                @click="handleEdit(scope.row.idcard)"
+                >编辑</iep-button
+              >
+              <iep-button
+                size="mini"
+                plain
+                @click="handleChange(scope.row.idcard)"
+                >变更</iep-button
+              >
+              <iep-button
+                size="mini"
+                plain
+                @click="handleView(scope.row.idcard)"
+                >查看</iep-button
+              >
+              <iep-button
+                size="mini"
+                plain
+                v-if="scope.row.sign"
+                @click="handleSign(scope.row.idcard)"
+                >合同</iep-button
+              >
+              <iep-button
+                size="mini"
+                plain
+                v-if="!scope.row.sign"
+                @click="contractAdd(scope.row.idcard)"
+                >签合同</iep-button
+              >
+              <iep-button
+                size="mini"
+                plain
+                v-if="!roles.includes(115)"
+                @click="handleDelete(scope.row.idcard)"
+                >删除</iep-button
+              >
               <!-- <iep-button size="mini" @click="handleView(scope.row.idcard)">查看</iep-button> -->
               <!-- <iep-button size="mini" plain v-if="scope.row.workStatus!='上船，已签合同'" @click="handleEdit(scope.row.idcard)">编辑</iep-button> -->
               <!-- <iep-button size="mini" type="primary" @click="handleCrew(scope.row.idcard,scope.row.workStatus)">离船</iep-button> -->
@@ -70,7 +128,11 @@
           <el-button @click="$router.go(-1)">取消</el-button>
         </div>
     </el-dialog> -->
-    <dialog-form-relation ref="dialogFormRelation" :status="relationStatus" v-model="formRelation"></dialog-form-relation>
+    <dialog-form-relation
+      ref="dialogFormRelation"
+      :status="relationStatus"
+      v-model="formRelation"
+    ></dialog-form-relation>
     <change-man ref="changeMan" @back="getData()"></change-man>
   </div>
 </template>
@@ -84,7 +146,7 @@ import changeMan from '@/components/changeMan/index'
 import { addUpWork } from '@/api/post/admin'
 import { getContractByidcard } from '@/api/tmlms/newContract'
 import mixins from '@/mixins/mixins'
-import { allcrewColumnsMap,dictsMap } from '../options'
+import { allcrewColumnsMap,dictsMap,checkPhone,checIdCard } from '../options'
 // import { getShipByShipNo } from '@/api/ships'
 import { getUserInfo } from '@/api/login'
 import keyBy from 'lodash/keyBy'
@@ -190,6 +252,19 @@ export default {
     ...mapGetters(['roles', 'permissions']),
   },
   methods: {
+    checIdCard,
+    checkPhone,
+    tableCellStyle ({row,column}){
+      // console.log(row)
+      // console.log(column)
+      if(column.label == '姓名'){
+        console.log(row)
+        // console.log(row.signStatus)
+        if(row.signStatus==0 || row.workStatus == '上船，未签合同' || row.idcard == '' || checIdCard(row.idcard) ||row.phone == ''|| checkPhone(row.phone) ){
+          return 'color:red'
+        }
+      }
+    },
     getData () {
             // this.loadPage()
       this.getRogionList().then(() => {
@@ -287,7 +362,7 @@ export default {
           this.certLevel.map(iep=>{
             if (v.certLevel === iep.value) {
               hdk = iep.label
-               console.log(hdk)
+              //  console.log(hdk)
             }
           })
           
@@ -303,7 +378,7 @@ export default {
             hdk=hdk.slice(0,hdk.length-1)
           }
           item.certName = hdk
-          console.log(item.certName)
+          // console.log(item.certName)
         })
         }
       })

@@ -80,6 +80,12 @@
             <el-button size="mini" @click="lookQr(scope.row,2)">{{ scope.row.meetEndSignTime ? '查看' : '生成' }}</el-button>
           </template>
           </el-table-column>
+           <el-table-column
+            width="180"
+            prop="number"
+            label="参会总人数"
+          >
+          </el-table-column>
           <el-table-column label="操作"  fixed="right">
             <template slot-scope="scope">
               <div style="text-align:center"><el-button size="mini" @click="handleView(scope.row.id)">编辑</el-button></div>

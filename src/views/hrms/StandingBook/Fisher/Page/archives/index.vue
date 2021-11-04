@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="archives-info">
-            <div v-for="(item,index) in list" :key="index" style="width: 20%">
+            <div v-for="(item,index) in list" :key="index">
                 <div v-for="(items,indexs) in item" :key="indexs" class="archives-info-content">
                     <p>{{ items.name }}</p>
                     <p v-if="!items.dic">{{ data[items.value] || '暂无' }}</p>
@@ -162,10 +162,17 @@ export default {
                     value: 'fishType',
                 },
             ],
+            [
+                {
+                    name: '总长',
+                    value: 'allLength',
+                },
+            ],
         ],
     }
   },
   created () {
+      console.log(this.data)
   },
   mounted () {
   },
@@ -201,7 +208,8 @@ export default {
 </script>
 <style scoped lang="scss">
 .archives-info {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(6,1fr);
     // justify-content: space-around;
     background: #F9F9F9;
     padding: 21px;

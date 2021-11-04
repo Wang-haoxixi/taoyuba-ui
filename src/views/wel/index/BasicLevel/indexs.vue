@@ -19,7 +19,7 @@
         <div>
             <el-row :gutter="20">
                 <el-col :span="12">
-                    <div class="kjtd">
+                    <div class="kjtd" v-if="inS.shipCount">
                         <h3>渔船总数 <span style="float: none">{{ inS.shipCount.total }}</span></h3>
                         <div class="kjtd-ship"><div>帆张网</div><p>{{ inS.shipCount['11'] }}</p></div>
                         <div class="kjtd-ship"><div>流刺网</div><p>{{ inS.shipCount['10'] }}</p></div>
@@ -28,7 +28,7 @@
                     </div>
                 </el-col>
                 <el-col :span="12">
-                    <div class="kjtd">
+                    <div class="kjtd" v-if="inS.certCount">
                         <h3>船员登记 <span style="float: none">{{ inS.certCount.total }}</span></h3>
                         <div class="kjtd-ship"><div>持证船员</div><p>{{ inS.certCount.cert }}</p></div>
                         <div class="kjtd-ship"><div>普通船员</div><p>{{ inS.certCount.normal }}</p></div>
@@ -37,7 +37,7 @@
                     </div>
                 </el-col>
                 <el-col :span="12">
-                    <div class="kjtd">
+                    <div class="kjtd" v-if="inO.sign">
                         <h3>面对面教育培训</h3>
                         <div class="kjtd-ship"><div>参会人员</div><p>{{ inO.sign.meet }}</p></div>
                         <div class="kjtd-ship"><div>船东</div><p>{{ inO.sign['0'] }}</p></div>
@@ -46,7 +46,7 @@
                     </div>
                 </el-col>
                 <el-col :span="12">
-                    <div class="kjtd">
+                    <div class="kjtd" v-if="inO.contract">
                         <h3>网签合同</h3>
                         <div class="kjtd-ship"><div>成立合同</div><p>{{ inO.contract.startContract }}</p></div>
                         <div class="kjtd-ship"><div>失效合同</div><p>{{ inO.contract.overContract }}</p></div>
@@ -178,6 +178,7 @@ export default {
           this.Zhao = data.data
       })
       countSignAndContractByOrg().then(({data})=>{
+        //   console.log(this.info)
           this.inO = data.data
       })
         var date = new Date()

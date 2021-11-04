@@ -58,9 +58,24 @@
         </div>
       </div>
         <el-table
+          :cell-style="tableCellStyle"
           :data="shipownerList"
           stripe
           style="width: 100%">
+          <el-table-column prop="realName" label="姓名" width="100">
+            <template slot-scope="scope">
+             <el-popover trigger="hover" placement="top" v-if="scope.row.idcard == '' || scope.row.phone == '' || checIdCard(scope.row.idcard) || checkPhone(scope.row.phone)">
+                <p v-if="scope.row.idcard == ''|| checIdCard(scope.row.idcard)">身份证缺失或有误</p>
+                <p v-if="scope.row.phone == ''|| checkPhone(scope.row.phone)">联系方式缺失或有误</p>
+                <div slot="reference" class="name-wrapper">
+                  {{ scope.row.realName }}
+                </div>
+              </el-popover>
+              <div v-else>
+                {{ scope.row.realName }}
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column
             v-for="(item,index) in options.columns"
             :key="index"
@@ -202,11 +217,6 @@ export default {
         expandAll: false,
         columns: [
           {
-            text: '姓名',
-            value: 'realName',
-            css: '100',
-          },
-          {
             text: '身份证号码',
             value: 'idcard',
             css: '182',
@@ -317,8 +327,33 @@ export default {
     }
   },
   methods: {
+     checkPhone (value) {
+   if (!value.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[0-9]|18[0-9]|14[0-9]|19[0-9]|16[0-9])[0-9]{8}$/)) {
+      return true
+    } else {
+      return false
+    }
+  },
+  checIdCard (value) {
+  if (!value.match(/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/)) {
+    return true
+  } else {
+    return false
+  }
+  },
+      tableCellStyle ({row,column}){
+      // console.log(row)
+      // console.log(column)
+      if(column.label == '姓名'){
+        // console.log(row)
+        // console.log(row.signStatus)
+        if(row.idcard == '' || row.phone == '' || this.checIdCard(row.idcard) || this.checkPhone(row.phone) ){
+          return 'color:red'
+        }
+      }
+    },
     parseInt (e){
-      console.log(e)
+      // console.log(e)
       var top =e.successCount+e.failCount
       
         this.importA=parseInt(top/e.total*100)+'%'
@@ -326,7 +361,7 @@ export default {
     onBeforeUpload (e){
      this.loading = true
      lookTask(e.data).then(({ data }) => {
-        console.log(data.data)
+        // console.log(data.data)
        this.parseInt(data.data)
        if(data.data.status!=1){
          var that =this
@@ -389,11 +424,14 @@ export default {
     //省
     provincesName (item, scope) {
       if(scope.row[item.value]){
+        // console.log(scope.row[item.value])
         let val = keyBy(this.provinces, 'value')
+        // console.log(val)
         if (!Object.keys(val).length) {
           return ''
+        }else if(keyBy(this.provinces, 'value') && keyBy(this.provinces, 'value')[scope.row[item.value]]){
+          return keyBy(this.provinces, 'value')[scope.row[item.value]].label
         }
-        return keyBy(this.provinces, 'value')[scope.row[item.value]].label
       }else{
         return '暂无'
       }
@@ -485,7 +523,7 @@ export default {
           }
         })
         this.total = res.data.data.total
-        console.log('shipownerList', this.shipownerList)
+        // console.log('shipownerList', this.shipownerList)
       })
     },
     //搜索
@@ -547,7 +585,7 @@ export default {
       }
     },
     isAdminPath () {
-      console.log(this.$route.path.indexOf('admin'))
+      // console.log(this.$route.path.indexOf('admin'))
       if(this.$route.path.indexOf('admin') == 1){
         this.showSwith=true
       }else{
