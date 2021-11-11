@@ -86,6 +86,7 @@ export default {
       if( id ){
         getDetail(id).then(res=>{
           this.form = res.data.data
+          // console.log(this.form)
           this.form.files.forEach(element => {
             this.fileList.push({...element,name: element.originalName})
           })
@@ -102,7 +103,7 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           let form = JSON.parse(JSON.stringify(this.form))
-          console.log(this.fileList)
+          // console.log(this.fileList)
           form.files = []
           this.fileList.forEach(element => {
             if( element.response ){

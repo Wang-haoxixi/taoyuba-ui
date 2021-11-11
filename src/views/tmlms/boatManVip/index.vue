@@ -428,6 +428,7 @@ export default {
       }
     },
     exportInfo () {
+      // console.log(this.exportParams)
       exportExcel (this.exportParams).catch(err => {
         this.$message({
           type: 'warning',

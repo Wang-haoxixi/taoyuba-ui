@@ -64,6 +64,7 @@ export default {
     let query = this.$route.query
     if (query.status) {
       this.status = query.status
+      // console.log(this.status)
     }
     if (query.id) {
       this.getList(query.id)
@@ -84,7 +85,7 @@ export default {
             this.form.shipNames = shipNames.join(',')
             this.form.shipIds = shipIds
           }
-          console.log('this.form', this.form)
+          // console.log('this.form', this.form)
         }
       })
     },

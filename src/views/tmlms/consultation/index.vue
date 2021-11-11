@@ -81,16 +81,19 @@
           </template>
           </el-table-column>
            <el-table-column
-            width="180"
             prop="number"
             label="参会总人数"
+            width="100"
           >
+          <template slot-scope="scope">
+              {{scope.row.number?scope.row.number:'0'}}
+            </template>
           </el-table-column>
-          <el-table-column label="操作"  fixed="right">
+          <el-table-column label="操作"  fixed="right" width="300">
             <template slot-scope="scope">
-              <div style="text-align:center"><el-button size="mini" @click="handleView(scope.row.id)">编辑</el-button></div>
-              <div style="text-align:center;margin: 5px 0;"><el-button size="mini" @click="handleDel(scope.row.id)">删除</el-button></div>
-              <div style="text-align:center"><el-button size="mini" @click="lookPeople(scope.row.id)">人员</el-button></div>
+              <el-button size="mini" @click="handleView(scope.row.id)">编辑</el-button>
+              <el-button size="mini" @click="handleDel(scope.row.id)">删除</el-button>
+              <el-button size="mini" @click="lookPeople(scope.row.id)">人员</el-button>
             </template>
           </el-table-column>
         </el-table>

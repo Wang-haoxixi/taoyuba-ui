@@ -214,7 +214,15 @@ export default {
   },
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+::v-deep .el-checkbox-button{
+  margin-right: 10px !important;
+  margin-bottom: 10px !important;
+  .el-checkbox-button__inner{
+    border: 1px solid #DCDFE6 !important;
+    box-shadow:none !important
+  }
+}
 .el-form {
   margin-right: 16%;
 }

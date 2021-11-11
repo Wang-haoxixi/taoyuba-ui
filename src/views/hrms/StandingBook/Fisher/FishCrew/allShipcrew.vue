@@ -41,7 +41,7 @@
       width="180"
       prop="realName">
       <template slot-scope="scope">
-        <el-popover trigger="hover" placement="top" v-if="scope.row.idcard == '' || checIdCard(scope.row.idcard) || scope.row.phone == '' || checkPhone(scope.row.phone)">
+        <el-popover trigger="hover" placement="top" v-if="scope.row.workStatus == '上船，未签合同' || scope.row.signStatus == 0 ||scope.row.idcard == '' || checIdCard(scope.row.idcard) || scope.row.phone == '' || checkPhone(scope.row.phone)">
           <p v-if="scope.row.idcard == '' || checIdCard(scope.row.idcard)">身份证缺失或有误</p>
           <p v-if="scope.row.phone == '' || checkPhone(scope.row.phone) ">联系方式缺失或有误</p>
           <p v-if="scope.row.workStatus == '上船，未签合同'" >上船未签合同</p>
@@ -50,6 +50,9 @@
             {{ scope.row.realName }}
           </div>
         </el-popover>
+        <div v-else>
+            {{ scope.row.realName }}
+        </div>
       </template>
     </el-table-column>
       </template>
@@ -258,9 +261,9 @@ export default {
       // console.log(row)
       // console.log(column)
       if(column.label == '姓名'){
-        console.log(row)
         // console.log(row.signStatus)
         if(row.signStatus==0 || row.workStatus == '上船，未签合同' || row.idcard == '' || checIdCard(row.idcard) ||row.phone == ''|| checkPhone(row.phone) ){
+          console.log(row)
           return 'color:red'
         }
       }

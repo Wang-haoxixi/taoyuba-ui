@@ -62,7 +62,7 @@
           :data="shipownerList"
           stripe
           style="width: 100%">
-          <el-table-column prop="realName" label="姓名" width="100">
+          <el-table-column prop="realName" label="姓名" width="200">
             <template slot-scope="scope">
              <el-popover trigger="hover" placement="top" v-if="scope.row.idcard == '' || scope.row.phone == '' || checIdCard(scope.row.idcard) || checkPhone(scope.row.phone)">
                 <p v-if="scope.row.idcard == ''|| checIdCard(scope.row.idcard)">身份证缺失或有误</p>
@@ -122,7 +122,7 @@
             {{ scope.row.status | typeFilter}}
           </template>
           </el-table-column> -->
-          <el-table-column label="操作" width="300" fixed="right">
+          <el-table-column label="操作" width="400" fixed="right">
             <template slot-scope="scope">
               <el-button size="mini" @click="handleChange(scope.row.idcard)">变更
               </el-button>
@@ -219,17 +219,15 @@ export default {
           {
             text: '身份证号码',
             value: 'idcard',
-            css: '182',
           },
           {
             text: '年龄',
             value: 'birthday',
-            css: '60',
+            css: '100',
           },
           {
             text: '联系电话',
             value: 'phone',
-            css: '140',
           },
           {
             text: '用工状态',
@@ -241,23 +239,25 @@ export default {
             value: 'positionId',
             dictName: 'tyb_resume_position',
             type: 'dictGroup',
-            css: '100',
+            css: '200',
           },
           {
             text: '证书职位',
             value: 'certTitle',
             dictName: 'tyb_crew_cert_title',
             type: 'dictGroup',
+            css: '200',
           },
           {
             text: '证书日期',
             value: 'certDateIssue',
-            css: '120',
+            css: '200',
           },
           {
             text: '户籍',
             value: 'provinceId',
             type:'province',
+            css: '100',
           },
         ],
       },

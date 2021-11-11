@@ -475,6 +475,7 @@ export default {
         })
       } 
       this.shipowner = data
+      // console.log(this.shipowner)
     }
     getUserInfo().then(res => {
       if (res.data.data.roles.includes(111)) {

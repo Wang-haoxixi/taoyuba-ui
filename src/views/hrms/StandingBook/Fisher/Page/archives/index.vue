@@ -2,17 +2,19 @@
     <div>
         <div class="archives-info">
             <div v-for="(item,index) in list" :key="index">
-                <div v-for="(items,indexs) in item" :key="indexs" class="archives-info-content">
-                    <p>{{ items.name }}</p>
-                    <p v-if="!items.dic">{{ data[items.value] || '暂无' }}</p>
-                    <p v-else>{{ getName(data[items.value],items.dic) || '暂无' }}</p>
+                <div class="archives-info-content">
+                    <p>{{ item.name }}</p>
+                    <p v-if="item.name == '作业类型'">{{ dataInfo['workTypeName']|| '暂无' }}</p>
+                    <p v-else-if="item.name == '作业方式'">{{ dataInfo['workModeName'] || '暂无' }}</p>
+                    <p v-else-if="!item.dic"> {{ dataInfo[item.value] || '暂无' }}</p>
+                    <p v-else>{{ getName(dataInfo[item.value],item.dic) || '暂无' }}</p>
                 </div>
             </div>
         </div>
         <div class="archives-certificate">
             <div>
                 <p>渔船所有权证书编号</p>
-                <p>{{ data.licensesOwnerShip || '暂无' }}</p>
+                <p>{{ dataInfo.licensesOwnerShip || '暂无' }}</p>
                 <p>到期日期：{{ list.licensesDateExpire || '暂无'}}</p>
                 <template v-if="img.ownershipRegistrationImage">
                     <el-image 
@@ -25,7 +27,7 @@
             </div>
             <div>
                 <p>渔船捕捞证书编号</p>
-                <p>{{ data.licensesFishingNo || '暂无' }}</p>
+                <p>{{ dataInfo.licensesFishingNo || '暂无' }}</p>
                 <p>到期日期：{{ list.licensesFishingExpireDate || '暂无' }}</p>
                 <template v-if="img.fishLicenceImage">
                     <el-image 
@@ -38,7 +40,7 @@
             </div>
             <div>
                 <p>船舶检验证书编号</p>
-                <p>{{ data.licensesInspectionNo || '暂无' }}</p>
+                <p>{{ dataInfo.licensesInspectionNo || '暂无' }}</p>
                 <p>到期日期：{{ list.licensesInspectionExpireDate || '暂无' }}</p>
                 <template v-if="img.fishVesselImage">
                     <el-image 
@@ -51,7 +53,7 @@
             </div>
             <div>
                 <p>国籍证书编号</p>
-                <p>{{ data.licensesNationalNo || '暂无' }}</p>
+                <p>{{ dataInfo.licensesNationalNo || '暂无' }}</p>
                 <p>到期日期：{{ list.licensesNationalExpireDate || '暂无' }}</p>
                 <template v-if="img.nationalityRegistrationImage">
                     <el-image 
@@ -71,7 +73,6 @@ export default {
   data () {
     return {
         list: [
-            [
                 {
                     name: '船籍港',
                     value: 'portName',
@@ -89,8 +90,6 @@ export default {
                     name: '造船日期',
                     value: 'buildDate',
                 },
-            ],
-            [
                 {
                     name: '船龄',
                     value: '7年',
@@ -107,8 +106,6 @@ export default {
                     name: '核定航区',
                     value: '太平洋',
                 },
-            ],
-            [
                 {
                     name: '主机型号',
                     value: 'mainEngineModel',
@@ -125,8 +122,6 @@ export default {
                     name: '双控功率',
                     value: 'dualPower',
                 },
-            ],
-            [
                 {
                     name: '型深',
                     value: 'mouldedDepth',
@@ -143,8 +138,6 @@ export default {
                     name: '净吨位',
                     value: 'netTonnage',
                 },
-            ],
-            [
                 {
                     name: '作业类型',
                     value: 'workTypeName ',
@@ -161,23 +154,20 @@ export default {
                     name: '主捕种类',
                     value: 'fishType',
                 },
-            ],
-            [
                 {
                     name: '总长',
                     value: 'allLength',
                 },
-            ],
         ],
     }
   },
   created () {
-      console.log(this.data)
+
   },
   mounted () {
   },
   props: {
-    data: {
+    dataInfo: {
       default: ()=>{},
       type: Object,
     },
@@ -187,8 +177,7 @@ export default {
     },
   },
   methods: {
-    handleClick () {
-    },
+
     back () {
     },
     getName (val,arr) {
@@ -209,7 +198,7 @@ export default {
 <style scoped lang="scss">
 .archives-info {
     display: grid;
-    grid-template-columns: repeat(6,1fr);
+    grid-template-columns: repeat(4,1fr);
     // justify-content: space-around;
     background: #F9F9F9;
     padding: 21px;

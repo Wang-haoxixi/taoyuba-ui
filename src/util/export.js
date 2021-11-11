@@ -1,7 +1,7 @@
 import request from '@/router/axios'
 
 export function exportDownload ({url, method = 'post', data = {}, title = ''}) {
-    console.log(url)
+    // console.log(url)
     return new Promise((resolve) => {
       return request({
         url: url,
@@ -43,7 +43,6 @@ export function exportDownload ({url, method = 'post', data = {}, title = ''}) {
         link.style.display = 'none'
         link.click()
       }
-  
       resolve()
     })
   }

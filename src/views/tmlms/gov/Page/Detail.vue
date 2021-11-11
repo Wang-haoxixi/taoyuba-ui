@@ -39,7 +39,7 @@
             </el-col>
             <el-col :span="12" v-if="cityVal || gov.regionType">
               <el-form-item label="所属行政区域：" prop="regionId">
-                <el-cascader v-model="gov.regionId" :options="options" @active-item-change="handleItemChange" :props="props" v-if="!$route.query.see"></el-cascader>
+                <el-cascader v-model="gov.regionId" :options="options" @active-item-change="handleItemChange" :props="props" v-if="!$route.query.see" clearable></el-cascader>
                 <div v-else>{{ gov.regionId }}</div>
               </el-form-item>
             </el-col>
@@ -161,6 +161,7 @@ export default {
             if(data.data.data.regionId !== 0){
               getAllArea(data.data.data.regionId).then( res=>{
                 this.options = res.data.data
+                // console.log(this.options)
               })
             }
             if(data.data.data.regionId === 0){
@@ -170,6 +171,7 @@ export default {
                 this.options.forEach(item=>{
                   this.$set(item, 'childList',[])
                 })
+                // console.log(this.options)
               })
               this.gov.regionId = this.options
               if (this.$route.query.see) {

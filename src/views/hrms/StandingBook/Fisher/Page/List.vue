@@ -520,7 +520,7 @@ export default {
           })
         this.$nextTick(()=>{
           this.pagedTable = data.data.data.records
-          console.log(this.$store.state.user.userInfo)
+          // console.log(this.$store.state.user.userInfo)
         })
         this.total = data.data.data.total
       })
@@ -581,8 +581,8 @@ export default {
     },
   },
  activated () {
-      let pageIndex = parseInt(this.history.getItem('pageIndex')) || 1
-      this.searchData(pageIndex) // 这是我们获取数据的函数
+      // let pageIndex = parseInt(this.history.getItem('pageIndex')) || 1
+      // this.searchData(pageIndex) // 这是我们获取数据的函数
   },
   watch: {
     params () {

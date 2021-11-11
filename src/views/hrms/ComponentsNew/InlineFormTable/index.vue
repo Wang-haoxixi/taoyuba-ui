@@ -58,6 +58,9 @@ export default {
     tableData: {
       type: Array,
       required: true,
+      default:()=>{
+        return []
+      },
     },
     columns: {
       type: Array,
@@ -83,7 +86,7 @@ export default {
   },
   created () {
     this.initData()
-    console.log(this.columns)
+    // console.log(this.columns)
   },
   methods: {
     initData () {

@@ -221,7 +221,7 @@ export default {
               return false
           }
           if(this.active === 0){
-            this.$router.push(`/ships/manage?shipName=${this.search}`)
+            // this.$router.push(`/ships/manage?shipName=${this.search}`)
           }else if(this.active === 1){
             // this.$router.push(`/ships/manage?shipName=${this.search}`)
             console.log(123)

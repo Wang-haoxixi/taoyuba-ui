@@ -149,7 +149,7 @@
                 <!-- <cert-form-table  :crewData="tableData" :crewId="userId" :columns="certificateColumns"></cert-form-table>
                 </iep-form-item>
             </el-col> -->
-              <el-col :span="8">
+              <el-col :span="12">
                   <el-form-item label="现任职位：" prop="positionId">
                   <el-select
                       v-model="form.positionId"

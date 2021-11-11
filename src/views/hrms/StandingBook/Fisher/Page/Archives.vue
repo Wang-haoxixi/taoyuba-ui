@@ -33,7 +33,7 @@
     <div class="archives-content">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="基本信息" name="first">
-          <info :data="list" :img="img"></info>
+          <info :dataInfo="list" :img="img"></info>
         </el-tab-pane>
         <el-tab-pane label="船员" name="seconda">
           <crew :shipMan="shipMan" :crew="crew" :num="num" :row="row"></crew>
