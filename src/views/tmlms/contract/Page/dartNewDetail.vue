@@ -1,4 +1,5 @@
 <template>
+<!-- 合同草稿新增 -->
   <div class="contract">
     <basic-container id="pdfDom">
       <page-header :title="getTitle"></page-header>
@@ -997,7 +998,6 @@ export default {
       })
     },
     handleBack () {
-    
       this.$emit('onGoBack')
     },
     handleGo () {
@@ -1360,7 +1360,7 @@ export default {
              if (!result.join('')) {
             AddTybcontractDraft(this.formData,true).then(()=>{
             this.$message.success('保存成功！')
-            that.$router.go(-1)
+            that.$emit('onGoBack')
             }).catch(err=>{
                console.log(err)
               this.$message.error('保存失败,请联系管理员!')
@@ -1459,7 +1459,9 @@ export default {
                     // this.$emit('onGoBack')
                     addContract(this.formData).then(()=>{
                       this.$message.success('保存成功！')
-                      that.$router.go(-1)
+                      // console.log(this.$router)
+                      // that.$emit('onGoBack')
+                      that.$router.push('contract_admin')
                     }).catch(err=>{
                       console.log(err)
                       this.$message.error('新增失败,请联系管理员!')
@@ -1479,7 +1481,8 @@ export default {
           } else if (this.type === 'edit') {
                addContract(this.formData).then(()=>{
                       this.$message.success('保存成功！')
-                      this.$emit('onGoBack')
+                      // that.$emit('onGoBack')
+                      that.$router.push('contract_admin')
                     }).catch(err=>{
                       console.log(err)
                       this.$message.error('新增失败,请联系管理员!')

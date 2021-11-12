@@ -407,4 +407,7 @@ export default {
         overflow: auto;
     }
 }
+  .el-cascader-menu {
+        height: 300px;
+    }
 </style>

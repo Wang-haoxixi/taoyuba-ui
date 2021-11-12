@@ -332,7 +332,7 @@ export default {
                 }
                 return tt
               })
-              this.chinaMap(this.mapProvice)
+              // this.chinaMap(this.mapProvice)
             })
           })
           }else{
@@ -354,7 +354,7 @@ export default {
                 tt.name = tt.name.replace(reg,'')
                 return tt
               })
-              this.chinaMap(this.mapProvice)
+              // this.chinaMap(this.mapProvice)LocaleProvider
           }
     })
     },

@@ -1,4 +1,5 @@
 <template>
+<!-- 网签合同新增 -->
   <div class="contract">
     <basic-container id="pdfDom">
       <page-header :title="getTitle"></page-header>
@@ -1003,7 +1004,9 @@ export default {
       this.$emit('onGoBack')
     },
     handleGo () {
+      // this.$router.push({ path: '/crew/htgl/contract_admin'})
       this.$router.go(-1)
+      // this.$emit('onGoBack')
     },
     shipNameChange (name) {     
       if (typeof name === 'object') {      
@@ -1374,8 +1377,11 @@ export default {
              if (!result.join('')) {
             AddTybcontractDraft(this.formData,true).then(()=>{
             this.$message.success('保存成功！')
-            that.$router.go(-1)
-            // that.$emit('onGoBack')
+            if(that.type == 'add' && that.akk == false){
+              that.$router.go(-1)
+            }else{
+              that.$router.push('tybcontract_draft')
+            }
             }).catch(err=>{
                console.log(err)
               this.$message.error('保存失败,请联系管理员!')
@@ -1468,7 +1474,11 @@ export default {
                     // this.$emit('onGoBack')
                     addContract(this.formData).then(()=>{
                       this.$message.success('保存成功！')
-                      that.$router.go(-1)
+                      if(that.type == 'add' && that.akk == false){
+                        that.$router.go(-1)
+                      }else{
+                        that.$emit('onGoBack')
+                      }
                     }).catch(err=>{
                       console.log(err)
                       this.$message.error('新增失败,请联系管理员!')
@@ -1488,7 +1498,11 @@ export default {
           } else if (this.type === 'edit') {
               updateContract(this.formData).then(() =>{
               this.$message.success('修改成功！')
-              this.$emit('onGoBack')
+              if(that.type == 'add' && that.akk == false){
+                  that.$router.go(-1)
+                }else{
+                  that.$emit('onGoBack')
+                }
               }).catch(() => {
                 this.$message.error('修改失败！')
               })

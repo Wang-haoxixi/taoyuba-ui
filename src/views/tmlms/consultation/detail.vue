@@ -262,6 +262,7 @@ export default {
     sumbit () {
       // 解决有的时候地图插件的信息没有赋值  手动赋值下
       this.form.address = document.getElementById('tipinput').value
+      // console.log( this.form.address )
       this.$refs['form'].validate((valid) => {
         if (valid) {
           // 进行一系列的判断 和为了给后端的数据格式 进行转化 

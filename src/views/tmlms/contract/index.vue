@@ -33,7 +33,7 @@ export default {
       this.type = 'view'
       this.currentComponet = 'Detail'
     },                                
-    handleGoBack () {                                       
+    handleGoBack () {   
       this.record = ''
       this.type = ''
       this.currentComponet = 'List'

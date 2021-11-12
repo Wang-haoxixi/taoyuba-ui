@@ -113,7 +113,7 @@ export default {
       })
     },
     // 获取子组件数据
-    setData (val) {     
+    setData (val) {    
       this.tybvillage.shiplist = val
     },
     changeval (data) {

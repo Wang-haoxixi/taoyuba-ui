@@ -23,7 +23,7 @@
           <template slot-scope="scope">
             <operation-wrapper>
               <!-- <iep-button size="mini" plain v-if="!(scope.row.showbtn==1)" @click="handleEdit(scope.row.idcard)">编辑</iep-button> -->
-              <iep-button size="mini" plain v-if="scope.$index !== 0 && scope.row.isEdit" @click="handleEdit(scope.row.idcard)">编辑</iep-button>
+              <iep-button size="mini" plain v-if="scope.row.isEdit" @click="handleEdit(scope.row.idcard)">编辑</iep-button>
               <iep-button size="mini" plain @click="handleView(scope.row.idcard)">查看</iep-button>
               <!-- <iep-button size="mini" plain @click="handleDelete(scope.row.id)">删除</iep-button>     -->
             </operation-wrapper>
@@ -69,6 +69,7 @@ export default {
     getCrewInfo (idcard, row) {
       getCrew({idcard: idcard}).then(({ data }) => {
         if (data.code === 0) {
+          console.log(data)
           if (data.data.records.length > 0) {
             this.$set(row, 'isEdit', true)
             // row.isEdit = true
@@ -104,6 +105,7 @@ export default {
     async loadPage () { 
       let shipId = this.$route.params.shipId
       let shipowner = await getShipByShipId(this.$route.params.shipId)
+      console.log(shipowner)
       this.owner.address = shipowner.data.data.address
       this.owner.phone = shipowner.data.data.mobile
       this.owner.idcard = shipowner.data.data.shipownerIdcard
@@ -111,6 +113,8 @@ export default {
       this.owner.realName = shipowner.data.data.shipowner
       this.owner.shipId = shipId
       this.owner.showbtn = 1
+      // TODO:判断持证人是否为船员，如果是则为true，可以编辑
+      // this.owner.isEdit = true
       getHoldersByShip(shipId).then(res=>{
         let alldata=[]
         alldata[0] = this.owner
@@ -124,10 +128,8 @@ export default {
         }      
         alldata[0].realName = alldata[0].realName + '(持证人)'
         this.pagedTable = alldata
-        this.pagedTable.forEach(async (item, index) => {
-          if (index !== 0) {
+        this.pagedTable.forEach(async (item) => {
             await this.getCrewInfo(item.idcard, item)
-          }
         })
         // console.log(this.pagedTable)
       })

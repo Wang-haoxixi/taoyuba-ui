@@ -62,7 +62,7 @@
           :data="shipownerList"
           stripe
           style="width: 100%">
-          <el-table-column prop="realName" label="姓名" width="200">
+          <el-table-column prop="realName" label="姓名" width="150">
             <template slot-scope="scope">
              <el-popover trigger="hover" placement="top" v-if="scope.row.idcard == '' || scope.row.phone == '' || checIdCard(scope.row.idcard) || checkPhone(scope.row.phone)">
                 <p v-if="scope.row.idcard == ''|| checIdCard(scope.row.idcard)">身份证缺失或有误</p>
@@ -232,32 +232,32 @@ export default {
           {
             text: '用工状态',
             value: 'workStatus',
-            css: '140',
+            css: '150',
           },
           {
             text: '当前职位',
             value: 'positionId',
             dictName: 'tyb_resume_position',
             type: 'dictGroup',
-            css: '200',
+            css: '150',
           },
           {
             text: '证书职位',
             value: 'certTitle',
             dictName: 'tyb_crew_cert_title',
             type: 'dictGroup',
-            css: '200',
+            css: '150',
           },
           {
             text: '证书日期',
             value: 'certDateIssue',
-            css: '200',
+            css: '150',
           },
           {
             text: '户籍',
             value: 'provinceId',
             type:'province',
-            css: '100',
+            css: '150',
           },
         ],
       },
