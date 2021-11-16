@@ -37,6 +37,7 @@ export default {
         this.pagination = { current, size, total }
       }
       this.pagedTable = records.map(fn)
+      // console.log(this.pagedTable)
       this.isLoadTable = false
       return data.data
     },

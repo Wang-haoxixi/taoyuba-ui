@@ -31,9 +31,9 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button v-if="hrms_book_edit" type="warning" size="mini" @click="handleEdit(scope.row.id)" plain>编辑
+              <el-button v-if="hrms_book_edit" type="default" size="mini" @click="handleEdit(scope.row.id)" plain>编辑
               </el-button>
-              <el-button v-if="hrms_book_del" icon="el-icon-delete" size="mini" @click="handleDelete(scope.row.id)">
+              <el-button v-if="hrms_book_del" type="warning" icon="el-icon-delete" size="mini" @click="handleDelete(scope.row.id)">
               </el-button>
             </template>
           </el-table-column>

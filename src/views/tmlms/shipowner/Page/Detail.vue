@@ -112,7 +112,7 @@
         </el-form>
         <div style="text-align:center">
           <el-button @click="save" v-if="!$route.query.see">提交</el-button>
-          <el-button @click="$router.push({name: 'Shipowner'})">返回</el-button>
+          <el-button @click="$router.go(-1)">返回</el-button>
           <el-button v-if="manager" @click="collect">数据读取</el-button>
         </div>
     </basic-container>
@@ -268,7 +268,10 @@ export default {
             if(this.$route.query.edit){
               // let data = JSON.parse(JSON.stringify(shipowner))
               let data = shipowner
-              data.villageId = data.villageId[data.villageId.length-1]
+              console.log(data)
+              if(data.villageId){
+                data.villageId = data.villageId[data.villageId.length-1]
+              }
                // 用户调用这个界面的时候 需要传入ID
               if(this.$route.query.userId){
                 type = 2
@@ -279,7 +282,7 @@ export default {
                     message: res.data.msg,
                     type: 'success',
                   })
-                 this.$router.push({name: 'Shipowner'})
+                 this.$router.go(-1)
               }).catch(err=>{
                 this.$message.error(err.message)
               })
@@ -297,7 +300,7 @@ export default {
                     message: res.data.msg,
                     type: 'success',
                   })
-                  this.$router.push({name: 'Shipowner'})
+                  this.$router.go(-1)
               }).catch(err=>{
                 this.$message.error(err.message)
               })

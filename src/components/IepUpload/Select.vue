@@ -88,7 +88,7 @@ export default {
       this.dialogShow = false
     },
     handleFinishAvatar (files) {
-      console.log(files)
+      // console.log(files)
       this.src = files
       this.$emit('input', files)
       this.dialogShow = false
@@ -99,7 +99,7 @@ export default {
   },
   created () {
     this.src = this.fileName
-    console.log(this.fileName)
+    // console.log(this.fileName)
   },
 }
 </script>

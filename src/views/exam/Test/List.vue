@@ -75,7 +75,7 @@ export default {
   mixins: [mixins, queryMixin],
   data () {
     return {
-      pagedTable: [],
+      // pagedTable: [],
       columnsMap,
       permissionAll: false,
       permissionAdd: false,
@@ -135,8 +135,6 @@ export default {
       this.permissionView = this.permissions['exam_library_view']
     },
     handleSelectionChange (val) {
-      console.log(12)
-      console.log(val)
       this.multipleSelection = val.map(m => m.id)
     },
     loadPage (param = this.params) {

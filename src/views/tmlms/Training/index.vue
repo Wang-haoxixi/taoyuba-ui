@@ -36,11 +36,11 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button plain type="warning" size="small" @click="handleView(scope.row.userId)">查看
+              <el-button plain type="default" size="small" @click="handleView(scope.row.userId)">查看
               </el-button>
               <el-button plain size="small" @click="handleEdit(scope.row.userId)">编辑
               </el-button>
-              <el-button plain icon="el-icon-delete" size="small" @click="handleDel(scope.row.userId)">
+              <el-button type="warning" icon="el-icon-delete" size="small" @click="handleDel(scope.row.userId)">
               </el-button>
             </template>
           </el-table-column>

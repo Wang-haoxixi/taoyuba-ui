@@ -30,12 +30,14 @@
             :key="index"
             :prop="item.value"
             :label="item.text"
+            :width="item.width"
           >
           </el-table-column>
           <el-table-column
             prop="status"
             label="审核操作"
             v-if="smdj"
+            width="200"
           >
           <!-- <template slot-scope="scope">
             <div>
@@ -64,6 +66,7 @@
             prop="status"
             label="审核状态"
             v-if="smdj"
+            width="200"
           >
           <template slot-scope="scope">
             {{ scope.row.status | typeFilter}}
@@ -122,10 +125,12 @@ export default {
           {
             text: '姓名',
             value: 'realName',
+            width:200,
           },
           {
             text: '身份证号码',
             value: 'idcard',
+            width:300,
           },
           {
             text: '联系地址',
@@ -134,6 +139,7 @@ export default {
           {
             text: '联系电话',
             value: 'phone',
+            width:300,
           },
         ],
       },
@@ -207,11 +213,16 @@ export default {
           type: 'warning',
         }).then(() => {
           deleteShipowner(id).then(res=>{
-            this.$message({
+            // console.log(res)
+            if(res.data.code == 0){
+              this.$message({
               type: 'success',
-              message: res.data.msg,
+              message: '删除成功',
             })
             this.getData()
+            }else{
+              this.$message.error(res.data.msg)
+            }
           }).catch(err=>{
             this.$message.error(err.data.msg)
           })
@@ -260,7 +271,11 @@ export default {
   computed: {   
       //区分实名登记和会员管理页面
       smdj () {
-            return  this.$route.path.indexOf('//') > 5
+        // console.log(this.$route.path.indexOf('admin'))
+          this.getQuery()
+          this.getData()
+          this.isManager()
+          return  this.$route.path.indexOf('admin') >0
       },
   },
   created () {            

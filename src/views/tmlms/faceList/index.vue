@@ -91,10 +91,8 @@
             <template slot-scope="scope">
               <el-button size="mini" @click="handleView(scope.row.id)" v-if="!isSelect">编辑
               </el-button>
-              <span v-if="!isSelect">
-                <el-button size="mini" @click="handleDel(scope.row.faceToken)" v-if="roleId.indexOf(1) !== -1 || roleId.indexOf(111) !== -1">删除
-                </el-button>
-              </span>
+              <el-button size="mini" @click="handleDel(scope.row.faceToken)" v-if="!isSelect && (roleId.indexOf(1) !== -1 || roleId.indexOf(111) !== -1)">删除
+              </el-button>
               <el-button size="mini" @click="handleSelect(scope.row)" v-if="!isSelect">关联渔船
               </el-button>
               <el-button size="mini" @click="selectRow(scope.row)" v-if="isSelect">选择

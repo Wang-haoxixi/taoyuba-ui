@@ -154,6 +154,7 @@ export default {
         phone: '',
         status: '',
         shipName: '',
+        sourceType:2,
         // timeLists: '',
       },
       exportParams: {

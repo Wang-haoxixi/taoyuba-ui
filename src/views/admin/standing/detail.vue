@@ -79,14 +79,14 @@ export default {
         if (valid) {
           let form = JSON.parse(JSON.stringify(this.form))
             addColumn(form).then(res=>{
-              console.log(res)
+              // console.log(res)
               if(res.data.code === 0){
                 this.$message.success('操作成功!')
                 this.$emit('back')
               }
             })
         } else {
-          console.log('error submit!!')
+          // console.log('error submit!!')
           return false
         }
       })

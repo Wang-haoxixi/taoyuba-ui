@@ -4,8 +4,8 @@
       <page-header title="船老大招聘"></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
-          <iep-button @click="loadPage()" type="primary">刷新</iep-button>
+          <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus">新增</iep-button>
+          <iep-button @click="loadPage()" type="default">刷新</iep-button>
         </template>
         <template slot="right">
           <operation-search @search-page="searchPage" advance-search :prop="searchData">
@@ -16,9 +16,9 @@
         <el-table-column prop="operation" label="操作" width="220">
           <template slot-scope="scope">
             <operation-wrapper>
-              <iep-button type="warning" plain @click="handleEdit(scope.row)">编辑</iep-button>
+              <iep-button type="default" plain @click="handleEdit(scope.row)">编辑</iep-button>
               <!-- <iep-button @click="handleDetail(scope.row)">查看</iep-button> -->
-              <iep-button type="default" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
+              <iep-button type="warning" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
             </operation-wrapper>
           </template>
         </el-table-column>

@@ -263,7 +263,7 @@ export default {
       if(column.label == '姓名'){
         // console.log(row.signStatus)
         if(row.signStatus==0 || row.workStatus == '上船，未签合同' || row.idcard == '' || checIdCard(row.idcard) ||row.phone == ''|| checkPhone(row.phone) ){
-          console.log(row)
+          // console.log(row)
           return 'color:red'
         }
       }

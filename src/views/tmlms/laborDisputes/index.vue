@@ -42,7 +42,7 @@
       <el-table-column
         prop="disputeReason"
         label="纠纷原因"
-        width="180">
+        >
         <template slot-scope="scope">
           <span>{{getLabel(scope.row.disputeReason, maps.disputeReason)}}</span>
         </template>

@@ -48,10 +48,10 @@
         <el-table-column prop="operation" label="操作" width="220">
           <template slot-scope="scope">
             <operation-wrapper>
-              <iep-button type="warning" @click="handleEdit(scope.row)" plain>编辑</iep-button>
+              <iep-button type="default" @click="handleEdit(scope.row)" plain>编辑</iep-button>
               <!-- <iep-button @click="handlePerson(scope.row, scope.index)">人员</iep-button> -->
               <!-- <iep-button v-if="scope.row.status === 1" type="default" @click="handleReviewDialog(scope.row, scope.index)">审核</iep-button> -->
-              <iep-button @click="handleDeleteById(scope.row)">删除</iep-button>
+              <iep-button type="warning" @click="handleDeleteById(scope.row)">删除</iep-button>
             </operation-wrapper>
           </template>
         </el-table-column>

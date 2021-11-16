@@ -195,7 +195,7 @@ export default {
         name: val.id.toString(),
         path: val.path,
       }
-      console.log(tabObj)
+      // console.log(tabObj)
       if (this.editableTabs.length === 0) {
         this.editableTabs.push(tabObj)
         this.editableTabsValue = tabObj.name

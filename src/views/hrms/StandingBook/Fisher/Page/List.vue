@@ -180,7 +180,7 @@
 <script>
 import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
 // import { countCrew } from '@/api/tmlms/boatMan/index'
-import { getVillageShipList,changeShip,exportShipExcel, exportShipNameExcel,exportContractModel,getFixOrgIds,changeOrgIds,exportRecord } from '@/api/ships'
+import { getVillageShipListV2,changeShip,exportShipExcel, exportShipNameExcel,exportContractModel,getFixOrgIds,changeOrgIds,exportRecord } from '@/api/ships'
 // import { getVillageShipList } from '@/api/ships'
 import prots from './Prot.vue'
 import archives from './Archives.vue'
@@ -484,7 +484,7 @@ export default {
       })
     },
     getData () {
-      getVillageShipList(this.params).then(data => {
+      getVillageShipListV2(this.params).then(data => {
         // this.pagedTable =  JSON.parse(JSON.stringify(data.data.data.records))
         data.data.data.records.forEach(async (v) => {
           // v.countCrews = ''
@@ -540,6 +540,7 @@ export default {
       })
     },
     handleAllCrew (shipId,shipName, row) {
+      // console.log('row',row)
       sessionStorage.setItem('hdkRow', JSON.stringify(row)),
       this.$router.push({       
         path: `/hrms_spa/ship_allcrew/${shipId}`, 

@@ -130,6 +130,14 @@ export function getVillageShipList (params) {
       params: params,
   })
 }
+
+export function getVillageShipListV2 (params) {
+  return request({
+      url: `${prefixUrl}/newpageV2`,
+      method: 'get',
+      params: params,
+  })
+}
 export function getShipCrew (params) {
   return request({
       url: `${prefixUrl}/page`,

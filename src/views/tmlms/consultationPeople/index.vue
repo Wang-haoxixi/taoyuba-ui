@@ -36,16 +36,21 @@
           <el-table-column
             prop="realName"
             label="姓名"
+            width="200"
           >
           </el-table-column>
           <el-table-column
             prop="phone"
             label="手机号"
+            width="300"
+
           >
           </el-table-column>
           <el-table-column
             prop="userType"
             label="角色"
+            width="100"
+
           >
             <template slot-scope="scope">
               <div>{{ scope.row.userType === 0 ? '船东' : scope.row.userType === 1 ? '职务船员' : '渔船监护人'  }}</div>
@@ -54,13 +59,13 @@
           <el-table-column
             prop="signInTime"
             label="签到时间"
-            width="180"
+            width="300"
           >
           </el-table-column>
           <el-table-column
             prop="signOutTime"
             label="签退时间"
-            width="180"
+            width="300"
           >
           </el-table-column>
           <el-table-column

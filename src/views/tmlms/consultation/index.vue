@@ -4,7 +4,7 @@
       <page-header title="培训咨询管理"></page-header>
       <div class="shipowner_title">
         <el-button @click="getData" type="default" size="small">刷新</el-button>
-        <el-button @click="add" type="default" size="small">新增</el-button>
+        <el-button @click="add" type="primary" size="small">新增</el-button>
         <div style="float:right">
           <span style="width:120px"><el-input v-model.trim="params.meetName" placeholder="会议标题" size="small" clearable></el-input></span>
           <span style="width:120px">

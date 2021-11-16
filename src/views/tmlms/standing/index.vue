@@ -4,7 +4,7 @@
       <page-header title="电子台账管理"></page-header>
       <div class="shipowner_title">
         <el-button @click="getData" type="default" size="small">刷新</el-button>
-        <el-button @click="add" type="default" size="small">新增</el-button>
+        <el-button @click="add" type="primary" size="small">新增</el-button>
         <div style="float:right">
           <span style="width:120px" v-if="roleId.indexOf(1) !== -1 || roleId.indexOf(111) !== -1">
               <el-select v-model="params.userId" filterable placeholder="请选择" size="small" clearable>

@@ -701,8 +701,8 @@ export default {
     removeBirthTimeFormat (time) {
       return time.split(' ')[0]
     },
-    isShowDeleteBtn (data) {
-      console.log(data)
+    isShowDeleteBtn () {
+      // console.log(data)
       if (this.$route.query.edit) {
       //   let status = true
       //   let arr = ['certNo', 'certType', 'certLevel', 'certTitle', 'certDateIssue', 'certDateExpire', 'certFile']
@@ -1261,6 +1261,7 @@ export default {
   },
   // components: { InlineFormTable },
   created () {
+    console.log(this.$route.query)
     this.mlms_submit_radio = this.permissions['mlms_submit_radio']
     getArea(0).then(({ data }) => {
       this.province = data.data
@@ -1299,10 +1300,10 @@ export default {
       // this.CertList.push(data.certPhoto)
       // console.log(this.frontList)
       // // 拿到ID 同步获取地址和选中的地址
-      let a = await this.choseProvince(data.provinceId)
-      let b = await this.choseCity(data.cityId) 
-      console.log(a)
-      console.log(b)
+      // let a = await this.choseProvince(data.provinceId)
+      // let b = await this.choseCity(data.cityId) 
+      // console.log(a)
+      // console.log(b)
       if(data.certList) {
         let id = 0
         data.certList.forEach(item => {

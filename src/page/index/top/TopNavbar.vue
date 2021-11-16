@@ -80,7 +80,7 @@ export default {
       }
     },
     open (name) {
-      console.log(name)
+      // console.log(name)
       if(name === 'index') {
         this.$router.push({ path: '/' })
         // window.open('https://www.taoyu58.com/')
@@ -113,14 +113,14 @@ export default {
         const { href } = this.$router.resolve({
           name: 'dataStatistics',
         })
-        console.log('href', href)
+        // console.log('href', href)
         window.open(href, '_blank')
       }
       if (name === 'oneStatistics') {
         const { href } = this.$router.resolve({
           name: 'oneStatistics',
         })
-        console.log('href', href)
+        // console.log('href', href)
         window.open(href, '_blank')
       }
     },

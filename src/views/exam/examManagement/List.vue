@@ -109,8 +109,8 @@ export default {
     // },
 
     loadPage (param=this.params) {
-      console.log(param)
-      this.pagedTable=this.loadTable(param, examList)
+      // console.log(param)
+      this.loadTable(param, examList)
     },
     getParamData () {
       this.params.examName = this.params.examName.replace(/\s*/g,'')

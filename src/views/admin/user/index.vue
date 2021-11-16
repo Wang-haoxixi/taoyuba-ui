@@ -20,8 +20,8 @@
         <el-table-column prop="operation" label="操作" width="220">   
           <template slot-scope="scope">
             <operation-wrapper>
-              <iep-button type="warning" @click="handleEdit(scope.row)" plain>编辑</iep-button>         
-              <iep-button @click="handleResetPass(scope.row)" plain>重置密码</iep-button>                          
+              <iep-button type="default" @click="handleEdit(scope.row)" plain>编辑</iep-button>         
+              <iep-button type="warning" @click="handleResetPass(scope.row)" plain>重置密码</iep-button>                          
             </operation-wrapper>              
           </template>
         </el-table-column>              

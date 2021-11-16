@@ -78,7 +78,7 @@ export default {
       this.getList(id)
       this.posId = id
       this.$nextTick(() => {
-        console.log('ref', this.$refs.adTable)
+        // console.log('ref', this.$refs.adTable)
         this.$refs.adTable.getList()
       })
     }

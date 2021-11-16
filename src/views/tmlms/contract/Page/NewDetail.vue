@@ -729,8 +729,6 @@ export default {
     // clearInterval(this.timer)
   },
   created () {
-    // console.log(this.record)
-    // console.log( this.$route)
     if (this.record) {
       this.getList()
     }else if(this.$route.query.idcard){
@@ -738,8 +736,8 @@ export default {
         this.type = 'see'
       }
       this.getListByidcard()
-      console.log('type')
-      console.log(this.type)
+      // console.log('type')
+      // console.log(this.type)
     }
     if(this.$route.query.add){
       this.formData.employeeIdcard=this.$route.query.hdkId
@@ -747,6 +745,7 @@ export default {
       this.refreshShipName(JSON.parse(sessionStorage.getItem('hdkRow')))
       this.type='add'
       this.akk=false
+      // console.log('type',this.type)
     }
         // this.timer = setInterval(this.handleSaveCaoGao,15000)
 
@@ -864,6 +863,7 @@ export default {
   },
   computed: {
     getTitle () {
+      // console.log(this.type)
       if (this.type === 'add') {
         return '合同新增'
       } else if (this.type === 'edit') {
@@ -1016,7 +1016,7 @@ export default {
       }
       // console.log(name)
       if (name.activityType!=''){
-        // console.log(this.dictGroup['tyb_resume_worktype'][name.workMode2])
+        // console.log(this.dictGroup['tyb_resume_worktype'][name.activityType])
         this.formData.activityType= this.dictGroup['tyb_resume_worktype'][name.activityType].value
       // console.log(this.formData.workMode)
       }
@@ -1039,7 +1039,7 @@ export default {
         this.formData.shipName = name.shipName
         this.employer =true
          if (name.activityType!=''){
-        // console.log(this.dictGroup['tyb_resume_worktype'][name.workMode2])
+        // console.log(this.dictGroup['tyb_resume_worktype'].indexOf(name.activityType))
         this.formData.activityType= this.dictGroup['tyb_resume_worktype'][name.activityType].value
       // console.log(this.formData.workMode)
       }

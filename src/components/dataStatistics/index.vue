@@ -343,7 +343,7 @@ export default {
     this.drawLine()
   },
   created (){
-    console.log(this.dictGroup['tyb_resume_position'])
+    // console.log(this.dictGroup['tyb_resume_position'])
     this.changeOrg(this.areaValue)
     this.positionDicMap = this.positionList
     // this.positionDicMap = this.positionDicMap.concat(this.dictGroup['tyb_resume_position'])
@@ -411,7 +411,7 @@ export default {
       let result = this.positionDicMap.filter((item) => {
         return item.value === val
       })
-      console.log(result)
+      // console.log(result)
       if (this.villageId) {
         if (result.length>0 && result[0].value !== '') {
           this.contractTitle = result[0].label

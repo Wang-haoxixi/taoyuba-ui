@@ -55,6 +55,7 @@ export default {
       dictsMap,
       columnsMap,
       searchData: 'realName',
+      loading:false,
     }
   },
   created () {
