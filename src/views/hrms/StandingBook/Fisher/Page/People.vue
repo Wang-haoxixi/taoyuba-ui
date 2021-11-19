@@ -8,21 +8,33 @@
             prop="name"
             label="船员名称"
           >
+           <template slot-scope="scope">
+                {{scope.row.name?scope.row.name:'--'}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="duty"
             label="船员职务"
           >
+           <template slot-scope="scope">
+                {{scope.row.duty?scope.row.duty:'--'}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="cardNum"
             label="船员身份证号"
           >
+           <template slot-scope="scope">
+                {{scope.row.cardNum?scope.row.cardNum:'--'}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="smNum"
             label="船员的船员证号"
           >
+           <template slot-scope="scope">
+                {{scope.row.smNum?scope.row.smNum:'--'}}
+            </template>
           </el-table-column>
     </el-table>
     <div style="text-align:center;margin-top: 30px;">

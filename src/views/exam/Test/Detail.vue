@@ -82,7 +82,7 @@
               <iep-input-area v-model="form.articleContent"></iep-input-area>
             </iep-form-item> -->
             <el-row>
-            <el-form-item label="题目：" prop="title">
+            <el-form-item label="题目" prop="title">
               <el-input  type="textarea" v-model="form.title" placeholder="请输入内容"></el-input>
             </el-form-item>
             </el-row>
@@ -111,10 +111,10 @@
                 <el-button @click="addItem" v-if="form.type!='GAPFILLING' && form.type!='ESSAYQUESTION'">添加选项</el-button>
               </el-form-item>
             </el-row>
-            <el-form-item label="答案：" prop="answer">
+            <el-form-item label="答案" prop="answer">
               <el-input  type="textarea" v-model="form.answer" maxlength="500" show-word-limit placeholder="请输入内容"></el-input>
             </el-form-item>
-            <el-form-item label="上传图片：">
+            <el-form-item label="上传图片">
               <el-upload
                 class="avatar-uploader"
                 action="/api/admin/file/upload/avatar"

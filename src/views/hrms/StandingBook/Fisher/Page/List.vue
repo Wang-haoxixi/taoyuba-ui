@@ -1,4 +1,5 @@
 <template>
+<!-- 台账/一船一档 -->
   <div>
     <basic-container v-if="prot && archives">
       <page-header title="一船一档"></page-header>
@@ -63,6 +64,9 @@
           :prop="item.value"  
           :label="item.text"
         >
+        <template slot-scope="scope">
+          {{scope.row[item.value]?scope.row[item.value]:'--'}}
+        </template>
           </el-table-column>
           <el-table-column prop="operation" label="操作" width="180" v-if="!roles.includes(115)">
           <template slot-scope="scope">

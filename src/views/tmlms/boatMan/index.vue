@@ -1,8 +1,8 @@
 <template>
+<!--船员/实名登记/船员登记 -->
   <div class="contract-box">
     <basic-container>
       <div class="shipowner_title">
-        
         <el-button type="primary" size="small" @click="addShipowner" v-if="manager">新增</el-button>
         <el-button v-if="manager"  type="default" size="small" @click="exportInfo">导出信息</el-button>
         <!-- <el-upload 
@@ -18,8 +18,7 @@
 </el-upload> -->
       
         <el-button @click="handleFresh" type="default" size="small">刷新</el-button>
-        
-        <div style="float:right">
+        <div style="float:right;display:flex;align-items:center">
           <span style="width:120px"><el-input v-model.trim="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
           <span style="width:120px"><el-input v-model.trim="params.idcard" placeholder="身份证" size="small" clearable></el-input></span>
           <span style="width:120px"><el-input v-model.trim="params.phone" placeholder="联系电话" size="small" clearable></el-input></span>
@@ -68,11 +67,11 @@
                 <p v-if="scope.row.idcard == ''|| checIdCard(scope.row.idcard)">身份证缺失或有误</p>
                 <p v-if="scope.row.phone == ''|| checkPhone(scope.row.phone)">联系方式缺失或有误</p>
                 <div slot="reference" class="name-wrapper">
-                  {{ scope.row.realName }}
+                  {{ scope.row.realName?scope.row.realName:'--' }}
                 </div>
               </el-popover>
               <div v-else>
-                {{ scope.row.realName }}
+                {{ scope.row.realName?scope.row.realName:'--' }}
               </div>
             </template>
           </el-table-column>
@@ -428,22 +427,22 @@ export default {
         let val = keyBy(this.provinces, 'value')
         // console.log(val)
         if (!Object.keys(val).length) {
-          return ''
+          return '--'
         }else if(keyBy(this.provinces, 'value') && keyBy(this.provinces, 'value')[scope.row[item.value]]){
           return keyBy(this.provinces, 'value')[scope.row[item.value]].label
         }
       }else{
-        return '暂无'
+        return '--'
       }
     },
     //字典
     dictJS (item, scope) {
       // console.log('字典', item, scope)
       if(scope.row[item.value]){
-        if(scope.row[item.value] === '0') return '暂无'
+        if(scope.row[item.value] === '0') return '--'
         return keyBy(this.dictGroup[item.dictName], 'value')[scope.row[item.value]].label
       }else{
-        return '暂无'
+        return '--'
       }
     },
     // 分页

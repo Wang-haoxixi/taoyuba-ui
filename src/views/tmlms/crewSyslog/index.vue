@@ -236,16 +236,16 @@ export default {
       if(scope.row[item.value]){
       return keyBy(this.provinces, 'value')[scope.row[item.value]].label
       }else{
-        return '暂无'
+        return '--'
       }
     },
     //字典
     dictJS (item, scope) {
       if(scope.row[item.value]){
-          if(scope.row[item.value] === '0')  return '暂无'
+          if(scope.row[item.value] === '0')  return '--'
       return keyBy(this.dictGroup[item.dictName], 'value')[scope.row[item.value]].label
       }else{
-        return '暂无'
+        return '--'
       }
     },
     // 分页

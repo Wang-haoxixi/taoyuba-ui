@@ -1016,6 +1016,7 @@ export default {
             })
             //地图数据
             this.mapProvice = JSON.parse(JSON.stringify(this.province))
+            // console.log(this.mapProvice)
             let reg = /省|市/g
             let reg1 = /自治区/
             this.mapProvice = this.mapProvice.map(tt=>{
@@ -1229,13 +1230,20 @@ export default {
         tooltip : {
           trigger: 'item',
         },
+        // legend: {
+        //   orient: 'horizontal',//图例的排列方向
+        //   textStyle: {color:'#fff'},
+        //   x:'top',//图例的位置
+        //   y:'20',
+        //   data:['全国数据'],
+        // },
         legend: {
-          orient: 'horizontal',//图例的排列方向
-          textStyle: {color:'#fff'},
-          x:'top',//图例的位置
-          y:'20',
-          data:['全国数据'],
-        },
+        data: ['疫情高风险区域', '疫情中风险区域', '疫情低风险区域'],
+        textStyle: { color: '#fff'},
+        orient: 'vertical',
+        x: 'left',
+        y: 'top',
+      },
         visualMap: {
             show : true,
             textStyle: {color:'#fff'},
@@ -1247,14 +1255,31 @@ export default {
               {start: 50, end: 99},{start: 1, end: 49},
             ],
             color: ['#5475f5', '#9feaa5', '#85daef','#74e2ca', '#e6ac53', '#9fb5ea'],
+            seriesIndex:0,
           },
+           geo: {
+        top: '10%', //组件距离容器的距离
+        type: 'map',
+        map: 'china',
+        roam: false,
+        enter: [104.114129, 37.550339],
+        itemStyle: {
+          normal: {
+            areaColor: 'rgba(43, 196, 243, 0.42)',
+            borderColor: 'rgba(43, 196, 243, 1)',
+            borderWidth: 1,
+          },
+        },
+        label: {
+          show: true,
+          color: '#FFF',
+        },
+      },
         series : [
           {
             name: '籍贯分布',
             type: 'map',
-            mapType: 'china',
-            roam: false,
-            zoom:1.25,
+            geoIndex: 0,
             label: {
               normal: {
                 show: true,  //省份名称
@@ -1278,6 +1303,80 @@ export default {
             // },
             data:data,
           },
+          {
+          name: '疫情高风险区域',
+          type: 'effectScatter', //设置为散点图
+          coordinateSystem: 'geo',
+          data: [
+            [122.207216, 29.985295],
+            [123.97, 47.33],
+            [120.33, 36.07],
+          ], // series数据内容，将地名转换为对应的经纬度，并提取数值大小
+          //symbolSize:"18",//set fixed point size;
+          //set point size by value
+          symbolSize: 20,
+          visualMap:false,
+          emphasis: {
+            scale: true,
+          },
+          //pointSize:'10',
+          //blurSize:'0',
+          itemStyle: {
+            color: '#9feaa5',
+          },
+          showEffectOn: 'render',
+          rippleEffect: {
+            brushType: 'stroke',
+          },
+          encode: { tooltip: [0, 1] },
+        },
+        {
+          name: '疫情中风险区域',
+          type: 'effectScatter',
+          coordinateSystem: 'geo',
+          data: [
+            [91.11, 29.97],
+            [121.48, 31.22],
+          ], // series数据内容
+          //symbolSize:"18",
+          symbolSize: 20,
+          visualMap:false,
+          emphasis: {
+            scale: true,
+          },
+          //pointSize:'10',
+          //blurSize:'0',
+          itemStyle: {
+            color: '#74e2ca',
+          },
+          showEffectOn: 'render',
+          rippleEffect: {
+            brushType: 'stroke',
+          },
+          encode: { tooltip: [0, 1] },
+        },
+        {
+          name: '疫情低风险区域',
+          type: 'effectScatter',
+          coordinateSystem: 'geo',
+          data: [[115.89, 28.68]], // series数据内容
+          //symbolSize:"18",
+          symbolSize: 20,
+          visualMap:false,
+          emphasis: {
+            scale: true,
+          },
+          //pointSize:'10',
+          //blurSize:'0',
+          itemStyle: {
+            color: '#f66',
+          },
+          showEffectOn: 'render',
+          rippleEffect: {
+            brushType: 'stroke',
+          },
+          encode: { tooltip: [0, 1] },
+        },
         ],
       }
       this.mapChina.setOption(option)

@@ -4,8 +4,8 @@
       <page-header title="试题库"></page-header>
       <operation-container>
         <template slot="left">
-          <iep-button @click="getData" type="primary" size="small">刷新</iep-button>
-          <iep-button size="small" type="primary" icon="el-icon-plus" plain @click="handleAdd">新增</iep-button>
+          <iep-button size="small" @click="getData">刷新</iep-button>
+          <iep-button size="small" @click="handleAdd">新增</iep-button>
           <iep-button size="small" @click="handleDeleteAll">批量删除</iep-button>
           <!-- <el-dropdown size="medium">
             <iep-button size="small" type="default">更多操作<i class="el-icon-arrow-down el-icon--right"></i></iep-button>

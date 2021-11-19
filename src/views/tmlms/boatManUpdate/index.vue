@@ -1,4 +1,5 @@
 <template>
+<!-- 台账/异常数据更新 -->
   <basic-container>
     <page-header title="异常数据更新"></page-header>
     <operation-container>
@@ -34,22 +35,37 @@
         <el-table-column
           prop="realName"
           label="姓名">
+           <template slot-scope="scope">
+                {{scope.row.realName?scope.row.realName:'--'}}
+            </template>
         </el-table-column>
         <el-table-column
           prop="idcard"
           label="身份证号码">
+          <template slot-scope="scope">
+                {{scope.row.idcard?scope.row.idcard:'--'}}
+            </template>
         </el-table-column>
         <el-table-column
           prop="phone"
           label="联系电话">
+          <template slot-scope="scope">
+                {{scope.row.phone?scope.row.phone:'--'}}
+            </template>
         </el-table-column>
         <el-table-column
           prop="birthday"
           label="出生日期">
+          <template slot-scope="scope">
+                {{scope.row.birthday?scope.row.birthday:'--'}}
+            </template>
         </el-table-column>
         <el-table-column
           prop="provinceIdName"
           label="户籍">
+          <template slot-scope="scope">
+                {{scope.row.provinceIdName?scope.row.provinceIdName:'--'}}
+            </template>
         </el-table-column>
          <el-table-column
           label="详情">

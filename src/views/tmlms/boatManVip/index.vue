@@ -1,4 +1,5 @@
 <template>
+<!-- 会员/船员管理 -->
   <div class="contract-box">
     <basic-container>
       <div class="shipowner_title">
@@ -9,7 +10,7 @@
           <span style="width:120px"><el-input v-model="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
           <span style="width:120px"><el-input v-model="params.idcard" placeholder="身份证" size="small" clearable></el-input></span>
           <span style="width:120px"><el-input v-model="params.phone" placeholder="联系电话" size="small" clearable></el-input></span>
-          <span style="width:150px"><el-select v-model="params.certLevel" placeholder="请选择证书等级" size="small">
+          <span style="width:150px"><el-select v-model="params.certLevel" placeholder="请选择证书等级" size="small" clearable>
               <el-option
                 v-for="item in certGrade"
                 :key="item.value"
@@ -18,8 +19,8 @@
               </el-option>
             </el-select>
           </span>
-          <span style="width:150px"><iep-dict-select placeholder="请选择证书职位" v-model="params.certTitle" size="small" dict-name="tyb_crew_cert_title"></iep-dict-select></span>
-          <span style="width:150px"><el-select v-model="params.workStatus" placeholder="请选择用工状态" size="small">
+          <span style="width:150px"><iep-dict-select clearable placeholder="请选择证书职位" v-model="params.certTitle" size="small" dict-name="tyb_crew_cert_title"></iep-dict-select></span>
+          <span style="width:150px"><el-select clearable v-model="params.workStatus" placeholder="请选择用工状态" size="small">
               <el-option
                 v-for="item in workStatus"
                 :key="item.value"
@@ -265,20 +266,20 @@ export default {
         // console.log('keyBy', keyBy(this.provinces, 'value'))
         let val = keyBy(this.provinces, 'value')
         if (!Object.keys(val).length) {
-          return ''
+          return '--'
         }
         return keyBy(this.provinces, 'value')[scope.row[item.value]].label
       }else{
-        return '暂无'
+        return '--'
       }
     },
     //字典
     dictJS (item, scope) {
       if(scope.row[item.value]){
-          if(scope.row[item.value] === '0')  return '暂无'
+          if(scope.row[item.value] === '0')  return '--'
       return keyBy(this.dictGroup[item.dictName], 'value')[scope.row[item.value]].label
       }else{
-        return '暂无'
+        return '--'
       }
     },
     // 分页
@@ -314,6 +315,7 @@ export default {
       this.params.status = 2
       getCrew(this.params).then(res=>{
         this.shipownerList = res.data.data.records
+        console.log(this.shipownerList)
         // this.shipownerList.map(m => {
         //   return m.remark.substring(0, 20)
         // })
@@ -446,9 +448,9 @@ export default {
     if (sessionStorage.getItem('query')) {
       var query = sessionStorage.getItem('query')
       this.params = JSON.parse(query)
-      console.log('aaaa')
+      // console.log('aaaa')
     } else {
-      console.log('bbbb')
+      // console.log('bbbb')
       this.params = {
         current: 1,
         size: 10,

@@ -1,4 +1,5 @@
 <template>
+<!-- 船员/实名登记/职务证书 -->
   <div>
     <basic-container>
 
@@ -20,7 +21,7 @@
     </el-upload>
         </template>
         <template slot="right">
-          <operation-search @search-page="searchPage" advance-search :prop="searchData">
+          <operation-search @search-page="searchPage" :prop="searchData">
           </operation-search>
         </template>
       </operation-container>

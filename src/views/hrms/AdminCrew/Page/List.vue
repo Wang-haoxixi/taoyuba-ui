@@ -7,7 +7,7 @@
           <iep-button @click="handleAdd()" type="primary" icon="el-icon-plus" plain>新增</iep-button>
         </template>
         <template slot="right">
-          <operation-search @search-page="searchPage" advance-search :prop="searchData">
+          <operation-search @search-page="searchPage" :prop="searchData">
           </operation-search>
         </template>
       </operation-container>

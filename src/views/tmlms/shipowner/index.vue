@@ -1,4 +1,5 @@
 <template>
+  <!-- 会员/持证人管理 船员/实名登记/船东登记 -->
   <div class="contract-box">
     <basic-container>
       <div class="shipowner_title">
@@ -32,6 +33,9 @@
             :label="item.text"
             :width="item.width"
           >
+          <template slot-scope="scope">
+            {{scope.row[item.value]?scope.row[item.value]:'--'}}
+          </template>
           </el-table-column>
           <el-table-column
             prop="status"
@@ -286,12 +290,16 @@ export default {
   },
   filters: {
     typeFilter (type) {
-      const typeMap = {
+      if(type){
+        const typeMap = {
         1: '审核中',
         2: '审核通过',
         3: '审核失败',
       }
       return typeMap[type]
+      }else{
+        return '--'
+      }
     },
   },
   watch : {                                   

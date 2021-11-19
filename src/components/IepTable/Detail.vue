@@ -11,7 +11,7 @@ export default {
   computed: {
     content () {
       if (validatenull(this.value)) {
-        return '暂无'
+        return '--'
       } else {
         return this.value
       }

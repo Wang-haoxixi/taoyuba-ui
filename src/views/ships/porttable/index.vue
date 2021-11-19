@@ -1,4 +1,5 @@
 <template>
+  <!-- 渔船/港口坐标管理 -->
   <div>
     <basic-container>
       <page-header title="港口坐标管理"></page-header>
@@ -16,22 +17,22 @@
         <template slot="before-columns">
           <el-table-column label="港口名称" >
             <template slot-scope="scope">
-              <span>{{scope.row.name}}</span>
+              <span>{{scope.row.name?scope.row.name:'--'}}</span>
             </template>
           </el-table-column>
          <el-table-column label="经度" >
             <template slot-scope="scope">
-              <span>{{scope.row.longitude}}</span>
+              <span>{{scope.row.longitude?scope.row.longitude:'--'}}</span>
             </template>
           </el-table-column>
           <el-table-column label="纬度" >
             <template slot-scope="scope">
-              <span>{{scope.row.latitude}}</span>
+              <span>{{scope.row.latitude?scope.row.latitude:'--'}}</span>
             </template>
           </el-table-column>
           <el-table-column label="范围（海里）" >
             <template slot-scope="scope">
-              <span>{{scope.row.distance}}</span>
+              <span>{{scope.row.distance?scope.row.distance:'--'}}</span>
             </template>
           </el-table-column>
           <!-- <el-table-column label="排序">

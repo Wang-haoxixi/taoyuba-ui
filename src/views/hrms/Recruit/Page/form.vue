@@ -2,7 +2,7 @@
   <div class="iep-page-form">
     <basic-container>
       <page-header :title="`${methodName}招聘`" :backOption="backOption"></page-header>
-      <el-form ref="form" :model="form" :rules="rules" label-width="140px" size="small">
+      <el-form ref="form" :model="form" :rules="rules" label-width="140px" size="small" v-show="loading">
         <el-row>
           <el-col :span="12" v-if="manager">
             <el-form-item label="船名：" prop="shipName">
@@ -99,9 +99,11 @@
                 <iep-dict-select v-model="form.workExprience" dict-name="tyb_work_exprience">></iep-dict-select>    
             </el-form-item>
            </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">                          
             <el-form-item label="备注：" prop="remark" v-if="manager">                              
-              <el-input   type="textarea" v-model="form.remark" ></el-input>
+              <el-input :autosize="{ minRows: 4}"  type="textarea" v-model="form.remark" ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -161,6 +163,7 @@ export default {
         },
       ],
       manager: false,
+      loading:false,
       userId: '',
       salaryList: [
         { label: '面议', value: '1' },
@@ -232,6 +235,7 @@ export default {
           this.manager = false
         }
         res.data.data.sysUser.userId
+        this.loading = true
       })
       this.getProvince()
     },

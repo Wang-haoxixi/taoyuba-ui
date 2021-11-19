@@ -1,4 +1,5 @@
 <template>
+<!-- 渔船/经营人管理 -->
   <div>
     <basic-container>
       <page-header title="渔船经营人"></page-header>
@@ -24,12 +25,12 @@
         is-mutiple-selection>
           <el-table-column prop="videoSrc" label="渔船名" width="200">
            <template slot-scope="scope">
-                  <span >{{scope.row.shipName}}</span>
+                  <span >{{scope.row.shipName?scope.row.shipName:'--'}}</span>
             </template>
         </el-table-column>
          <el-table-column prop="bindType" label="类型" width="100">
            <template slot-scope="scope">
-                  <span >{{scope.row.type}}</span>
+                  <span >{{scope.row.type?scope.row.type:'--'}}</span>
             </template>
         </el-table-column>
           <el-table-column prop="shipStatus" label="是否绑定渔船" width="150">

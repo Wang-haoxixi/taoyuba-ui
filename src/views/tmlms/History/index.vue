@@ -4,7 +4,7 @@
       <page-header title="基层浏览记录"></page-header>
       <div class="shipowner_title">
         <!-- <el-button type="primary" size="small" icon="el-icon-edit" @click="addShipowner">新增</el-button> -->
-        <div style="float:right">
+        <div style="float:right;display:flex;align-items:center">
           <span><el-input v-model.trim="params.realName" placeholder="请输入用户名" size="small" clearable></el-input></span>
           <span style="width:240px"><el-date-picker v-model="params.timeLists" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" clearable
             value-format="yyyy-MM-dd" size="small"></el-date-picker>

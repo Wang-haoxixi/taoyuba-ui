@@ -96,7 +96,7 @@
           <iep-input-area v-model="form.articleContent"></iep-input-area>
         </iep-form-item> -->
         <el-row>
-        <el-form-item label="考试说明：" prop="examExplain" v-show="isArticle">
+        <el-form-item label="考试说明" prop="examExplain" v-show="isArticle">
           <iep-froala-editor v-model="form.examExplain"></iep-froala-editor>
         </el-form-item>
         </el-row>

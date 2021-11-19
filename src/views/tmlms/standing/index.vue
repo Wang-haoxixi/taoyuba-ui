@@ -1,11 +1,12 @@
 <template>
+  <!-- 台账/电子台账 -->
   <div class="contract-box">
     <basic-container v-if="detailType">
       <page-header title="电子台账管理"></page-header>
       <div class="shipowner_title">
         <el-button @click="getData" type="default" size="small">刷新</el-button>
-        <el-button @click="add" type="primary" size="small">新增</el-button>
-        <div style="float:right">
+        <el-button @click="add" type="primary" size="small" v-if="relation_ship_add && roleId.indexOf(112) !== -1">新增</el-button>
+        <div style="float:right;display:flex;align-items:center">
           <span style="width:120px" v-if="roleId.indexOf(1) !== -1 || roleId.indexOf(111) !== -1">
               <el-select v-model="params.userId" filterable placeholder="请选择" size="small" clearable>
                 <el-option
@@ -42,25 +43,38 @@
             prop="name"
             label="台账名称"
           >
+           <template slot-scope="scope">
+              {{scope.row.name?scope.row.name:'--'}}
+          </template>
           </el-table-column>
           <el-table-column
             prop="columnName"
             label="类别"
           >
+           <template slot-scope="scope">
+              {{scope.row.columnName?scope.row.columnName:'--'}}
+          </template>
           </el-table-column>
           <el-table-column
             prop="villageName"
             label="基层"
           >
+          <template slot-scope="scope">
+              {{scope.row.villageName?scope.row.villageName:'--'}}
+          </template>
           </el-table-column>
           <el-table-column
             prop="updateTime"
             label="上传时间"
           >
+          <template slot-scope="scope">
+              {{scope.row.updateTime?scope.row.updateTime:'--'}}
+          </template>
           </el-table-column>
-          <el-table-column label="操作"  fixed="right" width="100">
+          <el-table-column label="操作"  fixed="right" width="200">
             <template slot-scope="scope">
-              <div style="text-align:center"><el-button size="mini" @click="handleView(scope.row.id)">编辑</el-button></div>
+              <el-button size="mini" @click="handleEdit(scope.row.id)" v-if="roleId.indexOf(112) !== -1">编辑</el-button>
+              <el-button size="mini" @click="handleView(scope.row.id)">查看</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -75,13 +89,14 @@
         </el-pagination>
       </div>
     </basic-container>
-    <detail v-else ref="detail" @back="detailType = true;getData()"></detail>
+    <detail v-else ref="detail" :disabledStatus="disabledStatus" @back="detailType = true;getData()"></detail>
   </div>
 </template>
 <script>
 import { getPage,getColumnPage } from '@/api/admin/ad.js'
 import { getVillage } from '@/api/tmlms/bvillage/index'
 import detail from './detail.vue'
+import { mapGetters } from 'vuex'
 export default {
   name: 'faceList',
   mixins: [],
@@ -103,6 +118,12 @@ export default {
       id: 0,
       roleId: [],
       optionsList: [],
+      disabledStatus:false,
+      relation_ship_add: false,
+      relation_ship_edit: false,
+      relation_ship_delete: false,
+      relation_ship_export: false,
+      relation_ship_statistics: false,
     }
   },
   created () {
@@ -114,6 +135,18 @@ export default {
     getColumnPage({size: 500}).then(res=>{
       this.optionsList = res.data.data.records
     })
+    this.relation_ship_add = this.permissions['relation_ship_add']
+    this.relation_ship_edit = this.permissions['relation_ship_edit']
+    this.relation_ship_delete = this.permissions['relation_ship_delete']
+    this.relation_ship_export = this.permissions['relation_ship_export']
+    this.relation_ship_statistics = this.permissions['relation_ship_statistics']
+  },
+  computed: {
+    ...mapGetters([
+      'permissions',
+      'roles',
+      'dictGroup',
+    ]),
   },
   methods: {
         // 分页
@@ -122,9 +155,17 @@ export default {
       this.getData()
     },
     getData () {
-      let data = {
-        startTimeStr: this.params.timeLists[0] || '',
-        endTimeStr: this.params.timeLists[1] || '',
+      let data = {}
+      if(this.params.timeLists && this.params.timeLists.length>0){
+        data = {
+                startTimeStr: this.params.timeLists[0],
+                endTimeStr: this.params.timeLists[1],
+              }
+      }else{
+        data = {
+                startTimeStr:'',
+                endTimeStr:'',
+              }
       }
       getPage({...this.params,...this.page,...data}).then(res=>{
         this.faceList = res.data.data.records
@@ -137,12 +178,21 @@ export default {
     },
     add () {
       this.detailType = false
+      this.disabledStatus=false
       this.$nextTick(()=>{
         this.$refs.detail.getDetail()
       })
     },
     handleView (id) {
       this.detailType = false
+      this.disabledStatus=true
+      this.$nextTick(()=>{
+        this.$refs.detail.getDetail(id)
+      })
+    },
+    handleEdit (id) {
+      this.detailType = false
+      this.disabledStatus=false
       this.$nextTick(()=>{
         this.$refs.detail.getDetail(id)
       })

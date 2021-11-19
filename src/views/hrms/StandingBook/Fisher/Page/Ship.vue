@@ -9,11 +9,17 @@
               prop="shipName"
               label="船只名称"
             >
+            <template slot-scope="scope">
+                {{scope.row.shipName?scope.row.shipName:'--'}}
+            </template>
             </el-table-column>
             <el-table-column
               prop="createDate"
               label="进出港时间"
             >
+             <template slot-scope="scope">
+                {{scope.row.createDate?scope.row.createDate:'--'}}
+            </template>
             </el-table-column>
             <el-table-column
               prop="进出港类型"
@@ -28,17 +34,26 @@
               label="港口名称"
               width="180"
             >
+             <template slot-scope="scope">
+                {{scope.row.pointName?scope.row.pointName:'--'}}
+            </template>
             </el-table-column>
             <el-table-column
               prop="number"
               label="进出港总人数"
               width="180"
             >
+             <template slot-scope="scope">
+                {{scope.row.number?scope.row.number:'0'}}
+            </template>
             </el-table-column>
             <el-table-column
               prop="receiveDate"
               label="接受时间"
             >
+             <template slot-scope="scope">
+                {{scope.row.receiveDate?scope.row.receiveDate:'--'}}
+            </template>
             </el-table-column>
             <el-table-column
               label="操作"

@@ -1,4 +1,5 @@
 <template>
+<!-- 船员/面对面教育/人员管理 -->
   <div class="contract-box">
     <basic-container v-if="detailType === 0 ">
       <page-header title="培训人员管理" v-if="!trainMeetId"></page-header>
@@ -7,7 +8,7 @@
         <el-button @click="handleStatistics" type="default" size="small" v-if="!trainMeetId">统计</el-button>
         <el-button @click="signature" type="default" size="small" v-if="!trainMeetId">补签</el-button>
         <el-button @click="getInformation" type="default" size="small">导出信息</el-button>
-        <div style="float:right">
+        <div style="float:right;display:flex;align-items:center">
           <span style="width:120px"><el-input v-model.trim="params.meetName" placeholder="会议标题" size="small" clearable v-if="!trainMeetId"></el-input></span>
           <span style="width:120px"><el-input v-model.trim="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
           <span style="width:120px">
@@ -38,19 +39,23 @@
             label="姓名"
             width="200"
           >
+          <template slot-scope="scope">
+                {{scope.row.realName?scope.row.realName:'--'}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="phone"
             label="手机号"
             width="300"
-
           >
+          <template slot-scope="scope">
+                {{scope.row.phone?scope.row.phone:'--'}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="userType"
             label="角色"
             width="100"
-
           >
             <template slot-scope="scope">
               <div>{{ scope.row.userType === 0 ? '船东' : scope.row.userType === 1 ? '职务船员' : '渔船监护人'  }}</div>
@@ -61,22 +66,34 @@
             label="签到时间"
             width="300"
           >
+          <template slot-scope="scope">
+                {{scope.row.signInTime?scope.row.signInTime:'--'}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="signOutTime"
             label="签退时间"
             width="300"
           >
+          <template slot-scope="scope">
+                {{scope.row.signOutTime?scope.row.signOutTime:'--'}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="meetName"
             label="培训名称"
           >
+          <template slot-scope="scope">
+                {{scope.row.meetName?scope.row.meetName:'--'}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="cooperateNames"
             label="合作社"
           >
+          <template slot-scope="scope">
+                {{scope.row.cooperateNames?scope.row.cooperateNames:'--'}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="sourceType"

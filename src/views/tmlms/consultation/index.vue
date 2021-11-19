@@ -1,11 +1,12 @@
 <template>
+<!-- 船员/面对面教育/咨询管理 -->
   <div class="contract-box">
     <basic-container v-if="detailType">
       <page-header title="培训咨询管理"></page-header>
       <div class="shipowner_title">
         <el-button @click="getData" type="default" size="small">刷新</el-button>
         <el-button @click="add" type="primary" size="small">新增</el-button>
-        <div style="float:right">
+        <div style="float:right;display:flex;align-items:center">
           <span style="width:120px"><el-input v-model.trim="params.meetName" placeholder="会议标题" size="small" clearable></el-input></span>
           <span style="width:120px">
               <el-select v-model="params.cooperateIds" filterable placeholder="请选择" size="small" clearable>
@@ -28,6 +29,9 @@
             prop="meetName"
             label="会议标题"
           >
+          <template slot-scope="scope">
+                {{scope.row.meetName?scope.row.meetName:'--'}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="meetStartTime"
@@ -41,28 +45,43 @@
             prop="address"
             label="培训地点"
           >
+          <template slot-scope="scope">
+                {{scope.row.address?scope.row.address:'--'}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="lecturer"
             label="培训讲师"
           >
+          <template slot-scope="scope">
+                {{scope.row.lecturer?scope.row.lecturer:'--'}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="typeNames"
             label="参会人员"
           >
+          <template slot-scope="scope">
+                {{scope.row.typeNames?scope.row.typeNames:'--'}}
+            </template>
           </el-table-column>
           <el-table-column
           width="180"
             prop="meetStartSignTime"
             label="培训开始时间"
           >
+          <template slot-scope="scope">
+                {{scope.row.meetStartSignTime?scope.row.meetStartSignTime:'--'}}
+            </template>
           </el-table-column>
           <el-table-column
           width="180"
             prop="meetEndSignTime"
             label="培训结束时间"
           >
+          <template slot-scope="scope">
+                {{scope.row.meetEndSignTime?scope.row.meetEndSignTime:'--'}}
+            </template>
           </el-table-column>
           <el-table-column
             prop="二维码"

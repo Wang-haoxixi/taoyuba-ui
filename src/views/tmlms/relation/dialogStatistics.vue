@@ -40,18 +40,24 @@
             prop="village_name"
             width="200px"
             label="基层名">
+             <template slot-scope="scope">
+              {{scope.row.village_name?scope.row.village_name:'--'}}
+          </template>
           </el-table-column>
           <el-table-column
             prop="number"
             width="160px"
             label="联系数量">
             <template slot-scope="scope">
-              <span>联系{{scope.row.number}}艘船</span>
+              <span>联系{{scope.row.number?scope.row.number:0}}艘船</span>
             </template>
           </el-table-column>
           <el-table-column
             prop="shipNames"
             label="渔船名">
+            <template slot-scope="scope">
+              {{scope.row.shipNames?scope.row.shipNames:'--'}}
+          </template>
           </el-table-column>
         </el-table>
         <!-- <template v-if="data.length">

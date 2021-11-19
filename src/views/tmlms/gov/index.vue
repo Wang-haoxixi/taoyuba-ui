@@ -1,4 +1,5 @@
 <template>
+<!-- 会员/主管部门 -->
   <div class="contract-box">
     <basic-container>
       <div class="shipowner_title">
@@ -21,6 +22,9 @@
             :prop="item.value"
             :label="item.text"
           >
+          <template slot-scope="scope">
+              {{scope.row[item.value]?scope.row[item.value]:'--'}}
+          </template>
           </el-table-column>
           <el-table-column label="操作" width="220" fixed="right">
             <template slot-scope="scope">

@@ -46,7 +46,7 @@
               </div>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="onSearch">搜索</el-button>
+              <el-button type="default" @click="onSearch">搜索</el-button>
             </el-form-item>
           </el-form>
         </template>
@@ -64,7 +64,7 @@
             label="基层名">
             <template slot-scope="scope">
               <div @click="getDetail(scope.row)" style="cursor: pointer">
-                {{getVillageLabel(scope.row.village_id)}}
+                {{getVillageLabel(scope.row.village_id)?getVillageLabel(scope.row.village_id):'--'}}
               </div>
             </template>
           </el-table-column>
@@ -100,10 +100,16 @@
           v-if="roles.indexOf(111) !== -1 || roles.indexOf(1) !== -1"
           prop="villageName"
           label="基层名">
+          <template slot-scope="scope">
+              {{scope.row.villageName?scope.row.villageName:'--'}}
+          </template>
         </el-table-column>
         <el-table-column
           prop="shipName"
           label="渔船名">
+           <template slot-scope="scope">
+              {{scope.row.shipName?scope.row.shipName:'--'}}
+          </template>
         </el-table-column>
         <el-table-column
           prop="relationshipType"
@@ -118,7 +124,7 @@
           prop="relationshipReason"
           label="联系事由">
           <template slot-scope="scope">
-            <span>{{scope.row.relationshipReason}}</span>
+            <span>{{scope.row.relationshipReason?scope.row.relationshipReason:'--'}}</span>
             <!-- <span>{{getLabel(map.relationshipReason, scope.row.relationshipReason)}}</span> -->
           </template>
         </el-table-column>
@@ -132,6 +138,9 @@
         <el-table-column
           prop="relationshipTime"
           label="联系时间">
+           <template slot-scope="scope">
+              {{scope.row.relationshipTime?scope.row.relationshipTime:'--'}}
+          </template>
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="290">
           <template slot-scope="scope">
@@ -296,13 +305,17 @@ export default {
       return result
     },
     getWorkModeLabel (value) {
-      let maps = this.dictGroup.tyb_work_mode
       let result = ''
+      if(!value){
+        result= '--'
+      }else{
+         let maps = this.dictGroup.tyb_work_mode
       for (let i = 0, len = maps.length; i < len; i++) {
         if (value === maps[i].value) {
           result = maps[i].label
           break
         }
+      }
       }
       return result
     },

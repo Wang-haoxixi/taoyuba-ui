@@ -46,7 +46,7 @@
               </el-option>
             </el-select>
           </span>
-          <el-button size="small" @click="getParamData">搜索</el-button>
+          <el-button size="small" style="margin-bottom:0px" @click="getParamData">搜索</el-button>
         </template>
       </operation-container>
       <avue-tree-table :option="options" style="margin-top: 20px;" :row-class-name="rowClassName">

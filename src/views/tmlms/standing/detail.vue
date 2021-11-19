@@ -2,7 +2,7 @@
   <div class="contract-box port-detail">
     <page-header title="电子台账栏目" :backOption="backOption"></page-header>
     <basic-container>
-      <el-form ref="form" :model="form" label-width="150px" size="small" :rules="rules">
+      <el-form ref="form" :model="form" label-width="150px" size="small" :rules="rules" :disabled="disabledStatus">
         <el-row :gutter="80">
           <el-col :span="18">
               <el-form-item label="分类：" prop="columnId">
@@ -26,7 +26,7 @@
           </el-col>
           <el-col :span="24">
               <el-form-item label="正文：" >
-                <iep-froala-editor v-model="form.content" :value="form.content"></iep-froala-editor>
+                <iep-froala-editor :disabled="true" v-model="form.content" :value="form.content"></iep-froala-editor>
               </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -48,7 +48,7 @@
         </el-row>
       </el-form>
       <div style="text-align: center;margin: 20px 0;">
-        <el-button @click="sumbit">提交</el-button>
+        <el-button @click="sumbit" :disabled="disabledStatus">提交</el-button>
         <el-button @click="back">返回</el-button>
       </div>
     </basic-container>
@@ -58,6 +58,12 @@
 import { addColumnNew,getDetail,getColumnPage } from '@/api/admin/ad.js'
 export default {
   mixins: [],
+  props: {
+    disabledStatus: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data () {
     return {
       form: {
