@@ -3,22 +3,35 @@
         <div style="margin-top: 21px">
               <el-table
                 :data="tableData"
-                style="width: 100%">
+                style="width: 100%"
+                :header-cell-style="headerStyle">
                 <el-table-column
                     prop="updateTime"
                     label="历史交易时间">
+                    <template slot-scope="scope">
+                        {{scope.row.updateTime?scope.row.updateTime:'--'}}
+                    </template>
                     </el-table-column>
                     <el-table-column
                     prop=""
                     label="流转地点">
+                    <template>
+                        --
+                    </template>
                     </el-table-column>
                     <el-table-column
                     prop="sellerName"
                     label="买方">
+                    <template slot-scope="scope">
+                        {{scope.row.sellerName?scope.row.sellerName:'--'}}
+                    </template>
                     </el-table-column>
                     <el-table-column
                     prop="buyerName"
                     label="卖方">
+                    <template slot-scope="scope">
+                        {{scope.row.buyerName?scope.row.buyerName:'--'}}
+                    </template>
                     </el-table-column>
                     <el-table-column
                     prop="address"
@@ -76,6 +89,11 @@ export default {
     },
   },
   methods: {
+       headerStyle (){
+          return {
+              background:'#F9F9F9',
+          }
+      },
     getData () {
       ByShipName({...this.page,shipNo: this.shipNo}).then(res=>{
         this.tableData = res.data.data.records

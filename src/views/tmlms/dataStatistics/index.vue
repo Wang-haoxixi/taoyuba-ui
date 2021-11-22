@@ -1237,13 +1237,13 @@ export default {
         //   y:'20',
         //   data:['全国数据'],
         // },
-        legend: {
-        data: ['疫情高风险区域', '疫情中风险区域', '疫情低风险区域'],
-        textStyle: { color: '#fff'},
-        orient: 'vertical',
-        x: 'left',
-        y: 'top',
-      },
+      //   legend: {
+      //   data: ['疫情高风险区域', '疫情中风险区域', '疫情低风险区域'],
+      //   textStyle: { color: '#fff'},
+      //   orient: 'vertical',
+      //   x: 'left',
+      //   y: 'top',
+      // },
         visualMap: {
             show : true,
             textStyle: {color:'#fff'},
@@ -1303,80 +1303,80 @@ export default {
             // },
             data:data,
           },
-          {
-          name: '疫情高风险区域',
-          type: 'effectScatter', //设置为散点图
-          coordinateSystem: 'geo',
-          data: [
-            [122.207216, 29.985295],
-            [123.97, 47.33],
-            [120.33, 36.07],
-          ], // series数据内容，将地名转换为对应的经纬度，并提取数值大小
-          //symbolSize:"18",//set fixed point size;
-          //set point size by value
-          symbolSize: 20,
-          visualMap:false,
-          emphasis: {
-            scale: true,
-          },
-          //pointSize:'10',
-          //blurSize:'0',
-          itemStyle: {
-            color: '#9feaa5',
-          },
-          showEffectOn: 'render',
-          rippleEffect: {
-            brushType: 'stroke',
-          },
-          encode: { tooltip: [0, 1] },
-        },
-        {
-          name: '疫情中风险区域',
-          type: 'effectScatter',
-          coordinateSystem: 'geo',
-          data: [
-            [91.11, 29.97],
-            [121.48, 31.22],
-          ], // series数据内容
-          //symbolSize:"18",
-          symbolSize: 20,
-          visualMap:false,
-          emphasis: {
-            scale: true,
-          },
-          //pointSize:'10',
-          //blurSize:'0',
-          itemStyle: {
-            color: '#74e2ca',
-          },
-          showEffectOn: 'render',
-          rippleEffect: {
-            brushType: 'stroke',
-          },
-          encode: { tooltip: [0, 1] },
-        },
-        {
-          name: '疫情低风险区域',
-          type: 'effectScatter',
-          coordinateSystem: 'geo',
-          data: [[115.89, 28.68]], // series数据内容
-          //symbolSize:"18",
-          symbolSize: 20,
-          visualMap:false,
-          emphasis: {
-            scale: true,
-          },
-          //pointSize:'10',
-          //blurSize:'0',
-          itemStyle: {
-            color: '#f66',
-          },
-          showEffectOn: 'render',
-          rippleEffect: {
-            brushType: 'stroke',
-          },
-          encode: { tooltip: [0, 1] },
-        },
+        //   {
+        //   name: '疫情高风险区域',
+        //   type: 'effectScatter', //设置为散点图
+        //   coordinateSystem: 'geo',
+        //   data: [
+        //     [122.207216, 29.985295],
+        //     [123.97, 47.33],
+        //     [120.33, 36.07],
+        //   ], // series数据内容，将地名转换为对应的经纬度，并提取数值大小
+        //   //symbolSize:"18",//set fixed point size;
+        //   //set point size by value
+        //   symbolSize: 20,
+        //   visualMap:false,
+        //   emphasis: {
+        //     scale: true,
+        //   },
+        //   //pointSize:'10',
+        //   //blurSize:'0',
+        //   itemStyle: {
+        //     color: '#9feaa5',
+        //   },
+        //   showEffectOn: 'render',
+        //   rippleEffect: {
+        //     brushType: 'stroke',
+        //   },
+        //   encode: { tooltip: [0, 1] },
+        // },
+        // {
+        //   name: '疫情中风险区域',
+        //   type: 'effectScatter',
+        //   coordinateSystem: 'geo',
+        //   data: [
+        //     [91.11, 29.97],
+        //     [121.48, 31.22],
+        //   ], // series数据内容
+        //   //symbolSize:"18",
+        //   symbolSize: 20,
+        //   visualMap:false,
+        //   emphasis: {
+        //     scale: true,
+        //   },
+        //   //pointSize:'10',
+        //   //blurSize:'0',
+        //   itemStyle: {
+        //     color: '#74e2ca',
+        //   },
+        //   showEffectOn: 'render',
+        //   rippleEffect: {
+        //     brushType: 'stroke',
+        //   },
+        //   encode: { tooltip: [0, 1] },
+        // },
+        // {
+        //   name: '疫情低风险区域',
+        //   type: 'effectScatter',
+        //   coordinateSystem: 'geo',
+        //   data: [[115.89, 28.68]], // series数据内容
+        //   //symbolSize:"18",
+        //   symbolSize: 20,
+        //   visualMap:false,
+        //   emphasis: {
+        //     scale: true,
+        //   },
+        //   //pointSize:'10',
+        //   //blurSize:'0',
+        //   itemStyle: {
+        //     color: '#f66',
+        //   },
+        //   showEffectOn: 'render',
+        //   rippleEffect: {
+        //     brushType: 'stroke',
+        //   },
+        //   encode: { tooltip: [0, 1] },
+        // },
         ],
       }
       this.mapChina.setOption(option)

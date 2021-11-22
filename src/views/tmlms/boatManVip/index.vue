@@ -315,7 +315,7 @@ export default {
       this.params.status = 2
       getCrew(this.params).then(res=>{
         this.shipownerList = res.data.data.records
-        console.log(this.shipownerList)
+        // console.log(this.shipownerList)
         // this.shipownerList.map(m => {
         //   return m.remark.substring(0, 20)
         // })

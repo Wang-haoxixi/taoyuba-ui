@@ -45,7 +45,7 @@
             :style="index%8==0?'border-left:1px solid #efefef':''" 
             v-for="(item,index) of tableData.records" :key="index"
             @click="showDialog(item)">
-              {{item.shipName}}
+              {{item.isResolved==3?`${item.shipName}(无定位)`:item.shipName}}
           </div>
       </div>
       <div class="empty" v-else>暂无数据</div>

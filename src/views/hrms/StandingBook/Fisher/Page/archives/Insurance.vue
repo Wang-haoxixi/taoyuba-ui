@@ -9,7 +9,8 @@
             </el-tabs>
               <el-table
                 :data="tableData"
-                style="width: 100%">
+                style="width: 100%"
+                :header-cell-style="headerStyle">
                 <el-table-column
                     prop="date"
                     label="时间">
@@ -38,7 +39,7 @@
                     label="保单详情"
                     width="100">
                     <template slot-scope="scope">
-                        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                        <el-button @click="handleClick(scope.row)" type="primary" plain size="small">查看</el-button>
                     </template>
                     </el-table-column>
                 </el-table>
@@ -77,6 +78,11 @@ export default {
   props: {
   },
   methods: {
+      headerStyle (){
+          return {
+              background:'#F9F9F9',
+          }
+      },
     getData () {
 
     },
@@ -95,6 +101,10 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+::v-deep .el-tabs__item.is-active{
+    background-color: #409EFF !important;
+    color: #fff !important;
+}
 .crew {
     .crew-title {
         display: flex;

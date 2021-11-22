@@ -1,4 +1,5 @@
 <template>
+<!-- 一船一档/船员/上船登记 -->
   <div class="agent-add">
     <basic-container>
         <h1 v-if="!$route.query.userId">
