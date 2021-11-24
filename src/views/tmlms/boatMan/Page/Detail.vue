@@ -1,4 +1,5 @@
 <template>
+  <!-- 船员/船员登记/编辑、查看 -->
   <div class="agent-add">
     <basic-container>
       <div class="tyb-tabs-wrapper clearfix" v-if="$route.query.see">

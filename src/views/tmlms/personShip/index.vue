@@ -41,11 +41,11 @@
       </div>
       <div class="content" v-if="tableData.records.length>0">
           <div class="contentItem" 
-            :class="item.isResolved==2?'active':''" 
+            :class="item.isResolved==2?'active':item.isResolved==3?'activeNone':'activeGreen'" 
             :style="index%8==0?'border-left:1px solid #efefef':''" 
             v-for="(item,index) of tableData.records" :key="index"
             @click="showDialog(item)">
-              {{item.isResolved==3?`${item.shipName}(无定位)`:item.shipName}}
+              {{item.shipName}}
           </div>
       </div>
       <div class="empty" v-else>暂无数据</div>
@@ -172,6 +172,12 @@ export default {
 .active{
     color:red;
     cursor: pointer;
+}
+.activeNone{
+  color: #909399;
+}
+.activeGreen{
+  color: green;
 }
 .empty{
   font-size: 14px;

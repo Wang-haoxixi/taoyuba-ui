@@ -5,7 +5,7 @@
         <h1 v-if="!$route.query.userId">
             <!-- {{ $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }} -->
             {{$route.query.shipName}}上船登记</h1>
-            <el-form :model="form" :rules="userRule" ref="userInfoForm" :disabled="false" label-width="150px" size="small" >
+            <el-form :model="form" :rules="userRule" ref="userInfoForm" :disabled="false" label-width="150px" size="small">
                 <el-row>
                 <el-col :span="12">
                     <el-form-item label="个人姓名：" prop="realName">
