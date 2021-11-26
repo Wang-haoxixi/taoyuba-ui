@@ -14,7 +14,7 @@
       <!-- <div> -->
         <h1 v-if="!$route.query.userId">{{ $route.query.see ? '查看' : $route.query.edit ? '编辑' :'新增' }}船员信息</h1>
         <h1 v-if="$route.query.userId">完善个人信息</h1>
-        <el-form ref="form" :model="form" :rules="$route.query.shipCrew ? shipCrewRules:rules" label-width="150px" size="small" :disabled="type === 1">
+        <el-form ref="form" v-loading="loadingForm" :model="form" :rules="$route.query.shipCrew ? shipCrewRules:rules" label-width="150px" size="small" :disabled="type === 1">
             <el-row>
             <el-col :span="12">
                 <el-form-item label="个人姓名：" prop="realName">
@@ -623,6 +623,7 @@ export default {
       idcards: [],
       isShipCrew:false,
       mlms_submit_radio:false,
+      loadingForm:true,
     }
   },
   methods: {
@@ -1272,6 +1273,8 @@ export default {
     })
     if(this.$route.query.edit || this.$route.query.see || this.$route.query.userId){
       getAll.call(this)
+    }else{
+      this.loadingForm=false
     }
     // this.getInformation('form',['phone','realName',true])
         // 获取编辑数据
@@ -1313,6 +1316,34 @@ export default {
         })
       }
       this.form = data
+      if(this.form.provinceId){
+        getArea(this.form.provinceId).then(({ data }) => {
+          this.city = data.data
+          if(this.form.cityId == 0 && this.form.districtId == 0){
+            this.loadingForm=false
+          }
+      })
+      }else{
+        this.loadingForm=false
+      }
+      if(this.form.cityId){
+         getArea(this.form.cityId).then(({ data }) => {
+          this.district = data.data
+          if(this.form.cityId && this.form.districtId == 0){
+            if(this.city.length>0){
+              this.loadingForm=false
+            }
+          }else if(this.form.districtId){
+           if(this.district.length>0){
+              this.loadingForm=false
+           }else{
+              this.loadingForm=false
+           }
+          }
+      })
+      }else{
+        this.loadingForm=false
+      }
       // this.$refs.pageContract.getList(this.form.idcard)
       // this.$refs.pageShipRecord.getList(this.form.realName)
       // console.log('this.form', this.form)
