@@ -11,7 +11,7 @@ import './plugins/element'
 import './plugins/ant-design'
 
 import './core/use'
-import * as echarts from 'echarts';
+import * as echarts from 'echarts'
 import 'echarts/map/js/china'
 import 'echarts/extension/bmap/bmap'
 import { VueJsonp } from 'vue-jsonp'
