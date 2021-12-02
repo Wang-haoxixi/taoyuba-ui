@@ -65,7 +65,22 @@
       <template slot="right">
         <el-form :inline="true" :model="mapParams" size="small">
           <el-form-item>
-            <el-input v-model="mapParams.shipName" placeholder="请输入船名">
+             <el-select v-model="mapParams.shipType" 
+             clearable
+             placeholder="请选择" 
+             style="width: 120px !important"
+             size="small">
+                <el-option
+                
+                  v-for="item in shipTypeList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-input v-model="mapParams.shipName" placeholder="">
             </el-input>
           </el-form-item>
           <el-form-item>
@@ -188,11 +203,31 @@ export default {
       },
       mapParams:{
         shipName: '',
+        shipType:'',
       },
       total: 0,
       orgSearchList: [],
       formRelation: {},
       id: '',
+      shipTypeList:[
+        {
+          value: '浙岱渔',
+          label: '浙岱渔',
+        },
+        {
+           value: '浙岱渔运',
+          label: '浙岱渔运',
+        },
+        {
+           value: '浙岱渔冷',
+          label: '浙岱渔冷',
+        },
+        {
+           value: '浙岱渔休',
+          label: '浙岱渔休',
+        },
+      ],
+      shipType:'',
     }
   },
   created () {
@@ -215,6 +250,7 @@ export default {
         this.getShipListInfo()
       }else{
         this.mapParams.shipName = ''
+        this.mapParams.shipType=''
         this.getList()
       }
     },
@@ -278,10 +314,10 @@ export default {
         this.shipList = res.data.data.map((item) => {
           return {
             name: item.shipName,
-            value: [item.longitude, item.latitude, item.flag],
+            value: [item.longitude, item.latitude, item.flag,false],
           }
         })
-        console.log(this.shipList)
+        // console.log(this.shipList)
         this.getData()
       })
     },
@@ -331,7 +367,14 @@ export default {
                 }
               },
             },
-            symbolSize: 20,
+            symbolSize:function (params){
+              // console.log(params)
+              if(params[3]==false){
+                return 20 
+              }else{
+                return 30
+              }
+            },
             encode: {
               value: 2,
             },
@@ -349,8 +392,14 @@ export default {
             // progressiveThreshold :600,
             large: true,
             largeThreshold: 2000,
-            symbol:
-              'path://M525.873548 897.156129l-383.174193-761.723871 763.045161-1.981935-379.870968 763.705806z',
+            symbol:function (params){
+              // console.log(params)
+              if(params[3]==false){
+                return 'path://M762.88 1014.784h-501.76c-7.168 0-11.264-6.144-10.24-13.312L501.76 47.104c3.072-10.24 17.408-10.24 19.456 0l250.88 954.368c3.072 6.144-2.048 13.312-9.216 13.312z'
+              }else{
+                return 'path://M699.733333 416v-113.066667l-172.8-234.666666-17.066666-6.4-17.066667 6.4-172.8 234.666666v113.066667l12.8 17.066667v260.266666l-12.8 17.066667V768l17.066667 64v64l78.933333 53.333333h187.733333L682.666667 896v-64l17.066666-64v-57.6l-12.8-17.066667V433.066667z M1015.466667 305.066667h-42.666667V51.2H718.933333v-42.666667h296.533334zM51.2 305.066667h-42.666667V8.533333h296.533334v42.666667H51.2zM305.066667 1015.466667H8.533333V718.933333h42.666667v253.866667h253.866667zM1015.466667 1015.466667H718.933333v-42.666667h253.866667V718.933333h42.666667z'
+              }
+            },
           },
           {
             name: '港口名称',
@@ -422,13 +471,27 @@ export default {
     },
     onMapSearch (){
       let res = this.shipList.filter(item=>{
-        return item.name == this.mapParams.shipName
+        return item.name == this.mapParams.shipType+this.mapParams.shipName
       })
-      // console.log(res)
+      let _option = this.myChart.getOption()
       if(res.length>0){
-        let _option = this.myChart.getOption()
         _option.bmap[0].center = [res[0].value[0],res[0].value[1]],
+        _option.series[0].data.forEach(item=>{
+          if(item.name == res[0].name){
+            item.value[3]=true
+          }else{
+            item.value[3]=false
+          }
+        })
         _option.bmap[0].zoom = 20
+        this.myChart.clear()
+        this.myChart.setOption(_option)
+      }else{
+         _option.bmap[0].center = [122.2741, 30.2608],
+        _option.bmap[0].zoom = 10
+         _option.series[0].data.forEach(item=>{
+            item.value[3]=false
+        })
         this.myChart.clear()
         this.myChart.setOption(_option)
       }
