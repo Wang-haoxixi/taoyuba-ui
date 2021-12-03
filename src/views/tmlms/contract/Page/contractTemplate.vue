@@ -241,18 +241,8 @@ export default {
     getShipDetail () {
       if(this.$route.query.operate=='add'){
         findMyship(this.$route.params.shipName).then(res=>{
-            let shipData = res.data.data
-            this.formData.shipownerName = shipData.shipowner
-            this.formData.shipownerIdcard = shipData.shipownerIdcard
-            this.formData.shipName = shipData.shipName
-            this.formData.shipLicenses = shipData.licensesOwnerShip
-            this.formData.shipownerPhone = shipData.mobile
-            this.formData.shipownerAddr = shipData.address
+            this.formData = res.data.data
             this.shipowner = true
-            this.formData.employerName = this.formData.shipownerName
-            this.formData.employerIdcard = this.formData.shipownerIdcard
-            this.formData.employerPhone = this.formData.shipownerPhone
-            this.formData.employerAddr = this.formData.shipownerAddr
             this.employer =true
         })
       }

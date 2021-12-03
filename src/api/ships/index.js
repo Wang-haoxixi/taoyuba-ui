@@ -104,7 +104,7 @@ export function getShipNamesWithOutOrg (name) {
 
 export  function  findMyship (name) {
   return request({
-    url: `${prefixUrl}/findmyship/${name}`,
+    url: `/tmlms/tybship/findmyship/${name}`,
     method: 'get',
   })
 }
