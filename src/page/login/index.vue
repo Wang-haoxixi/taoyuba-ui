@@ -1,40 +1,49 @@
 <template>
-  <container title="用户登录">
+  <!-- <container title="用户登录">
     <template v-slot:tab-panel>
       <user-login v-if="activeName === 'user'" @tab-active="handleActive"></user-login>
       <code-login v-if="activeName === 'code'"></code-login>
       <third-login v-if="activeName === 'third'"></third-login>
       <retrieve v-if="activeName === 'retrieve'" @tab-active="handleActive"></retrieve>
     </template>
-    <!-- <template v-slot:tab-footer>
-      <div class="menu-p">
-        <span class="menu-line"></span>
-        <span class="menu-text">其他方式登录</span>
-        <span class="menu-line"></span>
+  </container> -->
+  <div class="container">
+    <div class="loginWrap">
+      <div class="loginWrapContainer">
+        <div class="loginWrapContainerTop">
+          <img src="../../../public/img/bg/loginLogo.png" alt="" srcset="" class="loginWrapContainerTopLogo">
+          <div class="loginWrapContainerTopTitle">
+            淘渔吧用户登陆
+          </div>
+          <div class="loginWrapContainerTopLine">
+          </div>
+          <user-login v-if="activeName === 'user'" @tab-active="handleActive"></user-login>
+          <code-login v-if="activeName === 'code'"></code-login>
+        </div>
+         <div class="loginWrapContainerFooter">
+           Copyright©TAOYU58 版权所有 2018-2020
+        </div>
       </div>
-      <a href="#" @click.stop="activeName = 'user'">账号密码</a>
-      <a href="#" @click.stop="activeName = 'code'">手机号登录</a>
-      <a href="#" @click.stop="activeName = 'third'">第三方登录</a>
-    </template> -->
-  </container>
+    </div>
+  </div>
 </template>
 <script>
-import Container from '../Container'
+// import Container from '../Container'
 import userLogin from './userlogin'
 import codeLogin from './codelogin'
-import thirdLogin from './thirdlogin'
-import retrieve from './retrieve'
+// import thirdLogin from './thirdlogin'
+// import retrieve from './retrieve'
 import { setStore } from '@/util/store'
 import { mapGetters } from 'vuex'
 import { validatenull } from '@/util/validate'
 export default {
   name: 'Login',
   components: {
-    Container,
+    // Container,
     userLogin,
     codeLogin,
-    thirdLogin,
-    retrieve,
+    // thirdLogin,
+    // retrieve,
   },
   data () {
     return {
@@ -74,52 +83,62 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-a {
-  color: rgb(153, 153, 153);
-  font-size: 14px;
-  margin: 0px 8px;
-  -webkit-transition: 0.1s;
-  transition: 0.1s;
-  &:hover,
-  &:focus {
-    outline: none;
-    color: #b1b0b0;
-  }
-}
-.menu-p {
-  height: 40px;
-  line-height: 10px;
-  text-align: center;
-  .menu-line {
-    display: inline-block;
-    width: 130px;
-    border-top: 1px solid #d7d7d7;
-  }
-  .menu-text {
-    color: #686868;
-    vertical-align: middle;
-    vertical-align: -4px;
-    margin-right: 10px;
-    margin-left: 10px;
-  }
-}
-
-@media (max-width: 767px) {
-  .menu-p {
-    .menu-line {
-      width: 15%;
+.container{
+  margin: 0 auto;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: url('../../../public/img/bg/loginBg.png') no-repeat;
+  background-size: 100% 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background-position:-230px center;
+  .loginWrap{
+    width: 50%;
+    height: 100vh;
+    background: url('../../../public/img/bg/loginBgWhite.png') no-repeat;
+    background-size: 100% 100vh;
+    .loginWrapContainer{
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: space-between;
+      .loginWrapContainerTop{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-top: 137px;
+        .loginWrapContainerTopLogo{
+          width: 136px;
+          height: 123px;
+          margin-bottom: 8px;
+        }
+        .loginWrapContainerTopTitle{
+          color: #333333;
+          font-size: 24px;
+          line-height: 40px;
+          margin-bottom: 10px;
+        }
+        .loginWrapContainerTopLine{
+          width: 60px;
+          height: 8px;
+          background: rgba(68, 128, 248, 0.26);
+          opacity: 1;
+          border-radius: 10px;
+          margin-bottom: 60px;
+        }
+      }
+      .loginWrapContainerFooter{
+        font-size: 14px;
+        line-height: 40px;
+        color: #4480F8;
+        margin-bottom: 27px;
+      }
     }
-  }
-}
-@media (max-width: 320px) {
-  .login-form {
-    .el-form-item {
-      margin-bottom: 10px;
-    }
-  }
-  .el-form-item__error {
-    top: 30%;
-    left: 10px;
   }
 }
 </style>

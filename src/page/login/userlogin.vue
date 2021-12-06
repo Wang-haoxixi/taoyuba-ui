@@ -1,16 +1,24 @@
 <template>
   <el-form class="login-form" status-icon :rules="rules" ref="form" :model="form" label-width="0">
     <el-form-item prop="username">
-      <a-input ref="username" @keyup.enter.native="handleLogin" v-model="form.username" auto-complete="off" placeholder="请输入用户名" size="large">
-        <a-icon slot="prefix" type="user" />
-        <a-icon v-if="form.username" slot="suffix" type="close-circle" @click="emitEmpty('username')" />
+      <div class="inputWrap">
+         <a-input ref="username" style="height:32px;width:277px" @keyup.enter.native="handleLogin" v-model="form.username" auto-complete="off" placeholder="请输入用户名" size="large">
+        <!-- <a-icon v-if="form.username" slot="suffix" type="close-circle" @click="emitEmpty('username')" /> -->
       </a-input>
+      <div class="inputIcon">
+        <img src="../../../public/img/bg/loginUser.png" alt="" style="width:12px;height:14px">
+      </div>
+      </div>
     </el-form-item>
     <el-form-item prop="password">
-      <a-input ref="password" @keyup.enter.native="handleLogin" :type="passwordType" v-model="form.password" auto-complete="false" placeholder="请输入密码" size="large">
-        <a-icon slot="prefix" type="lock" />
-        <a-icon v-if="form.password" slot="suffix" :type="passwordType?'eye-invisible':'eye'" @click="showPassword" />
+      <div class="inputWrap">
+          <a-input ref="password" style="height:32px;width:277px" @keyup.enter.native="handleLogin" :type="passwordType" v-model="form.password" auto-complete="false" placeholder="密码" size="large">
+        <!-- <a-icon v-if="form.password" slot="suffix" :type="passwordType?'eye-invisible':'eye'" @click="showPassword" /> -->
       </a-input>
+      <div class="inputIcon">
+        <img src="../../../public/img/bg/loginPassword.png" alt="" style="width:12px;height:14px">
+      </div>
+      </div>
     </el-form-item>
     <el-form-item prop="code">
       <a-input class="login-code" @keyup.enter.native="handleLogin" :maxlength="code.len" v-model="form.code" auto-complete="false" placeholder="请输入验证码" size="large">
@@ -29,7 +37,7 @@
     <el-form-item>
       <a-row :gutter="8">
         <a-col :span="24">
-          <a-button type="primary" size="large" :loading="loginLoading" @click="handleLogin" block>登录</a-button>
+          <el-button type="primary" class="submitBtn" :loading="loginLoading" @click="handleLogin" block>登录</el-button>
         </a-col>
         <!-- <a-col :span="12">
           <a-button size="large" @click="$message.success('功能开发中')" block>访客</a-button>
@@ -167,12 +175,38 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.inputWrap{
+  display:flex;
+  align-items:center;
+  position: relative;
+}
+.inputIcon{
+  position: absolute;
+  top: 0;
+  right: 0px;
+  width: 35px;
+  height: 32px;
+  border-radius: 5px;
+  background-color: #4480F8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.submitBtn{
+  width: 307px;
+  height: 32px;
+  border-radius: 40px;
+  line-height: 0px;
+}
+.login-code >>> input {
+  height: 32px;
+}
 .login-code >>> .ant-input-group-addon {
   padding: 0;
-  height: 40px;
+  height: 32px;
 }
 .login-code .login-code-img {
-  padding: 1px 0;
+  /* padding: 1px 0; */
   height: 100%;
   box-sizing: border-box;
 }
@@ -194,9 +228,6 @@ export default {
 }
 .login-text >>> .el-button--text:nth-child(1):hover {
   color: #999;
-}
-.login-form {
-  margin: 10px 0;
 }
 .login-form i {
   color: #999;
