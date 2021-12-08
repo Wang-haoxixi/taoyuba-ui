@@ -39,7 +39,7 @@
       <template slot="before-columns">
         <el-table-column
       label="姓名"
-      width="180"
+      width="100"
       prop="realName">
       <template slot-scope="scope">
         <el-popover trigger="hover" placement="top" v-if="scope.row.workStatus == '上船，未签合同' || (scope.row.signStatus == 0 && (scope.row.positionId!=14 && scope.row.positionId!=0))  ||scope.row.idcard == '' || checIdCard(scope.row.idcard) || scope.row.phone == '' || checkPhone(scope.row.phone)">

@@ -1,4 +1,5 @@
 <template>
+<!-- 大数据墙 -->
   <div id="statisrics" style="min-width: 1200px;">
     <el-row>
       <el-col :span="24">
@@ -39,27 +40,6 @@
             </el-form-item>
           </el-form>
         </div>
-        <!-- <div class="select-wrap">
-          <el-cascader
-            @change="changeOrg"
-            placeholder=""
-            :options="orgList"
-            v-model="areaValue"
-            :props="areaListProps"
-            change-on-select
-            :disabled="disabled"
-          ></el-cascader>
-        </div>
-        <div class="crew-select">
-          <el-select :disabled="positionDisabled" v-model="positionId" placeholder="职位船员" @change="onChangePositionId">
-            <el-option
-              v-for="item in positionDicMap"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </div> -->
       </el-col>
     </el-row>
     <el-row>
@@ -117,7 +97,7 @@
         <div class="panel-footer"></div>
         <div class="chart-bg panel">
           <h2>船东统计</h2>
-          <div id="peopleTotal"  :style="{width: '100%', height: '282' + 'px'}"></div>
+          <div id="peopleTotal"  :style="{width: '100%', height: '290px'}"></div>
           <div class="panel-footer"></div>
         </div>
       </el-col>
@@ -147,6 +127,7 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
 import { mapGetters } from 'vuex'
 import { getAllAreaName } from '@/api/post/address'
 import { getPage as getPageArea } from '@/api/tmlms/area'
@@ -1059,15 +1040,16 @@ export default {
       this.provinceTotal = this.$echarts.init(document.getElementById('provinceTotal'))
       this.provinceTotal.setOption({
         color: [
-          '#006cff',
-          '#60cda0',
-          '#ed8884',
-          '#ff9f7f',
-          '#0096ff',
-          '#9fe6b8',
-          '#32c5e9',
-          '#1d9dff',
-          '#ffeb7b',
+          '#FFB171',
+          '#E45857',
+          '#2936ED',
+          '#9EFF81',
+          '#29FFF7',
+          '#FCFF83',
+          '#FCFF83',
+          '#FF74DF',
+          '#8B78F6',
+          '#4480F8',
         ],
         tooltip: {
             trigger: 'item',
@@ -1083,19 +1065,19 @@ export default {
             itemWidth:5,
             itemHeight:5,
             data: [],
+            width:'50%',
         },
         series: [{
             name: '籍贯分布',
             type: 'pie',
             radius: ['10%', '60%'],
             center: ['50%', '42%'],
-            roseType: 'area',
             // radius: [10, 60],
             // center: ['50%', '50%'],
             // roseType: 'area',
             data: [],
             label: {
-              fontSize: 10,
+              fontSize: 14
             },
             // 修饰引导线样式
             labelLine: {
@@ -1108,83 +1090,86 @@ export default {
       })
     },
     // 船东统计
-    getShipOwner (res) {
-      let shipHaver = res.data.data.shipHaver
-      let peopleShipName = shipHaver.map((item) => {
-        return item.number + '艘渔船'
-      })
-      let peopleShioNum =  shipHaver.map((item) => {
-        return item.havers
-      })
+     getShipOwner (res) {
+     let shipHaver = res.data.data.shipHaver
       this.peopleTotal.setOption({
-        xAxis: [
-          {
-            data: peopleShipName,
-          },
-        ],
+       radar:{
+        indicator:(function(){
+          var res = []
+          shipHaver.forEach(item=>{
+            res.push({
+              text:`${item.number}艘渔船${item.havers}人`,
+              max:1000
+            })
+          })
+          return res
+        })(),
+      },
         series: [{
           // 根据名字对应到相应的系列
-          name: '船东数量',
-          data:  peopleShioNum,
+          data: [
+            {
+              name:'船东统计',
+              value:(
+                function(){
+                var res= []
+               res = shipHaver.map(item=>{
+                  return item.havers
+                })
+                return res
+              }()
+              )
+            }
+          ],
         }],
       })
+
     },
     setShipOwner () {
       this.peopleTotal = this.$echarts.init(document.getElementById('peopleTotal'))
       this.peopleTotal.setOption({
-        color: ['#2f89cf'],
-          tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
-          },
+        tooltip: {
+        trigger: 'axis'
+      },
+      radar:{
+        indicator:[],
+        center:['50%','50%'],
+        radius:150,
+        axisName: {
+          color: '#f66',
         },
-        xAxis: {
-          type: 'category',
-          data: [],
-          axisLabel: {
-          color: 'rgba(255,255,255,.7)',
-          interval:0,
-          rotate:45,
-          },
-          axisTick: {
-            alignWithLabel: true,
-          },
-          axisLine: {
-            show: false,
-          },
+        splitLine:{
+          lineStyle:{
+            color:'rgba(43, 196, 243, .5)'
+          }
         },
-        yAxis: {
-            type: 'value',
-            axisLabel: {
-              textStyle: {
-                color: 'rgba(255,255,255,.6)',
-                fontSize: '12',
-              },
-            },
-            axisLine: {
-            lineStyle: {
-              color: 'rgba(255,255,255,.1)',
-              // width: 1,
-              // type: "solid"
-            },
-          },
-          splitLine: {
-            lineStyle: {
-              color: 'rgba(255,255,255,.1)',
-            },
-          },
+        splitArea:{
+          show:false
         },
-        series: [{
-          name: '船东统计',
-          barWidth: '35%',
-          data: [],
-          type: 'bar',
-          itemStyle: {
-            barBorderRadius: 5,
+        axisLine:{
+          lineStyle:{
+            color:'rgba(43, 196, 243, .5)'
+          }
+        }
+      },
+      series:[
+        {
+          name:'船东统计',
+          type:'radar',
+          itemStyle:{
+            color:'rgba(43, 196, 243)'
           },
-        }],
+           emphasis: {
+        lineStyle: {
+          width: 4
+        }
+      },
+          areaStyle: {
+            color:'rgba(43, 196, 243,.5)'
+          },
+          data:[]
+        }
+      ]
       })
     },
     // 已上船登记船员 已签订劳务协议船员
@@ -1230,20 +1215,55 @@ export default {
         tooltip : {
           trigger: 'item',
         },
-        // legend: {
-        //   orient: 'horizontal',//图例的排列方向
-        //   textStyle: {color:'#fff'},
-        //   x:'top',//图例的位置
-        //   y:'20',
-        //   data:['全国数据'],
-        // },
-      //   legend: {
-      //   data: ['疫情高风险区域', '疫情中风险区域', '疫情低风险区域'],
-      //   textStyle: { color: '#fff'},
-      //   orient: 'vertical',
-      //   x: 'left',
-      //   y: 'top',
-      // },
+        legend: {
+        inactiveBorderColor: 'rgba(204, 204, 204, 0.5)',
+        inactiveBorderWidth: 10,
+        data: [
+          {
+            name: '疫情高风险区域',
+            icon: 'circle',
+            textStyle: {
+              fontSize: 12,
+              color: '#fff',
+            },
+            itemStyle: {
+              borderWidth: 10,
+              borderColor: 'rgba(253, 101, 101, .3)',
+            },
+            // icon: 'path://M5313 10298 l-1081 -1872 -509 -108 c-279 -59 -753 -160 -1053 -224 -300 -63 -680 -144 -845 -179 -165 -35 -588 -125 -940 -200 -352 -74 -695 -147 -763 -162 -67 -14 -121 -30 -120 -35 3 -8 176 -201 1911 -2127 538 -596 977 -1090 977 -1098 0 -7 -101 -975 -225 -2150 -124 -1175 -223 -2138 -221 -2141 3 -2 892 391 1975 873 1344 598 1978 876 1993 873 13 -3 904 -398 1981 -878 1077 -480 1960 -870 1963 -868 2 3 -97 966 -221 2141 -124 1175 -225 2143 -225 2150 0 8 210 247 468 533 257 285 896 996 1421 1579 525 583 965 1072 979 1087 14 15 24 30 21 32 -2 2 -420 93 -929 201 -804 171 -2274 483 -3054 649 l-248 52 -1081 1872 c-595 1030 -1084 1872 -1087 1872 -3 0 -492 -842 -1087 -1872z m2166 -27 c589 -1019 1071 -1857 1071 -1862 0 -4 -482 -670 -1070 -1480 -589 -810 -1068 -1474 -1066 -1476 3 -3 3448 1113 6101 1977 132 43 241 77 243 75 2 -2 -164 -189 -370 -417 -205 -228 -852 -946 -1438 -1596 -761 -846 -1069 -1181 -1080 -1177 -15 6 -520 171 -2475 806 -539 175 -981 316 -983 314 -2 -1 650 -902 1449 -2002 2139 -2942 2454 -3377 2463 -3390 4 -8 2 -11 -6 -8 -7 3 -890 396 -1963 874 l-1950 868 -5 1834 c-6 2056 -2 8525 4 8518 3 -2 486 -838 1075 -1858z m-2161 -3338 c590 -812 1071 -1478 1068 -1480 -2 -2 -1321 424 -2932 947 -1611 524 -3035 986 -3164 1027 -129 42 -238 79 -242 82 -5 4 4124 891 4192 900 3 0 488 -664 1078 -1476z m1072 -1498 c0 -3 -761 -1053 -1692 -2333 -930 -1280 -1813 -2495 -1962 -2699 -148 -205 -271 -371 -271 -370 -2 2 439 4197 447 4255 3 22 99 55 1478 503 811 263 1590 517 1730 563 270 89 270 89 270 81z',
+          },
+          {
+            name: '疫情中风险区域',
+            icon: 'circle',
+            textStyle: {
+              fontSize: 12,
+              color: '#fff',
+            },
+            itemStyle: {
+              borderWidth: 10,
+              borderColor: 'rgba(255, 177, 113, .3)',
+            },
+            // icon:'path://M5477 12793 c-5 -7 -74 -232 -124 -398 -8 -27 -51 -167 -94 -310 -44 -143 -93 -303 -109 -355 -16 -52 -74 -243 -130 -425 -56 -181 -114 -373 -130 -425 -73 -239 -222 -729 -330 -1080 -65 -212 -167 -545 -226 -740 -59 -195 -109 -356 -110 -358 -1 -2 -39 6 -85 17 -46 11 -244 57 -439 102 -195 45 -470 108 -610 140 -140 33 -313 73 -385 89 -71 16 -245 56 -385 89 -140 32 -415 95 -610 140 -195 45 -391 91 -435 101 -44 10 -219 51 -390 90 -171 39 -346 80 -390 90 -215 51 -478 110 -486 110 -5 0 -9 -36 -9 -79 l0 -79 1445 -1552 c795 -854 1445 -1556 1445 -1560 0 -4 -650 -706 -1445 -1560 l-1445 -1552 0 -79 c0 -43 4 -79 9 -79 8 0 271 59 486 110 44 10 219 51 390 90 171 39 346 80 390 90 44 10 240 56 435 101 195 45 470 108 610 140 140 33 314 73 385 89 72 16 245 56 385 89 140 32 415 95 610 140 195 45 393 91 439 102 46 11 84 19 85 17 1 -2 51 -163 110 -358 59 -195 161 -528 226 -740 108 -351 257 -841 330 -1080 16 -52 74 -243 130 -425 56 -181 114 -373 130 -425 16 -52 65 -214 110 -360 45 -146 95 -310 111 -365 17 -55 47 -154 68 -220 l37 -120 74 0 74 0 37 120 c21 66 51 165 68 220 16 55 66 219 111 365 45 146 94 308 110 360 16 52 74 244 130 425 56 182 114 373 130 425 73 239 222 729 330 1080 65 212 167 545 226 740 59 195 109 356 110 358 1 2 39 -6 85 -17 46 -11 244 -57 439 -102 195 -45 470 -108 610 -140 140 -33 314 -73 385 -89 72 -16 245 -56 385 -89 140 -32 415 -95 610 -140 195 -45 391 -91 435 -101 44 -10 220 -51 390 -90 171 -39 346 -80 390 -90 215 -51 478 -110 486 -110 5 0 9 36 9 79 l0 79 -1445 1552 c-795 854 -1445 1556 -1445 1560 0 4 650 706 1445 1560 l1445 1552 0 79 c0 43 -4 79 -9 79 -8 0 -271 -59 -486 -110 -44 -10 -219 -51 -390 -90 -170 -39 -346 -80 -390 -90 -44 -10 -240 -56 -435 -101 -195 -45 -470 -108 -610 -140 -140 -33 -313 -73 -385 -89 -71 -16 -245 -56 -385 -89 -140 -32 -415 -95 -610 -140 -195 -45 -393 -91 -439 -102 -46 -11 -84 -19 -85 -17 -1 2 -51 163 -110 358 -59 195 -161 528 -226 740 -108 351 -257 841 -330 1080 -16 52 -74 244 -130 425 -56 182 -114 373 -130 425 -16 52 -65 214 -110 360 -45 146 -95 310 -111 365 -17 55 -47 154 -68 220 l-37 120 -71 3 c-39 2 -74 -1 -76 -5z'
+          },
+          {
+            name: '疫情低风险区域',
+            textStyle: {
+              fontSize: 12,
+              color: '#fff',
+            },
+            icon: 'circle',
+            itemStyle: {
+              borderWidth: 10,
+              borderColor: 'rgba(1, 236, 253, .3)',
+            },
+            // icon:'path://M4598 11198 l-915 -1593 -1840 -5 -1840 -5 918 -1597 919 -1598 -919 -1597 -918 -1598 1840 -5 1840 -5 915 -1592 c504 -876 919 -1593 922 -1593 3 0 418 717 922 1593 l915 1592 1840 5 1840 5 -918 1598 -919 1597 919 1598 918 1597 -1840 5 -1840 5 -916 1593 c-503 875 -918 1592 -921 1592 -3 0 -418 -717 -922 -1592z m1379 -806 l453 -787 -455 -3 c-250 -1 -660 -1 -910 0 l-455 3 453 787 c248 433 454 788 457 788 3 0 209 -355 457 -788z m-2769 -1611 c-16 -42 -904 -1569 -909 -1563 -4 4 -206 354 -449 777 -243 424 -447 776 -452 783 -8 9 173 12 902 12 514 0 910 -4 908 -9z m4378 -1186 c376 -654 684 -1192 684 -1195 0 -3 -308 -540 -684 -1195 l-684 -1190 -1382 0 -1381 0 -685 1190 c-390 679 -682 1196 -679 1204 3 8 286 501 627 1095 342 595 648 1127 681 1184 l59 102 1380 -2 1379 -3 685 -1190z m2056 1183 c-5 -7 -209 -359 -452 -783 -243 -423 -445 -773 -449 -777 -5 -6 -892 1520 -909 1563 -2 5 404 9 908 9 729 0 910 -3 902 -12z m-6883 -3977 c248 -430 451 -785 451 -787 0 -2 -410 -4 -911 -4 -728 0 -909 3 -901 13 5 6 209 359 452 782 243 424 445 774 447 778 3 5 6 7 8 5 2 -2 206 -356 454 -787z m6431 4 c243 -423 447 -776 452 -782 8 -10 -173 -13 -902 -13 -501 0 -910 4 -908 9 17 43 904 1569 909 1563 4 -4 206 -353 449 -777z m-2797 -1673 c-139 -248 -869 -1512 -873 -1512 -4 0 -734 1264 -873 1512 l-39 68 912 0 912 0 -39 -68z'
+          },
+        ],
+        textStyle: { color: 'black' },
+        orient: 'vertical',
+        x: 'left',
+        y: 'top',
+      },
         visualMap: {
             show : true,
             textStyle: {color:'#fff'},
@@ -1303,80 +1323,111 @@ export default {
             // },
             data:data,
           },
-        //   {
-        //   name: '疫情高风险区域',
-        //   type: 'effectScatter', //设置为散点图
-        //   coordinateSystem: 'geo',
-        //   data: [
-        //     [122.207216, 29.985295],
-        //     [123.97, 47.33],
-        //     [120.33, 36.07],
-        //   ], // series数据内容，将地名转换为对应的经纬度，并提取数值大小
-        //   //symbolSize:"18",//set fixed point size;
-        //   //set point size by value
-        //   symbolSize: 20,
-        //   visualMap:false,
-        //   emphasis: {
-        //     scale: true,
-        //   },
-        //   //pointSize:'10',
-        //   //blurSize:'0',
-        //   itemStyle: {
-        //     color: '#9feaa5',
-        //   },
-        //   showEffectOn: 'render',
-        //   rippleEffect: {
-        //     brushType: 'stroke',
-        //   },
-        //   encode: { tooltip: [0, 1] },
-        // },
-        // {
-        //   name: '疫情中风险区域',
-        //   type: 'effectScatter',
-        //   coordinateSystem: 'geo',
-        //   data: [
-        //     [91.11, 29.97],
-        //     [121.48, 31.22],
-        //   ], // series数据内容
-        //   //symbolSize:"18",
-        //   symbolSize: 20,
-        //   visualMap:false,
-        //   emphasis: {
-        //     scale: true,
-        //   },
-        //   //pointSize:'10',
-        //   //blurSize:'0',
-        //   itemStyle: {
-        //     color: '#74e2ca',
-        //   },
-        //   showEffectOn: 'render',
-        //   rippleEffect: {
-        //     brushType: 'stroke',
-        //   },
-        //   encode: { tooltip: [0, 1] },
-        // },
-        // {
-        //   name: '疫情低风险区域',
-        //   type: 'effectScatter',
-        //   coordinateSystem: 'geo',
-        //   data: [[115.89, 28.68]], // series数据内容
-        //   //symbolSize:"18",
-        //   symbolSize: 20,
-        //   visualMap:false,
-        //   emphasis: {
-        //     scale: true,
-        //   },
-        //   //pointSize:'10',
-        //   //blurSize:'0',
-        //   itemStyle: {
-        //     color: '#f66',
-        //   },
-        //   showEffectOn: 'render',
-        //   rippleEffect: {
-        //     brushType: 'stroke',
-        //   },
-        //   encode: { tooltip: [0, 1] },
-        // },
+          {
+          name: '疫情高风险区域',
+          type: 'effectScatter', //设置为散点图
+          coordinateSystem: 'geo',
+          data: [
+            [98.582245,24.440102],
+            [119.754812,49.168796],
+          ], // series数据内容，将地名转换为对应的经纬度，并提取数值大小
+          //symbolSize:"18",//set fixed point size;
+          //set point size by value
+          symbolSize: 12,
+          visualMap:false,
+          emphasis: {
+            scale: true,
+          },
+          //pointSize:'10',
+          //blurSize:'0',
+          itemStyle: {
+            color: 'rgba(253, 101, 101, 1)',
+          },
+          showEffectOn: 'render',
+          rippleEffect: {
+            brushType: 'stroke',
+          },
+          encode: { tooltip: [0, 1] },
+        },
+        {
+          name: '疫情中风险区域',
+          type: 'effectScatter',
+          coordinateSystem: 'geo',
+          data: [
+            [113.270216,23.135237],
+            [121.630872,29.865922],
+            [121.479696,31.235458],
+            [126.669513,45.747934],
+          ], // series数据内容
+          //symbolSize:"18",
+          symbolSize: 12,
+          visualMap:false,
+          emphasis: {
+            scale: true,
+          },
+          //pointSize:'10',
+          //blurSize:'0',
+          itemStyle: {
+            color: 'rgba(255, 177, 113, 1)',
+          },
+          showEffectOn: 'render',
+          rippleEffect: {
+            brushType: 'stroke',
+          },
+          encode: { tooltip: [0, 1] },
+        },
+        {
+          name: '疫情低风险区域',
+          type: 'effectScatter',
+          coordinateSystem: 'geo',
+          data: [
+            [106.634858,26.652434],
+            [123.472721,41.683052],
+            [118.801156,32.04554],
+            [113.631708,34.752861],
+            [114.521403,38.048292],
+            [112.946939,28.232687],
+            [112.556197,37.876857],
+            [114.185398,22.287344],
+            [101.784562,36.623236],
+            [117.208087,39.091091],
+            [116.731394,39.910433],
+            [91.123993,29.654594],
+            [126.556065,43.843414],
+            [106.558234,29.569046],
+            [106.26545,38.477905],
+            [87.635087,43.79934],
+            [113.580586,22.1538],
+            [115.8226,28.642675],
+            [117.02702,36.674443],
+            [114.348174,30.551647],
+            [103.840755,36.066746],
+            [103.840755,36.066746],
+            [108.37878,22.848207],
+            [108.960636,34.275514],
+            [120.650074,24.160554],
+            [104.082823,30.657042],
+            [117.233674,31.826972],
+            [110.206684,20.052127],
+            // [111.769695,40.822489],
+            ], // series数据内容
+          //symbolSize:"18",
+          symbolSize: 12,
+          visualMap:false,
+          emphasis: {
+            scale: true,
+          },
+          //pointSize:'10',
+          //blurSize:'0',
+          itemStyle: {
+            color: 'rgba(1, 236, 253, 1)',
+          },
+          showEffectOn: 'render',
+          rippleEffect: {
+            brushType: 'stroke',
+          },
+          encode: { tooltip: [0, 1] },
+        },
         ],
       }
       this.mapChina.setOption(option)

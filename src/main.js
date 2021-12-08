@@ -14,6 +14,7 @@ import './core/use'
 import * as echarts from 'echarts'
 import 'echarts/map/js/china'
 import 'echarts/extension/bmap/bmap'
+// require('echarts/extension/bmap/bmap')
 import { VueJsonp } from 'vue-jsonp'
 Vue.use(VueJsonp)
 // import VueSocketio from 'vue-socket.io'
