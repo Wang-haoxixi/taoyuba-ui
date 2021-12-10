@@ -27,6 +27,7 @@ export default {
     },
     async loadTable (param, requestFn, fn = m => m) {
       this.isLoadTable = true
+      console.log(123, { ...this.pageOption, ...param })
 
       const { data } = await requestFn({ ...this.pageOption, ...param })
       const { records, size, total, current } = data.data
@@ -46,6 +47,7 @@ export default {
       this.loadPage()
     },
     handleCurrentChange (val) {
+      // alert(val)
       this.pageOption.current = val
       this.loadPage()
     },

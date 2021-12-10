@@ -1,7 +1,7 @@
 <template>
   <div>
     <basic-container>
-      <page-header title="考试库"></page-header>
+      <page-header title="考试库1"></page-header>
       <operation-container>
         <template slot="left">
             <iep-button size="small" type="primary" icon="el-icon-plus" plain @click="handleAdd">新增</iep-button>
@@ -76,8 +76,8 @@ export default {
       permissionAdd: false,
       permissionView: false,
       params: {
-        current: 1,
-        size: 10,
+        // current: 1,
+        // size: 10,
         examName: '',
         // kind: '',
         // level: '',
@@ -109,6 +109,7 @@ export default {
     // },
 
     loadPage (param=this.params) {
+      console.log(333, this.pageOption)
       // console.log(param)
       this.loadTable(param, examList)
     },

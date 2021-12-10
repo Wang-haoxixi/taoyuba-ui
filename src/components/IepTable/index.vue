@@ -267,6 +267,7 @@ export default {
       this.$emit('size-change', val)
     },
     handleCurrentChange (val) {
+      console.log('val..',val)
       this.$emit('current-change', val)
     },
     // 切换下级是否展开
