@@ -76,8 +76,8 @@ export default {
       permissionAdd: false,
       permissionView: false,
       params: {
-        current: 1,
-        size: 10,
+        // current: 1,
+        // size: 10,
         examName: '',
         // kind: '',
         // level: '',
