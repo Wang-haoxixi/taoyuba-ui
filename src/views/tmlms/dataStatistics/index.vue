@@ -3,8 +3,10 @@
   <div id="statisrics" style="min-width: 1200px;">
     <el-row>
       <el-col :span="24">
-        <h1 class="chart-title">{{orgTitle}}渔业船员大数据统计墙</h1>
-        <h6 class="chart-time">数据更新时间：{{time}}</h6>
+        <div style="display:flex;flex-direction:column">
+          <div class="chart-title">{{orgTitle}}渔业船员大数据统计墙</div>
+        <div class="chart-time">数据更新时间：{{time}}</div>
+        </div>
         <div class="select-wrapper">
           <el-form :inline="true" class="demo-form-inline">
             <el-form-item style="width: 180px;">
@@ -476,6 +478,7 @@ export default {
       this.certTitleNum =  this.certTitle.map( v=>{
         return v.value
       })
+      // console.log(this.certTitleNum)
       this.certTotal.setOption({
         xAxis: [
           {
@@ -492,7 +495,7 @@ export default {
     setCrewNumber () {
       this.certTotal = this.$echarts.init(document.getElementById('certTotal'))
       this.certTotal.setOption({
-        color: ['#2f89cf'],
+        // color: ['red'],
           tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -542,8 +545,17 @@ export default {
           data: [],
           type: 'bar',
           itemStyle: {
-            barBorderRadius: 5,
-          },
+                    normal: {
+                        color: this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0,
+                            color: '#01ECFD'
+                        }, {
+                            offset: 1,
+                            color: '#5AB7FE'
+                        }]),
+                         barBorderRadius:[20,20, 0, 0],
+                    }
+                },
         }],
       })
     },
@@ -635,63 +647,157 @@ export default {
           case '4':
             age.value = res.data.data.age['4']
             age.name = '60及以上'
+            age.itemStyle={
+              color: this.$echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+                            offset: 0,
+                            color: '#F74437'
+                        }, {
+                            offset: 1,
+                            color: '#FFB171'
+                        }]),
+            }
             break
+          // case '5':
+          //   age.value = res.data.data.age['5']
+          //   age.name = '65及以上'
+          //   break  
           default:break
         }
         this.age.push(age)
       })
       //年龄统计
       this.ageTotal.setOption({
-        legend: {
-            data: this.age.name,
-        },
-        series: [{
-          // 根据名字对应到相应的系列
-          name: '年龄分布',
+       yAxis: [
+         {
+
+         },
+        {
           data: this.age,
-        }],
+        },
+      ],
+        series: [
+          {
+          data: this.age,
+        },
+        {
+        },
+         ],
       })
     },
     setCrewAge () {
       this.ageTotal = this.$echarts.init(document.getElementById('ageTotal'))
       this.ageTotal.setOption({
         tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b}: {c} ({d}%)',
-          position: function (p) {
-            //其中p为当前鼠标的位置
-            return [p[0] + 10, p[1] - 10]
-          },
+         
         },
-        legend: {
-          top: '90%',
-          itemWidth: 10,
-          itemHeight: 10,
+         grid: [
+        {
+          left: "10%",
+          top: "12%",
+          right: "5%",
+          bottom: "8%",
+          containLabel: true,
+        },
+      ],
+      xAxis: [
+        {
+          show: false,
+        },
+      ],
+      yAxis: [
+        {
+          inverse:true,
+          axisTick: "none",
+          axisLine: "none",
+          offset: "27",
+          axisLabel: {
+            textStyle: {
+              color: "rgba(187, 214, 236, 1)", //y轴字体颜色
+              fontSize: "16",
+            },
+          },
+          data: ["≤30", "31~40", "41~50", "51~60",'≥60'],
+        },
+        {
+          //设置柱状图右边参数
+          show: true,
+          inverse: true,
           data: [],
-          textStyle: {
-            color: 'rgba(255,255,255,.5)',
-            fontSize: '12',
+          axisLine: {
+            show: false,
+          },
+          splitLine: {
+            show: false,
+          },
+          axisTick: {
+            show: false,
+          },
+          axisLabel: {
+            textStyle: {
+              color: "rgba(187, 214, 236, 1)", //y轴字体颜色
+              fontSize: "16",
+            },
           },
         },
+      ],
         series: [
           {
-            name: '年龄分布',
-            type: 'pie',
-            center: ['50%', '42%'],
-            radius: ['40%', '60%'],
-            color: [
-              '#85daef',
-              '#74e2ca',
-              '#5475f5',
-              '#9feaa5',
-              '#e6ac53',
-              '#9fb5ea',
-            ],
-            label: { show: false },
-            labelLine: { show: false },
-            data: [],
+          name: "年龄分布",
+          type: "bar",
+          yAxisIndex: 0,
+          data: [],
+          label: {
+            normal: {
+              show: false,
+              // position: "right",
+              // distance: 10,
+              formatter: function (param) {
+                console.log(param)
+                return (param.value)/2 + "%";
+              },
+              textStyle: {
+                color: "#ffffff",
+                fontSize: "16",
+              },
+            },
+            emphasis:{
+              show:false
+            }
           },
-        ],
+          barWidth: 12,
+          itemStyle: {
+            normal: {
+              color: this.$echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+                            offset: 0,
+                            color: '#01ECFD'
+                        }, {
+                            offset: 1,
+                            color: '#5AB7FE'
+                        }]),
+              borderRadius: [0, 20, 20, 0],
+            },
+          },
+          z: 2,
+        },
+        {
+          //背景灰框
+          tooltip:{
+            show:false
+          },
+          name: "年龄分布",
+          type: "bar",
+          yAxisIndex: 1,
+          data: [3000, 3000, 3000,3000,3000,3000],
+          barWidth: 12,
+          itemStyle: {
+            normal: {
+              color: "rgba(237, 237, 237, 0.1)",
+              borderRadius: [0, 100, 100, 0],
+            },
+          },
+          z: 1, // 设置维度越高这表示覆盖低的
+        },
+         ],
       })
     },
     // 劳动合同状态统计
@@ -849,9 +955,17 @@ export default {
           trigger: 'axis',
           axisPointer: {
             lineStyle: {
-              color: '#dddc6b',
+              color: '#29FFF7',
+              type:'solid',
             },
           },
+           backgroundColor:'rgba(41, 255, 247, .9)',
+           padding: [5, 10],
+           formatter: '{c0}艘',
+            textStyle:{
+              color:'#fff'
+            },
+            borderWidth:0
         },
         legend: {
           top: '0%',
@@ -859,6 +973,7 @@ export default {
             color: 'rgba(255,255,255,.5)',
             fontSize: '12',
           },
+          show:false,
         },
         grid: {
           left: '10',
@@ -869,7 +984,7 @@ export default {
         },
         xAxis: [
           {
-              boundaryGap: false,
+              boundaryGap: true,
               type: 'category',
               axisLabel: {
                 textStyle: {
@@ -877,7 +992,6 @@ export default {
                   fontSize: 12,
                 },
                 interval:0,
-                rotate:45,
               },
               axisLine: {
                 lineStyle: {
@@ -922,11 +1036,11 @@ export default {
               type: 'line',
               smooth: true,
               symbol: 'circle',
-              symbolSize: 5,
+              symbolSize: 10,
               showSymbol: false,
               lineStyle: {
                 normal: {
-                  color: '#0184d5',
+                  color: '#29FFF7',
                   width: 2,
                 },
               },
@@ -936,11 +1050,11 @@ export default {
                     [
                       {
                         offset: 0,
-                        color: 'rgba(1, 132, 213, 0.4)',
+                        color: 'rgba(41, 255, 247, 0.9)',
                       },
                       {
                         offset: 0.8,
-                        color: 'rgba(1, 132, 213, 0.1)',
+                        color: 'rgba(41, 255, 247, 0.2)',
                       },
                     ],
                     false,
@@ -949,11 +1063,9 @@ export default {
                 },
               },
               itemStyle: {
-                normal: {
-                  color: '#0184d5',
-                  borderColor: 'rgba(221, 220, 107, .1)',
-                  borderWidth: 12,
-                },
+                  color: '#FFFFFF',
+                  borderColor: 'rgba(41, 255, 247, 1)',
+                  borderWidth: 4,
               },
               data: [],
           },
