@@ -60,6 +60,7 @@
       <el-col :span="span">
         <el-form-item label="联系时间" prop="relationshipTime">
           <el-date-picker
+            :picker-options="pickerOptions"
             value-format="yyyy-MM-dd HH:mm:ss"
             format="yyyy-MM-dd HH:mm:ss"
             v-model="form.relationshipTime"
@@ -134,14 +135,6 @@ export default {
       },
       fileList: [],
       shipNames: [],
-      pickerOptions: {
-        shortcuts: [{
-          text: '今天',
-          onClick (picker) {
-            picker.$emit('pick', new Date())
-          },
-        }],
-      },
       rules:{
         shipName: [{ required: true, message: '请输入渔船名', trigger: ['change', 'blur'] }],
         shipownerName: [{ required: true, message: '请输入联系人', trigger: 'blur' }],
@@ -164,6 +157,32 @@ export default {
     headers () {
       return {
         'Authorization': 'Bearer ' + this.access_token,
+      }
+    },
+    pickerOptions () {
+      return {
+        shortcuts: [{
+          text: '今天',
+          onClick (picker) {
+            picker.$emit('pick', new Date())
+          },
+        }],
+        selectableRange: (() => {
+          let data = new Date()
+          let hour = data.getHours()
+          let minute = data.getMinutes()
+          let second = data.getSeconds()
+          if (this.form.relationshipTime && data.getFullYear() == new Date(this.form.relationshipTime).getFullYear() && data.getMonth() == new Date(this.form.relationshipTime).getMonth() && data.getDate() == new Date(this.form.relationshipTime).getDate()) {
+            return [`00:00:00 - ${hour}:${minute}:${second}`]
+          } else {
+            return ['00:00:00 - 23:59:59']
+          }
+        })(),
+        disabledDate (time) {
+          return (
+            time.getTime() > Date.now()
+          )
+        },
       }
     },
   },
