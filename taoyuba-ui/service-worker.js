@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.7ac27e6577a2c0456c1362eb4a93ddbc.js"
+  "/precache-manifest.446f15b2884bab51c35cf2f02eeecd39.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "tyb-ui"});
