@@ -546,7 +546,7 @@ export default {
           type: 'bar',
           itemStyle: {
                     normal: {
-                        color: this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                        color:new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                             offset: 0,
                             color: '#01ECFD'
                         }, {
@@ -648,7 +648,7 @@ export default {
             age.value = res.data.data.age['4']
             age.name = '60及以上'
             age.itemStyle={
-              color: this.$echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+              color: new this.$echarts.graphic.LinearGradient(1, 0, 0, 0, [{
                             offset: 0,
                             color: '#F74437'
                         }, {
@@ -767,13 +767,13 @@ export default {
           barWidth: 12,
           itemStyle: {
             normal: {
-              color: this.$echarts.graphic.LinearGradient(1, 0, 0, 0, [{
-                            offset: 0,
-                            color: '#01ECFD'
-                        }, {
-                            offset: 1,
-                            color: '#5AB7FE'
-                        }]),
+               color: new this.$echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+                      offset: 0,
+                    color: '#01ECFD'
+            }, {
+                      offset: 1,
+                    color: '#5AB7FE'
+            }, ], false),
               borderRadius: [0, 20, 20, 0],
             },
           },
