@@ -173,6 +173,7 @@ import { getPage } from '@/api/tmlms/relation'
 import dialogFormRelation from '@/views/tmlms/relation/dialogForm'
 import { getVillageByOrg } from '@/api/tmlms/bvillage/index'
 import { mapGetters } from 'vuex'
+require('echarts/extension/bmap/bmap')
 export default {
   components: {
     dialogFormRelation,
