@@ -55,10 +55,10 @@
                         <div style="color:#666666;font-size: 12px;line-height: 20px;">浙岱渔2382证书即将到期，请及时核查！</div>
                         <el-button>查看详情</el-button>
                     </div>
-                    <div class="card-title" style="font-size:13px">请输入船员姓名或身份证号</div>
+                    <div class="card-title" style="font-size:13px">船东联系记录与进出港数据对比</div>
                     <div class="msg-middle">
-                        <div>浙岱渔<span>00001</span>上下船员与进出港不匹配，请及时核查。</div>
-                        <div>浙岱渔<span>06761</span>上下船员与进出港不匹配，请及时核查。</div>
+                        <div style="margin-top: 20px">浙岱渔<span>00001</span>上下船员与进出港不匹配，请及时核查。</div>
+                        <div style="margin-top: 20px">浙岱渔<span>06761</span>上下船员与进出港不匹配，请及时核查。</div>
                     </div>
                     <div class="card-title">渔船越界提醒</div>
                     <div class="msg-bottom" style="padding-bottom: 0px;margin-bottom: 0px;border-bottom: none">
@@ -172,7 +172,17 @@
                 </div>
             </div>
             <div class="aside-r">
-                <div class="card">111</div>
+                <div class="card notification">
+                    <div class="card-title">违规通知</div>
+                    <div class="msg-middle" style="padding-bottom: 0px;margin-bottom: 0px;border-bottom: none">
+                        <div class="viol">浙岱渔<span>L08k1d</span>上下船员与进出港不匹配,请及时核查。</div>
+                        <div class="viol">浙岱渔<span>026</span>在东经30度,北纬50度,请及时与船东联系进行核实。</div>
+                        <div class="viol">浙岱渔<span>00036</span>未经允许驶离港口,请及时与船东联系进行核实。</div>
+                        <div class="viol">当前浙岱渔<span>09230</span>有<span>232</span>份证书过期,请及时做好联系工作！</div>
+                        <div class="viol">浙岱渔<span>00036</span>在东经30度,北纬50度,请及时与船东联系进行核实。</div>
+                        <div class="viol">浙岱渔<span>00036</span>在东经30度,北纬50度,请及时与船东联系进行核实。</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -398,44 +408,49 @@ export default {
                 }
             }
         }
+        
         .aside-right{
             width: 277px;
             margin-left: 20px;
-            .notification{
-                box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.08);
-                .msg-top,.msg-middle,.msg-bottom{
-                    padding-bottom: 13px;
-                    margin-bottom: 13px;
-                    border-bottom: 1px solid #EDEDED;
-                    >div{
-                        color: #666666;
-                        line-height: 20px;
-                        span{
-                            color: #4480F8;
-                        }
-                    }
-                    >.el-button{
-                        padding: 6px 12px;
-                        margin-top: 10px;
-                    }
+        }
+    }
+    // 通知项
+    .notification{
+        box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.08);
+        .msg-top,.msg-middle,.msg-bottom{
+            padding-bottom: 13px;
+            margin-bottom: 13px;
+            border-bottom: 1px solid #EDEDED;
+            >div{
+                color: #666666;
+                line-height: 20px;
+                span{
+                    color: #4480F8;
                 }
-                .msg-middle{
-                    >div{
-                        text-indent: 9px;
-                        font-size: 12px;
-                        position: relative;
-                        &:after{
-                            content: '';
-                            background-color: #BBBBBB;
-                            width: 4px;
-                            height: 4px;
-                            border-radius: 50%;
-                            position: absolute;
-                            top: 8px;
-					        left: 0;
-                        }
-                    }
+            }
+            >.el-button{
+                padding: 6px 12px;
+                margin-top: 10px;
+            }
+        }
+        .msg-middle{
+            >div{
+                text-indent: 9px;
+                font-size: 12px;
+                position: relative;
+                &:after{
+                    content: '';
+                    background-color: #BBBBBB;
+                    width: 4px;
+                    height: 4px;
+                    border-radius: 50%;
+                    position: absolute;
+                    top: 8px;
+                    left: 0;
                 }
+            }
+            .viol{
+                margin-top: 24px;
             }
         }
     }
