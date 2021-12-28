@@ -683,6 +683,7 @@ export default {
         employeePhone: [{ 
           message: '请输入乙方（雇员)联系电话', trigger: 'blur',
         },{ validator: checkPhone, trigger: 'blur' }],
+        employeeLinkPhone:[{ validator: checkPhone, trigger: 'blur' }],
         employeePosition: [{ 
           required: true, message: '请输入现有资格证书', trigger: 'blur',
         }],
