@@ -557,7 +557,10 @@ const checkTime = (rule, value, callback) => {
   }
   const checkPhone = (rule, value, callback) => {
     const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/
-      if (!Number.isInteger(+value)) {
+    if(value == ''){
+      callback()
+    }
+      else if (!Number.isInteger(+value)) {
         callback(new Error('请输入数字值'))
       } else {
         if (phoneReg.test(value)) {
@@ -668,9 +671,7 @@ export default {
         employerProp: [{ 
           required: true, message: '请输入签约人身份性质', trigger: 'blur',
         }],
-        employerPhone: [{ 
-          message: '请输入甲方（雇主)联系电话', trigger: 'blur',
-        },{ validator: checkPhone, trigger: 'blur' }],
+        employerPhone: [{ validator: checkPhone, trigger: 'blur' }],
         employerAddr: [{ 
           required: true, message: '请输入甲方（雇主)地址', trigger: 'blur',
         }],
@@ -680,9 +681,7 @@ export default {
         employeeIdcard: [{ 
           required: true, message: '请输入乙方（雇员)身份证号', trigger: 'blur',
         },{ validator: checkCardTypeNumber, trigger: 'blur' }],
-        employeePhone: [{ 
-          message: '请输入乙方（雇员)联系电话', trigger: 'blur',
-        },{ validator: checkPhone, trigger: 'blur' }],
+        employeePhone: [{ validator: checkPhone, trigger: 'blur' }],
         employeeLinkPhone:[{ validator: checkPhone, trigger: 'blur' }],
         employeePosition: [{ 
           required: true, message: '请输入现有资格证书', trigger: 'blur',
@@ -693,9 +692,7 @@ export default {
         contactName: [{ 
           required: true, message: '请输入紧急联系人姓名', trigger: 'blur',
         }],
-        contactPhone: [{ 
-          required: true, message: '请输入紧急联系人电话', trigger: 'blur',
-        },{ validator: checkPhone, trigger: 'blur' }],
+        contactPhone: [{ validator: checkPhone, trigger: 'blur' }],
         workDateStart: [{ 
           required: true, message: '请选择生产周期开始日期', trigger: 'blur',
         }],
