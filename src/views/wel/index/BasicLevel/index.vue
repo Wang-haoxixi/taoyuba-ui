@@ -72,7 +72,7 @@
                 </div>
             </div>
             <div class="title td">
-                <h3>船东联系记录 <span style="color:#0185D8;float: right;font-size: 16px;">查看未联系渔船 <i class="el-icon-arrow-right"></i></span> </h3>
+                <h3>船东联系记录 <span @click="toLinkag " style="color:#0185D8;float: right;font-size: 16px;cursor: pointer;">查看未联系渔船 <i class="el-icon-arrow-right"></i></span> </h3>
                 <el-table
                     :data="pagedTable"
                     stripe
@@ -95,7 +95,7 @@
                 </el-table>
             </div>
             <div class="title td">
-                <h3>网签合同管理 <span style="color:#0185D8;float: right;font-size: 16px;">网签合同 <i class="el-icon-arrow-right"></i></span></h3>
+                <h3>网签合同管理 <span @click="toContract" style="color:#0185D8;float: right;font-size: 16px;cursor: pointer;">网签合同 <i class="el-icon-arrow-right"></i></span></h3>
                 <div class="contract">当前共有{{ crew.totalContract }}条合同，请及时关注处理</div>
                 <div class="contract-num">
                     <div>即将过期合同：<span>{{ crew.readyContract }}</span>条</div>
@@ -162,6 +162,18 @@ export default {
         // date.getDay(); //获取当前星期X(0-6,0代表星期天)
   },
   computed: {
+  },
+  methods:{
+      toLinkag (){
+          this.$router.push({
+              path:'/account/personShip',
+          })
+      },
+      toContract () {
+          this.$router.push({
+              path:'/crew/htgl/contract_admin',
+          })
+      },
   },
 }
 </script>
