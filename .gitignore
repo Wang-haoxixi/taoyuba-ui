@@ -4,6 +4,7 @@ node_modules
 /back-end
 remark.txt
 .env
+testpc
 
 # local env files
 .env.local

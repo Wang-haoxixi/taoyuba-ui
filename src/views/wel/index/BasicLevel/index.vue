@@ -292,6 +292,18 @@ export default {
     // date.getDate(); //获取当前日(1-31)
     // date.getDay(); //获取当前星期X(0-6,0代表星期天)
   },
+  methods:{
+      toLinkag (){
+          this.$router.push({
+              path:'/account/personShip',
+          })
+      },
+      toContract () {
+          this.$router.push({
+              path:'/crew/htgl/contract_admin',
+          })
+      },
+  },
 }
 </script>
 <style scoped lang="scss">

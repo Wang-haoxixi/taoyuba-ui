@@ -555,6 +555,29 @@ const checkTime = (rule, value, callback) => {
     }
     return callback()
   }
+  const checkPhone = (rule, value, callback) => {
+    const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/
+    if(value == ''){
+      callback()
+    }
+      else if (!Number.isInteger(+value)) {
+        callback(new Error('请输入数字值'))
+      } else {
+        if (phoneReg.test(value)) {
+          callback()
+        } else {
+          callback(new Error('电话号码格式不正确'))
+        }
+      }
+  }
+  const checkCardTypeNumber = (rule, value, callback)=>{
+  const reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+if (!reg.test(value)) {
+    return callback(new Error('证件号码不正确'))
+  } else {
+    callback()
+  }
+        }
 
 export default {
   props: {
@@ -626,16 +649,16 @@ export default {
         }],
         shipownerIdcard: [{ 
           required: true, message: '请输入持证人身份证号', trigger: 'blur',
-        }],
+        },{ validator: checkCardTypeNumber, trigger: 'blur' }],
         shipName: [{ 
           required: true, message: '请输入持证人船名', trigger: 'blur',
         }],
         shipLicenses: [{ 
           required: true, message: '请输入持证人船舶登记号', trigger: 'blur',
         }],
-        shipownerPhone: [{ 
-          required: true, message: '请输入持证人联系电话', trigger: 'blur',
-        }],
+        shipownerPhone: [
+          { validator: checkPhone, trigger: 'blur' },
+        ],
         shipownerAddr: [{ 
           required: true, message: '请输入持证人家庭地址', trigger: 'blur',
         }],
@@ -644,13 +667,11 @@ export default {
         }],
         employerIdcard: [{ 
           required: true, message: '请输入甲方（雇主)身份证号', trigger: 'blur',
-        }],
+        },{ validator: checkCardTypeNumber, trigger: 'blur' }],
         employerProp: [{ 
           required: true, message: '请输入签约人身份性质', trigger: 'blur',
         }],
-        employerPhone: [{ 
-          required: true, message: '请输入甲方（雇主)联系电话', trigger: 'blur',
-        }],
+        employerPhone: [{ validator: checkPhone, trigger: 'blur' }],
         employerAddr: [{ 
           required: true, message: '请输入甲方（雇主)地址', trigger: 'blur',
         }],
@@ -659,10 +680,9 @@ export default {
         }],
         employeeIdcard: [{ 
           required: true, message: '请输入乙方（雇员)身份证号', trigger: 'blur',
-        }],
-        employeePhone: [{ 
-          required: true, message: '请输入乙方（雇员)联系电话', trigger: 'blur',
-        }],
+        },{ validator: checkCardTypeNumber, trigger: 'blur' }],
+        employeePhone: [{ validator: checkPhone, trigger: 'blur' }],
+        employeeLinkPhone:[{ validator: checkPhone, trigger: 'blur' }],
         employeePosition: [{ 
           required: true, message: '请输入现有资格证书', trigger: 'blur',
         }],
@@ -672,9 +692,7 @@ export default {
         contactName: [{ 
           required: true, message: '请输入紧急联系人姓名', trigger: 'blur',
         }],
-        contactPhone: [{ 
-          required: true, message: '请输入紧急联系人电话', trigger: 'blur',
-        }],
+        contactPhone: [{ validator: checkPhone, trigger: 'blur' }],
         workDateStart: [{ 
           required: true, message: '请选择生产周期开始日期', trigger: 'blur',
         }],

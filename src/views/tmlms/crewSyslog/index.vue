@@ -14,7 +14,12 @@
                   <el-option label="上船" value="1"></el-option>
                   <el-option label="下船" value="2"></el-option>
                 </el-select>
-              </span>                                                                                                               
+              </span>      
+              <span style="width:150px"><el-select v-model="params.sourceType" placeholder="请选择来源" size="small" clearable >
+                  <el-option label="合同" value="1"></el-option>
+                  <el-option label="设备" value="2"></el-option>
+                </el-select>
+              </span>                                                                                                          
               <span style="width: 320px;">
                   <el-date-picker
                       size="small"
@@ -154,7 +159,7 @@ export default {
         phone: '',
         status: '',
         shipName: '',
-        sourceType:2,
+        sourceType:'',
         // timeLists: '',
       },
       exportParams: {

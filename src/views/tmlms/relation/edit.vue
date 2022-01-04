@@ -135,6 +135,14 @@ export default {
       },
       fileList: [],
       shipNames: [],
+      // pickerOptions: {
+      //   shortcuts: [{
+      //     text: '今天',
+      //     onClick (picker) {
+      //       picker.$emit('pick', new Date())
+      //     },
+      //   }],
+      // },
       rules:{
         shipName: [{ required: true, message: '请输入渔船名', trigger: ['change', 'blur'] }],
         shipownerName: [{ required: true, message: '请输入联系人', trigger: 'blur' }],

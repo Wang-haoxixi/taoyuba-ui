@@ -12,7 +12,7 @@
           <span style="width:120px"><el-input v-model.trim="params.meetName" placeholder="会议标题" size="small" clearable v-if="!trainMeetId"></el-input></span>
           <span style="width:120px"><el-input v-model.trim="params.realName" placeholder="姓名" size="small" clearable></el-input></span>
           <span style="width:120px">
-              <el-select v-model="params.userType" filterable placeholder="请选择" size="small" clearable>
+              <el-select v-model="params.userType" filterable placeholder="请选择角色" size="small" clearable>
                 <el-option v-for="item in options"
                   :key="item.value"
                   :label="item.label"
@@ -144,6 +144,9 @@ export default {
   data () {
     return {
       options: [{
+        label: '全部',
+        value: '',
+      },{
         label: '船东',
         value: 0,
       },{
@@ -204,17 +207,28 @@ export default {
       }
     },
     getInformation () {
-      if( !this.params.userType && this.params.userType !== 0 ){
-        this.$message.warning('请先选择导出人员类型！')
+      // console.log('userType..', this.params.userType, this.trainMeetId)
+      if( !this.params.userType && this.params.userType !== 0 && this.params.userType !== '' ){
+        this.$message.warning('请先选择导出角色！')
         return false
       }
       if(this.params.userType === 2){
         this.$message.warning('无法导出渔船监护人信息！')
         return false
       }
-      let data = this.params.userType === 0 ? '船东信息' : '职务船员信息'
-      exportExcelPeople(this.params.userType,data,this.trainMeetId || '').then(res=>{
-        console.log(res)
+      let userType = this.params.userType === '' ? 2 : this.params.userType
+      // let data = userType === 0 ? '船东信息' : '职务船员信息'
+      let data
+      if (userType === 0) {
+        data = '船东信息'
+      }else if(userType === 1){
+        data = '职务船员信息'
+      }else if(userType === 2){
+        data = '全部培训人员信息'
+      }
+      console.log(userType, data, this.trainMeetId)
+      exportExcelPeople(userType,data,this.trainMeetId || '').then(res=>{
+        console.log('export..', res)
       })
     },
     // 补签
