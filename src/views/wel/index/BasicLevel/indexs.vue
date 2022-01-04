@@ -238,7 +238,7 @@
                 <div class="position-item">
                     <div class="pst-price">
                         <div>
-                            <span class="pst">船长</span><el-tag size="mini">丙一</el-tag>
+                            <span class="pst">船长111111111</span><el-tag size="mini">丙一</el-tag>
                         </div>
                         <div class="price">
                             100K-120K
