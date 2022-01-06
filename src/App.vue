@@ -19,6 +19,13 @@ export default {
     }
   },
   mounted () {
+    // 监听窗口是否发生变化
+    window.addEventListener('resize', ()=>{
+      const changeSize = setInterval(()=>{
+        this.$root.$emit('resize', true)
+        clearInterval(changeSize)
+      },1000)
+    })
     deviceEnquire(deviceType => {
       switch (deviceType) {
         case DEVICE_TYPE.DESKTOP:

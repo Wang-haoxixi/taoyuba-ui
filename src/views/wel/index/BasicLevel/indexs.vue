@@ -39,12 +39,8 @@
                         </div>
                     </el-col>
                     <el-col :span="12">
-                        <div class="kjtd" v-if="inS.certCount">
+                        <div class="kjtd" style="height:300px" v-if="inS.certCount">
                             <h3>已登机船员<span style="float: right;">{{ inS.certCount.total }}</span></h3>
-                            <!-- <div class="kjtd-ship"><div>持证船员</div><p>{{ inS.certCount.cert }}</p></div>
-                            <div class="kjtd-ship"><div>普通船员</div><p>{{ inS.certCount.normal }}</p></div>
-                            <div class="kjtd-ship"><div>已上船船员</div><p>{{ inS.certCount.total }}</p></div>
-                            <div class="kjtd-ship"><div>合同船员</div><p>{{ inS.certCount['1'] }}</p></div> -->
                             <div class="card-type">
                                 <div class="_item" style="background: #4480F8">
                                     <div>
@@ -79,47 +75,91 @@
                         </div>
                     </el-col>
                     <el-col :span="12">
-                        <div class="kjtd" v-if="inO.contract">
-                            <!-- <h3>面对面教育培训</h3>
-                            <div class="kjtd-ship"><div>参会人员</div><p>{{ inO.sign.meet }}</p></div>
-                            <div class="kjtd-ship"><div>船东</div><p>{{ inO.sign['0'] }}</p></div>
-                            <div class="kjtd-ship"><div>渔船监护人</div><p>{{ inO.sign['1'] }}</p></div>
-                            <div class="kjtd-ship"><div>培训次数</div><p>{{ inO.sign.total }}</p></div> -->
+                        <div class="kjtd" style="height:300px" v-if="inO.contract">
                             <h3>船员合同</h3>
-                            <div id="main" style="width: 300px;height:300px;"></div>
+                            <div ref="contractEchart" style="width: 100%;height:100%;"></div>
                         </div>
                     </el-col>
                     <el-col :span="12">
                         <div class="kjtd" v-if="inO.sign">
-                            <h3>网签合同</h3>
-                            <div class="kjtd-ship"><div>成立合同</div><p>{{ inO.contract.startContract }}</p></div>
-                            <div class="kjtd-ship"><div>失效合同</div><p>{{ inO.contract.overContract }}</p></div>
-                            <div class="kjtd-ship"><div>解除合同</div><p>{{ inO.contract.endContract }}</p></div>
-                            <div class="kjtd-ship"><div>合同备案</div><p>{{ inO.contract.noPaperContract }}</p></div>
-                        </div>
-                    </el-col>
-                    <el-col :span="12">
-                        <div class="kjtd">
-                            <h3>进出港管理 </h3>
-                            <div class="kjtd-ship"><div>进港</div><p>{{ inM.IN }}</p></div>
-                            <div class="kjtd-ship"><div>出港</div><p>{{ inM.OUT }}</p></div>
-                            <div class="kjtd-ship"><div>已上报/未上报</div><p>0/0</p></div>
-                            <div class="kjtd-ship"><div>免报告</div><p>0</p></div>
+                            <h3>面对面教育培训</h3>
+                            <div class="kjtd-ship"><div>参会人数</div><p>{{ inO.sign.meet }}</p></div>
+                            <div class="kjtd-ship"><div>船东</div><p>{{ inO.sign['0'] }}</p></div>
+                            <div class="kjtd-ship"><div>渔船监护人</div><p>{{ inO.sign['1'] }}</p></div>
+                            <div class="kjtd-ship"><div>培训次数</div><p>{{ inO.sign.total }}</p></div>
                         </div>
                     </el-col>
                     <el-col :span="12">
                         <div class="kjtd">
                             <h3>求职招聘</h3>
-                            <div class="kjtd-ship"><div>持证船员</div><p>{{Zhao.licensedCrew}}</p></div>
-                            <div class="kjtd-ship"><div>普通船员</div><p>{{Zhao.rating}}</p></div>
-                            <div class="kjtd-ship"><div>已上船船员</div><p>{{Zhao.boarding}}</p></div>
-                            <div class="kjtd-ship"><div>合同船员</div><p>{{Zhao.contractCrew}}</p></div>
+                            <div class="kjtd-ship"><div>待求职总数</div><p>{{Zhao.licensedCrew}}</p></div>
+                            <div class="kjtd-ship"><div>驾驶类船员</div><p>{{Zhao.pilotCrew}}</p></div>
+                            <div class="kjtd-ship"><div>轮机类船员</div><p>{{Zhao.marineCrew}}</p></div>
+                            <div class="kjtd-ship"><div>普通船员</div><p>{{Zhao.contractCrew}}</p></div>
                         </div>
                     </el-col>
-                    <el-col :span="12">
-                        <div class="kjtd">
+                    <el-col :span="24">
+                        <!-- <div class="kjtd">
+                            <h3>进出港管理 </h3>
+                            <div class="kjtd-ship"><div>进港</div><p>{{ inM.IN }}</p></div>
+                            <div class="kjtd-ship"><div>出港</div><p>{{ inM.OUT }}</p></div>
+                            <div class="kjtd-ship"><div>已上报/未上报</div><p>0/0</p></div>
+                            <div class="kjtd-ship"><div>免报告</div><p>0</p></div>
+                        </div> -->
+                        <div class="middle-box">
+                            <div class="middle-box-title">进出港管理</div>
+                            <el-row :gutter="20">
+                                <el-col :span="6">
+                                    <div class="info-item" style="background: #4480F8;">
+                                        <div class="info-title">进港</div>
+                                        <div class="info-data">
+                                            <div class="num">{{ inM.IN }}</div>
+                                            <div class="circle-box">
+                                                <img src="../../../../../public/img/menuicon/icon-home-totalboat.png">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </el-col>
+                                <el-col :span="6">
+                                    <div class="info-item" style="background: #67DE9C;">
+                                        <div class="info-title">出港</div>
+                                        <div class="info-data">
+                                            <div class="num">{{ inM.OUT }}</div>
+                                            <div class="circle-box">
+                                                <img src="../../../../../public/img/menuicon/icon-home-totalboat.png">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </el-col>
+                                <el-col :span="6">
+                                    <div class="info-item" style="background: #FFB171;">
+                                        <div class="info-title">已上报/未上报</div>
+                                        <div class="info-data">
+                                            <div class="num">0/0</div>
+                                            <div class="circle-box">
+                                                <img src="../../../../../public/img/menuicon/icon-home-record.png">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </el-col>
+                                <el-col :span="6">
+                                    <div class="info-item" style="background: #FD6565;">
+                                        <div class="info-title">免报告</div>
+                                        <div class="info-data">
+                                            <div class="num">0</div>
+                                            <div class="circle-box">
+                                                <img src="../../../../../public/img/menuicon/icon-home-exempt.png">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                        </div>
+                    </el-col>
+                    <el-col :span="24">
+                        <div class="kjtd" style="height:348px;">
                             <h3>船东联系排行（当月）</h3>
-                            <el-table
+                            <!-- <el-table
                                 :data="pagedTable"
                                 stripe
                                 style="width: 100%">
@@ -137,10 +177,11 @@
                                 label="数量"
                                 >
                                 </el-table-column>
-                            </el-table>
+                            </el-table> -->
+                            <div ref="relationEchart" style="width: 100%;height:280px;"></div>
                         </div>
                     </el-col>
-                    <el-col :span="12">
+                    <!-- <el-col :span="12">
                         <div class="kjtd">
                             <h3>基层操作排行（当月）</h3>
                             <el-table
@@ -163,11 +204,11 @@
                                 </el-table-column>
                             </el-table>
                         </div>
-                    </el-col>
+                    </el-col> -->
                     <el-col :span="24">
                         <div class="kjtd">
                             <div>
-                                <el-button type="text" :class="active === 0 ? '' : 'button-dis'" @click="searchName(0)">渔船查询</el-button> <span class="kjtd-span">/</span> <el-button type="text" :class="active === 1 ? '' : 'button-dis'" @click="searchName(1)">证书查询</el-button> <span class="kjtd-span">/</span> <el-button type="text" :class="active === 2 ? '' : 'button-dis'" @click="searchName(2)">船员查询</el-button>
+                                <el-button type="text" :class="active === 0 ? '' : 'button-dis'" @click="searchName(0)">渔船查询</el-button> <span class="kjtd-span">/</span> <el-button type="text" :class="active === 1 ? '' : 'button-dis'" @click="searchName(1)">船员查询</el-button>
                             </div>
                             <div class="kjtd-search"> <el-input v-model="search" :placeholder="placeholders[active]"></el-input> <el-button type="primary" style="margin-left: 10px" @click="searchAny">查询</el-button> </div>
                         </div>
@@ -238,7 +279,7 @@
                 <div class="position-item">
                     <div class="pst-price">
                         <div>
-                            <span class="pst">船长111111111</span><el-tag size="mini">丙一</el-tag>
+                            <span class="pst">船长</span><el-tag size="mini">丙一</el-tag>
                         </div>
                         <div class="price">
                             100K-120K
@@ -256,7 +297,7 @@
 </template>
 
 <script>
-import * as echarts from 'echarts'
+// import * as echarts from 'echarts'
 import SelectOrgDialog from '@/page/index/top/SelectOrgDialog'
 import { mapState } from 'vuex'
 import { countPortByOrg,countShipAndCrewByOrg,countVillageByOrg,countSignAndContractByOrg,jobRecruitment } from '@/api/wel/index'
@@ -264,7 +305,11 @@ export default {
    data () {
     return {
       list: [],
-      pagedTable: [],
+      pagedTable: {
+          xData: [],
+          xTotal: [],
+          xRelationed: [],
+      },
       pageTable:[],
       search: '',
       active: 0,
@@ -277,43 +322,40 @@ export default {
       },
       inO: {},
       Zhao:{},
-      placeholders: ['请输入船名号','请输入证书号','请输入船员名称'],
+      placeholders: ['请输入船名号或渔船编号','请输入船员名称'],
       time: {
           z: '',
           y: '',
       },
+
+      contractEchart: null,
+      relationEchart: null,
     }
   },
   components: { SelectOrgDialog },
   mounted () {
-    // 基于准备好的dom，初始化echarts实例
-    var myChart = echarts.init(document.getElementById('main'))
-    // 绘制图表
-    myChart.setOption({
-    title: {
-        text: 'ECharts 入门示例',
-    },
-    tooltip: {},
-    xAxis: {
-        data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子'],
-    },
-    yAxis: {},
-    series: [
-        {
-        name: '销量',
-        type: 'bar',
-        data: [5, 20, 36, 10, 10, 20],
-        },
-    ],
+    this.$root.$on('resize',item=>{
+        if(item){
+            this.contractEchart.resize()
+            this.relationEchart.resize()
+        }
     })
   },
   created () {
       countVillageByOrg({current:1,size:6}).then(({ data })=>{
-          this.pagedTable = data.data.record
+          let recordData = data.data.record
+          recordData.forEach((item)=>{
+              this.pagedTable.xData.push(item.villageName)
+              this.pagedTable.xTotal.push(0)
+              this.pagedTable.xRelationed.push(item.number)
+          })
+          console.log('countVillageByOrg..', this.pagedTable)
+          this.$nextTick(()=>{
+              this.getRelationEchart()
+          })
       })
       countPortByOrg().then(({ data })=>{
           this.inM = data.data
-        //   console.log(this.inM)
       })
       countShipAndCrewByOrg().then(({ data })=>{
           this.inS = data.data
@@ -322,8 +364,12 @@ export default {
           this.Zhao = data.data
       })
       countSignAndContractByOrg().then(({data})=>{
-        //   console.log(this.info)
-          this.inO = data.data
+          if(data.code === 0){
+              this.inO = data.data
+              this.$nextTick(()=>{
+                  this.getContractEchart()
+              })
+          }
       })
         var date = new Date()
         let arrz = ['天','一','二','三','四','五','六']
@@ -365,14 +411,188 @@ export default {
               return false
           }
           if(this.active === 0){
-            // this.$router.push(`/ships/manage?shipName=${this.search}`)
+            this.$router.push(`/ships/manage?shipName=${this.search}`)
           }else if(this.active === 1){
-            // this.$router.push(`/ships/manage?shipName=${this.search}`)
-            console.log(123)
-          }else {
             this.$router.push(`/crew/smdj/boatMan?realName=${this.search}`)
           }
       },
+      getContractEchart (){
+        this.contractEchart = this.$echarts.init(this.$refs.contractEchart)
+        //配置图表
+        var option = {
+            tooltip: {
+                trigger: 'item',
+            },
+            legend: {
+                icon: 'circle',
+                orient: 'vertical',
+                right: '10%',
+                top: 'middle',
+                itemWidth: 8,
+                itemHeight: 8,
+            },
+            graphic:[{//图形中间文字
+                type:'text',
+                left:'center',
+                top:'43%',
+                style:{
+                    text:'824',
+                    textAlign:'center',
+                    font: '18px bold "DIN Alternate"',
+                    fill:'#333333',
+                    fontSize:20,
+                },
+                },
+                {//图形中间文字
+                    type:'text',
+                    left:'center',
+                    top:'53%',
+                    style:{
+                    text:'合同总数',
+                    textAlign:'center',
+                    fill:'#333333',
+                    fontSize:14,
+                },
+            }],
+            series: [
+                {
+                    name: '船员合同',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        show: false,
+                    },
+                    data: [
+                        { 
+                            value: this.inO.contract.startContract,
+                            name: '成立合同', 
+                            itemStyle: {
+                                color: '#67DE9C',
+                            },
+                        },
+                        { 
+                            value: this.inO.contract.overContract, 
+                            name: '失效合同',
+                            itemStyle: {
+                                color: '#FFB171',
+                            },
+                        },
+                        { 
+                            value: this.inO.contract.noPaperContract,
+                            name: '合同备案',
+                            itemStyle: {
+                                color: '#4480F8',
+                            },
+                        },
+                    ],
+                },
+            ],
+        }
+        this.contractEchart.setOption(option)
+    },
+    getRelationEchart (){ 
+        this.relationEchart = this.$echarts.init(this.$refs.relationEchart)
+        //配置图表
+        var option = {
+            backgroundColor: '#ffffff',
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow',
+                    label: {
+                        show: true,
+                    },
+                },
+            },
+            legend: {
+                show: false,
+            },
+            xAxis: {
+                data: this.pagedTable.xData,
+                // axisLine: {
+                //     show: true, //显隐X轴轴线
+                //     lineStyle: {
+                //         color: '#EDEDED',
+                //     },
+                // },
+                axisTick: {
+                    show: false, //显隐X轴刻度
+                },
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        color: '#999999', //X轴文字颜色
+                    },
+                },
+            },
+            yAxis: [
+                {
+                    min: 0,
+                    max: 600,
+                    type: 'value',
+                    splitLine: {
+                        show: true, //是否显示分隔线
+                    },
+                    axisTick: {
+                        show: false,
+                    },
+                    axisLine: {
+                        show: false,
+                    },
+                    axisLabel: {
+                        show: true,
+                        textStyle: {
+                            color: '#999999',
+                        },
+                    },
+                },
+            ],
+            series: [
+                {
+                    name: '已联系船数曲线',
+                    type: 'line',
+                    yAxisIndex: 0, //使用的 y 轴的 index，在单个图表实例中存在多个 y轴的时候有用
+                    smooth: true, //平滑曲线显示
+                    showAllSymbol: true, //显示所有图形。
+                    symbol: 'none', //取消标记点
+                    tooltip: {
+                        show:false,
+                    },
+                    lineStyle: {
+                        color: '#4480F8',
+                    },
+                    areaStyle: {
+                        color: 'rgba(5,140,255, 0.2)',
+                    },
+                    data: this.pagedTable.xRelationed,
+                },
+                {
+                    name: '渔船总数',
+                    type: 'bar',
+                    barWidth: 15,
+                    itemStyle: {
+                        normal: {
+                            color: '#4480F8',
+                        },
+                    },
+                    data: this.pagedTable.xTotal,
+                },
+                {
+                    name: '已联系船数柱状',
+                    type: 'bar',
+                    barWidth: 15,
+                    itemStyle: {
+                        normal: {
+                            color: '#67DE9C',
+                        },
+                    },
+                    data: this.pagedTable.xRelationed,
+                },
+            ],
+        }
+        this.relationEchart.setOption(option)
+    },
   },
 }
 </script>
@@ -752,6 +972,49 @@ export default {
         }
         .viol{
             margin-top: 24px;
+        }
+    }
+}
+
+.middle-box{
+    .middle-box-title{
+        color: #333333;
+        font-size: 16px;
+        font-weight: 800;
+        line-height: 24px;
+        font-family: PingFang SC;
+        padding-bottom: 16px;
+    }
+    margin-top: 20px;
+    .info-item{
+        padding: 16px;
+        border-radius: 10px;
+        line-height: 20px;
+        color: #FFFFFF;
+        .info-title{
+            margin-bottom: 7px;
+        }
+        .info-data{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            .num{
+                font-size: 24px;
+                font-weight: bold;
+                font-family: DIN Alternate;
+            }
+            .circle-box{
+                width: 44px;
+                height: 44px;
+                background: rgba(255, 255, 255, .25);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                >img{
+                    width: 24px;
+                }
+            }
         }
     }
 }
