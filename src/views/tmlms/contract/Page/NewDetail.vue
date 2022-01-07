@@ -556,7 +556,8 @@ const checkTime = (rule, value, callback) => {
     return callback()
   }
   const checkPhone = (rule, value, callback) => {
-    const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/
+    // const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/
+    const phoneReg = /^1[3-9]\d{9}$/
     if(value == ''){
       callback()
     }
