@@ -318,7 +318,7 @@ export default {
             value: [item.longitude, item.latitude, item.flag,false],
           }
         })
-        // console.log(this.shipList)
+        console.log('shipList...',this.shipList)
         this.getData()
       })
     },

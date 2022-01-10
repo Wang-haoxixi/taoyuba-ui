@@ -677,6 +677,12 @@ export default {
       params () {
       sessionStorage.setItem('query', JSON.stringify(this.params))
       },
+      '$route.query.realName' (newVal){
+        if(newVal){
+          this.params.realName = this.$route.query.realName
+          this.getData()
+        }
+      },
   },
  beforeUpdate () {
     sessionStorage.setItem('query', JSON.stringify(this.params))

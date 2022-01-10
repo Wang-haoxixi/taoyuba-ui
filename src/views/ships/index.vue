@@ -1,5 +1,6 @@
 <template>
-  <component :record="record" :is="currentComponet"></component>
+  <!-- 添加key用于防止频繁使用该组件导致created只能触发第一次 -->
+  <component :record="record" :is="currentComponet" :key="$route.path"></component>
 </template>
 <script>
 import List from './Page/List'

@@ -47,7 +47,20 @@
             </div>
             <div class="aside-right">
                 <div class="card" style="background: linear-gradient(135deg, #4480F8 0%, #3EBBFD 100%);margin-bottom:20px">
-                    111
+                    <div class="weather-date">
+                        <div class="weather">
+                            <div class="area">岱山县</div>
+                            <img class="weather-pic" src="/img/weatherIcon/icon-dalei.png">
+                            <div class="warning">
+                                蓝色预警<img src="/img/weatherIcon/icon-windpower.png">
+                            </div>
+                        </div>
+                        <div class="date">
+                            <div class="day">{{ dateTime.day }}</div>
+                            <div class="month">{{ dateTime.year }}年{{ dateTime.month }}月</div>
+                            <div class="week">{{ dateTime.week }}</div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card notification">
                     <div class="card-title">证书消息提醒</div>
@@ -200,10 +213,12 @@ export default {
       total: {},
       crew: {},
       info: {},
-      time: {
-          z: '',
-          y: '',
-      },
+    dateTime: {
+        year: '',
+        month: '',
+        day: '',
+        week: '',
+    },
 
       msgList: [
           {
@@ -284,13 +299,11 @@ export default {
         this.total = data.data
     })
     var date = new Date()
-    let arrz = ['天','一','二','三','四','五','六']
-    this.time.z = `周${ arrz[date.getDay()] }`
-    this.time.y = `${ date.getMonth() + 1 }月${ date.getDate() }日`
-    // date.getYear(); //获取当前年份(2位)
-    // date.getMonth(); //获取当前月份(0-11,0代表1月)
-    // date.getDate(); //获取当前日(1-31)
-    // date.getDay(); //获取当前星期X(0-6,0代表星期天)
+    let arrWeek = ['天','一','二','三','四','五','六']
+    this.dateTime.year = date.getFullYear()
+    this.dateTime.month = date.getMonth() + 1
+    this.dateTime.day = date.getDate()
+    this.dateTime.week = `星期${ arrWeek[date.getDay()] }`
   },
   methods:{
       toLinkag (){
@@ -424,6 +437,51 @@ export default {
         .aside-right{
             width: 277px;
             margin-left: 20px;
+
+            .weather-date{
+                color: #FFFFFF;
+                display: flex;
+                justify-content: space-between;
+                .weather{
+                    .area{
+                        font-size: 18px;
+                        font-weight: 500;
+                        line-height: 24px;
+                    }
+                    .weather-pic{
+                        width: 48px;
+                        height: 60px;
+                        margin: 16px 0 20px;
+                    }
+                    .warning{
+                        line-height: 24px;
+                        font-weight: 500;
+                        font-size: 14px;
+                        >img{
+                            width: 16px;
+                            margin-left: 7px;
+                        }
+                    }
+                }
+                .date{
+                    width: 84px;
+                    height: 128px;
+                    text-align: center;
+                    .day{
+                        font: bold 30px DIN Alternate;
+                        line-height: 42px;
+                    }
+                    .month{
+                        font: 400 14px PingFang SC;
+                        line-height: 20px;
+                        margin-bottom: 10px;
+                    }
+                    .week{
+                        font: 400 14px PingFang SC;
+                        line-height: 26px;
+                    }
+                }
+            }
         }
     }
     // 通知项

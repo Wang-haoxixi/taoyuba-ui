@@ -87,8 +87,8 @@ export default {
     }
   },
   created () {
+    console.log('created...', this.$route.query.shipName)
     this.getQuery()
-    // console.log(111)
     this.$set(this.pagination, 'current', this.params.current)
     this.$nextTick(() => {
       // this.pagination.current = this.params.current

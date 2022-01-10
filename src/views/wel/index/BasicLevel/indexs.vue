@@ -219,7 +219,20 @@
         </div>
         <div class="main-r">
             <div class="card" style="background: linear-gradient(135deg, #4480F8 0%, #3EBBFD 100%);margin-bottom:20px">
-                111
+                <div class="weather-date">
+                    <div class="weather">
+                        <div class="area">岱山县</div>
+                        <img class="weather-pic" src="/img/weatherIcon/icon-dalei.png">
+                        <div class="warning">
+                            蓝色预警<img src="/img/weatherIcon/icon-windpower.png">
+                        </div>
+                    </div>
+                    <div class="date">
+                        <div class="day">{{ dateTime.day }}</div>
+                        <div class="month">{{ dateTime.year }}年{{ dateTime.month }}月</div>
+                        <div class="week">{{ dateTime.week }}</div>
+                    </div>
+                </div>
             </div>
             <div class="card notification" style="margin-bottom: 20px">
                 <div class="card-title">违规通知</div>
@@ -234,10 +247,11 @@
             </div>
             <div class="card">
                 <div class="card-title">求职招聘</div>
-                <div class="position-item">
+                <div class="position-item" v-for="(item,index) in recruitList" :key='index'>
                     <div class="pst-price">
                         <div>
-                            <span class="pst">船长</span><el-tag size="mini">丙一</el-tag>
+                            <span class="pst">{{ dictGroup.tyb_resume_position[item.positionId].label }}</span>
+                            <el-tag size="mini">丙一</el-tag>
                         </div>
                         <div class="price">
                             100K-120K
@@ -245,10 +259,10 @@
                     </div>
                     <div class="ship-time">
                         <div>围网渔船</div>
-                        <div>30分钟前</div>
+                        <div>{{ item.updateTime }}</div>
                     </div>
                 </div>
-                <div class="position-item">
+                <!-- <div class="position-item">
                     <div class="pst-price">
                         <div>
                             <span class="pst">船长</span><el-tag size="mini">甲二</el-tag>
@@ -289,7 +303,7 @@
                         <div>围网渔船</div>
                         <div>30分钟前</div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
 
@@ -297,10 +311,10 @@
 </template>
 
 <script>
-// import * as echarts from 'echarts'
 import SelectOrgDialog from '@/page/index/top/SelectOrgDialog'
-import { mapState } from 'vuex'
-import { countPortByOrg,countShipAndCrewByOrg,countVillageByOrg,countSignAndContractByOrg,jobRecruitment } from '@/api/wel/index'
+import { mapState,mapGetters } from 'vuex'
+import { countPortByOrg,countShipAndCrewByOrg,owner_ranking,countSignAndContractByOrg,jobRecruitment } from '@/api/wel/index'
+import { getRecruitPage } from '@/api/post/recruit.js'
 export default {
    data () {
     return {
@@ -322,11 +336,14 @@ export default {
       },
       inO: {},
       Zhao:{},
-      placeholders: ['请输入船名号或渔船编号','请输入船员名称'],
-      time: {
-          z: '',
-          y: '',
+      placeholders: ['请输入船名号','请输入船员名称'],
+      dateTime: {
+          year: '',
+          month: '',
+          day: '',
+          week: '',
       },
+      recruitList: [],
 
       contractEchart: null,
       relationEchart: null,
@@ -342,17 +359,21 @@ export default {
     })
   },
   created () {
-      countVillageByOrg({current:1,size:6}).then(({ data })=>{
-          let recordData = data.data.record
+      console.log(33333,this.dictGroup)
+      owner_ranking({}).then(({ data })=>{
+          let recordData = data.data.rankingList
           recordData.forEach((item)=>{
               this.pagedTable.xData.push(item.villageName)
-              this.pagedTable.xTotal.push(0)
-              this.pagedTable.xRelationed.push(item.number)
+              this.pagedTable.xTotal.push(item.shipCount)
+              this.pagedTable.xRelationed.push(item.amount)
           })
-          console.log('countVillageByOrg..', this.pagedTable)
           this.$nextTick(()=>{
               this.getRelationEchart()
           })
+      })
+      getRecruitPage({size:5}).then(({ data })=>{
+          console.log('getRecruitPage..',data)
+          this.recruitList = data.data.records
       })
       countPortByOrg().then(({ data })=>{
           this.inM = data.data
@@ -372,15 +393,21 @@ export default {
           }
       })
         var date = new Date()
-        let arrz = ['天','一','二','三','四','五','六']
-        this.time.z = `周${ arrz[date.getDay()] }`
-        this.time.y = `${ date.getMonth() + 1 }月${ date.getDate() }日`
+        let arrWeek = ['天','一','二','三','四','五','六']
+        this.dateTime.year = date.getFullYear()
+        this.dateTime.month = date.getMonth() + 1
+        this.dateTime.day = date.getDate()
+        this.dateTime.week = `星期${ arrWeek[date.getDay()] }`
+        console.log('dateTime..', this.dateTime)
   },
-    computed: {         
+  computed: {         
     ...mapState({
-      orgList: state => state.user.orgs,
-      orgId: state => state.user.userInfo.orgId,
+    orgList: state => state.user.orgs,
+    orgId: state => state.user.userInfo.orgId,
     }),
+    ...mapGetters([
+    'dictGroup',
+    ]),
   },
   methods: {
       open (){
@@ -918,6 +945,51 @@ export default {
         }
         .ship-time{
 
+        }
+    }
+
+    .weather-date{
+        color: #FFFFFF;
+        display: flex;
+        justify-content: space-between;
+        .weather{
+            .area{
+                font-size: 18px;
+                font-weight: 500;
+                line-height: 24px;
+            }
+            .weather-pic{
+                width: 48px;
+                height: 60px;
+                margin: 16px 0 20px;
+            }
+            .warning{
+                line-height: 24px;
+                font-weight: 500;
+                font-size: 14px;
+                >img{
+                    width: 16px;
+                    margin-left: 7px;
+                }
+            }
+        }
+        .date{
+            width: 84px;
+            height: 128px;
+            text-align: center;
+            .day{
+                font: bold 30px DIN Alternate;
+                line-height: 42px;
+            }
+            .month{
+                font: 400 14px PingFang SC;
+                line-height: 20px;
+                margin-bottom: 10px;
+            }
+            .week{
+                font: 400 14px PingFang SC;
+                line-height: 26px;
+            }
         }
     }
 }

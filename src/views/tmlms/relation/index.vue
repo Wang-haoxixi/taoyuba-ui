@@ -400,6 +400,7 @@ export default {
       delete params.rangeTime
       this.tableLoading = true
       getPage(params).then(({ data }) => {
+        console.log('getPage..', data)
         if (data.code === 0) {
           this.pagedTable = data.data.records
           this.total = data.data.total

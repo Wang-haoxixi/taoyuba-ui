@@ -86,9 +86,10 @@ export function countSignAndContractByOrg () {
   })
 }
 
-export function countVillageByOrg () {
+export function owner_ranking () {
   return request({
-    url: '/tmlms/workSpace/countVillageByOrg',
+    // url: '/tmlms/workSpace/countVillageByOrg',
+    url: '/tmlms/relationship/owner_ranking',
     method: 'get',
   })
 }
