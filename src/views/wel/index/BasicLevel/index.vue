@@ -6,7 +6,7 @@
                     <el-image src="/img/title.png" class="title-img" style="width: 130px;height: 96px;margin-right: 20px"></el-image>
                     <div class="title-hello">
                         <div>您好，衢顺渔业专业合作社，欢迎来到淘渔吧后台系统</div>
-                        <div>您的合作社本月联系过<span style="color: #4480F8">999</span>名船东，感谢您对渔业安全做出的贡献”。</div>
+                        <div>您的合作社本月联系过<span style="color: #4480F8">{{ total.ready }}</span>名船东，感谢您对渔业安全做出的贡献”。</div>
                     </div>
                 </div>
                 <div class="card msg-manager">
@@ -86,7 +86,7 @@
                     <div class="info-item" style="background: #4480F8;">
                         <div class="info-title">本站渔船总量</div>
                         <div class="info-data">
-                            <div class="num">399</div>
+                            <div class="num">{{ crew.shipCount  }}</div>
                             <div class="circle-box">
                                 <img src="../../../../../public/img/menuicon/icon-home-totalboat.png">
                             </div>
@@ -97,7 +97,7 @@
                     <div class="info-item" style="background: #67DE9C;">
                         <div class="info-title">已参加面对面教育/应参加人数</div>
                         <div class="info-data">
-                            <div class="num">500/512</div>
+                            <div class="num">{{ crew.signCount }}/{{ crew.signCount }}</div>
                             <div class="circle-box">
                                 <img src="../../../../../public/img/menuicon/icon-home-joinnum.png">
                             </div>
@@ -108,7 +108,7 @@
                     <div class="info-item" style="background: #FFB171;">
                         <div class="info-title">本站船员总量</div>
                         <div class="info-data">
-                            <div class="num">875</div>
+                            <div class="num">{{ crew.crewCount }}</div>
                             <div class="circle-box">
                                 <img src="../../../../../public/img/menuicon/icon-home-totalcrew.png">
                             </div>
@@ -119,7 +119,7 @@
                     <div class="info-item" style="background: #FD6565;">
                         <div class="info-title">联系记录总数</div>
                         <div class="info-data">
-                            <div class="num">8997</div>
+                            <div class="num">{{ crew.recordCount }}</div>
                             <div class="circle-box">
                                 <img src="../../../../../public/img/menuicon/icon-home-totallinks.png">
                             </div>
@@ -165,13 +165,13 @@
                         </div>
                     </div>
                     <div class="contract">
-                        当前共有<span style="color:#4480F8">{{ contractList.total }}</span>条合同，请及时关注处理
+                        当前共有<span style="color:#4480F8">{{ crew.totalContract }}</span>条合同，请及时关注处理
                     </div>
                     <div class="contract-item">
-                        <div>即将过期合同：<span style="color:#FFB171">236</span> 条</div>
-                        <div>合同成立：<span style="color:#FFB171">586</span> 条</div>
-                        <div>未签纸质合同：<span style="color:#FFB171">1355</span> 条</div>
-                        <div>合同解除：<span style="color:#FFB171">126</span> 条</div>
+                        <div>即将过期合同：<span style="color:#FFB171">{{ crew.readyContract }}</span> 条</div>
+                        <div>合同成立：<span style="color:#FFB171">{{ crew.startContract }}</span> 条</div>
+                        <div>未签纸质合同：<span style="color:#FFB171">{{ crew.noPaperContract }}</span> 条</div>
+                        <div>合同解除：<span style="color:#FFB171">{{ crew.endContract }}</span> 条</div>
                     </div>
                     <div class="card-title" style="margin-bottom:16px">合同检索</div>
                     <div class="retrieve">
@@ -203,19 +203,16 @@
 
 <script>
 import { getPage } from '@/api/tmlms/relation'
-import { getContractList } from '@/api/tmlms/newContract'
 import { countShipAndCrew,countRecordByVillageId } from '@/api/wel/index'
 
 export default {
    data () {
     return {
       search:'',
-      contractList: {},
       list: [],
       pagedTable: [],
       total: {},
       crew: {},
-      info: {},
     dateTime: {
         year: '',
         month: '',
@@ -280,26 +277,15 @@ export default {
       showAside: true,
     }
   },
-  computed: {
-    isShow300px () {
-      if (!this.isTablet()) { return this.showAside ? '300px' : '0' } else { return '0' }
-    },
-  },
   created () {
-    this.getContractList()
     getPage({current:1,size:6}).then(({ data })=>{
         this.pagedTable = data.data.records
     })
-    // countInfo().then(({ data })=>{
-    //   console.log(data)
-    //   this.info = data.data
-    // })
     countShipAndCrew().then(({ data })=>{
-        console.log(data)
+        console.log('countShipAndCrew..',data)
         this.crew = data.data
     })
     countRecordByVillageId().then(({ data })=>{
-        console.log(data)
         this.total = data.data
     })
     var date = new Date()
@@ -318,12 +304,6 @@ export default {
       toContract () {
           this.$router.push({
               path:'/crew/htgl/contract_admin',
-          })
-      },
-      getContractList (){
-          getContractList().then(({data})=>{
-              console.log('data..', data)
-              this.contractList =  data.data
           })
       },
       searchContract (){

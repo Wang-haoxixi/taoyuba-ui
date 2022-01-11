@@ -1,15 +1,15 @@
 <template>
   <div class="avue-contail">
     <el-container style="height: 100vh;">
-      <el-header style="height: 60px;padding: 0;z-index: 500;">
-        <!-- 顶部导航栏 -->
-        <top @tabList="addList"/>
-      </el-header>
+      <el-aside :width="asideWidth">
+        <!-- 左侧导航栏 -->
+        <sidebar @tabList="addList"></sidebar >
+      </el-aside>
       <el-container>
-        <el-aside :width="asideWidth">
-          <!-- 左侧导航栏 -->
-          <sidebar @tabList="addList"></sidebar >
-        </el-aside>
+        <el-header style="height: 60px;padding: 0;z-index: 500;">
+          <!-- 顶部导航栏 -->
+          <top @tabList="addList"/>
+        </el-header>
         <el-main>
           <!-- 主体视图层 -->
           <el-scrollbar style="height:100%">

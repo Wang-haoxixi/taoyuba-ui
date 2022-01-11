@@ -1,23 +1,12 @@
 <template>
   <div class="top">
-    <div class="top-left">
+    <!-- <div class="top-left">
       <div class="logo-wrapper">
         <el-tooltip class="item" effect="dark" content="点击返回工作台" placement="bottom">
           <div class="logo" @click="$openPage('/')"></div>
         </el-tooltip>
-        <!-- <a-dropdown>
-          <a href="#">
-            国脉智慧平台
-            <a-icon type="down" />
-          </a>
-          <a-menu slot="overlay">
-            <a-menu-item v-for="(v, i) in collectWebsite" :key="i" @click="$openPage(v.url, 'url')">
-              {{v.name}}
-            </a-menu-item>
-          </a-menu>
-        </a-dropdown> -->
       </div>
-    </div>
+    </div> -->
     <div class="top-center">
       <top-navbar></top-navbar>
     </div>
