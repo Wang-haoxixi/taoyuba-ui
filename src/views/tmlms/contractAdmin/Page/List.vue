@@ -389,6 +389,9 @@ export default {
   },
   created () {
     let query = this.$route.query
+
+    this.params.shipName = this.$route.query.shipName
+
     for (let key in this.params) {
        this.params[key] = query[key]
       //  if (key === 'status') {

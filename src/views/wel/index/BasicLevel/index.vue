@@ -134,7 +134,7 @@
                 <div class="card recordbox" style="margin-bottom:20px;width:100%;">
                     <div class="card-title">
                         <div>船东联系记录
-                            <span style="color:#4480F8;float: right;font-size: 16px;">查看未联系渔船 <i class="el-icon-arrow-right"></i></span>
+                            <span @click="toLinkag" style="color:#4480F8;float: right;font-size: 16px;cursor: pointer;">查看未联系渔船 <i class="el-icon-arrow-right"></i></span>
                         </div>
                     </div>
                     <el-table
@@ -161,11 +161,11 @@
                 <div class="card contract-manage">
                     <div class="card-title">
                         <div>网签合同管理
-                            <span style="color:#4480F8;float: right;font-size: 16px;">网签合同 <i class="el-icon-arrow-right"></i></span>
+                            <span @click="toContract" style="color:#4480F8;float: right;font-size: 16px;cursor: pointer;">网签合同 <i class="el-icon-arrow-right"></i></span>
                         </div>
                     </div>
                     <div class="contract">
-                        当前共有<span style="color:#4480F8">2266</span>条合同，请及时关注处理
+                        当前共有<span style="color:#4480F8">{{ contractList.total }}</span>条合同，请及时关注处理
                     </div>
                     <div class="contract-item">
                         <div>即将过期合同：<span style="color:#FFB171">236</span> 条</div>
@@ -175,9 +175,9 @@
                     </div>
                     <div class="card-title" style="margin-bottom:16px">合同检索</div>
                     <div class="retrieve">
-                        <el-input placeholder="请输入船名号/船员姓名"></el-input>
+                        <el-input v-model.trim="search" placeholder="请输入船名号/船员姓名"></el-input>
                         <div class="search-btns">
-                            <el-button type="primary" icon="el-icon-search">检索</el-button>
+                            <el-button @click="searchContract" type="primary" icon="el-icon-search">检索</el-button>
                             <el-button icon="el-icon-printer">打印</el-button>
                             <el-button icon="el-icon-upload2">导出</el-button>
                         </div>
@@ -203,11 +203,14 @@
 
 <script>
 import { getPage } from '@/api/tmlms/relation'
+import { getContractList } from '@/api/tmlms/newContract'
 import { countShipAndCrew,countRecordByVillageId } from '@/api/wel/index'
 
 export default {
    data () {
     return {
+      search:'',
+      contractList: {},
       list: [],
       pagedTable: [],
       total: {},
@@ -283,6 +286,7 @@ export default {
     },
   },
   created () {
+    this.getContractList()
     getPage({current:1,size:6}).then(({ data })=>{
         this.pagedTable = data.data.records
     })
@@ -315,6 +319,20 @@ export default {
           this.$router.push({
               path:'/crew/htgl/contract_admin',
           })
+      },
+      getContractList (){
+          getContractList().then(({data})=>{
+              console.log('data..', data)
+              this.contractList =  data.data
+          })
+      },
+      searchContract (){
+          if(!this.search){
+              this.$message.warning('请先输入要搜索的内容！')
+              return false
+          }else{
+              this.$router.push(`/crew/htgl/contract_admin/?shipName=${this.search}`)
+          }
       },
   },
 }
@@ -591,7 +609,9 @@ export default {
                     display: flex;
                     justify-content: space-between;
                     .el-input{
-                        width: 512px;
+                        // width: 512px;
+                        flex: 1;
+                        margin-right: 56px;
                     }
                     .el-input__inner{
                         height: 36px;
