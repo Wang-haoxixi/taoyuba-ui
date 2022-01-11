@@ -1,9 +1,13 @@
 <template>
-  <div class="avue-sidebar" :style="{width: keyCollapse ? '' : '200px'}">
-    <el-scrollbar style="height:calc(100vh - 60px);" native>
+  <div class="avue-sidebar" :style="{width: keyCollapse ? '' : '240px'}">
+    <el-scrollbar style="height:100vh" native>
       <!-- <main-item :mainMenu="mainMenu" :collapse="keyCollapse"></main-item>
       <sidebar-item :menu="mainMenu.children" :screen="screen" first :props="website.menu.props" :collapse="keyCollapse"></sidebar-item> -->
       <div class="sub-menu-wrapper">
+        <div class="aside-logo">
+          <el-image class="logo" src='/img/bg/loginLogo.png'></el-image>
+          淘渔吧
+        </div>
         <el-menu default-active="-1" :collapse="keyCollapse" :unique-opened="unique">
           <!-- <el-menu-item :index="omenu.path" v-for="omenu in otherMenus" :key="omenu.path" @click="openModuleMenus(omenu)">
             <i :class="omenu.icon"></i>
@@ -62,6 +66,7 @@ export default {
   },
   created () {
     this.isMenu()
+    console.log('allMenus..', this.allMenus)
   },
   methods: {
     ...mapMutations({ setMainMenu: 'SET_MAINMENU', setOtherMenus: 'SET_OTHERMENUS', setAllMenus: 'SET_ALLMENUS', setmenusMap: 'SET_menusMap' }),
@@ -103,16 +108,35 @@ export default {
 </script>
 <style lang="scss" scoped>
 .sub-menu-wrapper {
+  padding: 0 16px;
   border-top: 1px solid #eee;
+  .aside-logo{
+    height: 80px;
+    font-size: 16px;
+    color: #FFFFFF;
+    font-family: MicrosoftYaHei;
+    display: flex;
+    align-items: center;
+    .logo{
+      width: 37px;
+      margin: 0px 7px 0px 24px;
+      border-radius: 17px;
+    }
+  }
   .el-menu-item {
     margin-left: 0 !important;
     height: 40px;
-    line-height: 40px;
-    border-left: 3px solid #fafafa;
+    color: #FFFFFF;
+    font-size: 12px;
+    border-radius: 40px;
+    // line-height: 40px;
+    // border-left: 3px solid #fafafa;
     &:hover,
     &:focus {
-      border-color: #0185d8;
-      color: #0185d8;
+      // border-color: #0185d8;
+      // color: #0185d8;
+      background: rgba(255, 255, 255, .1);
+      border-radius: 40px;
     }
   }
   .sub-menu {
@@ -138,7 +162,8 @@ export default {
   }
 }
 .el-menu {
-  background-color: #fafafa;
+  // background-color: #fafafa;
+  background-color:transparent;
 }
 </style>
 <style lang="css" scoped>
@@ -146,14 +171,19 @@ export default {
   overflow-x: hidden;
 }
 .avue-sidebar >>> .el-submenu .el-submenu__title {
-  border-left: 3px solid #fafafa;
+  /* border-left: 3px solid #fafafa; */
+  color: #FFFFFF;
+  font-size: 12px;
+  border-radius: 40px;
 }
 .avue-sidebar >>> .el-submenu .el-submenu__title:focus,
 .avue-sidebar >>> .el-menu--collapse .el-submenu.is-active .el-submenu__title,
 .avue-sidebar >>> .el-submenu .el-submenu__title:hover {
   margin-left: 0 !important;
-  border-color: #0185d8;
-  color: #0185d8;
+  /* border-color: #0185d8;
+  color: #0185d8; */
+  background: rgba(255, 255, 255, .1);
+  border-radius: 40px;
 }
 .avue-sidebar >>> .el-submenu .el-submenu__title,
 .avue-sidebar >>> .el-menu-item {
@@ -162,5 +192,6 @@ export default {
 }
 .avue-sidebar >>> .el-menu {
   border-right: none;
+  background: transparent;
 }
 </style>

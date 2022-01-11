@@ -97,7 +97,7 @@ export default {
         return '0px'
       }
       if (this.isDesktop()) {
-        return '200px'
+        return '240px'
       } else {
         return '64px'
       }
@@ -249,7 +249,8 @@ export default {
 <style lang="scss" scoped>
 .el-aside {
   overflow: hidden;
-  background-color: #fafafa;
+  background: linear-gradient(128deg, #1158F5 0%, #062F89 100%);
+  box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.04);
   border-right: 1px solid #e5e5e5;
 }
 </style>
