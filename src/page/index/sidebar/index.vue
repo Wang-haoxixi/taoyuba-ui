@@ -4,10 +4,12 @@
       <!-- <main-item :mainMenu="mainMenu" :collapse="keyCollapse"></main-item>
       <sidebar-item :menu="mainMenu.children" :screen="screen" first :props="website.menu.props" :collapse="keyCollapse"></sidebar-item> -->
       <div class="sub-menu-wrapper">
-        <div class="aside-logo">
+        <!-- <el-tooltip class="item" effect="dark" content="点击返回工作台" placement="bottom"> -->
+        <div class="aside-logo" title="点击返回工作台" style="cursor: pointer;" @click="$openPage('/')">
           <el-image class="logo" src='/img/bg/loginLogo.png'></el-image>
           淘渔吧
         </div>
+        <!-- </el-tooltip> -->
         <el-menu default-active="-1" :collapse="keyCollapse" :unique-opened="unique">
           <!-- <el-menu-item :index="omenu.path" v-for="omenu in otherMenus" :key="omenu.path" @click="openModuleMenus(omenu)">
             <i :class="omenu.icon"></i>
@@ -108,7 +110,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .sub-menu-wrapper {
-  padding: 0 16px;
+  // margin: 0 16px;
   border-top: 1px solid #eee;
   .aside-logo{
     height: 80px;
@@ -164,6 +166,7 @@ export default {
 .el-menu {
   // background-color: #fafafa;
   background-color:transparent;
+  padding: 0 16px;
 }
 </style>
 <style lang="css" scoped>
