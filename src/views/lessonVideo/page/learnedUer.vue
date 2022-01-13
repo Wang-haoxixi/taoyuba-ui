@@ -7,8 +7,8 @@
                     <iep-button @click="refresh">刷新</iep-button>
                 </template>
                 <template slot="right">
-                    <el-input v-model="params.idCard" placeholder="身份证" size="small" clearable style="width:150px"></el-input>
-                    <el-select clearable size="small" v-model="params.type" placeholder="请选择类型" style="width:150px!important">
+                    <el-input v-model.trim="params.idcard" placeholder="身份证" size="small" clearable style="width:150px"></el-input>
+                    <!-- <el-select clearable size="small" v-model="params.type" placeholder="请选择类型" style="width:150px!important">
                         <el-option
                         label="船东"
                         value="1">
@@ -21,9 +21,10 @@
                         label="游客"
                         value="3">
                         </el-option>
-                    </el-select>
-                    <el-input v-model="params.name" placeholder="姓名" size="small" clearable style="width:150px"></el-input>
+                    </el-select> -->
+                    <!-- <el-input v-model.trim="params.name" placeholder="姓名" size="small" clearable style="width:150px"></el-input> -->
                     <el-button size="small" @click="search">搜索</el-button>
+                    <el-button size="small" @click="$router.back(-1)" style="margin-left:0">返回</el-button>
                 </template>
             </operation-container>
             <el-table
@@ -41,8 +42,10 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="videoDescript"
                     label="视频简介">
+                    <template slot-scope="scope">
+                        <div class="videoDescript">{{ scope.row.videoDescript }}</div>
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="idcard"
@@ -52,14 +55,15 @@
                     prop="updateTime"
                     label="最近一次学习时间">
                 </el-table-column>
-                <el-table-column
+                <!-- <el-table-column
                     label="学习记录">
                     <template slot-scope="scope">
                         <el-button size="small" @click="check(scope.row)">查看</el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
             <el-pagination
+                background
                 style="text-align:center;margin-top:15px"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
@@ -81,9 +85,9 @@
                 params:{
                     current:1,
                     size:10,
-                    idCard:'',
-                    type:'',
-                    name:'',
+                    // idcard:'',
+                    // type:'',
+                    // name:'',
                 },
                 total:0,
                 userData:[],
@@ -98,9 +102,9 @@
                 this.params={
                     current:1,
                     size:10,
-                    idCard:'',
-                    type:'',
-                    name:'',
+                    // idcard:'',
+                    // type:'',
+                    // name:'',
                 }
             },
             // 秒转换为时分秒
@@ -153,9 +157,12 @@
             },
             search (){
                 console.log('search..')
+                if (!this.params.idcard) return this.$message.warning('身份证不能为空!')
+                this.getUserInfoList()
             },
             refresh (){
                 this.initParams()
+                this.getUserInfoList()
             },
         },
         computed:{
@@ -167,5 +174,10 @@
 </script>
 
 <style lang="scss" scoped>
-
+.videoDescript{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}
 </style>
