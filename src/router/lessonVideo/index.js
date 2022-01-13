@@ -7,6 +7,12 @@ export default [
     redirect: '/lessonVideo_spa/detail/:type/:id',
     children: [
       {
+        path: '/lessonVideo_spa/learnedUer/:id',
+        name: '用户信息',
+        component: () => import('@/views/lessonVideo/page/learnedUer.vue'),
+        meta: noKeepAlive,
+      },
+      {
         path: '/lessonVideo_spa/detail/:type/:id',
         name: '视频详情',
         component: () => import('@/views/lessonVideo/page/Detail.vue'),

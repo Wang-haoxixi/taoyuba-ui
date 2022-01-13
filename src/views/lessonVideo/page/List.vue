@@ -7,6 +7,20 @@
           <iep-button @click="handleAdd()" type="primary" v-if="manager">新增</iep-button>
         </template>
         <template slot="right">
+          <el-select clearable size="small" v-model="params.type" placeholder="请选择类型" style="width:150px!important">
+            <el-option
+              label="安全教育"
+              value="1">
+            </el-option>
+            <el-option
+              label="课程培训"
+              value="2">
+            </el-option>
+            <el-option
+              label="渔业知识"
+              value="3">
+            </el-option>
+          </el-select>
           <span><el-input v-model="params.vedioName" placeholder="请输入视频标题" size="small" clearable></el-input></span>
           <el-button size="small"  @click="loadPage(params)">搜索</el-button>
         </template>
@@ -23,14 +37,15 @@
         is-mutiple-selection>
           <el-table-column prop="videoSrc" label="视频图片" width="300">
            <template slot-scope="scope">
-                  <span ><img  :src="scope.row.videoImg" :on-error="errorImg" style="width:250px;height:50px;"/></span>
+                  <span ><el-image  :src="scope.row.videoImg" :on-error="errorImg" style="width:150px;"></el-image></span>
             </template>
         </el-table-column>
-        <el-table-column prop="operation" label="操作" width="200">
+        <el-table-column prop="operation" label="操作" width="300">
           <template slot-scope="scope">
             <operation-wrapper>
               <iep-button plain @click="handleEdit(scope.row.vedioId)" v-if="manager">编辑</iep-button>
               <iep-button @click="handleView(scope.row.vedioId)">查看</iep-button>
+              <iep-button @click="handleRecord(scope.row.vedioId)">学习记录查看</iep-button>
               <iep-button type="warning" @click="handleDelete(scope.row)"><i class="el-icon-delete"></i></iep-button>
             </operation-wrapper>
           </template>
@@ -68,6 +83,7 @@ export default {
         current: 1,
         size: 10,
         vedioName: '',
+        type: '',
       },
       errorImg:'this.src = "/img/logo.png"',
       imgsrc:'',
@@ -109,6 +125,11 @@ export default {
     handleView (id) {
       this.$router.push({
         path: `/lessonVideo_spa/detail/view/${id}`,
+      })
+    },
+    handleRecord (id) {
+      this.$router.push({
+        path: `/lessonVideo_spa/learnedUer/${id}`,
       })
     },
     handleEdit (id) {

@@ -39,7 +39,13 @@ export function deleteVideo (id) {
   })
 }
 
-
+export function getUserInfoList (params) {
+  return request({
+    url: '/tybhrms/tybLearnRecord/page',
+    method: 'get',
+    params: params,
+  })
+}   
 
 
 
