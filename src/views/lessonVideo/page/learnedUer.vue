@@ -83,6 +83,7 @@
         data (){
             return{
                 params:{
+                    videoId: '',
                     current:1,
                     size:10,
                     // idcard:'',
@@ -94,12 +95,13 @@
             }
         },
         created (){
-            console.log(12313, this.formatSeconds(90))
+            this.params.videoId = this.id
             this.getUserInfoList()
         },
         methods:{
             initParams (){
                 this.params={
+                    videoId: this.id,
                     current:1,
                     size:10,
                     // idcard:'',
