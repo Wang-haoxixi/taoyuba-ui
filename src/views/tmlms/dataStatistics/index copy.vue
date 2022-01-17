@@ -46,41 +46,12 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="8">
-        <div class="chart-bg panel warning-info">
-          <!-- <div>
+      <el-col :span="7">
+        <div class="chart-bg panel">
+          <div>
             <h2>{{title}}工资统计</h2>
           </div>
-          <div id="salaryTotal"  :style="{width: '100%', height: echartHeight + 'px'}"></div> -->
-
-          <div class="module-title">预警模块</div>
-          <div class="grad-warp">
-            <div>
-              <div>834</div>
-              <div>证书数据</div>
-            </div>
-            <div>
-              <div>108</div>
-              <div>进港船只</div>
-            </div>
-            <div>
-              <div>371</div>
-              <div>出港船只</div>
-            </div>
-            <div>
-              <div>563</div>
-              <div>保险</div>
-            </div>
-            <div>
-              <div>427k</div>
-              <div>交易数额</div>
-            </div>
-            <div>
-              <div>1283</div>
-              <div>船员总数</div>
-            </div>
-          </div>
-          
+          <div id="salaryTotal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
           <div class="panel-footer"></div>
         </div>
         <div class="chart-bg panel">
@@ -94,7 +65,7 @@
           <div class="panel-footer"></div>
         </div>
       </el-col>
-      <el-col :span="8" class="all-crew">
+      <el-col :span="10" class="all-crew">
         <div class="chart-bg panel font-height">
           <el-row>
             <el-col :span="12" class="font-yellow">{{totalCrew}}</el-col>
@@ -133,7 +104,7 @@
           <div class="panel-footer"></div>
         </div>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="7">
         <div class="chart-bg panel">
           <h2>{{title}}年龄分布</h2>
           <div id="ageTotal"  :style="{width: '100%', height: echartHeight + 'px'}"></div>
@@ -278,7 +249,6 @@ export default {
     this.drawLine()
   },
   created (){
-    console.log('tyb_resume_position..',this.dictGroup['tyb_resume_position'])
     this.positionDicMap = this.positionDicMap.concat(this.dictGroup['tyb_resume_position'])
     this.getPageArea()
     this.getTime()
@@ -593,65 +563,65 @@ export default {
     // 职务船员工资统计
     getSalary (res) {
       //薪资
-      // this.salaryValue = res.data.data.salary
-      // this.salaryTotal.setOption({
-      //   xAxis: {
-      //       data:this.salaryName,
-      //   },
-      //   series: [{
-      //       data: this.salaryValue,
-      //   }],
-      // })
+      this.salaryValue = res.data.data.salary
+      this.salaryTotal.setOption({
+        xAxis: {
+            data:this.salaryName,
+        },
+        series: [{
+            data: this.salaryValue,
+        }],
+      })
     },
     setSalary () {
-      // this.salaryTotal = this.$echarts.init(document.getElementById('salaryTotal'))
-      // this.salaryTotal.setOption({
-      //   color: ['#ed3f35'],
-      //   tooltip: {
-      //     // 通过坐标轴来触发
-      //     trigger: 'axis',
-      //   }, 
-      //   xAxis: {
-      //       type: 'category',
-      //       data: [],
-      //       // 去除刻度
-      //       axisTick: {
-      //         show: false,
-      //       },
-      //       // 修饰刻度标签的颜色
-      //     axisLabel: {
-      //       color: 'rgba(255,255,255,.7)',
-      //       interval:0,
-      //     },
-      //     // 去除x坐标轴的颜色
-      //     axisLine: {
-      //       show: false,
-      //     },
-      //   },
-      //   yAxis: {
-      //       type: 'value',
-      //       // 去除刻度
-      //       axisTick: {
-      //         show: false,
-      //       },
-      //       // 修饰刻度标签的颜色
-      //       axisLabel: {
-      //         color: 'rgba(255,255,255,.7)',
-      //       },
-      //       // 修改y轴分割线的颜色
-      //       splitLine: {
-      //         lineStyle: {
-      //           color: '#012f4a',
-      //         },
-      //       },
-      //   },
-      //   series: [{
-      //       name: '工资统计',
-      //       data: [],
-      //       type: 'line',
-      //       smooth: true,
-      //   }],
-      // })
+      this.salaryTotal = this.$echarts.init(document.getElementById('salaryTotal'))
+      this.salaryTotal.setOption({
+        color: ['#ed3f35'],
+        tooltip: {
+          // 通过坐标轴来触发
+          trigger: 'axis',
+        }, 
+        xAxis: {
+            type: 'category',
+            data: [],
+            // 去除刻度
+            axisTick: {
+              show: false,
+            },
+            // 修饰刻度标签的颜色
+          axisLabel: {
+            color: 'rgba(255,255,255,.7)',
+            interval:0,
+          },
+          // 去除x坐标轴的颜色
+          axisLine: {
+            show: false,
+          },
+        },
+        yAxis: {
+            type: 'value',
+            // 去除刻度
+            axisTick: {
+              show: false,
+            },
+            // 修饰刻度标签的颜色
+            axisLabel: {
+              color: 'rgba(255,255,255,.7)',
+            },
+            // 修改y轴分割线的颜色
+            splitLine: {
+              lineStyle: {
+                color: '#012f4a',
+              },
+            },
+        },
+        series: [{
+            name: '工资统计',
+            data: [],
+            type: 'line',
+            smooth: true,
+        }],
+      })
     },
     // 职务船员年龄分布
     getCrewAge (res) {
@@ -1659,16 +1629,8 @@ export default {
       border:solid 1px rgba(41, 255, 247, 0.5);
       // border-radius: 3px;
       margin:20px;
-      // padding-bottom: 10px;
-      padding: 24px 20px;
+      padding-bottom: 10px;
       position: relative;
-      .module-title{
-        color: #29FFF7;
-        font-size: 18px;
-        font-family: PingFang SC;
-        font-weight: 500;
-        padding-bottom: 24px;
-      }
       h2{
         color:#fff;
         font-size:16px;
@@ -1804,38 +1766,5 @@ export default {
   }
   .el-row {
     margin-bottom: 12px;
-  }
-
-
-  .warning-info{
-    .grad-warp{
-      display: grid;
-      grid-template-columns: repeat(3, 1fr); /* 相当于 1fr 1fr 1fr */
-      grid-template-rows: repeat(2, 1fr); /* fr单位可以将容器分为几等份 */
-      grid-gap: 10px 20px; /* grid-column-gap 和 grid-row-gap的简写 */
-      grid-auto-flow: row;
-      >div{
-        // width: 173px;
-        // height: 100px;
-        border: 1px solid rgba(41, 255, 247, .6);
-        border-radius: 5px;
-        padding: 15px 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        >div:first-of-type{
-          color: #29FFF7;
-          font-family: Impact;
-          font-size: 32px;
-          margin-bottom: 7px;
-        }
-        >div:last-of-type{
-          color: #FFFFFF;
-          font-family: Impact;
-          font-size: 14px;
-        }
-      }
-    }
   }
 </style>

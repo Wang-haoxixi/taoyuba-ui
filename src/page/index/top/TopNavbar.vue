@@ -67,6 +67,9 @@ export default {
       navList,
     }
   },
+  created (){
+    console.log('123..', this.$route.matched)
+  },
   // components: { TopSearch },
   methods: {
     handleInput () {
@@ -186,6 +189,7 @@ export default {
       .sub-menu {
         border-radius: 20px;
         background-color: #eee;
+        // color: #4480F8;
       }
     }
     .el-menu--horizontal .el-menu-item:not(.is-disabled):focus,
@@ -195,8 +199,9 @@ export default {
       border: 0;
       .sub-menu {
         padding: 4px 15px;
+        // padding: 16px 26px;
         transition: all 0.5s;
-        font-size: 16px;
+        font-size: 14px;
         .nav-bar {
           display: flex;
           margin: 0 20px;
